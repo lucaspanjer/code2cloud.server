@@ -72,7 +72,6 @@ import com.tasktop.c2c.server.internal.tasks.domain.conversion.ProfileConverter;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.SavedTaskQueryConverter;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.TaskDomain;
 import com.tasktop.c2c.server.internal.tasks.jpa.TaskQuery;
-import com.tasktop.c2c.server.internal.tasks.service.TaskSortFieldMapper.QueryParts;
 import com.tasktop.c2c.server.tasks.domain.AbstractDomainObject;
 import com.tasktop.c2c.server.tasks.domain.AbstractReferenceValue;
 import com.tasktop.c2c.server.tasks.domain.Attachment;
@@ -117,9 +116,6 @@ import com.tasktop.c2c.server.tasks.service.TaskService;
 @Qualifier("main")
 public class TaskServiceBean extends AbstractJpaServiceBean implements TaskService, TaskServiceDependencies,
 		InitializingBean {
-
-	@Autowired
-	private TaskSortFieldMapper sortFieldMapper;
 
 	@Autowired
 	private TaskServiceConfiguration configuration;
@@ -325,17 +321,6 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return findTasksWithCriteria(criteriaClause, querySpec);
 	}
 
-	private List<Task> mapToDomainObjects(QuerySpec querySpec, Query query) {
-		DomainConversionContext conversionContext = createTaskQueryDomainConversionContext(querySpec);
-
-		// Can't set the page size because it generates a bad mysql query.
-		query.setFirstResult(querySpec.getRegion().getOffset());
-		@SuppressWarnings("unchecked")
-		List<Object> queryResults = query.getResultList();
-
-		return mapToDomainObjects(conversionContext, querySpec.getRegion(), queryResults);
-	}
-
 	private List<Task> mapToDomainObjects(DomainConversionContext conversionContext, Region region, List<?> queryResults) {
 		List<Task> resultList = new ArrayList<Task>(region.getSize());
 		for (int i = 0; i < region.getSize() && i < queryResults.size(); i++) {
@@ -391,28 +376,13 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	}
 
 	private QueryResult<Task> findAllOpenTasks(QuerySpec querySpec) {
-		QueryParts sortParts = sortFieldMapper.mapSortFieldToDB(querySpec.getSortInfo());
-
-		// Special handle this case because it puts status in query too.
-		if (querySpec.getSortInfo().getSortField().equals(TaskFieldConstants.STATUS_FIELD)) {
-			sortParts = new QueryParts("", "", "", sortParts.getOrderByPart());
+		NaryCriteria crit = new NaryCriteria(Operator.OR);
+		for (TaskStatus status : getRepositoryContext().getStatuses()) {
+			if (status.isOpen()) {
+				crit.addSubCriteria(new ColumnCriteria(TaskFieldConstants.STATUS_FIELD, status.getValue()));
+			}
 		}
-
-		String queryString = TASK_SELECT_CLAUSE + ", stat" + sortParts.getSelectPart() + TASK_FROM_CLAUSE + ", "
-				+ com.tasktop.c2c.server.internal.tasks.domain.TaskStatus.class.getSimpleName() + " stat"
-				+ sortParts.getFromPart() + " WHERE stat.isOpen = true and task.status = stat.value "
-				+ (sortParts.getWherePart().isEmpty() ? "" : "and " + sortParts.getWherePart())
-				+ sortParts.getOrderByPart();
-
-		Query query = entityManager.createQuery(queryString);
-
-		List<Task> resultPage = mapToDomainObjects(querySpec, query);
-		Number totalResultSize = (Number) entityManager.createQuery(
-				"select count(task) from " + com.tasktop.c2c.server.internal.tasks.domain.Task.class.getSimpleName()
-						+ " task, " + com.tasktop.c2c.server.internal.tasks.domain.TaskStatus.class.getSimpleName()
-						+ " stat " + " where stat.value = task.status and stat.isOpen = true").getSingleResult();
-
-		return new QueryResult<Task>(querySpec.getRegion(), resultPage, totalResultSize.intValue());
+		return findTasksWithCriteria(crit, querySpec);
 	}
 
 	@Override
@@ -430,43 +400,19 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	}
 
 	private QueryResult<Task> findTasksWithStringTerm(String searchTerm, QuerySpec querySpec) {
-		QueryParts sortParts = sortFieldMapper.mapSortFieldToDB(querySpec.getSortInfo());
-
 		String[] terms = searchTerm.split("\\s+");
-		String termClause = makeTermsClause(terms);
-		String queryString = TASK_SELECT_CLAUSE + sortParts.getSelectPart() + TASK_FROM_CLAUSE
-				+ sortParts.getFromPart() + " WHERE (" + termClause + ") "
-				+ (sortParts.getWherePart().isEmpty() ? "" : "and " + sortParts.getWherePart())
-				+ sortParts.getOrderByPart();
-		Query pageQuery = entityManager.createQuery(queryString);
-		Query totalSizeQuery = entityManager.createQuery("select count(task) from "
-				+ com.tasktop.c2c.server.internal.tasks.domain.Task.class.getSimpleName() + " task " + " where ("
-				+ termClause + ")");
 
-		for (int i = 0; i < terms.length; i++) {
-			pageQuery.setParameter("term" + i, "%" + terms[i] + "%");
-			totalSizeQuery.setParameter("term" + i, "%" + terms[i] + "%");
-		}
+		NaryCriteria andCrit = new NaryCriteria(Operator.AND);
+		for (String term : terms) {
+			NaryCriteria orCrit = new NaryCriteria(Operator.OR);
+			andCrit.addSubCriteria(orCrit);
 
-		List<Task> resultPage = mapToDomainObjects(querySpec, pageQuery);
-		Number totalResultSize = (Number) totalSizeQuery.getSingleResult();
-
-		return new QueryResult<Task>(querySpec.getRegion(), resultPage, totalResultSize.intValue());
-	}
-
-	private String makeTermsClause(String[] terms) {
-		StringBuilder result = new StringBuilder();
-		for (int i = 0; i < terms.length; i++) {
-			String termParam = ":term" + i;
-			if (i != 0) {
-				result.append(" AND ");
+			for (String field : Arrays.asList(TaskFieldConstants.COMMENT_FIELD, TaskFieldConstants.SUMMARY_FIELD,
+					TaskFieldConstants.DESCRIPTION_FIELD)) {
+				orCrit.addSubCriteria(new ColumnCriteria(field, Operator.STRING_CONTAINS, term));
 			}
-			result.append("(task.shortDesc LIKE ").append(termParam).append(" OR task.targetMilestone LIKE ")
-					.append(termParam).append(" OR task.id in (SELECT tc").append(i).append(".task.id FROM ")
-					.append(Comment.class.getSimpleName()).append(" tc").append(i).append(" WHERE tc").append(i)
-					.append(".thetext LIKE ").append(termParam).append("))");
 		}
-		return result.toString();
+		return findTasksWithCriteria(andCrit, querySpec);
 	}
 
 	private QueryResult<Task> findTasksWithIntegerSearchTerm(Integer intSearchTerm, QuerySpec querySpec) {
