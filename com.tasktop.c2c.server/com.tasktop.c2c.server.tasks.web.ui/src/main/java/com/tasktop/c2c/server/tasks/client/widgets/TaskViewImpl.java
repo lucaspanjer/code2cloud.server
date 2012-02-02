@@ -708,7 +708,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			@Override
 			protected SafeHtml getHtml(Task t) {
 				boolean empty = task.getShortDescription() == null || task.getShortDescription().isEmpty();
-				return SafeHtmlUtils.fromTrustedString(empty ? NOT_SET : task.getShortDescription());
+				return SafeHtmlUtils.fromString(empty ? NOT_SET : task.getShortDescription());
 			}
 
 			protected SafeHtml editTriggerHtml(SafeHtml html) {
