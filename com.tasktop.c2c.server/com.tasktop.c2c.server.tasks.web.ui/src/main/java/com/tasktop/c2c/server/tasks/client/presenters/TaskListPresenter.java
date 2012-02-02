@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -183,8 +182,10 @@ public class TaskListPresenter extends AbstractTaskPresenter {
 		int resultSize = queryState.getQueryRequest().getPageInfo().getSize();
 		resultsTable.getColumnSortList().clear();
 		if (queryState.getQueryRequest().getSortInfo() != null) {
-			Column<?, ?> csi = getColumnSortInfo(queryState.getQueryRequest().getSortInfo());
-			if (csi != null) {
+			Column<?, ?> column = getColumnSortInfo(queryState.getQueryRequest().getSortInfo());
+			if (column != null) {
+				ColumnSortInfo csi = new ColumnSortInfo(column, queryState.getQueryRequest().getSortInfo()
+						.getSortOrder().equals(Order.ASCENDING));
 				resultsTable.getColumnSortList().push(csi);
 			} else {
 				ProfileGinjector.get.instance().getNotifier()
