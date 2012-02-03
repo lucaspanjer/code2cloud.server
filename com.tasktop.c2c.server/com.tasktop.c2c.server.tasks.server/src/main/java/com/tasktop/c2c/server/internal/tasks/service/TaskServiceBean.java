@@ -1069,7 +1069,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		throw new EntityNotFoundException(String.format("No %s with Id: %s", clazz.getSimpleName(), String.valueOf(id)));
 	}
 
-	private void cascadePersistForUpdate(com.tasktop.c2c.server.internal.tasks.domain.Task task) {
+	private void cascadePersistForUpdate(com.tasktop.c2c.server.internal.tasks.domain.Task task)
+			throws EntityNotFoundException {
 
 		// Persist Comments
 		for (Comment c : task.getComments()) {
@@ -1104,19 +1105,29 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		}
 	}
 
-	private void associateDependency(Dependency dep) {
+	private void associateDependency(Dependency dep) throws EntityNotFoundException {
 		com.tasktop.c2c.server.internal.tasks.domain.Task bugsByBlocked = dep.getBugsByBlocked();
 		com.tasktop.c2c.server.internal.tasks.domain.Task bugsByDependson = dep.getBugsByDependson();
 		if (!entityManager.contains(bugsByBlocked)) {
-			dep.setBugsByBlocked(entityManager.find(com.tasktop.c2c.server.internal.tasks.domain.Task.class,
-					bugsByBlocked.getId()));
+			com.tasktop.c2c.server.internal.tasks.domain.Task managedDep = entityManager.find(
+					com.tasktop.c2c.server.internal.tasks.domain.Task.class, bugsByBlocked.getId());
+			if (managedDep == null) {
+				throw new EntityNotFoundException("No task with Id: " + bugsByBlocked.getId());
+			}
+			dep.setBugsByBlocked(managedDep);
 			if (bugsByBlocked.getDeltaTs() != null) {
 				dep.getBugsByBlocked().setDeltaTs(bugsByBlocked.getDeltaTs());
 			}
 		}
 		if (!entityManager.contains(bugsByDependson)) {
-			dep.setBugsByDependson(entityManager.find(com.tasktop.c2c.server.internal.tasks.domain.Task.class,
-					bugsByDependson.getId()));
+			com.tasktop.c2c.server.internal.tasks.domain.Task managedDep = entityManager.find(
+					com.tasktop.c2c.server.internal.tasks.domain.Task.class, bugsByDependson.getId());
+			if (managedDep == null) {
+				throw new EntityNotFoundException("No task with Id: " + bugsByDependson.getId());
+			}
+
+			dep.setBugsByDependson(managedDep);
+
 			if (bugsByDependson.getDeltaTs() != null) {
 				dep.getBugsByDependson().setDeltaTs(bugsByDependson.getDeltaTs());
 			}

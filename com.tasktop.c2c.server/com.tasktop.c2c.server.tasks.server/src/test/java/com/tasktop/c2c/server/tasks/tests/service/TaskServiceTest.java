@@ -4490,4 +4490,35 @@ public class TaskServiceTest {
 		String html = taskService.renderWikiMarkupAsHtml(wikiText);
 		Assert.assertNotNull(html);
 	}
+
+	@Test
+	public void testCreateTaskWithInvalidParentId_task4026() throws ValidationException, EntityNotFoundException {
+		com.tasktop.c2c.server.tasks.domain.Task a = getMockTask("a");
+		com.tasktop.c2c.server.tasks.domain.Task invalid = new com.tasktop.c2c.server.tasks.domain.Task();
+		invalid.setId(666);
+		a.setParentTask(invalid);
+
+		try {
+			taskService.createTask(a);
+			Assert.fail("Expect ENF exception");
+		} catch (EntityNotFoundException e) {
+			// expected
+		}
+	}
+
+	@Test
+	public void testCreateTaskWithInvalidSubtaskId_task4026() throws ValidationException, EntityNotFoundException {
+		com.tasktop.c2c.server.tasks.domain.Task a = getMockTask("a");
+		com.tasktop.c2c.server.tasks.domain.Task invalid = new com.tasktop.c2c.server.tasks.domain.Task();
+		invalid.setId(666);
+		a.setSubTasks(Arrays.asList(invalid));
+
+		try {
+			taskService.createTask(a);
+			Assert.fail("Expect ENF exception");
+		} catch (EntityNotFoundException e) {
+			// expected
+		}
+
+	}
 }
