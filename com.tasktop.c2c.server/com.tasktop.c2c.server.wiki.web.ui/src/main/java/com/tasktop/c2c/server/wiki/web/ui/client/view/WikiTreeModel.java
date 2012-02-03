@@ -130,8 +130,13 @@ public class WikiTreeModel implements TreeViewModel {
 			case PAGE_HEADER:
 				Page page = value.getPage();
 				String url = ProjectWikiViewPagePlace.createPlaceForPage(projectId, page.getPath()).getHref();
-				sb.append(template.wikiPageHeader(page.getPath(), url, Format.stringValueDate(page.getCreationDate())
-						+ " by " + page.getOriginalAuthor().getName(),
+				String pageNameWithoutDir = page.getPath();
+				int i = pageNameWithoutDir.indexOf("/");
+				if (i != -1) {
+					pageNameWithoutDir = pageNameWithoutDir.substring(i + 1);
+				}
+				sb.append(template.wikiPageHeader(pageNameWithoutDir, url,
+						Format.stringValueDate(page.getCreationDate()) + " by " + page.getOriginalAuthor().getName(),
 						Format.stringValueDate(page.getModificationDate()) + " by " + page.getLastAuthor().getName()));
 				break;
 			case PAGE_OUTLINE_ITEM:
