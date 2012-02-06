@@ -15,28 +15,48 @@ package com.tasktop.c2c.server.services.web.scm;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jgit.http.server.GitServlet;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.tenancy.context.TenancyContextHolder;
-
+import org.springframework.web.context.ServletConfigAware;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.domain.Role;
-import com.tasktop.c2c.server.common.service.web.cgi.CGIHandler;
-import com.tasktop.c2c.server.services.web.scm.GitConstants;
 
-public class GitCGIHandler extends CGIHandler {
+/**
+ * @author cmorgan (Tasktop Technologies Inc.)
+ * 
+ */
+public class GitSmartHttpServlet extends GitServlet implements InitializingBean, ServletConfigAware {
 
-	private static final String GIT_ROOT_PATH_ENV_VAR = "GIT_PROJECT_ROOT";
+	private ServletConfig servletConfig;
+
+	public GitSmartHttpServlet() {
+
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		this.init(servletConfig);
+
+	}
+
+	@Override
+	public void setServletConfig(ServletConfig servletConfig) {
+		this.servletConfig = servletConfig;
+	}
+
 	public static final String GIT_RECEIVE_PACK_URL = "git-receive-pack";
 	public static final String GIT_UPLOAD_PACK_URL = "git-upload-pack";
 
-	private String gitRoot;
-
 	@Override
-	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		if (!validRequest(request)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST,
@@ -134,28 +154,4 @@ public class GitCGIHandler extends CGIHandler {
 		}
 	}
 
-	@Override
-	protected void configureEnvironment(HttpServletRequest request) {
-		super.configureEnvironment(request);
-		getEnvironment().put(
-				GIT_ROOT_PATH_ENV_VAR,
-				gitRoot + "/" + TenancyContextHolder.getContext().getTenant().getIdentity() + "/"
-						+ GitConstants.HOSTED_GIT_DIR);
-	}
-
-	@Override
-	public CGIHandler clone() {
-		GitCGIHandler copy = (GitCGIHandler) super.clone();
-		copy.gitRoot = this.gitRoot;
-		return copy;
-
-	}
-
-	public String getGitRoot() {
-		return gitRoot;
-	}
-
-	public void setGitRoot(String gitRoot) {
-		this.gitRoot = gitRoot;
-	}
 }

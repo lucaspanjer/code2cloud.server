@@ -14,19 +14,12 @@
 	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"/>
 	
 	<bean id="standardGitHttpRequestHandler"
-		class="com.tasktop.c2c.server.common.service.web.cgi.CGIHttpRequestHandler">
-		<property name="handler">
-			<bean class="com.tasktop.c2c.server.services.web.scm.GitCGIHandler"
-				p:command="${git.http-backend}" p:gitRoot="${git.root}" p:workingDirectory="${git.root}"
-			>
-				<property name="environment">
-					<map>
-						<entry key="PATH" value="${git.path}"/>
-						<entry key="GIT_HTTP_EXPORT_ALL" value="true"/>
-					</map>
-				</property>
-			</bean>
-		</property>
+		class="com.tasktop.c2c.server.services.web.scm.GitSmartHttpServlet"
+		p:repositoryResolver-ref="repositoryResolver">
+	</bean>
+	
+	<bean id="repositoryResolver" class="com.tasktop.c2c.server.services.web.scm.MultiTenantRepositoryResolver"
+		p:gitRoot="${git.root}">
 	</bean>
 	
 	<bean id="gitRequestHandler" class="com.tasktop.c2c.server.services.web.scm.GitHandler"
@@ -36,6 +29,7 @@
 		p:receivePackCommand="${git.receive-pack}">
 	</bean>
 	
+	<bean class="org.springframework.web.servlet.handler.SimpleServletHandlerAdapter" />
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<value>
