@@ -61,10 +61,10 @@
 		    <url>http://s3.amazonaws.com/maven.springframework.org/milestone</url>
 		</repository>
 		
-<!-- 	    <repository> -->
-<!--       		<id>jgit-repository</id> -->
-<!--       		<url>http://download.eclipse.org/jgit/maven</url> -->
-<!--    		</repository> -->
+	    <repository>
+      		<id>jgit-repository</id>
+      		<url>http://download.eclipse.org/jgit/maven</url>
+   		</repository>
 		
 		 <repository> 
 		    <id>Maven Central Repo</id>
