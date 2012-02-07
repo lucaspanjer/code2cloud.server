@@ -105,6 +105,8 @@ public class GitHandler implements HttpRequestHandler {
 
 		String pathInfo = request.getPathInfo();
 		log.info("Git request: " + request.getMethod() + " " + request.getRequestURI() + " " + pathInfo);
+
+		Repository repository = null;
 		try {
 			// only work on Git requests
 			Matcher matcher = pathInfo == null ? null : GIT_COMMAND_PATTERN.matcher(pathInfo);
@@ -122,7 +124,7 @@ public class GitHandler implements HttpRequestHandler {
 				badPathResponse();
 			}
 
-			Repository r = repositoryResolver.open(request, requestPath);
+			repository = repositoryResolver.open(request, requestPath);
 
 			InputStream requestInput = request.getInputStream();
 			if (!containerSupportsChunkedIO) {
@@ -147,11 +149,11 @@ public class GitHandler implements HttpRequestHandler {
 				}
 				switch (command) {
 				case RECEIVE_PACK:
-					ReceivePack rp = new ReceivePack(r);
+					ReceivePack rp = new ReceivePack(repository);
 					rp.receive(requestInput, mox.stream(PacketType.STDOUT), mox.stream(PacketType.STDERR));
 					break;
 				case UPLOAD_PACK:
-					UploadPack up = new UploadPack(r);
+					UploadPack up = new UploadPack(repository);
 					up.upload(requestInput, mox.stream(PacketType.STDOUT), mox.stream(PacketType.STDERR));
 					break;
 				default:
@@ -186,6 +188,9 @@ public class GitHandler implements HttpRequestHandler {
 			createGitErrorResponse(response, containerSupportsChunkedIO, e.getMessage());
 		} finally {
 			log.info("Git request complete");
+			if (repository != null) {
+				repository.close();
+			}
 		}
 	}
 

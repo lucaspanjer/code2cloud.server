@@ -40,12 +40,15 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.RepositoryCache;
+import org.eclipse.jgit.lib.RepositoryCache.FileKey;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.URIish;
+import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.FileUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.access.annotation.Secured;
@@ -115,6 +118,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 		}
 	}
 
+	// TODO make these from cache
 	private void doMirrorFetch(File mirroredRepo) {
 		try {
 			Git git = new Git(new FileRepository(mirroredRepo));
@@ -248,7 +252,9 @@ public class GitServiceBean implements GitService, InitializingBean {
 		if (hostedDir.exists()) {
 			for (File repoDir : hostedDir.listFiles()) {
 				try {
-					result.add(new FileRepository(repoDir));
+					FileKey key = FileKey.exact(repoDir, FS.DETECTED);
+					Repository repo = RepositoryCache.open(key, true);
+					result.add(repo);
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
@@ -299,6 +305,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 
 		for (Repository repo : getAllRepositories()) {
 			result.addAll(getLog(repo, region));
+			repo.close();
 		}
 
 		Collections.sort(result, new Comparator<Commit>() {
@@ -321,6 +328,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 
 		for (Repository repo : getAllRepositories()) {
 			addCommitsToSummary(repo, result);
+			repo.close();
 		}
 		return result;
 	}
@@ -332,7 +340,9 @@ public class GitServiceBean implements GitService, InitializingBean {
 		File gitDir = new File(hostedDir, name);
 		gitDir.mkdirs();
 		try {
-			new FileRepository(gitDir).create();
+			FileRepository repo = new FileRepository(gitDir);
+			repo.create();
+			repo.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -345,6 +355,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 		Map<String, Profile> profilesByName = new HashMap<String, Profile>();
 		for (Repository repo : getAllRepositories()) {
 			addCommitsToCommitsByAuthor(result, profilesByName, repo, numDays);
+			repo.close();
 		}
 
 		return result;
@@ -404,14 +415,11 @@ public class GitServiceBean implements GitService, InitializingBean {
 			config.update(git.getRepository().getConfig());
 			git.getRepository().getConfig().save();
 		} catch (JGitInternalException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
 	}
@@ -424,8 +432,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 		try {
 			FileUtils.delete(dir, FileUtils.RECURSIVE);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -434,11 +441,6 @@ public class GitServiceBean implements GitService, InitializingBean {
 		new WorkerThread().start();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.profile.service.GitService#removeInternalRepository(java.lang.String)
-	 */
 	@Override
 	public void removeInternalRepository(String name) {
 		File hostedDir = getTenantHostedBaseDir();
@@ -446,8 +448,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 		try {
 			FileUtils.delete(dir, FileUtils.RECURSIVE);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 }
