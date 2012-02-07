@@ -21,6 +21,7 @@
 		<activemq.version>5.4.2</activemq.version>
 		<slf4j.version>1.6.1</slf4j.version>
 	    <settingsBaseDir>${project.parent.basedir}</settingsBaseDir>
+	    <jgit.version>1.2.0.201112221803-r</jgit.version>
 	</properties>
 	
 	<licenses>
@@ -60,10 +61,10 @@
 		    <url>http://s3.amazonaws.com/maven.springframework.org/milestone</url>
 		</repository>
 		
-	    <repository>
-      		<id>jgit-repository</id>
-      		<url>http://download.eclipse.org/jgit/maven</url>
-   		</repository>
+<!-- 	    <repository> -->
+<!--       		<id>jgit-repository</id> -->
+<!--       		<url>http://download.eclipse.org/jgit/maven</url> -->
+<!--    		</repository> -->
 		
 		 <repository> 
 		    <id>Maven Central Repo</id>
@@ -491,7 +492,12 @@
 			<dependency>
 				<groupId>org.eclipse.jgit</groupId>
 				<artifactId>org.eclipse.jgit</artifactId>
-				<version>0.8.4</version>
+				<version>${jgit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jgit</groupId>
+				<artifactId>org.eclipse.jgit.http.server</artifactId>
+				<version>${jgit.version}</version>
 			</dependency>
 			<dependency>
 				<!-- Manual dep -->

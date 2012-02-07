@@ -23,10 +23,7 @@
 	</bean>
 	
 	<bean id="gitRequestHandler" class="com.tasktop.c2c.server.services.web.scm.GitHandler"
-		p:workingDirectory="${git.root}"
-		p:gitRoot="${git.root}"
-		p:uploadPackCommand="${git.upload-pack}"
-		p:receivePackCommand="${git.receive-pack}">
+	    p:repositoryResolver-ref="repositoryResolver">
 	</bean>
 	
 	<bean class="org.springframework.web.servlet.handler.SimpleServletHandlerAdapter" />
