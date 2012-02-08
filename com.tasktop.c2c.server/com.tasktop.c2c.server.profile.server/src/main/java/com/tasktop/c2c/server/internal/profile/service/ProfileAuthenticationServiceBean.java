@@ -31,16 +31,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
-import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.social.github.api.GitHub;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.NativeWebRequest;
 
 import com.tasktop.c2c.server.auth.service.AbstractAuthenticationServiceBean;
-import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
@@ -56,7 +52,7 @@ import com.tasktop.c2c.server.profile.domain.internal.SshPublicKey;
 @Qualifier("main")
 @Service("authenticationService")
 public class ProfileAuthenticationServiceBean extends AbstractAuthenticationServiceBean<Profile> implements
-		UserDetailsService, SignInAdapter, AuthenticationServiceInternal, PublicKeyAuthenticationService {
+		UserDetailsService, AuthenticationServiceInternal, PublicKeyAuthenticationService {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
@@ -73,31 +69,6 @@ public class ProfileAuthenticationServiceBean extends AbstractAuthenticationServ
 	@Override
 	public void setUsersConnectionRepository(UsersConnectionRepository newConnRepo) {
 		this.usersConnRepo = newConnRepo;
-	}
-
-	@Override
-	public String signIn(String username, Connection<?> connection, NativeWebRequest request) {
-		// Pull in this user's information
-		AuthenticationServiceUser user = (AuthenticationServiceUser) loadUserByUsername(username);
-
-		// Get a GitHub connection for this user.
-		ConnectionRepository connRepo = this.usersConnRepo.createConnectionRepository(username);
-		Connection<GitHub> apiConn = connRepo.findPrimaryConnection(GitHub.class);
-
-		if (apiConn == null) {
-			// No connection exists right now - that shouldn't happen since this is called from the GitHub connector
-			// code. Something's fishy - throw an exception to terminate this call.
-			throw new IllegalStateException("No GitHub connection exists for the given user!");
-		}
-
-		// Get our connection data so that we can populate the authentication token.
-		ConnectionData connData = apiConn.createData();
-
-		// Create a token for this user and push it into our security context, using the access token as the
-		// credentials.
-		AuthenticationToken token = user.getToken();
-		AuthUtils.insertNewAuthToken(user, connData.getAccessToken(), token.getAuthorities(), token);
-		return null;
 	}
 
 	@Override

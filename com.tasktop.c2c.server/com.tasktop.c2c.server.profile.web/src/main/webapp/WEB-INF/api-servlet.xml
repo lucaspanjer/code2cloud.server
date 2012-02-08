@@ -35,7 +35,7 @@
 		p:applicationUrl="#{psConfig.profileApplicationProtocol + '://' + psConfig.webHost + psConfig.baseContextPath}">
 		<constructor-arg ref="connectionFactoryLocator"/>
 		<constructor-arg ref="connectionRepository"/>
-		<constructor-arg ref="authenticationService"/>
+		<constructor-arg ref="signInAdaptor"/>
 	</bean>
 
 	<bean id="eventServiceController" class="com.tasktop.c2c.server.event.service.EventServiceController" autowire="byType"/>
