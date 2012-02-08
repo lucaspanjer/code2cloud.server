@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.profile.web.shared;
 
 @SuppressWarnings("serial")
+@Deprecated
 public class Profile extends AbstractEntity implements Comparable<Profile> {
 	private String username;
 	private String password;

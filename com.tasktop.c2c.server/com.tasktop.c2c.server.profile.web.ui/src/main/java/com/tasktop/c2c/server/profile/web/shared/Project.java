@@ -12,7 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.shared;
 
-
+@Deprecated
 @SuppressWarnings("serial")
 public class Project extends AbstractEntity {
 	private String identifier;
