@@ -28,10 +28,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.common.web.client.view.ErrorCapableView;
-import com.tasktop.c2c.server.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.tasks.domain.Keyword;
 
 public class ProjectAdminKeywordsEditView extends Composite implements Editor<Keyword>,

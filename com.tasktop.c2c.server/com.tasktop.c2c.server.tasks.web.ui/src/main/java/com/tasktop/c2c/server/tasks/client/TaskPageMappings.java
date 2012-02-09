@@ -13,8 +13,8 @@
 package com.tasktop.c2c.server.tasks.client;
 
 
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
-import com.tasktop.c2c.server.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.tasks.client.place.ProjectAdminCustomFieldsPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectAdminIterationsPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectAdminKeywordsPlace;

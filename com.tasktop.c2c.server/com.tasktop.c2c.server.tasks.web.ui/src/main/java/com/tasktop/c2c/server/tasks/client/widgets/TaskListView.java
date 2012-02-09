@@ -23,9 +23,9 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.widgets.Pager;
-import com.tasktop.c2c.server.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.tasks.client.presenters.ITaskListView;
 import com.tasktop.c2c.server.tasks.domain.SavedTaskQuery;
 

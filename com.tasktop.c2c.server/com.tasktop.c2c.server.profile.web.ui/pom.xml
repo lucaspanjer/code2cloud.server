@@ -16,6 +16,26 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>profile.server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>tasks.web.ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>wiki.web.ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>deployment.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>wiki.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
 			<artifactId>common.web</artifactId>
 		</dependency>
 		<dependency>
@@ -23,9 +43,55 @@
 			<artifactId>profile.api</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.google.gwt.google-apis</groupId>
+			<artifactId>gwt-visualization</artifactId>
+		</dependency>
+		
+		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>common.service</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.winstone</groupId>
+			<artifactId>winstone</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>httpunit</groupId>
+			<artifactId>httpunit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>test</scope>
+		</dependency>
+			<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-junit4</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-legacy</artifactId>
+			<scope>test</scope>
 		</dependency>
        <dependency>
              <groupId>com.google.gwt</groupId>
@@ -43,6 +109,21 @@
 			<artifactId>spring-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.gwt.inject</groupId>
+			<artifactId>gin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>common.web</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	
 	<build>
@@ -57,6 +138,8 @@
 					<include>**/*.ui.xml</include>
 					<include>**/*.gif</include>
 					<include>**/*.png</include>
+					<include>**/*.css</include>
+					<include>**/*.properties</include>
 				</includes>
 			</resource>
 			<resource>

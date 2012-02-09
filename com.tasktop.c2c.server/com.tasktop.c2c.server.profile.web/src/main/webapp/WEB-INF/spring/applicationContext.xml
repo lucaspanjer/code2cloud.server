@@ -28,12 +28,12 @@
 
 	<security:global-method-security secured-annotations="enabled" />
 
-	<context:component-scan base-package="com.tasktop.c2c.server.profile.web.ui.server,net.customware.gwt.dispatch.server.spring"/> 
+	<context:component-scan base-package="com.tasktop.c2c.server.common.profile.web.ui.server,net.customware.gwt.dispatch.server.spring"/> 
 	<context:annotation-config/>
 	
 	<bean class="net.customware.gwt.dispatch.server.BatchActionHandler"/>
 	
-	<bean class="com.tasktop.c2c.server.profile.web.proxy.ApplicationServiceProxy" id="applicationServiceProxy" autowire="byType">
+	<bean class="com.tasktop.c2c.server.common.profile.web.proxy.ApplicationServiceProxy" id="applicationServiceProxy" autowire="byType">
 		<property name="proxies">
 			<list value-type="com.tasktop.c2c.server.web.proxy.WebProxy">
 				<ref bean="ajpProxy"/>

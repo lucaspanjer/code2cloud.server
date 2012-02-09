@@ -30,8 +30,8 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.NoSelectionModel;
+import com.tasktop.c2c.server.common.profile.web.client.CustomActionCell;
 import com.tasktop.c2c.server.common.web.client.view.CellTableResources;
-import com.tasktop.c2c.server.profile.web.client.CustomActionCell;
 import com.tasktop.c2c.server.tasks.domain.CustomFieldValue;
 
 /**

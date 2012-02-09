@@ -1,7 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'
 			 xmlns:cellview="urn:import:com.google.gwt.user.cellview.client"
-			 xmlns:tt="urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.components">
+			 xmlns:tt="urn:import:com.tasktop.c2c.server.common.profile.web.ui.client.view.components">
 	<g:HTMLPanel>
 		<div class="deployment">
 			<div class="deployment-heading">

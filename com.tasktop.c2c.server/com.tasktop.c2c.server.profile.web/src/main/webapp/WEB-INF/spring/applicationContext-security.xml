@@ -20,7 +20,7 @@
 	/>
 	
 	<bean id="trustedHostAuthenticationProvider"
-		class="com.tasktop.c2c.server.profile.web.TrustedHostAuthenticationProvider"
+		class="com.tasktop.c2c.server.common.profile.web.TrustedHostAuthenticationProvider"
 	/>
 
 	<bean id="trustedHostAuthenticationProcessingFilter"

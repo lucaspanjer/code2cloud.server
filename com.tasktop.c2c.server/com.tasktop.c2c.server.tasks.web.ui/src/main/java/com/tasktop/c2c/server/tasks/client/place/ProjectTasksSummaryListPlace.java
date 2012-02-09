@@ -19,14 +19,14 @@ import net.customware.gwt.dispatch.shared.Action;
 
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
+import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
+import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.client.navigation.PageMapping;
-import com.tasktop.c2c.server.profile.web.client.place.Breadcrumb;
-import com.tasktop.c2c.server.profile.web.client.util.WindowTitleBuilder;
-import com.tasktop.c2c.server.profile.web.shared.actions.GetProjectResult;
 import com.tasktop.c2c.server.tasks.client.TaskPageMappings;
 import com.tasktop.c2c.server.tasks.client.presenters.TasksSummaryListPresenter.ListScope;
 import com.tasktop.c2c.server.tasks.domain.Component;
