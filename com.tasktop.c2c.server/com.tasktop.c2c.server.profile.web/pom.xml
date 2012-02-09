@@ -122,6 +122,31 @@
 		   </sourceIncludes>
 		</configuration>
 	   </plugin>
+	    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-shared-resources</id>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+             <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}</outputDirectory>
+            <artifactItems>
+            <artifactItem>
+            	<artifactId>profile.web.ui</artifactId>
+            	<groupId>${project.groupId}</groupId>
+            	<classifier>resources</classifier>
+            	<type>zip</type>
+            	<overWrite>false</overWrite>
+           	</artifactItem>
+            </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 	</plugins>
 </build>
 

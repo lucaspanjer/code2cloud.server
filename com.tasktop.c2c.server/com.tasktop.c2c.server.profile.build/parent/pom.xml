@@ -180,6 +180,7 @@
 				<configuration>
 				   <addGroupIdToProjectName>true</addGroupIdToProjectName>     
 				   <downloadSources>true</downloadSources>
+				   <workspace>NONE</workspace> <!-- Keep the eclipse worksace out of the equations. Comment out to get links to your dep projects (eg. jgit) -->
 				   <additionalConfig>
 				     <file>
 				       <name>.settings/org.eclipse.jdt.core.prefs</name>

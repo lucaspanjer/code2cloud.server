@@ -113,22 +113,22 @@
 	</servlet>
 	<servlet>
 		<servlet-name>profileServiceServlet</servlet-name>
-		<servlet-class>com.tasktop.c2c.server.common.profile.web.ui.server.ProfileServiceImpl</servlet-class>
+		<servlet-class>com.tasktop.c2c.server.profile.web.ui.server.ProfileServiceImpl</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>buildServiceServlet</servlet-name>
-		<servlet-class>com.tasktop.c2c.server.common.profile.web.ui.server.BuildServiceImpl</servlet-class>
+		<servlet-class>com.tasktop.c2c.server.profile.web.ui.server.BuildServiceImpl</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>deploymentServiceServlet</servlet-name>
-		<servlet-class>com.tasktop.c2c.server.common.profile.web.ui.server.DeploymentServiceImpl</servlet-class>
+		<servlet-class>com.tasktop.c2c.server.profile.web.ui.server.DeploymentServiceImpl</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>dispatchServiceServlet</servlet-name>
-		<servlet-class>com.tasktop.c2c.server.common.profile.web.ui.server.DispatchServiceImpl</servlet-class>
+		<servlet-class>com.tasktop.c2c.server.profile.web.ui.server.DispatchServiceImpl</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>

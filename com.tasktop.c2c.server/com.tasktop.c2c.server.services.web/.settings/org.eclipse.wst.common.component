@@ -90,10 +90,10 @@
     <dependent-module archiveName="openid4java-nodeps-0.9.6.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/openid4java/openid4java-nodeps/0.9.6/openid4java-nodeps-0.9.6.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
-    <dependent-module archiveName="org.eclipse.jgit.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/org.eclipse.jgit/org.eclipse.jgit">
+    <dependent-module archiveName="org.eclipse.jgit-1.2.0.201112221803-r.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/eclipse/jgit/org.eclipse.jgit/1.2.0.201112221803-r/org.eclipse.jgit-1.2.0.201112221803-r.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
-    <dependent-module archiveName="org.eclipse.jgit.http.server.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/org.eclipse.jgit.http.server/org.eclipse.jgit.http.server">
+    <dependent-module archiveName="org.eclipse.jgit.http.server-1.2.0.201112221803-r.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/eclipse/jgit/org.eclipse.jgit.http.server/1.2.0.201112221803-r/org.eclipse.jgit.http.server-1.2.0.201112221803-r.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
     <dependent-module archiveName="org.eclipse.mylyn.wikitext.core-1.6.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.core/1.6.0-SNAPSHOT/org.eclipse.mylyn.wikitext.core-1.6.0-SNAPSHOT.jar">

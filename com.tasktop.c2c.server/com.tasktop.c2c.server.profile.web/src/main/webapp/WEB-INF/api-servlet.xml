@@ -11,15 +11,15 @@
 	<context:annotation-config/>
    
 	<bean id="profileWebServiceController"
-		class="com.tasktop.c2c.server.common.profile.web.ui.server.ProfileWebServiceController"
+		class="com.tasktop.c2c.server.profile.web.ui.server.ProfileWebServiceController"
 		autowire="byType"/>
 	
 	<bean id="activityServiceController"
-		class="com.tasktop.c2c.server.common.profile.web.ui.server.ActivityServiceController"
+		class="com.tasktop.c2c.server.profile.web.ui.server.ActivityServiceController"
 		autowire="byType"/>
 		
 	<bean id="projectArtifactServiceController"
-		class="com.tasktop.c2c.server.common.profile.web.ui.server.ProjectArtifactServiceController"
+		class="com.tasktop.c2c.server.profile.web.ui.server.ProjectArtifactServiceController"
 		autowire="byType"/>
 
 	<bean id="externalConnectController"
