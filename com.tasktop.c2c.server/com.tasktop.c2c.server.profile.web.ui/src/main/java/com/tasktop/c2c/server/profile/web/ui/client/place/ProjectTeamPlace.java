@@ -17,7 +17,6 @@ import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
 
-
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
@@ -27,6 +26,8 @@ import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Section;
 import com.tasktop.c2c.server.common.profile.web.client.place.SectionPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
+import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamSummary;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult;
@@ -38,7 +39,7 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 public class ProjectTeamPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace,
-		BreadcrumbPlace, SectionPlace {
+		BreadcrumbPlace, SectionPlace, WindowTitlePlace {
 
 	public static class Tokenizer implements PlaceTokenizer<ProjectTeamPlace> {
 
@@ -124,5 +125,10 @@ public class ProjectTeamPlace extends AbstractBatchFetchingPlace implements Head
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
 		breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Team"));
+	}
+
+	@Override
+	public String getWindowTitle() {
+		return WindowTitleBuilder.createWindowTitle(Section.TEAM, project.getName());
 	}
 }
