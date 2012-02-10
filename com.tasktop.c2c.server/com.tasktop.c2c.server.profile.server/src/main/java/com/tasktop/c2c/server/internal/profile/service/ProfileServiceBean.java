@@ -136,6 +136,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Autowired
 	private NotificationService notificationService;
 
+	@Autowired
+	private IdentityManagmentService identityManagmentService;
+
 	private String profileCreatedTemplate = "com/tasktop/c2c/server/internal/profile/service/template/profileCreated.vm";
 	private String passwordResetTemplate = "com/tasktop/c2c/server/internal/profile/service/template/passwordResetRequest.vm";
 	private String projectInvitationTemplate = "com/tasktop/c2c/server/internal/profile/service/template/projectInvitation.vm";
@@ -224,14 +227,13 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		securityPolicy.create(profile);
 
 		validate(profile, validator, new AccountConstraintsValidator(), new ProfilePasswordValidator());
-		profile.setId(null);
-		profile.setPassword(passwordEncoder.encodePassword(profile.getPassword(), null));
 		profile.setNotificationSettings(notificationService.constructDefaultSettings());
-		profile.setDisabled(false);
-		entityManager.persist(profile);
-		sendVerificationEmail(profile);
 
-		return profile.getId();
+		Profile created = identityManagmentService.createProfile(profile);
+
+		sendVerificationEmail(created);
+
+		return created.getId();
 	}
 
 	private void sendWelcomEmail(Profile profile) {
@@ -252,57 +254,38 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		securityPolicy.modify(profile);
 
+		Profile currentProfile = identityManagmentService.getProfileByUsername(profile.getUsername());
+
 		boolean passwordReset = false;
-		Profile managedProfile = profile;
 		boolean nameChanged = true;
 		boolean emailChanged = true;
-		if (!entityManager.contains(profile)) {
-			managedProfile = entityManager.find(Profile.class, profile.getId());
-			if (managedProfile == null) {
-				throw new EntityNotFoundException();
-			}
-			nameChanged = !managedProfile.getFirstName().equals(profile.getFirstName())
-					|| !managedProfile.getLastName().equals(profile.getLastName());
-			emailChanged = !managedProfile.getEmail().equals(profile.getEmail());
+		nameChanged = !currentProfile.getFirstName().equals(profile.getFirstName())
+				|| !currentProfile.getLastName().equals(profile.getLastName());
+		emailChanged = !currentProfile.getEmail().equals(profile.getEmail());
 
-			managedProfile.setEmail(profile.getEmail());
-			managedProfile.setFirstName(profile.getFirstName());
-			managedProfile.setLastName(profile.getLastName());
-			if (profile.getNotificationSettings() != null) {
-				managedProfile.getNotificationSettings().setEmailTaskActivity(
-						profile.getNotificationSettings().getEmailTaskActivity());
-				managedProfile.getNotificationSettings().setEmailNewsAndEvents(
-						profile.getNotificationSettings().getEmailNewsAndEvents());
-				managedProfile.getNotificationSettings().setEmailServiceAndMaintenance(
-						profile.getNotificationSettings().getEmailServiceAndMaintenance());
-			}
-			if (profile.getPassword() != null && profile.getPassword().trim().length() > 0) {
-				passwordReset = true;
-				managedProfile.setPassword(profile.getPassword());
-			}
-			if (getCurrentUserProfile() != null && getCurrentUserProfile().getAdmin()
-					&& !getCurrentUserProfile().equals(profile)) {
-				managedProfile.setDisabled(profile.getDisabled());
-			}
+		if (profile.getPassword() != null && profile.getPassword().trim().length() > 0) {
+			passwordReset = true;
 		}
+
+		currentProfile = identityManagmentService.updateProfile(profile);
+
+		// Validation
 		List<Validator> validators = new ArrayList<Validator>();
 		validators.add(validator);
 		validators.add(new AccountConstraintsValidator());
 		if (passwordReset) {
 			validators.add(new ProfilePasswordValidator());
 		}
-		validate(managedProfile, validators);
-		if (passwordReset) {
-			managedProfile.setPassword(passwordEncoder.encodePassword(managedProfile.getPassword(), null));
-		}
+		validate(currentProfile, validators);
+
 		if (nameChanged || emailChanged) {
-			for (ProjectProfile projectProfile : managedProfile.getProjectProfiles()) {
+			for (ProjectProfile projectProfile : currentProfile.getProjectProfiles()) {
 				jobService.schedule(new ReplicateProjectTeamJob(projectProfile.getProject()));
 			}
 		}
 		if (emailChanged) {
-			managedProfile.setEmailVerified(false);
-			sendVerificationEmail(managedProfile);
+			currentProfile.setEmailVerified(false);
+			sendVerificationEmail(currentProfile);
 		}
 	}
 
@@ -1096,11 +1079,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		if (currentUser != null) {
 			try {
-				return (Profile) entityManager
-						.createQuery("select e from " + Profile.class.getSimpleName() + " e where e.username = :u")
-						.setParameter("u", currentUser).getSingleResult();
-
-			} catch (NoResultException e) {
+				return identityManagmentService.getProfileByUsername(currentUser);
+			} catch (EntityNotFoundException e) {
 				// expected
 			}
 		}

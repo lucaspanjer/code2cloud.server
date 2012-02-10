@@ -76,7 +76,6 @@ import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.Job;
-import com.tasktop.c2c.server.internal.profile.service.AuthenticationServiceInternal;
 import com.tasktop.c2c.server.internal.profile.service.EmailJob;
 import com.tasktop.c2c.server.internal.profile.service.ReplicateProjectTeamJob;
 import com.tasktop.c2c.server.profile.domain.Email;
@@ -152,7 +151,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 			}
 		});
 
-		applicationContext.getBean(AuthenticationServiceInternal.class).setUsersConnectionRepository(userConnRepo);
+		// applicationContext.getBean(AuthenticationServiceInternal.class).setUsersConnectionRepository(userConnRepo);
 	}
 
 	@After
@@ -1302,8 +1301,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 
 		assertEquals(invitationTokens.getTokens().size(), invitations.getTokens().size());
 		for (int x = 0; x < invitationTokens.getTokens().size(); ++x) {
-			com.tasktop.c2c.server.profile.domain.project.SignUpToken original = invitationTokens.getTokens()
-					.get(x);
+			com.tasktop.c2c.server.profile.domain.project.SignUpToken original = invitationTokens.getTokens().get(x);
 			com.tasktop.c2c.server.profile.domain.project.SignUpToken created = invitations.getTokens().get(x);
 			assertEquals(original.getFirstname(), created.getFirstname());
 			assertEquals(original.getLastname(), created.getLastname());

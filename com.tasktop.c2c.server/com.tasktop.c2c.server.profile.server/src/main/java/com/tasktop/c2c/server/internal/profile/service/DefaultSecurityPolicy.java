@@ -126,10 +126,16 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 		// at the end, unless explicitly allowable.
 
 		if (target instanceof Profile) {
+			Profile profile = (Profile) target;
 			switch (operation) {
 			case MODIFY:
 				if (getCurrentUserProfile() != null && getCurrentUserProfile().getAdmin()) {
+
+					if (getCurrentUserProfile().equals(profile) && profile.getDisabled()) {
+						throw new InsufficientPermissionsException("Can not disable your own account");
+					}
 					return;
+
 				}
 				assertEquals(getCurrentUserProfile(), target); // FIXME
 

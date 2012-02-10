@@ -12,7 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.auth.service;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import com.tasktop.c2c.server.common.service.AuthenticationException;
@@ -69,7 +71,12 @@ public abstract class AbstractAuthenticationServiceBean<UserData> implements Aut
 	 * @see AuthenticationToken#getAuthorities()
 	 */
 	protected void addAuthorities(UserData data, AuthenticationToken token) {
-		token.getAuthorities().add(Role.User);
+		token.getAuthorities().clear();
+		token.getAuthorities().addAll(computeAuthorities(data));
+	}
+
+	protected List<String> computeAuthorities(UserData data) {
+		return Collections.singletonList(Role.User);
 	}
 
 	/**
