@@ -19,10 +19,11 @@
 					<div class="menu-items browse">
 						<div class="top"/>
 							<ul>
+								<li><div>Standard Searches</div></li>
 								<g:FlowPanel ui:field="predefinedQueryMenuPanel"/>
 							</ul>
 							<ul class="saved-queries">
-								<li><div>Saved</div></li>
+								<li><div>My Searches</div></li>
 								<g:FlowPanel ui:field="savedQueryMenuPanel"/>
 							</ul>
 						<div class="bottom"></div>
