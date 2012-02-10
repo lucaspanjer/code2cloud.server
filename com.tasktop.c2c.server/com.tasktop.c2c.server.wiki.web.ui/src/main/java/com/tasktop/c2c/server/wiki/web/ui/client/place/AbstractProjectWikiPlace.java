@@ -17,18 +17,18 @@ import java.util.List;
 import net.customware.gwt.dispatch.shared.Action;
 
 
+import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.Section;
+import com.tasktop.c2c.server.common.profile.web.client.place.SectionPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.client.AuthenticationHelper;
-import com.tasktop.c2c.server.profile.web.client.ProfileGinjector;
-import com.tasktop.c2c.server.profile.web.client.place.AbstractBatchFetchingPlace;
-import com.tasktop.c2c.server.profile.web.client.place.BreadcrumbPlace;
-import com.tasktop.c2c.server.profile.web.client.place.HasProjectPlace;
-import com.tasktop.c2c.server.profile.web.client.place.HeadingPlace;
-import com.tasktop.c2c.server.profile.web.client.place.Section;
-import com.tasktop.c2c.server.profile.web.client.place.SectionPlace;
-import com.tasktop.c2c.server.profile.web.client.place.WindowTitlePlace;
-import com.tasktop.c2c.server.profile.web.shared.actions.GetProjectAction;
-import com.tasktop.c2c.server.profile.web.shared.actions.GetProjectResult;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)

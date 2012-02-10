@@ -16,10 +16,10 @@ import java.util.LinkedHashMap;
 
 
 import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
+import com.tasktop.c2c.server.common.profile.web.client.place.AbstractPlace;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
-import com.tasktop.c2c.server.profile.web.client.navigation.PageMapping;
-import com.tasktop.c2c.server.profile.web.client.place.AbstractPlace;
 
 public class ProjectAdminTasksPlace extends AbstractProjectAdminTasksPlace {
 

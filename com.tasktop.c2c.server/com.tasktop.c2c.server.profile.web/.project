@@ -6,6 +6,7 @@
     <project>com.tasktop.c2c.server.cloud.api</project>
     <project>com.tasktop.c2c.server.cloud.service</project>
     <project>com.tasktop.c2c.server.common.api</project>
+    <project>com.tasktop.c2c.server.common.profile.web.ui</project>
     <project>com.tasktop.c2c.server.common.service</project>
     <project>com.tasktop.c2c.server.common.web</project>
     <project>com.tasktop.c2c.server.configuration.service</project>

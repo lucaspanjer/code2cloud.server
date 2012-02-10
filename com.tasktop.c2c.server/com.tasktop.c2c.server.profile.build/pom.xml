@@ -18,6 +18,7 @@
 		<module>../com.tasktop.c2c.server.common.api</module>
 		<module>../com.tasktop.c2c.server.common.service</module>
 		<module>../com.tasktop.c2c.server.common.web</module>
+		<module>../com.tasktop.c2c.server.common.profile.web.ui</module>
 		<module>../com.tasktop.c2c.server.configuration.service</module>
 		<module>../com.tasktop.c2c.server.auth.service</module>
 

@@ -17,10 +17,10 @@ import java.util.List;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.view.ErrorCapableView;
-import com.tasktop.c2c.server.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.tasks.client.place.ProjectAdminKeywordsPlace;
 import com.tasktop.c2c.server.tasks.client.widgets.admin.keywords.IProjectAdminKeywordsView;
 import com.tasktop.c2c.server.tasks.client.widgets.admin.keywords.ProjectAdminKeywordsEditView;

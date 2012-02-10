@@ -19,13 +19,13 @@ import java.util.List;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
+import com.tasktop.c2c.server.common.profile.web.client.ClientCallback;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 import com.tasktop.c2c.server.common.web.client.view.ErrorCapableView;
-import com.tasktop.c2c.server.profile.web.client.ClientCallback;
-import com.tasktop.c2c.server.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.tasks.client.place.ProjectAdminProductsPlace;
 import com.tasktop.c2c.server.tasks.client.widgets.admin.products.IProjectAdminTasksView;
 import com.tasktop.c2c.server.tasks.client.widgets.admin.products.ProjectAdminTasksEditView;

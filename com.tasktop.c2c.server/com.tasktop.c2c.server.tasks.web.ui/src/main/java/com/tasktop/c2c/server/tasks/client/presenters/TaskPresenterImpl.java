@@ -18,11 +18,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
+import com.tasktop.c2c.server.common.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
-import com.tasktop.c2c.server.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTaskPlace;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskView;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskViewImpl;

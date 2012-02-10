@@ -56,6 +56,7 @@
   <classpathentry kind="var" path="M2_REPO/org/kohsuke/graph-layouter/1.0/graph-layouter-1.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/codehaus/groovy/groovy-all/1.6.0/groovy-all-1.6.0.jar" sourcepath="M2_REPO/org/codehaus/groovy/groovy-all/1.6.0/groovy-all-1.6.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/guava/guava/r06/guava-r06.jar" sourcepath="M2_REPO/com/google/guava/guava/r06/guava-r06-sources.jar"/>
+  <classpathentry kind="src" path="/hudson-core"/>
   <classpathentry kind="var" path="M2_REPO/org/kohsuke/jinterop/j-interop/2.0.5/j-interop-2.0.5.jar" sourcepath="M2_REPO/org/kohsuke/jinterop/j-interop/2.0.5/j-interop-2.0.5-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/kohsuke/jinterop/j-interopdeps/2.0.5/j-interopdeps-2.0.5.jar" sourcepath="M2_REPO/org/kohsuke/jinterop/j-interopdeps/2.0.5/j-interopdeps-2.0.5-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-core-asl/1.5.3/jackson-core-asl-1.5.3.jar" sourcepath="M2_REPO/org/codehaus/jackson/jackson-core-asl/1.5.3/jackson-core-asl-1.5.3-sources.jar"/>

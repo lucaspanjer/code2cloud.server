@@ -16,8 +16,8 @@ import java.util.List;
 
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.tasktop.c2c.server.common.profile.web.client.ClientCallback;
 import com.tasktop.c2c.server.common.web.client.view.ErrorCapableView;
-import com.tasktop.c2c.server.profile.web.client.ClientCallback;
 import com.tasktop.c2c.server.tasks.domain.Component;
 import com.tasktop.c2c.server.tasks.domain.Milestone;
 import com.tasktop.c2c.server.tasks.domain.Product;

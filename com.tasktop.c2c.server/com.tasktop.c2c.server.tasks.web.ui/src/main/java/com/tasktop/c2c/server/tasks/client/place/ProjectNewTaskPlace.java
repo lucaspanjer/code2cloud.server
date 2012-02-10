@@ -20,17 +20,17 @@ import net.customware.gwt.dispatch.shared.Action;
 
 
 import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
+import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
+import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.Section;
+import com.tasktop.c2c.server.common.profile.web.client.place.SectionPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.client.navigation.PageMapping;
-import com.tasktop.c2c.server.profile.web.client.place.Breadcrumb;
-import com.tasktop.c2c.server.profile.web.client.place.BreadcrumbPlace;
-import com.tasktop.c2c.server.profile.web.client.place.HasProjectPlace;
-import com.tasktop.c2c.server.profile.web.client.place.HeadingPlace;
-import com.tasktop.c2c.server.profile.web.client.place.Section;
-import com.tasktop.c2c.server.profile.web.client.place.SectionPlace;
-import com.tasktop.c2c.server.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.tasks.client.TaskPageMappings;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.Task;

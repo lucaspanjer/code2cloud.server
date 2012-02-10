@@ -13,8 +13,8 @@
 package com.tasktop.c2c.server.tasks.client.widgets;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.tasktop.c2c.server.common.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
-import com.tasktop.c2c.server.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.tasks.client.presenters.TaskPresenter;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.Task;
