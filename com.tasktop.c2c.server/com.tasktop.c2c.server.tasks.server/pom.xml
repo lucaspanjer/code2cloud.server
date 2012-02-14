@@ -135,11 +135,14 @@
 						<phase>process-classes</phase>
 						<configuration>
 							<tasks>
+								<copy file="${basedir}/target/classes/META-INF/persistence-tasks.xml" 
+								      tofile="${basedir}/target/classes/META-INF/persistence.xml"/>
 								<taskdef name="weave"
 									classname="org.eclipse.persistence.tools.weaving.jpa.StaticWeaveAntTask"
 									classpathref="maven.compile.classpath" />
+									
 								<weave loglevel="CONFIG" source="${basedir}/target/classes"
-									target="${basedir}/target/classes">
+									target="${basedir}/target/classes" >
 									<classpath refid="maven.compile.classpath" />
 								</weave>
 							</tasks>

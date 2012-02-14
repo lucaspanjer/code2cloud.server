@@ -62,6 +62,7 @@
         <module>../com.tasktop.c2c.server.hudson.configuration.web</module>
 
         <module>../com.tasktop.c2c.server.util.docs</module>
+        <module>../com.tasktop.c2c.server.developer.support</module>
 	</modules>
 	
 	<build>

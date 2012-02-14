@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>com.tasktop.c2c.server</groupId>
+		<artifactId>lib</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>../com.tasktop.c2c.server.build/parent/pom.xml</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>developer.support</artifactId>
+	<packaging>jar</packaging>
+
+	<version>0.1.0-SNAPSHOT</version>
+	<dependencies>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>profile.web</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>tasks.web</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>wiki.web</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>services.web</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>7.1.6.v20100715</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlet</artifactId>
+			<version>7.1.6.v20100715</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+			<version>7.1.6.v20100715</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-ajp</artifactId>
+			<version>7.1.6.v20100715</version>
+		</dependency>
+
+	</dependencies>
+
+
+</project>
