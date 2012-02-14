@@ -36,6 +36,7 @@ import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProfileFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
+import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectProfileFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/applicationContext-test.xml" })
@@ -152,7 +153,7 @@ public class ProfileServiceDataSecurityTest {
 	@Test
 	public void testMemberCanSeeApplication() throws EntityNotFoundException, ValidationException {
 		Project application = logonCreateAndRetrieveApplication();
-		profileService.addProjectProfile(application.getId(), profile2.getId());
+		MockProjectProfileFactory.create(application, profile2, entityManager);
 		logon(profile2);
 		profileService.getProject(application.getId());
 		profileService.getProjectByIdentifier(application.getIdentifier());
@@ -186,7 +187,7 @@ public class ProfileServiceDataSecurityTest {
 	public void testOwnerCanRemoveMember() throws EntityNotFoundException, ValidationException {
 		Project application = logonCreateAndRetrieveApplication();
 
-		profileService.addProjectProfile(application.getId(), profile2.getId());
+		MockProjectProfileFactory.create(application, profile2, entityManager);
 		profileService.removeProjectProfile(application.getId(), profile2.getId());
 	}
 
@@ -194,7 +195,7 @@ public class ProfileServiceDataSecurityTest {
 	public void testMemberCannotRemoveOwner() throws EntityNotFoundException, ValidationException {
 		Project application = logonCreateAndRetrieveApplication();
 
-		profileService.addProjectProfile(application.getId(), profile2.getId());
+		MockProjectProfileFactory.create(application, profile2, entityManager);
 
 		logon(profile2);
 
@@ -205,8 +206,8 @@ public class ProfileServiceDataSecurityTest {
 	public void testMemberCannotRemoveMember() throws EntityNotFoundException, ValidationException {
 		Project application = logonCreateAndRetrieveApplication();
 
-		profileService.addProjectProfile(application.getId(), profile2.getId());
-		profileService.addProjectProfile(application.getId(), profile3.getId());
+		MockProjectProfileFactory.create(application, profile2, entityManager);
+		MockProjectProfileFactory.create(application, profile3, entityManager);
 
 		logon(profile2);
 
@@ -217,7 +218,7 @@ public class ProfileServiceDataSecurityTest {
 	public void testMemberCanRemoveSelf() throws EntityNotFoundException, ValidationException {
 		Project application = logonCreateAndRetrieveApplication();
 
-		profileService.addProjectProfile(application.getId(), profile2.getId());
+		MockProjectProfileFactory.create(application, profile2, entityManager);
 
 		logon(profile2);
 		profileService.removeProjectProfile(application.getId(), profile2.getId());
@@ -227,7 +228,7 @@ public class ProfileServiceDataSecurityTest {
 	public void testOwnerCanAlterRoles() throws Exception {
 		Project application = logonCreateAndRetrieveApplication();
 
-		profileService.addProjectProfile(application.getId(), profile2.getId());
+		MockProjectProfileFactory.create(application, profile2, entityManager);
 
 		ProjectProfile applicationProfile = profileService.getProjectProfile(application.getId(), profile2.getId());
 		entityManager.flush();
@@ -245,7 +246,7 @@ public class ProfileServiceDataSecurityTest {
 	public void testNonOwnerCannotAlterRoles() throws Exception {
 		Project application = logonCreateAndRetrieveApplication();
 
-		profileService.addProjectProfile(application.getId(), profile2.getId());
+		MockProjectProfileFactory.create(application, profile2, entityManager);
 
 		ProjectProfile applicationProfile = profileService.getProjectProfile(application.getId(), profile2.getId());
 		entityManager.flush();

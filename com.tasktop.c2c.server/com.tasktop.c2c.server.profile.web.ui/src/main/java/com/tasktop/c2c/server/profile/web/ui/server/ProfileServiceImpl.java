@@ -408,30 +408,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	}
 
 	@Override
-	public Boolean addTeamMemberByEmail(String projectIdentifier, String personEmail) throws NoSuchEntityException {
-		setTenancyContext(projectIdentifier);
-
-		com.tasktop.c2c.server.profile.domain.internal.Project project;
-		try {
-			project = profileService.getProjectByIdentifier(projectIdentifier);
-		} catch (EntityNotFoundException e) {
-			handle(e);
-			throw new IllegalStateException();
-		}
-		com.tasktop.c2c.server.profile.domain.internal.Profile profile = profileService.getProfileByEmail(personEmail);
-		if (profile == null) {
-			throw new NoSuchEntityException();
-		}
-		try {
-			profileService.addProjectProfile(project.getId(), profile.getId());
-		} catch (EntityNotFoundException e) {
-			handle(e);
-			throw new IllegalStateException();
-		}
-		return true;
-	}
-
-	@Override
 	public boolean removeTeamMember(String projectIdentifier, ProjectTeamMember member) throws NoSuchEntityException,
 			ValidationFailedException {
 		setTenancyContext(projectIdentifier);

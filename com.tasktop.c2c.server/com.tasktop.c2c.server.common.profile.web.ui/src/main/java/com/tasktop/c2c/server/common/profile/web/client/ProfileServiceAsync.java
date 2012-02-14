@@ -63,8 +63,6 @@ public interface ProfileServiceAsync {
 
 	void findProfiles(String query, QueryRequest request, AsyncCallback<QueryResult<Profile>> callback);
 
-	void addTeamMemberByEmail(String projectIdentifier, String personEmail, AsyncCallback<Boolean> callback);
-
 	void updateTeamMemberRoles(String projectIdentifier, ProjectTeamMember member, AsyncCallback<Boolean> callback);
 
 	void removeTeamMember(String projectIdentifier, ProjectTeamMember member, AsyncCallback<Boolean> callback);

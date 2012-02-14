@@ -920,20 +920,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		return false;
 	}
 
-	@Secured(Role.User)
-	@Override
-	public void addProjectProfile(Long projectId, Long profileId) throws EntityNotFoundException {
-
-		Project project = getProject(projectId);
-		Profile profile = getProfileInternal(profileId);
-
-		// Validate that our security constraints are satisfied
-		securityPolicy.add(project, profile, "projectProfiles");
-
-		// Do the actual add now.
-		addProjectProfileInternal(project, profile);
-	}
-
 	private void addProjectProfileInternal(Project project, Profile profile) {
 		List<ProjectProfile> projectProfiles = project.getProjectProfiles();
 		ProjectProfile projectProfile = null;
@@ -1067,6 +1053,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			errors.reject("project.mustHaveOwner", null, "Cannot remove owner: an project must have at least one owner");
 			throw new ValidationException(errors);
 		}
+
+		jobService.schedule(new ReplicateProjectTeamJob(project));
 
 		project.getProjectProfiles().remove(profileToRemove);
 		profile.getProjectProfiles().remove(profileToRemove);

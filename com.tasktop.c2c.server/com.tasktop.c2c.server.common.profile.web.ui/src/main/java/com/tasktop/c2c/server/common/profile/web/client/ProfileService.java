@@ -76,8 +76,6 @@ public interface ProfileService extends RemoteService {
 
 	public QueryResult<Profile> findProfiles(String query, QueryRequest request);
 
-	public Boolean addTeamMemberByEmail(String projectIdentifier, String personEmail) throws NoSuchEntityException;
-
 	public Boolean updateTeamMemberRoles(String projectIdentifier, ProjectTeamMember member)
 			throws NoSuchEntityException, ValidationFailedException;
 

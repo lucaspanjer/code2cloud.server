@@ -22,6 +22,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,6 +47,7 @@ public class ProfileAuthenticationServiceBean extends AbstractAuthenticationServ
 	@PersistenceContext
 	protected EntityManager entityManager;
 
+	@Autowired
 	protected IdentityManagmentService identityManagmentService;
 
 	@Override

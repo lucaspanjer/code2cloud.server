@@ -90,8 +90,6 @@ public interface ProfileService {
 
 	public void unwatchProject(String projectIdentifier) throws EntityNotFoundException;
 
-	public void addProjectProfile(Long projectId, Long profileId) throws EntityNotFoundException;
-
 	public void removeProjectProfile(Long projectId, Long profileId) throws EntityNotFoundException,
 			ValidationException;
 

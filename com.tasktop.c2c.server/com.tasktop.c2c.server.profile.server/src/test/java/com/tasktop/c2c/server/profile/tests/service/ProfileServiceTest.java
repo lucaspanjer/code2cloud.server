@@ -98,6 +98,7 @@ import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockAgreementFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProfileFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
+import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectProfileFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockSshPublicKeyFactory;
 import com.tasktop.c2c.server.profile.tests.mock.MockTaskServiceProvider;
 import com.tasktop.c2c.server.tasks.domain.Team;
@@ -729,49 +730,6 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		assertEquals(region.getSize().intValue(), result.getResultPage().size());
 	}
 
-	@Test
-	public void testAddProjectProfile() throws EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
-		Project project = MockProjectFactory.create(entityManager);
-
-		profileService.addProjectProfile(project.getId(), profile.getId());
-
-		assertEquals(1, project.getProjectProfiles().size());
-		assertEquals(1, profile.getProjectProfiles().size());
-
-		ProjectProfile projectProfile = getProjectProfile(project, profile);
-		assertNotNull(projectProfile);
-	}
-
-	@Test
-	public void testAddProjectProfile_existingProjectProfile() throws EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
-		Project project = MockProjectFactory.create(entityManager);
-
-		// Before we do our add, create a projectProfile between this user and this project which doesn't have user
-		// privileges to ensure that the existing object is updated rather than a new one being created
-		ProjectProfile existingProjectProfile = new ProjectProfile();
-		existingProjectProfile.setProject(project);
-		project.getProjectProfiles().add(existingProjectProfile);
-		existingProjectProfile.setProfile(profile);
-		profile.getProjectProfiles().add(existingProjectProfile);
-		existingProjectProfile.setCommunity(true);
-		entityManager.persist(existingProjectProfile);
-
-		// Make sure we only have one object.
-		assertEquals(1, entityManager.createQuery("select a from " + ProjectProfile.class.getSimpleName() + " a")
-				.getResultList().size());
-
-		profileService.addProjectProfile(project.getId(), profile.getId());
-
-		assertEquals(1, project.getProjectProfiles().size());
-		assertEquals(1, profile.getProjectProfiles().size());
-
-		// Make sure we still only have one object.
-		assertEquals(1, entityManager.createQuery("select a from " + ProjectProfile.class.getSimpleName() + " a")
-				.getResultList().size());
-	}
-
 	protected ProjectProfile getProjectProfile(Project project, Profile profile) {
 		try {
 			return (ProjectProfile) entityManager
@@ -810,8 +768,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 	}
 
 	protected ProjectProfile addProject(Profile profile, Project project) throws EntityNotFoundException {
-		profileService.addProjectProfile(project.getId(), profile.getId());
-		return profileService.getProjectProfile(project.getId(), profile.getId());
+		return MockProjectProfileFactory.create(project, profile, entityManager);
 	}
 
 	@Test
@@ -832,8 +789,6 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		Profile profile = MockProfileFactory.create(entityManager);
 		Profile profile2 = MockProfileFactory.create(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
-
-		profileService.addProjectProfile(project.getId(), profile.getId());
 
 		ProjectProfile projectProfile = addProject(profile, project);
 		projectProfile.setOwner(true);
@@ -1358,13 +1313,17 @@ public class ProfileServiceTest implements ApplicationContextAware {
 	}
 
 	@Test
-	public void testReplicateTeamGetsScheduledOnTeamModification() throws EntityNotFoundException {
+	public void testReplicateTeamGetsScheduledOnTeamModification() throws EntityNotFoundException, ValidationException {
 		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile2 = MockProfileFactory.create(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
 
 		entityManager.flush();
 
-		profileService.addProjectProfile(project.getId(), profile.getId());
+		addProject(profile, project);
+		addProject(profile2, project);
+
+		profileService.removeProjectProfile(project.getId(), profile2.getId());
 
 		assertReplicateJobScheduled(project);
 	}
@@ -1389,6 +1348,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		project.addProfile(profile);
 
 		entityManager.flush();
+		entityManager.detach(profile);
 
 		profile.setFirstName(profile.getFirstName() + "changed");
 		profileService.updateProfile(profile);

@@ -29,6 +29,7 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.github.api.GitHub;
+import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
@@ -43,6 +44,7 @@ import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
  * @author clint.morgan@tasktop.com (Tasktop Technologies Inc.)
  * 
  */
+@Component
 public class BaseProfileIdentityManagmentService implements IdentityManagmentService {
 
 	@PersistenceContext
