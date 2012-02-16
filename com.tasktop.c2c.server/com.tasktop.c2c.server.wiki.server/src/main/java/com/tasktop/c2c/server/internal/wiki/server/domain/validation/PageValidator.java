@@ -20,7 +20,6 @@ import org.springframework.validation.Validator;
 
 import com.tasktop.c2c.server.wiki.domain.Page;
 
-
 public class PageValidator implements Validator {
 	// NOTE: CAREFUL careful about adding allowable characters: in particular Path.HASHTAG_DELIMITER
 	private static Pattern pathPattern = Pattern.compile("[a-zA-Z][a-zA-Z0-9 /_]*");
@@ -38,7 +37,8 @@ public class PageValidator implements Validator {
 		ValidationUtils.rejectIfEmpty(errors, "content", "field.required");
 
 		if (page.getPath() != null && page.getPath().length() > 0) {
-			if (!pathPattern.matcher(page.getPath()).matches() || !page.getPath().trim().equals(page.getPath())) {
+			if (!pathPattern.matcher(page.getPath()).matches() || !page.getPath().trim().equals(page.getPath())
+					|| page.getPath().contains("/ ")) {
 				errors.rejectValue("path", "invalidValue", new Object[] { page.getPath() }, "bad path");
 			}
 		}
