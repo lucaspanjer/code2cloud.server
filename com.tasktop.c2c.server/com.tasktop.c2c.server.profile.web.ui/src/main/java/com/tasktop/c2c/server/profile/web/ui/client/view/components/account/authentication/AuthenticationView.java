@@ -12,9 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.account.authentication;
 
-
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
@@ -36,10 +36,12 @@ import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.NamedFrame;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.UIObject;
 import com.tasktop.c2c.server.common.profile.web.client.ClientCallback;
 import com.tasktop.c2c.server.common.profile.web.client.CustomActionCell;
 import com.tasktop.c2c.server.common.web.client.view.CellTableResources;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.presenter.IAccountView;
 
 public class AuthenticationView extends Composite implements IAccountView<IAccountView.AccountAuthenticationPresenter> {
@@ -66,6 +68,8 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 	private static Template template = GWT.create(Template.class);
 
 	@UiField
+	DivElement changePasswordDiv;
+	@UiField
 	PasswordTextBox oldPasswordField;
 	@UiField
 	PasswordTextBox newPasswordField;
@@ -75,6 +79,8 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 	Button cancelChangePasswordButton;
 	@UiField
 	Button saveChangePasswordButton;
+	@UiField
+	DivElement linkGitHubDiv;
 	@UiField
 	Anchor linkGitHubButton;
 	@UiField
@@ -97,6 +103,12 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 		// redirect to GitHub happens (which is what we want).
 		githubForm = new FormPanel(new NamedFrame("_self"));
 		initWidget(ourUiBinder.createAndBindUi(this));
+		if (!AppGinjector.get.instance().getConfiguration().isEnablePasswordManagment()) {
+			UIObject.setVisible(changePasswordDiv, false);
+		}
+		if (!AppGinjector.get.instance().getConfiguration().isEnableGitHubAuth()) {
+			UIObject.setVisible(linkGitHubDiv, false);
+		}
 	}
 
 	@Override

@@ -4,6 +4,7 @@
 	<g:HTMLPanel>
 		<div>
 			<div class="auth">
+				<div ui:field="changePasswordDiv">
 				<h2>Password</h2>
 				<div class="inner-contents">
 					<div class="change-password">
@@ -39,9 +40,9 @@
 						</div>
 						<div class="clear"/>
 					</g:HTMLPanel>
-					<!-- change password div ends-->
 				</div>
-				<div class="github">
+				</div> 
+				<div class="github" ui:field="linkGitHubDiv">
 					<h2>GitHub</h2>
 					<div class="inner-contents">
 						<p>
