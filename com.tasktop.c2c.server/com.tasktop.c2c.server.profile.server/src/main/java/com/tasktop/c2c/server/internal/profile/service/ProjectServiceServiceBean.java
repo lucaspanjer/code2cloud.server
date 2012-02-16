@@ -247,7 +247,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	private List<ProjectService> projectServiceTemplate;
 
 	@Autowired
-	@Resource(name = "projectSeriviceTemplate")
+	@Resource(name = "projectServiceTemplate")
 	public void setProjectServiceTemplate(List<ProjectService> projectServices) {
 		this.projectServiceTemplate = projectServices;
 	}
