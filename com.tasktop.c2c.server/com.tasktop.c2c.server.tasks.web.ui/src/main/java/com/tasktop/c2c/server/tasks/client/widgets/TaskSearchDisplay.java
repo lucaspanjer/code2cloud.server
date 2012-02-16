@@ -17,8 +17,8 @@ import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
-import com.tasktop.c2c.server.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.tasks.client.widgets.presenter.person.KeywordSuggestService;
 import com.tasktop.c2c.server.tasks.domain.FieldDescriptor;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;

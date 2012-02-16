@@ -18,10 +18,10 @@ import java.util.List;
 import net.customware.gwt.dispatch.shared.Action;
 
 
+import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectAdminPlace;
+import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.client.place.Breadcrumb;
-import com.tasktop.c2c.server.profile.web.client.place.ProjectAdminPlace;
-import com.tasktop.c2c.server.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.shared.action.GetRepositoryConfigurationAction;
 import com.tasktop.c2c.server.tasks.shared.action.GetRepositoryConfigurationResult;

@@ -17,10 +17,10 @@ import net.customware.gwt.dispatch.client.DispatchAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.tasktop.c2c.server.common.profile.web.client.AppState;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.presenter.AbstractPresenter;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
-import com.tasktop.c2c.server.profile.web.client.AppState;
-import com.tasktop.c2c.server.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskMessages;
 
 /**

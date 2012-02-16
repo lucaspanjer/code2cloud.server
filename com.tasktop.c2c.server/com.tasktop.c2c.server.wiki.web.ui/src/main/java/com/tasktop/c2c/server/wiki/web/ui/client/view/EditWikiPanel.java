@@ -13,8 +13,8 @@
 package com.tasktop.c2c.server.wiki.web.ui.client.view;
 
 import com.google.gwt.user.client.ui.TextBox;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
-import com.tasktop.c2c.server.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.RetrievePagePreviewAction;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.RetrievePagePreviewResult;
 

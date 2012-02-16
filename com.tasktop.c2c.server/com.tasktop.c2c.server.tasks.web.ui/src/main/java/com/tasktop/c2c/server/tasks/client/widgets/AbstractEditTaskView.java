@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 import com.google.gwt.user.datepicker.client.DatePicker;
+import com.tasktop.c2c.server.common.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.view.CompositeClickHandlers;
 import com.tasktop.c2c.server.common.web.client.widgets.DynamicFormPanel;
@@ -54,7 +55,6 @@ import com.tasktop.c2c.server.common.web.client.widgets.chooser.StringValueCompo
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonSuggestOracle;
 import com.tasktop.c2c.server.common.web.client.widgets.time.TimePeriodBox;
-import com.tasktop.c2c.server.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.tasks.client.widgets.chooser.keywords.KeywordCompositeFactory;
 import com.tasktop.c2c.server.tasks.client.widgets.chooser.keywords.KeywordSuggestOracle;
 import com.tasktop.c2c.server.tasks.client.widgets.presenter.person.KeywordSuggestService;

@@ -24,7 +24,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tasktop.c2c.server</groupId>
-			<artifactId>profile.web.ui</artifactId>
+			<artifactId>common.profile.web.ui</artifactId>
 		</dependency>
 		<!-- FIXME this dep is a hack due to task anchor detection in wiki -->
 		<dependency>

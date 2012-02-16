@@ -137,6 +137,8 @@ public class WikiPageContentView extends AbstractComposite implements RenderedWi
 	public void setPageNotFound(String path) {
 		pageLabel.setText("Page \"" + path + "\" not found.");
 		contentPanel.clear();
+		createdMetadata.setText(null);
+		modifiedMetadata.setText(null);
 		setEnableRestore(false);
 
 	}

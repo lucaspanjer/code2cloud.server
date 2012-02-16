@@ -1,0 +1,18 @@
+<projectDescription>
+  <name>com.tasktop.c2c.server.developer.support</name>
+  <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects>
+    <project>com.tasktop.c2c.server.profile.web</project>
+    <project>com.tasktop.c2c.server.services.web</project>
+    <project>com.tasktop.c2c.server.tasks.web</project>
+    <project>com.tasktop.c2c.server.wiki.web</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>

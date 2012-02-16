@@ -523,11 +523,11 @@
 		id="task-2531-addNotificationSettingsEmailColumns">
 		<addColumn tableName="NOTIFICATIONSETTINGS">
 			<column name="EMAILNEWSANDEVENTS" type="BIT"
-				defaultValue="0">
+				defaultValueBoolean="false">
 				<constraints nullable="false" />
 			</column>
 			<column name="EMAILSERVICEANDMAINTENANCE" type="BIT"
-				defaultValue="1">
+				defaultValueBoolean="true">
 				<constraints nullable="false" />
 			</column>
 		</addColumn>
@@ -536,7 +536,7 @@
 		<dropDefaultValue tableName="NOTIFICATIONSETTINGS"
 			columnName="EMAILNEWSANDEVENTS" />
 		<addDefaultValue tableName="NOTIFICATIONSETTINGS"
-			columnName="EMAILNEWSANDEVENTS" defaultValue="1" />
+			columnName="EMAILNEWSANDEVENTS" defaultValueBoolean="true" />
 	</changeSet>
 
 	<changeSet id="task-2698-serviceHostType" author="cmorgan">

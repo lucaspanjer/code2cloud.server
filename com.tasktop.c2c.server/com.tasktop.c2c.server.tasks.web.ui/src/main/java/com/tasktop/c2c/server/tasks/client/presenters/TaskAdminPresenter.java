@@ -16,7 +16,7 @@ package com.tasktop.c2c.server.tasks.client.presenters;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
-import com.tasktop.c2c.server.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.tasks.client.place.AbstractProjectAdminTasksPlace;
 import com.tasktop.c2c.server.tasks.client.widgets.admin.TaskAdminView;
 

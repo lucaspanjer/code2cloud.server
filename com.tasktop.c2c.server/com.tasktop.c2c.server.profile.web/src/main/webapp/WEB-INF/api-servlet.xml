@@ -42,7 +42,7 @@
 
 	<!-- Add in a ViewResolver which handles the Spring Social controller redirects, and put it first in the chain -->
 	<bean id="redirectViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver"
-		p:location="classpath:org/cloudfoundry/code/web/views.xml" p:order="1"
+		p:location="classpath:com/tasktop/c2c/server/profile/web/views.xml" p:order="1"
 	/>
 
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">

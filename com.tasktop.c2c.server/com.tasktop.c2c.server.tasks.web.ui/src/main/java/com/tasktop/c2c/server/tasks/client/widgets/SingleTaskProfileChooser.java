@@ -22,11 +22,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.SingleValueChooser;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonCompositeFactory;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonSuggestOracle;
-import com.tasktop.c2c.server.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.tasks.client.widgets.presenter.person.PersonUtil;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
 

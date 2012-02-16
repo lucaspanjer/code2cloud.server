@@ -30,7 +30,7 @@
 	    <url>http://www.eclipse.org/legal/epl-v10.html</url>
 	  </license>
 	</licenses>
-	
+
 	<repositories>
 		<repository>
 			<id>code2cloud-internal</id>
@@ -180,6 +180,7 @@
 				<configuration>
 				   <addGroupIdToProjectName>true</addGroupIdToProjectName>     
 				   <downloadSources>true</downloadSources>
+				   <workspace>NONE</workspace> <!-- Keep the eclipse worksace out of the equations. Comment out to get links to your dep projects (eg. jgit) -->
 				   <additionalConfig>
 				     <file>
 				       <name>.settings/org.eclipse.jdt.core.prefs</name>
@@ -506,12 +507,6 @@
 				<version>1.1.0</version>
 			</dependency>
 			<dependency>
-				<!-- Manual dep -->
-				<groupId>com.google.code</groupId>
-				<artifactId>gchart</artifactId>
-				<version>2.6</version>
-			</dependency>
-			<dependency>
 				<groupId>javax.validation</groupId>
 				<artifactId>validation-api</artifactId>
 				<version>1.0.0.GA</version>
@@ -582,6 +577,11 @@
 			<dependency>
 				<groupId>com.tasktop.c2c.server</groupId>
 				<artifactId>profile.api</artifactId>
+				<version>${com.tasktop.c2c.server.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.tasktop.c2c.server</groupId>
+				<artifactId>common.profile.web.ui</artifactId>
 				<version>${com.tasktop.c2c.server.version}</version>
 			</dependency>
 			<dependency>
@@ -677,11 +677,6 @@
 			<dependency>
 				<groupId>com.tasktop.c2c.server</groupId>
 				<artifactId>wiki.server</artifactId>
-				<version>${com.tasktop.c2c.server.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.tasktop.c2c.server</groupId>
-				<artifactId>wiki.web.ui</artifactId>
 				<version>${com.tasktop.c2c.server.version}</version>
 			</dependency>
 			<dependency>
