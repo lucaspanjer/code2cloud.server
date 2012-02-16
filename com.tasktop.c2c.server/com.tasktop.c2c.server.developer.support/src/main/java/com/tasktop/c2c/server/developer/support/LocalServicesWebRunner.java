@@ -1,4 +1,3 @@
-package com.tasktop.c2c.server.developer.support;
 /*******************************************************************************
  * Copyright (c) 2010, 2012 Tasktop Technologies
  * 
@@ -10,6 +9,8 @@ package com.tasktop.c2c.server.developer.support;
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
+package com.tasktop.c2c.server.developer.support;
+
 import org.eclipse.jetty.ajp.Ajp13SocketConnector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
