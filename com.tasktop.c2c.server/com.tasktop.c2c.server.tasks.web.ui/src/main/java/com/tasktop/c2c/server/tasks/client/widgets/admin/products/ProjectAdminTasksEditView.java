@@ -22,6 +22,7 @@ import java.util.Map;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.SelectionCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style.Unit;
@@ -210,6 +211,10 @@ public class ProjectAdminTasksEditView extends Composite implements Editor<Produ
 	}
 
 	public void redraw() {
+
+		addPersonCellToComponentsTable(); // FIXME : this table is recreated each time because the selection changes and
+		// SelectionCell does not currently allow the options to be updated.
+
 		// Make sure we have the latest data.
 		productDefaultRelease.setAcceptableValues(presenter.getProduct().getMilestones());
 		componentsTable.setRowData(componentsEditor.getList());
@@ -576,43 +581,6 @@ public class ProjectAdminTasksEditView extends Composite implements Editor<Produ
 		});
 		componentsTable.addColumn(descriptionColumn, SafeHtmlUtils.fromSafeConstant("<h4>Description</h4>"));
 		componentsTable.setColumnWidth(descriptionColumn, 250, Unit.PX);
-		Column<Component, String> personColumn = addColumn(new CustomSelectionCell(users) {
-
-			@Override
-			public void render(Context context, String value, SafeHtmlBuilder sb) {
-				setOptions(users);
-				super.render(context, value, sb);
-			}
-		}, new GetValue<Component, String>() {
-			@Override
-			public String getValue(Component object) {
-				TaskUserProfile value = componentsEditor.getEditors().get(componentsEditor.getList().indexOf(object)).initialOwnerEditor
-						.getValue();
-				if (value == null) {
-					return null;
-				}
-				return value.getRealname();
-			}
-		});
-		personColumn.setFieldUpdater(new FieldUpdater<Component, String>() {
-			@Override
-			public void update(int index, Component object, String value) {
-				boolean foundUser = false;
-				for (TaskUserProfile user : presenter.getUsers()) {
-					if (user.getRealname().equals(value)) {
-						componentsEditor.getEditors().get(index).initialOwnerEditor.setValue(user);
-						foundUser = true;
-						break;
-					}
-				}
-				if (!foundUser) {
-					componentsEditor.getEditors().get(index).initialOwnerEditor.setValue(null);
-				}
-			}
-		});
-
-		componentsTable.addColumn(personColumn, SafeHtmlUtils.fromSafeConstant("<h4>Owner</h4>"));
-		componentsTable.setColumnWidth(personColumn, 210, Unit.PX);
 
 		CustomActionCell<String> removeComponentCell = new CustomActionCell<String>(
 				new CustomActionCell.TemplateDelegate<String>() {
@@ -683,6 +651,55 @@ public class ProjectAdminTasksEditView extends Composite implements Editor<Produ
 		};
 		componentsTable.addColumn(addComponentColumn);
 		componentsTable.setColumnWidth(addComponentColumn, 25, Unit.PX);
+	}
+
+	private Column<Component, String> personColumn;
+	private static final int PERSON_COLUMN_INDEX = 2;
+
+	// This must be done each time the users changes because SelectionCell's items specified at construction time.
+	private void addPersonCellToComponentsTable() {
+		if (personColumn != null) {
+			componentsTable.removeColumn(personColumn);
+		}
+
+		personColumn = addColumn(new SelectionCell(users) {
+
+			@Override
+			public void render(Context context, String value, SafeHtmlBuilder sb) {
+				super.render(context, value, sb);
+			}
+		}, new GetValue<Component, String>() {
+			@Override
+			public String getValue(Component object) {
+				TaskUserProfile value = componentsEditor.getEditors().get(componentsEditor.getList().indexOf(object)).initialOwnerEditor
+						.getValue();
+				if (value == null) {
+					return null;
+				}
+				return value.getRealname();
+			}
+		});
+		personColumn.setFieldUpdater(new FieldUpdater<Component, String>() {
+			@Override
+			public void update(int index, Component object, String value) {
+				boolean foundUser = false;
+				for (TaskUserProfile user : presenter.getUsers()) {
+					if (user.getRealname().equals(value)) {
+						componentsEditor.getEditors().get(index).initialOwnerEditor.setValue(user);
+						foundUser = true;
+						break;
+					}
+				}
+				if (!foundUser) {
+					componentsEditor.getEditors().get(index).initialOwnerEditor.setValue(null);
+				}
+			}
+		});
+
+		componentsTable.insertColumn(PERSON_COLUMN_INDEX, personColumn,
+				SafeHtmlUtils.fromSafeConstant("<h4>Owner</h4>"));
+		componentsTable.setColumnWidth(personColumn, 210, Unit.PX);
+
 	}
 
 	@UiHandler({ "upperSaveButton", "lowerSaveButton" })
