@@ -17,6 +17,9 @@ import hudson.Plugin;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
+import hudson.model.Node;
+
+import java.io.IOException;
 
 @Extension
 public class PluginImpl extends Plugin implements Describable<PluginImpl> {
@@ -24,6 +27,27 @@ public class PluginImpl extends Plugin implements Describable<PluginImpl> {
 	@Override
 	public void start() throws Exception {
 		load();
+		removeSlaves();
+	}
+
+	@Override
+	public void stop() throws Exception {
+		removeSlaves();
+		super.stop();
+	}
+
+	private void removeSlaves() throws IOException {
+		for (Node slave : Hudson.getInstance().getNodes()) {
+			if (slave instanceof C2CSlave) {
+				C2CSlave c2cSlave = (C2CSlave) slave;
+				System.out.println("Terminating slave: " + slave.toString());
+				try {
+					c2cSlave.terminate();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	public DescriptorImpl getDescriptor() {
