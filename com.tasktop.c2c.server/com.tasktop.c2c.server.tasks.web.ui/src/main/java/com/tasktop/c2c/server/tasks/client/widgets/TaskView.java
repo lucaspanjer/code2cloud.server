@@ -45,4 +45,6 @@ public interface TaskView extends IsWidget {
 
 	void reEnterEditMode();
 
+	void updateTask(Task task);
+
 }

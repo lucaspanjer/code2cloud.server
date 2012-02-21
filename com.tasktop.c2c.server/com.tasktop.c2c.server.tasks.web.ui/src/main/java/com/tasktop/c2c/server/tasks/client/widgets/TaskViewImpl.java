@@ -1029,6 +1029,11 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	}
 
 	public void setTask(Task task) {
+		updateTask(task);
+		updateCommentView(task);
+	}
+
+	public void updateTask(Task task) {
 		this.task = task;
 
 		editTaskAnchor.setHref(ProjectEditTaskPlace.createPlace(projectIdentifier, task.getId()).getHref());
@@ -1070,9 +1075,8 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		// attachments
 		setAttachments(task.getAttachments());
-		updateCommentView(task);
 
-		commentsPanel.setValue(task);
+		// updateCommentView(task);
 
 		taskHistoryLink.setHref(ProjectTaskHistoryPlace.createPlace(projectIdentifier, task.getId()).getHref());
 
