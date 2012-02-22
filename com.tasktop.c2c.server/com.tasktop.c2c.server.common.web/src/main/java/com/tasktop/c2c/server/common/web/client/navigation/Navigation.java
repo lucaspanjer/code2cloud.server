@@ -21,6 +21,7 @@ import com.google.gwt.dom.client.Node;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 
 /**
  * utility for working with navigation
@@ -88,7 +89,7 @@ public class Navigation {
 	public static boolean showIdElement(Element element, String elementId) {
 		Element idElement = findElementById(element, elementId);
 		if (idElement != null) {
-			idElement.scrollIntoView();
+			Window.scrollTo(idElement.getAbsoluteLeft(), idElement.getAbsoluteTop());
 			return true;
 		}
 		return false;
