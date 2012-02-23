@@ -12,8 +12,11 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.configuration.service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import com.tasktop.c2c.server.cloud.domain.ServiceType;
 
 public class ProjectServiceManagementServiceBean implements ProjectServiceManagementService {
 
@@ -21,10 +24,15 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 		void configure(ProjectServiceConfiguration configuration);
 	}
 
+	public interface MetricCollector {
+		void collect(ProjectServiceStatus status);
+	}
+
 	private List<Configurator> configurators;
+	private List<MetricCollector> metricCollectors = Collections.emptyList();
 
 	@Override
-	public void configureNode(ProjectServiceConfiguration configuration) {
+	public void provisionService(ProjectServiceConfiguration configuration) {
 		initializeConfiguration(configuration);
 
 		for (String requiredProperty : ProjectServiceConfiguration.REQUIRED_PROPERTIES) {
@@ -51,8 +59,26 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 				servicePath + "scm/" + config.getProjectIdentifier() + ".git");
 	}
 
+	@Override
+	public ProjectServiceStatus retrieveServiceStatus(String projectIdentifer, ServiceType serviceType) {
+		ProjectServiceStatus result = new ProjectServiceStatus();
+		result.setProjectIdentifier(projectIdentifer);
+		result.setServiceType(serviceType);
+		result.setMetrics(new HashMap<String, String>());
+
+		for (MetricCollector mc : metricCollectors) {
+			mc.collect(result);
+		}
+
+		return result;
+	}
+
 	public void setConfigurators(List<Configurator> configurators) {
 		this.configurators = configurators;
+	}
+
+	public void setMetricCollectors(List<MetricCollector> metricCollectors) {
+		this.metricCollectors = metricCollectors;
 	}
 
 }

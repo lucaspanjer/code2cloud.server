@@ -164,7 +164,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 		try {
 			LOGGER.info("configuring node for " + type);
-			nodeConfigurationService.configureNode(config);
+			nodeConfigurationService.provisionService(config);
 			LOGGER.info("configuring done");
 		} catch (Exception e) {
 			throw new ProvisioningException("Caught exception while configuring node", e);

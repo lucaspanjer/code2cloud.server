@@ -13,12 +13,13 @@
 package com.tasktop.c2c.server.configuration.service;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.web.AbstractRestService;
-
 
 @Controller
 public class ProjectServiceManagementServiceController extends AbstractRestService {
@@ -29,9 +30,15 @@ public class ProjectServiceManagementServiceController extends AbstractRestServi
 		this.nodeConfigurationService = nodeConfigurationService;
 	}
 
-	@RequestMapping(value = "/configure", method = RequestMethod.POST)
+	@RequestMapping(value = "/provision", method = RequestMethod.POST)
 	public void configureNode(@RequestBody ProjectServiceConfiguration configuration) {
-		nodeConfigurationService.configureNode(configuration);
+		nodeConfigurationService.provisionService(configuration);
+	}
+
+	@RequestMapping(value = "/status/{projectIdentifier}/{serviceType}", method = RequestMethod.GET)
+	public ProjectServiceStatus retrieveServiceStatus(@PathVariable("projectIdentifier") String projectIdentifer,
+			@PathVariable("serviceType") ServiceType serviceType) {
+		return nodeConfigurationService.retrieveServiceStatus(projectIdentifer, serviceType);
 	}
 
 }

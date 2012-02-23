@@ -12,30 +12,40 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.configuration.service;
 
+import java.util.Map;
+
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 
 /**
- * Internal service exposed to manage a project's service.
- * 
- * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
+ * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public interface ProjectServiceManagementService {
+public class ProjectServiceStatus {
+	private String projectIdentifier;
+	private ServiceType serviceType;
+	private Map<String, String> metrics;
 
-	/**
-	 * Provision a new project service.
-	 * 
-	 * @param configuration
-	 */
-	void provisionService(ProjectServiceConfiguration configuration);
+	public String getProjectIdentifier() {
+		return projectIdentifier;
+	}
 
-	/**
-	 * Get the status of a service.
-	 * 
-	 * @param projectIdentifer
-	 * @param serviceType
-	 * @return
-	 */
-	ProjectServiceStatus retrieveServiceStatus(String projectIdentifer, ServiceType serviceType);
+	public void setProjectIdentifier(String projectIdentifier) {
+		this.projectIdentifier = projectIdentifier;
+	}
 
+	public ServiceType getServiceType() {
+		return serviceType;
+	}
+
+	public void setServiceType(ServiceType serviceType) {
+		this.serviceType = serviceType;
+	}
+
+	public Map<String, String> getMetrics() {
+		return metrics;
+	}
+
+	public void setMetrics(Map<String, String> metrics) {
+		this.metrics = metrics;
+	}
 }
