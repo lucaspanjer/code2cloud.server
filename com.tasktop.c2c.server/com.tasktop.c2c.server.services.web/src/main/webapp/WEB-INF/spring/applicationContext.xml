@@ -39,7 +39,7 @@
 		</property>
 	</bean>
 	
-	<bean id="mvnConfigurationService" class="com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceBean">
+	<bean id="mvnConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
 		<property name="configurators">
 			<list> 
 				<bean id="mavenRepoConfigurator" class="com.tasktop.c2c.server.services.web.scm.MavenRepositoryConfigurator"
@@ -49,7 +49,7 @@
 		</property>
 	</bean>
 	
-	<bean id="gitConfigurationService" class="com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceBean">
+	<bean id="gitConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
 		<property name="configurators">
 			<list> 
 				<ref bean="gitRepositoryConfigurator"/>

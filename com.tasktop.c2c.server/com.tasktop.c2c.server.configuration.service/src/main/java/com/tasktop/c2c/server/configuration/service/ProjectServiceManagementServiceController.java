@@ -21,16 +21,16 @@ import com.tasktop.c2c.server.common.service.web.AbstractRestService;
 
 
 @Controller
-public class NodeConfigurationServiceController extends AbstractRestService {
+public class ProjectServiceManagementServiceController extends AbstractRestService {
 
-	private NodeConfigurationService nodeConfigurationService;
+	private ProjectServiceManagementService nodeConfigurationService;
 
-	public void setNodeConfigurationService(NodeConfigurationService nodeConfigurationService) {
+	public void setNodeConfigurationService(ProjectServiceManagementService nodeConfigurationService) {
 		this.nodeConfigurationService = nodeConfigurationService;
 	}
 
 	@RequestMapping(value = "/configure", method = RequestMethod.POST)
-	public void configureNode(@RequestBody NodeConfigurationService.NodeConfiguration configuration) {
+	public void configureNode(@RequestBody ProjectServiceConfiguration configuration) {
 		nodeConfigurationService.configureNode(configuration);
 	}
 

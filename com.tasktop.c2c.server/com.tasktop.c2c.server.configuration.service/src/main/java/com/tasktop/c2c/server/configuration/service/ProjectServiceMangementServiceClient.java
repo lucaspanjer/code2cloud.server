@@ -14,10 +14,10 @@ package com.tasktop.c2c.server.configuration.service;
 
 import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
 
-public class NodeConfigurationServiceClient extends AbstractRestServiceClient implements NodeConfigurationService {
+public class ProjectServiceMangementServiceClient extends AbstractRestServiceClient implements ProjectServiceManagementService {
 
 	@Override
-	public void configureNode(NodeConfiguration configuration) {
+	public void configureNode(ProjectServiceConfiguration configuration) {
 		template.postForObject(computeUrl("configure"), configuration, Void.class);
 	}
 

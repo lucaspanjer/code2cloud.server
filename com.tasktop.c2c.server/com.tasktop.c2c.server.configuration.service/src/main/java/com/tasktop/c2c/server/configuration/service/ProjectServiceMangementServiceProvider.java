@@ -14,11 +14,11 @@ package com.tasktop.c2c.server.configuration.service;
 
 import org.springframework.web.client.RestTemplate;
 
-public class NodeConfigurationServiceProvider {
+public class ProjectServiceMangementServiceProvider {
 	private RestTemplate template;
 
-	public NodeConfigurationServiceClient getNewService() {
-		NodeConfigurationServiceClient service = new NodeConfigurationServiceClient();
+	public ProjectServiceMangementServiceClient getNewService() {
+		ProjectServiceMangementServiceClient service = new ProjectServiceMangementServiceClient();
 		service.setRestTemplate(template);
 		return service;
 	}

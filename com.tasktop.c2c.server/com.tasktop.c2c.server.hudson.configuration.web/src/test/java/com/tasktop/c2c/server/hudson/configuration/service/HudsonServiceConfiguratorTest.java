@@ -31,9 +31,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.NodeConfiguration;
-import com.tasktop.c2c.server.hudson.configuration.service.HudsonServiceConfigurator;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 
 public class HudsonServiceConfiguratorTest {
 
@@ -98,9 +96,9 @@ public class HudsonServiceConfiguratorTest {
 			configurator.setTargetHudsonHomeBaseDir(expectedHomeDir);
 			configurator.setTargetWebappsDir(webappsTarget);
 
-			NodeConfiguration config = new NodeConfiguration();
-			config.setApplicationId("test123");
-			config.setProperties(Collections.singletonMap(NodeConfigurationService.PROFILE_BASE_SERVICE_URL,
+			ProjectServiceConfiguration config = new ProjectServiceConfiguration();
+			config.setProjectIdentifier("test123");
+			config.setProperties(Collections.singletonMap(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL,
 					"https://qcode.cloudfoundry.com/s/test/"));
 			// Now, run it against our test setup
 			configurator.configure(config);
@@ -183,9 +181,9 @@ public class HudsonServiceConfiguratorTest {
 			configurator.setTargetWebappsDir(webappsTarget);
 			configurator.setTargetHudsonHomeBaseDir("/some/silly/random/homeDir");
 
-			NodeConfiguration config = new NodeConfiguration();
-			config.setApplicationId("test123");
-			config.setProperties(Collections.singletonMap(NodeConfigurationService.PROFILE_BASE_SERVICE_URL,
+			ProjectServiceConfiguration config = new ProjectServiceConfiguration();
+			config.setProjectIdentifier("test123");
+			config.setProperties(Collections.singletonMap(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL,
 					"https://qcode.cloudfoundry.com/s/test123/"));
 
 			// Now, run it against our test setup

@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Required;
 
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.NodeConfiguration;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceBean.Configurator;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
 
 public class MavenRepositoryConfigurator implements Configurator {
 
@@ -28,9 +28,9 @@ public class MavenRepositoryConfigurator implements Configurator {
 	private String mavenRoot;
 
 	@Override
-	public void configure(NodeConfiguration configuration) {
+	public void configure(ProjectServiceConfiguration configuration) {
 
-		String projectName = configuration.getApplicationId();
+		String projectName = configuration.getProjectIdentifier();
 		if (projectName == null) {
 			LOG.warn("No Project ID specified!");
 			return;

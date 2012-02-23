@@ -46,7 +46,7 @@
 		p:serviceProxyPath="${profile.serviceProxy.path}"
 	/>
 	
-	<bean id="wikiConfigurationService" class="com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceBean">
+	<bean id="wikiConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
 		<property name="configurators">
 			<list>
 				<ref bean="wikiDatabaseConfigurator"/>

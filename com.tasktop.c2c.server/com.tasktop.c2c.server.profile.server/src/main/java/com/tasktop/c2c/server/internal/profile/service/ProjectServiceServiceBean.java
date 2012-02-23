@@ -40,9 +40,9 @@ import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceClient;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceProvider;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceClient;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceProvider;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectServiceProfile;
@@ -75,7 +75,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	private Map<ServiceType, String> configPathsByServiceType;
 
 	@Autowired
-	private NodeConfigurationServiceProvider nodeConfigurationServiceProvider;
+	private ProjectServiceMangementServiceProvider projectServiceMangementServiceProvider;
 
 	@Resource
 	private InternalAuthenticationService internalAuthenticationService;
@@ -138,12 +138,12 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		AuthUtils
 				.insertSystemAuthToken(internalAuthenticationService.toCompoundRole(Role.User, project.getIdentifier()));
 
-		NodeConfigurationService.NodeConfiguration config = new NodeConfigurationService.NodeConfiguration();
-		config.setApplicationId(project.getIdentifier());
-		config.setProperty(NodeConfigurationService.PROFILE_HOSTNAME, configuration.getWebHost());
-		config.setProperty(NodeConfigurationService.PROFILE_PROTOCOL, configuration.getProfileApplicationProtocol());
-		config.setProperty(NodeConfigurationService.PROFILE_BASE_URL, configuration.getProfileBaseUrl());
-		config.setProperty(NodeConfigurationService.PROFILE_BASE_SERVICE_URL,
+		ProjectServiceConfiguration config = new ProjectServiceConfiguration();
+		config.setProjectIdentifier(project.getIdentifier());
+		config.setProperty(ProjectServiceConfiguration.PROFILE_HOSTNAME, configuration.getWebHost());
+		config.setProperty(ProjectServiceConfiguration.PROFILE_PROTOCOL, configuration.getProfileApplicationProtocol());
+		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_URL, configuration.getProfileBaseUrl());
+		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL,
 				configuration.getServiceUrlPrefix(project.getIdentifier()));
 
 		NodeProvisioningService nodeProvisioningService = nodeProvisioningServiceByType.get(type);
@@ -157,7 +157,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		LOGGER.info("provisioned to " + serviceHost.getInternalNetworkAddress());
 
 		// Now configure the host for the new project.
-		NodeConfigurationServiceClient nodeConfigurationService = nodeConfigurationServiceProvider.getNewService();
+		ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider.getNewService();
 		String baseUrl = "http://" + serviceHost.getInternalNetworkAddress() + ":" + ALM_HTTP_PORT + "/"
 				+ configPathsByServiceType.get(type);
 		nodeConfigurationService.setBaseUrl(baseUrl);

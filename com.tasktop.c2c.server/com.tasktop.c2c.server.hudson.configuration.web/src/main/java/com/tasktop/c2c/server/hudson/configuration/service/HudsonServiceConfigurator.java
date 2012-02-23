@@ -27,9 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.NodeConfiguration;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceBean.Configurator;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 
 /**
  * Sets up the hudson service and performs the following tasks:
@@ -57,7 +56,7 @@ public class HudsonServiceConfigurator implements Configurator {
 	private String targetWebappsDir;
 
 	@Override
-	public void configure(NodeConfiguration configuration) {
+	public void configure(ProjectServiceConfiguration configuration) {
 
 		// Get a reference to our template WAR, and make sure it exists.
 		File hudsonTemplateWar = new File(warTemplateFile);
@@ -117,8 +116,8 @@ public class HudsonServiceConfigurator implements Configurator {
 			// Clean up our resources.
 			jarOutStream.close();
 
-			String deployedUrl = configuration.getProperties().get(NodeConfigurationService.PROFILE_BASE_SERVICE_URL)
-					+ "hudson/";
+			String deployedUrl = configuration.getProperties()
+					.get(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL) + "hudson/";
 			deployedUrl.replace("//", "/");
 			URL deployedHudsonUrl = new URL(deployedUrl);
 			String webappName = deployedHudsonUrl.getPath();
@@ -157,10 +156,10 @@ public class HudsonServiceConfigurator implements Configurator {
 		}
 	}
 
-	private String applyDirectoryToWebXml(String targetContents, NodeConfiguration configuration) {
+	private String applyDirectoryToWebXml(String targetContents, ProjectServiceConfiguration configuration) {
 
 		// Do our string processing now.
-		String hudsonHomeDir = targetHudsonHomeBaseDir + "/" + configuration.getApplicationId();
+		String hudsonHomeDir = targetHudsonHomeBaseDir + "/" + configuration.getProjectIdentifier();
 
 		return targetContents.replace("<env-entry-value></env-entry-value>", "<env-entry-value>" + hudsonHomeDir
 				+ "</env-entry-value>");

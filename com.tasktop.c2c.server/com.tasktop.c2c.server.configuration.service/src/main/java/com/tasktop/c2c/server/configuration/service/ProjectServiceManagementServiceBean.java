@@ -15,19 +15,19 @@ package com.tasktop.c2c.server.configuration.service;
 import java.util.HashMap;
 import java.util.List;
 
-public class NodeConfigurationServiceBean implements NodeConfigurationService {
+public class ProjectServiceManagementServiceBean implements ProjectServiceManagementService {
 
 	public interface Configurator {
-		void configure(NodeConfiguration configuration);
+		void configure(ProjectServiceConfiguration configuration);
 	}
 
 	private List<Configurator> configurators;
 
 	@Override
-	public void configureNode(NodeConfiguration configuration) {
+	public void configureNode(ProjectServiceConfiguration configuration) {
 		initializeConfiguration(configuration);
 
-		for (String requiredProperty : REQUIRED_PROPERTIES) {
+		for (String requiredProperty : ProjectServiceConfiguration.REQUIRED_PROPERTIES) {
 			if (!configuration.getProperties().containsKey(requiredProperty)) {
 				throw new IllegalArgumentException("Missing required property: " + requiredProperty);
 			}
@@ -39,16 +39,16 @@ public class NodeConfigurationServiceBean implements NodeConfigurationService {
 
 	}
 
-	private void initializeConfiguration(NodeConfiguration config) {
+	private void initializeConfiguration(ProjectServiceConfiguration config) {
 		if (config.getProperties() == null) {
 			config.setProperties(new HashMap<String, String>());
 		}
-		config.getProperties().put(NodeConfigurationService.APPLICATION_GIT_PROPERTY,
-				config.getApplicationId() + ".git");
-		config.getProperties().put(NodeConfigurationService.APPLICATION_ID, config.getApplicationId());
-		String servicePath = config.getProperties().get(NodeConfigurationService.PROFILE_BASE_SERVICE_URL);
-		config.getProperties().put(NodeConfigurationService.APPLICATION_GIT_URL,
-				servicePath + "scm/" + config.getApplicationId() + ".git");
+		config.getProperties().put(ProjectServiceConfiguration.APPLICATION_GIT_PROPERTY,
+				config.getProjectIdentifier() + ".git");
+		config.getProperties().put(ProjectServiceConfiguration.APPLICATION_ID, config.getProjectIdentifier());
+		String servicePath = config.getProperties().get(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL);
+		config.getProperties().put(ProjectServiceConfiguration.APPLICATION_GIT_URL,
+				servicePath + "scm/" + config.getProjectIdentifier() + ".git");
 	}
 
 	public void setConfigurators(List<Configurator> configurators) {

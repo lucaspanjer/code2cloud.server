@@ -53,7 +53,7 @@
 		p:serviceProxyPath="${profile.serviceProxy.path}"
 	/>
 
-	<bean id="taskConfigurationService" class="com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceBean">
+	<bean id="taskConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
 		<property name="configurators">
 			<list> 
 				<ref bean="taskDBConfigurationService"/>

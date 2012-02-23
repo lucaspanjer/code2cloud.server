@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.commons.io.FileUtils;
 
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.NodeConfiguration;
 
 /**
  * Goes through the template files and replaces entries of the form ${foo.bar} with the corresponding key from the
@@ -35,7 +34,7 @@ import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.Nod
  * @author Clint Morgan (Tasktop Technologies Inc.)
  * 
  */
-public class TemplateProcessingConfigurator implements NodeConfigurationServiceBean.Configurator {
+public class TemplateProcessingConfigurator implements ProjectServiceManagementServiceBean.Configurator {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TemplateProcessingConfigurator.class.getName());
 
@@ -43,9 +42,9 @@ public class TemplateProcessingConfigurator implements NodeConfigurationServiceB
 	private String targetBaseLocation;
 
 	@Override
-	public void configure(NodeConfiguration configuration) {
+	public void configure(ProjectServiceConfiguration configuration) {
 
-		File hudsonHomeDir = new File(targetBaseLocation, configuration.getApplicationId());
+		File hudsonHomeDir = new File(targetBaseLocation, configuration.getProjectIdentifier());
 
 		if (hudsonHomeDir.exists()) {
 			LOG.warn("Hudson home already apears to exist: " + hudsonHomeDir.getAbsolutePath());
@@ -75,7 +74,7 @@ public class TemplateProcessingConfigurator implements NodeConfigurationServiceB
 	}
 
 	// FIXME this is not efficient
-	private void applyTemplateFileToTarget(Map<String, String> props, File templateFile, NodeConfiguration configuration)
+	private void applyTemplateFileToTarget(Map<String, String> props, File templateFile, ProjectServiceConfiguration configuration)
 			throws IOException {
 
 		String targetContents = FileUtils.readFileToString(templateFile);
@@ -87,7 +86,7 @@ public class TemplateProcessingConfigurator implements NodeConfigurationServiceB
 		FileUtils.writeStringToFile(targetFile, targetContents);
 	}
 
-	private void createOrEnsureTargetDirectory(File templateDirectory, NodeConfiguration configuration) {
+	private void createOrEnsureTargetDirectory(File templateDirectory, ProjectServiceConfiguration configuration) {
 		File targetDirectory = mapToTargetFile(templateDirectory, configuration);
 		if (!targetDirectory.exists()) {
 			if (!targetDirectory.mkdir()) {
@@ -101,7 +100,7 @@ public class TemplateProcessingConfigurator implements NodeConfigurationServiceB
 		// Create automatically for template files;
 	}
 
-	private File mapToTargetFile(File templateFile, NodeConfiguration configuration) {
+	private File mapToTargetFile(File templateFile, ProjectServiceConfiguration configuration) {
 		String templateFilePath = templateFile.getAbsolutePath().replace("C:", "");
 		templateFilePath = templateFilePath.replace("\\", "/");
 		int startOfBase = templateFilePath.indexOf(templateBaseLocation);
@@ -110,8 +109,8 @@ public class TemplateProcessingConfigurator implements NodeConfigurationServiceB
 		}
 
 		String fullTargetBaseLocation = targetBaseLocation;
-		if (configuration.getApplicationId() != null) {
-			fullTargetBaseLocation = fullTargetBaseLocation.concat("/" + configuration.getApplicationId());
+		if (configuration.getProjectIdentifier() != null) {
+			fullTargetBaseLocation = fullTargetBaseLocation.concat("/" + configuration.getProjectIdentifier());
 		}
 		String filename = fullTargetBaseLocation + templateFilePath.substring(templateBaseLocation.length());
 		return new File(filename);

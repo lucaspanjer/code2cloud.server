@@ -18,13 +18,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.NodeConfiguration;
 
 /**
  * Kicks off a process.
  * 
  */
-public class ProcessRunningConfigurator implements NodeConfigurationServiceBean.Configurator {
+public class ProcessRunningConfigurator implements ProjectServiceManagementServiceBean.Configurator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessRunningConfigurator.class.getName());
 
@@ -34,14 +33,14 @@ public class ProcessRunningConfigurator implements NodeConfigurationServiceBean.
 	private static final String CURRENT_APPLICATION_ID_PLACEHOLDER = "#profile.application.identifier";
 
 	@Override
-	public void configure(NodeConfiguration configuration) {
+	public void configure(ProjectServiceConfiguration configuration) {
 		List<String> processedCommand = process(command, configuration);
 		LOGGER.info("Running process " + processedCommand);
 		try {
 			ProcessBuilder process = new ProcessBuilder().command(processedCommand);
 			if (workingDirectory != null) {
 				String processedWorkingDirectory = workingDirectory.replace(CURRENT_APPLICATION_ID_PLACEHOLDER,
-						configuration.getApplicationId());
+						configuration.getProjectIdentifier());
 				process.directory(new File(processedWorkingDirectory));
 			}
 			process.start().waitFor();
@@ -50,12 +49,12 @@ public class ProcessRunningConfigurator implements NodeConfigurationServiceBean.
 		}
 	}
 
-	private List<String> process(List<String> command, NodeConfiguration configuration) {
+	private List<String> process(List<String> command, ProjectServiceConfiguration configuration) {
 		List<String> processed = new ArrayList<String>(command.size());
 		for (String arg : command) {
 			String processedArg = arg;
 
-			processedArg = processedArg.replace(CURRENT_APPLICATION_ID_PLACEHOLDER, configuration.getApplicationId());
+			processedArg = processedArg.replace(CURRENT_APPLICATION_ID_PLACEHOLDER, configuration.getProjectIdentifier());
 
 			processed.add(processedArg);
 		}
