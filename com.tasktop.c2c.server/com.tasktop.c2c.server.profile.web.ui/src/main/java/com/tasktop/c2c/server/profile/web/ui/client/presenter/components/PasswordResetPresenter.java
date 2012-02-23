@@ -57,6 +57,7 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 			}
 		});
 		passwordResetView.submitButton.addClickHandler(this);
+		passwordResetView.username.setText("placeholder");
 	}
 
 	@Override

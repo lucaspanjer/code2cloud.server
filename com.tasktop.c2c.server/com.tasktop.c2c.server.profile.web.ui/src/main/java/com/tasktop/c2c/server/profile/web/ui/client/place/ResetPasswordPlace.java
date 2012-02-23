@@ -17,7 +17,6 @@ import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
 
-
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AnonymousPlace;
@@ -50,6 +49,7 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 	}
 
 	private String resetToken;
+	private String username;
 
 	private ResetPasswordPlace(String resetToken) {
 		this.resetToken = resetToken;
@@ -57,6 +57,10 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 
 	public String getResetToken() {
 		return resetToken;
+	}
+
+	public String getUsername() {
+		return username;
 	}
 
 	@Override
