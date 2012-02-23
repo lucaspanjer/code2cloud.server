@@ -42,8 +42,9 @@ public class DatabaseMetricCollector implements MetricCollector {
 	public void collect(ProjectServiceStatus status) {
 		String query = sqlSizeQuery.replace(PROJECT_ID_VAR, status.getProjectIdentifier());
 
+		Connection c = null;
 		try {
-			Connection c = dataSource.getConnection();
+			c = dataSource.getConnection();
 			ResultSet resultSet = c.createStatement().executeQuery(query);
 			if (resultSet.next()) {
 				int totalByteSize = resultSet.getInt(1);
@@ -54,6 +55,14 @@ public class DatabaseMetricCollector implements MetricCollector {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			status.setServiceState(ServiceState.UNAVAILABLE);
+		} finally {
+			if (c != null) {
+				try {
+					c.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 	}
