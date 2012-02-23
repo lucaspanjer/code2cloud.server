@@ -12,9 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.configuration.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
 
@@ -42,9 +40,7 @@ public class ProjectServiceMangementServiceClient extends AbstractRestServiceCli
 
 	@Override
 	public ProjectServiceStatus retrieveServiceStatus(String projectIdentifer, ServiceType serviceType) {
-		Map<String, String> args = new HashMap<String, String>();
-		args.put("projetIdentifer}", projectIdentifer);
-		args.put("serviceType", serviceType.toString());
-		return template.getForObject(computeUrl("status/{projectId}/{serviceType}"), ProjectServiceStatus.class, args);
+		return template.getForObject(computeUrl("status/{projectId}/{serviceType}"), ServiceCallResult.class,
+				projectIdentifer, serviceType).getProjectServiceStatus();
 	}
 }

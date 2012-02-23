@@ -32,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
 import com.tasktop.c2c.server.cloud.domain.ScmLocation;
 import com.tasktop.c2c.server.cloud.domain.ScmType;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
@@ -41,6 +43,7 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementService;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceClient;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceProvider;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -70,9 +73,6 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 	@Resource
 	private Map<ServiceType, NodeProvisioningService> nodeProvisioningServiceByType;
-
-	@Resource
-	private Map<ServiceType, String> configPathsByServiceType;
 
 	@Autowired
 	private ProjectServiceMangementServiceProvider projectServiceMangementServiceProvider;
@@ -153,14 +153,13 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		}
 
 		LOGGER.info("provisioning node for " + type);
-		ServiceHost serviceHost = convertToInternal(nodeProvisioningService.provisionNode());
+		com.tasktop.c2c.server.cloud.domain.ServiceHost domainServiceHost = nodeProvisioningService.provisionNode();
+		ServiceHost serviceHost = convertToInternal(domainServiceHost);
 		LOGGER.info("provisioned to " + serviceHost.getInternalNetworkAddress());
 
 		// Now configure the host for the new project.
-		ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider.getNewService();
-		String baseUrl = "http://" + serviceHost.getInternalNetworkAddress() + ":" + ALM_HTTP_PORT + "/"
-				+ configPathsByServiceType.get(type);
-		nodeConfigurationService.setBaseUrl(baseUrl);
+		ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
+				.getNewService(domainServiceHost, type);
 
 		try {
 			LOGGER.info("configuring node for " + type);
@@ -240,9 +239,6 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 			throw new ProvisioningException("Can't provision services: they're already provisioned");
 		}
 	}
-
-	private static final int ALM_HTTP_PORT = 8080;
-	private static final int ALM_AJP_PORT = 8009;
 
 	private List<ProjectService> projectServiceTemplate;
 
@@ -335,10 +331,6 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		this.nodeProvisioningServiceByType = nodeProvisioningServiceByType;
 	}
 
-	public void setConfigPathsByServiceType(Map<ServiceType, String> configPathsByServiceType) {
-		this.configPathsByServiceType = configPathsByServiceType;
-	}
-
 	@Override
 	public List<ServiceHost> findHostsForAddress(String remoteAddr) {
 		@SuppressWarnings("unchecked")
@@ -365,5 +357,39 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	@Value("${updateServiceTemplateOnStart}")
 	public void setUpdateServiceTemplateOnStart(boolean updateServiceTemplateOnStart) {
 		this.updateServiceTemplateOnStart = updateServiceTemplateOnStart;
+	}
+
+	@Override
+	public List<ProjectServiceStatus> computeProjectServicesStatus(Project managedProject) {
+		List<ProjectServiceStatus> result = new ArrayList<ProjectServiceStatus>();
+
+		for (ProjectService service : managedProject.getProjectServiceProfile().getProjectServices()) {
+			try {
+				if (service.getServiceHost() == null || !service.getServiceHost().isAvailable()) {
+					result.add(createFailureProjectServiceStatus(service));
+				} else {
+
+					ProjectServiceManagementService serviceMangementService = projectServiceMangementServiceProvider
+							.getNewService(ServiceHostServiceImpl.convertToPublic(service.getServiceHost()),
+									service.getType());
+
+					result.add(serviceMangementService.retrieveServiceStatus(managedProject.getIdentifier(),
+							service.getType()));
+				}
+			} catch (Exception e) {
+				LOGGER.warn("Caught exception trying to contact service", e);
+				result.add(createFailureProjectServiceStatus(service));
+			}
+		}
+
+		return result;
+	}
+
+	private ProjectServiceStatus createFailureProjectServiceStatus(ProjectService service) {
+		ProjectServiceStatus result = new ProjectServiceStatus();
+		result.setProjectIdentifier(service.getProjectServiceProfile().getProject().getIdentifier());
+		result.setServiceType(service.getType());
+		result.setServiceState(ServiceState.UNAVAILABLE);
+		return result;
 	}
 }

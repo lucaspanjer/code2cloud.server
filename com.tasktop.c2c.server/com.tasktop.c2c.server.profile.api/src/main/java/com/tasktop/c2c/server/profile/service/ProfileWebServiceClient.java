@@ -29,6 +29,7 @@ import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
@@ -68,6 +69,7 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 
 		private SshPublicKey sshPublicKey;
 		private List<SshPublicKey> sshPublicKeyList;
+		private List<ProjectServiceStatus> projectServiceStatusList;
 
 		public void setProfile(Profile profile) {
 			this.profile = profile;
@@ -195,6 +197,14 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 
 		public void setSshPublicKeyList(List<SshPublicKey> sshPublicKeyList) {
 			this.sshPublicKeyList = sshPublicKeyList;
+		}
+
+		public List<ProjectServiceStatus> getProjectServiceStatusList() {
+			return projectServiceStatusList;
+		}
+
+		public void setProjectServiceStatusList(List<ProjectServiceStatus> projectServiceStatusList) {
+			this.projectServiceStatusList = projectServiceStatusList;
 		}
 	}
 
@@ -689,6 +699,21 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 
 	public Boolean isPasswordResetTokenAvailable(String token) {
 		throw new UnsupportedOperationException();
+	}
+
+	public List<ProjectServiceStatus> computeProjectServicesStatus(String projectId) throws EntityNotFoundException {
+		try {
+			return new GetCall<List<ProjectServiceStatus>>() {
+
+				@Override
+				public List<ProjectServiceStatus> getValue(ServiceCallResult result) {
+					return result.getProjectServiceStatusList();
+				}
+			}.doCall("projects/{" + PROJECT_IDENTIFIER_URLPARAM + "}/status", projectId);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+			throw e;
+		}
 	}
 
 }

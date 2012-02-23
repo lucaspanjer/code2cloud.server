@@ -12,18 +12,40 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.configuration.service;
 
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.springframework.web.client.RestTemplate;
+
+import com.tasktop.c2c.server.cloud.domain.ServiceHost;
+import com.tasktop.c2c.server.cloud.domain.ServiceType;
 
 public class ProjectServiceMangementServiceProvider {
 	private RestTemplate template;
 
-	public ProjectServiceMangementServiceClient getNewService() {
+	private static final int ALM_HTTP_PORT = 8080;
+
+	@Resource
+	private Map<ServiceType, String> configPathsByServiceType;
+
+	public ProjectServiceMangementServiceClient getNewService(ServiceHost serviceHost, ServiceType type) {
 		ProjectServiceMangementServiceClient service = new ProjectServiceMangementServiceClient();
 		service.setRestTemplate(template);
+
+		String baseUrl = "http://" + serviceHost.getInternalNetworkAddress() + ":" + ALM_HTTP_PORT + "/"
+				+ configPathsByServiceType.get(type);
+		service.setBaseUrl(baseUrl);
+
 		return service;
 	}
 
 	public void setRestTemplate(RestTemplate template) {
 		this.template = template;
 	}
+
+	public void setConfigPathsByServiceType(Map<ServiceType, String> configPathsByServiceType) {
+		this.configPathsByServiceType = configPathsByServiceType;
+	}
+
 }

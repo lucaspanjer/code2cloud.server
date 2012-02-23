@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 
 public class ProjectServiceManagementServiceBean implements ProjectServiceManagementService {
@@ -65,6 +67,7 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 		result.setProjectIdentifier(projectIdentifer);
 		result.setServiceType(serviceType);
 		result.setMetrics(new HashMap<String, String>());
+		result.setServiceState(ServiceState.RUNNING);
 
 		for (MetricCollector mc : metricCollectors) {
 			mc.collect(result);

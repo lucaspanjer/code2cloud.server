@@ -16,6 +16,8 @@ import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.MetricCollector;
 
 /**
@@ -38,12 +40,12 @@ public class FileSystemMetricCollector implements MetricCollector {
 		File directory = new File(actualPath);
 
 		if (!directory.exists()) {
-			// TODO set something on status
+			status.setServiceState(ServiceState.UNAVAILABLE);
 			return;
 		}
 
 		if (!directory.isDirectory()) {
-			// TODO set something on status
+			status.setServiceState(ServiceState.UNAVAILABLE);
 			return;
 		}
 

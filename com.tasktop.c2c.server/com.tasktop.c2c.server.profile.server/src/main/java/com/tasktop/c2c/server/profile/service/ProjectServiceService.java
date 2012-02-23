@@ -15,9 +15,11 @@ package com.tasktop.c2c.server.profile.service;
 import java.util.Date;
 import java.util.List;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.internal.profile.service.ProvisioningException;
+import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
 
@@ -81,5 +83,7 @@ public interface ProjectServiceService {
 	List<ServiceHost> findHostsForAddress(String remoteAddr);
 
 	public List<ProjectService> findProjectServicesOlderThan(ServiceType type, Date date);
+
+	List<ProjectServiceStatus> computeProjectServicesStatus(Project managedProject);
 
 }

@@ -60,6 +60,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.doc.Documentation;
@@ -393,13 +394,19 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.profile.service.ProfileWebService#isPasswordResetTokenAvailable(java.lang.String)
+	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#isPasswordResetTokenAvailable(java.lang.String)
 	 */
 	@Override
 	public Boolean isPasswordResetTokenAvailable(String token) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	@RequestMapping(value = "projects/{" + PROJECT_IDENTIFIER_URLPARAM + "}/status", method = RequestMethod.GET)
+	public List<ProjectServiceStatus> computeProjectServicesStatus(
+			@PathVariable(PROJECT_IDENTIFIER_URLPARAM) String projectId) throws EntityNotFoundException {
+		return profileWebService.computeProjectServicesStatus(projectId);
 	}
 
 }

@@ -10,17 +10,21 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.configuration.service;
+package com.tasktop.c2c.server.cloud.domain;
 
 import java.util.Map;
-
-import com.tasktop.c2c.server.cloud.domain.ServiceType;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
 public class ProjectServiceStatus {
+
+	public enum ServiceState {
+		RUNNING, STOPPED, PROVISIONING, UNAVAILABLE;
+	}
+
+	private ServiceState serviceState;
 	private String projectIdentifier;
 	private ServiceType serviceType;
 	private Map<String, String> metrics;
@@ -47,5 +51,13 @@ public class ProjectServiceStatus {
 
 	public void setMetrics(Map<String, String> metrics) {
 		this.metrics = metrics;
+	}
+
+	public ServiceState getServiceState() {
+		return serviceState;
+	}
+
+	public void setServiceState(ServiceState serviceState) {
+		this.serviceState = serviceState;
 	}
 }

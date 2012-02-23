@@ -20,6 +20,8 @@ import javax.sql.DataSource;
 
 import org.apache.commons.io.FileUtils;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.MetricCollector;
 
 /**
@@ -51,6 +53,7 @@ public class DatabaseMetricCollector implements MetricCollector {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			status.setServiceState(ServiceState.UNAVAILABLE);
 		}
 
 	}

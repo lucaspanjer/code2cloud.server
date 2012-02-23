@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.configuration.service;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 
 /**
