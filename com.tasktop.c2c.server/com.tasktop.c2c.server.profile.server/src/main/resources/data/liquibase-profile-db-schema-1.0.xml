@@ -16,7 +16,7 @@
 			<column name="RANK" type="INT">
 				<constraints nullable="false" />
 			</column>
-			<column defaultValueBoolean="false" name="ACTIVE" type="BIT">
+			<column defaultValueBoolean="false" name="ACTIVE" type="BOOLEAN">
 				<constraints nullable="false" />
 			</column>
 			<column name="DATECREATED" type="DATE">
@@ -61,7 +61,7 @@
 			<column name="BUILDJOBNAME" type="VARCHAR(255)" />
 			<column name="BUILDJOBNUMBER" type="VARCHAR(255)" />
 			<column defaultValueBoolean="false" name="DEPLOYUNSTABLEBUILDS"
-				type="BIT" />
+				type="BOOLEAN" />
 			<column name="DEPLOYMENTTYPE" type="VARCHAR(255)" />
 			<column name="LASTDEPLOYMENTDATE" type="DATETIME" />
 			<column name="NAME" type="VARCHAR(255)" />
@@ -130,8 +130,7 @@
 			<column name="ID" type="BIGINT">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
-			<column defaultValueBoolean="true" name="EMAILTASKACTIVITY"
-				type="BIT">
+			<column defaultValueBoolean="true" name="EMAILTASKACTIVITY" type="BOOLEAN">
 				<constraints nullable="false" />
 			</column>
 			<column name="VERSION" type="INT" />
@@ -192,12 +191,11 @@
 				<constraints nullable="false" />
 			</column>
 			<column name="VERSION" type="INT" />
-			<column defaultValueBoolean="false" name="ADMIN" type="BIT">
+			<column defaultValueBoolean="false" name="ADMIN" type="BOOLEAN">
 				<constraints nullable="false" />
 			</column>
-			<column defaultValueBoolean="false" name="EMAILVERIFIED" type="BIT" />
-			<column defaultValueBoolean="false" name="SENTWELCOMEEMAIL"
-				type="BIT" />
+			<column defaultValueBoolean="false" name="EMAILVERIFIED" type="BOOLEAN" />
+			<column defaultValueBoolean="false" name="SENTWELCOMEEMAIL" type="BOOLEAN" />
 			<column name="NOTIFICATIONSETTINGS_ID" type="BIGINT" />
 		</createTable>
 
@@ -223,7 +221,7 @@
 			</column>
 			<column name="VERSION" type="INT" />
 			<column name="PROJECTSERVICEPROFILE_ID" type="BIGINT" />
-			<column defaultValueBoolean="false" name="IS_PUBLIC" type="BIT">
+			<column defaultValueBoolean="false" name="IS_PUBLIC" type="BOOLEAN">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -240,16 +238,16 @@
 			<column name="ID" type="BIGINT">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
-			<column defaultValueBoolean="false" name="OWNER" type="BIT">
+			<column defaultValueBoolean="false" name="OWNER" type="BOOLEAN">
 				<constraints nullable="false" />
 			</column>
 			<column name="VERSION" type="INT" />
 			<column name="PROFILE_ID" type="BIGINT" />
 			<column name="PROJECT_ID" type="BIGINT" />
-			<column defaultValueBoolean="false" name="COMMUNITY" type="BIT">
+			<column defaultValueBoolean="false" name="COMMUNITY" type="BOOLEAN">
 				<constraints nullable="false" />
 			</column>
-			<column defaultValueBoolean="false" name="MEMBER" type="BIT">
+			<column defaultValueBoolean="false" name="MEMBER" type="BOOLEAN">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -277,7 +275,7 @@
 			<column name="ID" type="BIGINT">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
-			<column defaultValueBoolean="false" name="TEMPLATE" type="BIT" />
+			<column defaultValueBoolean="false" name="TEMPLATE" type="BOOLEAN" />
 			<column name="VERSION" type="INT" />
 		</createTable>
 	</changeSet>
@@ -315,7 +313,7 @@
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="INTERNALNETWORKADDRESS" type="VARCHAR(255)" />
-			<column defaultValueBoolean="false" name="AVAILABLE" type="BIT" />
+			<column defaultValueBoolean="false" name="AVAILABLE" type="BOOLEAN" />
 			<column name="VERSION" type="INT" />
 			<column name="TYPE" type="VARCHAR(255)" />
 		</createTable>
@@ -522,11 +520,11 @@
 	<changeSet author="cmorgan"
 		id="task-2531-addNotificationSettingsEmailColumns">
 		<addColumn tableName="NOTIFICATIONSETTINGS">
-			<column name="EMAILNEWSANDEVENTS" type="BIT"
+			<column name="EMAILNEWSANDEVENTS" type="BOOLEAN"
 				defaultValueBoolean="false">
 				<constraints nullable="false" />
 			</column>
-			<column name="EMAILSERVICEANDMAINTENANCE" type="BIT"
+			<column name="EMAILSERVICEANDMAINTENANCE" type="BOOLEAN"
 				defaultValueBoolean="true">
 				<constraints nullable="false" />
 			</column>
@@ -584,9 +582,7 @@
 	</changeSet>
 	<changeSet author="cmorgan" id="task-2990-disable-accounts">
 		<addColumn tableName="PROFILE">
-
-			<column defaultValueBoolean="false" name="DISABLED"
-				type="BIT" />
+			<column defaultValueBoolean="false" name="DISABLED"	type="BOOLEAN" />
 		</addColumn>
 	</changeSet>
 </databaseChangeLog>
