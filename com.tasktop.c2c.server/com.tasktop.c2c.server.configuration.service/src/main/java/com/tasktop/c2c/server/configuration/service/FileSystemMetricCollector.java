@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.configuration.service;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
@@ -49,10 +50,15 @@ public class FileSystemMetricCollector implements MetricCollector {
 			return;
 		}
 
-		long totalByteSize = FileUtils.sizeOfDirectory(directory);
+		long totalByteSize;
+		try {
+			totalByteSize = com.tasktop.c2c.server.configuration.service.FileUtils.size(directory);
+			status.getMetrics().put(metricName, totalByteSize + "");
+			status.getMetrics().put(metricName + ".humanReadable", FileUtils.byteCountToDisplaySize(totalByteSize));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		status.getMetrics().put(metricName, totalByteSize + "");
-		status.getMetrics().put(metricName + ".humanReadable", FileUtils.byteCountToDisplaySize(totalByteSize));
 	}
 
 	public void setPath(String path) {
