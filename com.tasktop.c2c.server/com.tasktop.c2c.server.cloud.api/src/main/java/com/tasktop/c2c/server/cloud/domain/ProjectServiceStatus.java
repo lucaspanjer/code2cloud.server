@@ -21,7 +21,7 @@ import java.util.Map;
 public class ProjectServiceStatus {
 
 	public enum ServiceState {
-		RUNNING, STOPPED, PROVISIONING, UNAVAILABLE;
+		UNKNOWN, RUNNING, STOPPED, PROVISIONING, UNAVAILABLE;
 	}
 
 	private ServiceState serviceState;

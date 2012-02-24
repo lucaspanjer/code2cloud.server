@@ -67,7 +67,7 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 		result.setProjectIdentifier(projectIdentifer);
 		result.setServiceType(serviceType);
 		result.setMetrics(new HashMap<String, String>());
-		result.setServiceState(ServiceState.RUNNING);
+		result.setServiceState(ServiceState.UNKNOWN);
 
 		for (MetricCollector mc : metricCollectors) {
 			mc.collect(result);

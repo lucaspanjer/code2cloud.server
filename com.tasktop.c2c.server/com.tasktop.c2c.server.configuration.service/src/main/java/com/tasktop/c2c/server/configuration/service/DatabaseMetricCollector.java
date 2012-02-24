@@ -48,7 +48,7 @@ public class DatabaseMetricCollector implements MetricCollector {
 			ResultSet resultSet = c.createStatement().executeQuery(query);
 			if (resultSet.next()) {
 				int totalByteSize = resultSet.getInt(1);
-
+				status.setServiceState(ServiceState.RUNNING);
 				status.getMetrics().put(metricName, totalByteSize + "");
 				status.getMetrics().put(metricName + ".humanReadable", FileUtils.byteCountToDisplaySize(totalByteSize));
 			}
