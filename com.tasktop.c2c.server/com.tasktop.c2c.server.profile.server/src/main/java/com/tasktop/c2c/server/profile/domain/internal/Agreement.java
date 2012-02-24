@@ -49,7 +49,7 @@ public class Agreement extends BaseEntity {
 	 * The text of the agreement
 	 */
 	@Basic(optional = false)
-	@Column(nullable = false, length = 5000)
+	@Column(nullable = false, length = 4000)
 	public String getText() {
 		return text;
 	}

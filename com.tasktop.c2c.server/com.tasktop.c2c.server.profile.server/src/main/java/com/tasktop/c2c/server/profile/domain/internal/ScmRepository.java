@@ -25,7 +25,6 @@ import javax.persistence.Transient;
 import com.tasktop.c2c.server.cloud.domain.ScmLocation;
 import com.tasktop.c2c.server.cloud.domain.ScmType;
 
-
 @Entity
 @Table(name = "SCMREPOSITORY")
 public class ScmRepository extends BaseEntity {
@@ -45,7 +44,7 @@ public class ScmRepository extends BaseEntity {
 		this.project = project;
 	}
 
-	@Column(name = "url", nullable = false, length = 4096)
+	@Column(name = "url", nullable = false, length = 4000)
 	public String getUrl() {
 		return url;
 	}

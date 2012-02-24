@@ -32,7 +32,7 @@ public class ConfigurationProperty extends BaseEntity {
 		this.name = name;
 	}
 
-	@Column(nullable = false, length = 4096)
+	@Column(nullable = false, length = 4000)
 	public String getValue() {
 		return value;
 	}

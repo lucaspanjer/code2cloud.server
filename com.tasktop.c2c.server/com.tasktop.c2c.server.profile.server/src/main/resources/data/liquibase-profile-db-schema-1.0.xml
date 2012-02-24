@@ -10,7 +10,7 @@
 			<column defaultValue="" name="TITLE" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
-			<column defaultValue="" name="TEXT" type="VARCHAR(5000)">
+			<column defaultValue="" name="TEXT" type="VARCHAR(4000)">
 				<constraints nullable="false" />
 			</column>
 			<column name="RANK" type="INT">
@@ -45,7 +45,7 @@
 			<column defaultValue="" name="NAME" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
-			<column defaultValue="" name="VALUE" type="VARCHAR(4096)">
+			<column defaultValue="" name="VALUE" type="VARCHAR(4000)">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -293,7 +293,7 @@
 			<column defaultValue="" name="location" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
-			<column defaultValue="" name="url" type="VARCHAR(4096)">
+			<column defaultValue="" name="url" type="VARCHAR(4000)">
 				<constraints nullable="false" />
 			</column>
 			<column name="project_id" type="BIGINT">
