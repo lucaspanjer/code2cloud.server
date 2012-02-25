@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
@@ -24,6 +25,7 @@ import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
 import com.tasktop.c2c.server.profile.web.ui.client.event.LogonEvent;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.place.ResetPasswordPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.PasswordResetView;
 
@@ -57,7 +59,6 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 			}
 		});
 		passwordResetView.submitButton.addClickHandler(this);
-		passwordResetView.username.setText("placeholder");
 	}
 
 	@Override
@@ -102,5 +103,13 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 				}
 			}
 		});
+	}
+
+	/**
+	 * @param place
+	 */
+	public void setPlace(Place place) {
+		ResetPasswordPlace resetPasswordPlace = (ResetPasswordPlace) place;
+		passwordResetView.username.setText(resetPasswordPlace.getUsername());
 	}
 }

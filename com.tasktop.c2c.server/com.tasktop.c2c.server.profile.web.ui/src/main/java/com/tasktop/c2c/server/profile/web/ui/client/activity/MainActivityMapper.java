@@ -486,7 +486,10 @@ public class MainActivityMapper implements ActivityMapper {
 			return new PasswordResetRequestPresenter(PasswordResetRequestView.getInstance(),
 					(RequestPasswordResetPlace) place);
 		} else if (place instanceof ResetPasswordPlace) {
-			return new PasswordResetPresenter(new PasswordResetView(), ((ResetPasswordPlace) place).getResetToken());
+			PasswordResetPresenter activity = new PasswordResetPresenter(new PasswordResetView(),
+					((ResetPasswordPlace) place).getResetToken());
+			activity.setPlace(place);
+			return activity;
 		} else if (place instanceof AgreementsPlace) {
 			return new AgreementsPresenter(AgreementsView.getInstance(), (AgreementsPlace) place);
 		} else if (place instanceof AppSectionPlace) {

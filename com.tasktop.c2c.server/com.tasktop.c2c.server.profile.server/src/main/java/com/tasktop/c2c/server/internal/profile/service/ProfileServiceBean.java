@@ -655,7 +655,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		return passwordResetToken;
 	}
 
-	private PasswordResetToken getPasswordResetToken(String token) {
+	private PasswordResetToken getPassResetToken(String token) {
 		return getToken(token, PasswordResetToken.class);
 	}
 
@@ -671,7 +671,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	public String resetPassword(String token, String newPassword) throws EntityNotFoundException, ValidationException {
 		SecurityContextHolder.getContext().setAuthentication(null);
 		// load the token
-		PasswordResetToken passwordResetToken = this.getPasswordResetToken(token);
+		PasswordResetToken passwordResetToken = this.getPassResetToken(token);
 		if (passwordResetToken == null || passwordResetToken.getDateUsed() != null) {
 			throw new EntityNotFoundException();
 		}
@@ -697,7 +697,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Override
 	public Boolean isPasswordResetTokenAvailable(String token) {
 
-		PasswordResetToken dbToken = getPasswordResetToken(token);
+		PasswordResetToken dbToken = getPassResetToken(token);
 
 		// We want to return true if we have a token with an empty used-date.
 		return (dbToken != null) && (dbToken.getDateUsed() == null);
@@ -1246,6 +1246,16 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Override
 	public SignUpToken getSignUpToken(String signUpToken) throws EntityNotFoundException {
 		SignUpToken dbToken = getToken(signUpToken, SignUpToken.class);
+		// We want to return true if we have a token with an empty used-date.
+		if (dbToken != null && dbToken.getDateUsed() == null) {
+			return dbToken;
+		}
+		throw new EntityNotFoundException();
+	}
+
+	@Override
+	public PasswordResetToken getPasswordResetToken(String token) throws EntityNotFoundException {
+		PasswordResetToken dbToken = getToken(token, PasswordResetToken.class);
 		// We want to return true if we have a token with an empty used-date.
 		if (dbToken != null && dbToken.getDateUsed() == null) {
 			return dbToken;

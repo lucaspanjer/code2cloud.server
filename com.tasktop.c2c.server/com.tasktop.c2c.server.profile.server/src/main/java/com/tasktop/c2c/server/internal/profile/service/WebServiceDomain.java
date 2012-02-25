@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.internal.profile.crypto.OpenSSHPublicKeyReader;
+import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.domain.internal.ScmRepository;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
@@ -312,6 +313,13 @@ public class WebServiceDomain {
 		token.setEmail(internalToken.getEmail());
 		token.setIssuingUser(copy(internalToken.getIssuingProfile()));
 		return token;
+	}
+
+	public com.tasktop.c2c.server.profile.domain.project.PasswordResetToken copy(PasswordResetToken p) {
+		com.tasktop.c2c.server.profile.domain.project.PasswordResetToken passwordResetToken = new com.tasktop.c2c.server.profile.domain.project.PasswordResetToken();
+		passwordResetToken.setToken(p.getToken());
+		passwordResetToken.setProfile(copy(p.getProfile()));
+		return passwordResetToken;
 	}
 
 	private OpenSSHPublicKeyReader rsaReader = new OpenSSHPublicKeyReader();

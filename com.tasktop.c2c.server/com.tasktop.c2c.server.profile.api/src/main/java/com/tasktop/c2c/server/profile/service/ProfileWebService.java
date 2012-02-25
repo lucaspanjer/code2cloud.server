@@ -21,6 +21,7 @@ import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
+import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
@@ -160,4 +161,5 @@ public interface ProfileWebService {
 
 	List<ProjectServiceStatus> computeProjectServicesStatus(String projectId) throws EntityNotFoundException;
 
+	public PasswordResetToken getPasswordResetToken(String token) throws EntityNotFoundException;
 }

@@ -40,6 +40,7 @@ import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.profile.domain.internal.RandomToken;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
+import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
@@ -404,4 +405,16 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 		return projectServiceService.computeProjectServicesStatus(project);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#getPasswordResetToken(java.lang.String)
+	 */
+	@Override
+	public PasswordResetToken getPasswordResetToken(String token) throws EntityNotFoundException {
+		com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken passwordResetToken = profileService
+				.getPasswordResetToken(token);
+		PasswordResetToken copy = webServiceDomain.copy(passwordResetToken);
+		return copy;
+	}
 }
