@@ -22,8 +22,6 @@ import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AnonymousPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
-import com.tasktop.c2c.server.common.profile.web.shared.actions.CheckPasswordResetTokenAction;
-import com.tasktop.c2c.server.common.profile.web.shared.actions.CheckPasswordResetTokenResult;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetPasswordResetTokenAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetPasswordResetTokenResult;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
@@ -85,7 +83,7 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 	@Override
 	protected void addActions(List<Action<?>> actions) {
 		super.addActions(actions);
-		actions.add(new CheckPasswordResetTokenAction(resetToken));
+		// actions.add(new CheckPasswordResetTokenAction(resetToken));
 		actions.add(new GetPasswordResetTokenAction(resetToken));
 	}
 
@@ -93,18 +91,19 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 	protected void handleBatchResults() {
 		super.handleBatchResults();
 
-		CheckPasswordResetTokenResult result2 = getResult(CheckPasswordResetTokenResult.class);
-		if (!result2.get()) {
-			SignInPlace.createPlace().setMessage(getMessage()).go();
-		} else {
-			onPlaceDataFetched();
-		}
+		/*
+		 * CheckPasswordResetTokenResult result2 = getResult(CheckPasswordResetTokenResult.class); if (!result2.get()) {
+		 * SignInPlace.createPlace().setMessage(getMessage()).go(); } else { onPlaceDataFetched(); }
+		 */
 
 		GetPasswordResetTokenResult result = getResult(GetPasswordResetTokenResult.class);
 
 		if (result.get() != null && result.get().getProfile() != null
 				&& result.get().getProfile().getUsername() != null) {
 			username = result.get().getProfile().getUsername();
+			onPlaceDataFetched();
+		} else {
+			SignInPlace.createPlace().setMessage(getMessage()).go();
 		}
 
 	}
