@@ -392,16 +392,16 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#isPasswordResetTokenAvailable(java.lang.String)
-	 */
-	@Override
-	public Boolean isPasswordResetTokenAvailable(String token) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	// /*
+	// * (non-Javadoc)
+	// *
+	// * @see com.tasktop.c2c.server.profile.service.ProfileWebService#isPasswordResetTokenAvailable(java.lang.String)
+	// */
+	// @Override
+	// public Boolean isPasswordResetTokenAvailable(String token) {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
 
 	@Override
 	@RequestMapping(value = "projects/{" + PROJECT_IDENTIFIER_URLPARAM + "}/status", method = RequestMethod.GET)
