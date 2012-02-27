@@ -112,9 +112,9 @@
 		</createTable>
 	</changeSet>
 	<changeSet author="profiledb" id="createInvitationTokenUserIndex">
-		<createIndex indexName="FK_invitationtoken_issuing_user_id"
+		<createIndex indexName="FK_IT_ISSUING_USER_ID"
 			tableName="INVITATIONTOKEN" unique="false">
-			<column name="issuing_user_id" />
+			<column name="ISSUING_USER_ID" />
 		</createIndex>
 	</changeSet>
 
@@ -423,99 +423,73 @@
 
 	<changeSet author="profiledb" id="createAgreementProfileAgreementFK">
 		<addForeignKeyConstraint baseColumnNames="AGREEMENT_ID"
-			baseTableName="AGREEMENTPROFILE" constraintName="FK_AGREEMENTPROFILE_AGREEMENT_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="AGREEMENT"
-			referencesUniqueColumn="false" />
+			baseTableName="AGREEMENTPROFILE" constraintName="FK_AP_A_ID"
+			referencedColumnNames="ID" referencedTableName="AGREEMENT" />
 	</changeSet>
 
 	<changeSet author="profiledb" id="createAgreementProfileProfileFK">
 		<addForeignKeyConstraint baseColumnNames="PROFILE_ID"
-			baseTableName="AGREEMENTPROFILE" constraintName="FK_AGREEMENTPROFILE_PROFILE_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROFILE"
-			referencesUniqueColumn="false" />
+			baseTableName="AGREEMENTPROFILE" constraintName="FK_AP_PROF_ID"
+			referencedColumnNames="ID" referencedTableName="PROFILE" />
 	</changeSet>
 
 	<changeSet author="profiledb" id="createDeployConfigProjectFK">
 		<addForeignKeyConstraint baseColumnNames="PROJECT_ID"
-			baseTableName="DEPLOYMENTCONFIGURATION" constraintName="FK_DEPLOYMENTCONFIGURATION_PROJECT_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROJECT"
-			referencesUniqueColumn="false" />
+			baseTableName="DEPLOYMENTCONFIGURATION" constraintName="FK_DC_PROJ_ID"
+			referencedColumnNames="ID" referencedTableName="PROJECT" />
 	</changeSet>
 
 	<changeSet author="profiledb" id="createEmailVerificationTokenProfileFK">
 		<addForeignKeyConstraint baseColumnNames="PROFILE_ID"
-			baseTableName="EMAILVERIFICATIONTOKEN" constraintName="FK_EMAILVERIFICATIONTOKEN_PROFILE_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROFILE"
-			referencesUniqueColumn="false" />
+			baseTableName="EMAILVERIFICATIONTOKEN" constraintName="FK_EVT_PROF_ID"
+			referencedColumnNames="ID" referencedTableName="PROFILE" />
 	</changeSet>
 
 	<changeSet author="profiledb" id="createPasswordResetTokenProfileFK">
 		<addForeignKeyConstraint baseColumnNames="PROFILE_ID"
-			baseTableName="PASSWORDRESETTOKEN" constraintName="FK_PASSWORDRESETTOKEN_PROFILE_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROFILE"
-			referencesUniqueColumn="false" />
+			baseTableName="PASSWORDRESETTOKEN" constraintName="FK_PRT_PROF_ID"
+			referencedColumnNames="ID" referencedTableName="PROFILE" />
 	</changeSet>
 
 	<changeSet author="profiledb" id="createProfileNotifSettingsFK">
 		<addForeignKeyConstraint baseColumnNames="NOTIFICATIONSETTINGS_ID"
-			baseTableName="PROFILE" constraintName="FK_PROFILE_NOTIFICATIONSETTINGS_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="NOTIFICATIONSETTINGS"
-			referencesUniqueColumn="false" />
+			baseTableName="PROFILE" constraintName="FK_PROF_NS_ID"
+			referencedColumnNames="ID" referencedTableName="NOTIFICATIONSETTINGS" />
 	</changeSet>
 	<changeSet author="profiledb" id="createProjSvcProfileFK">
 		<addForeignKeyConstraint baseColumnNames="PROJECTSERVICEPROFILE_ID"
-			baseTableName="PROJECT" constraintName="FK_PROJECT_PROJECTSERVICEPROFILE_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROJECTSERVICEPROFILE"
-			referencesUniqueColumn="false" />
+			baseTableName="PROJECT" constraintName="FK_PROJ_PSP_ID"
+			referencedColumnNames="ID" referencedTableName="PROJECTSERVICEPROFILE" />
 	</changeSet>
 	<changeSet author="profiledb" id="createProjProfileProfileFK">
 		<addForeignKeyConstraint baseColumnNames="PROFILE_ID"
-			baseTableName="PROJECTPROFILE" constraintName="FK_PROJECTPROFILE_PROFILE_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROFILE"
-			referencesUniqueColumn="false" />
+			baseTableName="PROJECTPROFILE" constraintName="FK_PP_PROF_ID"
+			referencedColumnNames="ID" referencedTableName="PROFILE" />
 	</changeSet>
 	<changeSet author="profiledb" id="createProjProfileProjectFK">
 		<addForeignKeyConstraint baseColumnNames="PROJECT_ID"
-			baseTableName="PROJECTPROFILE" constraintName="FK_PROJECTPROFILE_PROJECT_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROJECT"
-			referencesUniqueColumn="false" />
+			baseTableName="PROJECTPROFILE" constraintName="FK_PP_PROJ_ID"
+			referencedColumnNames="ID" referencedTableName="PROJECT" />
 	</changeSet>
 	<changeSet author="profiledb" id="createProjectSvcProjSvcProfileFK">
 		<addForeignKeyConstraint baseColumnNames="PROJECTSERVICEPROFILE_ID"
-			baseTableName="PROJECTSERVICE" constraintName="FK_PROJECTSERVICE_PROJECTSERVICEPROFILE_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROJECTSERVICEPROFILE"
-			referencesUniqueColumn="false" />
+			baseTableName="PROJECTSERVICE" constraintName="FK_PS_PSP_ID"
+			referencedColumnNames="ID" referencedTableName="PROJECTSERVICEPROFILE" />
 	</changeSet>
 	<changeSet author="profiledb" id="createProjSvcSvcHostFK">
 		<addForeignKeyConstraint baseColumnNames="SERVICEHOST_ID"
-			baseTableName="PROJECTSERVICE" constraintName="FK_PROJECTSERVICE_SERVICEHOST_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="SERVICEHOST"
-			referencesUniqueColumn="false" />
+			baseTableName="PROJECTSERVICE" constraintName="FK_PS_SH_ID"
+			referencedColumnNames="ID" referencedTableName="SERVICEHOST" />
 	</changeSet>
 	<changeSet author="profiledb" id="createScmRepoProjFK">
 		<addForeignKeyConstraint baseColumnNames="project_id"
-			baseTableName="SCMREPOSITORY" constraintName="FK_SCMREPOSITORY_project_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROJECT"
-			referencesUniqueColumn="false" />
+			baseTableName="SCMREPOSITORY" constraintName="FK_SCMREPOSITORY_PROJECT_ID"
+			referencedColumnNames="ID" referencedTableName="PROJECT" />
 	</changeSet>
 	<changeSet author="profiledb" id="createSshPublicKeyProfileFK">
 		<addForeignKeyConstraint baseColumnNames="PROFILE_ID"
 			baseTableName="SSHPUBLICKEY" constraintName="FK_SSHPUBLICKEY_PROFILE_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROFILE"
-			referencesUniqueColumn="false" />
+			referencedColumnNames="ID" referencedTableName="PROFILE" />
 	</changeSet>
 	<changeSet author="cmorgan"
 		id="task-2531-addNotificationSettingsEmailColumns">
@@ -551,20 +525,16 @@
 			<column name="PENDINGDELETIONS" type="INT" />
 			<column name="VERSION" type="INT" />
 		</createTable>
-		<createTable tableName="SERVICEHOSTCONFIGURATIONSERVICES">
-			<column name="ServiceHostConfiguration_ID" type="BIGINT"/>
+		<createTable tableName="SERVICEHOSTCONFIGURATIONSRVCS">
+			<column name="SERVICEHOSTCONFIGURATION_ID" type="BIGINT"/>
 			<column name="SUPPORTEDSERVICES" type="VARCHAR(255)" />
 		</createTable>
 		<addForeignKeyConstraint baseColumnNames="SERVICEHOSTCONFIGURATION_ID"
-			baseTableName="SERVICEHOST" constraintName="FK_SERVICEHOST_SERVICEHOSTCONFIGURATION_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="SERVICEHOSTCONFIGURATION"
-			referencesUniqueColumn="false" />
-		<addForeignKeyConstraint baseColumnNames="ServiceHostConfiguration_ID"
-			baseTableName="SERVICEHOSTCONFIGURATIONSERVICES" constraintName="SRVCHSTCONFIGURATIONSERVICESSrvcHstConfigurationID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="SERVICEHOSTCONFIGURATION"
-			referencesUniqueColumn="false" />
+			baseTableName="SERVICEHOST" constraintName="FK_SH_SHCONF_ID"
+			referencedColumnNames="ID" referencedTableName="SERVICEHOSTCONFIGURATION" />
+		<addForeignKeyConstraint baseColumnNames="SERVICEHOSTCONFIGURATION_ID"
+			baseTableName="SERVICEHOSTCONFIGURATIONSRVCS" constraintName="SHCS_SHC_ID"
+			referencedColumnNames="ID" referencedTableName="SERVICEHOSTCONFIGURATION" />
 	</changeSet>
 	<changeSet author="cmorgan" id="task-2816-fair-hudson-service">
 		<createTable tableName="PROMISETOKEN">

@@ -31,7 +31,7 @@ public class ServiceHostConfiguration extends BaseEntity {
 	private Set<ServiceType> supportedServices;
 
 	@ElementCollection
-	@CollectionTable(name = "SERVICEHOSTCONFIGURATIONSERVICES")
+	@CollectionTable(name = "SERVICEHOSTCONFIGURATIONSRVCS")
 	@Column
 	@Enumerated(EnumType.STRING)
 	public Set<ServiceType> getSupportedServices() {
