@@ -655,9 +655,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		return passwordResetToken;
 	}
 
-	private PasswordResetToken getPassResetToken(String token) {
-		return getToken(token, PasswordResetToken.class);
-	}
+	// private PasswordResetToken getPassResetToken(String token) {
+	// return getToken(token, PasswordResetToken.class);
+	// }
 
 	private InvitationToken getInvitationToken(String token) {
 		return getToken(token, InvitationToken.class);
@@ -671,10 +671,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	public String resetPassword(String token, String newPassword) throws EntityNotFoundException, ValidationException {
 		SecurityContextHolder.getContext().setAuthentication(null);
 		// load the token
-		PasswordResetToken passwordResetToken = this.getPassResetToken(token);
-		if (passwordResetToken == null || passwordResetToken.getDateUsed() != null) {
-			throw new EntityNotFoundException();
-		}
+		PasswordResetToken passwordResetToken = this.getPasswordResetToken(token);
 
 		Profile profile = passwordResetToken.getProfile();
 		if (profile == null) {
@@ -697,7 +694,12 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Override
 	public Boolean isPasswordResetTokenAvailable(String token) {
 
-		PasswordResetToken dbToken = getPassResetToken(token);
+		PasswordResetToken dbToken;
+		try {
+			dbToken = getPasswordResetToken(token);
+		} catch (EntityNotFoundException e) {
+			return false;
+		}
 
 		// We want to return true if we have a token with an empty used-date.
 		return (dbToken != null) && (dbToken.getDateUsed() == null);

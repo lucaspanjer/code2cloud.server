@@ -87,6 +87,17 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 	}
 
 	@Override
+	protected void onResultsRecieved() {
+
+		if (hasException("NoSuchEntityException")) {
+			SignInPlace.createPlace().setMessage(getMessage()).go();
+			return;
+		}
+
+		handleBatchResults();
+	}
+
+	@Override
 	protected void handleBatchResults() {
 		super.handleBatchResults();
 
