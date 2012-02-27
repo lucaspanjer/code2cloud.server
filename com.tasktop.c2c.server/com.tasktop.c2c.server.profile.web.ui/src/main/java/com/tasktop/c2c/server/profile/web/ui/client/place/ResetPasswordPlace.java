@@ -93,17 +93,19 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 	protected void handleBatchResults() {
 		super.handleBatchResults();
 
-		GetPasswordResetTokenResult result = getResult(GetPasswordResetTokenResult.class);
-		if (result.get() != null && result.get().getProfile() != null
-				&& result.get().getProfile().getUsername() != null) {
-			username = result.get().getProfile().getUsername();
-		}
-
 		CheckPasswordResetTokenResult result2 = getResult(CheckPasswordResetTokenResult.class);
 		if (!result2.get()) {
 			SignInPlace.createPlace().setMessage(getMessage()).go();
 		} else {
 			onPlaceDataFetched();
 		}
+
+		GetPasswordResetTokenResult result = getResult(GetPasswordResetTokenResult.class);
+
+		if (result.get() != null && result.get().getProfile() != null
+				&& result.get().getProfile().getUsername() != null) {
+			username = result.get().getProfile().getUsername();
+		}
+
 	}
 }
