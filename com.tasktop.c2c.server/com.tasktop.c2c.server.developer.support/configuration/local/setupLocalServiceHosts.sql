@@ -1,9 +1,10 @@
-DELETE FROM `profile`.`servicehostconfigurationsrvcs`;
-DELETE FROM `profile`.`servicehost`;
-DELETE FROM `profile`.`servicehostconfiguration`;
-INSERT INTO `profile`.`servicehostconfiguration`
-VALUES (1, 0, 0, 1);
-INSERT INTO `profile`.`servicehostconfigurationsrvcs`
-VALUES (1, 'BUILD'), (1, 'TASKS'), (1, 'WIKI'), (1,'SCM'), (1,'MAVEN');
-INSERT INTO `profile`.`servicehost`
-VALUES (1, '127.0.0.1', 1, 1, 1);
+DELETE FROM servicehostconfigurationsrvcs;
+DELETE FROM servicehost;
+DELETE FROM servicehostconfiguration;
+INSERT INTO servicehostconfiguration VALUES (1, 0, 0, 1);
+INSERT INTO servicehostconfigurationsrvcs VALUES (1, 'BUILD');
+INSERT INTO servicehostconfigurationsrvcs VALUES (1, 'TASKS');
+INSERT INTO servicehostconfigurationsrvcs VALUES (1, 'WIKI');
+INSERT INTO servicehostconfigurationsrvcs VALUES (1,'SCM');
+INSERT INTO servicehostconfigurationsrvcs VALUES (1,'MAVEN');
+INSERT INTO servicehost VALUES (1, '127.0.0.1', 1, 1, 1);
