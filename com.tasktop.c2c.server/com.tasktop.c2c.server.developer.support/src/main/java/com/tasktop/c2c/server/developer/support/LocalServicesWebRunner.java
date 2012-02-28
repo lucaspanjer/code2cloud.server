@@ -1,4 +1,3 @@
-package com.tasktop.c2c.server.developer.support;
 /*******************************************************************************
  * Copyright (c) 2010, 2012 Tasktop Technologies
  * 
@@ -10,6 +9,8 @@ package com.tasktop.c2c.server.developer.support;
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
+package com.tasktop.c2c.server.developer.support;
+
 import org.eclipse.jetty.ajp.Ajp13SocketConnector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -39,10 +40,13 @@ public class LocalServicesWebRunner {
 		wikiContext.setContextPath("/wiki");
 		wikiContext.setParentLoaderPriority(true);
 
-		// TODO hudson config.
+		WebAppContext hudsonConfigContext = new WebAppContext();
+		hudsonConfigContext.setResourceBase("../com.tasktop.c2c.server.hudson.configuration.web/src/main/webapp/");
+		hudsonConfigContext.setContextPath("/hudson-config");
+		hudsonConfigContext.setParentLoaderPriority(true);
 
 		ContextHandlerCollection handlers = new ContextHandlerCollection();
-		handlers.setHandlers(new Handler[] { serviceContext, taskContext, wikiContext });
+		handlers.setHandlers(new Handler[] { serviceContext, taskContext, wikiContext, hudsonConfigContext });
 		server.setHandler(handlers);
 
 		Ajp13SocketConnector ajpCon = new Ajp13SocketConnector();

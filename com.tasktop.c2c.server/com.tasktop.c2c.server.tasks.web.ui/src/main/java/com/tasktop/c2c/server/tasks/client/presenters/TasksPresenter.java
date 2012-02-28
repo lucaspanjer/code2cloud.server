@@ -12,6 +12,11 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.presenters;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -21,9 +26,9 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.HasOneWidget;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.service.domain.criteria.ColumnCriteria;
+import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
 import com.tasktop.c2c.server.common.service.domain.criteria.CriteriaParser;
 import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
-import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
@@ -143,19 +148,40 @@ public class TasksPresenter extends AbstractTaskPresenter implements ITaskListVi
 	}
 
 	private void setupPredefinedQueryLinks() {
-		view.predefinedQueryMenuPanel.clear();
-		for (final PredefinedTaskQuery query : PredefinedTaskQuery.values()) {
+		List<PredefinedTaskQuery> queries = new ArrayList<PredefinedTaskQuery>();
 
+		for (final PredefinedTaskQuery query : PredefinedTaskQuery.values()) {
 			// If we have an anonymous user and this query requires a user, skip it.
 			if (isAnonymous && query.isUserRequired()) {
 				continue;
 			}
+			queries.add(query);
+		}
+
+		Collections.sort(queries, new Comparator<PredefinedTaskQuery>() {
+
+			@Override
+			public int compare(PredefinedTaskQuery o1, PredefinedTaskQuery o2) {
+				return o1.getLabel().compareToIgnoreCase(o2.getLabel());
+			}
+		});
+
+		view.predefinedQueryMenuPanel.clear();
+		for (PredefinedTaskQuery query : queries) {
 			view.addQueryMenuItem(query);
 		}
 	}
 
 	protected void setupSavedQueryLinks() {
-		view.setSavedTaskQueries(repositoryConfiguration.getSavedTaskQueries());
+		List<SavedTaskQuery> savedTaskQueries = repositoryConfiguration.getSavedTaskQueries();
+		Collections.sort(savedTaskQueries, new Comparator<SavedTaskQuery>() {
+
+			@Override
+			public int compare(SavedTaskQuery o1, SavedTaskQuery o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
+		view.setSavedTaskQueries(savedTaskQueries);
 	}
 
 	private void showQuery() {

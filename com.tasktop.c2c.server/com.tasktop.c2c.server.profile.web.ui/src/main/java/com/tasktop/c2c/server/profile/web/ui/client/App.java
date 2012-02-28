@@ -33,7 +33,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
  */
 public class App {
 
-	private final AppGinjector injector = AppGinjector.get.instance();
+	private static final AppGinjector injector = AppGinjector.get.instance();
 
 	public void run(HasWidgets.ForIsWidget root) {
 		addHandlers();
@@ -50,7 +50,14 @@ public class App {
 		injector.getPlaceHistoryHandler().handleCurrentHistory();
 	}
 
-	public static native void registerGAPageVisit() /*-{
+	public static void registerGAPageVisit() {
+		if (injector.getConfiguration().isEnableGoogleAnalytics()) {
+			registerGAPageVisitInternal();
+		}
+	}
+
+	private static native void registerGAPageVisitInternal()
+	/*-{
 		var url = decodeURIComponent($wnd.location.toString());
 		$wnd._gaq.push([ '_trackPageview', url.split('#')[1] ]);
 	}-*/;

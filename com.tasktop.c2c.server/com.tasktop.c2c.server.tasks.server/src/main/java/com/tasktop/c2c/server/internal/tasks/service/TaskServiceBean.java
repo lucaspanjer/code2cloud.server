@@ -134,11 +134,6 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 	private static final String DEFAULT_MILESTONE = "---";
 
-	private static final String TASK_SELECT_CLAUSE = "SELECT task ";
-
-	private static final String TASK_FROM_CLAUSE = " FROM "
-			+ com.tasktop.c2c.server.internal.tasks.domain.Task.class.getSimpleName() + " task";
-
 	@SuppressWarnings("unchecked")
 	@Override
 	@Secured({ Role.Observer, Role.User })

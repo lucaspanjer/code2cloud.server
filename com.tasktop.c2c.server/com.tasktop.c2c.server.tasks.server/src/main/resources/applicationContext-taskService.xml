@@ -53,17 +53,24 @@
 		p:serviceProxyPath="${profile.serviceProxy.path}"
 	/>
 
-	<bean id="taskConfigurationService" class="com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceBean">
+	<bean id="taskServiceManagementService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
 		<property name="configurators">
 			<list> 
-				<ref bean="taskDBConfigurationService"/>
+				<bean class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 
+					p:suffix="_tasks" p:rawDatasource-ref="rawDataSource" p:tenantAwareDataSource-ref="dataSource" 
+					p:changelog="classpath:/data/liquibase-task-db-master.xml"/>
+			</list>
+		</property>
+		<property name="metricCollectors">
+			<list>
+				<bean class="com.tasktop.c2c.server.configuration.service.DatabaseMetricCollector" 
+					p:metricName="diskUsage" p:dataSource-ref="rawDataSource" 
+					p:sqlSizeQuery="SELECT sum( data_length + index_length ) FROM information_schema.TABLES where TABLE_SCHEMA = &quot;{projectIdentifier}_tasks&quot; ; "/>
 			</list>
 		</property>
 	</bean>
 	
-	<bean id="taskDBConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 
-					p:suffix="_tasks" p:rawDatasource-ref="rawDataSource" p:tenantAwareDataSource-ref="dataSource" 
-					p:changelog="classpath:/data/liquibase-task-db-master.xml"/>
+	
 	
 	<bean id="aopLogger" class="com.tasktop.c2c.server.common.service.ServiceLoggingAdvice"/>
 	

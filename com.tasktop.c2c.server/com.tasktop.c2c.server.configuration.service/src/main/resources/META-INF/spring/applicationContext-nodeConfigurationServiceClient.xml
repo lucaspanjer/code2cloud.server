@@ -13,7 +13,7 @@
 
 	<import resource="classpath:META-INF/spring/applicationContext-restClient.xml"/>
 
-	<bean id="nodeConfigurationServiceProvider" class="com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceProvider">
+	<bean id="nodeConfigurationServiceProvider" class="com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceProvider">
 		<property name="restTemplate" ref="restTemplate"/>
 	</bean>
 </beans>

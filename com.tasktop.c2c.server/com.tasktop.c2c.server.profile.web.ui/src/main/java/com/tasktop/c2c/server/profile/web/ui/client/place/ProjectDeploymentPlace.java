@@ -18,7 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
-
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -28,6 +27,8 @@ import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Section;
 import com.tasktop.c2c.server.common.profile.web.client.place.SectionPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SecuredProjectPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
+import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
@@ -39,7 +40,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 public class ProjectDeploymentPlace extends SecuredProjectPlace implements HeadingPlace, HasProjectPlace,
-		BreadcrumbPlace, SectionPlace {
+		BreadcrumbPlace, SectionPlace, WindowTitlePlace {
 
 	private static final Set<String> roles = new HashSet<String>(Arrays.asList(Role.User));
 
@@ -156,5 +157,10 @@ public class ProjectDeploymentPlace extends SecuredProjectPlace implements Headi
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
 		breadcrumbs.add(new Breadcrumb(ProjectDeploymentPlace.createPlace(project.getIdentifier()).getHref(),
 				"Deployments"));
+	}
+
+	@Override
+	public String getWindowTitle() {
+		return "Deployments - " + project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
 	}
 }

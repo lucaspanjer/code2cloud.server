@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.gin;
 
 import net.customware.gwt.dispatch.client.DispatchAsync;
 
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -44,31 +43,18 @@ public class AppGinModule extends AbstractGinModule {
 
 	@Override
 	protected void configure() {
-		bind(AppShell.class).toProvider(StandardApplicationViewProvider.class).in(Singleton.class);
+		bind(AppShell.class).to(StandardApplicationView.class).in(Singleton.class);
 		bind(NotificationPanel.class).in(Singleton.class);
-		// bind(Resources.class).in(Singleton.class);
 		bind(AppState.class).in(Singleton.class);
 		bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
-
 		bind(PlaceHistoryMapper.class).to(AppHistoryMapper.class).in(Singleton.class);
 		bind(MainActivityMapper.class).in(Singleton.class);
 		bind(PlaceHistoryHandler.class).toProvider(PlaceHistoryHandlerProvider.class).in(Singleton.class);
-		bind(PlaceController.class).toProvider(PlaceControllerProvider.class).in(Singleton.class);
+		bind(PlaceController.class).to(AppPlaceController.class).in(Singleton.class);
 		bind(Notifier.class).to(NotificationPanel.class).in(Singleton.class);
 		bind(Scheduler.class).toProvider(SchedulerProvider.class).in(Singleton.class);
 		bind(DispatchAsync.class).to(DispatchServiceAsync.class).in(Singleton.class);
-	}
 
-	// If you need to have a single instance of an object, or something which is instantiated at runtime, you *must* use
-	// a Provider.
-	static class StandardApplicationViewProvider implements Provider<StandardApplicationView> {
-
-		private static final StandardApplicationView view = new StandardApplicationView();
-
-		@Override
-		public StandardApplicationView get() {
-			return view;
-		}
 	}
 
 	static class SchedulerProvider implements Provider<Scheduler> {
@@ -100,17 +86,4 @@ public class AppGinModule extends AbstractGinModule {
 		}
 	}
 
-	static class PlaceControllerProvider implements Provider<PlaceController> {
-
-		private final EventBus eventBus;
-
-		@Inject
-		PlaceControllerProvider(EventBus eventBus) {
-			this.eventBus = eventBus;
-		}
-
-		public PlaceController get() {
-			return new AppPlaceController(eventBus);
-		}
-	}
 }

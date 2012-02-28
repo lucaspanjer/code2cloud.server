@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	
-	<bean id="configServiceController" class="com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceController">
+	<bean id="configServiceController" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceController">
 		<property name="nodeConfigurationService" ref="wikiConfigurationService"/>	
 	</bean>
 		

@@ -20,6 +20,7 @@ import com.google.gwt.place.shared.PlaceChangeRequestEvent;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.History;
+import com.google.inject.Inject;
 import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 
@@ -30,7 +31,6 @@ import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
  */
 public class AppPlaceController extends PlaceController {
 
-	private AppGinjector injector = AppGinjector.get.instance();
 	private final EventBus eventBus;
 	private final Delegate delegate;
 	private Place where = Place.NOWHERE;
@@ -38,6 +38,7 @@ public class AppPlaceController extends PlaceController {
 
 	private PlaceHistoryMapper placeHistoryMapper;
 
+	@Inject
 	public AppPlaceController(EventBus eventBus) {
 		this(eventBus, (Delegate) GWT.create(DefaultDelegate.class));
 	}

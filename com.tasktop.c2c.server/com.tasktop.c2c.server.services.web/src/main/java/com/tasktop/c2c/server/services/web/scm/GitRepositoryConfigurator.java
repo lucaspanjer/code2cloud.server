@@ -22,9 +22,8 @@ import org.springframework.tenancy.provider.DefaultTenant;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.common.service.domain.Role;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.NodeConfiguration;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceBean.Configurator;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
 import com.tasktop.c2c.server.profile.service.GitService;
 
 @Component
@@ -36,14 +35,14 @@ public class GitRepositoryConfigurator implements Configurator {
 	private GitService gitService;
 
 	@Override
-	public void configure(NodeConfiguration configuration) {
-		String gitRepositoryName = configuration.getProperties().get(NodeConfigurationService.APPLICATION_GIT_PROPERTY);
+	public void configure(ProjectServiceConfiguration configuration) {
+		String gitRepositoryName = configuration.getProperties().get(ProjectServiceConfiguration.APPLICATION_GIT_PROPERTY);
 		if (gitRepositoryName == null) {
 			return;
 		}
 		try {
 			TenancyContextHolder.createEmptyContext();
-			TenancyContextHolder.getContext().setTenant(new DefaultTenant(configuration.getApplicationId(), null));
+			TenancyContextHolder.getContext().setTenant(new DefaultTenant(configuration.getProjectIdentifier(), null));
 			AuthUtils.insertSystemAuthToken(Role.Admin);
 			gitService.createEmptyRepository(gitRepositoryName);
 		} finally {

@@ -61,7 +61,7 @@
 	   	</property>
 	</bean>
 	
-	<util:list id="projectSeriviceTemplate">
+	<util:list id="projectServiceTemplate">
 		<bean class="com.tasktop.c2c.server.profile.domain.internal.ProjectService">
 			<property name="type" value="TASKS"/>
 			<property name="internalUriPrefix" value="/tasks/api"/>

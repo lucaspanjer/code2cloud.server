@@ -27,8 +27,7 @@ import org.springframework.tenancy.context.TenancyContext;
 import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.tenancy.provider.DefaultTenant;
 
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.NodeConfiguration;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationServiceBean.Configurator;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
 
 /**
  * Used to configure a new database for a service for a project. Will create a database named from the projectIdentifier
@@ -111,9 +110,9 @@ public class ProjectServiceDatabaseConfigurator implements Configurator, Resourc
 	 * cloudfoundry.code.server.configuration.service.NodeConfigurationService.NodeConfiguration)
 	 */
 	@Override
-	public void configure(NodeConfiguration configuration) {
+	public void configure(ProjectServiceConfiguration configuration) {
 		try {
-			initializeNewProject(configuration.getApplicationId());
+			initializeNewProject(configuration.getProjectIdentifier());
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

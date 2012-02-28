@@ -63,7 +63,10 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 		return result;
 	}
 
-	private static com.tasktop.c2c.server.cloud.domain.ServiceHost convertToPublic(ServiceHost node) {
+	static com.tasktop.c2c.server.cloud.domain.ServiceHost convertToPublic(ServiceHost node) {
+		if (node == null) {
+			return null;
+		}
 		com.tasktop.c2c.server.cloud.domain.ServiceHost result = new com.tasktop.c2c.server.cloud.domain.ServiceHost();
 		result.setId(node.getId());
 		result.setInternalNetworkAddress(node.getInternalNetworkAddress());
@@ -75,8 +78,7 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 		return result;
 	}
 
-	private static void updateManaged(com.tasktop.c2c.server.cloud.domain.ServiceHost publicNode,
-			ServiceHost managed) {
+	private static void updateManaged(com.tasktop.c2c.server.cloud.domain.ServiceHost publicNode, ServiceHost managed) {
 		managed.setInternalNetworkAddress(publicNode.getInternalNetworkAddress());
 		// managed.setType(publicNode.getType());
 		managed.setAvailable(publicNode.isAvailable());
@@ -150,8 +152,7 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 	}
 
 	@Override
-	public List<com.tasktop.c2c.server.cloud.domain.ServiceHost> findHostsAtCapacity(Set<ServiceType> type,
-			int capacity) {
+	public List<com.tasktop.c2c.server.cloud.domain.ServiceHost> findHostsAtCapacity(Set<ServiceType> type, int capacity) {
 		ServiceHostConfiguration config = findSupportedConfiguration(type);
 
 		if (config == null) {
@@ -277,8 +278,8 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 	}
 
 	@Override
-	public void deallocateHostFromProject(com.tasktop.c2c.server.cloud.domain.ServiceHost host,
-			String projectIdentifier) throws EntityNotFoundException {
+	public void deallocateHostFromProject(com.tasktop.c2c.server.cloud.domain.ServiceHost host, String projectIdentifier)
+			throws EntityNotFoundException {
 		ServiceHost managedHost = entityManager.find(ServiceHost.class, host.getId(), LockModeType.PESSIMISTIC_WRITE);
 		if (managedHost == null) {
 			throw new EntityNotFoundException();
@@ -311,8 +312,7 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 	}
 
 	@Override
-	public com.tasktop.c2c.server.cloud.domain.ServiceHost retrieve(Long serviceHostId)
-			throws EntityNotFoundException {
+	public com.tasktop.c2c.server.cloud.domain.ServiceHost retrieve(Long serviceHostId) throws EntityNotFoundException {
 		ServiceHost managedHost = entityManager.find(ServiceHost.class, serviceHostId);
 		if (managedHost == null) {
 			throw new EntityNotFoundException();

@@ -31,6 +31,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
@@ -49,6 +50,7 @@ import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
+import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 
 @Qualifier("main")
 @Service
@@ -63,6 +65,9 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 
 	@Autowired
 	private ProfileService profileService;
+
+	@Autowired
+	private ProjectServiceService projectServiceService;
 
 	private UsersConnectionRepository usersConnRepo;
 
@@ -235,8 +240,8 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 
 	@Override
 	public QueryResult<Project> findProjects(String query, QueryRequest request) {
-		QueryResult<com.tasktop.c2c.server.profile.domain.internal.Project> result = profileService.findProjects(
-				query, request.getPageInfo(), request.getSortInfo());
+		QueryResult<com.tasktop.c2c.server.profile.domain.internal.Project> result = profileService.findProjects(query,
+				request.getPageInfo(), request.getSortInfo());
 		return new QueryResult<Project>(result.getOffset(), result.getPageSize(), webServiceDomain.copyProjects(
 				result.getResultPage(), configuration), result.getTotalResultSize());
 	}
@@ -359,8 +364,7 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 
 	@Override
 	public List<SshPublicKey> listSshPublicKeys() {
-		List<com.tasktop.c2c.server.profile.domain.internal.SshPublicKey> keys = profileService
-				.listSshPublicKeys();
+		List<com.tasktop.c2c.server.profile.domain.internal.SshPublicKey> keys = profileService.listSshPublicKeys();
 		List<SshPublicKey> values = new ArrayList<SshPublicKey>(keys.size());
 		for (com.tasktop.c2c.server.profile.domain.internal.SshPublicKey key : keys) {
 			values.add(webServiceDomain.copy(key));
@@ -386,12 +390,18 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.profile.service.ProfileWebService#isPasswordResetTokenAvailable(java.lang.String)
+	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#isPasswordResetTokenAvailable(java.lang.String)
 	 */
 	@Override
 	public Boolean isPasswordResetTokenAvailable(String token) {
 		return profileService.isPasswordResetTokenAvailable(token);
+	}
+
+	@Override
+	public List<ProjectServiceStatus> computeProjectServicesStatus(String projectId) throws EntityNotFoundException {
+		com.tasktop.c2c.server.profile.domain.internal.Project project = profileService
+				.getProjectByIdentifier(projectId);
+		return projectServiceService.computeProjectServicesStatus(project);
 	}
 
 }

@@ -16,6 +16,7 @@
   <classpathentry kind="src" path="/com.tasktop.c2c.server.auth.service"/>
   <classpathentry kind="var" path="M2_REPO/cglib/cglib/2.2/cglib-2.2.jar" sourcepath="M2_REPO/cglib/cglib/2.2/cglib-2.2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3.jar" sourcepath="M2_REPO/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3-sources.jar"/>
+  <classpathentry kind="src" path="/com.tasktop.c2c.server.cloud.api"/>
   <classpathentry kind="src" path="/com.tasktop.c2c.server.common.api"/>
   <classpathentry kind="src" path="/com.tasktop.c2c.server.common.service"/>
   <classpathentry kind="src" path="/com.tasktop.c2c.server.common.web"/>

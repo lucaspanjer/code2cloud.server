@@ -36,6 +36,13 @@
 			<version>0.1.0-SNAPSHOT</version>
 			<type>war</type>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>hudson.configuration.web</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
 
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>

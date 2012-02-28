@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.profile.service;
 
 import java.util.List;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
@@ -156,5 +157,7 @@ public interface ProfileWebService {
 	public Boolean isProjectCreateAvailble();
 
 	Boolean isPasswordResetTokenAvailable(String token);
+
+	List<ProjectServiceStatus> computeProjectServicesStatus(String projectId) throws EntityNotFoundException;
 
 }

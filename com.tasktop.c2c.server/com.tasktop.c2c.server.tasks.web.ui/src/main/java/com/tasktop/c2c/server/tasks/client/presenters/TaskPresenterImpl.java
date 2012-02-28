@@ -228,7 +228,7 @@ public class TaskPresenterImpl extends AbstractTaskPresenter implements TaskPres
 					protected void success(UpdateTaskResult actionResult) {
 						Task result = actionResult.get();
 						setTask(result);
-						taskView.setTask(result);
+						taskView.updateTask(result);
 
 						if (actionResult.isUpdatedAlready()) {
 							getNotifier().displayMessage(

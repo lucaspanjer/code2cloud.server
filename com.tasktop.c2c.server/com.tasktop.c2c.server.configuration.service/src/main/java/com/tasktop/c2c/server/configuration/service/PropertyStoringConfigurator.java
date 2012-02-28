@@ -18,7 +18,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map.Entry;
 
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.NodeConfiguration;
 
 /**
  * Stores the properties in a properties files to be used to config other processes (EG task service).
@@ -26,12 +25,12 @@ import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.Nod
  * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
  * 
  */
-public class PropertyStoringConfigurator implements NodeConfigurationServiceBean.Configurator {
+public class PropertyStoringConfigurator implements ProjectServiceManagementServiceBean.Configurator {
 
 	private String propertiesLocation;
 
 	@Override
-	public void configure(NodeConfiguration configuration) {
+	public void configure(ProjectServiceConfiguration configuration) {
 		File propertiesFile = new File(propertiesLocation);
 
 		// TODO check permissions/existence

@@ -22,8 +22,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.NodeConfiguration;
 
 /**
  * Verifies that the project task DB is created and schema installed with no Exceptions. This tests the
@@ -46,8 +46,8 @@ public class TaskProjectServiceDatabaseConfiguratorTest {
 
 	@Test
 	public void testConfigure() {
-		NodeConfiguration configuration = new NodeConfiguration();
-		configuration.setApplicationId(TEST_PROJ_ID);
+		ProjectServiceConfiguration configuration = new ProjectServiceConfiguration();
+		configuration.setProjectIdentifier(TEST_PROJ_ID);
 		configurator.configure(configuration);
 	}
 }

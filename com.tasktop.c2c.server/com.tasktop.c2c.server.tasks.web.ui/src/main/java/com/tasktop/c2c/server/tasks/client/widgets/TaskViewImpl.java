@@ -1029,6 +1029,11 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	}
 
 	public void setTask(Task task) {
+		updateTask(task);
+		updateCommentView(task);
+	}
+
+	public void updateTask(Task task) {
 		this.task = task;
 
 		editTaskAnchor.setHref(ProjectEditTaskPlace.createPlace(projectIdentifier, task.getId()).getHref());
@@ -1070,19 +1075,23 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		// attachments
 		setAttachments(task.getAttachments());
-		updateCommentView(task);
 
-		commentsPanel.setValue(task);
+		// updateCommentView(task);
 
 		taskHistoryLink.setHref(ProjectTaskHistoryPlace.createPlace(projectIdentifier, task.getId()).getHref());
 
 		updateCustomFields(task);
 	}
 
+	private boolean repoConfigHasCustomFields(RepositoryConfiguration repositoryConfiguration) {
+		return !(repositoryConfiguration.getCustomFields() == null || repositoryConfiguration.getCustomFields()
+				.isEmpty());
+	}
+
 	private void updateCustomFields(Task task) {
 		customFieldsPanel.clear();
 
-		if (repositoryConfiguration.getCustomFields() == null || repositoryConfiguration.getCustomFields().isEmpty()) {
+		if (!repoConfigHasCustomFields(repositoryConfiguration)) {
 			return;
 		}
 		List<CustomField> customFields = new ArrayList<CustomField>(repositoryConfiguration.getCustomFields().size());
@@ -1345,7 +1354,8 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 	@Override
 	public boolean isDirty() {
-		return commentsPanel.isDirty() || driver.isDirty() || customFieldDriver.isDirty();
+		return commentsPanel.isDirty() || driver.isDirty()
+				|| (repoConfigHasCustomFields(repositoryConfiguration) && customFieldDriver.isDirty());
 	}
 
 	@Override

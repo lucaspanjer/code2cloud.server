@@ -26,8 +26,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.tasktop.c2c.server.common.tests.util.TestResourceUtil;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.TemplateProcessingConfigurator;
-import com.tasktop.c2c.server.configuration.service.NodeConfigurationService.NodeConfiguration;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -58,12 +58,12 @@ public class TemplateProcessingConfiguratorTest {
 	public void testBasicTemplating() {
 		Assert.assertFalse(targetDir.exists());
 
-		NodeConfiguration conf = new NodeConfiguration();
+		ProjectServiceConfiguration conf = new ProjectServiceConfiguration();
 		conf.setProperties(new HashMap<String, String>());
 		conf.getProperties().put("a.key", "a.value");
 		conf.getProperties().put("b.key", "b.value");
 		conf.getProperties().put("c.key", "c.value");
-		conf.setApplicationId("testId");
+		conf.setProjectIdentifier("testId");
 
 		templateProcessingConfigurator.configure(conf);
 
