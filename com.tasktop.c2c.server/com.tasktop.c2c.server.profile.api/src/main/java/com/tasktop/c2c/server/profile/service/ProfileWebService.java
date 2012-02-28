@@ -157,8 +157,6 @@ public interface ProfileWebService {
 
 	public Boolean isProjectCreateAvailble();
 
-	// Boolean isPasswordResetTokenAvailable(String token);
-
 	List<ProjectServiceStatus> computeProjectServicesStatus(String projectId) throws EntityNotFoundException;
 
 	public PasswordResetToken getPasswordResetToken(String token) throws EntityNotFoundException;

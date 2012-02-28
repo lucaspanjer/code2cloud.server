@@ -48,8 +48,6 @@ public interface ProfileService extends RemoteService {
 
 	public Boolean requestPasswordReset(String email) throws NoSuchEntityException;
 
-	public Boolean isTokenAvailable(String token);
-
 	public Credentials resetPassword(String token, String newPassword) throws NoSuchEntityException,
 			ValidationFailedException, AuthenticationFailedException;
 

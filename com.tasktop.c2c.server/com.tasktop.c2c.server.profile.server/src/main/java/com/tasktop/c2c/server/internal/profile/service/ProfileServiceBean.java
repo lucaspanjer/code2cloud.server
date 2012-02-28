@@ -691,20 +691,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		return profile.getUsername();
 	}
 
-	@Override
-	public Boolean isPasswordResetTokenAvailable(String token) {
-
-		PasswordResetToken dbToken;
-		try {
-			dbToken = getPasswordResetToken(token);
-		} catch (EntityNotFoundException e) {
-			return false;
-		}
-
-		// We want to return true if we have a token with an empty used-date.
-		return (dbToken != null) && (dbToken.getDateUsed() == null);
-	}
-
 	@Secured(Role.User)
 	@Override
 	public String inviteUserForProject(String email, String appIdentifier) throws EntityNotFoundException {

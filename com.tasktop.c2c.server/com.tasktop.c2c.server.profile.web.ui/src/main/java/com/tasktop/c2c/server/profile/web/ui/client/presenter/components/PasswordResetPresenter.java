@@ -15,10 +15,8 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -43,21 +41,6 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 
 	@Override
 	protected void bind() {
-		getProfileService().isTokenAvailable(passwordResetToken, new AsyncCallback<Boolean>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				SignInPlace.createPlace().go();
-			}
-
-			@Override
-			public void onSuccess(Boolean result) {
-				// if true do nothing
-				if (!result) {
-					SignInPlace.createPlace().go();
-				}
-			}
-		});
 		passwordResetView.submitButton.addClickHandler(this);
 	}
 

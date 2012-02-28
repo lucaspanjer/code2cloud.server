@@ -698,10 +698,6 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 		throw new UnsupportedOperationException();
 	}
 
-	public Boolean isPasswordResetTokenAvailable(String token) {
-		throw new UnsupportedOperationException();
-	}
-
 	public List<ProjectServiceStatus> computeProjectServicesStatus(String projectId) throws EntityNotFoundException {
 		try {
 			return new GetCall<List<ProjectServiceStatus>>() {

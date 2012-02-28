@@ -53,8 +53,6 @@ public interface ProfileServiceAsync {
 
 	void requestPasswordReset(String email, AsyncCallback<Boolean> callback);
 
-	void isTokenAvailable(String token, AsyncCallback<Boolean> callback);
-
 	void resetPassword(String token, String newPassword, AsyncCallback<Credentials> callback);
 
 	void getProfiles(String projectIdentifier, AsyncCallback<List<Profile>> callback);

@@ -679,22 +679,22 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		profileService.requestPasswordReset(profile.getEmail());
 		PasswordResetToken token = profile.getPasswordResetTokens().get(0);
 
-		assertTrue(profileService.isPasswordResetTokenAvailable(token.getToken()));
+		assertTrue(profileService.getPasswordResetToken(token.getToken()) != null);
 	}
 
-	@Test
+	@Test(expected = EntityNotFoundException.class)
 	public void testIsTokenAvailableTokenIsUsed() throws Exception {
 		Profile profile = MockProfileFactory.create(entityManager);
 		profileService.requestPasswordReset(profile.getEmail());
 		PasswordResetToken token = profile.getPasswordResetTokens().get(0);
 		profileService.resetPassword(token.getToken(), "abc123ABC)$(^");
 
-		assertFalse(profileService.isPasswordResetTokenAvailable(token.getToken()));
+		profileService.getPasswordResetToken(token.getToken());
 	}
 
-	@Test
+	@Test(expected = EntityNotFoundException.class)
 	public void testIsTokenAvailableTokenDoesNotExist() throws Exception {
-		assertFalse(profileService.isPasswordResetTokenAvailable("invalid-token"));
+		profileService.getPasswordResetToken("invalid-token");
 	}
 
 	@Test
@@ -1302,8 +1302,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 
 		assertEquals(invitationTokens.getTokens().size(), invitations.getTokens().size());
 		for (int x = 0; x < invitationTokens.getTokens().size(); ++x) {
-			com.tasktop.c2c.server.profile.domain.project.SignUpToken original = invitationTokens.getTokens()
-					.get(x);
+			com.tasktop.c2c.server.profile.domain.project.SignUpToken original = invitationTokens.getTokens().get(x);
 			com.tasktop.c2c.server.profile.domain.project.SignUpToken created = invitations.getTokens().get(x);
 			assertEquals(original.getFirstname(), created.getFirstname());
 			assertEquals(original.getLastname(), created.getLastname());

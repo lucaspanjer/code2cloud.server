@@ -321,11 +321,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	}
 
 	@Override
-	public Boolean isTokenAvailable(String token) {
-		return profileService.isPasswordResetTokenAvailable(token);
-	}
-
-	@Override
 	public Credentials resetPassword(String token, String newPassword) throws NoSuchEntityException,
 			ValidationFailedException, AuthenticationFailedException {
 		try {

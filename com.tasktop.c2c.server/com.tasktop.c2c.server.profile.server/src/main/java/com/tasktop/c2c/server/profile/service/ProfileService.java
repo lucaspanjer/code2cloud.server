@@ -77,14 +77,6 @@ public interface ProfileService {
 	public String resetPassword(String token, @NoLog String newPassword) throws EntityNotFoundException,
 			ValidationException;
 
-	/**
-	 * Determines whether a password reset token is available.
-	 * 
-	 * @param passwordResetToken
-	 * @return
-	 */
-	public Boolean isPasswordResetTokenAvailable(String passwordResetToken);
-
 	public QueryResult<Profile> findProfiles(String query, Region pageInfo, SortInfo sortInfo);
 
 	public void watchProject(String projectIdentifier) throws EntityNotFoundException;

@@ -388,16 +388,6 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 		return profileService.isProjectCreateAvailable();
 	}
 
-	// /*
-	// * (non-Javadoc)
-	// *
-	// * @see com.tasktop.c2c.server.profile.service.ProfileWebService#isPasswordResetTokenAvailable(java.lang.String)
-	// */
-	// @Override
-	// public Boolean isPasswordResetTokenAvailable(String token) {
-	// return profileService.isPasswordResetTokenAvailable(token);
-	// }
-
 	@Override
 	public List<ProjectServiceStatus> computeProjectServicesStatus(String projectId) throws EntityNotFoundException {
 		com.tasktop.c2c.server.profile.domain.internal.Project project = profileService
