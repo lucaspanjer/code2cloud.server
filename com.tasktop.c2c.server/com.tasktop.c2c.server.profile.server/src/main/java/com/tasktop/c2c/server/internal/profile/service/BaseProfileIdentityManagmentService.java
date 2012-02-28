@@ -154,6 +154,21 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 		if (profile.getAdmin() == true) {
 			roles.add(Role.Admin);
 		}
+		addOrganizationRoles(profile, roles);
+		addProjectRoles(profile, roles);
+		return roles;
+
+	}
+
+	protected void addOrganizationRoles(Profile profile, List<String> roles) {
+		// TODO
+	}
+
+	/**
+	 * @param profile
+	 * @param roles
+	 */
+	protected void addProjectRoles(Profile profile, List<String> roles) {
 		for (ProjectProfile projectProfile : profile.getProjectProfiles()) {
 			String projectIdentifier = projectProfile.getProject().getIdentifier();
 
@@ -170,8 +185,6 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 				roles.add(internalAuthenticationService.toCompoundRole(Role.Community, projectIdentifier));
 			}
 		}
-		return roles;
-
 	}
 
 	protected final boolean hasPendingAgreements(Profile profile) {
