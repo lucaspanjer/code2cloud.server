@@ -44,7 +44,7 @@ import com.tasktop.c2c.server.profile.service.provider.ScmServiceInternal;
 		+ "The SCM service methods are available by appending the URI to the base URL\n"
 		+ "https://{hostname}/s/{projectIdentifier}/scm + URI, for example: https://code.cloudfoundry.com/s/code2cloud/scm/summary")
 @Controller
-@RequestMapping("/{appId}/")
+@RequestMapping("/{projectIdentifier}/")
 public class ScmServiceController extends AbstractRestService implements ScmService {
 
 	@Resource(name = "scmService")
