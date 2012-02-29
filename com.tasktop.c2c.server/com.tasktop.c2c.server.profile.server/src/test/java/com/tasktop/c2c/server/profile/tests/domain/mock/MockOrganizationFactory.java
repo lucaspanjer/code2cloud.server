@@ -42,7 +42,7 @@ public class MockOrganizationFactory {
 	private synchronized static Organization populate(Organization mock) {
 		int index = ++created;
 		mock.setName("project" + index);
-		mock.setDescription("A description about project " + index);
+		mock.setDescription("A description about org " + index);
 		return mock;
 	}
 

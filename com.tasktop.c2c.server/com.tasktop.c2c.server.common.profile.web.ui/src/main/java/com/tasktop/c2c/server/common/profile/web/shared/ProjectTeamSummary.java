@@ -19,17 +19,8 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class ProjectTeamSummary implements Serializable {
 
-	private Project project;
 	private List<ProjectTeamMember> members;
 	private Set<ProjectRole> roles;
-
-	public Project getApplication() {
-		return project;
-	}
-
-	public void setApplication(Project project) {
-		this.project = project;
-	}
 
 	public List<ProjectTeamMember> getMembers() {
 		return members;

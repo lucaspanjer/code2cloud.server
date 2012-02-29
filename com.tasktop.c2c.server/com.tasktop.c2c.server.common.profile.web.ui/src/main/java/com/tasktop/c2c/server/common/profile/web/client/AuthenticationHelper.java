@@ -18,6 +18,7 @@ import java.util.List;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 
 public class AuthenticationHelper {
 
@@ -112,12 +113,12 @@ public class AuthenticationHelper {
 					roles.add(globalRole.substring(0, globalRole.length() - projectRoleSuffix.length()));
 				}
 			}
-			if (project.getPublic()) {
+			if (project.getAccessibility().equals(ProjectAccessibility.PUBLIC)) {
 				// logged-in and public
 				roles.add(Role.Community);
 			}
 		}
-		if (project.getPublic()) {
+		if (project.getAccessibility().equals(ProjectAccessibility.PUBLIC)) {
 			roles.add(Role.Observer);
 		}
 		return roles;

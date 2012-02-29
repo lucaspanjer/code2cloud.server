@@ -42,6 +42,7 @@ import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
 import com.tasktop.c2c.server.common.web.tests.client.JRETestUtil;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 
@@ -152,7 +153,7 @@ public abstract class AbstractPlaceTest {
 		Project project = new Project();
 		project.setIdentifier(projectId);
 		project.setName("Project Name");
-		project.setPublic(false);
+		project.setAccessibility(ProjectAccessibility.PRIVATE);
 		project.setDescription("desc");
 		return project;
 	}

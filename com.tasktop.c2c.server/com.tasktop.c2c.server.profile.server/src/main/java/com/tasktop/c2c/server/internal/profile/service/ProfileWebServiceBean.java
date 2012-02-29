@@ -44,6 +44,7 @@ import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
@@ -179,13 +180,13 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 			}
 
 			// IF we have a public project, then add in the community role since we're a registered user.
-			if (project.getPublic()) {
+			if (ProjectAccessibility.PUBLIC.equals(project.getAccessibility())) {
 				roles.add(String.format("%s/%s", Role.Community, projectIdentifier));
 			}
 		}
 
 		// Then, check the project's status to see if we should add in the observer role.
-		if (project.getPublic()) {
+		if (ProjectAccessibility.PUBLIC.equals(project.getAccessibility())) {
 			roles.add(String.format("%s/%s", Role.Observer, projectIdentifier));
 		}
 

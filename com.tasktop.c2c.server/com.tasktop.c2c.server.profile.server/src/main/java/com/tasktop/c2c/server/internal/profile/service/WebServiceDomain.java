@@ -63,7 +63,7 @@ public class WebServiceDomain {
 		p.setIdentifier(project.getIdentifier());
 		p.setName(project.getName());
 		p.setDescription(project.getDescription());
-		p.setPublic(project.getPublic());
+		p.setAccessibility(project.getAccessibility());
 		p.setNumWatchers(project.getNumWatchers());
 		p.setNumCommiters(project.getNumCommitters());
 
@@ -152,7 +152,7 @@ public class WebServiceDomain {
 		project.setIdentifier(p.getIdentifier());
 		project.setName(p.getName());
 		project.setDescription(p.getDescription());
-		project.setPublic(p.getPublic());
+		project.setAccessibility(p.getAccessibility());
 		return project;
 	}
 

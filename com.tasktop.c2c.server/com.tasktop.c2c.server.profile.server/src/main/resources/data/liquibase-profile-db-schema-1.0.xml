@@ -576,4 +576,19 @@
 			baseTableName="PROJECT" constraintName="PRJ_ORG_ID"
 			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
 	</changeSet>
+	
+	<changeSet author="cmorgan" id="supportOrgPublicProjects-task4138">
+		<addColumn tableName="PROJECT">
+			<column name="ACCESSIBILITY" type="VARCHAR(25)"/>
+		</addColumn>
+		<update tableName="PROJECT">
+		 	<column name="ACCESSIBILITY" value="PUBLIC"/>
+		 	<where>IS_PUBLIC=1</where>
+		</update>
+		<update tableName="PROJECT">
+		 	<column name="ACCESSIBILITY" value="PRIVATE"/>
+		 	<where>IS_PUBLIC=0</where>
+		</update>
+		<dropColumn tableName="PROJECT" columnName="IS_PUBLIC"/>
+	</changeSet>
 </databaseChangeLog>

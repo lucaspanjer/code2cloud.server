@@ -17,12 +17,17 @@ import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 
 public class ProjectAdminSettingsEditView extends Composite implements Editor<Project> {
 	interface ProjectAdminSettingsEditViewUiBinder extends UiBinder<HTMLPanel, ProjectAdminSettingsEditView> {
@@ -53,11 +58,14 @@ public class ProjectAdminSettingsEditView extends Composite implements Editor<Pr
 	}
 
 	@UiField
-	@Path("public")
+	@Ignore
 	RadioButton privacyPublicOption;
 	@UiField
 	@Ignore
 	RadioButton privacyPrivateOption;
+	@UiField
+	@Ignore
+	RadioButton privacyOrgPrivateOption;
 	@UiField
 	@Path("description")
 	TextArea projectDescription;
@@ -78,8 +86,10 @@ public class ProjectAdminSettingsEditView extends Composite implements Editor<Pr
 
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
-		privacyPublicOption.setValue(presenter.getProject().getPublic());
-		privacyPrivateOption.setValue(!presenter.getProject().getPublic());
+		privacyPublicOption.setValue(presenter.getProject().getAccessibility().equals(ProjectAccessibility.PUBLIC));
+		privacyPrivateOption.setValue(presenter.getProject().getAccessibility().equals(ProjectAccessibility.PRIVATE));
+		privacyOrgPrivateOption.setValue(presenter.getProject().getAccessibility()
+				.equals(ProjectAccessibility.ORGANIZATION_PRIVATE));
 		driver.edit(presenter.getProject());
 	}
 
@@ -102,6 +112,16 @@ public class ProjectAdminSettingsEditView extends Composite implements Editor<Pr
 	void onSave(ClickEvent event) {
 		if (driver.isDirty()) {
 			driver.flush();
+			Project project = presenter.getProject();
+
+			if (privacyPublicOption.getValue()) {
+				project.setAccessibility(ProjectAccessibility.PUBLIC);
+			} else if (privacyPrivateOption.getValue()) {
+				project.setAccessibility(ProjectAccessibility.PRIVATE);
+			} else if (privacyOrgPrivateOption.getValue()) {
+				project.setAccessibility(ProjectAccessibility.ORGANIZATION_PRIVATE);
+			}
+
 			presenter.onSaveProject();
 		} else {
 			presenter.onCancelProjectEdit();

@@ -43,6 +43,7 @@ import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.testing.PassthroughRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
@@ -120,10 +121,11 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 
-	abstract class InlineEditableField {
+	abstract class InlineEditableField<T> {
 		private final HTML readOnlyField; // for anon users
 		private final Anchor editAnchor;
 		private final Widget editableField;
+		private TakesValue<T> editor;
 
 		public InlineEditableField(HTML readOnlyField, Anchor editAnchor, Widget editableField) {
 			this(readOnlyField, editAnchor, editableField, editAnchor);
@@ -144,6 +146,10 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 					}
 				});
 			}
+		}
+
+		public T getValue() {
+			return editor.getValue();
 		}
 
 		public void renderTask(Task t) {
@@ -1047,7 +1053,11 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		newSubTaskLink.setHref(ProjectNewTaskPlace.createNewSubtaskPlace(projectIdentifier, task.getId()).getHref());
 
 		// Editable fields
+		for (InlineEditableField f : editingFields) {
+			// save editing fields
+		}
 		driver.edit(task);
+		// reset editing fields
 		updateAcceptableValues();
 		for (InlineEditableField f : inlineEditFields) {
 			f.renderTask(task);

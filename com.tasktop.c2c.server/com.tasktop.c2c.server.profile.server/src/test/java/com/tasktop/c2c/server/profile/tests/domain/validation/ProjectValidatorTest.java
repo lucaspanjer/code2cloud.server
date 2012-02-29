@@ -89,9 +89,9 @@ public class ProjectValidatorTest extends AbstractValidatorTest<Project> {
 
 	@Test
 	public void publicNull() {
-		mock.setPublic(null);
+		mock.setAccessibility(null);
 		validator.validate(mock, result);
-		assertHaveValidationError("field.required.public");
+		assertHaveValidationError("field.required.accessibility");
 	}
 
 	@Test

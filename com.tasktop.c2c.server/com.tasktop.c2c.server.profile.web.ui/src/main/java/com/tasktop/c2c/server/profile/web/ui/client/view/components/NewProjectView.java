@@ -54,6 +54,8 @@ public class NewProjectView extends Composite {
 
 	@UiField
 	public RadioButton privateProjectButton;
+	@UiField
+	public RadioButton orgPrivateProjectButton;
 
 	@UiField
 	public RadioButton publicProjectButton;
@@ -74,6 +76,6 @@ public class NewProjectView extends Composite {
 	public void clear() {
 		name.setValue("");
 		description.setValue("");
-		privateProjectButton.setValue(true);		
+		privateProjectButton.setValue(true);
 	}
 }

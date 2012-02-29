@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.settings;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
@@ -26,6 +25,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 
 public class ProjectAdminSettingsDisplayView extends Composite implements Editor<Project> {
 	interface ProjectAdminSettingsDisplayViewUiBinder extends UiBinder<HTMLPanel, ProjectAdminSettingsDisplayView> {
@@ -54,7 +54,7 @@ public class ProjectAdminSettingsDisplayView extends Composite implements Editor
 	}
 
 	@UiField
-	@Path("name")
+	@Ignore
 	Label projectName;
 	@UiField
 	@Path("description")
@@ -62,6 +62,9 @@ public class ProjectAdminSettingsDisplayView extends Composite implements Editor
 	@UiField
 	@Ignore
 	RadioButton privacyPrivateOption;
+	@UiField
+	@Ignore
+	RadioButton privacyOrgPrivateOption;
 	@UiField
 	@Ignore
 	RadioButton privacyPublicOption;
@@ -77,8 +80,10 @@ public class ProjectAdminSettingsDisplayView extends Composite implements Editor
 
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
-		privacyPublicOption.setValue(presenter.getProject().getPublic());
-		privacyPrivateOption.setValue(!presenter.getProject().getPublic());
+		privacyPublicOption.setValue(presenter.getProject().getAccessibility().equals(ProjectAccessibility.PUBLIC));
+		privacyPrivateOption.setValue(presenter.getProject().getAccessibility().equals(ProjectAccessibility.PRIVATE));
+		privacyOrgPrivateOption.setValue(presenter.getProject().getAccessibility()
+				.equals(ProjectAccessibility.ORGANIZATION_PRIVATE));
 		driver.edit(presenter.getProject());
 	}
 

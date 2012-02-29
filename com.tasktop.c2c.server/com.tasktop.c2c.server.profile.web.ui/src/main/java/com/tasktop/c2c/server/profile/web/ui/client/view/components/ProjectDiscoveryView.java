@@ -48,6 +48,7 @@ import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.widgets.Pager;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.event.WatchProjectClickHandler;
@@ -312,7 +313,7 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 			}
 		}
 
-		if (AuthenticationHelper.isAnonymous() || !newProject.getPublic()) {
+		if (AuthenticationHelper.isAnonymous() || !newProject.getAccessibility().equals(ProjectAccessibility.PUBLIC)) {
 			// Can't watch if you're anonymous.
 			watchLink.setVisible(false);
 			return;

@@ -57,6 +57,7 @@ import com.tasktop.c2c.server.profile.domain.internal.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.service.ProfileService;
@@ -137,7 +138,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		internalProject.setDescription("My app");
 		internalProject.setIdentifier("myApp");
 		internalProject.setName("Appracadapra");
-		internalProject.setPublic(Boolean.FALSE);
+		internalProject.setAccessibility(ProjectAccessibility.PRIVATE);
 
 		profileService.createProject(profileId, internalProject);
 
@@ -153,7 +154,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		project.setName("New Application");
 		project.setIdentifier("abccccapplication");
 		project.setDescription("Application description; blah blah blah.");
-		project.setPublic(Boolean.FALSE);
+		project.setAccessibility(ProjectAccessibility.PRIVATE);
 
 		Project created = profileWebService.createProject(profileId, project);
 		assertNotNull(created);
@@ -204,7 +205,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		Long profileId = setupProfile().getId();
 
 		com.tasktop.c2c.server.profile.domain.internal.Project project = MockProjectFactory.create(entityManager);
-		project.setPublic(true);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		entityManager.persist(project);
 
 		assertEquals(0, profileService.getProfileProjects(profileId).size());
@@ -217,7 +218,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		Long profileId = setupProfile().getId();
 
 		com.tasktop.c2c.server.profile.domain.internal.Project project = MockProjectFactory.create(entityManager);
-		project.setPublic(true);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		entityManager.persist(project);
 
 		assertEquals(0, profileService.getProfileProjects(profileId).size());
@@ -232,7 +233,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		Long profileId = setupProfile().getId();
 
 		com.tasktop.c2c.server.profile.domain.internal.Project project = MockProjectFactory.create(entityManager);
-		project.setPublic(true);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		entityManager.persist(project);
 
 		assertEquals(0, profileService.getProfileProjects(profileId).size());
@@ -403,7 +404,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		project.setName("new-app");
 		project.setIdentifier("new-app");
 		project.setDescription("Application description; blah blah blah.");
-		project.setPublic(Boolean.FALSE);
+		project.setAccessibility(ProjectAccessibility.PRIVATE);
 		profileWebService.createProject(owner.getId(), project);
 		Profile newMember = setupProfile();
 		SecurityContextHolder.getContext().setAuthentication(
@@ -615,7 +616,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		project.setName("New Application");
 		project.setIdentifier("abccccapplication");
 		project.setDescription("Application description; blah blah blah.");
-		project.setPublic(Boolean.FALSE);
+		project.setAccessibility(ProjectAccessibility.PRIVATE);
 
 		Project createdProject = profileWebService.createProject(profileId, project);
 		assertNotNull(createdProject);

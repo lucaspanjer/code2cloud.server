@@ -26,8 +26,8 @@ import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.service.ProfileService;
-
 
 public abstract class AbstractPreAuthServiceProvider<T> extends AbstractServiceProvider<T> {
 
@@ -79,7 +79,7 @@ public abstract class AbstractPreAuthServiceProvider<T> extends AbstractServiceP
 			Project project = profileService.getProjectByIdentifier(projectIdentifier);
 
 			return internalAuthenticationService.specializeAuthenticationToken(authenticationToken,
-					project.getIdentifier(), project.getPublic());
+					project.getIdentifier(), ProjectAccessibility.PUBLIC.equals(project.getAccessibility()));
 
 		} catch (EntityNotFoundException e) {
 			throw new IllegalStateException(e);

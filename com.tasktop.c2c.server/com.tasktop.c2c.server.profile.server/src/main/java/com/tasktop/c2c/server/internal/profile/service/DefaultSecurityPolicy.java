@@ -33,6 +33,7 @@ import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.domain.internal.ScmRepository;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 
 /**
  * implements data-level security policies
@@ -144,7 +145,7 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 			Project targetProject = (Project) target;
 			switch (operation) {
 			case RETRIEVE:
-				if (!targetProject.getPublic()) {
+				if (!ProjectAccessibility.PUBLIC.equals(targetProject.getAccessibility())) {
 					assertMember(targetProject);
 				}
 				return;
@@ -198,7 +199,7 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 				assertOwner(repo.getProject());
 				return;
 			case RETRIEVE:
-				if (!repo.getProject().getPublic()) {
+				if (!ProjectAccessibility.PUBLIC.equals(repo.getProject().getAccessibility())) {
 					assertMember(repo.getProject());
 				}
 				return;
@@ -218,7 +219,7 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 				assertMember(deployment.getProject());
 				return;
 			case RETRIEVE:
-				if (!deployment.getProject().getPublic()) {
+				if (!ProjectAccessibility.PUBLIC.equals(deployment.getProject().getAccessibility())) {
 					assertMember(deployment.getProject());
 				}
 				return;

@@ -16,29 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tasktop.c2c.server.common.profile.web.shared.Profile;
-import com.tasktop.c2c.server.common.profile.web.shared.Project;
 
 public class WebDomain {
-
-	public static Project copy(com.tasktop.c2c.server.profile.domain.internal.Project project) {
-		Project p = new Project();
-		p.setId(project.getId());
-		p.setIdentifier(project.getIdentifier());
-		p.setName(project.getName());
-		p.setDescription(project.getDescription());
-		p.setPublic(project.getPublic());
-		return p;
-	}
-
-	public static com.tasktop.c2c.server.profile.domain.internal.Project copy(Project p) {
-		com.tasktop.c2c.server.profile.domain.internal.Project project = new com.tasktop.c2c.server.profile.domain.internal.Project();
-		project.setId(p.getId());
-		project.setIdentifier(p.getIdentifier());
-		project.setName(p.getName());
-		project.setDescription(p.getDescription());
-		project.setPublic(p.isPublic());
-		return project;
-	}
 
 	public static com.tasktop.c2c.server.profile.domain.internal.Profile copy(Profile p) {
 		com.tasktop.c2c.server.profile.domain.internal.Profile profile = new com.tasktop.c2c.server.profile.domain.internal.Profile();

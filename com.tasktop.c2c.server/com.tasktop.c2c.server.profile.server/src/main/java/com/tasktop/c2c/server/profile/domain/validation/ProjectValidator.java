@@ -54,7 +54,7 @@ public class ProjectValidator implements Validator {
 			errors.rejectValue("description", "field.tooLong");
 		}
 
-		ValidationUtils.rejectIfEmpty(errors, "public", "field.required");
+		ValidationUtils.rejectIfEmpty(errors, "accessibility", "field.required");
 	}
 
 }

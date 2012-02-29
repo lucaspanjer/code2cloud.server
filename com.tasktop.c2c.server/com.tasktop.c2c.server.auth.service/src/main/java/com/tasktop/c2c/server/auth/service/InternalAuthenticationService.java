@@ -55,7 +55,7 @@ public interface InternalAuthenticationService {
 	 * @return the new token
 	 */
 	public AuthenticationToken specializeAuthenticationToken(AuthenticationToken originalToken,
-			String projectIdentifier, boolean projectIsPublic);
+			String projectIdentifier, boolean projectIsPublicl);
 
 	/**
 	 * Replace the current security context with one authorized for Role.User and Role.System access for the given

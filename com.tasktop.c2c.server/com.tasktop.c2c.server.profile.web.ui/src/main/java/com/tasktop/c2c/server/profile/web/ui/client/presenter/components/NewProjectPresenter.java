@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
@@ -21,6 +20,7 @@ import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.NewProjectView;
@@ -62,7 +62,13 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 		Project project = new Project();
 		project.setName(view.name.getText());
 		project.setDescription(view.description.getText());
-		project.setPublic(view.publicProjectButton.getValue());
+		if (view.publicProjectButton.getValue()) {
+			project.setAccessibility(ProjectAccessibility.PUBLIC);
+		} else if (view.privateProjectButton.getValue()) {
+			project.setAccessibility(ProjectAccessibility.PRIVATE);
+		} else if (view.orgPrivateProjectButton.getValue()) {
+			project.setAccessibility(ProjectAccessibility.ORGANIZATION_PRIVATE);
+		}
 
 		getProfileService().createProject(getAppState().getCredentials(), project,
 				new AsyncCallbackSupport<String>(new OperationMessage("Creating project...")) {

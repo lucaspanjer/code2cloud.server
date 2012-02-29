@@ -93,6 +93,7 @@ import com.tasktop.c2c.server.profile.domain.internal.ProjectServiceProfile;
 import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
 import com.tasktop.c2c.server.profile.domain.internal.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.internal.SshPublicKey;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -523,12 +524,12 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		project.setName(project.getName() + "2");
 		project.setDescription(project.getDescription() + "2");
 		project.setIdentifier(project.getIdentifier() + "2");
-		project.setPublic(Boolean.TRUE);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		Project updatedProject = profileService.updateProject(project);
 
 		assertEquals(project.getName(), updatedProject.getName());
 		assertEquals(project.getDescription(), updatedProject.getDescription());
-		assertEquals(project.getPublic(), updatedProject.getPublic());
+		assertEquals(project.getAccessibility(), updatedProject.getAccessibility());
 
 		// identifier should never change
 		assertEquals(originalIdentity, updatedProject.getIdentifier());
@@ -1122,7 +1123,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		List<Project> projects = MockProjectFactory.create(entityManager, max);
 		int x = -1;
 		for (Project project : projects) {
-			project.setPublic(createPublic);
+			project.setAccessibility(createPublic ? ProjectAccessibility.PUBLIC : ProjectAccessibility.PRIVATE);
 			++x;
 			if (x < count) {
 				if (x % 3 == 0) {
@@ -1156,7 +1157,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		logon(mockProfile);
 
 		Project project = MockProjectFactory.create(entityManager);
-		project.setPublic(true);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		entityManager.persist(project);
 
 		assertEquals(0, profileService.getProfileProjects(mockProfile.getId()).size());
@@ -1170,7 +1171,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		logon(mockProfile);
 
 		Project project = MockProjectFactory.create(entityManager);
-		project.setPublic(true);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		entityManager.persist(project);
 
 		assertEquals(0, profileService.getProfileProjects(mockProfile.getId()).size());
@@ -1186,7 +1187,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		logon(mockProfile);
 
 		Project project = MockProjectFactory.create(entityManager);
-		project.setPublic(true);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		entityManager.persist(project);
 
 		assertEquals(0, profileService.getProfileProjects(mockProfile.getId()).size());

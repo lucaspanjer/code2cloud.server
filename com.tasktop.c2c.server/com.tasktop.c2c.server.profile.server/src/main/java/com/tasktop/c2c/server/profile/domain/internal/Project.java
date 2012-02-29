@@ -27,6 +27,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
+
 /**
  * A project is the central concept behind a project that includes source, issue tracking, builds, etc.
  * 
@@ -36,7 +38,7 @@ public class Project extends BaseEntity {
 	private String name;
 	private String identifier;
 	private String description;
-	private Boolean isPublic;
+	private ProjectAccessibility accessibility;
 
 	private List<ProjectProfile> projectProfiles = new ArrayList<ProjectProfile>();
 	private List<ScmRepository> repositories = new ArrayList<ScmRepository>();
@@ -138,15 +140,6 @@ public class Project extends BaseEntity {
 		}
 	}
 
-	@Column(name = "is_public", nullable = false)
-	public Boolean getPublic() {
-		return isPublic;
-	}
-
-	public void setPublic(Boolean isPublic) {
-		this.isPublic = isPublic;
-	}
-
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, mappedBy = "project")
 	@OrderBy("url")
 	public List<ScmRepository> getRepositories() {
@@ -186,5 +179,14 @@ public class Project extends BaseEntity {
 
 	public void setOrganization(Organization organization) {
 		this.organization = organization;
+	}
+
+	@Column
+	public ProjectAccessibility getAccessibility() {
+		return accessibility;
+	}
+
+	public void setAccessibility(ProjectAccessibility accessibility) {
+		this.accessibility = accessibility;
 	}
 }

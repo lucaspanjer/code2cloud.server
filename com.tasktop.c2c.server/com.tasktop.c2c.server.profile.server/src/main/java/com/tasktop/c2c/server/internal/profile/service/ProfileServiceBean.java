@@ -71,6 +71,7 @@ import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.RandomToken;
 import com.tasktop.c2c.server.profile.domain.internal.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.internal.SshPublicKey;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -537,8 +538,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	private void setDefaultValuesBeforeCreate(Project project) {
-		if (project.getPublic() == null) {
-			project.setPublic(false);
+		if (project.getAccessibility() == null) {
+			project.setAccessibility(ProjectAccessibility.PRIVATE);
 		}
 	}
 
@@ -560,7 +561,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			// we disallow change of identifier
 			managedProject.setName(project.getName());
 			managedProject.setDescription(project.getDescription());
-			managedProject.setPublic(project.getPublic());
+			managedProject.setAccessibility(project.getAccessibility());
 		}
 
 		// Since our update is now done, return our project to the caller.
@@ -987,7 +988,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		// Only allow watching of a public project - if a private project is given, then pretend it doesn't exist to
 		// prevent information leakage.
-		if (!project.getPublic()) {
+		if (!ProjectAccessibility.PUBLIC.equals(project.getAccessibility())) {
 			throw new EntityNotFoundException();
 		}
 
@@ -1180,7 +1181,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (profile != null) {
 			coreQuery += ", IN(project.projectProfiles) pp ";
 		}
-		coreQuery += "WHERE (LOWER(project.name) LIKE :q OR LOWER(project.description) LIKE :q OR LOWER(project.identifier) LIKE :q) AND (project.public = true";
+		coreQuery += "WHERE (LOWER(project.name) LIKE :q OR LOWER(project.description) LIKE :q OR LOWER(project.identifier) LIKE :q) AND (project.accessibility = :public";
 
 		if (profile != null) {
 			coreQuery += " OR pp.profile.id = :id)";
@@ -1192,6 +1193,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 				+ createSortClause("project", Project.class, sortInfo, new SortInfo("name")));
 
 		query.setParameter("q", queryText.trim());
+		query.setParameter("public", ProjectAccessibility.PUBLIC);
 		if (profile != null) {
 			query.setParameter("id", profile.getId());
 		}
@@ -1204,8 +1206,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		query.setFirstResult(region.getOffset());
 		query.setMaxResults(region.getSize());
 
-		Query countQuery = entityManager.createQuery("select count(distinct project) " + coreQuery).setParameter("q",
-				queryText);
+		Query countQuery = entityManager.createQuery("select count(distinct project) " + coreQuery)
+				.setParameter("q", queryText).setParameter("public", ProjectAccessibility.PUBLIC);
 		if (profile != null) {
 			countQuery.setParameter("id", profile.getId());
 		}
@@ -1528,7 +1530,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		boolean needIdParam = true;
 		switch (projectRelationship) {
 		case ALL:
-			whereString = "WHERE project.public = true OR pp.profile.id = :id ";
+			whereString = "WHERE project.accessibility = :public OR pp.profile.id = :id ";
 			break;
 		case MEMBER:
 			whereString = "WHERE pp.profile.id = :id AND pp.user = true ";
@@ -1541,7 +1543,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			break;
 		case PUBLIC:
 			needIdParam = false;
-			whereString = "WHERE project.public = true ";
+			whereString = "WHERE project.accessibility = :public ";
 			break;
 		default:
 			throw new IllegalStateException();
@@ -1549,6 +1551,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		Query totalResultQuery = entityManager
 				.createQuery("SELECT count(DISTINCT project) " + fromString + whereString);
+		totalResultQuery.setParameter("public", ProjectAccessibility.PUBLIC);
 		if (needIdParam) {
 			totalResultQuery.setParameter("id", profile.getId());
 		}
@@ -1556,6 +1559,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		Query q = entityManager.createQuery("SELECT DISTINCT project " + fromString + whereString
 				+ createSortClause("project", Project.class, new SortInfo("name")));
+		q.setParameter("public", ProjectAccessibility.PUBLIC);
 		if (needIdParam) {
 			q.setParameter("id", profile.getId());
 		}
