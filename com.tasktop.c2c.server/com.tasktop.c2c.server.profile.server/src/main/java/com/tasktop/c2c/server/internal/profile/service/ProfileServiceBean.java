@@ -258,6 +258,16 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		Profile managedProfile = profile;
 		boolean nameChanged = true;
 		boolean emailChanged = true;
+
+		List<Validator> validators = new ArrayList<Validator>();
+		validators.add(validator);
+		validators.add(new AccountConstraintsValidator());
+		if (profile.getPassword() != null && profile.getPassword().trim().length() > 0) {
+			passwordReset = true;
+			validators.add(new ProfilePasswordValidator());
+		}
+		validate(managedProfile, validators);
+
 		if (!entityManager.contains(profile)) {
 			managedProfile = entityManager.find(Profile.class, profile.getId());
 			if (managedProfile == null) {
@@ -278,8 +288,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 				managedProfile.getNotificationSettings().setEmailServiceAndMaintenance(
 						profile.getNotificationSettings().getEmailServiceAndMaintenance());
 			}
-			if (profile.getPassword() != null && profile.getPassword().trim().length() > 0) {
-				passwordReset = true;
+			if (passwordReset) {
 				managedProfile.setPassword(profile.getPassword());
 			}
 			if (getCurrentUserProfile() != null && getCurrentUserProfile().getAdmin()
@@ -287,13 +296,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 				managedProfile.setDisabled(profile.getDisabled());
 			}
 		}
-		List<Validator> validators = new ArrayList<Validator>();
-		validators.add(validator);
-		validators.add(new AccountConstraintsValidator());
-		if (passwordReset) {
-			validators.add(new ProfilePasswordValidator());
-		}
-		validate(managedProfile, validators);
+
 		if (passwordReset) {
 			managedProfile.setPassword(passwordEncoder.encodePassword(managedProfile.getPassword(), null));
 		}

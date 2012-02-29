@@ -14,7 +14,7 @@
 		<spring.core.version>3.0.5.RELEASE</spring.core.version>
 		<spring.security.version>3.1.0.RC2</spring.security.version>
 		<spring.social.version>1.0.0.RC2</spring.social.version>
-		<com.tasktop.calm.eclipselink.version>2.2.0</com.tasktop.calm.eclipselink.version>
+		<com.tasktop.c2c.eclipselink.version>2.2.0</com.tasktop.c2c.eclipselink.version>
 		<gwt.version>2.4.0</gwt.version>
 	    <maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
 	    <bouncycastle.version>1.46</bouncycastle.version>
@@ -382,12 +382,12 @@
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.core</artifactId>
-				<version>${com.tasktop.calm.eclipselink.version}</version>
+				<version>${com.tasktop.c2c.eclipselink.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.jpa</artifactId>
-				<version>${com.tasktop.calm.eclipselink.version}</version>
+				<version>${com.tasktop.c2c.eclipselink.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.persistence</groupId>
