@@ -26,6 +26,7 @@ import com.tasktop.c2c.server.profile.domain.internal.ScmRepository;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.project.NotificationSettings;
+import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
@@ -347,5 +348,39 @@ public class WebServiceDomain {
 		copy.setId(key.getId());
 		copy.setName(key.getName());
 		return copy;
+	}
+
+	/**
+	 * @param org
+	 * @return
+	 */
+	public com.tasktop.c2c.server.profile.domain.internal.Organization copy(Organization org) {
+		com.tasktop.c2c.server.profile.domain.internal.Organization target = new com.tasktop.c2c.server.profile.domain.internal.Organization();
+		target.setDescription(org.getDescription());
+		target.setId(org.getId());
+		target.setIdentifier(org.getIdentifier());
+		target.setName(org.getName());
+
+		return target;
+	}
+
+	/**
+	 * @param createOrganization
+	 * @return
+	 */
+	public Organization copy(com.tasktop.c2c.server.profile.domain.internal.Organization org) {
+		Organization target = new Organization();
+		target.setDescription(org.getDescription());
+		target.setId(org.getId());
+		target.setIdentifier(org.getIdentifier());
+		target.setName(org.getName());
+		if (org.getProjects() != null) {
+			target.setProjects(new ArrayList<Project>(org.getProjects().size()));
+			for (com.tasktop.c2c.server.profile.domain.internal.Project p : org.getProjects()) {
+				target.getProjects().add(copy(p));
+			}
+		}
+
+		return target;
 	}
 }

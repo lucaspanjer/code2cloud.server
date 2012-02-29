@@ -25,6 +25,7 @@ import com.tasktop.c2c.server.common.service.logging.NoLog;
 import com.tasktop.c2c.server.profile.domain.internal.Agreement;
 import com.tasktop.c2c.server.profile.domain.internal.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.internal.InvitationToken;
+import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -202,4 +203,8 @@ public interface ProfileService {
 	 *             if the token is invalid
 	 */
 	public PasswordResetToken getPasswordResetToken(String token) throws EntityNotFoundException;
+
+	Organization createOrganization(Organization org) throws ValidationException;
+
+	Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException;
 }

@@ -62,6 +62,7 @@ import com.tasktop.c2c.server.profile.domain.internal.BaseEntity;
 import com.tasktop.c2c.server.profile.domain.internal.ConfigurationProperty;
 import com.tasktop.c2c.server.profile.domain.internal.EmailVerificationToken;
 import com.tasktop.c2c.server.profile.domain.internal.InvitationToken;
+import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -462,8 +463,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		project.setId(null);
 		entityManager.persist(project);
 
-		ProjectProfile projectProfile = project.addProfile(profile);
+		if (project.getOrganization() != null) {
+			project.getOrganization().getProjects().add(project);
+		}
 
+		ProjectProfile projectProfile = project.addProfile(profile);
 		// Mark project create as both project user and owner
 		projectProfile.setUser(true);
 		projectProfile.setOwner(true);
@@ -1575,5 +1579,68 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		}
 		return new QueryResult<Project>(region, projects, totalResultSize);
 
+	}
+
+	private final class OrganizationConstraintsValidator implements Validator {
+
+		@Override
+		public boolean supports(Class<?> clazz) {
+			return Project.class.isAssignableFrom(clazz);
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void validate(Object target, Errors errors) {
+			Organization organization = (Organization) target;
+			if (organization.getName() != null && organization.getName().trim().length() > 0) {
+				List<Project> projectsWithName = entityManager
+						.createQuery(
+								"select e from " + Organization.class.getSimpleName()
+										+ " e where e.name = :name or e.identifier = :identifier")
+						.setParameter("name", organization.getName())
+						.setParameter("identifier", organization.getIdentifier()).getResultList();
+				if (!projectsWithName.isEmpty()) {
+					if (projectsWithName.size() != 1 || !projectsWithName.get(0).equals(organization)) {
+						errors.reject("nameUnique", new Object[] { organization.getName() }, null);
+					}
+				}
+			}
+		}
+
+	}
+
+	@Override
+	public Organization createOrganization(Organization org) throws ValidationException {
+
+		// Compute identifer
+		if (org.getIdentifier() == null) {
+			org.computeIdentifier();
+		}
+
+		securityPolicy.create(org);
+		validate(org, validator, new OrganizationConstraintsValidator());
+
+		entityManager.persist(org);
+
+		return org;
+	}
+
+	@Override
+	public Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException {
+		if (orgIdentifier == null) {
+			throw new IllegalArgumentException();
+		}
+
+		try {
+			Organization org = (Organization) entityManager
+					.createQuery("select a from " + Organization.class.getSimpleName() + " a where a.identifier = :i")
+					.setParameter("i", orgIdentifier).getSingleResult();
+
+			securityPolicy.retrieve(org);
+
+			return org;
+		} catch (NoResultException e) {
+			throw new EntityNotFoundException();
+		}
 	}
 }

@@ -83,6 +83,7 @@ import com.tasktop.c2c.server.profile.domain.Email;
 import com.tasktop.c2c.server.profile.domain.internal.Agreement;
 import com.tasktop.c2c.server.profile.domain.internal.ConfigurationProperty;
 import com.tasktop.c2c.server.profile.domain.internal.InvitationToken;
+import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -97,6 +98,7 @@ import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockAgreementFactory;
+import com.tasktop.c2c.server.profile.tests.domain.mock.MockOrganizationFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProfileFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockSshPublicKeyFactory;
@@ -1496,4 +1498,23 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		// TODO more testing
 	}
 
+	@Test
+	public void testCreateOrganizationWithProjects() throws ValidationException, EntityNotFoundException {
+		Profile profile = MockProfileFactory.create(entityManager);
+
+		Organization org = MockOrganizationFactory.create(null);
+		org = profileService.createOrganization(org);
+		assertEquals(0, org.getProjects().size());
+		assertNotNull(org.getIdentifier());
+		org = profileService.getOrganizationByIdentfier(org.getIdentifier());
+		assertNotNull(org);
+
+		Project project = MockProjectFactory.create(null);
+		project.setOrganization(org);
+		project = profileService.createProject(profile.getId(), project);
+
+		org = profileService.getOrganizationByIdentfier(org.getIdentifier());
+		assertEquals(1, org.getProjects().size());
+
+	}
 }

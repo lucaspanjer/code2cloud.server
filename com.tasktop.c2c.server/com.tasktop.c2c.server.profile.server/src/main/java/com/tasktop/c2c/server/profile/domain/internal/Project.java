@@ -21,6 +21,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
@@ -41,6 +42,8 @@ public class Project extends BaseEntity {
 	private List<ScmRepository> repositories = new ArrayList<ScmRepository>();
 
 	private ProjectServiceProfile projectServiceProfile;
+
+	private Organization organization;
 
 	public Project() {
 		super();
@@ -174,5 +177,14 @@ public class Project extends BaseEntity {
 			}
 		}
 		return result;
+	}
+
+	@ManyToOne
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 }

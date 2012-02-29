@@ -55,6 +55,7 @@ import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.RandomToken;
 import com.tasktop.c2c.server.profile.domain.internal.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
+import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -544,8 +545,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 
 		Assert.assertEquals(1, profile.getSshPublicKeys().size());
 
-		com.tasktop.c2c.server.profile.domain.internal.SshPublicKey domainPublicKey = profile.getSshPublicKeys()
-				.get(0);
+		com.tasktop.c2c.server.profile.domain.internal.SshPublicKey domainPublicKey = profile.getSshPublicKeys().get(0);
 
 		Assert.assertEquals(domainPublicKey.getId(), publicKey.getId());
 		Assert.assertEquals(domainPublicKey.getFingerprint(), publicKey.getFingerprint());
@@ -579,8 +579,8 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 	@Test
 	public void testRemoveSshPublicKey() throws EntityNotFoundException, ValidationException {
 		Profile profile = setupProfile(false);
-		com.tasktop.c2c.server.profile.domain.internal.SshPublicKey key = MockSshPublicKeyFactory.create(
-				entityManager, profile);
+		com.tasktop.c2c.server.profile.domain.internal.SshPublicKey key = MockSshPublicKeyFactory.create(entityManager,
+				profile);
 		entityManager.flush();
 		entityManager.refresh(profile);
 
@@ -590,5 +590,39 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 
 		entityManager.refresh(profile);
 		Assert.assertEquals(0, profile.getSshPublicKeys().size());
+	}
+
+	@Test
+	public void testCreateOrganization() throws ValidationException, EntityNotFoundException, AuthenticationException {
+		Long profileId = setupProfile().getId();
+
+		Organization org = new Organization();
+		org.setName("New ORG");
+		org.setIdentifier("abccccapplication");
+		org.setDescription("Org description; blah blah blah.");
+
+		Organization created = profileWebService.createOrganization(org);
+		assertNotNull(created);
+
+		assertEquals(org.getName(), created.getName());
+		assertEquals(org.getDescription(), created.getDescription());
+
+		org = profileWebService.getOrganizationByIdentfier(created.getIdentifier());
+		assertNotNull(org);
+		assertEquals(0, org.getProjects().size());
+
+		Project project = new Project();
+		project.setName("New Application");
+		project.setIdentifier("abccccapplication");
+		project.setDescription("Application description; blah blah blah.");
+		project.setPublic(Boolean.FALSE);
+
+		Project createdProject = profileWebService.createProject(profileId, project);
+		assertNotNull(createdProject);
+		assertEquals(org, createdProject.getOrganization());
+
+		org = profileWebService.getOrganizationByIdentfier(created.getIdentifier());
+		assertNotNull(org);
+		assertEquals(1, org.getProjects().size());
 	}
 }

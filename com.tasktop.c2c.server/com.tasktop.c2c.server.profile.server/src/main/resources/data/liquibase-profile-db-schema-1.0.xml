@@ -555,4 +555,25 @@
 			<column defaultValueBoolean="false" name="DISABLED"	type="BOOLEAN" />
 		</addColumn>
 	</changeSet>
+	<changeSet author="cmorgan" id="createOrganizationTable-task4136">
+		<createTable tableName="ORGANIZATION">
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column defaultValue="" name="NAME" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column defaultValue="" name="IDENTIFIER" type="VARCHAR(255)">
+				<constraints nullable="false" unique="true"/>
+			</column>
+			<column name="VERSION" type="INT" />
+		</createTable>
+		<addColumn tableName="PROJECT">
+			<column name="ORGANIZATION_ID" type="BIGINT"/>
+		</addColumn>
+		<addForeignKeyConstraint baseColumnNames="ORGANIZATION_ID"
+			baseTableName="PROJECT" constraintName="PRJ_ORG_ID"
+			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
+	</changeSet>
 </databaseChangeLog>

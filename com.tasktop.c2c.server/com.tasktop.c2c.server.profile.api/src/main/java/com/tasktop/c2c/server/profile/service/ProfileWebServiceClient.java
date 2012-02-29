@@ -38,6 +38,7 @@ import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
+import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
@@ -714,6 +715,14 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 	}
 
 	public PasswordResetToken getPasswordResetToken(String token) {
+		throw new UnsupportedOperationException();
+	}
+
+	public Organization createOrganization(Organization org) throws ValidationException {
+		throw new UnsupportedOperationException();
+	}
+
+	public Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException {
 		throw new UnsupportedOperationException();
 	}
 }

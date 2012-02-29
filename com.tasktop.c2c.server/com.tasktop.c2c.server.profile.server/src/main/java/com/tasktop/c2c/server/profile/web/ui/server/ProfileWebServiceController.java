@@ -71,6 +71,7 @@ import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.web.AbstractRestService;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
+import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
@@ -399,13 +400,20 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 		return profileWebService.computeProjectServicesStatus(projectId);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#getPasswordResetToken(java.lang.String)
-	 */
 	@Override
 	public PasswordResetToken getPasswordResetToken(String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Organization createOrganization(Organization org) throws ValidationException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException {
 		// TODO Auto-generated method stub
 		return null;
 	}

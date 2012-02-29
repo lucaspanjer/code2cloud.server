@@ -26,6 +26,7 @@ public class Project extends AbstractEntity {
 	private List<ProjectService> projectServices;
 	private Integer numWatchers;
 	private Integer numCommiters;
+	private Organization organization;
 
 	public Project() {
 		// Default constructor, does nothing.
@@ -110,6 +111,14 @@ public class Project extends AbstractEntity {
 	 */
 	public void setNumCommiters(Integer numCommiters) {
 		this.numCommiters = numCommiters;
+	}
+
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 
 }

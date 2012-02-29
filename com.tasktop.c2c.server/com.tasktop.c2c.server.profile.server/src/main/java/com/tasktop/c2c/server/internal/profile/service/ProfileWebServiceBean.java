@@ -40,6 +40,7 @@ import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.profile.domain.internal.RandomToken;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
+import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
@@ -406,5 +407,20 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 				.getPasswordResetToken(token);
 		PasswordResetToken copy = webServiceDomain.copy(passwordResetToken);
 		return copy;
+	}
+
+	@Override
+	public Organization createOrganization(Organization org) throws ValidationException {
+		return webServiceDomain.copy(profileService.createOrganization(webServiceDomain.copy(org)));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#getOrganizationByIdentfier(java.lang.String)
+	 */
+	@Override
+	public Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException {
+		return webServiceDomain.copy(profileService.getOrganizationByIdentfier(orgIdentifier));
 	}
 }
