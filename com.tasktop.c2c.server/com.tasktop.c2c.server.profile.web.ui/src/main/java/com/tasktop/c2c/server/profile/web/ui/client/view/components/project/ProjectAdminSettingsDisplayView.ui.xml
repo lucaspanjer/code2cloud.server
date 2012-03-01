@@ -8,11 +8,11 @@
 			</h4>
 			<fieldset>
 				<label>Name:</label>
-				<g:Label ui:field="projectName"/>
+				<g:Label ui:field="name"/>
 			</fieldset>
 			<fieldset>
 				<label>Description:</label>
-				<g:Label addStyleNames="description" ui:field="projectDescription"/>
+				<g:Label addStyleNames="description" ui:field="description"/>
 			</fieldset>
 			<fieldset>
 				<label>Privacy:</label>

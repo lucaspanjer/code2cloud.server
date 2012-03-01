@@ -51,11 +51,9 @@ public class ProjectAdminSettingsDisplayView extends AbstractProjectView impleme
 	}
 
 	@UiField
-	@Ignore
-	Label projectName;
+	Label name;
 	@UiField
-	@Path("description")
-	Label projectDescription;
+	Label description;
 
 	@UiField
 	Anchor editButton;
