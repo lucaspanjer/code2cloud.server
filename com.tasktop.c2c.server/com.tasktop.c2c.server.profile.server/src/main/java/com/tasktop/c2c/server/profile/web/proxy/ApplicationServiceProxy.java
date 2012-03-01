@@ -35,7 +35,6 @@ import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.web.HeaderConstants;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
-import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.web.proxy.WebProxy;
 
@@ -93,8 +92,7 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 		}
 
 		// Get our token from the authentication context, and rewrite it to be in specialized form.
-		authenticationToken = internalAuthenticationService.specializeAuthenticationToken(authenticationToken,
-				project.getIdentifier(), ProjectAccessibility.PUBLIC.equals(project.getAccessibility()));
+		authenticationToken = internalAuthenticationService.specializeAuthenticationToken(authenticationToken, project);
 
 		tokenSerializer.serialize(proxyRequest, authenticationToken);
 

@@ -610,7 +610,7 @@
 		<addForeignKeyConstraint baseColumnNames="PROFILE_ID"
 			baseTableName="ORGANIZATIONPROFILE" constraintName="FK_OP_PROF_ID"
 			referencedColumnNames="ID" referencedTableName="PROFILE" />
-		<addForeignKeyConstraint baseColumnNames="PROJECT_ID"
+		<addForeignKeyConstraint baseColumnNames="ORGANIZATION_ID"
 			baseTableName="ORGANIZATIONPROFILE" constraintName="FK_OP_ORG_ID"
 			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
 	</changeSet>

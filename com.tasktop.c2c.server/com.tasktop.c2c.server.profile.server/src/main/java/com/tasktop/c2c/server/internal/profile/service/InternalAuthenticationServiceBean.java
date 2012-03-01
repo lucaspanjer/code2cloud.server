@@ -17,19 +17,20 @@ import org.springframework.stereotype.Service;
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.domain.Role;
+import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
+import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
 
 @Service("internalAuthenticationService")
 public class InternalAuthenticationServiceBean implements InternalAuthenticationService {
 
 	@Override
-	public AuthenticationToken specializeAuthenticationToken(AuthenticationToken originalToken,
-			String projectIdentifier, boolean projectIsPublic) {
+	public AuthenticationToken specializeAuthenticationToken(AuthenticationToken originalToken, Project project) {
 
-		AuthenticationToken token = originalToken;
+		AuthenticationToken token;
 
 		// If we have a public project, we want to pass along a token which indicates that the observer role is present.
-		if (token == null) {
+		if (originalToken == null) {
 			// This is an anonymous user, so create a new token for them.
 			token = new AuthenticationToken();
 
@@ -37,20 +38,47 @@ public class InternalAuthenticationServiceBean implements InternalAuthentication
 			token.getAuthorities().add(Role.Anonymous);
 		} else {
 			token = originalToken.clone();
-			token.setAuthorities(AuthUtils.fromCompoundRole(token.getAuthorities(), projectIdentifier));
+			token.setAuthorities(AuthUtils.fromCompoundRole(token.getAuthorities(), project.getIdentifier()));
+		}
 
-			// we already had an authentication token - if we have a public project, add in our community role now.
-			if (projectIsPublic) {
-				token.getAuthorities().add(Role.Community);
+		if (project.getAccessibility() != null) {
+
+			switch (project.getAccessibility()) {
+			case PUBLIC:
+				token.getAuthorities().add(Role.Observer);
+				if (originalToken != null) {
+					token.getAuthorities().add(Role.Community);
+				}
+				break;
+			case ORGANIZATION_PRIVATE:
+				if (userIsMemberOfProjectOrg(token.getUsername(), project)) {
+					token.getAuthorities().add(Role.Community);
+				}
+			case PRIVATE:
+				// nothing
+			default:
 			}
 		}
 
-		if (projectIsPublic) {
-			// Plug in our observer role since we have a public project.
-			token.getAuthorities().add(Role.Observer);
+		return token;
+	}
+
+	private boolean userIsMemberOfProjectOrg(String username, Project project) {
+		if (username == null) {
+			return false;
 		}
 
-		return token;
+		if (project.getOrganization() == null) {
+			return false;
+		}
+
+		for (OrganizationProfile op : project.getOrganization().getOrganizationProfiles()) {
+			if (op.getProfile().getUsername().equals(username)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }
