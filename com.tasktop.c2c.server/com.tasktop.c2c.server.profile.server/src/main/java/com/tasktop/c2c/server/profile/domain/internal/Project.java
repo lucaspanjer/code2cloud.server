@@ -19,6 +19,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -182,6 +184,7 @@ public class Project extends BaseEntity {
 	}
 
 	@Column
+	@Enumerated(EnumType.STRING)
 	public ProjectAccessibility getAccessibility() {
 		return accessibility;
 	}
