@@ -32,6 +32,7 @@ public class Organization extends BaseEntity {
 	private String description;
 
 	private List<Project> projects = new ArrayList<Project>();
+	private List<OrganizationProfile> organizationProfiles = new ArrayList<OrganizationProfile>();
 
 	public Organization() {
 		super();
@@ -77,7 +78,7 @@ public class Organization extends BaseEntity {
 	}
 
 	/**
-	 * the profiles that participate in this project
+	 * the projects that participate in this organization
 	 */
 	@OneToMany(cascade = { CascadeType.PERSIST }, mappedBy = "organization")
 	public List<Project> getProjects() {
@@ -96,6 +97,18 @@ public class Organization extends BaseEntity {
 			// CAREFUL: don't introduce new allowable characters here without considering tenancy and database names
 			setIdentifier(getName().trim().replaceAll("[^a-zA-Z0-9\\.]", "-").toLowerCase());
 		}
+	}
+
+	/**
+	 * the profiles that participate in this organization
+	 */
+	@OneToMany(cascade = { CascadeType.PERSIST }, mappedBy = "organization")
+	public List<OrganizationProfile> getOrganizationProfiles() {
+		return organizationProfiles;
+	}
+
+	public void setOrganizationProfiles(List<OrganizationProfile> organizationProfiles) {
+		this.organizationProfiles = organizationProfiles;
 	}
 
 }

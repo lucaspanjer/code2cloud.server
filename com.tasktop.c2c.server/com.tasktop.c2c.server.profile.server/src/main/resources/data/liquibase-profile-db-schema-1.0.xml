@@ -591,4 +591,27 @@
 		</update>
 		<dropColumn tableName="PROJECT" columnName="IS_PUBLIC"/>
 	</changeSet>
+	
+	<changeSet author="cmorgan" id="createOrganizationProfileTable-task4136">
+		<createTable tableName="ORGANIZATIONPROFILE">
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column defaultValueBoolean="false" name="OWNER" type="BOOLEAN">
+				<constraints nullable="false" />
+			</column>
+			<column name="VERSION" type="INT" />
+			<column name="PROFILE_ID" type="BIGINT" />
+			<column name="ORGANIZATION_ID" type="BIGINT" />
+			<column defaultValueBoolean="false" name="MEMBER" type="BOOLEAN">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addForeignKeyConstraint baseColumnNames="PROFILE_ID"
+			baseTableName="ORGANIZATIONPROFILE" constraintName="FK_OP_PROF_ID"
+			referencedColumnNames="ID" referencedTableName="PROFILE" />
+		<addForeignKeyConstraint baseColumnNames="PROJECT_ID"
+			baseTableName="ORGANIZATIONPROFILE" constraintName="FK_OP_ORG_ID"
+			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
+	</changeSet>
 </databaseChangeLog>

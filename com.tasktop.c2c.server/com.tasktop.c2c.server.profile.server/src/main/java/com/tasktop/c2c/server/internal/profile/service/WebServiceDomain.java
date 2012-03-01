@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.internal.profile.crypto.OpenSSHPublicKeyReader;
+import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.domain.internal.ScmRepository;
@@ -394,6 +395,12 @@ public class WebServiceDomain {
 			target.setProjects(new ArrayList<Project>(org.getProjects().size()));
 			for (com.tasktop.c2c.server.profile.domain.internal.Project p : org.getProjects()) {
 				target.getProjects().add(copy(p, true));
+			}
+		}
+		if (org.getOrganizationProfiles() != null) {
+			target.setMembers(new ArrayList<Profile>());
+			for (OrganizationProfile op : org.getOrganizationProfiles()) {
+				target.getMembers().add(copy(op.getProfile()));
 			}
 		}
 
