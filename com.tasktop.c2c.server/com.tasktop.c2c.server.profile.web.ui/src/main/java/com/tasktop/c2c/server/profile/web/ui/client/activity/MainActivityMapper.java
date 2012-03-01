@@ -60,12 +60,12 @@ import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.SignUpP
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.AgreementsView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.AppSectionView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.CreateInvitationView;
-import com.tasktop.c2c.server.profile.web.ui.client.view.components.NewProjectView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.PasswordResetRequestView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.PasswordResetView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.ProjectInvitationView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.SignInView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.presenter.AccountActivity;
+import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView;
 import com.tasktop.c2c.server.tasks.client.place.ProjectEditTaskPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectNewTaskPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTaskHistoryPlace;

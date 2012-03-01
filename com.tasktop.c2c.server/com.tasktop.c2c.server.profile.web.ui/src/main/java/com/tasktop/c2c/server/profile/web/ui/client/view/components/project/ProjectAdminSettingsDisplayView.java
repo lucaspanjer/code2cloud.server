@@ -10,7 +10,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.settings;
+package com.tasktop.c2c.server.profile.web.ui.client.view.components.project;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -20,14 +20,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RadioButton;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 
-public class ProjectAdminSettingsDisplayView extends Composite implements Editor<Project> {
+public class ProjectAdminSettingsDisplayView extends AbstractProjectView implements Editor<Project> {
 	interface ProjectAdminSettingsDisplayViewUiBinder extends UiBinder<HTMLPanel, ProjectAdminSettingsDisplayView> {
 	}
 
@@ -59,15 +56,7 @@ public class ProjectAdminSettingsDisplayView extends Composite implements Editor
 	@UiField
 	@Path("description")
 	Label projectDescription;
-	@UiField
-	@Ignore
-	RadioButton privacyPrivateOption;
-	@UiField
-	@Ignore
-	RadioButton privacyOrgPrivateOption;
-	@UiField
-	@Ignore
-	RadioButton privacyPublicOption;
+
 	@UiField
 	Anchor editButton;
 
@@ -80,10 +69,8 @@ public class ProjectAdminSettingsDisplayView extends Composite implements Editor
 
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
-		privacyPublicOption.setValue(presenter.getProject().getAccessibility().equals(ProjectAccessibility.PUBLIC));
-		privacyPrivateOption.setValue(presenter.getProject().getAccessibility().equals(ProjectAccessibility.PRIVATE));
-		privacyOrgPrivateOption.setValue(presenter.getProject().getAccessibility()
-				.equals(ProjectAccessibility.ORGANIZATION_PRIVATE));
+		setProject(presenter.getProject());
+
 		driver.edit(presenter.getProject());
 	}
 

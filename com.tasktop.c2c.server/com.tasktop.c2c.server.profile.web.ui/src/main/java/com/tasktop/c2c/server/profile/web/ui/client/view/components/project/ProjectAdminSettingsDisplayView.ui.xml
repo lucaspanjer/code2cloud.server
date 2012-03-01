@@ -25,9 +25,9 @@
 						<g:RadioButton ui:field="privacyPrivateOption" name="privacy" enabled="false"/>
 						Private
 					</p>
-					<p>
+					<p ui:field="orgPrivatePElement">
 						<g:RadioButton ui:field="privacyOrgPrivateOption" name="privacy" enabled="false"/>
-						Org Private
+						Organization Private
 					</p>
 				</div>
 			</fieldset>

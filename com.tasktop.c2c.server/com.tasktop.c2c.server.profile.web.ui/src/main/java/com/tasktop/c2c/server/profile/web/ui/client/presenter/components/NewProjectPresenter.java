@@ -23,7 +23,7 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
-import com.tasktop.c2c.server.profile.web.ui.client.view.components.NewProjectView;
+import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView;
 
 public class NewProjectPresenter extends AbstractProfilePresenter {
 
@@ -32,8 +32,9 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 	public NewProjectPresenter(NewProjectView projectsView, NewProjectPlace place) {
 		super(projectsView);
 		this.view = projectsView;
-
-		view.clear();
+		Project newProject = new Project();
+		newProject.setAccessibility(ProjectAccessibility.PRIVATE);
+		view.setProject(newProject);
 		// Set the createAvailable flag on our view
 		view.displayMaxProjectsMessage(!(place.isCreateAvailable()));
 
@@ -59,17 +60,7 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 	}
 
 	private void doCreateProject() {
-		Project project = new Project();
-		project.setName(view.name.getText());
-		project.setDescription(view.description.getText());
-		if (view.publicProjectButton.getValue()) {
-			project.setAccessibility(ProjectAccessibility.PUBLIC);
-		} else if (view.privateProjectButton.getValue()) {
-			project.setAccessibility(ProjectAccessibility.PRIVATE);
-		} else if (view.orgPrivateProjectButton.getValue()) {
-			project.setAccessibility(ProjectAccessibility.ORGANIZATION_PRIVATE);
-		}
-
+		Project project = view.getProject();
 		getProfileService().createProject(getAppState().getCredentials(), project,
 				new AsyncCallbackSupport<String>(new OperationMessage("Creating project...")) {
 					@Override

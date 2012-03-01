@@ -26,15 +26,15 @@
 						<label>Privacy:</label>
 						<div>
 							<p>
-								<g:RadioButton styleName="radio" name="privacy" ui:field="publicProjectButton" />
+								<g:RadioButton ui:field="privacyPublicOption" name="privacy"/>
 								Public
 							</p>
 							<p>
-								<g:RadioButton styleName="radio" name="privacy" ui:field="privateProjectButton" />
+								<g:RadioButton ui:field="privacyPrivateOption" name="privacy" />
 								Private
 							</p>
-							<p>
-								<g:RadioButton styleName="radio" name="privacy" ui:field="orgPrivateProjectButton" />
+							<p ui:field="orgPrivatePElement">
+								<g:RadioButton ui:field="privacyOrgPrivateOption" name="privacy"/>
 								Organization Private
 							</p>
 						</div>
