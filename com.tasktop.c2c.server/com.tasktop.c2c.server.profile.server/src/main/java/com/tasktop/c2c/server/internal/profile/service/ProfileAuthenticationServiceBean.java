@@ -43,7 +43,6 @@ import com.tasktop.c2c.server.auth.service.AbstractAuthenticationServiceBean;
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
-import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.auth.service.PublicKeyAuthenticationService;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.domain.Role;
@@ -63,9 +62,6 @@ public class ProfileAuthenticationServiceBean extends AbstractAuthenticationServ
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	private InternalAuthenticationService internalAuthenticationService;
 
 	private UsersConnectionRepository usersConnRepo;
 
@@ -234,16 +230,15 @@ public class ProfileAuthenticationServiceBean extends AbstractAuthenticationServ
 
 			// Add our appropriate roles now.
 			if (projectProfile.getOwner()) {
-				token.getAuthorities().add(internalAuthenticationService.toCompoundRole(Role.Admin, projectIdentifier));
+				token.getAuthorities().add(AuthUtils.toCompoundRole(Role.Admin, projectIdentifier));
 			}
 
 			if (projectProfile.getUser()) {
-				token.getAuthorities().add(internalAuthenticationService.toCompoundRole(Role.User, projectIdentifier));
+				token.getAuthorities().add(AuthUtils.toCompoundRole(Role.User, projectIdentifier));
 			}
 
 			if (projectProfile.getCommunity()) {
-				token.getAuthorities().add(
-						internalAuthenticationService.toCompoundRole(Role.Community, projectIdentifier));
+				token.getAuthorities().add(AuthUtils.toCompoundRole(Role.Community, projectIdentifier));
 			}
 		}
 	}

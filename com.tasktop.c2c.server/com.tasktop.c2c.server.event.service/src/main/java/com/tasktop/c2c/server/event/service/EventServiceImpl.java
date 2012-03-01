@@ -26,19 +26,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.tenancy.provider.DefaultTenant;
 
-import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
+import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.event.domain.Event;
-import com.tasktop.c2c.server.event.service.EventListener;
-import com.tasktop.c2c.server.event.service.EventService;
 
 @Service("eventService")
 public class EventServiceImpl implements EventService {
 
 	private Logger LOGGER = LoggerFactory.getLogger(EventServiceImpl.class);
-
-	@Autowired
-	private InternalAuthenticationService authService;
 
 	private List<EventListener> eventListeners;
 
@@ -69,7 +64,7 @@ public class EventServiceImpl implements EventService {
 			TenancyContextHolder.createEmptyContext();
 			TenancyContextHolder.getContext().setTenant(new DefaultTenant(event.getProjectId(), null));
 
-			authService.assumeSystemIdentity(event.getProjectId());
+			AuthUtils.assumeSystemIdentity(event.getProjectId());
 
 			try {
 				for (EventListener listener : eventListeners) {

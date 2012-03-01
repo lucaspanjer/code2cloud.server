@@ -15,7 +15,7 @@ package com.tasktop.c2c.server.auth.service.job;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
+import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.common.service.job.Job;
 
 public abstract class SystemJob extends Job {
@@ -40,8 +40,6 @@ public abstract class SystemJob extends Job {
 	}
 
 	protected final void assumeSystemIdentity(ApplicationContext applicationContext, String projectIdentifier) {
-		InternalAuthenticationService authenticationService = applicationContext.getBean(
-				"internalAuthenticationService", InternalAuthenticationService.class);
-		authenticationService.assumeSystemIdentity(projectIdentifier);
+		AuthUtils.assumeSystemIdentity(projectIdentifier);
 	}
 }

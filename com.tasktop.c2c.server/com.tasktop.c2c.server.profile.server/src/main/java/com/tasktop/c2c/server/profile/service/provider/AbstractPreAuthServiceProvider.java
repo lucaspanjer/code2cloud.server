@@ -20,13 +20,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.tasktop.c2c.server.auth.service.AuthenticationService;
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
-import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.auth.service.proxy.ProxyPreAuthClientInvocationHandler;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
+import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 
 public abstract class AbstractPreAuthServiceProvider<T> extends AbstractServiceProvider<T> {

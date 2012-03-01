@@ -17,7 +17,7 @@ import java.util.EnumSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
+import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
@@ -27,15 +27,12 @@ import com.tasktop.c2c.server.common.service.domain.Role;
 
 @Component
 public class HudsonSlavePoolSecurityPolicyImpl implements HudsonSlavePoolSecurityPolicy {
-	@Autowired
-	private InternalAuthenticationService internalAuthenticationService;
-
 	@Autowired(required = false)
 	// Let it fail to autowire for the tests here.
 	private ServiceHostService serviceHostService;
 
 	public void authorize(String projectIdentifier) {
-		if (!Security.hasRole(internalAuthenticationService.toCompoundRole(Role.User, projectIdentifier))) {
+		if (!Security.hasRole(AuthUtils.toCompoundRole(Role.User, projectIdentifier))) {
 			throw new InsufficientPermissionsException();
 		}
 	}

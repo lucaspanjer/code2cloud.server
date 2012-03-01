@@ -29,7 +29,6 @@ import org.springframework.web.HttpRequestHandler;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
-import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.auth.service.proxy.AuthenticationTokenSerializer;
 import com.tasktop.c2c.server.auth.service.proxy.ProxyHttpServletRequest;
 import com.tasktop.c2c.server.common.service.domain.Role;
@@ -37,6 +36,7 @@ import com.tasktop.c2c.server.common.service.web.HeaderConstants;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
+import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.web.proxy.WebProxy;
 
 /**

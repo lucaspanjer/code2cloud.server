@@ -18,11 +18,10 @@ import javax.persistence.PersistenceContext;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
+import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.domain.Role;
@@ -73,9 +72,6 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
-
-	@Autowired
-	protected InternalAuthenticationService internalAuthenticationService;
 
 	private boolean enabled = true;
 
@@ -253,7 +249,7 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 	}
 
 	private void assertMember(Project target) throws InsufficientPermissionsException {
-		String userRole = internalAuthenticationService.toCompoundRole(Role.User, target.getIdentifier());
+		String userRole = AuthUtils.toCompoundRole(Role.User, target.getIdentifier());
 
 		if (Security.hasRole(userRole)) {
 			// is a user
@@ -264,7 +260,7 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 	}
 
 	private void assertOwner(Project target) throws InsufficientPermissionsException {
-		String adminRole = internalAuthenticationService.toCompoundRole(Role.Admin, target.getIdentifier());
+		String adminRole = AuthUtils.toCompoundRole(Role.Admin, target.getIdentifier());
 
 		if (Security.hasRole(adminRole)) {
 			// is an admin

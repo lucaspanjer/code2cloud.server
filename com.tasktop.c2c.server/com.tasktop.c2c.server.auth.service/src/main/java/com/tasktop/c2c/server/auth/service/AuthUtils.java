@@ -16,11 +16,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+
+import com.tasktop.c2c.server.common.service.domain.Role;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -31,16 +37,6 @@ public final class AuthUtils {
 	// No instantiation of this class
 	private AuthUtils() {
 
-	}
-
-	// FIXME this token will not work when used with AbstractPreAuthServiceProvider.
-	public static void insertSystemAuthToken(String role) {
-		// Create our standard system token now.
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("SYSTEM", "",
-				Collections.singletonList(new SimpleGrantedAuthority(role)));
-
-		// Push it into the Spring Security context.
-		SecurityContextHolder.getContext().setAuthentication(token);
 	}
 
 	// Ensure that auth tokens are inserted and handled in a consistent manner.
@@ -80,5 +76,69 @@ public final class AuthUtils {
 			}
 		}
 		return authorities;
+	}
+
+	public static String toCompoundRole(String roleName, String projectIdentifier) {
+		if (roleName == null || roleName.contains("/")) {
+			throw new IllegalArgumentException();
+		}
+		return String.format("%s/%s", roleName, projectIdentifier);
+	}
+
+	public static String fromCompoundRole(String compoundRole, String projectIdentifier) {
+		List<String> retList = fromCompoundRole(Collections.singletonList(compoundRole), projectIdentifier);
+		String retStr = null;
+
+		if (retList.size() > 0) {
+			retStr = retList.get(0);
+		}
+
+		return retStr;
+	}
+
+	public static List<String> fromCompoundRole(List<String> compoundRoles, String projectIdentifier) {
+		Pattern rolePattern = computeRolePattern(projectIdentifier);
+		List<String> roleNames = new ArrayList<String>(compoundRoles.size());
+		for (String authority : compoundRoles) {
+			Matcher matcher = rolePattern.matcher(authority);
+			if (matcher.matches()) {
+				String role = matcher.group(1);
+				roleNames.add(role);
+			}
+		}
+		return roleNames;
+	}
+
+	private static Pattern computeRolePattern(String projectIdentifier) {
+		return Pattern.compile("([^/]+)/" + Pattern.quote(projectIdentifier));
+	}
+
+	private static AuthenticationToken createSystemAuthenticationToken(String projectIdentifier) {
+		AuthenticationToken token = new AuthenticationToken();
+		token.setUsername("SYSTEM");
+		token.setKey(UUID.randomUUID().toString());
+		token.getAuthorities().add(Role.System);
+		token.getAuthorities().add(Role.User);
+		if (projectIdentifier != null) {
+			token.getAuthorities().add(AuthUtils.toCompoundRole(Role.System, projectIdentifier));
+			token.getAuthorities().add(AuthUtils.toCompoundRole(Role.User, projectIdentifier));
+		}
+		return token;
+	}
+
+	/**
+	 * Replace the current security context with one authorized for Role.User and Role.System access for the given
+	 * project.
+	 * 
+	 * @param projectIdentifier
+	 */
+	public static void assumeSystemIdentity(String projectIdentifier) {
+		AuthenticationToken authenticationToken = createSystemAuthenticationToken(projectIdentifier);
+		AuthenticationServiceUser user = AuthenticationServiceUser.fromAuthenticationToken(authenticationToken);
+		PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(user,
+				authenticationToken, user.getAuthorities());
+		authentication.setAuthenticated(true);
+		SecurityContextHolder.createEmptyContext();
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 }
