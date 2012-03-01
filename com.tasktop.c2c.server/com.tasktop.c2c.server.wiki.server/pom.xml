@@ -120,7 +120,7 @@
 						<phase>process-classes</phase>
 						<configuration>
 							<tasks>
-								<copy file="${basedir}/target/classes/META-INF/persistence-wiki.xml" 
+								<copy file="${basedir}/target/classes/META-INF/persistence-wiki-mysql.xml" 
 								      tofile="${basedir}/target/classes/META-INF/persistence.xml"/>
 							
 								<taskdef name="weave"
