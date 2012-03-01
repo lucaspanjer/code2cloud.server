@@ -58,6 +58,10 @@ public class WebServiceDomain {
 	}
 
 	public Project copy(com.tasktop.c2c.server.profile.domain.internal.Project project) {
+		return copy(project, false);
+	}
+
+	public Project copy(com.tasktop.c2c.server.profile.domain.internal.Project project, boolean shallow) {
 		Project p = new Project();
 		p.setId(project.getId());
 		p.setIdentifier(project.getIdentifier());
@@ -66,6 +70,9 @@ public class WebServiceDomain {
 		p.setAccessibility(project.getAccessibility());
 		p.setNumWatchers(project.getNumWatchers());
 		p.setNumCommiters(project.getNumCommitters());
+		if (!shallow) {
+			p.setOrganization(copy(project.getOrganization()));
+		}
 
 		// Don't copy our ProjectServiceProfile as part of this - that requires a ProfileWebServiceConfiguration
 		// be passed in.
@@ -153,6 +160,8 @@ public class WebServiceDomain {
 		project.setName(p.getName());
 		project.setDescription(p.getDescription());
 		project.setAccessibility(p.getAccessibility());
+		project.setOrganization(copy(p.getOrganization()));
+
 		return project;
 	}
 
@@ -355,6 +364,10 @@ public class WebServiceDomain {
 	 * @return
 	 */
 	public com.tasktop.c2c.server.profile.domain.internal.Organization copy(Organization org) {
+		if (org == null) {
+			return null;
+		}
+
 		com.tasktop.c2c.server.profile.domain.internal.Organization target = new com.tasktop.c2c.server.profile.domain.internal.Organization();
 		target.setDescription(org.getDescription());
 		target.setId(org.getId());
@@ -369,6 +382,9 @@ public class WebServiceDomain {
 	 * @return
 	 */
 	public Organization copy(com.tasktop.c2c.server.profile.domain.internal.Organization org) {
+		if (org == null) {
+			return null;
+		}
 		Organization target = new Organization();
 		target.setDescription(org.getDescription());
 		target.setId(org.getId());
@@ -377,7 +393,7 @@ public class WebServiceDomain {
 		if (org.getProjects() != null) {
 			target.setProjects(new ArrayList<Project>(org.getProjects().size()));
 			for (com.tasktop.c2c.server.profile.domain.internal.Project p : org.getProjects()) {
-				target.getProjects().add(copy(p));
+				target.getProjects().add(copy(p, true));
 			}
 		}
 

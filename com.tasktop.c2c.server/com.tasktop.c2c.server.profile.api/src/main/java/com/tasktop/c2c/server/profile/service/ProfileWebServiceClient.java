@@ -72,6 +72,7 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 		private SshPublicKey sshPublicKey;
 		private List<SshPublicKey> sshPublicKeyList;
 		private List<ProjectServiceStatus> projectServiceStatusList;
+		private Organization organization;
 
 		public void setProfile(Profile profile) {
 			this.profile = profile;
@@ -207,6 +208,14 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 
 		public void setProjectServiceStatusList(List<ProjectServiceStatus> projectServiceStatusList) {
 			this.projectServiceStatusList = projectServiceStatusList;
+		}
+
+		public Organization getOrganization() {
+			return organization;
+		}
+
+		public void setOrganization(Organization organization) {
+			this.organization = organization;
 		}
 	}
 
@@ -719,10 +728,28 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 	}
 
 	public Organization createOrganization(Organization org) throws ValidationException {
-		throw new UnsupportedOperationException();
+		try {
+			return new PostCall<Organization>() {
+				public Organization getValue(ServiceCallResult result) {
+					return result.getOrganization();
+				}
+			}.doCall("organization", org);
+		} catch (WrappedCheckedException e) {
+			convertValidationException(e);
+			throw e;
+		}
 	}
 
 	public Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException {
-		throw new UnsupportedOperationException();
+		try {
+			return new GetCall<Organization>() {
+				public Organization getValue(ServiceCallResult result) {
+					return result.getOrganization();
+				}
+			}.doCall("organization/{id}", orgIdentifier);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+			throw e;
+		}
 	}
 }

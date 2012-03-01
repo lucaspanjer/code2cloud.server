@@ -406,15 +406,21 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 		return null;
 	}
 
+	@Section("Organizations")
+	@Title("Create Organization")
+	@Documentation("Create a new organization.")
+	@RequestMapping(value = "organization", method = RequestMethod.POST)
 	@Override
-	public Organization createOrganization(Organization org) throws ValidationException {
-		// TODO Auto-generated method stub
-		return null;
+	public Organization createOrganization(@RequestBody Organization org) throws ValidationException {
+		return profileWebService.createOrganization(org);
 	}
 
+	@Section("Organizations")
+	@Title("Retrieve Organization By Identifier")
 	@Override
-	public Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+	@RequestMapping(value = "organization/{id}", method = RequestMethod.GET)
+	public Organization getOrganizationByIdentfier(@PathVariable("id") String orgIdentifier)
+			throws EntityNotFoundException {
+		return profileWebService.getOrganizationByIdentfier(orgIdentifier);
 	}
 }

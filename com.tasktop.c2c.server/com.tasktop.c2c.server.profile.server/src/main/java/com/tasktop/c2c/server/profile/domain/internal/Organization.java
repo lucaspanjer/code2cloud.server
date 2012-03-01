@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.domain.internal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -30,8 +31,7 @@ public class Organization extends BaseEntity {
 	private String identifier;
 	private String description;
 
-	private List<Project> projects;
-	private List<Profile> members;
+	private List<Project> projects = new ArrayList<Project>();
 
 	public Organization() {
 		super();

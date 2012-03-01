@@ -468,7 +468,12 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		entityManager.persist(project);
 
 		if (project.getOrganization() != null) {
-			project.getOrganization().getProjects().add(project);
+			Organization org = entityManager.find(Organization.class, project.getOrganization().getId());
+			if (org == null) {
+				throw new EntityNotFoundException();
+			}
+			project.setOrganization(org);
+			org.getProjects().add(project);
 		}
 
 		ProjectProfile projectProfile = project.addProfile(profile);

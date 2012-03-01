@@ -617,6 +617,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		project.setIdentifier("abccccapplication");
 		project.setDescription("Application description; blah blah blah.");
 		project.setAccessibility(ProjectAccessibility.PRIVATE);
+		project.setOrganization(org);
 
 		Project createdProject = profileWebService.createProject(profileId, project);
 		assertNotNull(createdProject);
