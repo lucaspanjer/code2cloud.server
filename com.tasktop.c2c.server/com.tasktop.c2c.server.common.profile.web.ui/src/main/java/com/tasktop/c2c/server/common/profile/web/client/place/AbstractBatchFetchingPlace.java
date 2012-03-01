@@ -13,7 +13,6 @@
 package com.tasktop.c2c.server.common.profile.web.client.place;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
@@ -25,7 +24,6 @@ import net.customware.gwt.dispatch.shared.Result;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.tasktop.c2c.server.common.profile.web.client.AppState;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
@@ -199,11 +197,4 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace implement
 		CommonGinjector.get.instance().getDispatchService().execute(fetchAction, fetchCallback);
 	}
 
-	protected List<String> getUserRolesForPlace() {
-		AppState appState = ProfileGinjector.get.instance().getAppState();
-		if (appState == null || appState.getCredentials() == null || appState.getCredentials().getRoles() == null) {
-			return Collections.EMPTY_LIST;
-		}
-		return appState.getCredentials().getRoles();
-	}
 }
