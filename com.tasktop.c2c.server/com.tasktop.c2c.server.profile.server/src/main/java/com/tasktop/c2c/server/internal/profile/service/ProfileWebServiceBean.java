@@ -17,8 +17,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
@@ -36,7 +34,6 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
-import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.profile.domain.internal.RandomToken;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
@@ -44,7 +41,6 @@ import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
@@ -163,34 +159,6 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 		}
 
 		return projects;
-	}
-
-	@Override
-	public String[] getRolesForProject(String projectIdentifier) throws EntityNotFoundException {
-		// Get the current user's credentials to start.
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		List<String> roles = new ArrayList<String>();
-		com.tasktop.c2c.server.profile.domain.internal.Project project = profileService
-				.getProjectByIdentifier(projectIdentifier);
-
-		if (authentication != null) {
-			for (GrantedAuthority authority : authentication.getAuthorities()) {
-				if (authority.getAuthority().endsWith("/" + projectIdentifier))
-					roles.add(authority.getAuthority());
-			}
-
-			// IF we have a public project, then add in the community role since we're a registered user.
-			if (ProjectAccessibility.PUBLIC.equals(project.getAccessibility())) {
-				roles.add(String.format("%s/%s", Role.Community, projectIdentifier));
-			}
-		}
-
-		// Then, check the project's status to see if we should add in the observer role.
-		if (ProjectAccessibility.PUBLIC.equals(project.getAccessibility())) {
-			roles.add(String.format("%s/%s", Role.Observer, projectIdentifier));
-		}
-
-		return roles.toArray(new String[roles.size()]);
 	}
 
 	@Override

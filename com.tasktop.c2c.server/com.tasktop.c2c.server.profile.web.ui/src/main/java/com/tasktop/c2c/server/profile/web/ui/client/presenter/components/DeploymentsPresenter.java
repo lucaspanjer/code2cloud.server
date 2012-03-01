@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
 import java.util.List;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
@@ -28,20 +27,21 @@ import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
 import com.tasktop.c2c.server.profile.web.ui.client.DeploymentService;
-import com.tasktop.c2c.server.profile.web.ui.client.DeploymentService.AvailableBuildInformation;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDeploymentPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
-import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentsView;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsAction;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsResult;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.ArtifactEditView.JobNameChangedHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentEditView.EditStartHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentReadOnlyView.DeleteHandler;
+import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentsView;
 
 public class DeploymentsPresenter extends AbstractProfilePresenter implements SplittableActivity {
 
 	private final DeploymentsView view;
 	private String projectIdentifier;
 	private List<DeploymentConfiguration> deploymentConfigurations;
-	private DeploymentService.AvailableBuildInformation buildInformation;
+	private GetProjectBuildsResult buildInformation;
 
 	public DeploymentsPresenter(DeploymentsView view) {
 		super(view);
@@ -54,7 +54,7 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 
 	public void setPlace(Place place) {
 		ProjectDeploymentPlace depPlace = (ProjectDeploymentPlace) place;
-		this.projectIdentifier = depPlace.getProjectId();
+		this.projectIdentifier = depPlace.getProject().getIdentifier();
 		this.deploymentConfigurations = depPlace.getDeploymentConfigurations();
 		this.buildInformation = depPlace.getBuildInformation();
 	}
@@ -79,15 +79,16 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 
 			@Override
 			public void jobNameChanged(final String jobName) {
-				getDeploymentService().getBuildInformation(projectIdentifier, jobName,
-						new AsyncCallbackSupport<AvailableBuildInformation>() {
+				getDispatchService().execute(new GetProjectBuildsAction(projectIdentifier, jobName),
 
-							@Override
-							protected void success(AvailableBuildInformation result) {
-								view.deploymentEditView.setBuilds(jobName, result.getBuilds());
-							}
+				new AsyncCallbackSupport<GetProjectBuildsResult>() {
 
-						});
+					@Override
+					protected void success(GetProjectBuildsResult result) {
+						view.deploymentEditView.setBuilds(jobName, result.getBuilds());
+					}
+
+				});
 
 			}
 		});

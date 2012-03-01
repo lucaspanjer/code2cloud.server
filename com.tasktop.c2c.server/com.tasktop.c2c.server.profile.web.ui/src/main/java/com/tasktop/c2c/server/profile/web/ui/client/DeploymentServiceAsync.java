@@ -12,14 +12,10 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client;
 
-import java.util.List;
-
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
-import com.tasktop.c2c.server.profile.web.ui.client.DeploymentService.AvailableBuildInformation;
 import com.tasktop.c2c.server.profile.web.ui.client.DeploymentService.DeploymentConfigurationOptions;
 
 /**
@@ -27,12 +23,6 @@ import com.tasktop.c2c.server.profile.web.ui.client.DeploymentService.Deployment
  * 
  */
 public interface DeploymentServiceAsync {
-
-	/**
-	 * 
-	 * @see com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#getDeploymentConfigurations(java.lang.String)
-	 */
-	void getDeploymentConfigurations(String projectId, AsyncCallback<List<DeploymentConfiguration>> callback);
 
 	void createDeploymentConfiguration(String projectId, DeploymentConfiguration configuration,
 			AsyncCallback<DeploymentConfiguration> callback);
@@ -53,8 +43,5 @@ public interface DeploymentServiceAsync {
 	void restartDeployment(DeploymentConfiguration configuration, AsyncCallback<DeploymentStatus> callback);
 
 	void createService(DeploymentConfiguration configuration, CloudService service, AsyncCallback<CloudService> callback);
-
-	void getBuildInformation(String projectIdentifier, String buildJobName,
-			AsyncCallback<AvailableBuildInformation> callback);
 
 }

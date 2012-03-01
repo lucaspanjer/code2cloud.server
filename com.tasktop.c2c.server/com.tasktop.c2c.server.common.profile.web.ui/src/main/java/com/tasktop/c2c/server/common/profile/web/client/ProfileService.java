@@ -60,13 +60,7 @@ public interface ProfileService extends RemoteService {
 	String createProject(Credentials credentials, Project project) throws ValidationFailedException,
 			AuthenticationRequiredException, NoSuchEntityException;
 
-	public Project updateProject(Project project) throws NoSuchEntityException, ValidationFailedException;
-
-	public Project getProject(String projectIdentifier) throws NoSuchEntityException, AuthenticationRequiredException;
-
 	public QueryResult<Project> getProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest);
-
-	public String[] getRolesForProject(String projectIdentifier) throws NoSuchEntityException;
 
 	public List<Profile> getProfiles(String projectIdentifier) throws NoSuchEntityException;
 
@@ -119,8 +113,6 @@ public interface ProfileService extends RemoteService {
 	 */
 	public UserInfo createProfileWithSignUpToken(com.tasktop.c2c.server.profile.domain.project.Profile profile,
 			String token) throws NoSuchEntityException, ValidationFailedException;
-
-	public List<Profile> listAllProfiles();
 
 	public SignUpTokens createSignUpTokensFromCsv(String csv, Boolean sendEmail) throws ValidationFailedException;
 

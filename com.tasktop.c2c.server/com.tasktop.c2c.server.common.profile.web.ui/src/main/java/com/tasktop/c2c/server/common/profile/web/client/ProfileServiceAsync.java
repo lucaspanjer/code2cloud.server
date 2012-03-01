@@ -43,14 +43,6 @@ public interface ProfileServiceAsync {
 
 	void createProject(Credentials credentials, Project project, AsyncCallback<String> callback);
 
-	void updateProject(Project project, AsyncCallback<Project> callback);
-
-	void getProject(String projectIdentifier, AsyncCallback<Project> callback);
-
-	void getRolesForProject(String projectIdentifier, AsyncCallback<String[]> callback);
-
-	void listAllProfiles(AsyncCallback<List<Profile>> callback);
-
 	void requestPasswordReset(String email, AsyncCallback<Boolean> callback);
 
 	void resetPassword(String token, String newPassword, AsyncCallback<Credentials> callback);

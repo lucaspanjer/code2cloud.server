@@ -62,8 +62,6 @@ public interface ProfileWebService {
 
 	public List<AgreementProfile> getApprovedAgreementProfiles() throws EntityNotFoundException;
 
-	public String[] getRolesForProject(String projectIdentifier) throws EntityNotFoundException;
-
 	public QueryResult<Project> findProjects(String query, QueryRequest request);
 
 	public QueryResult<Project> findProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest);

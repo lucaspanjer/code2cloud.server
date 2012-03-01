@@ -15,7 +15,6 @@ package com.tasktop.c2c.server.profile.web.ui.client;
 import java.io.Serializable;
 import java.util.List;
 
-
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
@@ -24,7 +23,7 @@ import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
-import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsResult;
 
 /**
  * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
@@ -38,7 +37,7 @@ public interface DeploymentService extends RemoteService {
 		private List<Integer> availableMemories;
 		private List<CloudService> availableServices;
 		private List<DeploymentServiceConfiguration> availableServiceConfigurations;
-		private AvailableBuildInformation buildInformation;
+		private GetProjectBuildsResult buildInformation;
 
 		/**
 		 * @return the availableMemories
@@ -89,7 +88,7 @@ public interface DeploymentService extends RemoteService {
 		/**
 		 * @return the buildInformation
 		 */
-		public AvailableBuildInformation getBuildInformation() {
+		public GetProjectBuildsResult getBuildInformation() {
 			return buildInformation;
 		}
 
@@ -97,48 +96,10 @@ public interface DeploymentService extends RemoteService {
 		 * @param buildInformation
 		 *            the buildInformation to set
 		 */
-		public void setBuildInformation(AvailableBuildInformation buildInformation) {
+		public void setBuildInformation(GetProjectBuildsResult buildInformation) {
 			this.buildInformation = buildInformation;
 		}
 	}
-
-	public static class AvailableBuildInformation implements Serializable {
-		private List<String> buildJobNames;
-		private List<BuildDetails> builds;
-
-		/**
-		 * @return the buildJobNames
-		 */
-		public List<String> getBuildJobNames() {
-			return buildJobNames;
-		}
-
-		/**
-		 * @param buildJobNames
-		 *            the buildJobNames to set
-		 */
-		public void setBuildJobNames(List<String> buildJobNames) {
-			this.buildJobNames = buildJobNames;
-		}
-
-		/**
-		 * @return the builds
-		 */
-		public List<BuildDetails> getBuilds() {
-			return builds;
-		}
-
-		/**
-		 * @param builds
-		 *            the builds to set
-		 */
-		public void setBuilds(List<BuildDetails> builds) {
-			this.builds = builds;
-		}
-
-	}
-
-	public List<DeploymentConfiguration> getDeploymentConfigurations(String projectId);
 
 	public DeploymentConfiguration createDeploymentConfiguration(String projectId, DeploymentConfiguration configuration)
 			throws ValidationFailedException;
@@ -159,16 +120,6 @@ public interface DeploymentService extends RemoteService {
 
 	public DeploymentConfigurationOptions getDeploymentConfigurationOptions(String projectId,
 			DeploymentConfiguration configuration) throws NoSuchEntityException;
-
-	/**
-	 * Get the buildInfo.
-	 * 
-	 * @param projectIdentifier
-	 * @param buildJobName
-	 *            : or null for all names
-	 * @return
-	 */
-	public AvailableBuildInformation getBuildInformation(String projectIdentifier, String buildJobName);
 
 	public CloudService createService(DeploymentConfiguration configuration, CloudService service);
 

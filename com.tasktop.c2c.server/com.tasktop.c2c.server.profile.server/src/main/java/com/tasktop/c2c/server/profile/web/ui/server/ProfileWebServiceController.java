@@ -30,7 +30,6 @@ import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PROJECT_BY_IDENTIFIER_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PROJECT_FOR_INVITATION_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PROJECT_INVITATION_TOKEN_URL;
-import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_ROLES_FOR_PROJECT_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_SIGNUP_TOKEN_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_UNUSED_SIGNUP_TOKENS_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.INVITE_USER_TO_PROJECT_URL;
@@ -180,16 +179,6 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 	@Override
 	public Project updateProject(Project project) throws EntityNotFoundException, ValidationException {
 		return profileWebService.updateProject(project);
-	}
-
-	@Section("Projects")
-	@Title("Get Project Roles")
-	@Documentation("Get the current user's roles for the given project")
-	@Override
-	@RequestMapping(value = GET_ROLES_FOR_PROJECT_URL, method = RequestMethod.GET)
-	public String[] getRolesForProject(@PathVariable(PROJECT_IDENTIFIER_URLPARAM) String projectIdentifier)
-			throws EntityNotFoundException {
-		return profileWebService.getRolesForProject(projectIdentifier);
 	}
 
 	@Section("Projects")

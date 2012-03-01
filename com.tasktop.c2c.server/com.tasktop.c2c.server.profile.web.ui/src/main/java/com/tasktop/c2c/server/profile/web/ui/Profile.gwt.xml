@@ -38,5 +38,6 @@
 		<exclude name="**/*Test.java"/>
 		 <exclude name="**/test/*"/>
 	</source>
+	<source path="shared"/>
 
 </module>

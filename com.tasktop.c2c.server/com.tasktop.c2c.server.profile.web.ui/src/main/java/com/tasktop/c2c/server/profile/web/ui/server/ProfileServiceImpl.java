@@ -109,7 +109,11 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 		ProjectDashboard dashboard = new ProjectDashboard();
 		int numDays = 60;
 
-		dashboard.setProject(getProject(projectIdentifier));
+		try {
+			dashboard.setProject(profileWebService.getProjectByIdentifier(projectIdentifier));
+		} catch (EntityNotFoundException e1) {
+			throw new NoSuchEntityException();
+		}
 
 		// Let some these services fails and still return data.
 		try {
@@ -238,43 +242,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 			throw new IllegalStateException();
 		} catch (EntityNotFoundException e) {
 			handle(e);
-			throw new IllegalStateException();
-		}
-	}
-
-	@Override
-	public Project updateProject(Project project) throws NoSuchEntityException, ValidationFailedException {
-		try {
-			return profileWebService.updateProject(project);
-		} catch (ValidationException e) {
-			handle(e);
-			throw new IllegalStateException();
-		} catch (EntityNotFoundException e) {
-			handle(e);
-			throw new IllegalStateException();
-		}
-	}
-
-	@Override
-	public Project getProject(String projectIdentifier) throws NoSuchEntityException {
-		setTenancyContext(projectIdentifier);
-
-		try {
-			return profileWebService.getProjectByIdentifier(projectIdentifier);
-		} catch (EntityNotFoundException e) {
-			handle(e);
-			throw new IllegalStateException();
-		}
-	}
-
-	@Override
-	public String[] getRolesForProject(String projectIdentifier) throws NoSuchEntityException {
-		setTenancyContext(projectIdentifier);
-
-		try {
-			return profileWebService.getRolesForProject(projectIdentifier);
-		} catch (EntityNotFoundException enfe) {
-			handle(enfe);
 			throw new IllegalStateException();
 		}
 	}
@@ -595,12 +562,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 			// should never happen
 			throw new IllegalStateException(e);
 		}
-	}
-
-	@Override
-	public List<Profile> listAllProfiles() {
-		// Don't worry - this is secured at the next level, so only a system admin account can call it.
-		return WebDomain.copy(profileService.listAllProfiles());
 	}
 
 	@Override
