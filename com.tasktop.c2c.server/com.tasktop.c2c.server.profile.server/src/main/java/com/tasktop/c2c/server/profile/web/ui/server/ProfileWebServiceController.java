@@ -38,7 +38,6 @@ import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PRO
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PROJECT_IDENTIFIER_URLPARAM;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PROJECT_UNWATCH_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PROJECT_WATCH_URL;
-import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.QUERY_URLPARAM;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.SEND_SIGNUP_INVITATION_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.SSH_KEY_ID_PARAM;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.TOKEN_URLPARAM;
@@ -65,7 +64,6 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.doc.Documentation;
 import com.tasktop.c2c.server.common.service.doc.Section;
 import com.tasktop.c2c.server.common.service.doc.Title;
-import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.web.AbstractRestService;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
@@ -75,7 +73,7 @@ import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -193,20 +191,10 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 
 	@Section("Projects")
 	@Title("Find Projects")
-	@Documentation("Find projects matching the given query string. Projects are matched by name and description.")
+	@RequestMapping(value = FIND_PROJECTS_URL, method = RequestMethod.POST)
 	@Override
-	@RequestMapping(value = FIND_PROJECTS_URL, method = RequestMethod.GET)
-	public QueryResult<Project> findProjects(@PathVariable(QUERY_URLPARAM) String query, QueryRequest request) {
-		return profileWebService.findProjects(query, null);
-	}
-
-	@Section("Projects")
-	@Title("Find Projects")
-	@Documentation("Find projects based on the relationship with the user.")
-	@RequestMapping(value = FIND_PROJECTS_URL, method = RequestMethod.GET)
-	@Override
-	public QueryResult<Project> findProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest) {
-		return profileWebService.findProjects(projectRelationship, queryRequest);
+	public QueryResult<Project> findProjects(@RequestBody ProjectsQuery query) {
+		return profileWebService.findProjects(query);
 	}
 
 	@Section("Projects")

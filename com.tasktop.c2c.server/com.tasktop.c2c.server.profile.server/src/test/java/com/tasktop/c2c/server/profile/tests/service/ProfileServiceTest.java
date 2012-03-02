@@ -72,6 +72,7 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.MockJobService;
 import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
@@ -95,6 +96,7 @@ import com.tasktop.c2c.server.profile.domain.internal.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.internal.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.service.ProfileService;
@@ -1097,7 +1099,8 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		setupProjects(count, true, null);
 
 		Region region = new Region(0, count / 2);
-		QueryResult<Project> result = profileService.findProjects("tesT123", region, null);
+		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("tesT123", new QueryRequest(region,
+				null)));
 		assertNotNull(result);
 		assertEquals(count, result.getTotalResultSize().intValue());
 		assertEquals(region.getSize().intValue(), result.getResultPage().size());
@@ -1112,7 +1115,8 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		setupProjects(count, false, mockProfile);
 
 		Region region = new Region(0, count / 2);
-		QueryResult<Project> result = profileService.findProjects("tesT123", region, null);
+		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("tesT123", new QueryRequest(region,
+				null)));
 		assertNotNull(result);
 		assertEquals(count, result.getTotalResultSize().intValue());
 		assertEquals(region.getSize().intValue(), result.getResultPage().size());
@@ -1493,7 +1497,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		assertEquals(profile, project.getProjectProfiles().get(0).getProfile());
 		assertEquals(true, project.getProjectProfiles().get(0).getOwner());
 
-		QueryResult<Project> projects = profileService.findProjects(ProjectRelationship.ALL, null);
+		QueryResult<Project> projects = profileService.findProjects(new ProjectsQuery(ProjectRelationship.ALL, null));
 		Assert.assertEquals((Integer) 1, projects.getTotalResultSize());
 
 		// TODO more testing
@@ -1501,7 +1505,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 
 	@Test
 	public void testCreateOrganizationWithProjects() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = setupProfile();
 
 		Organization org = MockOrganizationFactory.create(null);
 		org = profileService.createOrganization(org);
@@ -1510,6 +1514,12 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		org = profileService.getOrganizationByIdentfier(org.getIdentifier());
 		assertNotNull(org);
 
+		ProjectsQuery query = new ProjectsQuery(ProjectRelationship.ALL, null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		QueryResult<Project> queryResult = profileService.findProjects(query);
+
+		assertEquals(0, (int) queryResult.getTotalResultSize());
+
 		Project project = MockProjectFactory.create(null);
 		project.setOrganization(org);
 		project = profileService.createProject(profile.getId(), project);
@@ -1517,5 +1527,8 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		org = profileService.getOrganizationByIdentfier(org.getIdentifier());
 		assertEquals(1, org.getProjects().size());
 
+		query = new ProjectsQuery(ProjectRelationship.ALL, null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		assertEquals(1, (int) queryResult.getTotalResultSize());
 	}
 }

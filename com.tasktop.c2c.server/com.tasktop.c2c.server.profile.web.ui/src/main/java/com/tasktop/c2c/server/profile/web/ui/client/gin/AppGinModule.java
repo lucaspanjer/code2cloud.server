@@ -25,7 +25,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.tasktop.c2c.server.common.profile.web.client.AppState;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.notification.NotificationPanel;
 import com.tasktop.c2c.server.common.web.client.notification.Notifier;
 import com.tasktop.c2c.server.profile.web.ui.client.AppShell;
@@ -81,7 +81,7 @@ public class AppGinModule extends AbstractGinModule {
 
 		public PlaceHistoryHandler get() {
 			PlaceHistoryHandler placeHistoryHandler = new PlaceHistoryHandler(placeHistoryMapper);
-			placeHistoryHandler.register(placeController, eventBus, ProjectsDiscoverPlace.createPlace());
+			placeHistoryHandler.register(placeController, eventBus, ProjectsPlace.createPlace());
 			return placeHistoryHandler;
 		}
 	}

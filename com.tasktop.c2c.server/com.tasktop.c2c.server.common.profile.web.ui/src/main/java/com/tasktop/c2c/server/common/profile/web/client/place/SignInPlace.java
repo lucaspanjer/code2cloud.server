@@ -65,7 +65,7 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 	}
 
 	public String getPrefix() {
-		if (afterSuccessfulSignIn != null && !(afterSuccessfulSignIn instanceof ProjectsDiscoverPlace)) {
+		if (afterSuccessfulSignIn != null && !(afterSuccessfulSignIn instanceof ProjectsPlace)) {
 			return SignIn.getUrl() + AFTER_TOKEN + afterSuccessfulSignIn.getPrefix();
 		}
 		return SignIn.getUrl();
@@ -73,18 +73,18 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 
 	private SignInPlace(DefaultPlace afterSuccessfulSignIn) {
 		if (afterSuccessfulSignIn == null) {
-			afterSuccessfulSignIn = ProjectsDiscoverPlace.createPlace();
+			afterSuccessfulSignIn = ProjectsPlace.createPlace();
 		}
 		this.afterSuccessfulSignIn = afterSuccessfulSignIn;
 	}
 
 	public static SignInPlace createPlace() {
-		return new SignInPlace(ProjectsDiscoverPlace.createPlace());
+		return new SignInPlace(ProjectsPlace.createPlace());
 	}
 
 	public static SignInPlace createPlace(DefaultPlace afterSuccessfulSignIn) {
 		if (afterSuccessfulSignIn == null) {
-			afterSuccessfulSignIn = ProjectsDiscoverPlace.createPlace();
+			afterSuccessfulSignIn = ProjectsPlace.createPlace();
 		}
 		return new SignInPlace(afterSuccessfulSignIn);
 	}

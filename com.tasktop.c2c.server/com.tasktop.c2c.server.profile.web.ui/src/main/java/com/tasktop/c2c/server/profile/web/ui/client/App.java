@@ -18,7 +18,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.event.EmbeddedNavigationEvent;
 import com.tasktop.c2c.server.common.web.client.event.EmbeddedNavigationEventHandler;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
@@ -94,7 +94,7 @@ public class App {
 					@Override
 					public void success(Boolean result) {
 						injector.getAppState().setCredentials(null);
-						ProjectsDiscoverPlace place = ProjectsDiscoverPlace.createPlaceForAfterLogout();
+						ProjectsPlace place = ProjectsPlace.createPlaceForAfterLogout();
 						place.displayOnArrival(Message.createSuccessMessage("Signed out"));
 						place.go();
 					}

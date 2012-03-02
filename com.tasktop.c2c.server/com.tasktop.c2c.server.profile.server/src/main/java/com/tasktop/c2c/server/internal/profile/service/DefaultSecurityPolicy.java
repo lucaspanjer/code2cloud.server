@@ -28,6 +28,8 @@ import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.profile.domain.internal.ConfigurationProperty;
 import com.tasktop.c2c.server.profile.domain.internal.InvitationToken;
+import com.tasktop.c2c.server.profile.domain.internal.Organization;
+import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
@@ -220,6 +222,13 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 				}
 				return;
 			}
+		} else if (target instanceof Organization) {
+			Organization org = (Organization) target;
+			switch (operation) {
+			case RETRIEVE:
+				assertMember(org);
+				return;
+			}
 		}
 		// if we reach here then we're trying to do something for which there
 		// is no policy. Deny by default.
@@ -257,6 +266,16 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 		}
 
 		assertOwner(target); // Not a user, assert owner role
+	}
+
+	protected void assertMember(Organization org) {
+		String currentUserName = Security.getCurrentUser();
+		for (OrganizationProfile op : org.getOrganizationProfiles()) {
+			if (op.getProfile().getUsername().equals(currentUserName)) {
+				return;
+			}
+		}
+		throw new InsufficientPermissionsException();
 	}
 
 	private void assertOwner(Project target) throws InsufficientPermissionsException {

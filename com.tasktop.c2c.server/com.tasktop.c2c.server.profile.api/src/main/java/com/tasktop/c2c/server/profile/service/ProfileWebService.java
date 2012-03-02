@@ -17,7 +17,6 @@ import java.util.List;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
-import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
@@ -26,7 +25,7 @@ import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -62,9 +61,7 @@ public interface ProfileWebService {
 
 	public List<AgreementProfile> getApprovedAgreementProfiles() throws EntityNotFoundException;
 
-	public QueryResult<Project> findProjects(String query, QueryRequest request);
-
-	public QueryResult<Project> findProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest);
+	public QueryResult<Project> findProjects(ProjectsQuery query);
 
 	public void watchProject(String projectIdentifier) throws EntityNotFoundException;
 

@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
@@ -129,7 +129,7 @@ public class ProjectOptionsPopupPanel extends PopupPanel {
 			@Override
 			protected void onLeaveSuccess(Project project) {
 				// Navigate to the "My Projects" page.
-				ProjectsDiscoverPlace.createPlace()
+				ProjectsPlace.createPlace()
 						.displayOnArrival(Message.createSuccessMessage("Left project " + project.getName())).go();
 			}
 		}));

@@ -24,7 +24,7 @@ import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -71,8 +71,6 @@ public interface ProfileServiceAsync {
 
 	void getProjectForInvitationToken(String token, AsyncCallback<Project> callback);
 
-	void findProjects(String query, QueryRequest request, AsyncCallback<QueryResult<Project>> callback);
-
 	void watchProject(String projectIdentifier, AsyncCallback<Void> callback);
 
 	void unwatchProject(String projectIdentifier, AsyncCallback<Void> callback);
@@ -100,7 +98,6 @@ public interface ProfileServiceAsync {
 
 	void verifyEmailToken(String token, AsyncCallback<Void> asyncCallbackSupport);
 
-	void getProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest,
-			AsyncCallback<QueryResult<Project>> callback);
+	void findProjects(ProjectsQuery query, AsyncCallback<QueryResult<Project>> callback);
 
 }

@@ -15,7 +15,7 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -76,6 +76,6 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 	}
 
 	private void doCancel() {
-		ProjectsDiscoverPlace.createPlace().go();
+		ProjectsPlace.createPlace().go();
 	}
 }

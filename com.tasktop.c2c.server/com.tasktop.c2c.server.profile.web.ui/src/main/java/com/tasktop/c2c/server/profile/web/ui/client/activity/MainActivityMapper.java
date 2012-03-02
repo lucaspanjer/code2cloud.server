@@ -21,9 +21,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.AsyncProxy;
 import com.tasktop.c2c.server.common.profile.web.client.place.AgreementsPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.OrganizationProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectAdminPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.web.client.presenter.ActivityProxy;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
@@ -287,14 +288,30 @@ public class MainActivityMapper implements ActivityMapper {
 		}
 	}
 
-	public static class ProjectDiscoveryActivity extends ActivityProxy<ProjectsDiscoverPlace> {
+	public static class ProjectDiscoveryActivity extends ActivityProxy<ProjectsPlace> {
 
 		@com.google.gwt.user.client.AsyncProxy.ConcreteType(ProjectDiscoveryPresenter.class)
 		public interface Proxy extends AsyncProxy<SplittableActivity>, SplittableActivity, ProxyReturn {
 		};
 
 		public ProjectDiscoveryActivity() {
-			super(ProjectsDiscoverPlace.class);
+			super(ProjectsPlace.class);
+		}
+
+		@Override
+		protected ProxyReturn instantiate() {
+			return GWT.create(Proxy.class);
+		}
+	}
+
+	public static class OrganizationsActivity extends ActivityProxy<OrganizationProjectsPlace> {
+
+		@com.google.gwt.user.client.AsyncProxy.ConcreteType(ProjectDiscoveryPresenter.class)
+		public interface Proxy extends AsyncProxy<SplittableActivity>, SplittableActivity, ProxyReturn {
+		};
+
+		public OrganizationsActivity() {
+			super(OrganizationProjectsPlace.class);
 		}
 
 		@Override
@@ -452,8 +469,8 @@ public class MainActivityMapper implements ActivityMapper {
 			new TasksSummaryActivity(), new TasksSummaryListActivity(), new SignupMappedActivity(),
 			new DeploymentMappedActivity(), new WikiHomeMappedActivity(), new WikiViewMappedActivity(),
 			new WikiEditMappedActivity(), new DashboardActivity(), new ProjectDiscoveryActivity(),
-			new ProjectActivity(), new HelpActivity(), new UserAccountActivity(), new ProjectTeamActivity(),
-			new ProjectTaskHistoryActivity() };
+			new OrganizationsActivity(), new ProjectActivity(), new HelpActivity(), new UserAccountActivity(),
+			new ProjectTeamActivity(), new ProjectTaskHistoryActivity() };
 
 	public void registerActivity(ActivityProxy<?> activity) {
 		mappedActivities.put(activity.getPlaceClass().getName(), activity);

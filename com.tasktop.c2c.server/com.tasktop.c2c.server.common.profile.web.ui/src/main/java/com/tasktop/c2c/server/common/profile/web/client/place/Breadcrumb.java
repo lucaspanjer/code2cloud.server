@@ -21,7 +21,7 @@ public class Breadcrumb {
 
 	public static List<Breadcrumb> getBaseBreadcrumbs() {
 		List<Breadcrumb> result = new ArrayList<Breadcrumb>();
-		result.add(new Breadcrumb(ProjectsDiscoverPlace.createPlace().getHistoryToken(), "Projects"));
+		result.add(new Breadcrumb(ProjectsPlace.createPlace().getHistoryToken(), "Projects"));
 		return result;
 	}
 

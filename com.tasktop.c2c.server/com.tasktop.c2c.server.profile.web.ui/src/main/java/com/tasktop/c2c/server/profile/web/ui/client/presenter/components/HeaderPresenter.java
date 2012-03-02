@@ -24,7 +24,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Section;
 import com.tasktop.c2c.server.common.profile.web.client.place.SectionPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
@@ -98,8 +98,8 @@ public class HeaderPresenter extends AbstractProfilePresenter {
 			windowTitle = ((WindowTitlePlace) place).getWindowTitle();
 		}
 		String currentQuery = null;
-		if (place instanceof ProjectsDiscoverPlace) {
-			currentQuery = ((ProjectsDiscoverPlace) place).getQuery();
+		if (place instanceof ProjectsPlace) {
+			currentQuery = ((ProjectsPlace) place).getQuery();
 		}
 		view.search.setText(currentQuery);
 
@@ -130,7 +130,7 @@ public class HeaderPresenter extends AbstractProfilePresenter {
 		if (queryText == null || queryText.trim().length() == 0) {
 			return;
 		} else {
-			ProjectsDiscoverPlace.createPlaceForQuery(queryText).go();
+			ProjectsPlace.createPlaceForQuery(queryText).go();
 		}
 	}
 }

@@ -24,7 +24,7 @@ import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectForInvitationTokenAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
@@ -89,7 +89,7 @@ public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implement
 
 	protected boolean handleExceptionInResults() {
 		// Assume its a token not found
-		ProjectsDiscoverPlace.createPlace()
+		ProjectsPlace.createPlace()
 				.displayOnArrival(Message.createErrorMessage("Invitation token is not valid.")).go();
 		return false;
 	}

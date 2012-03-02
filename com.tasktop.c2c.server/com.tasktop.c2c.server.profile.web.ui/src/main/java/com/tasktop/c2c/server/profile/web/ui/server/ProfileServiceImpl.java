@@ -53,7 +53,7 @@ import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
@@ -269,11 +269,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 			handle(e);
 		}
 		return true;
-	}
-
-	@Override
-	public QueryResult<Project> getProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest) {
-		return profileWebService.findProjects(projectRelationship, queryRequest);
 	}
 
 	@Override
@@ -504,12 +499,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	}
 
 	@Override
-	public QueryResult<Project> findProjects(String query, QueryRequest request) {
-		QueryResult<Project> result = profileWebService.findProjects(query, request);
-		return result;
-	}
-
-	@Override
 	public void watchProject(String projectIdentifier) throws NoSuchEntityException {
 		setTenancyContext(projectIdentifier);
 
@@ -669,5 +658,10 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 		} catch (ValidationException e) {
 			handle(e);
 		}
+	}
+
+	@Override
+	public QueryResult<Project> findProjects(ProjectsQuery query) {
+		return profileWebService.findProjects(query);
 	}
 }

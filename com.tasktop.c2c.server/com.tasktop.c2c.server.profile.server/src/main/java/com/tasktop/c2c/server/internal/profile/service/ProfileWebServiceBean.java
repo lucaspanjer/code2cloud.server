@@ -32,7 +32,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
-import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.profile.domain.internal.RandomToken;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
@@ -42,7 +41,7 @@ import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -210,17 +209,8 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 	}
 
 	@Override
-	public QueryResult<Project> findProjects(String query, QueryRequest request) {
-		QueryResult<com.tasktop.c2c.server.profile.domain.internal.Project> result = profileService.findProjects(query,
-				request.getPageInfo(), request.getSortInfo());
-		return new QueryResult<Project>(result.getOffset(), result.getPageSize(), webServiceDomain.copyProjects(
-				result.getResultPage(), configuration), result.getTotalResultSize());
-	}
-
-	@Override
-	public QueryResult<Project> findProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest) {
-		QueryResult<com.tasktop.c2c.server.profile.domain.internal.Project> result = profileService.findProjects(
-				projectRelationship, queryRequest);
+	public QueryResult<Project> findProjects(ProjectsQuery query) {
+		QueryResult<com.tasktop.c2c.server.profile.domain.internal.Project> result = profileService.findProjects(query);
 		return new QueryResult<Project>(result.getOffset(), result.getPageSize(), webServiceDomain.copyProjects(
 				result.getResultPage(), configuration), result.getTotalResultSize());
 	}

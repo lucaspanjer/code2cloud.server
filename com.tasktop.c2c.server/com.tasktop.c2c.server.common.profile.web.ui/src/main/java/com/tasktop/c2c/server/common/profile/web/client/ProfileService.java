@@ -29,7 +29,7 @@ import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
 import com.tasktop.c2c.server.common.web.shared.ValidationFailedException;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -60,7 +60,7 @@ public interface ProfileService extends RemoteService {
 	String createProject(Credentials credentials, Project project) throws ValidationFailedException,
 			AuthenticationRequiredException, NoSuchEntityException;
 
-	public QueryResult<Project> getProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest);
+	public QueryResult<Project> findProjects(ProjectsQuery query);
 
 	public List<Profile> getProfiles(String projectIdentifier) throws NoSuchEntityException;
 
@@ -92,8 +92,6 @@ public interface ProfileService extends RemoteService {
 	public void acceptInvitation(String invitationToken) throws NoSuchEntityException;
 
 	public Project getProjectForInvitationToken(String token) throws NoSuchEntityException;
-
-	public QueryResult<Project> findProjects(String query, QueryRequest request);
 
 	public void watchProject(String projectIdentifier) throws NoSuchEntityException;
 

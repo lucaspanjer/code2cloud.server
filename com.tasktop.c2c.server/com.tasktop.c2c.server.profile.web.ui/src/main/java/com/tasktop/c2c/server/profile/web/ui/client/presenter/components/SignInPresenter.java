@@ -14,7 +14,7 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
 
 import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -55,7 +55,7 @@ public class SignInPresenter extends AbstractProfilePresenter {
 						if (postActionPlace != null) {
 							postActionPlace.go();
 						} else {
-							ProjectsDiscoverPlace.createPlace().go();
+							ProjectsPlace.createPlace().go();
 						}
 					}
 

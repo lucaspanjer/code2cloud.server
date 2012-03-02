@@ -73,6 +73,7 @@ import com.tasktop.c2c.server.profile.domain.internal.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.internal.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.domain.validation.ProfilePasswordValidator;
@@ -1170,8 +1171,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public QueryResult<Project> findProjects(String queryText, Region region, SortInfo sortInfo) {
+	private QueryResult<Project> findProjects(String queryText, String orgIdentifierOrNull, QueryRequest queryRequest) {
+		SortInfo sortInfo = queryRequest == null ? null : queryRequest.getSortInfo();
+		Region region = queryRequest == null ? null : queryRequest.getPageInfo();
 
 		Profile profile;
 		try {
@@ -1192,9 +1194,13 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		coreQuery += "WHERE (LOWER(project.name) LIKE :q OR LOWER(project.description) LIKE :q OR LOWER(project.identifier) LIKE :q) AND (project.accessibility = :public";
 
 		if (profile != null) {
-			coreQuery += " OR pp.profile.id = :id)";
-		} else {
-			coreQuery += ")";
+			coreQuery += " OR pp.profile.id = :id";
+		}
+
+		coreQuery += ")";
+
+		if (orgIdentifierOrNull != null) {
+			coreQuery += " AND project.organization.identifier =  : orgId";
 		}
 
 		Query query = entityManager.createQuery("SELECT distinct project " + coreQuery + " "
@@ -1204,6 +1210,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		query.setParameter("public", ProjectAccessibility.PUBLIC);
 		if (profile != null) {
 			query.setParameter("id", profile.getId());
+		}
+		if (orgIdentifierOrNull != null) {
+			query.setParameter("orgId", orgIdentifierOrNull);
 		}
 
 		if (region == null) {
@@ -1219,6 +1228,10 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (profile != null) {
 			countQuery.setParameter("id", profile.getId());
 		}
+		if (orgIdentifierOrNull != null) {
+			countQuery.setParameter("orgId", orgIdentifierOrNull);
+		}
+
 		Long totalSize = (Long) countQuery.getSingleResult();
 
 		List<Project> results = query.getResultList();
@@ -1515,8 +1528,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		entityManager.flush();
 	}
 
-	@Override
-	public QueryResult<Project> findProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest) {
+	private QueryResult<Project> findProjects(ProjectRelationship projectRelationship, String orgIdentifierOrNull,
+			QueryRequest queryRequest) {
 
 		Profile profile;
 		try {
@@ -1557,11 +1570,19 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			throw new IllegalStateException();
 		}
 
+		if (orgIdentifierOrNull != null) {
+			whereString += " AND project.organization.identifier = :orgId ";
+		}
+
 		Query totalResultQuery = entityManager
 				.createQuery("SELECT count(DISTINCT project) " + fromString + whereString);
 		totalResultQuery.setParameter("public", ProjectAccessibility.PUBLIC);
 		if (needIdParam) {
 			totalResultQuery.setParameter("id", profile.getId());
+		}
+
+		if (orgIdentifierOrNull != null) {
+			totalResultQuery.setParameter("orgId", orgIdentifierOrNull);
 		}
 		int totalResultSize = ((Long) totalResultQuery.getSingleResult()).intValue();
 
@@ -1570,6 +1591,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		q.setParameter("public", ProjectAccessibility.PUBLIC);
 		if (needIdParam) {
 			q.setParameter("id", profile.getId());
+		}
+		if (orgIdentifierOrNull != null) {
+			q.setParameter("orgId", orgIdentifierOrNull);
 		}
 
 		if (queryRequest != null && queryRequest.getPageInfo() != null) {
@@ -1653,6 +1677,18 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			return org;
 		} catch (NoResultException e) {
 			throw new EntityNotFoundException();
+		}
+	}
+
+	@Override
+	public QueryResult<Project> findProjects(ProjectsQuery query) {
+		if (query.getQueryString() != null) {
+			return findProjects(query.getQueryString(), query.getOrganizationIdentifier(), query.getQueryRequest());
+		} else if (query.getProjectRelationship() != null) {
+			return findProjects(query.getProjectRelationship(), query.getOrganizationIdentifier(),
+					query.getQueryRequest());
+		} else {
+			throw new IllegalArgumentException();
 		}
 	}
 }
