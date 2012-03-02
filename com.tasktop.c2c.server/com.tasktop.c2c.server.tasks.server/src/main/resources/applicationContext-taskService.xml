@@ -70,8 +70,6 @@
 		</property>
 	</bean>
 	
-	
-	
 	<bean id="aopLogger" class="com.tasktop.c2c.server.common.service.ServiceLoggingAdvice"/>
 	
 	<aop:config>

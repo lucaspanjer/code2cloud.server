@@ -46,6 +46,7 @@
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
 		id="entityManagerFactory"
 		p:dataSource-ref="dataSource" depends-on="liquibase"
+		p:persistenceXmlLocation="classpath*:META-INF/${profile.persistenceXmlFilename}"
 	/>
 	
 	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">

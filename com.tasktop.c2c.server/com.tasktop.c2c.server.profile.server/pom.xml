@@ -129,6 +129,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
@@ -196,6 +197,9 @@
 						<phase>process-classes</phase>
 						<configuration>
 							<tasks>
+								<copy file="${basedir}/target/classes/META-INF/persistence-profile-mysql.xml"
+								      tofile="${basedir}/target/classes/META-INF/persistence.xml"/>
+
 								<taskdef name="weave"
 									classname="org.eclipse.persistence.tools.weaving.jpa.StaticWeaveAntTask"
 									classpathref="maven.compile.classpath" />
