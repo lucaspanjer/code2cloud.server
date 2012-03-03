@@ -14,7 +14,7 @@ package com.tasktop.c2c.server.tasks.domain;
 
 import java.io.Serializable;
 
-public class TaskUserProfile extends AbstractDomainObject implements Serializable {
+public class TaskUserProfile extends AbstractDomainObject implements Comparable<TaskUserProfile>, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String loginName;
@@ -62,4 +62,43 @@ public class TaskUserProfile extends AbstractDomainObject implements Serializabl
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = prime * ((loginName == null) ? 0 : loginName.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (getClass() != obj.getClass())
+			return false;
+		TaskUserProfile other = (TaskUserProfile) obj;
+		if (loginName == null) {
+			if (other.loginName != null)
+				return false;
+		} else if (!loginName.equals(other.loginName))
+			return false;
+		return true;
+	}
+
+	public int compareTo(TaskUserProfile taskUserProfile) {
+		int realNameComparison = this.getRealname().compareTo(taskUserProfile.getRealname());
+		if (realNameComparison == 0) {
+			return this.getLoginName().compareTo(taskUserProfile.getLoginName());
+		}
+		return realNameComparison;
+	}
 }

@@ -19,6 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.ValueListBox;
@@ -30,7 +31,7 @@ import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskResolution;
 import com.tasktop.c2c.server.tasks.domain.TaskStatus;
 
-public class StatusEditorView extends Composite implements ValueAwareEditor<Task> {
+public class StatusEditorView extends Composite implements ValueAwareEditor<Task>, TakesValue<Task> {
 	interface Binder extends UiBinder<Widget, StatusEditorView> {
 	}
 
@@ -150,7 +151,7 @@ public class StatusEditorView extends Composite implements ValueAwareEditor<Task
 	}
 
 	// FIXME This has been duplicated for View Task in TaskPresenter.saveStatus()
-	public void updateTask(Task task) {
+	private void updateTask(Task task) {
 		if (task.getStatus().isOpen()) {
 			task.setResolution(null);
 			task.setDuplicateOf(null);
@@ -218,6 +219,17 @@ public class StatusEditorView extends Composite implements ValueAwareEditor<Task
 	 */
 	public void setNewTask(boolean isNewTask) {
 		this.isNewTask = isNewTask;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.google.gwt.user.client.TakesValue#getValue()
+	 */
+	@Override
+	public Task getValue() {
+		flush();
+		return task;
 	}
 
 }
