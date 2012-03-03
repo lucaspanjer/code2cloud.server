@@ -78,6 +78,8 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 			query.setProjectRelationship(currentRelationship);
 		} else if (currentQueryString != null) {
 			query.setQueryString(currentQueryString);
+		} else {
+			return; // Happens on init
 		}
 
 		if (currentOrganization != null) {

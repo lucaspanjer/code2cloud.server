@@ -85,6 +85,7 @@ import com.tasktop.c2c.server.profile.domain.internal.Agreement;
 import com.tasktop.c2c.server.profile.domain.internal.ConfigurationProperty;
 import com.tasktop.c2c.server.profile.domain.internal.InvitationToken;
 import com.tasktop.c2c.server.profile.domain.internal.Organization;
+import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -1514,6 +1515,12 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		org = profileService.getOrganizationByIdentfier(org.getIdentifier());
 		assertNotNull(org);
 
+		OrganizationProfile op = new OrganizationProfile();
+		op.setOrganization(org);
+		op.setProfile(profile);
+		org.getOrganizationProfiles().add(op);
+		entityManager.persist(op);
+
 		ProjectsQuery query = new ProjectsQuery(ProjectRelationship.ALL, null);
 		query.setOrganizationIdentifier(org.getIdentifier());
 		QueryResult<Project> queryResult = profileService.findProjects(query);
@@ -1529,6 +1536,27 @@ public class ProfileServiceTest implements ApplicationContextAware {
 
 		query = new ProjectsQuery(ProjectRelationship.ALL, null);
 		query.setOrganizationIdentifier(org.getIdentifier());
+		queryResult = profileService.findProjects(query);
+
 		assertEquals(1, (int) queryResult.getTotalResultSize());
+
+		query = new ProjectsQuery(ProjectRelationship.PUBLIC, null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		queryResult = profileService.findProjects(query);
+
+		assertEquals(0, (int) queryResult.getTotalResultSize());
+
+		query = new ProjectsQuery(ProjectRelationship.MEMBER, null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		queryResult = profileService.findProjects(query);
+
+		assertEquals(1, (int) queryResult.getTotalResultSize());
+
+		query = new ProjectsQuery(project.getIdentifier(), null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		queryResult = profileService.findProjects(query);
+
+		assertEquals(1, (int) queryResult.getTotalResultSize());
+
 	}
 }

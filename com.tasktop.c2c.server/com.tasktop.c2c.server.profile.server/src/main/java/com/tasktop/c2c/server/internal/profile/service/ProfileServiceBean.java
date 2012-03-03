@@ -1200,7 +1200,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		coreQuery += ")";
 
 		if (orgIdentifierOrNull != null) {
-			coreQuery += " AND project.organization.identifier =  : orgId";
+			coreQuery += " AND project.organization.identifier =  :orgId";
 		}
 
 		Query query = entityManager.createQuery("SELECT distinct project " + coreQuery + " "
@@ -1549,9 +1549,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		String fromString = "FROM " + Project.class.getSimpleName() + " project, IN(project.projectProfiles) pp ";
 		String whereString;
 		boolean needIdParam = true;
+		boolean needPubParam = false;
 		switch (projectRelationship) {
 		case ALL:
 			whereString = "WHERE project.accessibility = :public OR pp.profile.id = :id ";
+			needPubParam = true;
 			break;
 		case MEMBER:
 			whereString = "WHERE pp.profile.id = :id AND pp.user = true ";
@@ -1564,6 +1566,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			break;
 		case PUBLIC:
 			needIdParam = false;
+			needPubParam = true;
 			whereString = "WHERE project.accessibility = :public ";
 			break;
 		default:
@@ -1576,7 +1579,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		Query totalResultQuery = entityManager
 				.createQuery("SELECT count(DISTINCT project) " + fromString + whereString);
-		totalResultQuery.setParameter("public", ProjectAccessibility.PUBLIC);
+		if (needPubParam) {
+			totalResultQuery.setParameter("public", ProjectAccessibility.PUBLIC);
+		}
 		if (needIdParam) {
 			totalResultQuery.setParameter("id", profile.getId());
 		}
@@ -1588,7 +1593,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		Query q = entityManager.createQuery("SELECT DISTINCT project " + fromString + whereString
 				+ createSortClause("project", Project.class, new SortInfo("name")));
-		q.setParameter("public", ProjectAccessibility.PUBLIC);
+		if (needPubParam) {
+			q.setParameter("public", ProjectAccessibility.PUBLIC);
+		}
 		if (needIdParam) {
 			q.setParameter("id", profile.getId());
 		}
