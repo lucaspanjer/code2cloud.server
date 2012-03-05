@@ -51,7 +51,7 @@ public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, Wind
 		return "Create Project";
 	}
 
-	private NewProjectPlace() {
+	protected NewProjectPlace() {
 	}
 
 	public static NewProjectPlace createPlace() {

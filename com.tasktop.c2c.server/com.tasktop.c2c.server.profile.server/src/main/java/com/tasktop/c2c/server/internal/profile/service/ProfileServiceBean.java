@@ -1569,6 +1569,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			needPubParam = true;
 			whereString = "WHERE project.accessibility = :public ";
 			break;
+		// TODO
 		default:
 			throw new IllegalStateException();
 		}

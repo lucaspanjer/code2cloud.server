@@ -26,6 +26,8 @@ import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
+import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationNewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.ProjectDiscoveryView;
 
@@ -58,8 +60,11 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 		}
 		if (p instanceof OrganizationProjectsPlace) {
 			this.currentOrganization = ((OrganizationProjectsPlace) p).getOrganization();
+			ProjectDiscoveryView.getInstance().createAnchorElement.setHref(OrganizationNewProjectPlace.createPlace(
+					currentOrganization.getIdentifier()).getHref());
 		} else {
 			this.currentOrganization = null;
+			ProjectDiscoveryView.getInstance().createAnchorElement.setHref(NewProjectPlace.createPlace().getHref());
 		}
 		ProjectDiscoveryView.getInstance().pager.setPageSize(currentQueryRequest.getPageInfo().getSize());
 		ProjectDiscoveryView.getInstance().setPresenter(ProjectDiscoveryPresenter.this);

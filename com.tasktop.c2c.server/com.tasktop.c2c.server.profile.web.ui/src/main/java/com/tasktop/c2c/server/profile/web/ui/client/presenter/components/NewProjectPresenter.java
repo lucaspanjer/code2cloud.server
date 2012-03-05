@@ -22,6 +22,7 @@ import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationNewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView;
 
@@ -34,6 +35,9 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 		this.view = projectsView;
 		Project newProject = new Project();
 		newProject.setAccessibility(ProjectAccessibility.PRIVATE);
+		if (place instanceof OrganizationNewProjectPlace) {
+			newProject.setOrganization(((OrganizationNewProjectPlace) place).getOrganization());
+		}
 		view.setProject(newProject);
 		// Set the createAvailable flag on our view
 		view.displayMaxProjectsMessage(!(place.isCreateAvailable()));

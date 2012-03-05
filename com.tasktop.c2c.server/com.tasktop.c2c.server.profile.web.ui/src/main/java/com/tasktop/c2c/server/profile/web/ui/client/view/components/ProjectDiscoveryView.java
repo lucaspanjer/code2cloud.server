@@ -52,7 +52,6 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.event.WatchProjectClickHandler;
-import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDashboardPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.IProjectDiscoryView;
 
@@ -87,7 +86,7 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 	private Anchor[] filterAnchors;
 
 	@UiField
-	AnchorElement createAnchorElement;
+	public AnchorElement createAnchorElement;
 
 	@UiField
 	Panel projectsPanel;
@@ -137,7 +136,6 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 		projectsPanel.add(projectList);
 		pager.setDisplay(projectList);
 		pager.itemLabel.setText("projects:");
-		createAnchorElement.setHref(NewProjectPlace.createPlace().getHref());
 		setupFilterAnchors();
 	}
 
