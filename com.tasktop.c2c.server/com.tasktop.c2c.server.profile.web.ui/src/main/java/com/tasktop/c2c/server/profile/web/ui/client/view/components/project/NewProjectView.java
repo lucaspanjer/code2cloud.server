@@ -50,6 +50,7 @@ public class NewProjectView extends AbstractProjectView {
 	public Button cancelButton;
 	@UiField
 	public Panel maxProjectsMessagePanel;
+	private Project project;
 
 	private NewProjectView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -65,13 +66,13 @@ public class NewProjectView extends AbstractProjectView {
 	 * 
 	 */
 	public void setProject(Project project) {
+		this.project = project;
 		name.setValue(project.getName());
 		description.setValue(project.getDescription());
 		super.setProject(project);
 	}
 
 	public Project getProject() {
-		Project project = new Project();
 		project.setName(name.getValue());
 		project.setDescription(description.getValue());
 		super.updateProject(project);
