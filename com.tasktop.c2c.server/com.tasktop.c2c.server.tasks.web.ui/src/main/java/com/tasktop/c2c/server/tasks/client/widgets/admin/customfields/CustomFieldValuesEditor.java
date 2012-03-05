@@ -30,7 +30,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.NoSelectionModel;
-import com.tasktop.c2c.server.common.profile.web.client.CustomActionCell;
+import com.tasktop.c2c.server.common.profile.web.client.DelegateCell;
 import com.tasktop.c2c.server.common.web.client.view.CellTableResources;
 import com.tasktop.c2c.server.tasks.domain.CustomFieldValue;
 
@@ -57,13 +57,13 @@ public class CustomFieldValuesEditor extends Composite implements LeafValueEdito
 
 	private void initTableColumns() {
 
-		CustomActionCell<String> moveUpCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> moveUpCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						return SafeHtmlUtils.fromSafeConstant("<span class=\"order-control\"><a class=\"up\"/></span>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(Cell.Context object) {
 						int index = object.getIndex();
@@ -93,13 +93,13 @@ public class CustomFieldValuesEditor extends Composite implements LeafValueEdito
 		cellTable.addColumn(moveUpColumn);
 		cellTable.setColumnWidth(moveUpColumn, 22, Unit.PX);
 
-		CustomActionCell<String> moveDownCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> moveDownCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						return SafeHtmlUtils.fromSafeConstant("<span class=\"order-control\"><a class=\"down\"/></span>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(Cell.Context object) {
 						Short index = (short) object.getIndex();
@@ -163,17 +163,17 @@ public class CustomFieldValuesEditor extends Composite implements LeafValueEdito
 		//
 		// cellTable.addColumn(activeColumn, "Active");
 
-		CustomActionCell<String> removeCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> removeCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						final CustomFieldValue referenced = dataProvider.getList().get(context.getIndex());
 						if (referenced != null && "---".equals(referenced.getValue())) {
 							return SafeHtmlUtils.fromSafeConstant("<a class=\"delete-disabled\"><span/></a>");
 						}
 						return SafeHtmlUtils.fromSafeConstant("<a class=\"misc-icon cancel\"><span/></a>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(final Cell.Context object) {
 						final CustomFieldValue toRemove = dataProvider.getList().get(object.getIndex());
@@ -206,13 +206,13 @@ public class CustomFieldValuesEditor extends Composite implements LeafValueEdito
 		cellTable.addColumn(removeColumn);
 		cellTable.setColumnWidth(removeColumn, 30, Unit.PX);
 
-		CustomActionCell<String> addCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> addCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						return SafeHtmlUtils.fromSafeConstant("<a class=\"misc-icon add right\"><span/></a>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(Cell.Context object) {
 						addNewValue();
