@@ -182,10 +182,8 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	private void updateScmRepository(Project project) {
 
 		try {
-			// This seems crazy, but I can't figure out a better way to do this that doesn't involve refactoring a large
-			// chunk of code - the external service URL is calculated inside this method and associated with the
-			// returned Project, and I need that URL to put into the database. This code path needs some refactoring to
-			// make it easier to use.
+			// The external service URL is calculated here and associated with the returned Project. This URL is
+			// persisted.
 			com.tasktop.c2c.server.profile.domain.project.Project serviceUrlEnabledProject = profileWebService
 					.getProjectByIdentifier(project.getIdentifier());
 
