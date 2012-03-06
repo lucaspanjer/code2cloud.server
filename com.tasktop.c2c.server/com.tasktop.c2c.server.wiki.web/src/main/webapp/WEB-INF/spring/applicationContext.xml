@@ -23,7 +23,7 @@
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
 		id="wikiDomain"
 		p:dataSource-ref="dataSource"
-		p:persistenceXmlLocation="classpath*:META-INF/persistence-wiki-mysql.xml"
+		p:persistenceXmlLocation="classpath*:META-INF/${wiki.persistenceXmlFilename}"
 	/>
 	
 	<bean id="tenancyContextIntegrationFilter" class="org.springframework.tenancy.web.TenancyContextIntegrationFilter">
