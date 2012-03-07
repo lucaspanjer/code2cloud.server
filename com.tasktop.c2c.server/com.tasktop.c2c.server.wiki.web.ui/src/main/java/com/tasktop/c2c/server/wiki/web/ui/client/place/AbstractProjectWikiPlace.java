@@ -16,9 +16,6 @@ import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
 
-
-import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
-import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
@@ -90,16 +87,6 @@ public abstract class AbstractProjectWikiPlace extends AbstractBatchFetchingPlac
 	protected void handleBatchResults() {
 		super.handleBatchResults();
 		project = getResult(GetProjectResult.class).get();
-	}
-
-	// TODO push to new super
-	@Override
-	protected List<String> getUserRolesForPlace() {
-		List<String> roles = null;
-		if (ProfileGinjector.get.instance().getAppState().getCredentials() != null) {
-			roles = ProfileGinjector.get.instance().getAppState().getCredentials().getRoles();
-		}
-		return AuthenticationHelper.getRolesForProject(getProject(), roles);
 	}
 
 }

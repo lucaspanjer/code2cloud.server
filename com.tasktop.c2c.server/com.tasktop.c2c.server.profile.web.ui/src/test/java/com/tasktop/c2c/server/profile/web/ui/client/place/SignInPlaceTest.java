@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetUserInfoResult;
 
@@ -47,6 +47,6 @@ public class SignInPlaceTest extends AbstractPlaceTest {
 		signInPlace.go();
 
 		Assert.assertFalse(appGinjector.getAppState().hasPendingAgreements());
-		verify(placeController).goTo(isA(ProjectsDiscoverPlace.class));
+		verify(placeController).goTo(isA(ProjectsPlace.class));
 	}
 }

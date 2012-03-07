@@ -62,6 +62,7 @@ import com.tasktop.c2c.server.profile.domain.internal.BaseEntity;
 import com.tasktop.c2c.server.profile.domain.internal.ConfigurationProperty;
 import com.tasktop.c2c.server.profile.domain.internal.EmailVerificationToken;
 import com.tasktop.c2c.server.profile.domain.internal.InvitationToken;
+import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -70,7 +71,9 @@ import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.RandomToken;
 import com.tasktop.c2c.server.profile.domain.internal.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.internal.SshPublicKey;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.domain.validation.ProfilePasswordValidator;
@@ -259,6 +262,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		boolean passwordReset = false;
 		boolean nameChanged = true;
 		boolean emailChanged = true;
+
 		nameChanged = !currentProfile.getFirstName().equals(profile.getFirstName())
 				|| !currentProfile.getLastName().equals(profile.getLastName());
 		emailChanged = !currentProfile.getEmail().equals(profile.getEmail());
@@ -267,8 +271,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			passwordReset = true;
 		}
 
-		currentProfile = identityManagmentService.updateProfile(profile);
-
 		// Validation
 		List<Validator> validators = new ArrayList<Validator>();
 		validators.add(validator);
@@ -276,7 +278,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (passwordReset) {
 			validators.add(new ProfilePasswordValidator());
 		}
-		validate(currentProfile, validators);
+		validate(profile, validators);
+
+		currentProfile = identityManagmentService.updateProfile(profile);
 
 		if (nameChanged || emailChanged) {
 			for (ProjectProfile projectProfile : currentProfile.getProjectProfiles()) {
@@ -445,8 +449,16 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		project.setId(null);
 		entityManager.persist(project);
 
-		ProjectProfile projectProfile = project.addProfile(profile);
+		if (project.getOrganization() != null) {
+			Organization org = entityManager.find(Organization.class, project.getOrganization().getId());
+			if (org == null) {
+				throw new EntityNotFoundException();
+			}
+			project.setOrganization(org);
+			org.getProjects().add(project);
+		}
 
+		ProjectProfile projectProfile = project.addProfile(profile);
 		// Mark project create as both project user and owner
 		projectProfile.setUser(true);
 		projectProfile.setOwner(true);
@@ -516,8 +528,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	private void setDefaultValuesBeforeCreate(Project project) {
-		if (project.getPublic() == null) {
-			project.setPublic(false);
+		if (project.getAccessibility() == null) {
+			project.setAccessibility(ProjectAccessibility.PRIVATE);
 		}
 	}
 
@@ -539,7 +551,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			// we disallow change of identifier
 			managedProject.setName(project.getName());
 			managedProject.setDescription(project.getDescription());
-			managedProject.setPublic(project.getPublic());
+			managedProject.setAccessibility(project.getAccessibility());
 		}
 
 		// Since our update is now done, return our project to the caller.
@@ -638,9 +650,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		return passwordResetToken;
 	}
 
-	private PasswordResetToken getPasswordResetToken(String token) {
-		return getToken(token, PasswordResetToken.class);
-	}
+	// private PasswordResetToken getPassResetToken(String token) {
+	// return getToken(token, PasswordResetToken.class);
+	// }
 
 	private InvitationToken getInvitationToken(String token) {
 		return getToken(token, InvitationToken.class);
@@ -655,9 +667,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		SecurityContextHolder.getContext().setAuthentication(null);
 		// load the token
 		PasswordResetToken passwordResetToken = this.getPasswordResetToken(token);
-		if (passwordResetToken == null || passwordResetToken.getDateUsed() != null) {
-			throw new EntityNotFoundException();
-		}
 
 		Profile profile = passwordResetToken.getProfile();
 		if (profile == null) {
@@ -675,15 +684,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		passwordResetToken.setDateUsed(new Date());
 		entityManager.persist(passwordResetToken);
 		return profile.getUsername();
-	}
-
-	@Override
-	public Boolean isPasswordResetTokenAvailable(String token) {
-
-		PasswordResetToken dbToken = getPasswordResetToken(token);
-
-		// We want to return true if we have a token with an empty used-date.
-		return (dbToken != null) && (dbToken.getDateUsed() == null);
 	}
 
 	@Secured(Role.User)
@@ -964,7 +964,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		// Only allow watching of a public project - if a private project is given, then pretend it doesn't exist to
 		// prevent information leakage.
-		if (!project.getPublic()) {
+		if (!ProjectAccessibility.PUBLIC.equals(project.getAccessibility())) {
 			throw new EntityNotFoundException();
 		}
 
@@ -1137,8 +1137,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public QueryResult<Project> findProjects(String queryText, Region region, SortInfo sortInfo) {
+	private QueryResult<Project> findProjects(String queryText, String orgIdentifierOrNull, QueryRequest queryRequest) {
+		SortInfo sortInfo = queryRequest == null ? null : queryRequest.getSortInfo();
+		Region region = queryRequest == null ? null : queryRequest.getPageInfo();
 
 		Profile profile;
 		try {
@@ -1156,20 +1157,28 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (profile != null) {
 			coreQuery += ", IN(project.projectProfiles) pp ";
 		}
-		coreQuery += "WHERE (LOWER(project.name) LIKE :q OR LOWER(project.description) LIKE :q OR LOWER(project.identifier) LIKE :q) AND (project.public = true";
+		coreQuery += "WHERE (LOWER(project.name) LIKE :q OR LOWER(project.description) LIKE :q OR LOWER(project.identifier) LIKE :q) AND (project.accessibility = :public";
 
 		if (profile != null) {
-			coreQuery += " OR pp.profile.id = :id)";
-		} else {
-			coreQuery += ")";
+			coreQuery += " OR pp.profile.id = :id";
+		}
+
+		coreQuery += ")";
+
+		if (orgIdentifierOrNull != null) {
+			coreQuery += " AND project.organization.identifier =  :orgId";
 		}
 
 		Query query = entityManager.createQuery("SELECT distinct project " + coreQuery + " "
 				+ createSortClause("project", Project.class, sortInfo, new SortInfo("name")));
 
 		query.setParameter("q", queryText.trim());
+		query.setParameter("public", ProjectAccessibility.PUBLIC);
 		if (profile != null) {
 			query.setParameter("id", profile.getId());
+		}
+		if (orgIdentifierOrNull != null) {
+			query.setParameter("orgId", orgIdentifierOrNull);
 		}
 
 		if (region == null) {
@@ -1180,11 +1189,15 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		query.setFirstResult(region.getOffset());
 		query.setMaxResults(region.getSize());
 
-		Query countQuery = entityManager.createQuery("select count(distinct project) " + coreQuery).setParameter("q",
-				queryText);
+		Query countQuery = entityManager.createQuery("select count(distinct project) " + coreQuery)
+				.setParameter("q", queryText).setParameter("public", ProjectAccessibility.PUBLIC);
 		if (profile != null) {
 			countQuery.setParameter("id", profile.getId());
 		}
+		if (orgIdentifierOrNull != null) {
+			countQuery.setParameter("orgId", orgIdentifierOrNull);
+		}
+
 		Long totalSize = (Long) countQuery.getSingleResult();
 
 		List<Project> results = query.getResultList();
@@ -1214,6 +1227,16 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Override
 	public SignUpToken getSignUpToken(String signUpToken) throws EntityNotFoundException {
 		SignUpToken dbToken = getToken(signUpToken, SignUpToken.class);
+		// We want to return true if we have a token with an empty used-date.
+		if (dbToken != null && dbToken.getDateUsed() == null) {
+			return dbToken;
+		}
+		throw new EntityNotFoundException();
+	}
+
+	@Override
+	public PasswordResetToken getPasswordResetToken(String token) throws EntityNotFoundException {
+		PasswordResetToken dbToken = getToken(token, PasswordResetToken.class);
 		// We want to return true if we have a token with an empty used-date.
 		if (dbToken != null && dbToken.getDateUsed() == null) {
 			return dbToken;
@@ -1471,8 +1494,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		entityManager.flush();
 	}
 
-	@Override
-	public QueryResult<Project> findProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest) {
+	private QueryResult<Project> findProjects(ProjectRelationship projectRelationship, String orgIdentifierOrNull,
+			QueryRequest queryRequest) {
 
 		Profile profile;
 		try {
@@ -1492,9 +1515,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		String fromString = "FROM " + Project.class.getSimpleName() + " project, IN(project.projectProfiles) pp ";
 		String whereString;
 		boolean needIdParam = true;
+		boolean needPubParam = false;
 		switch (projectRelationship) {
 		case ALL:
-			whereString = "WHERE project.public = true OR pp.profile.id = :id ";
+			whereString = "WHERE project.accessibility = :public OR pp.profile.id = :id ";
+			needPubParam = true;
 			break;
 		case MEMBER:
 			whereString = "WHERE pp.profile.id = :id AND pp.user = true ";
@@ -1507,23 +1532,42 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			break;
 		case PUBLIC:
 			needIdParam = false;
-			whereString = "WHERE project.public = true ";
+			needPubParam = true;
+			whereString = "WHERE project.accessibility = :public ";
 			break;
+		// TODO
 		default:
 			throw new IllegalStateException();
 		}
 
+		if (orgIdentifierOrNull != null) {
+			whereString += " AND project.organization.identifier = :orgId ";
+		}
+
 		Query totalResultQuery = entityManager
 				.createQuery("SELECT count(DISTINCT project) " + fromString + whereString);
+		if (needPubParam) {
+			totalResultQuery.setParameter("public", ProjectAccessibility.PUBLIC);
+		}
 		if (needIdParam) {
 			totalResultQuery.setParameter("id", profile.getId());
+		}
+
+		if (orgIdentifierOrNull != null) {
+			totalResultQuery.setParameter("orgId", orgIdentifierOrNull);
 		}
 		int totalResultSize = ((Long) totalResultQuery.getSingleResult()).intValue();
 
 		Query q = entityManager.createQuery("SELECT DISTINCT project " + fromString + whereString
 				+ createSortClause("project", Project.class, new SortInfo("name")));
+		if (needPubParam) {
+			q.setParameter("public", ProjectAccessibility.PUBLIC);
+		}
 		if (needIdParam) {
 			q.setParameter("id", profile.getId());
+		}
+		if (orgIdentifierOrNull != null) {
+			q.setParameter("orgId", orgIdentifierOrNull);
 		}
 
 		if (queryRequest != null && queryRequest.getPageInfo() != null) {
@@ -1545,5 +1589,80 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		}
 		return new QueryResult<Project>(region, projects, totalResultSize);
 
+	}
+
+	private final class OrganizationConstraintsValidator implements Validator {
+
+		@Override
+		public boolean supports(Class<?> clazz) {
+			return Project.class.isAssignableFrom(clazz);
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void validate(Object target, Errors errors) {
+			Organization organization = (Organization) target;
+			if (organization.getName() != null && organization.getName().trim().length() > 0) {
+				List<Project> projectsWithName = entityManager
+						.createQuery(
+								"select e from " + Organization.class.getSimpleName()
+										+ " e where e.name = :name or e.identifier = :identifier")
+						.setParameter("name", organization.getName())
+						.setParameter("identifier", organization.getIdentifier()).getResultList();
+				if (!projectsWithName.isEmpty()) {
+					if (projectsWithName.size() != 1 || !projectsWithName.get(0).equals(organization)) {
+						errors.reject("nameUnique", new Object[] { organization.getName() }, null);
+					}
+				}
+			}
+		}
+
+	}
+
+	@Override
+	public Organization createOrganization(Organization org) throws ValidationException {
+
+		// Compute identifer
+		if (org.getIdentifier() == null) {
+			org.computeIdentifier();
+		}
+
+		securityPolicy.create(org);
+		validate(org, validator, new OrganizationConstraintsValidator());
+
+		entityManager.persist(org);
+
+		return org;
+	}
+
+	@Override
+	public Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException {
+		if (orgIdentifier == null) {
+			throw new IllegalArgumentException();
+		}
+
+		try {
+			Organization org = (Organization) entityManager
+					.createQuery("select a from " + Organization.class.getSimpleName() + " a where a.identifier = :i")
+					.setParameter("i", orgIdentifier).getSingleResult();
+
+			securityPolicy.retrieve(org);
+
+			return org;
+		} catch (NoResultException e) {
+			throw new EntityNotFoundException();
+		}
+	}
+
+	@Override
+	public QueryResult<Project> findProjects(ProjectsQuery query) {
+		if (query.getQueryString() != null) {
+			return findProjects(query.getQueryString(), query.getOrganizationIdentifier(), query.getQueryRequest());
+		} else if (query.getProjectRelationship() != null) {
+			return findProjects(query.getProjectRelationship(), query.getOrganizationIdentifier(),
+					query.getQueryRequest());
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 }

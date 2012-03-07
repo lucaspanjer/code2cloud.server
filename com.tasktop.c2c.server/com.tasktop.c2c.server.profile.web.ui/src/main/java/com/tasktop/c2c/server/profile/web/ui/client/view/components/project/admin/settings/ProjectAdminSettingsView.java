@@ -18,6 +18,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.ProjectAdminSettingsDisplayView;
+import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.ProjectAdminSettingsEditView;
 
 public class ProjectAdminSettingsView extends Composite {
 	interface ProjectAdminSettingsViewUiBinder extends UiBinder<HTMLPanel, ProjectAdminSettingsView> {

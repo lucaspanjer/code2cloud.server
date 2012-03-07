@@ -555,4 +555,63 @@
 			<column defaultValueBoolean="false" name="DISABLED"	type="BOOLEAN" />
 		</addColumn>
 	</changeSet>
+	<changeSet author="cmorgan" id="createOrganizationTable-task4136">
+		<createTable tableName="ORGANIZATION">
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column defaultValue="" name="NAME" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column defaultValue="" name="IDENTIFIER" type="VARCHAR(255)">
+				<constraints nullable="false" unique="true"/>
+			</column>
+			<column name="VERSION" type="INT" />
+		</createTable>
+		<addColumn tableName="PROJECT">
+			<column name="ORGANIZATION_ID" type="BIGINT"/>
+		</addColumn>
+		<addForeignKeyConstraint baseColumnNames="ORGANIZATION_ID"
+			baseTableName="PROJECT" constraintName="PRJ_ORG_ID"
+			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
+	</changeSet>
+	
+	<changeSet author="cmorgan" id="supportOrgPublicProjects-task4138">
+		<addColumn tableName="PROJECT">
+			<column name="ACCESSIBILITY" type="VARCHAR(25)"/>
+		</addColumn>
+		<update tableName="PROJECT">
+		 	<column name="ACCESSIBILITY" value="PUBLIC"/>
+		 	<where>IS_PUBLIC=1</where>
+		</update>
+		<update tableName="PROJECT">
+		 	<column name="ACCESSIBILITY" value="PRIVATE"/>
+		 	<where>IS_PUBLIC=0</where>
+		</update>
+		<dropColumn tableName="PROJECT" columnName="IS_PUBLIC"/>
+	</changeSet>
+	
+	<changeSet author="cmorgan" id="createOrganizationProfileTable-task4136">
+		<createTable tableName="ORGANIZATIONPROFILE">
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column defaultValueBoolean="false" name="OWNER" type="BOOLEAN">
+				<constraints nullable="false" />
+			</column>
+			<column name="VERSION" type="INT" />
+			<column name="PROFILE_ID" type="BIGINT" />
+			<column name="ORGANIZATION_ID" type="BIGINT" />
+			<column defaultValueBoolean="false" name="MEMBER" type="BOOLEAN">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addForeignKeyConstraint baseColumnNames="PROFILE_ID"
+			baseTableName="ORGANIZATIONPROFILE" constraintName="FK_OP_PROF_ID"
+			referencedColumnNames="ID" referencedTableName="PROFILE" />
+		<addForeignKeyConstraint baseColumnNames="ORGANIZATION_ID"
+			baseTableName="ORGANIZATIONPROFILE" constraintName="FK_OP_ORG_ID"
+			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
+	</changeSet>
 </databaseChangeLog>

@@ -29,7 +29,7 @@ import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
 import com.tasktop.c2c.server.common.web.shared.ValidationFailedException;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -48,8 +48,6 @@ public interface ProfileService extends RemoteService {
 
 	public Boolean requestPasswordReset(String email) throws NoSuchEntityException;
 
-	public Boolean isTokenAvailable(String token);
-
 	public Credentials resetPassword(String token, String newPassword) throws NoSuchEntityException,
 			ValidationFailedException, AuthenticationFailedException;
 
@@ -62,13 +60,7 @@ public interface ProfileService extends RemoteService {
 	String createProject(Credentials credentials, Project project) throws ValidationFailedException,
 			AuthenticationRequiredException, NoSuchEntityException;
 
-	public Project updateProject(Project project) throws NoSuchEntityException, ValidationFailedException;
-
-	public Project getProject(String projectIdentifier) throws NoSuchEntityException, AuthenticationRequiredException;
-
-	public QueryResult<Project> getProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest);
-
-	public String[] getRolesForProject(String projectIdentifier) throws NoSuchEntityException;
+	public QueryResult<Project> findProjects(ProjectsQuery query);
 
 	public List<Profile> getProfiles(String projectIdentifier) throws NoSuchEntityException;
 
@@ -99,8 +91,6 @@ public interface ProfileService extends RemoteService {
 
 	public Project getProjectForInvitationToken(String token) throws NoSuchEntityException;
 
-	public QueryResult<Project> findProjects(String query, QueryRequest request);
-
 	public void watchProject(String projectIdentifier) throws NoSuchEntityException;
 
 	public void unwatchProject(String projectIdentifier) throws NoSuchEntityException;
@@ -119,8 +109,6 @@ public interface ProfileService extends RemoteService {
 	 */
 	public UserInfo createProfileWithSignUpToken(com.tasktop.c2c.server.profile.domain.project.Profile profile,
 			String token) throws NoSuchEntityException, ValidationFailedException;
-
-	public List<Profile> listAllProfiles();
 
 	public SignUpTokens createSignUpTokensFromCsv(String csv, Boolean sendEmail) throws ValidationFailedException;
 

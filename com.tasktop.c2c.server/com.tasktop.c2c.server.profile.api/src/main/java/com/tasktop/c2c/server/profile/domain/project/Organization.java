@@ -10,17 +10,19 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.common.profile.web.shared;
+package com.tasktop.c2c.server.profile.domain.project;
 
-@Deprecated
+import java.util.List;
+
 @SuppressWarnings("serial")
-public class Project extends AbstractEntity {
+public class Organization extends AbstractEntity {
 	private String identifier;
 	private String name;
 	private String description;
-	private Boolean isPublic;
+	private List<Profile> members;
+	private List<Project> projects;
 
-	public Project() {
+	public Organization() {
 		// Default constructor, does nothing.
 	}
 
@@ -48,11 +50,20 @@ public class Project extends AbstractEntity {
 		this.description = description;
 	}
 
-	public Boolean isPublic() {
-		return isPublic;
+	public List<Profile> getMembers() {
+		return members;
 	}
 
-	public void setPublic(Boolean isPublic) {
-		this.isPublic = isPublic;
+	public void setMembers(List<Profile> members) {
+		this.members = members;
 	}
+
+	public List<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
+	}
+
 }

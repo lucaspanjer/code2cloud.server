@@ -17,7 +17,6 @@ import java.util.List;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
-import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.SortInfo;
@@ -25,13 +24,15 @@ import com.tasktop.c2c.server.common.service.logging.NoLog;
 import com.tasktop.c2c.server.profile.domain.internal.Agreement;
 import com.tasktop.c2c.server.profile.domain.internal.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.internal.InvitationToken;
+import com.tasktop.c2c.server.profile.domain.internal.Organization;
+import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.domain.internal.RandomToken;
 import com.tasktop.c2c.server.profile.domain.internal.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.internal.SshPublicKey;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 
@@ -69,20 +70,10 @@ public interface ProfileService {
 
 	public List<Project> getProfileProjects(Long profileId) throws EntityNotFoundException;
 
-	public QueryResult<Project> findProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest);
-
 	public void requestPasswordReset(String email) throws EntityNotFoundException;
 
 	public String resetPassword(String token, @NoLog String newPassword) throws EntityNotFoundException,
 			ValidationException;
-
-	/**
-	 * Determines whether a password reset token is available.
-	 * 
-	 * @param passwordResetToken
-	 * @return
-	 */
-	public Boolean isPasswordResetTokenAvailable(String passwordResetToken);
 
 	public QueryResult<Profile> findProfiles(String query, Region pageInfo, SortInfo sortInfo);
 
@@ -110,8 +101,6 @@ public interface ProfileService {
 	public Project getProjectForInvitationToken(String invitationToken) throws EntityNotFoundException;
 
 	public void acceptInvitation(String invitationToken) throws EntityNotFoundException;
-
-	public QueryResult<Project> findProjects(String query, Region pageInfo, SortInfo sortInfo);
 
 	public Boolean isWatchingProject(String projectIdentifier) throws EntityNotFoundException;
 
@@ -200,4 +189,17 @@ public interface ProfileService {
 	 * 
 	 */
 	void sendVerificationEmail();
+
+	/**
+	 * @param token
+	 * @throws EntityNotFoundException
+	 *             if the token is invalid
+	 */
+	public PasswordResetToken getPasswordResetToken(String token) throws EntityNotFoundException;
+
+	Organization createOrganization(Organization org) throws ValidationException;
+
+	Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException;
+
+	public QueryResult<Project> findProjects(ProjectsQuery query);
 }

@@ -31,7 +31,7 @@ import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.github.api.GitHub;
 import org.springframework.stereotype.Component;
 
-import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
+import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Role;
@@ -55,9 +55,6 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 
 	@Autowired
 	protected UsersConnectionRepository usersConnRepo;
-
-	@Autowired
-	protected InternalAuthenticationService internalAuthenticationService;
 
 	@Override
 	public Profile getProfileByUsername(String username) throws EntityNotFoundException {
@@ -174,15 +171,15 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 
 			// Add our appropriate roles now.
 			if (projectProfile.getOwner()) {
-				roles.add(internalAuthenticationService.toCompoundRole(Role.Admin, projectIdentifier));
+				roles.add(AuthUtils.toCompoundRole(Role.Admin, projectIdentifier));
 			}
 
 			if (projectProfile.getUser()) {
-				roles.add(internalAuthenticationService.toCompoundRole(Role.User, projectIdentifier));
+				roles.add(AuthUtils.toCompoundRole(Role.User, projectIdentifier));
 			}
 
 			if (projectProfile.getCommunity()) {
-				roles.add(internalAuthenticationService.toCompoundRole(Role.Community, projectIdentifier));
+				roles.add(AuthUtils.toCompoundRole(Role.Community, projectIdentifier));
 			}
 		}
 	}

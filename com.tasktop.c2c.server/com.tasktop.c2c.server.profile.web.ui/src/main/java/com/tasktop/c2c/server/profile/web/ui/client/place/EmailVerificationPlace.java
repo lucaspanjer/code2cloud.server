@@ -18,7 +18,7 @@ import java.util.LinkedHashMap;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractPreAuthorizingPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -71,7 +71,7 @@ public class EmailVerificationPlace extends AbstractPreAuthorizingPlace {
 
 					@Override
 					public void success(Void result) {
-						ProjectsDiscoverPlace
+						ProjectsPlace
 								.createPlace()
 								.displayOnArrival(
 										Message.createSuccessMessage("Your email address has been verified. ")).go();

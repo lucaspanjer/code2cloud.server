@@ -20,11 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.internal.profile.crypto.OpenSSHPublicKeyReader;
+import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
+import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.domain.internal.ScmRepository;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.project.NotificationSettings;
+import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
@@ -56,14 +59,21 @@ public class WebServiceDomain {
 	}
 
 	public Project copy(com.tasktop.c2c.server.profile.domain.internal.Project project) {
+		return copy(project, false);
+	}
+
+	public Project copy(com.tasktop.c2c.server.profile.domain.internal.Project project, boolean shallow) {
 		Project p = new Project();
 		p.setId(project.getId());
 		p.setIdentifier(project.getIdentifier());
 		p.setName(project.getName());
 		p.setDescription(project.getDescription());
-		p.setPublic(project.getPublic());
+		p.setAccessibility(project.getAccessibility());
 		p.setNumWatchers(project.getNumWatchers());
 		p.setNumCommiters(project.getNumCommitters());
+		if (!shallow) {
+			p.setOrganization(copy(project.getOrganization()));
+		}
 
 		// Don't copy our ProjectServiceProfile as part of this - that requires a ProfileWebServiceConfiguration
 		// be passed in.
@@ -150,7 +160,9 @@ public class WebServiceDomain {
 		project.setIdentifier(p.getIdentifier());
 		project.setName(p.getName());
 		project.setDescription(p.getDescription());
-		project.setPublic(p.getPublic());
+		project.setAccessibility(p.getAccessibility());
+		project.setOrganization(copy(p.getOrganization()));
+
 		return project;
 	}
 
@@ -314,6 +326,13 @@ public class WebServiceDomain {
 		return token;
 	}
 
+	public com.tasktop.c2c.server.profile.domain.project.PasswordResetToken copy(PasswordResetToken p) {
+		com.tasktop.c2c.server.profile.domain.project.PasswordResetToken passwordResetToken = new com.tasktop.c2c.server.profile.domain.project.PasswordResetToken();
+		passwordResetToken.setToken(p.getToken());
+		passwordResetToken.setProfile(copy(p.getProfile()));
+		return passwordResetToken;
+	}
+
 	private OpenSSHPublicKeyReader rsaReader = new OpenSSHPublicKeyReader();
 
 	public SshPublicKey copy(com.tasktop.c2c.server.profile.domain.internal.SshPublicKey key) {
@@ -339,5 +358,52 @@ public class WebServiceDomain {
 		copy.setId(key.getId());
 		copy.setName(key.getName());
 		return copy;
+	}
+
+	/**
+	 * @param org
+	 * @return
+	 */
+	public com.tasktop.c2c.server.profile.domain.internal.Organization copy(Organization org) {
+		if (org == null) {
+			return null;
+		}
+
+		com.tasktop.c2c.server.profile.domain.internal.Organization target = new com.tasktop.c2c.server.profile.domain.internal.Organization();
+		target.setDescription(org.getDescription());
+		target.setId(org.getId());
+		target.setIdentifier(org.getIdentifier());
+		target.setName(org.getName());
+
+		return target;
+	}
+
+	/**
+	 * @param createOrganization
+	 * @return
+	 */
+	public Organization copy(com.tasktop.c2c.server.profile.domain.internal.Organization org) {
+		if (org == null) {
+			return null;
+		}
+		Organization target = new Organization();
+		target.setDescription(org.getDescription());
+		target.setId(org.getId());
+		target.setIdentifier(org.getIdentifier());
+		target.setName(org.getName());
+		if (org.getProjects() != null) {
+			target.setProjects(new ArrayList<Project>(org.getProjects().size()));
+			for (com.tasktop.c2c.server.profile.domain.internal.Project p : org.getProjects()) {
+				target.getProjects().add(copy(p, true));
+			}
+		}
+		if (org.getOrganizationProfiles() != null) {
+			target.setMembers(new ArrayList<Profile>());
+			for (OrganizationProfile op : org.getOrganizationProfiles()) {
+				target.getMembers().add(copy(op.getProfile()));
+			}
+		}
+
+		return target;
 	}
 }

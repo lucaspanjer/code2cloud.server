@@ -51,6 +51,7 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 		UserAccountPlace place = (UserAccountPlace) p;
 		this.profile = place.getProfile();
 		this.sshPublicKeys = place.getSshPublicKeys();
+		this.originalEmail = place.getProfile().getEmail();
 	}
 
 	@Override

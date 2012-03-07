@@ -12,18 +12,19 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationNewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
-import com.tasktop.c2c.server.profile.web.ui.client.view.components.NewProjectView;
+import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView;
 
 public class NewProjectPresenter extends AbstractProfilePresenter {
 
@@ -32,8 +33,12 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 	public NewProjectPresenter(NewProjectView projectsView, NewProjectPlace place) {
 		super(projectsView);
 		this.view = projectsView;
-
-		view.clear();
+		Project newProject = new Project();
+		newProject.setAccessibility(ProjectAccessibility.PRIVATE);
+		if (place instanceof OrganizationNewProjectPlace) {
+			newProject.setOrganization(((OrganizationNewProjectPlace) place).getOrganization());
+		}
+		view.setProject(newProject);
 		// Set the createAvailable flag on our view
 		view.displayMaxProjectsMessage(!(place.isCreateAvailable()));
 
@@ -59,11 +64,7 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 	}
 
 	private void doCreateProject() {
-		Project project = new Project();
-		project.setName(view.name.getText());
-		project.setDescription(view.description.getText());
-		project.setPublic(view.publicProjectButton.getValue());
-
+		Project project = view.getProject();
 		getProfileService().createProject(getAppState().getCredentials(), project,
 				new AsyncCallbackSupport<String>(new OperationMessage("Creating project...")) {
 					@Override
@@ -79,6 +80,6 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 	}
 
 	private void doCancel() {
-		ProjectsDiscoverPlace.createPlace().go();
+		ProjectsPlace.createPlace().go();
 	}
 }

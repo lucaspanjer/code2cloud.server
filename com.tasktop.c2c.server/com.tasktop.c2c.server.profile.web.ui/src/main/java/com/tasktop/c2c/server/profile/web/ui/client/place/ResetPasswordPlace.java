@@ -17,14 +17,13 @@ import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
 
-
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AnonymousPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
-import com.tasktop.c2c.server.common.profile.web.shared.actions.CheckPasswordResetTokenAction;
-import com.tasktop.c2c.server.common.profile.web.shared.actions.CheckPasswordResetTokenResult;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetPasswordResetTokenAction;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetPasswordResetTokenResult;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
@@ -50,6 +49,7 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 	}
 
 	private String resetToken;
+	private String username;
 
 	private ResetPasswordPlace(String resetToken) {
 		this.resetToken = resetToken;
@@ -57,6 +57,10 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 
 	public String getResetToken() {
 		return resetToken;
+	}
+
+	public String getUsername() {
+		return username;
 	}
 
 	@Override
@@ -79,20 +83,33 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 	@Override
 	protected void addActions(List<Action<?>> actions) {
 		super.addActions(actions);
-		actions.add(new CheckPasswordResetTokenAction(resetToken));
+		actions.add(new GetPasswordResetTokenAction(resetToken));
+	}
 
+	@Override
+	protected void onResultsRecieved() {
+
+		if (hasException("NoSuchEntityException")) {
+			SignInPlace.createPlace().setMessage(getMessage()).go();
+			return;
+		}
+
+		handleBatchResults();
 	}
 
 	@Override
 	protected void handleBatchResults() {
 		super.handleBatchResults();
 
-		CheckPasswordResetTokenResult result = getResult(CheckPasswordResetTokenResult.class);
-		if (!result.get()) {
-			SignInPlace.createPlace().setMessage(getMessage()).go();
-		} else {
-			onPlaceDataFetched();
-		}
-	}
+		GetPasswordResetTokenResult result = getResult(GetPasswordResetTokenResult.class);
 
+		if (result.get() != null && result.get().getProfile() != null
+				&& result.get().getProfile().getUsername() != null) {
+			username = result.get().getProfile().getUsername();
+			onPlaceDataFetched();
+		} else {
+			SignInPlace.createPlace().setMessage(getMessage()).go();
+		}
+
+	}
 }

@@ -20,33 +20,28 @@ import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.tasktop.c2c.server.auth.service.AuthenticationToken;
-import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
+import com.tasktop.c2c.server.auth.service.AuthUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/applicationContext-test.xml" })
-public class InternalAuthenticationServiceTest {
-
-	@Autowired
-	private InternalAuthenticationService service;
+public class AuthUtilsTest {
 
 	@Test
 	public void testToCompoundRole() {
-		assertEquals("A/B", service.toCompoundRole("A", "B"));
+		assertEquals("A/B", AuthUtils.toCompoundRole("A", "B"));
 	}
 
 	@Test
 	public void testFromCompoundRole() {
-		assertEquals("A", service.fromCompoundRole("A/B", "B"));
+		assertEquals("A", AuthUtils.fromCompoundRole("A/B", "B"));
 	}
 
 	@Test
 	public void testFromCompoundRoleNotApplicable() {
-		assertNull(service.fromCompoundRole("A/B", "C"));
+		assertNull(AuthUtils.fromCompoundRole("A/B", "C"));
 	}
 
 	@Test
@@ -56,21 +51,7 @@ public class InternalAuthenticationServiceTest {
 		roles.add("C/D");
 		List<String> expected = new ArrayList<String>();
 		expected.add("A");
-		assertEquals(expected, service.fromCompoundRole(roles, "B"));
+		assertEquals(expected, AuthUtils.fromCompoundRole(roles, "B"));
 	}
 
-	@Test
-	public void testSpecalizeAuthToken() {
-		AuthenticationToken origToken = new AuthenticationToken();
-		List<String> roles = new ArrayList<String>();
-		roles.add("A/app1");
-		roles.add("B/app1");
-		roles.add("C/app2");
-		origToken.setAuthorities(roles);
-		origToken.setFirstName("first");
-		origToken.setLastName("first");
-		AuthenticationToken specToken = service.specializeAuthenticationToken(origToken, "app1", false);
-		assertEquals(2, specToken.getAuthorities().size());
-		assertEquals(3, origToken.getAuthorities().size());
-	}
 }

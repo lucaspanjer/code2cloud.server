@@ -19,12 +19,17 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
+
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 
 /**
  * A project is the central concept behind a project that includes source, issue tracking, builds, etc.
@@ -35,12 +40,14 @@ public class Project extends BaseEntity {
 	private String name;
 	private String identifier;
 	private String description;
-	private Boolean isPublic;
+	private ProjectAccessibility accessibility;
 
 	private List<ProjectProfile> projectProfiles = new ArrayList<ProjectProfile>();
 	private List<ScmRepository> repositories = new ArrayList<ScmRepository>();
 
 	private ProjectServiceProfile projectServiceProfile;
+
+	private Organization organization;
 
 	public Project() {
 		super();
@@ -135,15 +142,6 @@ public class Project extends BaseEntity {
 		}
 	}
 
-	@Column(name = "is_public", nullable = false)
-	public Boolean getPublic() {
-		return isPublic;
-	}
-
-	public void setPublic(Boolean isPublic) {
-		this.isPublic = isPublic;
-	}
-
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, mappedBy = "project")
 	@OrderBy("url")
 	public List<ScmRepository> getRepositories() {
@@ -174,5 +172,24 @@ public class Project extends BaseEntity {
 			}
 		}
 		return result;
+	}
+
+	@ManyToOne
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
+	}
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	public ProjectAccessibility getAccessibility() {
+		return accessibility;
+	}
+
+	public void setAccessibility(ProjectAccessibility accessibility) {
+		this.accessibility = accessibility;
 	}
 }

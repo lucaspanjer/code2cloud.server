@@ -14,8 +14,9 @@ package com.tasktop.c2c.server.profile.web.ui.client.navigation;
 
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AgreementsPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.OrganizationProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.web.ui.client.place.AdminProfilePlace;
@@ -42,7 +43,8 @@ import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admi
  * 
  */
 public class PageMappings {
-	public static PageMapping Discover = ProjectsDiscoverPlace.Discover;
+	public static PageMapping Discover = ProjectsPlace.Discover;
+	public static PageMapping OrgDiscover = OrganizationProjectsPlace.Discover;
 	public static PageMapping ProjectHome = ProjectHomePlace.ProjectHome;
 	public static PageMapping SignOut = SignOutPlace.SignOut;
 	public static PageMapping SignUp = new PageMapping(new SignUpPlace.Tokenizer(), "signup", "signup/{"

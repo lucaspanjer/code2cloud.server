@@ -29,7 +29,7 @@ import com.google.gwt.junit.GWTMockUtilities;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.navigation.PathMapping;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.Message.MessageType;
@@ -67,7 +67,7 @@ public class NavigationTest {
 	@Test
 	public void testRoot() {
 		Place place = historyMapper.getPlace("projects");
-		Assert.assertEquals(ProjectsDiscoverPlace.class, place.getClass());
+		Assert.assertEquals(ProjectsPlace.class, place.getClass());
 	}
 
 	@Test

@@ -12,11 +12,11 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
@@ -28,6 +28,8 @@ public class PasswordResetView extends AbstractComposite {
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 
+	@UiField
+	public Label username;
 	@UiField
 	public TextBox password;
 	@UiField

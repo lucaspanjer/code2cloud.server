@@ -10,21 +10,23 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.settings;
+package com.tasktop.c2c.server.profile.web.ui.client.view.components.project;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 
-public class ProjectAdminSettingsEditView extends Composite implements Editor<Project> {
+public class ProjectAdminSettingsEditView extends AbstractProjectView implements Editor<Project> {
 	interface ProjectAdminSettingsEditViewUiBinder extends UiBinder<HTMLPanel, ProjectAdminSettingsEditView> {
 	}
 
@@ -53,12 +55,6 @@ public class ProjectAdminSettingsEditView extends Composite implements Editor<Pr
 	}
 
 	@UiField
-	@Path("public")
-	RadioButton privacyPublicOption;
-	@UiField
-	@Ignore
-	RadioButton privacyPrivateOption;
-	@UiField
 	@Path("description")
 	TextArea projectDescription;
 	@UiField
@@ -78,8 +74,7 @@ public class ProjectAdminSettingsEditView extends Composite implements Editor<Pr
 
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
-		privacyPublicOption.setValue(presenter.getProject().getPublic());
-		privacyPrivateOption.setValue(!presenter.getProject().getPublic());
+		super.setProject(presenter.getProject());
 		driver.edit(presenter.getProject());
 	}
 
@@ -100,11 +95,10 @@ public class ProjectAdminSettingsEditView extends Composite implements Editor<Pr
 
 	@UiHandler("saveButton")
 	void onSave(ClickEvent event) {
-		if (driver.isDirty()) {
-			driver.flush();
-			presenter.onSaveProject();
-		} else {
-			presenter.onCancelProjectEdit();
-		}
+		driver.flush();
+		Project project = presenter.getProject();
+		super.updateProject(project);
+
+		presenter.onSaveProject();
 	}
 }

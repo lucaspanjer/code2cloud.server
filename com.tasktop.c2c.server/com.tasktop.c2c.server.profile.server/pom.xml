@@ -172,7 +172,6 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-			<scope>test</scope>
 		</dependency>
 		
 	</dependencies>
@@ -198,6 +197,9 @@
 						<phase>process-classes</phase>
 						<configuration>
 							<tasks>
+								<copy file="${basedir}/target/classes/META-INF/persistence-profile-mysql.xml"
+								      tofile="${basedir}/target/classes/META-INF/persistence.xml"/>
+
 								<taskdef name="weave"
 									classname="org.eclipse.persistence.tools.weaving.jpa.StaticWeaveAntTask"
 									classpathref="maven.compile.classpath" />

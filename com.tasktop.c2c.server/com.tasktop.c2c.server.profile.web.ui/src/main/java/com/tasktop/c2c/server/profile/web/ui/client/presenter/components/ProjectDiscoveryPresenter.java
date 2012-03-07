@@ -15,14 +15,19 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.OrganizationProjectsPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
+import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
+import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationNewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.ProjectDiscoveryView;
 
@@ -33,6 +38,7 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 	private QueryRequest currentQueryRequest = new QueryRequest(new Region(0, 25), null);
 	private String currentQueryString = null;
 	private ProjectRelationship currentRelationship;
+	private Organization currentOrganization = null;
 
 	private AsyncDataProvider<Project> viewAdapter;
 
@@ -46,11 +52,19 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 	}
 
 	public void setPlace(Place p) {
-		currentQueryString = ((ProjectsDiscoverPlace) p).getQuery();
+		currentQueryString = ((ProjectsPlace) p).getQuery();
 		if (currentQueryString == null) {
 			currentRelationship = ProjectRelationship.ALL;
 		} else {
 			currentRelationship = null;
+		}
+		if (p instanceof OrganizationProjectsPlace) {
+			this.currentOrganization = ((OrganizationProjectsPlace) p).getOrganization();
+			ProjectDiscoveryView.getInstance().createAnchorElement.setHref(OrganizationNewProjectPlace.createPlace(
+					currentOrganization.getIdentifier()).getHref());
+		} else {
+			this.currentOrganization = null;
+			ProjectDiscoveryView.getInstance().createAnchorElement.setHref(NewProjectPlace.createPlace().getHref());
 		}
 		ProjectDiscoveryView.getInstance().pager.setPageSize(currentQueryRequest.getPageInfo().getSize());
 		ProjectDiscoveryView.getInstance().setPresenter(ProjectDiscoveryPresenter.this);
@@ -63,29 +77,30 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 	}
 
 	private void update() {
+		ProjectsQuery query = new ProjectsQuery();
+
 		if (currentRelationship != null) {
-			getProfileService().getProjects(currentRelationship, currentQueryRequest,
-					new AsyncCallbackSupport<QueryResult<Project>>() {
-
-						@Override
-						protected void success(QueryResult<Project> result) {
-							currentResult = result;
-							viewAdapter.updateRowCount(result.getTotalResultSize(), true);
-							viewAdapter.updateRowData(result.getOffset(), result.getResultPage());
-						}
-					});
+			query.setProjectRelationship(currentRelationship);
 		} else if (currentQueryString != null) {
-			getProfileService().findProjects(currentQueryString, currentQueryRequest,
-					new AsyncCallbackSupport<QueryResult<Project>>() {
-
-						@Override
-						protected void success(QueryResult<Project> result) {
-							currentResult = result;
-							viewAdapter.updateRowCount(result.getTotalResultSize(), true);
-							viewAdapter.updateRowData(result.getOffset(), result.getResultPage());
-						}
-					});
+			query.setQueryString(currentQueryString);
+		} else {
+			return; // Happens on init
 		}
+
+		if (currentOrganization != null) {
+			query.setOrganizationIdentifier(currentOrganization.getIdentifier());
+		}
+
+		getProfileService().findProjects(query, new AsyncCallbackSupport<QueryResult<Project>>() {
+
+			@Override
+			protected void success(QueryResult<Project> result) {
+				currentResult = result;
+				viewAdapter.updateRowCount(result.getTotalResultSize(), true);
+				viewAdapter.updateRowData(result.getOffset(), result.getResultPage());
+			}
+		});
+
 	}
 
 	@Override

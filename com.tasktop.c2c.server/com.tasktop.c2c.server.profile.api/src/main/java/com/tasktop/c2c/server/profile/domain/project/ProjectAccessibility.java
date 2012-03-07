@@ -10,22 +10,17 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.common.profile.web.shared.actions;
-
-import net.customware.gwt.dispatch.shared.AbstractSimpleResult;
+package com.tasktop.c2c.server.profile.domain.project;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class CheckPasswordResetTokenResult extends AbstractSimpleResult<Boolean> {
-
-	protected CheckPasswordResetTokenResult() {
-		super();
-	}
-
-	public CheckPasswordResetTokenResult(Boolean value) {
-		super(value);
-	}
-
+public enum ProjectAccessibility {
+	/** Only specific members have access. */
+	PRIVATE,
+	/** All members of the project's organization have access. */
+	ORGANIZATION_PRIVATE,
+	/** All users can access. */
+	PUBLIC;
 }

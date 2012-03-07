@@ -25,17 +25,17 @@ import com.tasktop.c2c.server.common.web.client.util.StringUtils;
  * @author straxus (Tasktop Technologies Inc.)
  * 
  */
-public class ProjectsDiscoverPlace extends AbstractBatchFetchingPlace implements HeadingPlace, WindowTitlePlace {
+public class ProjectsPlace extends AbstractBatchFetchingPlace implements HeadingPlace, WindowTitlePlace {
 
 	public static final String QUERY = "query";
 
-	public static PageMapping Discover = new PageMapping(new ProjectsDiscoverPlace.Tokenizer(), "projects", "search/{"
-			+ QUERY + "}");
+	public static PageMapping Discover = new PageMapping(new ProjectsPlace.Tokenizer(), "projects", "search/{" + QUERY
+			+ "}");
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectsDiscoverPlace> {
+	public static class Tokenizer implements PlaceTokenizer<ProjectsPlace> {
 
 		@Override
-		public ProjectsDiscoverPlace getPlace(String token) {
+		public ProjectsPlace getPlace(String token) {
 			Args pathArgs = PageMapping.getPathArgsForUrl(token);
 
 			// Only one of the following three can be defined at a time, so use this to determine which place to create.
@@ -50,7 +50,7 @@ public class ProjectsDiscoverPlace extends AbstractBatchFetchingPlace implements
 		}
 
 		@Override
-		public String getToken(ProjectsDiscoverPlace place) {
+		public String getToken(ProjectsPlace place) {
 			return place.getToken();
 		}
 	}
@@ -58,12 +58,12 @@ public class ProjectsDiscoverPlace extends AbstractBatchFetchingPlace implements
 	private final String query;
 	private final boolean assumeUserIsAnonymous;
 
-	private ProjectsDiscoverPlace(boolean assumeUserIsAnon) {
+	protected ProjectsPlace(boolean assumeUserIsAnon) {
 		this.assumeUserIsAnonymous = assumeUserIsAnon;
 		query = null;
 	}
 
-	private ProjectsDiscoverPlace(String query) {
+	protected ProjectsPlace(String query) {
 		this.query = query;
 		assumeUserIsAnonymous = false;
 	}
@@ -78,16 +78,16 @@ public class ProjectsDiscoverPlace extends AbstractBatchFetchingPlace implements
 		return "";
 	}
 
-	public static ProjectsDiscoverPlace createPlace() {
-		return new ProjectsDiscoverPlace(false);
+	public static ProjectsPlace createPlace() {
+		return new ProjectsPlace(false);
 	}
 
-	public static ProjectsDiscoverPlace createPlaceForQuery(String query) {
-		return new ProjectsDiscoverPlace(query);
+	public static ProjectsPlace createPlaceForQuery(String query) {
+		return new ProjectsPlace(query);
 	}
 
-	public static ProjectsDiscoverPlace createPlaceForAfterLogout() {
-		return new ProjectsDiscoverPlace(true);
+	public static ProjectsPlace createPlaceForAfterLogout() {
+		return new ProjectsPlace(true);
 	}
 
 	@Override

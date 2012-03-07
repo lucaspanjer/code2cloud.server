@@ -35,7 +35,7 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 		@Override
 		public AgreementsPlace getPlace(String token) {
-			return AgreementsPlace.createPlace(ProjectsDiscoverPlace.createPlace());
+			return AgreementsPlace.createPlace(ProjectsPlace.createPlace());
 		}
 
 		@Override
@@ -53,7 +53,7 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	private AgreementsPlace(DefaultPlace postAgreementsPlace) {
 		if (postAgreementsPlace == null) {
-			this.postAgreementsPlace = ProjectsDiscoverPlace.createPlace();
+			this.postAgreementsPlace = ProjectsPlace.createPlace();
 		} else {
 			this.postAgreementsPlace = postAgreementsPlace;
 		}

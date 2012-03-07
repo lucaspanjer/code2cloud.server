@@ -59,13 +59,14 @@ import com.tasktop.c2c.server.common.service.domain.SortInfo;
 import com.tasktop.c2c.server.common.service.domain.SortInfo.Order;
 import com.tasktop.c2c.server.common.service.domain.criteria.ColumnCriteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria;
-import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
+import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
 import com.tasktop.c2c.server.internal.wiki.server.WikiServiceController;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.web.ui.server.ProfileWebServiceController;
@@ -85,6 +86,7 @@ import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.StateTransition;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity;
+import com.tasktop.c2c.server.tasks.domain.TaskActivity.FieldUpdate;
 import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
 import com.tasktop.c2c.server.tasks.domain.TaskHandle;
 import com.tasktop.c2c.server.tasks.domain.TaskResolution;
@@ -93,7 +95,6 @@ import com.tasktop.c2c.server.tasks.domain.TaskStatus;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
-import com.tasktop.c2c.server.tasks.domain.TaskActivity.FieldUpdate;
 import com.tasktop.c2c.server.tasks.service.CriteriaQueryArguments;
 import com.tasktop.c2c.server.tasks.service.PredefinedQueryArguments;
 import com.tasktop.c2c.server.tasks.service.SaveAttachmentArguments;
@@ -601,8 +602,8 @@ public class APIDocGenerator {
 		return handle;
 	}
 
-	private com.tasktop.c2c.server.tasks.domain.AttachmentHandle createTaskAttachmentHandle(
-			boolean asReturnValue, boolean thin) {
+	private com.tasktop.c2c.server.tasks.domain.AttachmentHandle createTaskAttachmentHandle(boolean asReturnValue,
+			boolean thin) {
 		com.tasktop.c2c.server.tasks.domain.AttachmentHandle handle = new com.tasktop.c2c.server.tasks.domain.AttachmentHandle();
 		handle.setId(123);
 		handle.setTaskHandle(createTaskHandle());
@@ -664,8 +665,7 @@ public class APIDocGenerator {
 		return createTaskAttachment(asReturnValue, thin);
 	}
 
-	private com.tasktop.c2c.server.tasks.domain.Attachment createTaskAttachment(boolean asReturnValue,
-			boolean thin) {
+	private com.tasktop.c2c.server.tasks.domain.Attachment createTaskAttachment(boolean asReturnValue, boolean thin) {
 		com.tasktop.c2c.server.tasks.domain.Attachment attachment = new com.tasktop.c2c.server.tasks.domain.Attachment();
 
 		attachment.setByteSize(1024);
@@ -864,7 +864,7 @@ public class APIDocGenerator {
 		Project project = new Project();
 		project.setName("Pet Clinic");
 		project.setDescription("project description");
-		project.setPublic(true);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		if (asReturnValue) {
 			project.setId(1234L);
 			project.setIdentifier("pet-clinic");

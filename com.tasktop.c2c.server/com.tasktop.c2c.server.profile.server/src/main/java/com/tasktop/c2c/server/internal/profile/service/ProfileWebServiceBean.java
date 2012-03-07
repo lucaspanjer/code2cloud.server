@@ -17,8 +17,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
@@ -34,16 +32,16 @@ import org.springframework.web.context.request.RequestContextHolder;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
-import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
-import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.profile.domain.internal.RandomToken;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
+import com.tasktop.c2c.server.profile.domain.project.Organization;
+import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -163,34 +161,6 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 	}
 
 	@Override
-	public String[] getRolesForProject(String projectIdentifier) throws EntityNotFoundException {
-		// Get the current user's credentials to start.
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		List<String> roles = new ArrayList<String>();
-		com.tasktop.c2c.server.profile.domain.internal.Project project = profileService
-				.getProjectByIdentifier(projectIdentifier);
-
-		if (authentication != null) {
-			for (GrantedAuthority authority : authentication.getAuthorities()) {
-				if (authority.getAuthority().endsWith("/" + projectIdentifier))
-					roles.add(authority.getAuthority());
-			}
-
-			// IF we have a public project, then add in the community role since we're a registered user.
-			if (project.getPublic()) {
-				roles.add(String.format("%s/%s", Role.Community, projectIdentifier));
-			}
-		}
-
-		// Then, check the project's status to see if we should add in the observer role.
-		if (project.getPublic()) {
-			roles.add(String.format("%s/%s", Role.Observer, projectIdentifier));
-		}
-
-		return roles.toArray(new String[roles.size()]);
-	}
-
-	@Override
 	public Project getProjectForInvitationToken(String token) throws EntityNotFoundException {
 		return webServiceDomain.copy(profileService.getProjectForInvitationToken(token), configuration);
 	}
@@ -239,17 +209,8 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 	}
 
 	@Override
-	public QueryResult<Project> findProjects(String query, QueryRequest request) {
-		QueryResult<com.tasktop.c2c.server.profile.domain.internal.Project> result = profileService.findProjects(query,
-				request.getPageInfo(), request.getSortInfo());
-		return new QueryResult<Project>(result.getOffset(), result.getPageSize(), webServiceDomain.copyProjects(
-				result.getResultPage(), configuration), result.getTotalResultSize());
-	}
-
-	@Override
-	public QueryResult<Project> findProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest) {
-		QueryResult<com.tasktop.c2c.server.profile.domain.internal.Project> result = profileService.findProjects(
-				projectRelationship, queryRequest);
+	public QueryResult<Project> findProjects(ProjectsQuery query) {
+		QueryResult<com.tasktop.c2c.server.profile.domain.internal.Project> result = profileService.findProjects(query);
 		return new QueryResult<Project>(result.getOffset(), result.getPageSize(), webServiceDomain.copyProjects(
 				result.getResultPage(), configuration), result.getTotalResultSize());
 	}
@@ -387,16 +348,6 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 		return profileService.isProjectCreateAvailable();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#isPasswordResetTokenAvailable(java.lang.String)
-	 */
-	@Override
-	public Boolean isPasswordResetTokenAvailable(String token) {
-		return profileService.isPasswordResetTokenAvailable(token);
-	}
-
 	@Override
 	public List<ProjectServiceStatus> computeProjectServicesStatus(String projectId) throws EntityNotFoundException {
 		com.tasktop.c2c.server.profile.domain.internal.Project project = profileService
@@ -404,4 +355,31 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 		return projectServiceService.computeProjectServicesStatus(project);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#getPasswordResetToken(java.lang.String)
+	 */
+	@Override
+	public PasswordResetToken getPasswordResetToken(String token) throws EntityNotFoundException {
+		com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken passwordResetToken = profileService
+				.getPasswordResetToken(token);
+		PasswordResetToken copy = webServiceDomain.copy(passwordResetToken);
+		return copy;
+	}
+
+	@Override
+	public Organization createOrganization(Organization org) throws ValidationException {
+		return webServiceDomain.copy(profileService.createOrganization(webServiceDomain.copy(org)));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#getOrganizationByIdentfier(java.lang.String)
+	 */
+	@Override
+	public Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException {
+		return webServiceDomain.copy(profileService.getOrganizationByIdentfier(orgIdentifier));
+	}
 }

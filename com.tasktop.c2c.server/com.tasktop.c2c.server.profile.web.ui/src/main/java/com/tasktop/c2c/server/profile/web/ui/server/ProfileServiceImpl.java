@@ -53,7 +53,7 @@ import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
@@ -109,7 +109,11 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 		ProjectDashboard dashboard = new ProjectDashboard();
 		int numDays = 60;
 
-		dashboard.setProject(getProject(projectIdentifier));
+		try {
+			dashboard.setProject(profileWebService.getProjectByIdentifier(projectIdentifier));
+		} catch (EntityNotFoundException e1) {
+			throw new NoSuchEntityException();
+		}
 
 		// Let some these services fails and still return data.
 		try {
@@ -243,43 +247,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	}
 
 	@Override
-	public Project updateProject(Project project) throws NoSuchEntityException, ValidationFailedException {
-		try {
-			return profileWebService.updateProject(project);
-		} catch (ValidationException e) {
-			handle(e);
-			throw new IllegalStateException();
-		} catch (EntityNotFoundException e) {
-			handle(e);
-			throw new IllegalStateException();
-		}
-	}
-
-	@Override
-	public Project getProject(String projectIdentifier) throws NoSuchEntityException {
-		setTenancyContext(projectIdentifier);
-
-		try {
-			return profileWebService.getProjectByIdentifier(projectIdentifier);
-		} catch (EntityNotFoundException e) {
-			handle(e);
-			throw new IllegalStateException();
-		}
-	}
-
-	@Override
-	public String[] getRolesForProject(String projectIdentifier) throws NoSuchEntityException {
-		setTenancyContext(projectIdentifier);
-
-		try {
-			return profileWebService.getRolesForProject(projectIdentifier);
-		} catch (EntityNotFoundException enfe) {
-			handle(enfe);
-			throw new IllegalStateException();
-		}
-	}
-
-	@Override
 	public Boolean updateTeamMemberRoles(String projectIdentifier, ProjectTeamMember member)
 			throws NoSuchEntityException, ValidationFailedException {
 		setTenancyContext(projectIdentifier);
@@ -305,11 +272,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	}
 
 	@Override
-	public QueryResult<Project> getProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest) {
-		return profileWebService.findProjects(projectRelationship, queryRequest);
-	}
-
-	@Override
 	public Boolean requestPasswordReset(String email) throws NoSuchEntityException {
 		try {
 			profileService.requestPasswordReset(email);
@@ -318,11 +280,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 			throw new IllegalStateException();
 		}
 		return true;
-	}
-
-	@Override
-	public Boolean isTokenAvailable(String token) {
-		return profileService.isPasswordResetTokenAvailable(token);
 	}
 
 	@Override
@@ -518,12 +475,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	}
 
 	@Override
-	public QueryResult<Project> findProjects(String query, QueryRequest request) {
-		QueryResult<Project> result = profileWebService.findProjects(query, request);
-		return result;
-	}
-
-	@Override
 	public void watchProject(String projectIdentifier) throws NoSuchEntityException {
 		setTenancyContext(projectIdentifier);
 
@@ -576,12 +527,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 			// should never happen
 			throw new IllegalStateException(e);
 		}
-	}
-
-	@Override
-	public List<Profile> listAllProfiles() {
-		// Don't worry - this is secured at the next level, so only a system admin account can call it.
-		return WebDomain.copy(profileService.listAllProfiles());
 	}
 
 	@Override
@@ -689,5 +634,10 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 		} catch (ValidationException e) {
 			handle(e);
 		}
+	}
+
+	@Override
+	public QueryResult<Project> findProjects(ProjectsQuery query) {
+		return profileWebService.findProjects(query);
 	}
 }

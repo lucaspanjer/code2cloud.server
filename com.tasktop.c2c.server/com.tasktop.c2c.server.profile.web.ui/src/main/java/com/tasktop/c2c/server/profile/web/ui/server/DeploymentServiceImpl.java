@@ -12,9 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.server;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,14 +26,10 @@ import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
 import com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService;
 import com.tasktop.c2c.server.deployment.service.ServiceException;
-import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
-import com.tasktop.c2c.server.profile.domain.build.BuildSummary;
-import com.tasktop.c2c.server.profile.domain.build.HudsonStatus;
-import com.tasktop.c2c.server.profile.domain.build.JobDetails;
-import com.tasktop.c2c.server.profile.domain.build.JobSummary;
-import com.tasktop.c2c.server.profile.service.HudsonService;
 import com.tasktop.c2c.server.profile.service.provider.HudsonServiceProvider;
 import com.tasktop.c2c.server.profile.web.ui.client.DeploymentService;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsAction;
+import com.tasktop.c2c.server.profile.web.ui.server.action.GetProjectBuildInformationActionHandler;
 
 @SuppressWarnings("serial")
 public class DeploymentServiceImpl extends AbstractAutowiredRemoteServiceServlet implements DeploymentService {
@@ -46,25 +40,13 @@ public class DeploymentServiceImpl extends AbstractAutowiredRemoteServiceServlet
 	@Autowired
 	private HudsonServiceProvider hudsonServiceProvider;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#getDeploymentConfigurations(java.lang.String
-	 * )
-	 */
-	@Override
-	public List<DeploymentConfiguration> getDeploymentConfigurations(String projectId) {
-		setTenancyContext(projectId);
-
-		return deploymentConfigurationService.listDeployments(null);
-	}
+	@Autowired
+	private GetProjectBuildInformationActionHandler getProjectBuildInformationActionHandler;
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#createDeploymentConfigurations(java.lang
+	 * @see com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#createDeploymentConfigurations(java.lang
 	 * .String, com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -109,8 +91,7 @@ public class DeploymentServiceImpl extends AbstractAutowiredRemoteServiceServlet
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#getDeploymentConfigurationOptions(com.tasktop
+	 * @see com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#getDeploymentConfigurationOptions(com.tasktop
 	 * . alm.server.deployment.domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -124,7 +105,8 @@ public class DeploymentServiceImpl extends AbstractAutowiredRemoteServiceServlet
 					.getAvailableServiceConfigurations(configuration));
 
 			try {
-				result.setBuildInformation(getBuildInformation(projectIdentifier, configuration.getBuildJobName()));
+				result.setBuildInformation(getProjectBuildInformationActionHandler.execute(new GetProjectBuildsAction(
+						projectIdentifier, configuration.getBuildJobName()), null));
 			} catch (Exception e) {
 				e.printStackTrace(); // Continue
 			}
@@ -135,42 +117,6 @@ public class DeploymentServiceImpl extends AbstractAutowiredRemoteServiceServlet
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#getBuildInformation(java.lang.String,
-	 * java.lang.String, java.lang.String)
-	 */
-	@Override
-	public AvailableBuildInformation getBuildInformation(String projectIdentifier, String buildJobName) {
-		AvailableBuildInformation result = new AvailableBuildInformation();
-		HudsonService hudsonService = hudsonServiceProvider.getHudsonService(projectIdentifier);
-		if (buildJobName == null) {
-			HudsonStatus status = hudsonServiceProvider.getHudsonService(projectIdentifier).getStatus();
-			result.setBuildJobNames(new ArrayList<String>(status.getJobs().size()));
-			for (JobSummary job : status.getJobs()) {
-				result.getBuildJobNames().add(job.getName());
-			}
-		}
-
-		if (buildJobName != null) {
-			JobDetails jobDetails = hudsonService.getJobDetails(buildJobName);
-
-			result.setBuilds(new ArrayList<BuildDetails>(jobDetails.getBuilds().size()));
-			for (BuildSummary buildSummary : jobDetails.getBuilds()) {
-				BuildDetails details = hudsonService.getBuildDetails(buildJobName, buildSummary.getNumber());
-				if (details.getBuilding()) {
-					continue; // Don't add pending builds
-				}
-				details.setActions(null); // Un needed
-
-				result.getBuilds().add(details);
-			}
-		}
-
-		return result;
-	}
-
 	private void handle(ServiceException exception) throws ValidationFailedException {
 		throw new ValidationFailedException(Arrays.asList(exception.getMessage()));
 	}
@@ -178,8 +124,7 @@ public class DeploymentServiceImpl extends AbstractAutowiredRemoteServiceServlet
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#deleteDeployment(com.tasktop.c2c.server
+	 * @see com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#deleteDeployment(com.tasktop.c2c.server
 	 * .deployment .domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -197,8 +142,7 @@ public class DeploymentServiceImpl extends AbstractAutowiredRemoteServiceServlet
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#startDeployment(com.tasktop.c2c.server
+	 * @see com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#startDeployment(com.tasktop.c2c.server
 	 * .deployment .domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -234,8 +178,7 @@ public class DeploymentServiceImpl extends AbstractAutowiredRemoteServiceServlet
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#createService(com.tasktop.c2c.server
+	 * @see com.tasktop.c2c.server.profile.web.ui.client.DeploymentService#createService(com.tasktop.c2c.server
 	 * .deployment .domain.CloudService)
 	 */
 	@Override

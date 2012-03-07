@@ -72,6 +72,7 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.MockJobService;
 import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
@@ -82,6 +83,8 @@ import com.tasktop.c2c.server.profile.domain.Email;
 import com.tasktop.c2c.server.profile.domain.internal.Agreement;
 import com.tasktop.c2c.server.profile.domain.internal.ConfigurationProperty;
 import com.tasktop.c2c.server.profile.domain.internal.InvitationToken;
+import com.tasktop.c2c.server.profile.domain.internal.Organization;
+import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -91,11 +94,14 @@ import com.tasktop.c2c.server.profile.domain.internal.ProjectServiceProfile;
 import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
 import com.tasktop.c2c.server.profile.domain.internal.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.internal.SshPublicKey;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockAgreementFactory;
+import com.tasktop.c2c.server.profile.tests.domain.mock.MockOrganizationFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProfileFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectProfileFactory;
@@ -521,12 +527,12 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		project.setName(project.getName() + "2");
 		project.setDescription(project.getDescription() + "2");
 		project.setIdentifier(project.getIdentifier() + "2");
-		project.setPublic(Boolean.TRUE);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		Project updatedProject = profileService.updateProject(project);
 
 		assertEquals(project.getName(), updatedProject.getName());
 		assertEquals(project.getDescription(), updatedProject.getDescription());
-		assertEquals(project.getPublic(), updatedProject.getPublic());
+		assertEquals(project.getAccessibility(), updatedProject.getAccessibility());
 
 		// identifier should never change
 		assertEquals(originalIdentity, updatedProject.getIdentifier());
@@ -679,22 +685,22 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		profileService.requestPasswordReset(profile.getEmail());
 		PasswordResetToken token = profile.getPasswordResetTokens().get(0);
 
-		assertTrue(profileService.isPasswordResetTokenAvailable(token.getToken()));
+		assertTrue(profileService.getPasswordResetToken(token.getToken()) != null);
 	}
 
-	@Test
+	@Test(expected = EntityNotFoundException.class)
 	public void testIsTokenAvailableTokenIsUsed() throws Exception {
 		Profile profile = MockProfileFactory.create(entityManager);
 		profileService.requestPasswordReset(profile.getEmail());
 		PasswordResetToken token = profile.getPasswordResetTokens().get(0);
 		profileService.resetPassword(token.getToken(), "abc123ABC)$(^");
 
-		assertFalse(profileService.isPasswordResetTokenAvailable(token.getToken()));
+		profileService.getPasswordResetToken(token.getToken());
 	}
 
-	@Test
+	@Test(expected = EntityNotFoundException.class)
 	public void testIsTokenAvailableTokenDoesNotExist() throws Exception {
-		assertFalse(profileService.isPasswordResetTokenAvailable("invalid-token"));
+		profileService.getPasswordResetToken("invalid-token");
 	}
 
 	@Test
@@ -1048,7 +1054,8 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		setupProjects(count, true, null);
 
 		Region region = new Region(0, count / 2);
-		QueryResult<Project> result = profileService.findProjects("tesT123", region, null);
+		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("tesT123", new QueryRequest(region,
+				null)));
 		assertNotNull(result);
 		assertEquals(count, result.getTotalResultSize().intValue());
 		assertEquals(region.getSize().intValue(), result.getResultPage().size());
@@ -1063,7 +1070,8 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		setupProjects(count, false, mockProfile);
 
 		Region region = new Region(0, count / 2);
-		QueryResult<Project> result = profileService.findProjects("tesT123", region, null);
+		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("tesT123", new QueryRequest(region,
+				null)));
 		assertNotNull(result);
 		assertEquals(count, result.getTotalResultSize().intValue());
 		assertEquals(region.getSize().intValue(), result.getResultPage().size());
@@ -1074,7 +1082,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		List<Project> projects = MockProjectFactory.create(entityManager, max);
 		int x = -1;
 		for (Project project : projects) {
-			project.setPublic(createPublic);
+			project.setAccessibility(createPublic ? ProjectAccessibility.PUBLIC : ProjectAccessibility.PRIVATE);
 			++x;
 			if (x < count) {
 				if (x % 3 == 0) {
@@ -1108,7 +1116,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		logon(mockProfile);
 
 		Project project = MockProjectFactory.create(entityManager);
-		project.setPublic(true);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		entityManager.persist(project);
 
 		assertEquals(0, profileService.getProfileProjects(mockProfile.getId()).size());
@@ -1122,7 +1130,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		logon(mockProfile);
 
 		Project project = MockProjectFactory.create(entityManager);
-		project.setPublic(true);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		entityManager.persist(project);
 
 		assertEquals(0, profileService.getProfileProjects(mockProfile.getId()).size());
@@ -1138,7 +1146,7 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		logon(mockProfile);
 
 		Project project = MockProjectFactory.create(entityManager);
-		project.setPublic(true);
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		entityManager.persist(project);
 
 		assertEquals(0, profileService.getProfileProjects(mockProfile.getId()).size());
@@ -1449,10 +1457,65 @@ public class ProfileServiceTest implements ApplicationContextAware {
 		assertEquals(profile, project.getProjectProfiles().get(0).getProfile());
 		assertEquals(true, project.getProjectProfiles().get(0).getOwner());
 
-		QueryResult<Project> projects = profileService.findProjects(ProjectRelationship.ALL, null);
+		QueryResult<Project> projects = profileService.findProjects(new ProjectsQuery(ProjectRelationship.ALL, null));
 		Assert.assertEquals((Integer) 1, projects.getTotalResultSize());
 
 		// TODO more testing
 	}
 
+	@Test
+	public void testCreateOrganizationWithProjects() throws ValidationException, EntityNotFoundException {
+		Profile profile = setupProfile();
+
+		Organization org = MockOrganizationFactory.create(null);
+		org = profileService.createOrganization(org);
+		assertEquals(0, org.getProjects().size());
+		assertNotNull(org.getIdentifier());
+		org = profileService.getOrganizationByIdentfier(org.getIdentifier());
+		assertNotNull(org);
+
+		OrganizationProfile op = new OrganizationProfile();
+		op.setOrganization(org);
+		op.setProfile(profile);
+		org.getOrganizationProfiles().add(op);
+		entityManager.persist(op);
+
+		ProjectsQuery query = new ProjectsQuery(ProjectRelationship.ALL, null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		QueryResult<Project> queryResult = profileService.findProjects(query);
+
+		assertEquals(0, (int) queryResult.getTotalResultSize());
+
+		Project project = MockProjectFactory.create(null);
+		project.setOrganization(org);
+		project = profileService.createProject(profile.getId(), project);
+
+		org = profileService.getOrganizationByIdentfier(org.getIdentifier());
+		assertEquals(1, org.getProjects().size());
+
+		query = new ProjectsQuery(ProjectRelationship.ALL, null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		queryResult = profileService.findProjects(query);
+
+		assertEquals(1, (int) queryResult.getTotalResultSize());
+
+		query = new ProjectsQuery(ProjectRelationship.PUBLIC, null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		queryResult = profileService.findProjects(query);
+
+		assertEquals(0, (int) queryResult.getTotalResultSize());
+
+		query = new ProjectsQuery(ProjectRelationship.MEMBER, null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		queryResult = profileService.findProjects(query);
+
+		assertEquals(1, (int) queryResult.getTotalResultSize());
+
+		query = new ProjectsQuery(project.getIdentifier(), null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		queryResult = profileService.findProjects(query);
+
+		assertEquals(1, (int) queryResult.getTotalResultSize());
+
+	}
 }

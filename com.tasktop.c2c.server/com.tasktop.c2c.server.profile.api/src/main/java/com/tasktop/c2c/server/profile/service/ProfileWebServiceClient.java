@@ -33,15 +33,16 @@ import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
-import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
+import com.tasktop.c2c.server.profile.domain.project.Organization;
+import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -70,6 +71,7 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 		private SshPublicKey sshPublicKey;
 		private List<SshPublicKey> sshPublicKeyList;
 		private List<ProjectServiceStatus> projectServiceStatusList;
+		private Organization organization;
 
 		public void setProfile(Profile profile) {
 			this.profile = profile;
@@ -205,6 +207,14 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 
 		public void setProjectServiceStatusList(List<ProjectServiceStatus> projectServiceStatusList) {
 			this.projectServiceStatusList = projectServiceStatusList;
+		}
+
+		public Organization getOrganization() {
+			return organization;
+		}
+
+		public void setOrganization(Organization organization) {
+			this.organization = organization;
 		}
 	}
 
@@ -462,12 +472,10 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 		}
 	}
 
-	public static final String QUERY_URLPARAM = "query";
+	public static final String FIND_PROJECTS_URL = "projects/search";
 
-	public static final String FIND_PROJECTS_URL = "search/{" + QUERY_URLPARAM + "}";
-
-	public QueryResult<Project> findProjects(String query, QueryRequest request) {
-		return new GetCall<QueryResult<Project>>() {
+	public QueryResult<Project> findProjects(ProjectsQuery query) {
+		return new PostCall<QueryResult<Project>>() {
 			public QueryResult<Project> getValue(ServiceCallResult result) {
 				return result.getQueryResult();
 			}
@@ -689,15 +697,7 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 		}
 	}
 
-	public QueryResult<Project> findProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest) {
-		throw new UnsupportedOperationException();
-	}
-
 	public Boolean isProjectCreateAvailble() {
-		throw new UnsupportedOperationException();
-	}
-
-	public Boolean isPasswordResetTokenAvailable(String token) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -710,6 +710,36 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 					return result.getProjectServiceStatusList();
 				}
 			}.doCall("projects/{" + PROJECT_IDENTIFIER_URLPARAM + "}/status", projectId);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+			throw e;
+		}
+	}
+
+	public PasswordResetToken getPasswordResetToken(String token) {
+		throw new UnsupportedOperationException();
+	}
+
+	public Organization createOrganization(Organization org) throws ValidationException {
+		try {
+			return new PostCall<Organization>() {
+				public Organization getValue(ServiceCallResult result) {
+					return result.getOrganization();
+				}
+			}.doCall("organization", org);
+		} catch (WrappedCheckedException e) {
+			convertValidationException(e);
+			throw e;
+		}
+	}
+
+	public Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException {
+		try {
+			return new GetCall<Organization>() {
+				public Organization getValue(ServiceCallResult result) {
+					return result.getOrganization();
+				}
+			}.doCall("organization/{id}", orgIdentifier);
 		} catch (WrappedCheckedException e) {
 			convertEntityNotFoundException(e);
 			throw e;

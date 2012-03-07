@@ -8,7 +8,7 @@
 	</ui:style>
 	<g:HTMLPanel>
 
-		<form id="project-admin" class="add-form edit project-admin left" action="" method="post">
+		<div id="project-admin" class="add-form edit project-admin left" >
 			<h4>Properties</h4>
 			<fieldset>
 				<label class="left">Name:</label>
@@ -33,6 +33,10 @@
 						<g:RadioButton name="privacy" ui:field="privacyPrivateOption"/>
 						Private
 					</p>
+					<p ui:field="orgPrivatePElement">
+						<g:RadioButton name="privacy" ui:field="privacyOrgPrivateOption"/>
+						Organization Private
+					</p>
 				</div>
 			</fieldset>
 			<div class="clear"/>
@@ -46,7 +50,7 @@
 				</div>
 			</fieldset>
 			<div class="clear"/>
-		</form>
+		</div>
 
 	</g:HTMLPanel>
 </ui:UiBinder>

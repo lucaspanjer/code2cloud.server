@@ -50,7 +50,6 @@ import org.springframework.tenancy.provider.DefaultTenant;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
-import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.auth.service.proxy.AuthenticationTokenSerializer;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.Security;
@@ -60,6 +59,7 @@ import com.tasktop.c2c.server.common.service.io.MultiplexingInputStream;
 import com.tasktop.c2c.server.common.service.io.PacketType;
 import com.tasktop.c2c.server.common.service.web.HeaderConstants;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
+import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 import com.tasktop.c2c.server.ssh.server.Constants;
 
@@ -170,13 +170,14 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 					getLogger().info("Service temporarily unavailable for " + projectId + " path " + requestPath);
 					throw new CommandException(1, "Repository temporarily unavailable.  Please try again later.");
 				}
-				final Boolean projectIsPublic = service.getProjectServiceProfile().getProject().getPublic();
+
 				executorService.execute(new Runnable() {
 					@Override
 					public void run() {
 						// setup the security context
 						AuthenticationToken projectSpecializedToken = internalAuthenticationService
-								.specializeAuthenticationToken(authenticationToken, projectId, projectIsPublic);
+								.specializeAuthenticationToken(authenticationToken, service.getProjectServiceProfile()
+										.getProject());
 						AuthenticationServiceUser user = AuthenticationServiceUser
 								.fromAuthenticationToken(projectSpecializedToken);
 						SecurityContextHolder.getContext().setAuthentication(

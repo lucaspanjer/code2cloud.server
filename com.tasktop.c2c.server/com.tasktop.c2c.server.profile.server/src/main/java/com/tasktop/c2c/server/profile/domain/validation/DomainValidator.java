@@ -12,10 +12,10 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.domain.validation;
 
-
 import com.tasktop.c2c.server.common.service.validation.AbstractDomainValidator;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.internal.deployment.service.DeploymentConfigurationValidator;
+import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
@@ -35,6 +35,7 @@ public class DomainValidator extends AbstractDomainValidator {
 		registerValidator(DeploymentConfiguration.class, new DeploymentConfigurationValidator());
 		registerValidator(SshPublicKey.class, new SshPublicKeyValidator());
 		registerValidator(SshPublicKeySpec.class, new SshPublicKeySpecValidator());
+		registerValidator(Organization.class, new OrganizationValidator());
 	}
 
 }

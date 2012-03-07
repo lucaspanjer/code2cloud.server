@@ -14,14 +14,12 @@ package com.tasktop.c2c.server.services.web.scm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.tenancy.provider.DefaultTenant;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
-import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
 import com.tasktop.c2c.server.profile.service.GitService;
@@ -36,14 +34,16 @@ public class GitRepositoryConfigurator implements Configurator {
 
 	@Override
 	public void configure(ProjectServiceConfiguration configuration) {
-		String gitRepositoryName = configuration.getProperties().get(ProjectServiceConfiguration.APPLICATION_GIT_PROPERTY);
+		String gitRepositoryName = configuration.getProperties().get(
+				ProjectServiceConfiguration.APPLICATION_GIT_PROPERTY);
 		if (gitRepositoryName == null) {
 			return;
 		}
 		try {
 			TenancyContextHolder.createEmptyContext();
 			TenancyContextHolder.getContext().setTenant(new DefaultTenant(configuration.getProjectIdentifier(), null));
-			AuthUtils.insertSystemAuthToken(Role.Admin);
+			AuthUtils.assumeSystemIdentity(configuration.getProjectIdentifier());
+
 			gitService.createEmptyRepository(gitRepositoryName);
 		} finally {
 			TenancyContextHolder.clearContext();

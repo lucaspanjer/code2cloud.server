@@ -17,22 +17,28 @@ import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.stereotype.Component;
 
-import com.tasktop.c2c.server.common.profile.web.shared.actions.CheckPasswordResetTokenAction;
-import com.tasktop.c2c.server.common.profile.web.shared.actions.CheckPasswordResetTokenResult;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetOrganizationAction;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetOrganizationResult;
+import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
 @Component
-public class CheckPasswordResetTokenActionHandler extends
-		AbstractProfileActionHandler<CheckPasswordResetTokenAction, CheckPasswordResetTokenResult> {
+public class GetOrganizationActionHandler extends
+		AbstractProfileActionHandler<GetOrganizationAction, GetOrganizationResult> {
 
 	@Override
-	public CheckPasswordResetTokenResult execute(CheckPasswordResetTokenAction action, ExecutionContext context)
+	public GetOrganizationResult execute(GetOrganizationAction action, ExecutionContext context)
 			throws DispatchException {
-		return new CheckPasswordResetTokenResult(profileWebService.isPasswordResetTokenAvailable(action.getToken()));
-
+		try {
+			setTenancyContext(action.getOrganizationId());
+			return new GetOrganizationResult(profileWebService.getOrganizationByIdentfier(action.getOrganizationId()));
+		} catch (EntityNotFoundException e) {
+			handle(e);
+		}
+		throw new IllegalStateException();
 	}
 
 }

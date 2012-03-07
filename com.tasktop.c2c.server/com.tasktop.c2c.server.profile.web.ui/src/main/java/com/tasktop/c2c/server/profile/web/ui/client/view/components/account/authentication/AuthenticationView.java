@@ -38,7 +38,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.UIObject;
 import com.tasktop.c2c.server.common.profile.web.client.ClientCallback;
-import com.tasktop.c2c.server.common.profile.web.client.CustomActionCell;
+import com.tasktop.c2c.server.common.profile.web.client.DelegateCell;
 import com.tasktop.c2c.server.common.web.client.view.CellTableResources;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
@@ -134,13 +134,13 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 	private void createSshKeyTable() {
 		sshKeyTable = new CellTable<SshPublicKey>(10, CellTableResources.get.resources);
 		sshKeyTable.setTableLayoutFixed(true);
-		CustomActionCell<String> nameCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> nameCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						return template.sshKeyName(presenter.getSshKeys().get(context.getIndex()).getName());
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(Cell.Context context) {
 						SshPublicKey toEdit = presenter.getSshKeys().get(context.getIndex());
@@ -156,12 +156,12 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 		};
 		sshKeyTable.addColumn(nameColumn);
 		sshKeyTable.setColumnWidth(nameColumn, 200, Style.Unit.PX);
-		CustomActionCell<String> removeKeyCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+		DelegateCell<String> removeKeyCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						return SafeHtmlUtils.fromSafeConstant("<div class=\"left\"><a style=\"cursor:pointer\" class=\" red-link\">Remove</a></div>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(Cell.Context context) {
 						SshPublicKey toDelete = presenter.getSshKeys().get(context.getIndex());

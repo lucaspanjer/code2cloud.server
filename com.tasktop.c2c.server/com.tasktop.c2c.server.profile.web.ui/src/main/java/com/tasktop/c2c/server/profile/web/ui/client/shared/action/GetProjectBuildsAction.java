@@ -10,7 +10,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.common.profile.web.shared.actions;
+package com.tasktop.c2c.server.profile.web.ui.client.shared.action;
 
 import net.customware.gwt.dispatch.shared.Action;
 
@@ -18,21 +18,27 @@ import net.customware.gwt.dispatch.shared.Action;
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class CheckPasswordResetTokenAction implements Action<CheckPasswordResetTokenResult> {
-	private String token;
+public class GetProjectBuildsAction implements Action<GetProjectBuildsResult> {
+	private String projectId;
+	private String jobName;
 
-	public CheckPasswordResetTokenAction(String token) {
-		this.token = token;
+	public GetProjectBuildsAction(String projectId, String jobName) {
+		this.projectId = projectId;
+		this.jobName = jobName;
 	}
 
-	protected CheckPasswordResetTokenAction() {
+	protected GetProjectBuildsAction() {
 	}
 
 	/**
-	 * @return the token
+	 * @return the projectId
 	 */
-	public String getToken() {
-		return token;
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public String getJobName() {
+		return jobName;
 	}
 
 }

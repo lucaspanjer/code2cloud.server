@@ -1,0 +1,95 @@
+.cellTableWidget {
+
+}
+
+.cellTableFirstColumn {
+
+}
+
+.cellTableLastColumn {
+
+}
+
+.cellTableFooter {
+}
+
+.cellTableHeader {
+  border-left: 1px solid #ababab;
+  border-top: 1px solid #ababab;
+  border-bottom: 2px solid #ababab;
+  line-height: 24px;
+  background: #fff;
+  padding: 0 5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.cellTableCell {
+}
+
+.cellTableFirstColumnFooter {
+}
+
+.cellTableFirstColumnHeader {
+}
+
+.cellTableLastColumnFooter {
+
+}
+
+.cellTableLastColumnHeader {
+	border: 1px solid #ababab;
+  	border-bottom-width: 2px; 
+}
+
+.cellTableSortableHeader {
+}
+
+.cellTableSortableHeader:hover {
+}
+
+.cellTableSortedHeaderAscending {
+	background: #d1d1d1;
+	border-color: #8c8c8c;
+}
+
+.cellTableSortedHeaderDescending {
+	background: #d1d1d1;
+	border-color: #8c8c8c;
+}
+
+.cellTableEvenRow {
+}
+
+.cellTableEvenRowCell {
+}
+
+.cellTableOddRow {
+}
+
+.cellTableOddRowCell {
+}
+
+.cellTableHoveredRow {
+}
+
+.cellTableHoveredRowCell {
+}
+
+.cellTableKeyboardSelectedRow {
+}
+
+.cellTableKeyboardSelectedRowCell {
+}
+
+.cellTableSelectedRow {
+}
+
+.cellTableSelectedRowCell {
+}
+
+.cellTableKeyboardSelectedCell {
+}
+
+.cellTableLoading {
+}

@@ -50,7 +50,6 @@ public class GetProjectTeamActionHandler extends
 			project = profileService.getProjectByIdentifier(action.getProjectId());
 
 			ProjectTeamSummary summary = new ProjectTeamSummary();
-			summary.setApplication(WebDomain.copy(project));
 			summary.setRoles(new HashSet<ProjectRole>());
 
 			String currentUser = Security.getCurrentUser();

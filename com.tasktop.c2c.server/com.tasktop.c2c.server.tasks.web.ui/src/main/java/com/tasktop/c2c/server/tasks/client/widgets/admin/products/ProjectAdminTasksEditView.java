@@ -51,7 +51,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.tasktop.c2c.server.common.profile.web.client.ClientCallback;
-import com.tasktop.c2c.server.common.profile.web.client.CustomActionCell;
+import com.tasktop.c2c.server.common.profile.web.client.DelegateCell;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.TextBoxCell;
 import com.tasktop.c2c.server.common.profile.web.client.ValidatingTextBox;
@@ -273,13 +273,13 @@ public class ProjectAdminTasksEditView extends Composite implements Editor<Produ
 	private void createReleasesTable() {
 		milestoneTable = new CellTable<Milestone>(10, resources);
 		milestoneTable.setWidth("320px", true);
-		CustomActionCell<String> moveReleaseUpCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> moveReleaseUpCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						return SafeHtmlUtils.fromSafeConstant("<span class=\"order-control\"><a class=\"up\"/></span>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(Cell.Context object) {
 						int index = object.getIndex();
@@ -308,13 +308,13 @@ public class ProjectAdminTasksEditView extends Composite implements Editor<Produ
 		milestoneTable.addColumn(moveReleaseUpColumn);
 		milestoneTable.setColumnWidth(moveReleaseUpColumn, 22, Unit.PX);
 
-		CustomActionCell<String> moveReleaseDownCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> moveReleaseDownCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						return SafeHtmlUtils.fromSafeConstant("<span class=\"order-control\"><a class=\"down\"/></span>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(Cell.Context object) {
 						Short index = (short) object.getIndex();
@@ -343,13 +343,13 @@ public class ProjectAdminTasksEditView extends Composite implements Editor<Produ
 		milestoneTable.addColumn(moveReleaseDownColumn);
 		milestoneTable.setColumnWidth(moveReleaseDownColumn, 22, Unit.PX);
 
-		CustomActionCell<String> moveReleaseToTopCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> moveReleaseToTopCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						return SafeHtmlUtils.fromSafeConstant("<span class=\"order-control\"><a class=\"top\"/></span>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(Cell.Context object) {
 						int index = object.getIndex();
@@ -427,17 +427,17 @@ public class ProjectAdminTasksEditView extends Composite implements Editor<Produ
 		milestoneTable.addColumn(releaseVersionColumn);
 		milestoneTable.setColumnWidth(releaseVersionColumn, 250, Unit.PX);
 
-		CustomActionCell<String> removeReleaseCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> removeReleaseCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						final Milestone referenced = milestonesEditor.getList().get(context.getIndex());
 						if (referenced != null && "---".equals(referenced.getValue())) {
 							return SafeHtmlUtils.fromSafeConstant("<a class=\"delete-disabled\"><span/></a>");
 						}
 						return SafeHtmlUtils.fromSafeConstant("<a class=\"misc-icon cancel\"><span/></a>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(final Cell.Context object) {
 						final Milestone toRemove = milestonesEditor.getList().get(object.getIndex());
@@ -482,13 +482,13 @@ public class ProjectAdminTasksEditView extends Composite implements Editor<Produ
 		milestoneTable.addColumn(removeReleaseColumn);
 		milestoneTable.setColumnWidth(removeReleaseColumn, 30, Unit.PX);
 
-		CustomActionCell<String> addReleaseCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> addReleaseCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						return SafeHtmlUtils.fromSafeConstant("<a class=\"misc-icon add right\"><span/></a>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(Cell.Context object) {
 						Milestone newMilestone = presenter.createNewTransientMilestone(milestonesEditor.getList());
@@ -582,13 +582,13 @@ public class ProjectAdminTasksEditView extends Composite implements Editor<Produ
 		componentsTable.addColumn(descriptionColumn, SafeHtmlUtils.fromSafeConstant("<h4>Description</h4>"));
 		componentsTable.setColumnWidth(descriptionColumn, 250, Unit.PX);
 
-		CustomActionCell<String> removeComponentCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> removeComponentCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						return SafeHtmlUtils.fromSafeConstant("<a class=\"misc-icon cancel\"><span/></a>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(final Cell.Context object) {
 						presenter.deleteComponent(componentsEditor.getList().get(object.getIndex()).getId(),
@@ -620,13 +620,13 @@ public class ProjectAdminTasksEditView extends Composite implements Editor<Produ
 		componentsTable.addColumn(removeComponentColumn);
 		componentsTable.setColumnWidth(removeComponentColumn, 30, Unit.PX);
 
-		CustomActionCell<String> addComponentCell = new CustomActionCell<String>(
-				new CustomActionCell.TemplateDelegate<String>() {
+		DelegateCell<String> addComponentCell = new DelegateCell<String>(
+				new DelegateCell.RenderDelegate<String>() {
 					@Override
-					public SafeHtml getHtml(Cell.Context context, String value, SafeHtmlBuilder sb) {
+					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
 						return SafeHtmlUtils.fromSafeConstant("<a class=\"misc-icon add right\"><span/></a>");
 					}
-				}, new CustomActionCell.ActionDelegate<String>() {
+				}, new DelegateCell.ActionDelegate<String>() {
 					@Override
 					public void execute(Cell.Context object) {
 						componentsEditor.getList().add(

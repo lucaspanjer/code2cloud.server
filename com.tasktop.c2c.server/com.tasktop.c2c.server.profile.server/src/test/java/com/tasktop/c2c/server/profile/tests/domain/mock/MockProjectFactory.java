@@ -18,7 +18,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.tasktop.c2c.server.profile.domain.internal.Project;
-
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 
 public class MockProjectFactory {
 
@@ -45,7 +45,7 @@ public class MockProjectFactory {
 		mock.setName("project" + index);
 		mock.computeIdentifier();
 		mock.setDescription("A description about project " + index);
-		mock.setPublic(Boolean.FALSE);
+		mock.setAccessibility(ProjectAccessibility.PRIVATE);
 		return mock;
 	}
 

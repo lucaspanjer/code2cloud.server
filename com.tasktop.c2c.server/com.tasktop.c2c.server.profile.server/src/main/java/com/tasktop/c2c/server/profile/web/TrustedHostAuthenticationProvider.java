@@ -30,13 +30,14 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 import com.tasktop.c2c.server.auth.service.AbstractAuthenticationServiceBean;
+import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
-import com.tasktop.c2c.server.auth.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.web.HeaderConstants;
 import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
+import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 import com.tasktop.c2c.server.profile.web.proxy.AuthenticationProviderNotApplicableException;
 
 // XXX Need to subclass AASB so that I can create auth tokens.
@@ -44,9 +45,7 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 		implements AuthenticationProvider {
 
 	@Autowired
-	private com.tasktop.c2c.server.profile.service.ProjectServiceService projectServiceService;
-	@Autowired
-	private InternalAuthenticationService internalAuthenticationService;
+	private ProjectServiceService projectServiceService;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -140,7 +139,7 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 			if (host.getServiceHostConfiguration().getSupportedServices().contains(ServiceType.BUILD_SLAVE)
 					&& host.getProjectServices().size() == 1) {
 				// Grant the builder access to the project its building for
-				authorities.add(new SimpleGrantedAuthority(internalAuthenticationService.toCompoundRole(Role.User, host
+				authorities.add(new SimpleGrantedAuthority(AuthUtils.toCompoundRole(Role.User, host
 						.getProjectServices().get(0).getProjectServiceProfile().getProject().getIdentifier())));
 			}
 
@@ -148,8 +147,7 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 				// Grant the master access only if it has a special header
 				String appId = request.getHeader(HeaderConstants.TRUSTED_HOST_PROJECT_ID_HEADER);
 				if (appId != null) {
-					authorities.add(new SimpleGrantedAuthority(internalAuthenticationService.toCompoundRole(Role.User,
-							appId)));
+					authorities.add(new SimpleGrantedAuthority(AuthUtils.toCompoundRole(Role.User, appId)));
 				}
 			}
 

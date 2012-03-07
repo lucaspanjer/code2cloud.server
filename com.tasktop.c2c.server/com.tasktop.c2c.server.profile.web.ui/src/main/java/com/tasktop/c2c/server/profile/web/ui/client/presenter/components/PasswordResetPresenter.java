@@ -14,16 +14,16 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsDiscoverPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
 import com.tasktop.c2c.server.profile.web.ui.client.event.LogonEvent;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.place.ResetPasswordPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.PasswordResetView;
 
@@ -41,21 +41,6 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 
 	@Override
 	protected void bind() {
-		getProfileService().isTokenAvailable(passwordResetToken, new AsyncCallback<Boolean>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				SignInPlace.createPlace().go();
-			}
-
-			@Override
-			public void onSuccess(Boolean result) {
-				// if true do nothing
-				if (!result) {
-					SignInPlace.createPlace().go();
-				}
-			}
-		});
 		passwordResetView.submitButton.addClickHandler(this);
 	}
 
@@ -81,7 +66,7 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 			@Override
 			public void success(Credentials result) {
 				getEventBus().fireEvent(new LogonEvent(result));
-				ProjectsDiscoverPlace
+				ProjectsPlace
 						.createPlace()
 						.displayOnArrival(
 								Message.createSuccessMessage("Your password has been updated. You are now signed in."))
@@ -101,5 +86,13 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 				}
 			}
 		});
+	}
+
+	/**
+	 * @param place
+	 */
+	public void setPlace(Place place) {
+		ResetPasswordPlace resetPasswordPlace = (ResetPasswordPlace) place;
+		passwordResetView.username.setText(resetPasswordPlace.getUsername());
 	}
 }

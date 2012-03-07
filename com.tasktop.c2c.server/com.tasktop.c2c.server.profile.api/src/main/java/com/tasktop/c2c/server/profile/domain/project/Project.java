@@ -23,9 +23,11 @@ public class Project extends AbstractEntity {
 	private String name;
 	private String description;
 	private Boolean isPublic;
+	private ProjectAccessibility accessibility;
 	private List<ProjectService> projectServices;
 	private Integer numWatchers;
 	private Integer numCommiters;
+	private Organization organization;
 
 	public Project() {
 		// Default constructor, does nothing.
@@ -74,14 +76,6 @@ public class Project extends AbstractEntity {
 		return results;
 	}
 
-	public Boolean getPublic() {
-		return isPublic;
-	}
-
-	public void setPublic(Boolean isPublic) {
-		this.isPublic = isPublic;
-	}
-
 	/**
 	 * @return the numWatchers
 	 */
@@ -110,6 +104,22 @@ public class Project extends AbstractEntity {
 	 */
 	public void setNumCommiters(Integer numCommiters) {
 		this.numCommiters = numCommiters;
+	}
+
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
+	}
+
+	public ProjectAccessibility getAccessibility() {
+		return accessibility;
+	}
+
+	public void setAccessibility(ProjectAccessibility accessibility) {
+		this.accessibility = accessibility;
 	}
 
 }

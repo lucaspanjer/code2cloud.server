@@ -18,7 +18,7 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
- * @author clint.morgan@tasktop.com (Tasktop Technologies Inc.)
+ * @author Clint Morgan (Tasktop Technologies Inc.)
  * 
  */
 public class LocalServicesWebRunner {

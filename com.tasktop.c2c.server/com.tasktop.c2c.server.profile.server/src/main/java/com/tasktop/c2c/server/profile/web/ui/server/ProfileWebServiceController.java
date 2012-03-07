@@ -30,7 +30,6 @@ import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PROJECT_BY_IDENTIFIER_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PROJECT_FOR_INVITATION_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PROJECT_INVITATION_TOKEN_URL;
-import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_ROLES_FOR_PROJECT_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_SIGNUP_TOKEN_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_UNUSED_SIGNUP_TOKENS_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.INVITE_USER_TO_PROJECT_URL;
@@ -39,7 +38,6 @@ import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PRO
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PROJECT_IDENTIFIER_URLPARAM;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PROJECT_UNWATCH_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PROJECT_WATCH_URL;
-import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.QUERY_URLPARAM;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.SEND_SIGNUP_INVITATION_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.SSH_KEY_ID_PARAM;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.TOKEN_URLPARAM;
@@ -66,15 +64,16 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.doc.Documentation;
 import com.tasktop.c2c.server.common.service.doc.Section;
 import com.tasktop.c2c.server.common.service.doc.Title;
-import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.web.AbstractRestService;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
+import com.tasktop.c2c.server.profile.domain.project.Organization;
+import com.tasktop.c2c.server.profile.domain.project.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
-import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
@@ -181,16 +180,6 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 	}
 
 	@Section("Projects")
-	@Title("Get Project Roles")
-	@Documentation("Get the current user's roles for the given project")
-	@Override
-	@RequestMapping(value = GET_ROLES_FOR_PROJECT_URL, method = RequestMethod.GET)
-	public String[] getRolesForProject(@PathVariable(PROJECT_IDENTIFIER_URLPARAM) String projectIdentifier)
-			throws EntityNotFoundException {
-		return profileWebService.getRolesForProject(projectIdentifier);
-	}
-
-	@Section("Projects")
 	@Title("Retrieve Project By Identifier")
 	@Documentation("Get a project by its identifier.")
 	@Override
@@ -202,20 +191,10 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 
 	@Section("Projects")
 	@Title("Find Projects")
-	@Documentation("Find projects matching the given query string. Projects are matched by name and description.")
+	@RequestMapping(value = FIND_PROJECTS_URL, method = RequestMethod.POST)
 	@Override
-	@RequestMapping(value = FIND_PROJECTS_URL, method = RequestMethod.GET)
-	public QueryResult<Project> findProjects(@PathVariable(QUERY_URLPARAM) String query, QueryRequest request) {
-		return profileWebService.findProjects(query, null);
-	}
-
-	@Section("Projects")
-	@Title("Find Projects")
-	@Documentation("Find projects based on the relationship with the user.")
-	@RequestMapping(value = FIND_PROJECTS_URL, method = RequestMethod.GET)
-	@Override
-	public QueryResult<Project> findProjects(ProjectRelationship projectRelationship, QueryRequest queryRequest) {
-		return profileWebService.findProjects(projectRelationship, queryRequest);
+	public QueryResult<Project> findProjects(@RequestBody ProjectsQuery query) {
+		return profileWebService.findProjects(query);
 	}
 
 	@Section("Projects")
@@ -391,17 +370,6 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#isPasswordResetTokenAvailable(java.lang.String)
-	 */
-	@Override
-	public Boolean isPasswordResetTokenAvailable(String token) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	@RequestMapping(value = "projects/{" + PROJECT_IDENTIFIER_URLPARAM + "}/status", method = RequestMethod.GET)
 	public List<ProjectServiceStatus> computeProjectServicesStatus(
@@ -409,4 +377,27 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 		return profileWebService.computeProjectServicesStatus(projectId);
 	}
 
+	@Override
+	public PasswordResetToken getPasswordResetToken(String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Section("Organizations")
+	@Title("Create Organization")
+	@Documentation("Create a new organization.")
+	@RequestMapping(value = "organization", method = RequestMethod.POST)
+	@Override
+	public Organization createOrganization(@RequestBody Organization org) throws ValidationException {
+		return profileWebService.createOrganization(org);
+	}
+
+	@Section("Organizations")
+	@Title("Retrieve Organization By Identifier")
+	@Override
+	@RequestMapping(value = "organization/{id}", method = RequestMethod.GET)
+	public Organization getOrganizationByIdentfier(@PathVariable("id") String orgIdentifier)
+			throws EntityNotFoundException {
+		return profileWebService.getOrganizationByIdentfier(orgIdentifier);
+	}
 }

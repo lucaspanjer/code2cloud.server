@@ -18,28 +18,33 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
+import net.customware.gwt.dispatch.shared.Action;
+
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
+import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Section;
 import com.tasktop.c2c.server.common.profile.web.client.place.SectionPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.SecuredProjectPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
-import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.ui.client.DeploymentService;
-import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsAction;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsResult;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectDeploymentsAction;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectDeploymentsResult;
 
-public class ProjectDeploymentPlace extends SecuredProjectPlace implements HeadingPlace, HasProjectPlace,
+public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace,
 		BreadcrumbPlace, SectionPlace, WindowTitlePlace {
 
 	private static final Set<String> roles = new HashSet<String>(Arrays.asList(Role.User));
@@ -60,10 +65,11 @@ public class ProjectDeploymentPlace extends SecuredProjectPlace implements Headi
 		}
 	}
 
+	private String projectId;
 	private Project project;
 	private List<Breadcrumb> breadcrumbs;
 	private List<DeploymentConfiguration> deploymentConfigurations;
-	private DeploymentService.AvailableBuildInformation buildInformation;
+	private GetProjectBuildsResult buildInformation;
 
 	public Project getProject() {
 		return project;
@@ -87,7 +93,7 @@ public class ProjectDeploymentPlace extends SecuredProjectPlace implements Headi
 		return deploymentConfigurations;
 	}
 
-	public DeploymentService.AvailableBuildInformation getBuildInformation() {
+	public GetProjectBuildsResult getBuildInformation() {
 		return buildInformation;
 	}
 
@@ -101,44 +107,21 @@ public class ProjectDeploymentPlace extends SecuredProjectPlace implements Headi
 	}
 
 	@Override
-	protected void fetchPlaceData() {
-		AppGinjector.get.instance().getProfileService().getProject(projectId, new AsyncCallbackSupport<Project>() {
-			@Override
-			protected void success(Project result) {
-				project = result;
-				createBreadCrumbs(result);
-				fetchBuildConfigs();
-			}
-		});
+	protected void addActions(List<Action<?>> actions) {
+		super.addActions(actions);
+		actions.add(new GetProjectAction(projectId));
+		actions.add(new GetProjectDeploymentsAction(projectId));
+		actions.add(new GetProjectBuildsAction(projectId, null));
 	}
 
-	private void fetchBuildConfigs() {
-		AppGinjector.get.instance().getDeploymentService()
-				.getDeploymentConfigurations(projectId, new AsyncCallbackSupport<List<DeploymentConfiguration>>() {
-
-					@Override
-					protected void success(List<DeploymentConfiguration> result) {
-						deploymentConfigurations = result;
-						fetchBuildInformation();
-					}
-				});
-	}
-
-	private void fetchBuildInformation() {
-		AppGinjector.get
-				.instance()
-				.getDeploymentService()
-				.getBuildInformation(projectId, null,
-						new AsyncCallbackSupport<DeploymentService.AvailableBuildInformation>() {
-
-							@Override
-							protected void success(DeploymentService.AvailableBuildInformation result) {
-								buildInformation = result;
-								onPlaceDataFetched();
-
-							}
-
-						});
+	@Override
+	protected void handleBatchResults() {
+		super.handleBatchResults();
+		project = getResult(GetProjectResult.class).get();
+		deploymentConfigurations = getResult(GetProjectDeploymentsResult.class).get();
+		buildInformation = getResult(GetProjectBuildsResult.class);
+		createBreadCrumbs(project);
+		onPlaceDataFetched();
 	}
 
 	public String getToken() {
@@ -150,7 +133,7 @@ public class ProjectDeploymentPlace extends SecuredProjectPlace implements Headi
 	}
 
 	private ProjectDeploymentPlace(String projectId) {
-		super(roles, projectId);
+		this.projectId = projectId;
 	}
 
 	private void createBreadCrumbs(Project project) {

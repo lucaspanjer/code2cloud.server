@@ -10,20 +10,19 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.profile.web.ui.client.view.components;
+package com.tasktop.c2c.server.profile.web.ui.client.view.components.project;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
+import com.tasktop.c2c.server.profile.domain.project.Project;
 
-public class NewProjectView extends Composite {
+public class NewProjectView extends AbstractProjectView {
 
 	private static NewProjectView instance = null;
 
@@ -51,12 +50,7 @@ public class NewProjectView extends Composite {
 	public Button cancelButton;
 	@UiField
 	public Panel maxProjectsMessagePanel;
-
-	@UiField
-	public RadioButton privateProjectButton;
-
-	@UiField
-	public RadioButton publicProjectButton;
+	private Project project;
 
 	private NewProjectView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -71,9 +65,17 @@ public class NewProjectView extends Composite {
 	/**
 	 * 
 	 */
-	public void clear() {
-		name.setValue("");
-		description.setValue("");
-		privateProjectButton.setValue(true);		
+	public void setProject(Project project) {
+		this.project = project;
+		name.setValue(project.getName());
+		description.setValue(project.getDescription());
+		super.setProject(project);
+	}
+
+	public Project getProject() {
+		project.setName(name.getValue());
+		project.setDescription(description.getValue());
+		super.updateProject(project);
+		return project;
 	}
 }
