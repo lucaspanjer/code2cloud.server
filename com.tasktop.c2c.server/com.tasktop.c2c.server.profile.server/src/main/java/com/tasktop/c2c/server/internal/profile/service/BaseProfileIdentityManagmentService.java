@@ -37,6 +37,7 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.profile.domain.internal.Agreement;
 import com.tasktop.c2c.server.profile.domain.internal.AgreementProfile;
+import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 
@@ -158,7 +159,18 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 	}
 
 	protected void addOrganizationRoles(Profile profile, List<String> roles) {
-		// TODO
+		for (OrganizationProfile organizationProfile : profile.getOrganizationProfiles()) {
+			String identifier = organizationProfile.getOrganization().getIdentifier();
+
+			if (organizationProfile.getOwner()) {
+				roles.add(AuthUtils.toCompoundOrganizationRole(Role.Admin, identifier));
+			}
+
+			if (organizationProfile.getUser()) {
+				roles.add(AuthUtils.toCompoundOrganizationRole(Role.User, identifier));
+			}
+
+		}
 	}
 
 	/**
@@ -171,15 +183,15 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 
 			// Add our appropriate roles now.
 			if (projectProfile.getOwner()) {
-				roles.add(AuthUtils.toCompoundRole(Role.Admin, projectIdentifier));
+				roles.add(AuthUtils.toCompoundProjectRole(Role.Admin, projectIdentifier));
 			}
 
 			if (projectProfile.getUser()) {
-				roles.add(AuthUtils.toCompoundRole(Role.User, projectIdentifier));
+				roles.add(AuthUtils.toCompoundProjectRole(Role.User, projectIdentifier));
 			}
 
 			if (projectProfile.getCommunity()) {
-				roles.add(AuthUtils.toCompoundRole(Role.Community, projectIdentifier));
+				roles.add(AuthUtils.toCompoundProjectRole(Role.Community, projectIdentifier));
 			}
 		}
 	}

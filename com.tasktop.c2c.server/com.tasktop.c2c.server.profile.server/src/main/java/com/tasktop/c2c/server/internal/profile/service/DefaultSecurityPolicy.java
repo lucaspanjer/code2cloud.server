@@ -264,7 +264,7 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 	}
 
 	private void assertMember(Project target) throws InsufficientPermissionsException {
-		String userRole = AuthUtils.toCompoundRole(Role.User, target.getIdentifier());
+		String userRole = AuthUtils.toCompoundProjectRole(Role.User, target.getIdentifier());
 
 		if (Security.hasRole(userRole)) {
 			// is a user
@@ -285,7 +285,7 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 	}
 
 	private void assertOwner(Project target) throws InsufficientPermissionsException {
-		String adminRole = AuthUtils.toCompoundRole(Role.Admin, target.getIdentifier());
+		String adminRole = AuthUtils.toCompoundProjectRole(Role.Admin, target.getIdentifier());
 
 		if (Security.hasRole(adminRole)) {
 			// is an admin

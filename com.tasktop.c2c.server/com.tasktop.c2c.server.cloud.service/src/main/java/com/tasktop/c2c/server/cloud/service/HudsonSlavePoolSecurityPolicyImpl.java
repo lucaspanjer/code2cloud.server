@@ -32,7 +32,7 @@ public class HudsonSlavePoolSecurityPolicyImpl implements HudsonSlavePoolSecurit
 	private ServiceHostService serviceHostService;
 
 	public void authorize(String projectIdentifier) {
-		if (!Security.hasRole(AuthUtils.toCompoundRole(Role.User, projectIdentifier))) {
+		if (!Security.hasRole(AuthUtils.toCompoundProjectRole(Role.User, projectIdentifier))) {
 			throw new InsufficientPermissionsException();
 		}
 	}

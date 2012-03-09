@@ -38,6 +38,7 @@ public class Profile extends BaseEntity {
 	private String firstName;
 	private String lastName;
 	private List<ProjectProfile> projectProfiles = new ArrayList<ProjectProfile>();
+	private List<OrganizationProfile> organizationProfiles = new ArrayList<OrganizationProfile>();
 	private List<PasswordResetToken> passwordResetTokens = new ArrayList<PasswordResetToken>();
 	private List<AgreementProfile> agreementProfiles = new ArrayList<AgreementProfile>();
 	private List<SshPublicKey> sshPublicKeys = new ArrayList<SshPublicKey>();
@@ -244,5 +245,14 @@ public class Profile extends BaseEntity {
 	 */
 	public void setDisabled(Boolean disabled) {
 		this.disabled = disabled;
+	}
+
+	@OneToMany(cascade = { CascadeType.PERSIST }, mappedBy = "profile")
+	public List<OrganizationProfile> getOrganizationProfiles() {
+		return organizationProfiles;
+	}
+
+	public void setOrganizationProfiles(List<OrganizationProfile> organizationProfiles) {
+		this.organizationProfiles = organizationProfiles;
 	}
 }

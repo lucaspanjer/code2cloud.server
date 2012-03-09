@@ -38,7 +38,7 @@ public class InternalAuthenticationServiceBean implements InternalAuthentication
 			token.getAuthorities().add(Role.Anonymous);
 		} else {
 			token = originalToken.clone();
-			token.setAuthorities(AuthUtils.fromCompoundRole(token.getAuthorities(), project.getIdentifier()));
+			token.setAuthorities(AuthUtils.fromCompoundProjectRoles(token.getAuthorities(), project.getIdentifier()));
 		}
 
 		if (project.getAccessibility() != null) {

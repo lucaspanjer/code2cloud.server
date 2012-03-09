@@ -78,15 +78,22 @@ public final class AuthUtils {
 		return authorities;
 	}
 
-	public static String toCompoundRole(String roleName, String projectIdentifier) {
+	public static String toCompoundProjectRole(String roleName, String projectIdentifier) {
 		if (roleName == null || roleName.contains("/")) {
 			throw new IllegalArgumentException();
 		}
 		return String.format("%s/%s", roleName, projectIdentifier);
 	}
 
-	public static String fromCompoundRole(String compoundRole, String projectIdentifier) {
-		List<String> retList = fromCompoundRole(Collections.singletonList(compoundRole), projectIdentifier);
+	public static String toCompoundOrganizationRole(String roleName, String organizationIdentifier) {
+		if (roleName == null || roleName.contains("/")) {
+			throw new IllegalArgumentException();
+		}
+		return String.format("%s/ORG_%s", roleName, organizationIdentifier);
+	}
+
+	public static String fromCompoundProjectRole(String compoundRole, String projectIdentifier) {
+		List<String> retList = fromCompoundProjectRoles(Collections.singletonList(compoundRole), projectIdentifier);
 		String retStr = null;
 
 		if (retList.size() > 0) {
@@ -96,8 +103,8 @@ public final class AuthUtils {
 		return retStr;
 	}
 
-	public static List<String> fromCompoundRole(List<String> compoundRoles, String projectIdentifier) {
-		Pattern rolePattern = computeRolePattern(projectIdentifier);
+	public static List<String> fromCompoundProjectRoles(List<String> compoundRoles, String projectIdentifier) {
+		Pattern rolePattern = computeProjectRolePattern(projectIdentifier);
 		List<String> roleNames = new ArrayList<String>(compoundRoles.size());
 		for (String authority : compoundRoles) {
 			Matcher matcher = rolePattern.matcher(authority);
@@ -109,7 +116,7 @@ public final class AuthUtils {
 		return roleNames;
 	}
 
-	private static Pattern computeRolePattern(String projectIdentifier) {
+	private static Pattern computeProjectRolePattern(String projectIdentifier) {
 		return Pattern.compile("([^/]+)/" + Pattern.quote(projectIdentifier));
 	}
 
@@ -120,8 +127,8 @@ public final class AuthUtils {
 		token.getAuthorities().add(Role.System);
 		token.getAuthorities().add(Role.User);
 		if (projectIdentifier != null) {
-			token.getAuthorities().add(AuthUtils.toCompoundRole(Role.System, projectIdentifier));
-			token.getAuthorities().add(AuthUtils.toCompoundRole(Role.User, projectIdentifier));
+			token.getAuthorities().add(AuthUtils.toCompoundProjectRole(Role.System, projectIdentifier));
+			token.getAuthorities().add(AuthUtils.toCompoundProjectRole(Role.User, projectIdentifier));
 		}
 		return token;
 	}

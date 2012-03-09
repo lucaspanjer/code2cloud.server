@@ -31,17 +31,17 @@ public class AuthUtilsTest {
 
 	@Test
 	public void testToCompoundRole() {
-		assertEquals("A/B", AuthUtils.toCompoundRole("A", "B"));
+		assertEquals("A/B", AuthUtils.toCompoundProjectRole("A", "B"));
 	}
 
 	@Test
 	public void testFromCompoundRole() {
-		assertEquals("A", AuthUtils.fromCompoundRole("A/B", "B"));
+		assertEquals("A", AuthUtils.fromCompoundProjectRole("A/B", "B"));
 	}
 
 	@Test
 	public void testFromCompoundRoleNotApplicable() {
-		assertNull(AuthUtils.fromCompoundRole("A/B", "C"));
+		assertNull(AuthUtils.fromCompoundProjectRole("A/B", "C"));
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class AuthUtilsTest {
 		roles.add("C/D");
 		List<String> expected = new ArrayList<String>();
 		expected.add("A");
-		assertEquals(expected, AuthUtils.fromCompoundRole(roles, "B"));
+		assertEquals(expected, AuthUtils.fromCompoundProjectRoles(roles, "B"));
 	}
 
 }

@@ -139,7 +139,7 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 			if (host.getServiceHostConfiguration().getSupportedServices().contains(ServiceType.BUILD_SLAVE)
 					&& host.getProjectServices().size() == 1) {
 				// Grant the builder access to the project its building for
-				authorities.add(new SimpleGrantedAuthority(AuthUtils.toCompoundRole(Role.User, host
+				authorities.add(new SimpleGrantedAuthority(AuthUtils.toCompoundProjectRole(Role.User, host
 						.getProjectServices().get(0).getProjectServiceProfile().getProject().getIdentifier())));
 			}
 
@@ -147,7 +147,7 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 				// Grant the master access only if it has a special header
 				String appId = request.getHeader(HeaderConstants.TRUSTED_HOST_PROJECT_ID_HEADER);
 				if (appId != null) {
-					authorities.add(new SimpleGrantedAuthority(AuthUtils.toCompoundRole(Role.User, appId)));
+					authorities.add(new SimpleGrantedAuthority(AuthUtils.toCompoundProjectRole(Role.User, appId)));
 				}
 			}
 

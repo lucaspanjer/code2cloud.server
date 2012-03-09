@@ -48,9 +48,9 @@ public class InternalAuthenticationServiceTest {
 		project1 = new Project();
 		project1.setIdentifier("p1");
 		List<String> roles = new ArrayList<String>();
-		roles.add(AuthUtils.toCompoundRole(Role.User, project1.getIdentifier()));
-		roles.add(AuthUtils.toCompoundRole(Role.Admin, project1.getIdentifier()));
-		roles.add(AuthUtils.toCompoundRole(Role.Admin, "otherIdentifier"));
+		roles.add(AuthUtils.toCompoundProjectRole(Role.User, project1.getIdentifier()));
+		roles.add(AuthUtils.toCompoundProjectRole(Role.Admin, project1.getIdentifier()));
+		roles.add(AuthUtils.toCompoundProjectRole(Role.Admin, "otherIdentifier"));
 		origToken.setAuthorities(roles);
 		origToken.setFirstName("first");
 		origToken.setLastName("last");
