@@ -85,13 +85,6 @@ public final class AuthUtils {
 		return String.format("%s/%s", roleName, projectIdentifier);
 	}
 
-	public static String toCompoundOrganizationRole(String roleName, String organizationIdentifier) {
-		if (roleName == null || roleName.contains("/")) {
-			throw new IllegalArgumentException();
-		}
-		return String.format("%s/ORG_%s", roleName, organizationIdentifier);
-	}
-
 	public static String fromCompoundProjectRole(String compoundRole, String projectIdentifier) {
 		List<String> retList = fromCompoundProjectRoles(Collections.singletonList(compoundRole), projectIdentifier);
 		String retStr = null;
@@ -118,6 +111,41 @@ public final class AuthUtils {
 
 	private static Pattern computeProjectRolePattern(String projectIdentifier) {
 		return Pattern.compile("([^/]+)/" + Pattern.quote(projectIdentifier));
+	}
+
+	public static String toCompoundOrganizationRole(String roleName, String organizationIdentifier) {
+		if (roleName == null || roleName.contains("/")) {
+			throw new IllegalArgumentException();
+		}
+		return String.format("%s/ORG_%s", roleName, organizationIdentifier);
+	}
+
+	public static String fromCompoundOrganizationRole(String compoundRole, String projectIdentifier) {
+		List<String> retList = fromCompoundOrganizationRoles(Collections.singletonList(compoundRole), projectIdentifier);
+		String retStr = null;
+
+		if (retList.size() > 0) {
+			retStr = retList.get(0);
+		}
+
+		return retStr;
+	}
+
+	public static List<String> fromCompoundOrganizationRoles(List<String> compoundRoles, String projectIdentifier) {
+		Pattern rolePattern = computeOrganizationRolePattern(projectIdentifier);
+		List<String> roleNames = new ArrayList<String>(compoundRoles.size());
+		for (String authority : compoundRoles) {
+			Matcher matcher = rolePattern.matcher(authority);
+			if (matcher.matches()) {
+				String role = matcher.group(1);
+				roleNames.add(role);
+			}
+		}
+		return roleNames;
+	}
+
+	private static Pattern computeOrganizationRolePattern(String projectIdentifier) {
+		return Pattern.compile("([^/]+)/" + Pattern.quote("ORG_" + projectIdentifier));
 	}
 
 	private static AuthenticationToken createSystemAuthenticationToken(String projectIdentifier) {

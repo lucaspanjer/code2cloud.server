@@ -29,7 +29,6 @@ import com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration
 import com.tasktop.c2c.server.profile.domain.internal.ConfigurationProperty;
 import com.tasktop.c2c.server.profile.domain.internal.InvitationToken;
 import com.tasktop.c2c.server.profile.domain.internal.Organization;
-import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
@@ -274,17 +273,27 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 		assertOwner(target); // Not a user, assert owner role
 	}
 
-	protected void assertMember(Organization org) {
-		String currentUserName = Security.getCurrentUser();
-		for (OrganizationProfile op : org.getOrganizationProfiles()) {
-			if (op.getProfile().getUsername().equals(currentUserName)) {
-				return;
-			}
+	private void assertOwner(Project target) throws InsufficientPermissionsException {
+		String adminRole = AuthUtils.toCompoundProjectRole(Role.Admin, target.getIdentifier());
+
+		if (Security.hasRole(adminRole)) {
+			// is an admin
+			return;
 		}
 		throw new InsufficientPermissionsException();
 	}
 
-	private void assertOwner(Project target) throws InsufficientPermissionsException {
+	protected void assertMember(Organization org) {
+		String memberRole = AuthUtils.toCompoundOrganizationRole(Role.User, org.getIdentifier());
+		if (Security.hasRole(memberRole)) {
+			// is a user
+			return;
+		}
+
+		assertOwner(org);
+	}
+
+	private void assertOwner(Organization target) throws InsufficientPermissionsException {
 		String adminRole = AuthUtils.toCompoundProjectRole(Role.Admin, target.getIdentifier());
 
 		if (Security.hasRole(adminRole)) {
