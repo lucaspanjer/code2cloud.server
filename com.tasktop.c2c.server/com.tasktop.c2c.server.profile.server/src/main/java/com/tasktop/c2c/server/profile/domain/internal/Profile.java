@@ -50,6 +50,23 @@ public class Profile extends BaseEntity {
 	@Transient
 	private String gravatarHash;
 
+	public Profile() {
+
+	}
+
+	public Profile(com.tasktop.c2c.server.profile.domain.internal.Profile p) {
+		this.username = p.username;
+		this.password = p.password;
+		this.email = p.email;
+		this.emailVerified = p.emailVerified;
+		this.firstName = p.firstName;
+		this.lastName = p.lastName;
+		this.admin = p.admin;
+		this.notificationSettings = p.notificationSettings;
+		this.sentWelcomeEmail = p.sentWelcomeEmail;
+		this.disabled = p.disabled;
+	}
+
 	/**
 	 * the username that identifies the user
 	 */

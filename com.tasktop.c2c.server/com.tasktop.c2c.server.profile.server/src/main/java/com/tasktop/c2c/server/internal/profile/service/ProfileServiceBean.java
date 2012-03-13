@@ -421,7 +421,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Secured(Role.User)
 	@Override
 	public Profile getProfileByUsername(String username) throws EntityNotFoundException {
-		return getEntityByField("username", username, Profile.class);
+		return identityManagmentService.getProfileByUsername(username);
 	}
 
 	@Secured(Role.User)

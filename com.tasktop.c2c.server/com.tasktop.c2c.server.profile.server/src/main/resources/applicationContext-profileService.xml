@@ -51,6 +51,8 @@
 		p:publicSshPort="${ssh.server.publicPort}"
 		p:signupNotificationEmail="${profile.signup.notifyEmail}"
 	/>
+	
+	<bean class="com.tasktop.c2c.server.internal.profile.service.BaseProfileIdentityManagmentService"/>
 
  	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
