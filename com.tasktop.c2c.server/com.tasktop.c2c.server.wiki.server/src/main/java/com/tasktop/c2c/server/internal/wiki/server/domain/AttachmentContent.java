@@ -25,7 +25,7 @@ public class AttachmentContent extends BaseEntity {
 	private Person author;
 
 	private byte[] content;
-	private int size;
+	private int sizeBytes;
 
 	@ManyToOne(optional = false)
 	public Attachment getAttachment() {
@@ -56,12 +56,12 @@ public class AttachmentContent extends BaseEntity {
 	}
 
 	@Column(nullable = false)
-	public int getSize() {
-		return size;
+	public int getSizeBytes() {
+		return sizeBytes;
 	}
 
-	public void setSize(int size) {
-		this.size = size;
+	public void setSizeBytes(int sizeBytes) {
+		this.sizeBytes = sizeBytes;
 	}
 
 }

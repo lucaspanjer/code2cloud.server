@@ -30,7 +30,7 @@
 			<column name="content" type="MEDIUMBLOB" />
 			<column name="creationDate" type="DATETIME" />
 			<column name="modificationDate" type="DATETIME" />
-			<column name="size" type="INT">
+			<column name="sizeBytes" type="INT">
 				<constraints nullable="false" />
 			</column>
 			<column name="version" type="INT" />
