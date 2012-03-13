@@ -48,10 +48,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -113,7 +110,7 @@ import com.tasktop.c2c.server.tasks.service.TaskService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/applicationContext-testDisableSecurity.xml" })
 @Transactional
-public class ProfileServiceTest implements ApplicationContextAware {
+public class ProfileServiceTest {
 
 	@Autowired
 	protected ProfileService profileService;
@@ -128,13 +125,6 @@ public class ProfileServiceTest implements ApplicationContextAware {
 	private PasswordEncoder passwordEncoder;
 
 	private Mockery context = new JUnit4Mockery();
-
-	private ApplicationContext applicationContext;
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-	}
 
 	@Before
 	public void clearJobService() {
