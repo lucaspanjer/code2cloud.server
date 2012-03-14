@@ -96,6 +96,7 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
+import com.tasktop.c2c.server.profile.domain.project.WikiMarkupLanguage;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockAgreementFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockOrganizationFactory;
@@ -514,15 +515,19 @@ public class ProfileServiceTest {
 
 		String originalIdentity = project.getIdentifier();
 
+		project.getProjectPreferences().setWikiLanguage(WikiMarkupLanguage.CONFLUENCE);
 		project.setName(project.getName() + "2");
 		project.setDescription(project.getDescription() + "2");
 		project.setIdentifier(project.getIdentifier() + "2");
 		project.setAccessibility(ProjectAccessibility.PUBLIC);
+		project.setProjectPreferences(project.getProjectPreferences());
+
 		Project updatedProject = profileService.updateProject(project);
 
 		assertEquals(project.getName(), updatedProject.getName());
 		assertEquals(project.getDescription(), updatedProject.getDescription());
 		assertEquals(project.getAccessibility(), updatedProject.getAccessibility());
+		assertEquals(project.getProjectPreferences(), updatedProject.getProjectPreferences());
 
 		// identifier should never change
 		assertEquals(originalIdentity, updatedProject.getIdentifier());

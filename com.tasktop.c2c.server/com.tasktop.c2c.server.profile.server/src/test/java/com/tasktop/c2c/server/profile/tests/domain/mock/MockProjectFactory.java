@@ -18,6 +18,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.tasktop.c2c.server.profile.domain.internal.Project;
+import com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 
 public class MockProjectFactory {
@@ -31,7 +32,7 @@ public class MockProjectFactory {
 	public static List<Project> create(EntityManager entityManager, int count) {
 		List<Project> mocks = new ArrayList<Project>(count);
 		for (int x = 0; x < count; ++x) {
-			Project mock = populate(new Project());
+			Project mock = populate(new Project(), MockProjectPreferencesFactory.create(entityManager));
 			if (entityManager != null) {
 				entityManager.persist(mock);
 			}
@@ -40,13 +41,13 @@ public class MockProjectFactory {
 		return mocks;
 	}
 
-	private synchronized static Project populate(Project mock) {
+	private synchronized static Project populate(Project mock, ProjectPreferences preferences) {
 		int index = ++created;
 		mock.setName("project" + index);
 		mock.computeIdentifier();
 		mock.setDescription("A description about project " + index);
 		mock.setAccessibility(ProjectAccessibility.PRIVATE);
+		mock.setProjectPreferences(preferences);
 		return mock;
 	}
-
 }

@@ -39,6 +39,12 @@
 					</p>
 				</div>
 			</fieldset>
+			<fieldset>
+				<label>Wiki Markup:</label>
+	 		<div>
+					<g:ValueListBox ui:field="wikiLanguageListBox"/>
+				</div>
+			</fieldset>
 			<div class="clear"/>
 			<fieldset>
 				<label>&#160;</label>

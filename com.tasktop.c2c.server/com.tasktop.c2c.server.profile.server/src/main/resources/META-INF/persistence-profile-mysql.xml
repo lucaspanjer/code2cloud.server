@@ -27,6 +27,7 @@
         <class>com.tasktop.c2c.server.profile.domain.internal.PromiseToken</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.Organization</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile</class>
+        <class>com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences</class>
         <properties>
             <property name="eclipselink.target-database" value="com.tasktop.c2c.server.common.jpa.MySQL55Platform"/>
             <property name="eclipselink.ddl-generation" value="none"/>

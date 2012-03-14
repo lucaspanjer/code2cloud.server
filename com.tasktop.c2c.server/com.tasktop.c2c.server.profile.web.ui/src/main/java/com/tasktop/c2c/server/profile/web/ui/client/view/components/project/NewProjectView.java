@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.project;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
@@ -36,6 +37,11 @@ public class NewProjectView extends AbstractProjectView {
 	interface NewProjectViewUiBinder extends UiBinder<HTMLPanel, NewProjectView> {
 	}
 
+	interface Driver extends SimpleBeanEditorDriver<Project, NewProjectView> {
+	}
+
+	private static Driver driver = GWT.create(Driver.class);
+
 	private static NewProjectViewUiBinder uiBinder = GWT.create(NewProjectViewUiBinder.class);
 
 	@UiField
@@ -54,6 +60,7 @@ public class NewProjectView extends AbstractProjectView {
 
 	private NewProjectView() {
 		initWidget(uiBinder.createAndBindUi(this));
+		driver.initialize(this);
 	}
 
 	public void displayMaxProjectsMessage(boolean show) {
@@ -62,19 +69,14 @@ public class NewProjectView extends AbstractProjectView {
 		this.newProjectForm.setVisible(!show);
 	}
 
-	/**
-	 * 
-	 */
 	public void setProject(Project project) {
 		this.project = project;
-		name.setValue(project.getName());
-		description.setValue(project.getDescription());
+		driver.edit(project);
 		super.setProject(project);
 	}
 
 	public Project getProject() {
-		project.setName(name.getValue());
-		project.setDescription(description.getValue());
+		driver.flush();
 		super.updateProject(project);
 		return project;
 	}

@@ -31,6 +31,7 @@ import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
+import com.tasktop.c2c.server.profile.domain.project.ProjectPreferences;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
@@ -73,10 +74,19 @@ public class WebServiceDomain {
 		p.setNumCommiters(project.getNumCommitters());
 		if (!shallow) {
 			p.setOrganization(copy(project.getOrganization()));
+			p.setProjectPreferences(copy(project.getProjectPreferences()));
 		}
 
 		// Don't copy our ProjectServiceProfile as part of this - that requires a ProfileWebServiceConfiguration
 		// be passed in.
+
+		return p;
+	}
+
+	public ProjectPreferences copy(com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences projectPreferences) {
+		ProjectPreferences p = new ProjectPreferences();
+		p.setId(projectPreferences.getId());
+		p.setWikiLanguage(projectPreferences.getWikiLanguage());
 
 		return p;
 	}
@@ -162,8 +172,17 @@ public class WebServiceDomain {
 		project.setDescription(p.getDescription());
 		project.setAccessibility(p.getAccessibility());
 		project.setOrganization(copy(p.getOrganization()));
+		project.setProjectPreferences(copy(p.getProjectPreferences()));
 
 		return project;
+	}
+
+	public com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences copy(ProjectPreferences p) {
+		com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences projectPreferences = new com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences();
+		projectPreferences.setId(p.getId());
+		projectPreferences.setWikiLanguage(p.getWikiLanguage());
+
+		return projectPreferences;
 	}
 
 	public com.tasktop.c2c.server.profile.domain.internal.Profile copy(Profile p) {
@@ -406,4 +425,5 @@ public class WebServiceDomain {
 
 		return target;
 	}
+
 }

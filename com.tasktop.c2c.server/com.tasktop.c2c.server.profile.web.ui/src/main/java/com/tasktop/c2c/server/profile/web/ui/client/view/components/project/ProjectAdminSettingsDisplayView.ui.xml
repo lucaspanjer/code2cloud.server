@@ -31,6 +31,10 @@
 					</p>
 				</div>
 			</fieldset>
+			<fieldset>
+				<label>Wiki Markup:</label>
+				<g:ValueListBox ui:field="wikiLanguageListBox" />
+			</fieldset>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>
