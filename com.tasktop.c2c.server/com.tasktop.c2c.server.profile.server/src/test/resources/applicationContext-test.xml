@@ -61,9 +61,6 @@
 	<bean class="com.tasktop.c2c.server.profile.service.HudsonServiceClient">
 		<property name="restTemplate" ref="basicAuthRestTemplate"/>
 	</bean>
-		
-	<!--  This is not really correct (Db is not mysql), but it allows the context to be loaded, and the service is not used in these tests -->
-	<alias name="dataSource" alias="mysqlDataSource"/>
 	
 	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase" >
       <property name="dataSource" ref="dataSource" />

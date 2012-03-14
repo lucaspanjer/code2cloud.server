@@ -557,7 +557,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		AttachmentContent attachmentContent = new AttachmentContent();
 		attachmentContent.setAuthor(author);
 		attachmentContent.setContent(attachment.getContent());
-		attachmentContent.setSize(attachment.getSize());
+		attachmentContent.setSizeBytes(attachment.getSize());
 
 		managedAttachment.addAttachmentContent(attachmentContent);
 

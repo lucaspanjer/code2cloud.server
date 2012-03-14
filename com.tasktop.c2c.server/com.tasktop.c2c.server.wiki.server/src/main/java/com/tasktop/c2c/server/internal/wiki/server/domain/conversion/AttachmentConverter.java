@@ -58,7 +58,7 @@ public class AttachmentConverter implements ObjectConverter<Attachment> {
 		target.setUrl(serviceConfiguration.computeWebUrlForAttachment(attachment.getPage().getId(),
 				attachment.getName()));
 		target.setMimeType(attachment.getMimeType());
-		target.setSize(attachment.getLastAttachmentContent().getSize());
+		target.setSize(attachment.getLastAttachmentContent().getSizeBytes());
 		target.setPage(new PageHandle(attachment.getPage().getId().intValue()));
 		target.setEtag(Long.toHexString(attachment.getModificationDate().getTime()) + ':'
 				+ Integer.toHexString(target.getSize()));

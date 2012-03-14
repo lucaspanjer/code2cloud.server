@@ -27,10 +27,10 @@
 			<column autoIncrement="true" name="id" type="BIGINT">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
-			<column name="content" type="MEDIUMBLOB" />
+			<column name="content" type="BLOB" />
 			<column name="creationDate" type="DATETIME" />
 			<column name="modificationDate" type="DATETIME" />
-			<column name="size" type="INT">
+			<column name="sizeBytes" type="INT">
 				<constraints nullable="false" />
 			</column>
 			<column name="version" type="INT" />
@@ -58,7 +58,7 @@
 			<column name="lastAuthor_id" type="BIGINT" />
 			<column name="lastPageContent_id" type="BIGINT" />
 			<column name="originalAuthor_id" type="BIGINT" />
-			<column defaultValueBoolean="false" name="deleted" type="BIT" />
+			<column defaultValueBoolean="false" name="deleted" type="BOOLEAN" />
 			<column defaultValue="ALL" name="deleteAccess" type="VARCHAR(32)" />
 			<column defaultValue="ALL" name="editAccess" type="VARCHAR(32)" />
 		</createTable>
@@ -120,80 +120,58 @@
 	</changeSet>
 	<changeSet author="wikidb" id="createAttachmentLastContentFK">
 		<addForeignKeyConstraint baseColumnNames="lastAttachmentContent_id"
-			baseTableName="Attachment" constraintName="FK_Attachment_lastAttachmentContent_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="AttachmentContent"
-			referencesUniqueColumn="false" />
+			baseTableName="Attachment" constraintName="FK_A_lastAContent_id"
+			referencedColumnNames="id" referencedTableName="AttachmentContent" />
 	</changeSet>
 	<changeSet author="wikidb" id="createAttachmentLastAuthorFK">
 		<addForeignKeyConstraint baseColumnNames="lastAuthor_id"
-			baseTableName="Attachment" constraintName="FK_Attachment_lastAuthor_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="Person"
-			referencesUniqueColumn="false" />
+			baseTableName="Attachment" constraintName="FK_A_lastAuthor_id"
+			referencedColumnNames="id" referencedTableName="Person" />
 	</changeSet>
 	<changeSet author="wikidb" id="createAttachmentOriginalAuthorFK">
 		<addForeignKeyConstraint baseColumnNames="originalAuthor_id"
-			baseTableName="Attachment" constraintName="FK_Attachment_originalAuthor_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="Person"
-			referencesUniqueColumn="false" />
+			baseTableName="Attachment" constraintName="FK_A_originalAuthor_id"
+			referencedColumnNames="id" referencedTableName="Person" />
 	</changeSet>
 	<changeSet author="wikidb" id="createAttachmentPageFK">
 		<addForeignKeyConstraint baseColumnNames="page_id"
 			baseTableName="Attachment" constraintName="FK_Attachment_page_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="Page"
-			referencesUniqueColumn="false" />
+			referencedColumnNames="id" referencedTableName="Page" />
 	</changeSet>
 	<changeSet author="wikidb" id="createAttachmentContentAttachmentFK">
 		<addForeignKeyConstraint baseColumnNames="attachment_id"
-			baseTableName="AttachmentContent" constraintName="FK_AttachmentContent_attachment_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="Attachment"
-			referencesUniqueColumn="false" />
+			baseTableName="AttachmentContent" constraintName="FK_AContent_attachment_id"
+			referencedColumnNames="id" referencedTableName="Attachment" />
 	</changeSet>
 	<changeSet author="wikidb" id="createAttachmentContentAuthorFK">
 		<addForeignKeyConstraint baseColumnNames="author_id"
 			baseTableName="AttachmentContent" constraintName="FK_AttachmentContent_author_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="Person"
-			referencesUniqueColumn="false" />
+			referencedColumnNames="id" referencedTableName="Person" />
 	</changeSet>
 	<changeSet author="wikidb" id="createPageLastAuthorFK">
 		<addForeignKeyConstraint baseColumnNames="lastAuthor_id"
 			baseTableName="Page" constraintName="FK_Page_lastAuthor_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="Person"
-			referencesUniqueColumn="false" />
+			referencedColumnNames="id" referencedTableName="Person" />
 	</changeSet>
 	<changeSet author="wikidb" id="createPageLastPageContentFK">
 		<addForeignKeyConstraint baseColumnNames="lastPageContent_id"
 			baseTableName="Page" constraintName="FK_Page_lastPageContent_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="PageContent"
-			referencesUniqueColumn="false" />
+			referencedColumnNames="id" referencedTableName="PageContent" />
 	</changeSet>
 	<changeSet author="wikidb" id="createPageOriginalAuthorFK">
 		<addForeignKeyConstraint baseColumnNames="originalAuthor_id"
 			baseTableName="Page" constraintName="FK_Page_originalAuthor_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="Person"
-			referencesUniqueColumn="false" />
+			referencedColumnNames="id" referencedTableName="Person" />
 	</changeSet>
 	<changeSet author="wikidb" id="createPageContentAuthorFK">
 		<addForeignKeyConstraint baseColumnNames="author_id"
 			baseTableName="PageContent" constraintName="FK_PageContent_author_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="Person"
-			referencesUniqueColumn="false" />
+			referencedColumnNames="id" referencedTableName="Person" />
 	</changeSet>
 	<changeSet author="wikidb" id="createPageContentPageFK">
 		<addForeignKeyConstraint baseColumnNames="page_id"
 			baseTableName="PageContent" constraintName="FK_PageContent_page_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="Page"
-			referencesUniqueColumn="false" />
+			referencedColumnNames="id" referencedTableName="Page" />
 	</changeSet>
 	<changeSet author="wikidb" id="createSequenceTable">
 		<createTable tableName="SEQUENCE">

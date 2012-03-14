@@ -42,7 +42,7 @@ public class MockAttachmentContentFactory {
 	private static AttachmentContent populate(AttachmentContent content, EntityManager entityManager, Person author) {
 		content.setContent(new byte[] { 1, 2, 3 });
 		content.setAuthor(author);
-		content.setSize(content.getContent().length);
+		content.setSizeBytes(content.getContent().length);
 
 		author.getAuthorAttachmentContent().add(content);
 

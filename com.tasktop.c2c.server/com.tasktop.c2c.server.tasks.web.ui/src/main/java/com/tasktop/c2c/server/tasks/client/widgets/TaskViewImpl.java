@@ -12,10 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets;
 
-import static com.tasktop.c2c.server.common.web.client.widgets.Format.stringValueDateTime;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +42,7 @@ import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.testing.PassthroughRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
@@ -120,21 +120,20 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 
-	abstract class InlineEditableField {
+	abstract class InlineEditableField<T> {
 		private final HTML readOnlyField; // for anon users
 		private final Anchor editAnchor;
-		private final Widget editableField;
+		private final TakesValue<T> editableField;
 
-		public InlineEditableField(HTML readOnlyField, Anchor editAnchor, Widget editableField) {
+		public InlineEditableField(HTML readOnlyField, Anchor editAnchor, TakesValue<T> editableField) {
 			this(readOnlyField, editAnchor, editableField, editAnchor);
 		}
 
-		public InlineEditableField(HTML readOnlyField, Anchor editAnchor, Widget editableField,
+		public InlineEditableField(HTML readOnlyField, Anchor editAnchor, TakesValue<T> editableField,
 				HasClickHandlers editTrigger) {
 			this.readOnlyField = readOnlyField;
 			this.editableField = editableField;
 			this.editAnchor = editAnchor;
-
 			if (editTrigger != null) {
 				editTrigger.addClickHandler(new ClickHandler() {
 
@@ -146,11 +145,30 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			}
 		}
 
+		protected Element getEditableElement() {
+			return ((Widget) editableField).getElement();
+		}
+
+		@SuppressWarnings("unchecked")
+		public T getEditableFieldValue() {
+			if (editableField instanceof TakesValue<?>) {
+				return ((TakesValue<T>) editableField).getValue();
+			}
+			return null;
+		}
+
+		@SuppressWarnings("unchecked")
+		public void setEditableFieldValue(T value) {
+			if (editableField instanceof TakesValue<?>) {
+				((TakesValue<T>) editableField).setValue(value);
+			}
+		}
+
 		public void renderTask(Task t) {
 			setTask(t);
 
 			SafeHtml html = getHtml(t);
-			UIObject.setVisible(editableField.getElement().getParentElement(), false);
+			UIObject.setVisible(getEditableElement().getParentElement(), false);
 			boolean anon = AuthenticationHelper.isAnonymous();
 			if (readOnlyField != null) {
 				readOnlyField.setVisible(anon);
@@ -225,7 +243,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 				UIObject.setVisible(getHideOnEditElement(), false);
 			}
 			if (editableField != null) {
-				UIObject.setVisible(editableField.getElement().getParentElement(), true);
+				UIObject.setVisible(getEditableElement().getParentElement(), true);
 
 				ProfileGinjector.get.instance().getScheduler().scheduleDeferred(new ScheduledCommand() {
 
@@ -240,7 +258,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		}
 
 		protected void deferedStartEdit() {
-			editableField.getElement().focus();
+			getEditableElement().focus();
 		}
 
 		public void saveEdit() {
@@ -546,9 +564,9 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	protected TaskMessages taskMessages = GWT.create(TaskMessages.class);
 
 	private RepositoryConfiguration repositoryConfiguration;
-	private List<InlineEditableField> inlineEditFields = new ArrayList<InlineEditableField>();
-	private List<InlineEditableField> editingFields = new ArrayList<InlineEditableField>();
-	private InlineEditableField lastEditedField;
+	private List<InlineEditableField<?>> inlineEditFields = new ArrayList<InlineEditableField<?>>();
+	private List<InlineEditableField<?>> editingFields = new ArrayList<InlineEditableField<?>>();
+	private InlineEditableField<?> lastEditedField;
 
 	private TaskViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -574,7 +592,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 	private void initEditFields() {
 
-		inlineEditFields.add(new InlineEditableField(readOnlyTaskType, editTaskTypeAnchor, taskType) {
+		inlineEditFields.add(new InlineEditableField<String>(readOnlyTaskType, editTaskTypeAnchor, taskType) {
 
 			@Override
 			public void flushTask() {
@@ -592,7 +610,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlyPriority, editPriorityAnchor, priority) {
+		inlineEditFields.add(new InlineEditableField<Priority>(readOnlyPriority, editPriorityAnchor, priority) {
 
 			@Override
 			public void flushTask() {
@@ -606,7 +624,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlySeverity, editSeverityAnchor, severity) {
+		inlineEditFields.add(new InlineEditableField<TaskSeverity>(readOnlySeverity, editSeverityAnchor, severity) {
 
 			@Override
 			public void flushTask() {
@@ -620,7 +638,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlyStatus, editStatusAnchor, statusEditor) {
+		inlineEditFields.add(new InlineEditableField<Task>(readOnlyStatus, editStatusAnchor, statusEditor) {
 
 			@Override
 			public void flushTask() {
@@ -661,7 +679,8 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		});
 
-		final InlineEditableField descriptionEditableField = new InlineEditableField(null, null, description, null) {
+		final InlineEditableField<String> descriptionEditableField = new InlineEditableField<String>(null, null,
+				description, null) {
 
 			@Override
 			public void flushTask() {
@@ -685,6 +704,12 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 				setTask(t);
 			}
 
+			@Override
+			public void startEdit() {
+				super.startEdit();
+				description.setEditMode();
+			}
+
 		};
 		inlineEditFields.add(descriptionEditableField);
 		description.getTextArea().setWidth("98%"); // FIXME
@@ -698,7 +723,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			}
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlySummary, editSummaryAnchor, shortDescription) {
+		inlineEditFields.add(new InlineEditableField<String>(readOnlySummary, editSummaryAnchor, shortDescription) {
 
 			@Override
 			public void flushTask() {
@@ -716,7 +741,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			}
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlyEstimate, editEstimateAnchor, estimatedTime) {
+		inlineEditFields.add(new InlineEditableField<BigDecimal>(readOnlyEstimate, editEstimateAnchor, estimatedTime) {
 
 			@Override
 			public void flushTask() {
@@ -731,7 +756,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlyOwner, editOwnerAnchor, assignee.asWidget()) {
+		inlineEditFields.add(new InlineEditableField<TaskUserProfile>(readOnlyOwner, editOwnerAnchor, assignee) {
 
 			@Override
 			public void flushTask() {
@@ -749,9 +774,14 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 				return SafeHtmlUtils.fromString(t.getAssignee() == null ? NOT_SET : t.getAssignee().getRealname());
 			}
 
+			@Override
+			protected Element getEditableElement() {
+				return assignee.asWidget().getElement();
+			}
+
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlyTimeSpent, editTimeSpentAnchor, timeSpent) {
+		inlineEditFields.add(new InlineEditableField<BigDecimal>(readOnlyTimeSpent, editTimeSpentAnchor, timeSpent) {
 
 			@Override
 			public void flushTask() {
@@ -779,7 +809,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			}
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlyCC, editCCAnchor, watchers.asWidget()) {
+		inlineEditFields.add(new InlineEditableField<List<TaskUserProfile>>(readOnlyCC, editCCAnchor, watchers) {
 
 			@Override
 			protected void flushTask() {
@@ -794,12 +824,25 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 			@Override
 			protected SafeHtml getHtml(Task t) {
+				Collections.sort(t.getWatchers());
 				return getHtmlForPeople(t.getWatchers());
+			}
+
+			@Override
+			protected Element getEditableElement() {
+				return watchers.asWidget().getElement();
+			}
+
+			@Override
+			public List<TaskUserProfile> getEditableFieldValue() {
+				List<TaskUserProfile> userList = watchers.getValue();
+				Collections.sort(userList);
+				return userList;
 			}
 
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlyTags, editTagsAnchor, keywords) {
+		inlineEditFields.add(new InlineEditableField<List<Keyword>>(readOnlyTags, editTagsAnchor, keywords) {
 			@Override
 			protected void flushTask() {
 				presenter.saveTags(keywords.getValues());
@@ -818,7 +861,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			}
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlyIteration, editIterationAnchor, iteration) {
+		inlineEditFields.add(new InlineEditableField<Iteration>(readOnlyIteration, editIterationAnchor, iteration) {
 
 			@Override
 			protected void flushTask() {
@@ -833,7 +876,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			}
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlyDueDate, editDueDateAnchor, deadline) {
+		inlineEditFields.add(new InlineEditableField<Date>(readOnlyDueDate, editDueDateAnchor, deadline) {
 
 			@Override
 			protected void flushTask() {
@@ -848,7 +891,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			}
 		});
 
-		inlineEditFields.add(new InlineEditableField(null, editSubtasksAnchor, subTasks) {
+		inlineEditFields.add(new InlineEditableField<List<Task>>(null, editSubtasksAnchor, subTasks) {
 
 			@Override
 			protected void flushTask() {
@@ -877,7 +920,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		});
 
-		inlineEditFields.add(new InlineEditableField(null, editParentAnchor, blocksTasks) {
+		inlineEditFields.add(new InlineEditableField<List<Task>>(null, editParentAnchor, blocksTasks) {
 
 			@Override
 			protected void flushTask() {
@@ -910,7 +953,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	}
 
 	private void initProductComopnentReleaseFoundIn() {
-		inlineEditFields.add(new InlineEditableField(readOnlyProduct, editProductAnchor, product) {
+		inlineEditFields.add(new InlineEditableField<Product>(readOnlyProduct, editProductAnchor, product) {
 
 			@Override
 			protected void flushTask() {
@@ -925,7 +968,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			}
 		});
 
-		inlineEditFields.add(new InlineEditableField(readOnlyComponent, editComponentAnchor, component) {
+		inlineEditFields.add(new InlineEditableField<Component>(readOnlyComponent, editComponentAnchor, component) {
 
 			@Override
 			protected void flushTask() {
@@ -938,7 +981,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 			}
 		});
-		inlineEditFields.add(new InlineEditableField(readOnlyFoundIn, editFoundInAnchor, foundInRelease) {
+		inlineEditFields.add(new InlineEditableField<String>(readOnlyFoundIn, editFoundInAnchor, foundInRelease) {
 
 			@Override
 			protected void flushTask() {
@@ -957,7 +1000,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 			}
 		});
-		inlineEditFields.add(new InlineEditableField(readOnlyRelease, editReleaseAnchor, milestone) {
+		inlineEditFields.add(new InlineEditableField<Milestone>(readOnlyRelease, editReleaseAnchor, milestone) {
 
 			@Override
 			protected void flushTask() {
@@ -1029,11 +1072,25 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	}
 
 	public void setTask(Task task) {
-		updateTask(task);
+		updateTaskInternal(task);
 		updateCommentView(task);
 	}
 
 	public void updateTask(Task task) {
+		Object currentlyEditing = null;
+		if (lastEditedField != null) {
+			currentlyEditing = lastEditedField.getEditableFieldValue();
+		}
+		updateTaskInternal(task);
+		if (currentlyEditing != null) {
+			if (!lastEditedField.getEditableFieldValue().equals(currentlyEditing)) {
+				((InlineEditableField<Object>) lastEditedField).setEditableFieldValue(currentlyEditing);
+				startInlineEdit(lastEditedField);
+			}
+		}
+	}
+
+	private void updateTaskInternal(Task task) {
 		this.task = task;
 
 		editTaskAnchor.setHref(ProjectEditTaskPlace.createPlace(projectIdentifier, task.getId()).getHref());
@@ -1041,15 +1098,16 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		createdByImage.setUrl(Avatar.computeAvatarUrl(task.getReporter().getGravatarHash(), Avatar.Size.MICRO));
 		createdBy.setText(task.getReporter().getLoginName());
-		creationDate.setText(stringValueDateTime(task.getCreationDate()));
-		updateDate.setText(stringValueDateTime(task.getModificationDate()));
+		creationDate.setText(Format.stringValueDateTime(task.getCreationDate()));
+		updateDate.setText(Format.stringValueDateTime(task.getModificationDate()));
 
 		newSubTaskLink.setHref(ProjectNewTaskPlace.createNewSubtaskPlace(projectIdentifier, task.getId()).getHref());
 
 		// Editable fields
 		driver.edit(task);
+
 		updateAcceptableValues();
-		for (InlineEditableField f : inlineEditFields) {
+		for (InlineEditableField<?> f : inlineEditFields) {
 			f.renderTask(task);
 		}
 
@@ -1081,6 +1139,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		taskHistoryLink.setHref(ProjectTaskHistoryPlace.createPlace(projectIdentifier, task.getId()).getHref());
 
 		updateCustomFields(task);
+
 	}
 
 	private boolean repoConfigHasCustomFields(RepositoryConfiguration repositoryConfiguration) {
@@ -1107,15 +1166,15 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		customFieldDriver.edit(customFields);
 
-		List<InlineEditableField> customInlineEditFields = new ArrayList<InlineEditableField>();
+		List<InlineEditableField<?>> customInlineEditFields = new ArrayList<InlineEditableField<?>>();
 
 		for (final CustomFieldEditor editor : customFieldEditor.getEditors()) {
 
 			InlineEditableCustomField customFieldWidget = new InlineEditableCustomField(editor);
 			customFieldsPanel.add(customFieldWidget);
 
-			customInlineEditFields.add(new InlineEditableField(customFieldWidget.getReadOnlyField(), customFieldWidget
-					.getEditFieldAnchor(), editor.getWidget()) {
+			customInlineEditFields.add(new InlineEditableField<CustomField>(customFieldWidget.getReadOnlyField(),
+					customFieldWidget.getEditFieldAnchor(), editor) {
 
 				@Override
 				protected void flushTask() {
@@ -1130,17 +1189,22 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 					if (value == null || value.isEmpty()) {
 						displayValue = NOT_SET;
 					} else if (editor.getFieldDescriptor().getFieldType().equals(FieldType.TIMESTAMP)) {
-						displayValue = stringValueDateTime(new Date(Long.parseLong(value)));
+						displayValue = Format.stringValueDateTime(new Date(Long.parseLong(value)));
 					} else {
 						displayValue = value;
 					}
 					return SafeHtmlUtils.fromString(displayValue);
 				}
+
+				@Override
+				protected Element getEditableElement() {
+					return editor.getWidget().getElement();
+				}
 			});
 
 		}
 
-		for (InlineEditableField f : customInlineEditFields) {
+		for (InlineEditableField<?> f : customInlineEditFields) {
 			f.renderTask(task);
 		}
 
@@ -1245,9 +1309,9 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		presenter.postComment(commentsPanel.getText());
 	}
 
-	private void startInlineEdit(InlineEditableField field) {
+	private void startInlineEdit(InlineEditableField<?> field) {
 		// Currently not supporting editing multiple fields in one go.
-		for (InlineEditableField inEditField : editingFields) {
+		for (InlineEditableField<?> inEditField : editingFields) {
 			if (driver.isDirty() || customFieldDriver.isDirty()) {
 				// FIXME how to handle this?
 				Window.alert("Save or cancel current edit first.");
@@ -1261,14 +1325,14 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		field.startEdit();
 	}
 
-	private void adjustEditControls(InlineEditableField fieldOrNull) {
+	private void adjustEditControls(InlineEditableField<?> fieldOrNull) {
 		boolean hide = fieldOrNull == null;
 		editControlsDiv.removeFromParent();
 		UIObject.setVisible(editControlsDiv, !hide);
 
 		if (!hide) {
-			InlineEditableField field = fieldOrNull;
-			field.editableField.getElement().getParentElement().appendChild(editControlsDiv);
+			InlineEditableField<?> field = fieldOrNull;
+			field.getEditableElement().getParentElement().appendChild(editControlsDiv);
 
 			// Seem we loose the clickhandlers with dom remove so must re-add each time.
 			saveButton.addClickHandler(new ClickHandler() {
@@ -1290,31 +1354,31 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		}
 	}
 
-	private void saveInlineEdit(InlineEditableField field) {
+	private void saveInlineEdit(InlineEditableField<?> field) {
 		field.saveEdit();
 		lastEditedField = field;
 		complteInlineEdit(field);
 	}
 
-	private void cancelInlineEdit(InlineEditableField field) {
+	private void cancelInlineEdit(InlineEditableField<?> field) {
 		field.cancelEdit();
 		complteInlineEdit(field);
 	}
 
-	private void complteInlineEdit(InlineEditableField field) {
+	private void complteInlineEdit(InlineEditableField<?> field) {
 		editingFields.remove(field);
 
 		adjustEditControls(null);
 	}
 
 	protected void onSave(ClickEvent e) {
-		for (InlineEditableField field : new ArrayList<InlineEditableField>(editingFields)) {
+		for (InlineEditableField<?> field : new ArrayList<InlineEditableField<?>>(editingFields)) {
 			saveInlineEdit(field);
 		}
 	}
 
 	protected void onCancel(ClickEvent e) {
-		for (InlineEditableField field : new ArrayList<InlineEditableField>(editingFields)) {
+		for (InlineEditableField<?> field : new ArrayList<InlineEditableField<?>>(editingFields)) {
 			cancelInlineEdit(field);
 		}
 		driver.edit(task); // Resets the editiable fields

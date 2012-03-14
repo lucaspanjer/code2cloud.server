@@ -82,9 +82,6 @@
     		</array>
     	</property>
 	</bean>
-	
-	<!--  For locking service -->
-	<alias name="dataSource" alias="mysqlDataSource"/>
 
 	<!--  AOP Logging -->
 	<bean id="aopLogger" class="com.tasktop.c2c.server.common.service.ServiceLoggingAdvice"/>
