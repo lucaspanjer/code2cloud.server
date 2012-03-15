@@ -614,4 +614,7 @@
 			baseTableName="ORGANIZATIONPROFILE" constraintName="FK_OP_ORG_ID"
 			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
 	</changeSet>
+	<changeSet id="orgProjectNameUniqueness-task4187" author="cmorgan">
+		<dropUniqueConstraint tableName="PROJECT" constraintName="NAME"/>
+	</changeSet>
 </databaseChangeLog>

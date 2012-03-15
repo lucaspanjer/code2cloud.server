@@ -206,10 +206,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			if (project.getName() != null && project.getName().trim().length() > 0) {
 				List<Project> projectsWithName = entityManager
 						.createQuery(
-								"select e from " + Project.class.getSimpleName()
-										+ " e where e.name = :name or e.identifier = :identifier")
+								"select e from "
+										+ Project.class.getSimpleName()
+										+ " e where (e.name = :name or e.identifier = :identifier) and e.organization = :organization")
 						.setParameter("name", project.getName()).setParameter("identifier", project.getIdentifier())
-						.getResultList();
+						.setParameter("organization", project.getOrganization()).getResultList();
 				if (!projectsWithName.isEmpty()) {
 					if (projectsWithName.size() != 1 || !projectsWithName.get(0).equals(project)) {
 						errors.reject("project.nameUnique", new Object[] { project.getName() }, null);
