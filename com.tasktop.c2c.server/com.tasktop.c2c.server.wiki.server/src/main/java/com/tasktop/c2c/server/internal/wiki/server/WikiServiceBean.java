@@ -630,7 +630,6 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		pageContent.setContent(newContent);
 		page.addPageContent(pageContent);
 		markupRenderer.render(pageContent);
-
 	}
 
 }
