@@ -643,14 +643,14 @@
 
 <changeSet author="mfeichtinger" id="populateProjectPreferencesTable-task4146">
 	<sql>
-		INSERT INTO profile.projectpreferences (ID, VERSION, WIKILANGUAGE)
-		select ID, 1,'TEXTILE' from profile.project;
+		INSERT INTO PROJECTPREFERENCES (ID, VERSION, WIKILANGUAGE)
+		select ID, 1,'TEXTILE' from PROJECT;
 
-		INSERT INTO profile.projectpreferences (ID, VERSION, WIKILANGUAGE)
-		select ID, 1,'TEXTILE' from profile.organization;
+		INSERT INTO PROJECTPREFERENCES (ID, VERSION, WIKILANGUAGE)
+		select ID, 1,'TEXTILE' from ORGANIZATION;
 
-		UPDATE profile.project SET PROJECTPREFERENCES_ID = ID;
-		UPDATE profile.organization set PROJECTPREFERENCES_ID = ID;
+		UPDATE PROJECT SET PROJECTPREFERENCES_ID = ID;
+		UPDATE ORGANIZATION set PROJECTPREFERENCES_ID = ID;
 	</sql>
 </changeSet>
 
