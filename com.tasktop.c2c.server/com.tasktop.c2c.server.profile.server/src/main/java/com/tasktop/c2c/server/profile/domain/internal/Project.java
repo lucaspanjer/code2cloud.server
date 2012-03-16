@@ -138,7 +138,11 @@ public class Project extends BaseEntity {
 	public void computeIdentifier() {
 		if (getName() != null) {
 			// CAREFUL: don't introduce new allowable characters here without considering tenancy and database names
-			setIdentifier(getName().trim().replaceAll("[^a-zA-Z0-9\\.]", "-").toLowerCase());
+			String baseId = "";
+			if (getOrganization() != null) {
+				baseId = getOrganization().getIdentifier() + "_";
+			}
+			setIdentifier(baseId + getName().trim().replaceAll("[^a-zA-Z0-9\\.]", "-").toLowerCase());
 		}
 	}
 
