@@ -187,4 +187,26 @@
 			<column name="SEQ_COUNT" value="0" />
 		</insert>
 	</changeSet>
+	<changeSet author="lpanjer" id="insertSequenceInfo2" >
+		<insert tableName="SEQUENCE">
+			<column name="SEQ_NAME" value="Attachment" />
+			<column name="SEQ_COUNT" value="0" />
+		</insert>
+		<insert tableName="SEQUENCE">
+			<column name="SEQ_NAME" value="AttachmentContent" />
+			<column name="SEQ_COUNT" value="0" />
+		</insert>
+		<insert tableName="SEQUENCE">
+			<column name="SEQ_NAME" value="Page" />
+			<column name="SEQ_COUNT" value="0" />
+		</insert>
+		<insert tableName="SEQUENCE">
+			<column name="SEQ_NAME" value="Person" />
+			<column name="SEQ_COUNT" value="0" />
+		</insert>
+		<insert tableName="SEQUENCE">
+			<column name="SEQ_NAME" value="PageContent" />
+			<column name="SEQ_COUNT" value="0" />
+		</insert>
+	</changeSet>
 </databaseChangeLog>

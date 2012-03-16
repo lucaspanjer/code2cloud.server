@@ -15,7 +15,11 @@ package com.tasktop.c2c.server.internal.wiki.server.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.TableGenerator;
 
 @Entity
 public class PageContent extends BaseEntity {
@@ -26,6 +30,14 @@ public class PageContent extends BaseEntity {
 	private String content;
 	private String rendererVersion;
 	private String renderedContent;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "PageContent")
+	@TableGenerator(name = "PageContent", allocationSize = 1)
+	@Override
+	public Long getId() {
+		return super.getId();
+	}
 
 	@ManyToOne(optional = false)
 	public Page getPage() {

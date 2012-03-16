@@ -18,9 +18,9 @@
 	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="rawDataSource"
 		p:driverClassName="${wiki.database.driverClassName}" p:url="${wiki.database.url}"
 		p:username="${wiki.database.username}" p:password="${wiki.database.password}" />
-	
-	<bean class="com.tasktop.c2c.server.internal.wiki.server.WikiTenantAwareDataSource" id="dataSource"
-		p:wrappedDataSource-ref="rawDataSource" p:language="MYSQL">
+
+ 	<bean class="com.tasktop.c2c.server.internal.wiki.server.WikiTenantAwareDataSource" id="dataSource"
+		p:wrappedDataSource-ref="rawDataSource" p:language="${wiki.database.dialect}">
 		<qualifier value="switching"/>
 	</bean>
 

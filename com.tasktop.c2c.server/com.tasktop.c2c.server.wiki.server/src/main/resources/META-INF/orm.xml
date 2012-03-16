@@ -10,21 +10,4 @@
             <delimited-identifiers/>
         </persistence-unit-defaults>
     </persistence-unit-metadata>
-    <mapped-superclass class="com.tasktop.c2c.server.internal.wiki.server.domain.BaseEntity"/>
-    <entity class="com.tasktop.c2c.server.internal.wiki.server.domain.Page"/>
-    <entity class="com.tasktop.c2c.server.internal.wiki.server.domain.Person"/>
-    <entity class="com.tasktop.c2c.server.internal.wiki.server.domain.PageContent">
-    	<attribute-override name="content">
-    		<column column-definition="TEXT" nullable="false"/>
-    	</attribute-override>
-    	<attribute-override name="renderedContent">
-    		<column column-definition="TEXT" nullable="false"/>
-    	</attribute-override>
-    </entity>
-    <entity class="com.tasktop.c2c.server.internal.wiki.server.domain.Attachment"/>
-    <entity class="com.tasktop.c2c.server.internal.wiki.server.domain.AttachmentContent">
-    	<attribute-override name="content">
-    		<column column-definition="MEDIUMBLOB" nullable="false"/>
-    	</attribute-override>
-    </entity>
 </entity-mappings>

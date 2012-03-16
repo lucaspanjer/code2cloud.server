@@ -14,9 +14,6 @@ package com.tasktop.c2c.server.internal.wiki.server.domain;
 
 import java.util.Date;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -25,7 +22,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 @MappedSuperclass
-public class BaseEntity {
+public abstract class BaseEntity {
 
 	private Long id;
 	private Integer version;
@@ -33,8 +30,6 @@ public class BaseEntity {
 	private Date creationDate;
 	private Date modificationDate;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
 		return id;
 	}

@@ -10,40 +10,4 @@
 <!--             <delimited-identifiers/> -->
         </persistence-unit-defaults>
     </persistence-unit-metadata>
-    <mapped-superclass class="com.tasktop.c2c.server.internal.wiki.server.domain.BaseEntity"/>
-    <entity class="com.tasktop.c2c.server.internal.wiki.server.domain.Page">
-	    <attributes>
-		    <id name="id">
-		    	<generated-value strategy="AUTO"/>
-		    </id>
-	    </attributes>
-    </entity>
-    <entity class="com.tasktop.c2c.server.internal.wiki.server.domain.Person">
-	    <attributes>
-		    <id name="id">
-		    	<generated-value strategy="AUTO"/>
-		    </id>
-	    </attributes>
-    </entity>
-    <entity class="com.tasktop.c2c.server.internal.wiki.server.domain.PageContent">
-	    <attributes>
-		    <id name="id">
-		    	<generated-value strategy="AUTO"/>
-		    </id>
-	    </attributes>
-    </entity>
-    <entity class="com.tasktop.c2c.server.internal.wiki.server.domain.Attachment">
-	    <attributes>
-		    <id name="id">
-		    	<generated-value strategy="AUTO"/>
-		    </id>
-	    </attributes>
-    </entity>
-    <entity class="com.tasktop.c2c.server.internal.wiki.server.domain.AttachmentContent">
-	    <attributes>
-		    <id name="id">
-		    	<generated-value strategy="AUTO"/>
-		    </id>
-	    </attributes>
-    </entity>
 </entity-mappings>

@@ -22,9 +22,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.TableGenerator;
 
 import com.tasktop.c2c.server.wiki.domain.Page.GroupAccess;
 
@@ -44,6 +48,14 @@ public class Page extends BaseEntity {
 	private Boolean deleted = false;
 	private GroupAccess editAccess = GroupAccess.ALL;
 	private GroupAccess deleteAccess = GroupAccess.ALL;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "Page")
+	@TableGenerator(name = "Page", allocationSize = 1)
+	@Override
+	public Long getId() {
+		return super.getId();
+	}
 
 	@Basic(optional = false)
 	@Column(length = 255, nullable = false, unique = true)

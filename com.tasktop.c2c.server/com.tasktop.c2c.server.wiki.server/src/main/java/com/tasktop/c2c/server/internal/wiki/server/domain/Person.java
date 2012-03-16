@@ -19,7 +19,11 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.TableGenerator;
 
 @Entity
 public class Person extends BaseEntity {
@@ -32,6 +36,14 @@ public class Person extends BaseEntity {
 
 	private List<Attachment> originalAuthorAttachments = new ArrayList<Attachment>();
 	private List<AttachmentContent> authorAttachmentContent = new ArrayList<AttachmentContent>();
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "Person")
+	@TableGenerator(name = "Person", allocationSize = 1)
+	@Override
+	public Long getId() {
+		return super.getId();
+	}
 
 	public String getName() {
 		return name;
