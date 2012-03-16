@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -54,7 +53,7 @@ public class WikiActivityRow extends Composite {
 		personLabel.setPerson(person);
 		dateLabel.setText(Format.stringValueTime(activity.getActivityDate()));
 		changeType.setText(activity.getActivity().getActivityType().getLabel());
-		pageAnchor.setText("Page " + activity.getActivity().getPage().getPath());
+		pageAnchor.setText(activity.getActivity().getPage().getPath());
 		pageAnchor.setHref(activity.getActivity().getPage().getUrl());
 	}
 
