@@ -52,6 +52,7 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.internal.profile.service.ProfileWebServiceInternal;
 import com.tasktop.c2c.server.profile.domain.internal.InvitationToken;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
+import com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences;
 import com.tasktop.c2c.server.profile.domain.internal.RandomToken;
 import com.tasktop.c2c.server.profile.domain.internal.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
@@ -60,6 +61,7 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
+import com.tasktop.c2c.server.profile.domain.project.WikiMarkupLanguage;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
@@ -135,11 +137,14 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		Long profileId = setupProfile().getId();
 
 		com.tasktop.c2c.server.profile.domain.internal.Project internalProject = new com.tasktop.c2c.server.profile.domain.internal.Project();
+		ProjectPreferences prefs = new ProjectPreferences();
+		prefs.setWikiLanguage(WikiMarkupLanguage.TEXTILE);
+
 		internalProject.setDescription("My app");
 		internalProject.setIdentifier("myApp");
 		internalProject.setName("Appracadapra");
 		internalProject.setAccessibility(ProjectAccessibility.PRIVATE);
-
+		internalProject.setProjectPreferences(prefs);
 		profileService.createProject(profileId, internalProject);
 
 		List<Project> projects = profileWebService.getProjects(profileId);
@@ -155,6 +160,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		project.setIdentifier("abccccapplication");
 		project.setDescription("Application description; blah blah blah.");
 		project.setAccessibility(ProjectAccessibility.PRIVATE);
+		setProjectPrefs(project);
 
 		Project created = profileWebService.createProject(profileId, project);
 		assertNotNull(created);
@@ -405,6 +411,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		project.setIdentifier("new-app");
 		project.setDescription("Application description; blah blah blah.");
 		project.setAccessibility(ProjectAccessibility.PRIVATE);
+		setProjectPrefs(project);
 		profileWebService.createProject(owner.getId(), project);
 		Profile newMember = setupProfile();
 		SecurityContextHolder.getContext().setAuthentication(
@@ -618,7 +625,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		project.setDescription("Application description; blah blah blah.");
 		project.setAccessibility(ProjectAccessibility.PRIVATE);
 		project.setOrganization(org);
-
+		setProjectPrefs(project);
 		Project createdProject = profileWebService.createProject(profileId, project);
 		assertNotNull(createdProject);
 		assertEquals(org, createdProject.getOrganization());
@@ -626,5 +633,11 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		org = profileWebService.getOrganizationByIdentfier(created.getIdentifier());
 		assertNotNull(org);
 		assertEquals(1, org.getProjects().size());
+	}
+
+	private void setProjectPrefs(com.tasktop.c2c.server.profile.domain.project.Project project) {
+		com.tasktop.c2c.server.profile.domain.project.ProjectPreferences projectPreferences = new com.tasktop.c2c.server.profile.domain.project.ProjectPreferences();
+		projectPreferences.setWikiLanguage(WikiMarkupLanguage.TEXTILE);
+		project.setProjectPreferences(projectPreferences);
 	}
 }
