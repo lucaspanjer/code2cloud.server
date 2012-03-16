@@ -15,7 +15,5 @@
 	
     <bean id="wikiServiceController" class="com.tasktop.c2c.server.internal.wiki.server.WikiServiceController"/>
 	<alias name="wikiServiceController" alias="/wiki*"/>
-     
-
 	
 </beans>

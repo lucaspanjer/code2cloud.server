@@ -144,7 +144,6 @@ public class WikiServiceTest {
 
 		dataSource.getConnection().createStatement()
 				.executeQuery("SELECT ID, CREATIONDATE, IDENTITY, MODIFICATIONDATE, NAME, VERSION FROM PERSON");
-
 	}
 
 	@Test

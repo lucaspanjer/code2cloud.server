@@ -3,7 +3,7 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
-	<display-name>CloudALM Tasks</display-name>
+	<display-name>Code2Cloud Wiki</display-name>
 	<context-param>
 		<param-name>defaultHtmlEscape</param-name>
 		<param-value>true</param-value>
@@ -46,11 +46,11 @@
     </filter>
 	<filter-mapping>
 		<filter-name>RequestContextFilter</filter-name>
-		<url-pattern>*</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>messageErrorHandlerFilter</filter-name>
-		<url-pattern>*</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
     <filter-mapping>
       <filter-name>springSecurityFilterChain</filter-name>
@@ -58,11 +58,11 @@
     </filter-mapping>
 	<filter-mapping>
 		<filter-name>CharacterEncodingFilter</filter-name>
-		<url-pattern>*</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>httpMethodFilter</filter-name>
-		<url-pattern>*</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<listener>
 		<listener-class>com.tasktop.c2c.server.common.tests.util.EmbeddedWebContextLoader</listener-class>
