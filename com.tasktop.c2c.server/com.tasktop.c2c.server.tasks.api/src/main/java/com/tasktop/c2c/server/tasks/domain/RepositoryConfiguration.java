@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -55,6 +56,8 @@ public class RepositoryConfiguration implements Serializable {
 	private List<StateTransition> stateTransitions;
 
 	private List<SavedTaskQuery> savedTaskQueries;
+
+	private Map<String, String> configurationProperties;
 
 	public String getUrl() {
 		return url;
@@ -333,6 +336,18 @@ public class RepositoryConfiguration implements Serializable {
 			}
 		}
 		return Collections.emptyList();
+	}
+
+	public void setConfigurationProperties(Map<String, String> configurationProperties) {
+		this.configurationProperties = configurationProperties;
+	}
+
+	public Map<String, String> getConfigurationProperties() {
+		return configurationProperties;
+	}
+
+	public String getConfigurationProperty(String key) {
+		return configurationProperties.get(key);
 	}
 
 }

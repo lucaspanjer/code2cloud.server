@@ -102,6 +102,7 @@ import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskSeverity;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
 import com.tasktop.c2c.server.tasks.domain.WorkLog;
+import com.tasktop.c2c.server.tasks.service.TaskService;
 
 public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<Task> {
 
@@ -1102,6 +1103,10 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		updateDate.setText(Format.stringValueDateTime(task.getModificationDate()));
 
 		newSubTaskLink.setHref(ProjectNewTaskPlace.createNewSubtaskPlace(projectIdentifier, task.getId()).getHref());
+
+		String markupLanguage = repositoryConfiguration.getConfigurationProperty(TaskService.MARKUP_LANGUAGE_DB_KEY);
+		description.setMarkLanguage(markupLanguage);
+		commentsPanel.setMarkupLanguage(markupLanguage);
 
 		// Editable fields
 		driver.edit(task);

@@ -35,6 +35,9 @@ import com.tasktop.c2c.server.wiki.domain.WikiActivity;
  * 
  */
 public interface WikiService {
+
+	public static final String MARKUP_LANGUAGE_DB_KEY = "MARKUP_LANGUAGE";
+
 	/**
 	 * create a wiki page
 	 * 
@@ -228,4 +231,5 @@ public interface WikiService {
 	 * @throws EntityNotFoundException
 	 */
 	public String setConfigurationProperty(String name, String value);
+
 }

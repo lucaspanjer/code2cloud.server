@@ -45,7 +45,6 @@ import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.domain.SortInfo;
 import com.tasktop.c2c.server.common.service.domain.SortInfo.Order;
 import com.tasktop.c2c.server.common.service.job.JobService;
-import com.tasktop.c2c.server.common.service.wiki.MarkupLanguageUtil;
 import com.tasktop.c2c.server.internal.wiki.server.domain.AttachmentContent;
 import com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty;
 import com.tasktop.c2c.server.internal.wiki.server.domain.MarkupRenderer;
@@ -101,7 +100,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		com.tasktop.c2c.server.internal.wiki.server.domain.Page managedPage = new com.tasktop.c2c.server.internal.wiki.server.domain.Page();
 		managedPage.setOriginalAuthor(author);
 		managedPage.setPath(wikiPage.getPath());
-		managedPage.setMarkupLanguage(retrieveConfigurationProperty(MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY));
+		managedPage.setMarkupLanguage(retrieveConfigurationProperty(WikiService.MARKUP_LANGUAGE_DB_KEY));
 		if (wikiPage.getEditAccess() != null) {
 			managedPage.setEditAccess(wikiPage.getEditAccess());
 		}
@@ -657,7 +656,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 			page = findPageByPath(pagePath);
 		} catch (EntityNotFoundException e) {
 			page = new com.tasktop.c2c.server.internal.wiki.server.domain.Page();
-			page.setMarkupLanguage(retrieveConfigurationProperty(MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY));
+			page.setMarkupLanguage(retrieveConfigurationProperty(WikiService.MARKUP_LANGUAGE_DB_KEY));
 			page.setId(-1l);
 			page.setPath(pagePath);
 		}

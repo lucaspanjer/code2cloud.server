@@ -67,7 +67,6 @@ public class CommentsPanel extends Composite {
 		super.initWidget(uiBinder.createAndBindUi(this));
 		this.commentReplyHandler = new TaskComment.TextBoxReplyHandler(comment.getTextArea());
 		comment.getTextArea().getElement().setAttribute("placeholder", "Post a comment...");
-
 	}
 
 	public void setValue(Task task) {
@@ -144,6 +143,10 @@ public class CommentsPanel extends Composite {
 	 */
 	public void setProjectIdentifier(String projectIdentifier) {
 		comment.setProjectId(projectIdentifier);
+	}
+
+	public void setMarkupLanguage(String markupLanguage) {
+		comment.setMarkLanguage(markupLanguage);
 	}
 
 }

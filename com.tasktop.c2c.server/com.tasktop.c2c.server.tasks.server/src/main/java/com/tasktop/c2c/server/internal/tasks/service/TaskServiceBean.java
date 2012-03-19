@@ -23,6 +23,9 @@ import java.util.Map;
 import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +62,7 @@ import com.tasktop.c2c.server.internal.tasks.domain.AttachmentData;
 import com.tasktop.c2c.server.internal.tasks.domain.Cc;
 import com.tasktop.c2c.server.internal.tasks.domain.Classification;
 import com.tasktop.c2c.server.internal.tasks.domain.Comment;
+import com.tasktop.c2c.server.internal.tasks.domain.ConfigurationProperty;
 import com.tasktop.c2c.server.internal.tasks.domain.Dependency;
 import com.tasktop.c2c.server.internal.tasks.domain.KeywordId;
 import com.tasktop.c2c.server.internal.tasks.domain.Keyworddef;
@@ -1211,6 +1215,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		result.setPriorities(getPriorities());
 		result.setSeverities(getSeverities());
 		result.setStatuses(getStatuses());
+		result.setConfigurationProperties(getConfigurationProperties());
 		result.setStateTransitions(computeStateTransitions());
 		result.setUrl(configuration.getExternalTaskServiceUrl());
 		result.setUsers(getUsers());
@@ -1404,6 +1409,18 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		for (Object queryResult : query.getResultList()) {
 			com.tasktop.c2c.server.internal.tasks.domain.TaskStatus status = (com.tasktop.c2c.server.internal.tasks.domain.TaskStatus) queryResult;
 			results.add(TaskDomain.createDomain(status));
+		}
+		return results;
+	}
+
+	private Map<String, String> getConfigurationProperties() {
+		Query query = entityManager.createQuery("select configurationproperty from "
+				+ com.tasktop.c2c.server.internal.tasks.domain.ConfigurationProperty.class.getSimpleName()
+				+ " configurationproperty");
+		Map<String, String> results = new HashMap<String, String>();
+		for (Object queryResult : query.getResultList()) {
+			com.tasktop.c2c.server.internal.tasks.domain.ConfigurationProperty configurationProperty = (com.tasktop.c2c.server.internal.tasks.domain.ConfigurationProperty) queryResult;
+			results.put(configurationProperty.getName(), configurationProperty.getValue());
 		}
 		return results;
 	}
@@ -2167,5 +2184,47 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	@Override
 	public String renderWikiMarkupAsHtml(String markup) {
 		return wikiRenderer.render(markup);
+	}
+
+	@Secured({ Role.Community, Role.User, Role.Admin })
+	@Override
+	public String setConfigurationProperty(String name, String value) {
+		ConfigurationProperty property;
+		try {
+			property = findConfigurationProperty(name);
+		} catch (EntityNotFoundException e) {
+			property = new ConfigurationProperty();
+		}
+		property.setName(name);
+		property.setValue(value);
+		entityManager.persist(property);
+		entityManager.flush();
+
+		return property.getValue();
+	}
+
+	@Secured({ Role.User })
+	@Override
+	public String retrieveConfigurationProperty(String propertyName) throws EntityNotFoundException {
+		ConfigurationProperty property = findConfigurationProperty(propertyName);
+
+		return property.getValue();
+	}
+
+	private ConfigurationProperty findConfigurationProperty(String name) throws EntityNotFoundException {
+		if (name == null) {
+			throw new EntityNotFoundException();
+		}
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<ConfigurationProperty> pageQuery = criteriaBuilder.createQuery(ConfigurationProperty.class);
+		Root<ConfigurationProperty> root = pageQuery.from(ConfigurationProperty.class);
+
+		pageQuery.select(root).where(criteriaBuilder.equal(root.get("name"), name));
+		try {
+			ConfigurationProperty property = entityManager.createQuery(pageQuery).getSingleResult();
+			return property;
+		} catch (NoResultException e) {
+			throw new EntityNotFoundException(String.format("Property with name %s not found", name));
+		}
 	}
 }

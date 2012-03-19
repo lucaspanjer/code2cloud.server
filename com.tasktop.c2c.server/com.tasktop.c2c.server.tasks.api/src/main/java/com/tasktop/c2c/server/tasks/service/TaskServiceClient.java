@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
@@ -909,6 +911,31 @@ public class TaskServiceClient extends AbstractRestServiceClient implements Task
 				return result.getString();
 			}
 		}.doCall("wikimarkup", markup);
+
+	}
+
+	public String retrieveConfigurationProperty(String propertyName) throws EntityNotFoundException {
+		try {
+			return new GetCall<String>() {
+				public String getValue(ServiceCallResult result) {
+					return result.getString();
+				}
+			}.doCall("configuration/{propertyName}", propertyName);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+			throw e;
+		}
+	}
+
+	public String setConfigurationProperty(String name, String value) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(name, value);
+		return new PostCall<String>() {
+
+			public String getValue(ServiceCallResult result) {
+				return result.getString();
+			}
+		}.doCall("configuration", map);
 
 	}
 }

@@ -18,7 +18,6 @@ import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
 
-
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -129,6 +128,7 @@ public class ProjectNewTaskPlace extends AbstractProjectTaskBatchingPlace implem
 		if (this.parentId != null) {
 			actions.add(new GetTaskAction(projectId, parentId));
 		}
+
 	}
 
 	@Override

@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator;
+import com.tasktop.c2c.server.internal.tasks.service.ProjectServicePreferencesConfigurator;
+import com.tasktop.c2c.server.wiki.service.WikiService;
 
 /**
  * Verifies that the project task DB is created and schema installed with no Exceptions. This tests the
@@ -40,7 +42,10 @@ import com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfig
 public class TaskProjectServiceDatabaseConfiguratorTest {
 
 	@Resource(name = "taskTestDatabaseConfigurer")
-	private ProjectServiceDatabaseConfigurator configurator;
+	private ProjectServiceDatabaseConfigurator databaseConfigurator;
+
+	@Resource(name = "taskTestPreferencesConfigurator")
+	private ProjectServicePreferencesConfigurator preferencesConfigurator;
 
 	private static final String TEST_PROJ_ID = "taskconfiguratortester";
 
@@ -48,6 +53,8 @@ public class TaskProjectServiceDatabaseConfiguratorTest {
 	public void testConfigure() {
 		ProjectServiceConfiguration configuration = new ProjectServiceConfiguration();
 		configuration.setProjectIdentifier(TEST_PROJ_ID);
-		configurator.configure(configuration);
+		configuration.setProperty(WikiService.MARKUP_LANGUAGE_DB_KEY, "Textile");
+		preferencesConfigurator.configure(configuration);
+		databaseConfigurator.configure(configuration);
 	}
 }

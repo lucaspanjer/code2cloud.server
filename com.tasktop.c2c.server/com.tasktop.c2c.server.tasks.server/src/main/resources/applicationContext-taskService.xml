@@ -59,6 +59,7 @@
 				<bean class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 
 					p:suffix="_tasks" p:rawDatasource-ref="rawDataSource" p:tenantAwareDataSource-ref="dataSource" 
 					p:changelog="classpath:/data/liquibase-task-db-master.xml"/>
+				<bean id="taskPreferencesConfigurator" class="com.tasktop.c2c.server.internal.tasks.service.ProjectServicePreferencesConfigurator" />
 			</list>
 		</property>
 		<property name="metricCollectors">

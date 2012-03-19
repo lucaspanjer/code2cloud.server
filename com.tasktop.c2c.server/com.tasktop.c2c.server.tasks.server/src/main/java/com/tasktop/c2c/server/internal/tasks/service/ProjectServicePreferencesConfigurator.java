@@ -10,7 +10,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.internal.wiki.server;
+package com.tasktop.c2c.server.internal.tasks.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.tenancy.context.TenancyContextHolder;
@@ -19,12 +19,13 @@ import org.springframework.tenancy.provider.DefaultTenant;
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
+import com.tasktop.c2c.server.tasks.service.TaskService;
 import com.tasktop.c2c.server.wiki.service.WikiService;
 
 public class ProjectServicePreferencesConfigurator implements Configurator {
 
 	@Autowired
-	WikiService wikiService;
+	TaskService taskService;
 
 	/*
 	 * (non-Javadoc)
@@ -39,6 +40,7 @@ public class ProjectServicePreferencesConfigurator implements Configurator {
 		TenancyContextHolder.getContext().setTenant(new DefaultTenant(configuration.getProjectIdentifier(), null));
 		AuthUtils.assumeSystemIdentity(null);
 
-		wikiService.setConfigurationProperty(WikiService.MARKUP_LANGUAGE_DB_KEY, markupLanguage);
+		taskService.setConfigurationProperty(WikiService.MARKUP_LANGUAGE_DB_KEY, markupLanguage);
+
 	}
 }

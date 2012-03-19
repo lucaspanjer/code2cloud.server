@@ -2539,4 +2539,22 @@
 	<changeSet author="cmorgan" id="allowNullEsitmate-task2769">
 		<sql>ALTER TABLE bugs MODIFY estimated_time DECIMAL(7,2) DEFAULT NULL</sql>
 	</changeSet>
+	<changeSet author="mfeichtinger" id="createConfigurationProperty" >
+		<createTable tableName="ConfigurationProperty">
+			<column name="ID" type="BIGINT" autoIncrement="true">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="VERSION" type="INT" />
+			<column name="NAME" type="VARCHAR(50)">
+				<constraints unique="true" />
+			</column>
+			<column name="VALUE" type="VARCHAR(50)" />
+		</createTable>
+		<insert tableName="ConfigurationProperty">
+			<column name="ID" value="1"/>
+			<column name="VERSION" value="1" />
+			<column name="NAME" value="MARKUP_LANGUAGE" />
+			<column name="VALUE"  value="Textile" />
+		</insert>
+	</changeSet>
 </databaseChangeLog>

@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.tasks.client.widgets;
 
 import java.util.List;
 
-
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasValue;
@@ -68,4 +67,6 @@ public interface AbstractEditTaskDisplay extends IsWidget, HasValue<Task> {
 	 * @param projectIdentifier
 	 */
 	void setProjectIdentifier(String projectIdentifier);
+
+	void setMarkupLanguage(String markupLanguage);
 }

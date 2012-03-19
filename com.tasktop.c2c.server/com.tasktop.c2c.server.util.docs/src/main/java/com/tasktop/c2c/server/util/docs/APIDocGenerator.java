@@ -98,6 +98,7 @@ import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
 import com.tasktop.c2c.server.tasks.service.CriteriaQueryArguments;
 import com.tasktop.c2c.server.tasks.service.PredefinedQueryArguments;
 import com.tasktop.c2c.server.tasks.service.SaveAttachmentArguments;
+import com.tasktop.c2c.server.tasks.service.TaskService;
 import com.tasktop.c2c.server.tasks.web.service.TaskServiceController;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.AttachmentHandle;
@@ -390,10 +391,17 @@ public class APIDocGenerator {
 		configuration.setSeverities(createTaskSeverities());
 		configuration.setStateTransitions(createTaskStateTransitions());
 		configuration.setStatuses(createTaskStatuses());
+		configuration.setConfigurationProperties(createConfigurationProperties());
 		configuration.setTaskTypes(Arrays.asList("Task", "Defect", "Feature"));
 		configuration.setKeywords(createTaskKeywords());
 		configuration.setUsers(createTaskUserProfiles());
 		return configuration;
+	}
+
+	private Map<String, String> createConfigurationProperties() {
+		Map<String, String> propMap = new HashMap<String, String>();
+		propMap.put(TaskService.MARKUP_LANGUAGE_DB_KEY, "Textile");
+		return propMap;
 	}
 
 	private List<TaskUserProfile> createTaskUserProfiles() {

@@ -54,7 +54,6 @@ import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.domain.SortInfo;
 import com.tasktop.c2c.server.common.service.job.JobService;
-import com.tasktop.c2c.server.common.service.wiki.MarkupLanguageUtil;
 import com.tasktop.c2c.server.internal.profile.crypto.PublicKeyReader;
 import com.tasktop.c2c.server.profile.domain.Email;
 import com.tasktop.c2c.server.profile.domain.internal.Agreement;
@@ -87,6 +86,8 @@ import com.tasktop.c2c.server.profile.service.QuotaService;
 import com.tasktop.c2c.server.profile.service.provider.TaskServiceProvider;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
 import com.tasktop.c2c.server.tasks.domain.Team;
+import com.tasktop.c2c.server.tasks.service.TaskService;
+import com.tasktop.c2c.server.wiki.service.WikiService;
 
 /**
  * Main implementation of the {@link ProfileService} using JPA.
@@ -565,7 +566,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		if (project.getProjectPreferences().getWikiLanguage() != managedProject.getProjectPreferences()
 				.getWikiLanguage()) {
-			jobService.schedule(new UpdateProjectWikiPreferencesJob(project, MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY));
+			jobService.schedule(new UpdateProjectWikiPreferencesJob(project, WikiService.MARKUP_LANGUAGE_DB_KEY));
+			jobService.schedule(new UpdateProjectTaskPreferencesJob(project, TaskService.MARKUP_LANGUAGE_DB_KEY));
 		}
 		if (!entityManager.contains(project)) {
 			// we disallow change of identifier

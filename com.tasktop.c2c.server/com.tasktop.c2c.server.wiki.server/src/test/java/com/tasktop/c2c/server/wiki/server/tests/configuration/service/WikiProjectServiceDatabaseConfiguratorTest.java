@@ -20,10 +20,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tasktop.c2c.server.common.service.wiki.MarkupLanguageUtil;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator;
 import com.tasktop.c2c.server.internal.wiki.server.ProjectServicePreferencesConfigurator;
+import com.tasktop.c2c.server.wiki.service.WikiService;
 
 /**
  * Verifies that the project wiki DB is created and schema installed with no Exceptions. This tests the
@@ -49,7 +49,7 @@ public class WikiProjectServiceDatabaseConfiguratorTest {
 	public void testConfigure() {
 		ProjectServiceConfiguration configuration = new ProjectServiceConfiguration();
 		configuration.setProjectIdentifier(TEST_PROJ_ID);
-		configuration.setProperty(MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY, "Textile");
+		configuration.setProperty(WikiService.MARKUP_LANGUAGE_DB_KEY, "Textile");
 		databaseConfigurator.configure(configuration);
 		preferencesConfigurator.configure(configuration);
 	}

@@ -177,6 +177,10 @@ public class EditWikiPanel extends Composite implements HasValue<String>, IsEdit
 		this.markupLanguage = markupLanguage;
 	}
 
+	public String getMarkupLanguage() {
+		return markupLanguage;
+	}
+
 	public void setVisibleLines(int lines) {
 		text.setVisibleLines(lines);
 	}
