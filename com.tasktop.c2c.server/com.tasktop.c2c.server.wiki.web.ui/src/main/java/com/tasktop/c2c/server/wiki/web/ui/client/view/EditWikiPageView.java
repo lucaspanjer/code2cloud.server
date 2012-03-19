@@ -154,7 +154,6 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 			pageTitle.setText("Edit Page");
 			attachmentsPanel.setVisible(true);
 			attachmentForm.setAction(page.getAttachmentsUrl());
-
 			// If the delete value is already beyond our permissions, then we can't edit it, so dont' display it.
 			boolean canEditDelete = availableAccessSettings.contains(page.getDeleteAccess());
 			deleteAccessPanel.setVisible(canEditDelete);
@@ -184,6 +183,11 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 	@Override
 	public void setProjectIdentifier(String projectIdentifier) {
 		content.setProjectId(projectIdentifier);
+	}
+
+	@Override
+	public void setMarkupLanguage(String markupLanguage) {
+		content.setMarkLanguage(markupLanguage);
 	}
 
 	public Page getPage() {

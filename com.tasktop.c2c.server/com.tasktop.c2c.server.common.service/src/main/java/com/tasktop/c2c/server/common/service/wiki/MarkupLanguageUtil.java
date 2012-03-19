@@ -12,10 +12,17 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.service.wiki;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.eclipse.mylyn.wikitext.confluence.core.ConfluenceLanguage;
 import org.eclipse.mylyn.wikitext.core.parser.markup.MarkupLanguage;
 import org.eclipse.mylyn.wikitext.core.parser.markup.MarkupLanguageConfiguration;
 import org.eclipse.mylyn.wikitext.core.parser.markup.token.ImpliedHyperlinkReplacementToken;
+import org.eclipse.mylyn.wikitext.mediawiki.core.MediaWikiLanguage;
 import org.eclipse.mylyn.wikitext.textile.core.TextileLanguage;
+import org.eclipse.mylyn.wikitext.tracwiki.core.TracWikiLanguage;
+import org.eclipse.mylyn.wikitext.twiki.core.TWikiLanguage;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -23,11 +30,37 @@ import org.eclipse.mylyn.wikitext.textile.core.TextileLanguage;
  */
 public class MarkupLanguageUtil {
 
+	public static final String MARKUP_LANGUAGE_DB_KEY = "MARKUP_LANGUAGE";
+
 	private MarkupLanguageUtil() {
 		// No instantiation of this class.
 	}
 
 	public static MarkupLanguage createDefaultMarkupLanguage() {
+		// Create and wire up our markup language.
+		MarkupLanguage markupLanguage = new TextileLanguage();
+		markupLanguage.configure(getMarkupLanguageConfiguration());
+
+		return markupLanguage;
+	}
+
+	public static List<MarkupLanguage> createMarkupLanguages() {
+		// Create and wire up our markup languages.
+		List<MarkupLanguage> languageList = new LinkedList<MarkupLanguage>();
+		languageList.add(new TextileLanguage());
+		languageList.add(new ConfluenceLanguage());
+		languageList.add(new MediaWikiLanguage());
+		languageList.add(new TracWikiLanguage());
+		languageList.add(new TWikiLanguage());
+
+		for (MarkupLanguage language : languageList) {
+			language.configure(getMarkupLanguageConfiguration());
+		}
+
+		return languageList;
+	}
+
+	private static MarkupLanguageConfiguration getMarkupLanguageConfiguration() {
 		MarkupLanguageConfiguration configuration = new MarkupLanguageConfiguration();
 		configuration.setEscapingHtmlAndXml(true);
 
@@ -43,11 +76,6 @@ public class MarkupLanguageUtil {
 		configuration.getPhraseModifiers().add(emailReplacer);
 		configuration.getPhraseModifiers().add(taskLinkReplacer);
 		configuration.getPhraseModifiers().add(new ImpliedHyperlinkReplacementToken());
-
-		// Create and wire up our markup language.
-		MarkupLanguage markupLanguage = new TextileLanguage();
-		markupLanguage.configure(configuration);
-
-		return markupLanguage;
+		return configuration;
 	}
 }

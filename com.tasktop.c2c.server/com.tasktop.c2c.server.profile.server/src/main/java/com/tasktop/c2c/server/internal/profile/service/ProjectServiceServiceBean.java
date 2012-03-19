@@ -140,6 +140,8 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_URL, configuration.getProfileBaseUrl());
 		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL,
 				configuration.getServiceUrlPrefix(project.getIdentifier()));
+		config.setProperty(ProjectServiceConfiguration.MARKUP_LANGUAGE, project.getProjectPreferences()
+				.getWikiLanguage().toString());
 
 		NodeProvisioningService nodeProvisioningService = nodeProvisioningServiceByType.get(type);
 		if (nodeProvisioningService == null) {

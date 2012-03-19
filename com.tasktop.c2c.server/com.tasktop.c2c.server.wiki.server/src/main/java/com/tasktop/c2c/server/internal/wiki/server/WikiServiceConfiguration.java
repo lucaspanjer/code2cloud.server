@@ -53,4 +53,9 @@ public class WikiServiceConfiguration extends BaseProfileConfiguration {
 	public String computeAttachmentsUrlForPage(Long id) {
 		return getServiceUrlPrefix(getProfileProjectIdentifier()) + "wiki/" + id + "/attachment";
 	}
+
+	public String retrievePropertyConfiguration(String propertyName) {
+		return getServiceUrlPrefix(getProfileProjectIdentifier()) + "wiki/configuration/" + propertyName;
+	}
+
 }

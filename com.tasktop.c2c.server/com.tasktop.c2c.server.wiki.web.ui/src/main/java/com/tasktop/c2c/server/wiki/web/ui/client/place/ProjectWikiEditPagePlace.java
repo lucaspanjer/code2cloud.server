@@ -26,6 +26,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SectionPlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
+import com.tasktop.c2c.server.common.service.wiki.MarkupLanguageUtil;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
@@ -35,6 +36,8 @@ import com.tasktop.c2c.server.wiki.domain.Page;
 import com.tasktop.c2c.server.wiki.web.ui.client.WikiPageMappings;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.ListAttachmentsAction;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.ListAttachmentsResult;
+import com.tasktop.c2c.server.wiki.web.ui.shared.action.RetrieveConfigurationPropertyAction;
+import com.tasktop.c2c.server.wiki.web.ui.shared.action.RetrieveConfigurationPropertyResult;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.RetrievePageAction;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.RetrievePageResult;
 
@@ -65,6 +68,7 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
 	private boolean isNew;
 	private String pagePath;
+	private String markupLanguage;
 	private Page page;
 	private List<Attachment> attachements;
 
@@ -79,6 +83,10 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 	private ProjectWikiEditPagePlace(String projectIdentifier, String pagePath) {
 		super(projectIdentifier);
 		this.pagePath = pagePath;
+	}
+
+	public String getMarkupLanguage() {
+		return markupLanguage;
 	}
 
 	public String getHeading() {
@@ -113,6 +121,7 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 		super.addActions(actions);
 		actions.add(new RetrievePageAction(projectId, pagePath, false));
 		actions.add(new ListAttachmentsAction(projectId, pagePath));
+		actions.add(new RetrieveConfigurationPropertyAction(projectId, MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY));
 	}
 
 	protected boolean handleExceptionInResults() {
@@ -128,6 +137,9 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 		if (!isNew) {
 			page = retrievePageResult.get();
 			attachements = getResult(ListAttachmentsResult.class).get();
+		} else {
+			RetrieveConfigurationPropertyResult retrieveConfigurationPropertyResult = getResult(RetrieveConfigurationPropertyResult.class);
+			markupLanguage = retrieveConfigurationPropertyResult.get();
 		}
 		createBreadcrumbs(project);
 		onPlaceDataFetched();

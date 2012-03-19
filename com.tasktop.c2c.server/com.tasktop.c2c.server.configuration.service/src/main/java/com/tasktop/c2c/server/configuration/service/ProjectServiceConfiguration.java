@@ -35,6 +35,7 @@ public class ProjectServiceConfiguration {
 	public static final String[] REQUIRED_PROPERTIES = new String[] { ProjectServiceConfiguration.APPLICATION_ID,
 			ProjectServiceConfiguration.PROFILE_PROTOCOL, ProjectServiceConfiguration.PROFILE_HOSTNAME,
 			ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL, ProjectServiceConfiguration.PROFILE_BASE_URL };
+	public static final String MARKUP_LANGUAGE = "markup.language";
 
 	private String projectId;
 	private Map<String, String> properties;

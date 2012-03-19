@@ -4131,6 +4131,14 @@ textarea {
   font-style: italic;
 }
 
+.wikiContent blockquote{
+	margin-left: 2%;
+}
+
+.wikiContent blockquote p{
+	color: #026789;
+}
+
 .wikiContent strong,
 .wikiContent b {
   font-weight: bolder;
@@ -4198,6 +4206,21 @@ textarea {
   font-size: 11px;
   text-align: right;
   color: #A0A39E;
+}
+
+/* Wiki Content fixes */
+.wikiContent {
+	padding-bottom: 15px;
+}
+
+.wikiContent pre {
+	display: block;
+	white-space: pre;
+	background-color: #FEFFE2;
+	border: 1px solid #B7B7B7;
+	margin: 10px 0 10px 10px;
+	padding: 0 5px;
+	overflow-x: scroll;
 }
 
 ul.saved-queries div.hover-edit {

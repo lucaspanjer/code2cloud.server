@@ -505,6 +505,9 @@ public class ProfileServiceTest {
 
 	@Test
 	public void testUpdateProject() throws ValidationException, EntityNotFoundException {
+
+		List<Job> scheduledJobs = jobService.getScheduledJobs();
+
 		Profile profile = MockProfileFactory.create(entityManager);
 		Project project = MockProjectFactory.create(null);
 
@@ -522,7 +525,11 @@ public class ProfileServiceTest {
 		project.setAccessibility(ProjectAccessibility.PUBLIC);
 		project.setProjectPreferences(project.getProjectPreferences());
 
+		int size = scheduledJobs.size();
+
 		Project updatedProject = profileService.updateProject(project);
+
+		assertEquals(size + 1, scheduledJobs.size());
 
 		assertEquals(project.getName(), updatedProject.getName());
 		assertEquals(project.getDescription(), updatedProject.getDescription());
@@ -597,6 +604,7 @@ public class ProfileServiceTest {
 
 	@Test
 	public void testUpdateProfile() throws ValidationException, EntityNotFoundException {
+
 		Profile profile = MockProfileFactory.create(entityManager);
 		entityManager.flush();
 		entityManager.clear();

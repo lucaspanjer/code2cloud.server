@@ -17,6 +17,7 @@ import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.stereotype.Component;
 
+import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.CreatePageAction;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.CreatePageResult;
@@ -34,8 +35,9 @@ public class CreatePageActionHandler extends AbstractWikiActionHandler<CreatePag
 			return new CreatePageResult(getService(action.getProjectId()).createPage(action.getPage()));
 		} catch (ValidationException e) {
 			handle(e);
+		} catch (EntityNotFoundException e) {
+			handle(e);
 		}
 		throw new IllegalStateException();
 	}
-
 }

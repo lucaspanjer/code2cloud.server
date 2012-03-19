@@ -616,11 +616,11 @@
 	</changeSet>
  
 	<changeSet id="orgProjectNameUniqueness-task4187" author="cmorgan">
-		<dropUniqueConstraint tableName="PROJECT" constraintName="NAME_UNIQUE"/>
-		<dropIndex tableName="PROJECT" indexName="NAME"/>
-		<createIndex indexName="NAME" tableName="PROJECT">
-			<column name="NAME" />
-		</createIndex>
+        <dropUniqueConstraint tableName="PROJECT" constraintName="NAME_UNIQUE"/>
+        <dropIndex tableName="PROJECT" indexName="NAME"/>
+        <createIndex indexName="NAME" tableName="PROJECT">
+                <column name="NAME" />
+        </createIndex>
 	</changeSet>
 	
  	<changeSet author="mfeichtinger" id="createProjectPreferencesTable-task4146">

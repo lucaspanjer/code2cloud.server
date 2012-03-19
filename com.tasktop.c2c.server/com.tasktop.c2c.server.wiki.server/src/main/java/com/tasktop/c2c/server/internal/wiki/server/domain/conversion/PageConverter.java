@@ -55,6 +55,7 @@ public class PageConverter implements ObjectConverter<Page> {
 		target.setPath(page.getPath());
 		target.setUrl(serviceConfiguration.computeWebUrlForPage(page.getPath()));
 		target.setAttachmentsUrl(serviceConfiguration.computeAttachmentsUrlForPage(page.getId()));
+		target.setMarkupLanguage(page.getMarkupLanguage());
 		target.setEditAccess(page.getEditAccess());
 		target.setDeleteAccess(page.getDeleteAccess());
 		target.setDeleted(page.getDeleted());

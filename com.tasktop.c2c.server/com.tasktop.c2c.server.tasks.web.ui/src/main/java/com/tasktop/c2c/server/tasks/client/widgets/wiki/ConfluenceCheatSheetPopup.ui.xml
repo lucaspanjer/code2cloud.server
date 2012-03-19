@@ -1,0 +1,48 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+	<g:HTMLPanel >
+		<div class="wikiContent" >
+		<h3 id="ConfluenceMarkupCheatSheet">Confluence Markup Cheat Sheet</h3>
+		
+		<h4 id="PhraseModifiers">Phrase Modifiers</h4>
+		<table><tbody>
+		<tr><td>_emphasis_ </td><td><em>emphasis</em> </td></tr>
+		<tr><td>*strong* </td><td><strong>strong</strong> </td></tr>
+		<tr><td>??citation?? </td><td><cite>citation</cite> </td></tr>
+		<tr><td>-deleted text- </td><td><del>deleted text</del> </td></tr>
+		<tr><td>+inserted text+ </td><td><ins>inserted text</ins> </td></tr>
+		<tr><td>^superscript^ </td><td><sup>superscript</sup> </td></tr>
+		<tr><td>^subscript^ </td><td><sub>subscript</sub> </td></tr>
+		<tr><td>{{monospace}} </td><td><tt>monospace</tt></td></tr>
+		</tbody></table>
+		
+		<h4 id="Block Modifiers">Block Modifiers</h4>
+		<table><tbody>
+		<tr><td>hn.</td><td><em>Heading (where n is some digit, for example h1)</em> </td></tr>
+		<tr><td>bq.</td><td><em>Block quote (single paragraph)</em> </td></tr>
+		<tr><td>{quote}</td><td><em>Block quote (multiple paragraphs)</em> </td></tr> 
+		<tr><td>{code}</td><td><em>Block code</em> </td></tr>
+		<tr><td>{note:title=Note}</td><td><em>A simple note</em> </td></tr>
+		<tr><td>{warning:title=Caution}</td><td><em>A warning note</em> </td></tr>
+		<tr><td>{info:title=Useful Information}</td><td><em>Informational note</em> </td></tr>
+		<tr><td>{tip:title=Tip}</td><td><em>A help tip</em> </td></tr>
+		<tr><td>{noformat}</td><td><em>Pre-formatted block</em> </td></tr>
+		<tr><td>#</td><td><em>Numeric list</em> </td></tr>
+		<tr><td>*</td><td><em>Bulleted list</em> </td></tr>
+		</tbody></table>
+		
+		<h4 id="Links">Links</h4><p>[Title|http://www.example.com]<br/>
+		[Title|http://www.example.com|tip]</p>
+		
+		<h4 id="Text Breaks">Text Breaks</h4>
+		<table><tbody>
+		<tr><td>(empty line)</td><td><em>produces a new paragraph</em> </td></tr>
+		<tr><td>----</td><td><em>horizontal rule</em> </td></tr>
+		<tr><td>---</td><td><em>— symbol (emdash)</em> </td></tr>
+		<tr><td>--</td><td><em>– symbol (endash)</em> </td></tr>
+		</tbody></table>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder>

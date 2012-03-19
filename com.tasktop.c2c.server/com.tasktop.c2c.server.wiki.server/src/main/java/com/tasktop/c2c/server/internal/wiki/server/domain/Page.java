@@ -35,10 +35,8 @@ import com.tasktop.c2c.server.wiki.domain.Page.GroupAccess;
 @Entity
 public class Page extends BaseEntity {
 
-	public static final String DEFAULT_MARKUP_LANGUAGE = "Textile";
-
 	private String path;
-	private String markupLanguage = DEFAULT_MARKUP_LANGUAGE;
+	private String markupLanguage;
 
 	private Person originalAuthor;
 	private Person lastAuthor;

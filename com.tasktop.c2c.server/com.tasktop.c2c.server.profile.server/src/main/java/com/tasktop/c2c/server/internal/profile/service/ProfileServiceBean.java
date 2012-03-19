@@ -54,6 +54,7 @@ import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.domain.SortInfo;
 import com.tasktop.c2c.server.common.service.job.JobService;
+import com.tasktop.c2c.server.common.service.wiki.MarkupLanguageUtil;
 import com.tasktop.c2c.server.internal.profile.crypto.PublicKeyReader;
 import com.tasktop.c2c.server.profile.domain.Email;
 import com.tasktop.c2c.server.profile.domain.internal.Agreement;
@@ -562,6 +563,10 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		validate(project, validator, new ProjectConstraintsValidator());
 
+		if (project.getProjectPreferences().getWikiLanguage() != managedProject.getProjectPreferences()
+				.getWikiLanguage()) {
+			jobService.schedule(new UpdateProjectWikiPreferencesJob(project, MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY));
+		}
 		if (!entityManager.contains(project)) {
 			// we disallow change of identifier
 			managedProject.setName(project.getName());

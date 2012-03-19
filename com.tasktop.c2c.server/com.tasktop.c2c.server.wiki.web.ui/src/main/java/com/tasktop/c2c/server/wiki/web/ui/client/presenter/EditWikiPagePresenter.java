@@ -109,6 +109,8 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 
 		void setProjectIdentifier(String projectIdentifier);
 
+		void setMarkupLanguage(String markupLanguage);
+
 		/**
 		 * @return
 		 */
@@ -130,6 +132,7 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 			newPage.setPath(path);
 			newPage.setEditAccess(GroupAccess.ALL);
 			newPage.setDeleteAccess(GroupAccess.ALL);
+			newPage.setMarkupLanguage(place.getMarkupLanguage());
 			setPage(newPage);
 		}
 
@@ -145,6 +148,7 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 		view.setPage(page);
 		view.setAttachments(place.getAttachements());
 		view.setProjectIdentifier(projectIdentifier);
+		view.setMarkupLanguage(page.getMarkupLanguage());
 
 	}
 

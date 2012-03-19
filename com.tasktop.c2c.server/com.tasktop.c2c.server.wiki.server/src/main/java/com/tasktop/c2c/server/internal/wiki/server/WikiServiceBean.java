@@ -45,7 +45,9 @@ import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.domain.SortInfo;
 import com.tasktop.c2c.server.common.service.domain.SortInfo.Order;
 import com.tasktop.c2c.server.common.service.job.JobService;
+import com.tasktop.c2c.server.common.service.wiki.MarkupLanguageUtil;
 import com.tasktop.c2c.server.internal.wiki.server.domain.AttachmentContent;
+import com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty;
 import com.tasktop.c2c.server.internal.wiki.server.domain.MarkupRenderer;
 import com.tasktop.c2c.server.internal.wiki.server.domain.PageContent;
 import com.tasktop.c2c.server.internal.wiki.server.domain.Person;
@@ -85,7 +87,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 
 	@Secured({ Role.Community, Role.User, Role.Admin })
 	@Override
-	public Page createPage(Page wikiPage) throws ValidationException {
+	public Page createPage(Page wikiPage) throws ValidationException, EntityNotFoundException {
 		validate(wikiPage);
 		try {
 			findPageByPath(wikiPage.getPath());
@@ -99,6 +101,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		com.tasktop.c2c.server.internal.wiki.server.domain.Page managedPage = new com.tasktop.c2c.server.internal.wiki.server.domain.Page();
 		managedPage.setOriginalAuthor(author);
 		managedPage.setPath(wikiPage.getPath());
+		managedPage.setMarkupLanguage(retrieveConfigurationProperty(MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY));
 		if (wikiPage.getEditAccess() != null) {
 			managedPage.setEditAccess(wikiPage.getEditAccess());
 		}
@@ -208,6 +211,26 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 			return page;
 		} catch (NoResultException e) {
 			throw new EntityNotFoundException(String.format("Page with path %s not found", path));
+		}
+	}
+
+	private ConfigurationProperty findConfigurationProperty(String name) throws EntityNotFoundException {
+		if (name == null) {
+			throw new EntityNotFoundException();
+		}
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty> pageQuery = criteriaBuilder
+				.createQuery(com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty.class);
+		Root<com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty> root = pageQuery
+				.from(com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty.class);
+
+		pageQuery.select(root).where(criteriaBuilder.equal(root.get("name"), name));
+		try {
+			com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty property = entityManager
+					.createQuery(pageQuery).getSingleResult();
+			return property;
+		} catch (NoResultException e) {
+			throw new EntityNotFoundException(String.format("Property with name %s not found", name));
 		}
 	}
 
@@ -585,6 +608,31 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		return attachmentHandle;
 	}
 
+	@Secured({ Role.Community, Role.User, Role.Admin })
+	@Override
+	public String setConfigurationProperty(String name, String value) {
+		com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty property;
+		try {
+			property = findConfigurationProperty(name);
+		} catch (EntityNotFoundException e) {
+			property = new ConfigurationProperty();
+		}
+		property.setName(name);
+		property.setValue(value);
+		entityManager.persist(property);
+		entityManager.flush();
+
+		return property.getValue();
+	}
+
+	@Secured({ Role.User })
+	@Override
+	public String retrieveConfigurationProperty(String propertyName) throws EntityNotFoundException {
+		com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty property = findConfigurationProperty(propertyName);
+
+		return property.getValue();
+	}
+
 	@Secured({ Role.Observer, Role.User })
 	@Override
 	public PageOutline retrieveOutlineByPath(String path) throws EntityNotFoundException {
@@ -609,7 +657,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 			page = findPageByPath(pagePath);
 		} catch (EntityNotFoundException e) {
 			page = new com.tasktop.c2c.server.internal.wiki.server.domain.Page();
-			// page.setMarkupLanguage(markupLanguage)
+			page.setMarkupLanguage(retrieveConfigurationProperty(MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY));
 			page.setId(-1l);
 			page.setPath(pagePath);
 		}

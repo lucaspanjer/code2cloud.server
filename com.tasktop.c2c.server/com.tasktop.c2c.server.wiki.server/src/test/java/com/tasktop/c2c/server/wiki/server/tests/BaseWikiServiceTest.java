@@ -48,8 +48,10 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.job.Job;
+import com.tasktop.c2c.server.common.service.wiki.MarkupLanguageUtil;
 import com.tasktop.c2c.server.common.tests.util.ValidationAssert;
 import com.tasktop.c2c.server.internal.wiki.server.UpdatePageContentJob;
+import com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty;
 import com.tasktop.c2c.server.internal.wiki.server.domain.PageContent;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.AttachmentHandle;
@@ -97,6 +99,8 @@ public abstract class BaseWikiServiceTest {
 		person2 = new Person();
 		person2.setName("Frank Smith");
 		person2.setLoginName("person2@example.com");
+
+		createMarkupProperty();
 	}
 
 	@After
@@ -116,8 +120,16 @@ public abstract class BaseWikiServiceTest {
 		TestSecurity.login(person);
 	}
 
+	private void createMarkupProperty() {
+		ConfigurationProperty cp = new ConfigurationProperty();
+		cp.setName(MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY);
+		cp.setValue("Textile");
+
+		entityManager.persist(cp);
+	}
+
 	@Test
-	public void testCreatePage_RequiresLogon() throws ValidationException {
+	public void testCreatePage_RequiresLogon() throws ValidationException, EntityNotFoundException {
 		try {
 			Page page = new Page();
 			page.setId(12345);
@@ -203,6 +215,33 @@ public abstract class BaseWikiServiceTest {
 		} catch (EntityNotFoundException e) {
 			// expected
 		}
+	}
+
+	@Test
+	public void testRetrieveConfigurationProperty() throws EntityNotFoundException {
+		logon(author);
+
+		final String TEST_CONFIGURATION_PROPERTY = "TEST_CONFIGURATION_PROPERTY";
+		ConfigurationProperty cp = new ConfigurationProperty();
+		cp.setName(TEST_CONFIGURATION_PROPERTY);
+		cp.setValue("test value");
+		entityManager.persist(cp);
+		entityManager.flush();
+
+		String property = wikiService.retrieveConfigurationProperty(TEST_CONFIGURATION_PROPERTY);
+		assertTrue(property.equals("test value"));
+
+	}
+
+	@Test
+	public void testSetConfigurationProperty() throws ValidationException, EntityNotFoundException {
+		logon(author);
+
+		final String TEST_CONFIGURATION_PROPERTY = "TEST_CONFIGURATION_PROPERTY";
+
+		wikiService.setConfigurationProperty(TEST_CONFIGURATION_PROPERTY, "test value");
+		String property = wikiService.retrieveConfigurationProperty(TEST_CONFIGURATION_PROPERTY);
+		assertTrue(property.equals("test value"));
 	}
 
 	@Test

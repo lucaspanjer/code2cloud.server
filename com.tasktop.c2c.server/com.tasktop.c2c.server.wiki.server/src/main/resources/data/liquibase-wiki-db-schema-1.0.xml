@@ -209,4 +209,25 @@
 			<column name="SEQ_COUNT" value="0" />
 		</insert>
 	</changeSet>
+	<changeSet author="wikidb" id="createConfigurationProperty" >
+		<createTable tableName="CONFIGURATIONPROPERTY">
+			<column name="ID" type="BIGINT" autoIncrement="true">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="VERSION" type="INT" />
+			<column name="NAME" type="VARCHAR(50)">
+				<constraints unique="true" />
+			</column>
+			<column name="VALUE" type="VARCHAR(50)" />
+			<column name="CREATIONDATE" type="DATETIME" />
+			<column name="MODIFICATIONDATE" type="DATETIME" />
+		</createTable>
+	</changeSet>
+	<changeSet author="mfeichtinger" id="insertConfigurationPropertySequenceInfo">
+		<insert tableName="SEQUENCE">
+			<column name="SEQ_NAME" value="ConfigurationProperty" />
+			<column name="SEQ_COUNT" value="0" />
+		</insert>
+	</changeSet>
+
 </databaseChangeLog>

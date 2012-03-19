@@ -21,23 +21,23 @@ import com.google.gwt.user.client.ui.Widget;
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class WikiCheatSheetPopup extends DecoratedPopupPanel {
+public class ConfluenceCheatSheetPopup extends DecoratedPopupPanel {
 
-	private static WikiCheatSheetPopup instance;
+	private static ConfluenceCheatSheetPopup instance;
 
-	public static WikiCheatSheetPopup getInstance() {
+	public static ConfluenceCheatSheetPopup getInstance() {
 		if (instance == null) {
-			instance = new WikiCheatSheetPopup();
+			instance = new ConfluenceCheatSheetPopup();
 		}
 		return instance;
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 
-	interface Binder extends UiBinder<Widget, WikiCheatSheetPopup> {
+	interface Binder extends UiBinder<Widget, ConfluenceCheatSheetPopup> {
 	}
 
-	private WikiCheatSheetPopup() {
+	private ConfluenceCheatSheetPopup() {
 		super(true);
 		setWidget(uiBinder.createAndBindUi(this));
 	}

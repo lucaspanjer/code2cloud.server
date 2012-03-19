@@ -43,8 +43,9 @@ public interface WikiService {
 	 * @return the page as it was created
 	 * @throws ValidationException
 	 *             if the given page cannot be created because it is invalid
+	 * @throws EntityNotFoundException
 	 */
-	public Page createPage(Page wikiPage) throws ValidationException;
+	public Page createPage(Page wikiPage) throws ValidationException, EntityNotFoundException;
 
 	/**
 	 * retrieve a wiki page by its id
@@ -205,9 +206,26 @@ public interface WikiService {
 	 */
 	public AttachmentHandle updateAttachment(Attachment attachment) throws EntityNotFoundException, ValidationException;
 
+	/**
+	 * retrieve the requested configuration setting
+	 * 
+	 * @param setting
+	 *            the name of the setting to retrieve
+	 * @return the value of the configuration setting
+	 */
+	public String retrieveConfigurationProperty(String propertyName) throws EntityNotFoundException;
+
 	PageOutline retrieveOutlineByPath(String path) throws EntityNotFoundException;
 
 	String renderPreview(String pagePath, String markup) throws EntityNotFoundException;
 
 	void restorePage(Integer pageId) throws EntityNotFoundException;
+
+	/**
+	 * @param name
+	 * @param value
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	public String setConfigurationProperty(String name, String value);
 }

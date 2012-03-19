@@ -43,6 +43,7 @@ public class Page extends PageHandle {
 	private GroupAccess editAccess;
 	private GroupAccess deleteAccess;
 	private boolean deleted;
+	private String markupLanguage;
 
 	private String content;
 
@@ -155,6 +156,14 @@ public class Page extends PageHandle {
 	 */
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public String getMarkupLanguage() {
+		return markupLanguage;
+	}
+
+	public void setMarkupLanguage(String markupLanguage) {
+		this.markupLanguage = markupLanguage;
 	}
 
 }

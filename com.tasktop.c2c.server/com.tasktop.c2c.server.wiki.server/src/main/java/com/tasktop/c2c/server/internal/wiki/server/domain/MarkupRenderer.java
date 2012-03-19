@@ -20,6 +20,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.jar.Manifest;
 
@@ -52,7 +53,8 @@ public class MarkupRenderer {
 	WikiServiceConfiguration serviceConfiguration;
 
 	public MarkupRenderer() {
-		register(MarkupLanguageUtil.createDefaultMarkupLanguage());
+		// register(MarkupLanguageUtil.createDefaultMarkupLanguage());
+		register(MarkupLanguageUtil.createMarkupLanguages());
 
 		for (Map.Entry<String, MarkupLanguage> languageEntry : markupLanguageByName.entrySet()) {
 			markupLanguageToVersion.put(languageEntry.getKey(), computeVersion(languageEntry.getValue()));
@@ -65,6 +67,12 @@ public class MarkupRenderer {
 
 	private void register(MarkupLanguage markupLanguage) {
 		markupLanguageByName.put(markupLanguage.getName(), markupLanguage);
+	}
+
+	private void register(List<MarkupLanguage> markupLanguages) {
+		for (MarkupLanguage markupLanguage : markupLanguages) {
+			register(markupLanguage);
+		}
 	}
 
 	public void render(PageContent pageContent) {

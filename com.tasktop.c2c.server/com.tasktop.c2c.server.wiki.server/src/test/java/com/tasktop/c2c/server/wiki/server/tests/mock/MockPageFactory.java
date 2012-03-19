@@ -22,7 +22,6 @@ import com.tasktop.c2c.server.internal.wiki.server.domain.Page;
 import com.tasktop.c2c.server.internal.wiki.server.domain.PageContent;
 import com.tasktop.c2c.server.internal.wiki.server.domain.Person;
 
-
 public class MockPageFactory {
 
 	private static AtomicInteger created = new AtomicInteger(0);
@@ -50,7 +49,7 @@ public class MockPageFactory {
 
 		page.setOriginalAuthor(author);
 		page.setPath("page" + index);
-
+		page.setMarkupLanguage("Textile");
 		PageContent content = MockPageContentFactory.create(entityManager, author);
 		page.addPageContent(content);
 

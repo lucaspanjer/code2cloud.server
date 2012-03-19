@@ -10,23 +10,22 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.profile.domain.project;
+package com.tasktop.c2c.server.wiki.web.ui.shared.action;
+
+import net.customware.gwt.dispatch.shared.AbstractSimpleResult;
 
 /**
- * @author Myles Feichtinger (Tasktop Technologies Inc.)
+ * @author Myles (Tasktop Technologies Inc.)
  * 
  */
-public enum WikiMarkupLanguage {
-	TEXTILE("Textile"), CONFLUENCE("Confluence");// MEDIAWIKI("MediaWiki"), TRACWIKI("TracWiki"), TWIKI("TWiki");
 
-	private String name;
-
-	private WikiMarkupLanguage(String name) {
-		this.name = name;
+public class RetrieveConfigurationPropertyResult extends AbstractSimpleResult<String> {
+	protected RetrieveConfigurationPropertyResult() {
+		super();
 	}
 
-	@Override
-	public String toString() {
-		return this.name;
+	public RetrieveConfigurationPropertyResult(String value) {
+		super(value);
 	}
+
 }

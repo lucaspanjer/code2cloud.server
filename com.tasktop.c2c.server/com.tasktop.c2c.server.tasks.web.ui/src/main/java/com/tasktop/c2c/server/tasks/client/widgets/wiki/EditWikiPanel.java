@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
+import com.tasktop.c2c.server.profile.domain.project.WikiMarkupLanguage;
 import com.tasktop.c2c.server.tasks.client.TaskResources;
 import com.tasktop.c2c.server.tasks.shared.action.RenderWikiTextAction;
 import com.tasktop.c2c.server.tasks.shared.action.RenderWikiTextResult;
@@ -102,6 +103,7 @@ public class EditWikiPanel extends Composite implements HasValue<String>, IsEdit
 	}
 
 	protected String projectId;
+	protected String markupLanguage;
 
 	@UiHandler("toggleButton")
 	protected void onToggleButton(ClickEvent e) {
@@ -168,6 +170,13 @@ public class EditWikiPanel extends Composite implements HasValue<String>, IsEdit
 		this.projectId = projectId;
 	}
 
+	/**
+	 * @param markupLanguage
+	 */
+	public void setMarkLanguage(String markupLanguage) {
+		this.markupLanguage = markupLanguage;
+	}
+
 	public void setVisibleLines(int lines) {
 		text.setVisibleLines(lines);
 	}
@@ -184,7 +193,11 @@ public class EditWikiPanel extends Composite implements HasValue<String>, IsEdit
 
 	@UiHandler("helpAnchor")
 	protected void onHelp(ClickEvent e) {
-		WikiCheatSheetPopup.getInstance().center();
+		if (markupLanguage.equals(WikiMarkupLanguage.TEXTILE.toString())) {
+			TextileCheatSheetPopup.getInstance().center();
+		} else if (markupLanguage.equals(WikiMarkupLanguage.CONFLUENCE.toString())) {
+			ConfluenceCheatSheetPopup.getInstance().center();
+		}
 	}
 
 }

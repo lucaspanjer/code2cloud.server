@@ -86,7 +86,7 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 			+ "The provided path must be unique, and the page must have content.")
 	@RequestMapping(value = "/page", method = RequestMethod.POST)
 	@Override
-	public Page createPage(@RequestBody Page wikiPage) throws ValidationException {
+	public Page createPage(@RequestBody Page wikiPage) throws ValidationException, EntityNotFoundException {
 		return service.createPage(wikiPage);
 	}
 
@@ -450,4 +450,35 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 		service.restorePage(pageId);
 	}
 
+	@Section("Configuration Properties")
+	@Title("Configuration Property")
+	@Documentation("Retrieve setting by name.")
+	@RequestMapping(value = "/configuration/{propertyName}", method = RequestMethod.GET)
+	public Map<String, String> doRetrieveConfigurationProperty(@PathVariable(value = "propertyName") String propertyName)
+			throws EntityNotFoundException {
+		return Collections.singletonMap("string", retrieveConfigurationProperty(propertyName));
+	}
+
+	@Override
+	public String retrieveConfigurationProperty(String propertyName) throws EntityNotFoundException {
+		return service.retrieveConfigurationProperty(propertyName);
+	}
+
+	@RequestMapping(value = "/configuration", method = RequestMethod.POST)
+	public Map<String, String> doSetConfigurationProperty(@RequestBody Map<String, String> propertyMap)
+			throws ValidationException, EntityNotFoundException {
+		if (propertyMap.size() == 1) {
+			for (String name : propertyMap.keySet()) {
+				return Collections.singletonMap("string", setConfigurationProperty(name, propertyMap.get(name)));
+			}
+		}
+		throw new EntityNotFoundException("Only one property may be set"); // FIXME Throw different exception or handle
+																			// multiple property adding or change
+																			// params?
+	}
+
+	@Override
+	public String setConfigurationProperty(String name, String value) {
+		return service.setConfigurationProperty(name, value);
+	}
 }
