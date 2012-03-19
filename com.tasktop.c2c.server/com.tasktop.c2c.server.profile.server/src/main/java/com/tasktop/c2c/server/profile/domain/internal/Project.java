@@ -41,6 +41,7 @@ public class Project extends BaseEntity {
 	private String identifier;
 	private String description;
 	private ProjectAccessibility accessibility;
+	private ProjectPreferences projectPreferences;
 
 	private List<ProjectProfile> projectProfiles = new ArrayList<ProjectProfile>();
 	private List<ScmRepository> repositories = new ArrayList<ScmRepository>();
@@ -195,5 +196,15 @@ public class Project extends BaseEntity {
 
 	public void setAccessibility(ProjectAccessibility accessibility) {
 		this.accessibility = accessibility;
+	}
+
+	@OneToOne(cascade = { CascadeType.PERSIST }, optional = false)
+	@JoinColumn(name = "projectpreferences_id", nullable = false)
+	public ProjectPreferences getProjectPreferences() {
+		return projectPreferences;
+	}
+
+	public void setProjectPreferences(ProjectPreferences projectPreferences) {
+		this.projectPreferences = projectPreferences;
 	}
 }

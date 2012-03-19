@@ -21,6 +21,8 @@ import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
+import com.tasktop.c2c.server.profile.domain.project.ProjectPreferences;
+import com.tasktop.c2c.server.profile.domain.project.WikiMarkupLanguage;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationNewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
@@ -34,6 +36,9 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 		super(projectsView);
 		this.view = projectsView;
 		Project newProject = new Project();
+		ProjectPreferences prefs = new ProjectPreferences();
+		prefs.setWikiLanguage(WikiMarkupLanguage.TEXTILE);
+		newProject.setProjectPreferences(prefs);
 		newProject.setAccessibility(ProjectAccessibility.PRIVATE);
 		if (place instanceof OrganizationNewProjectPlace) {
 			newProject.setOrganization(((OrganizationNewProjectPlace) place).getOrganization());

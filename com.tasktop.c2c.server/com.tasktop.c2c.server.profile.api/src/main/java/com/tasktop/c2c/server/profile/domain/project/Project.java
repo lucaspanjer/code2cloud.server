@@ -24,6 +24,7 @@ public class Project extends AbstractEntity {
 	private String description;
 	private Boolean isPublic;
 	private ProjectAccessibility accessibility;
+	private ProjectPreferences projectPreferences;
 	private List<ProjectService> projectServices;
 	private Integer numWatchers;
 	private Integer numCommiters;
@@ -120,6 +121,20 @@ public class Project extends AbstractEntity {
 
 	public void setAccessibility(ProjectAccessibility accessibility) {
 		this.accessibility = accessibility;
+	}
+
+	/**
+	 * @return the projectPreferences
+	 */
+	public ProjectPreferences getProjectPreferences() {
+		return projectPreferences;
+	}
+
+	/**
+	 * @param projectPreferences the projectPreferences to set
+	 */
+	public void setProjectPreferences(ProjectPreferences projectPreferences) {
+		this.projectPreferences = projectPreferences;
 	}
 
 }

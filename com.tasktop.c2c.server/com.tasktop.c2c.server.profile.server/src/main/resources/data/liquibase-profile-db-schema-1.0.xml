@@ -621,4 +621,43 @@
 			<column name="NAME" />
 		</createIndex>
 	</changeSet>
+	<changeSet author="mfeichtinger" id="createProjectPreferencesTable-task4146">
+		<createTable tableName="PROJECTPREFERENCES">
+			<column name="ID" type="BIGINT" autoIncrement="true">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="VERSION" type="INT" />
+			<column defaultValue="TEXTILE" name="WIKILANGUAGE" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addColumn tableName="PROJECT">
+			<column name="PROJECTPREFERENCES_ID" type="BIGINT" />
+		</addColumn>
+		<addColumn tableName="ORGANIZATION">
+			<column name="PROJECTPREFERENCES_ID" type="BIGINT" />
+		</addColumn>
+		<addForeignKeyConstraint baseColumnNames="PROJECTPREFERENCES_ID"
+			baseTableName="PROJECT" constraintName="FK_PROJECT_PROJECTPREFERENCES"
+			referencedColumnNames="ID" referencedTableName="PROJECTPREFERENCES" />
+		<addForeignKeyConstraint baseColumnNames="PROJECTPREFERENCES_ID"
+			baseTableName="ORGANIZATION" constraintName="FK_ORGANIZATION_PROJECTPREFERENCES"
+			referencedColumnNames="ID" referencedTableName="PROJECTPREFERENCES" />
+		<addUniqueConstraint tableName="PROJECT" columnNames="PROJECTPREFERENCES_ID"/>
+		<addUniqueConstraint tableName="ORGANIZATION" columnNames="PROJECTPREFERENCES_ID"/>
+	</changeSet>
+
+<changeSet author="mfeichtinger" id="populateProjectPreferencesTable-task4146">
+	<sql>
+		INSERT INTO PROJECTPREFERENCES (ID, VERSION, WIKILANGUAGE)
+		select ID, 1,'TEXTILE' from PROJECT;
+
+		INSERT INTO PROJECTPREFERENCES (ID, VERSION, WIKILANGUAGE)
+		select ID, 1,'TEXTILE' from ORGANIZATION;
+
+		UPDATE PROJECT SET PROJECTPREFERENCES_ID = ID;
+		UPDATE ORGANIZATION set PROJECTPREFERENCES_ID = ID;
+	</sql>
+</changeSet>
+
 </databaseChangeLog>

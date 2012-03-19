@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -61,6 +62,7 @@ public class ProjectAdminSettingsDisplayView extends AbstractProjectView impleme
 	private Presenter presenter;
 
 	public ProjectAdminSettingsDisplayView() {
+		DOM.setElementPropertyBoolean(wikiLanguageListBox.getElement(), "disabled", true);
 		initWidget(ourUiBinder.createAndBindUi(this));
 		driver.initialize(this);
 	}

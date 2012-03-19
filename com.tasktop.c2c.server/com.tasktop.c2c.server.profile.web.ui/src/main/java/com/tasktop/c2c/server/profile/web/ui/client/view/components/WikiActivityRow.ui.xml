@@ -8,10 +8,9 @@
 			  	<a class="social-icon"></a>
 			  <p>
 			  	<p:PersonLabel ui:field="personLabel"/>
-				<g:Label ui:field="changeType"/>
-				<g:Anchor ui:field="pageAnchor"/>
+				<g:Label ui:field="changeType"/> <g:Anchor ui:field="pageAnchor"/>
 				<span class="date">
- 			  	<g:Label ui:field="dateLabel"/>
+					<g:Label ui:field="dateLabel"/>
 				</span>
 			  </p>
 			<div class="spacer clear small"></div>

@@ -562,6 +562,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			managedProject.setName(project.getName());
 			managedProject.setDescription(project.getDescription());
 			managedProject.setAccessibility(project.getAccessibility());
+			managedProject.getProjectPreferences().setWikiLanguage(project.getProjectPreferences().getWikiLanguage());
 		}
 
 		// Since our update is now done, return our project to the caller.
@@ -1675,4 +1676,5 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			throw new IllegalArgumentException();
 		}
 	}
+
 }
