@@ -1513,4 +1513,47 @@ public class ProfileServiceTest {
 		assertEquals(1, (int) queryResult.getTotalResultSize());
 
 	}
+
+	@Test
+	public void testProjectIdentifierUniqueness() throws ValidationException, EntityNotFoundException {
+		Profile profile = setupProfile();
+
+		Organization org = MockOrganizationFactory.create(null);
+		org = profileService.createOrganization(org);
+		assertEquals(0, org.getProjects().size());
+		assertNotNull(org.getIdentifier());
+		org = profileService.getOrganizationByIdentfier(org.getIdentifier());
+		assertNotNull(org);
+
+		String projectName = "projectNameABC";
+
+		Project project = MockProjectFactory.create(null);
+		project.setName(projectName);
+		project = profileService.createProject(profile.getId(), project);
+
+		project = MockProjectFactory.create(null);
+		project.setName(projectName);
+		try {
+			project = profileService.createProject(profile.getId(), project);
+			Assert.fail();
+		} catch (ValidationException e) {
+			// expected
+		}
+
+		project = MockProjectFactory.create(null);
+		project.setOrganization(org);
+		project.setName(projectName);
+		project = profileService.createProject(profile.getId(), project);
+
+		project = MockProjectFactory.create(null);
+		project.setOrganization(org);
+		project.setName(projectName);
+		try {
+			project = profileService.createProject(profile.getId(), project);
+			Assert.fail();
+		} catch (ValidationException e) {
+			// expected
+		}
+
+	}
 }

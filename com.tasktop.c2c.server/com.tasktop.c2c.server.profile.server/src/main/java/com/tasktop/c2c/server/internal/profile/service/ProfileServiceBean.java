@@ -204,12 +204,21 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		public void validate(Object target, Errors errors) {
 			Project project = (Project) target;
 			if (project.getName() != null && project.getName().trim().length() > 0) {
-				List<Project> projectsWithName = entityManager
-						.createQuery(
-								"select e from " + Project.class.getSimpleName()
-										+ " e where e.name = :name or e.identifier = :identifier")
-						.setParameter("name", project.getName()).setParameter("identifier", project.getIdentifier())
-						.getResultList();
+
+				String queryString = "select e from " + Project.class.getSimpleName()
+						+ " e where (e.name = :name or e.identifier = :identifier) and ";
+				if (project.getOrganization() != null) {
+					queryString += "e.organization = :organization";
+				} else {
+					queryString += "e.organization is null";
+				}
+				Query query = entityManager.createQuery(queryString);
+				query.setParameter("name", project.getName()).setParameter("identifier", project.getIdentifier());
+
+				if (project.getOrganization() != null) {
+					query.setParameter("organization", project.getOrganization());
+				}
+				List<Project> projectsWithName = query.getResultList();
 				if (!projectsWithName.isEmpty()) {
 					if (projectsWithName.size() != 1 || !projectsWithName.get(0).equals(project)) {
 						errors.reject("project.nameUnique", new Object[] { project.getName() }, null);
@@ -217,7 +226,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 				}
 			}
 		}
-
 	}
 
 	@Override

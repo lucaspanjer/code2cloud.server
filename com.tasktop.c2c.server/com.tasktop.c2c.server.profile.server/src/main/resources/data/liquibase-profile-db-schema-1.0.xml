@@ -214,7 +214,7 @@
 			</column>
 			<column name="DESCRIPTION" type="VARCHAR(255)" />
 			<column defaultValue="" name="NAME" type="VARCHAR(255)">
-				<constraints nullable="false" />
+				<constraints nullable="false" unique="true" uniqueConstraintName="NAME_UNIQUE"/>
 			</column>
 			<column defaultValue="" name="IDENTIFIER" type="VARCHAR(255)">
 				<constraints nullable="false" unique="true"/>
@@ -614,7 +614,13 @@
 			baseTableName="ORGANIZATIONPROFILE" constraintName="FK_OP_ORG_ID"
 			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
 	</changeSet>
-	
+	<changeSet id="orgProjectNameUniqueness-task4187" author="cmorgan">
+		<dropUniqueConstraint tableName="PROJECT" constraintName="NAME_UNIQUE"/>
+		<dropIndex tableName="PROJECT" indexName="NAME"/>
+		<createIndex indexName="NAME" tableName="PROJECT">
+			<column name="NAME" />
+		</createIndex>
+	</changeSet>
 	<changeSet author="mfeichtinger" id="createProjectPreferencesTable-task4146">
 		<createTable tableName="PROJECTPREFERENCES">
 			<column name="ID" type="BIGINT" autoIncrement="true">
