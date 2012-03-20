@@ -24,11 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
-import com.tasktop.c2c.server.cloud.service.BasePoolService;
-import com.tasktop.c2c.server.cloud.service.FinishReleaseHudsonSlaveJob;
-import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolSecurityPolicy;
-import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolService;
-import com.tasktop.c2c.server.cloud.service.RequestBuildSlaveResult;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.common.service.ValidationException;
@@ -86,8 +81,8 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 	}
 
 	@Override
-	protected void startThreads() {
-		super.startThreads();
+	public void initialize() {
+		super.initialize();
 		new CheckBuildTimeQutaThread().start();
 	}
 
