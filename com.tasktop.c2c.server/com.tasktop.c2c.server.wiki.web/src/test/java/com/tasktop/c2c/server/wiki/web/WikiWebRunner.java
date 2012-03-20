@@ -22,6 +22,7 @@ public class WikiWebRunner {
 		WebApplicationRunner r = new WebApplicationRunner();
 		r.setContextRoot("/wiki");
 		r.setPort(8080);
+		r.setAjpPort(8009);
 		r.start();
 		Thread.sleep(Integer.MAX_VALUE);
 	}

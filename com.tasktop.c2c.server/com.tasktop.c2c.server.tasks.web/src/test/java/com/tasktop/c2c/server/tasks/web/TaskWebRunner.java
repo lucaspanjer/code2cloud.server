@@ -25,6 +25,7 @@ public class TaskWebRunner {
 		WebApplicationRunner r = new WebApplicationRunner();
 		r.setContextRoot("/tasks");
 		r.setPort(8080);
+		r.setAjpPort(8009);
 		r.start();
 		Thread.sleep(Integer.MAX_VALUE);
 	}
