@@ -34,7 +34,7 @@ import com.tasktop.c2c.server.wiki.service.WikiServiceClient;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class WikiServiceWebTest extends WikiServiceTest {
+public class WikiServiceWebTest extends HsqlWikiServiceTest {
 
 	@Autowired
 	private WikiServiceClient wikiServiceClient;

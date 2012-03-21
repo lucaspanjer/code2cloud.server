@@ -31,7 +31,7 @@ import com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfig
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-test.xml" })
+@ContextConfiguration({ "/applicationContext-hsql.xml" })
 @Transactional
 public class WikiProjectServiceDatabaseConfiguratorTest {
 

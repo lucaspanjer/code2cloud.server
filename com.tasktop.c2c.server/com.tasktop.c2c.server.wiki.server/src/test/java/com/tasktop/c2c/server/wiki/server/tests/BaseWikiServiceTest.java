@@ -21,30 +21,24 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.net.URLEncoder;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.tenancy.provider.DefaultTenant;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
@@ -69,10 +63,8 @@ import com.tasktop.c2c.server.wiki.server.tests.mock.MockPageFactory;
 import com.tasktop.c2c.server.wiki.server.tests.util.TestSecurity;
 import com.tasktop.c2c.server.wiki.service.WikiService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-test.xml", "/applicationContext-testSecurity.xml" })
 @Transactional
-public class WikiServiceTest {
+public abstract class BaseWikiServiceTest {
 
 	@Autowired
 	protected WikiService wikiService;
@@ -91,10 +83,6 @@ public class WikiServiceTest {
 	private Person person2;
 
 	private boolean tenantSet;
-
-	@Qualifier("rawDataSource")
-	@Autowired
-	private DataSource dataSource;
 
 	@Before
 	public void before() {
@@ -126,24 +114,6 @@ public class WikiServiceTest {
 
 	private void logon(Person person) {
 		TestSecurity.login(person);
-	}
-
-	@Test
-	public void testHsqlQueries() throws SQLException {
-		dataSource.getConnection().createStatement().executeQuery("SELECT * FROM Page");
-		dataSource.getConnection().createStatement().executeQuery("SELECT * FROM PAGE");
-
-		try {
-			dataSource.getConnection().createStatement().executeQuery("SELECT * FROM \"Page\"");
-			Assert.fail("expected ex");
-		} catch (SQLException e) {
-			// expected
-		}
-
-		dataSource.getConnection().createStatement().executeQuery("SELECT * FROM \"PAGE\"");
-
-		dataSource.getConnection().createStatement()
-				.executeQuery("SELECT ID, CREATIONDATE, IDENTITY, MODIFICATIONDATE, NAME, VERSION FROM PERSON");
 	}
 
 	@Test
@@ -747,4 +717,5 @@ public class WikiServiceTest {
 		assertNotNull(html);
 		assertTrue(html, html.contains("<h1"));
 	}
+
 }

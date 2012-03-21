@@ -20,34 +20,13 @@
 
 	<context:component-scan base-package="com.tasktop.c2c.server.wiki.server.tests,com.tasktop.c2c.server.internal.auth.service,com.tasktop.c2c.server.internal.wiki.server">
 	</context:component-scan>
-
-	<bean class="com.tasktop.c2c.server.common.tests.jpa.SingletonTestEntityManagerFactory" 
-		id="wikiDomain" depends-on="liquibase">
-		<property name="delegate">
-			<bean
-				class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-				<property name="dataSource" ref="rawDataSource" />
-				<property name="persistenceXmlLocation" value="classpath:/persistence-test-wiki.xml"/>
-			</bean>
-		</property>
-	</bean>
 	
 	<bean id="jobService" class="com.tasktop.c2c.server.common.service.MockJobService"/>
 		
 	<bean class="com.tasktop.c2c.server.common.tests.util.WebApplicationContainerBean" id="webApplicationContainerBean"/>
 	
-	<bean class="com.tasktop.c2c.server.internal.wiki.server.WikiTenantAwareDataSource" id="wikiCreateTestDataSource"
-		p:wrappedDataSource-ref="rawDataSource" p:language="HSQL">
-		<qualifier value="switching"/>
-	</bean>
-	
 	<bean id="wikiTestDatabaseConfigurator" class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 
 					p:suffix="_wiki" p:rawDatasource-ref="rawDataSource" p:tenantAwareDataSource-ref="wikiCreateTestDataSource" 
 					p:changelog="classpath:/data/liquibase-wiki-db-master.xml"/>
-					
-	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase" >
-      <property name="dataSource" ref="rawDataSource" />
-      <property name="changeLog" value="classpath:data/liquibase-wiki-db-master.xml" />
- 	</bean>
  	
 </beans>

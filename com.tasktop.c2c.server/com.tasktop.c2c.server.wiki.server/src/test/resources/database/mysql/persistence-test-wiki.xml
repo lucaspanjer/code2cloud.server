@@ -5,17 +5,19 @@
 
     <persistence-unit name="wikiDomain" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>com.tasktop.c2c.server.internal.wiki.server.domain.Attachment</class>
-		<class>com.tasktop.c2c.server.internal.wiki.server.domain.AttachmentContent</class>
-		<class>com.tasktop.c2c.server.internal.wiki.server.domain.Page</class>
-		<class>com.tasktop.c2c.server.internal.wiki.server.domain.PageContent</class>
-		<class>com.tasktop.c2c.server.internal.wiki.server.domain.Person</class>
+        <mapping-file>orm-test-wiki.xml</mapping-file>
+        <class>com.tasktop.c2c.server.internal.wiki.server.domain.BaseEntity</class>
+        <class>com.tasktop.c2c.server.internal.wiki.server.domain.Person</class>
+        <class>com.tasktop.c2c.server.internal.wiki.server.domain.Page</class>
+        <class>com.tasktop.c2c.server.internal.wiki.server.domain.PageContent</class>
+        <class>com.tasktop.c2c.server.internal.wiki.server.domain.Attachment</class>
+        <class>com.tasktop.c2c.server.internal.wiki.server.domain.AttachmentContent</class>
         <properties>
             <property name="eclipselink.target-database" value="com.tasktop.c2c.server.common.jpa.MySQL55Platform"/>
-            <property name="eclipselink.ddl-generation" value="NONE"/>
+            <property name="eclipselink.ddl-generation" value="none"/>
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
             <property name="eclipselink.weaving" value="false"/>
-            <property name="eclipselink.cache.shared.default" value="false"/>
+            <property name="eclipselink.logging.level" value="CONFIG"/>
         </properties>
     </persistence-unit>
 </persistence>

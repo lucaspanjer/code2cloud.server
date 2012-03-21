@@ -30,7 +30,7 @@ import com.tasktop.c2c.server.internal.wiki.server.domain.PageContent;
 import com.tasktop.c2c.server.wiki.server.tests.mock.MockPageFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-test.xml" })
+@ContextConfiguration({ "/applicationContext-hsql.xml" })
 public class MarkupRendererTest {
 
 	@Autowired
