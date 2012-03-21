@@ -9,7 +9,6 @@
 	<name>profile build</name>
 	<description>Build profile projects</description>
 
-
 	<modules>
 		<module>parent</module>
 		<module>api-parent</module>

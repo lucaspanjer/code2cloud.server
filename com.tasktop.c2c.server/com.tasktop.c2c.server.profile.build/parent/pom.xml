@@ -22,6 +22,7 @@
 		<slf4j.version>1.6.1</slf4j.version>
 	    <settingsBaseDir>${project.parent.basedir}</settingsBaseDir>
 	    <jgit.version>1.2.0.201112221803-r</jgit.version>
+	    <liquibase.version>2.0.3</liquibase.version>
 	</properties>
 	
 	<licenses>
@@ -735,7 +736,7 @@
 			<dependency>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-core</artifactId>
-				<version>2.0.1</version>
+				<version>${liquibase.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
