@@ -220,7 +220,7 @@ public class HudsonSlavePoolServiceTest {
 
 	@Test
 	public void testWithFixedSizePool() throws Exception {
-		hudsonSlavePoolServiceImpl.afterPropertiesSet(); // Kick off threads;
+		hudsonSlavePoolServiceImpl.initialize(); // Kick off threads;
 
 		Set<String> provisionedIps = new HashSet<String>();
 		waitForAllocations();
@@ -280,7 +280,7 @@ public class HudsonSlavePoolServiceTest {
 	@Test
 	public void testWithDynamicSizePool() throws Exception {
 		hudsonSlavePoolServiceImpl.setPoolSizeStrategy(getDynamicPoolSizeStrategy());
-		hudsonSlavePoolServiceImpl.afterPropertiesSet(); // Kick off threads;
+		hudsonSlavePoolServiceImpl.initialize(); // Kick off threads;
 
 		waitForAllocations();
 
