@@ -12,24 +12,25 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.profile.service;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 
 @Service
-public class DefaultApplicationServiceProfileInitializer implements Ordered, InitializingBean {
+public class DefaultApplicationServiceProfileInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired
 	private InternalApplicationService service;
 
-	@Override
-	public int getOrder() {
-		return Ordered.LOWEST_PRECEDENCE;
-	}
+	@Autowired
+	protected PlatformTransactionManager trxManager;
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void onApplicationEvent(ContextRefreshedEvent event) {
+
 		service.initializeApplicationServiceProfileTemplate();
+
 	}
 }

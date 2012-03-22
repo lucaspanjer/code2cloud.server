@@ -20,7 +20,11 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.social.InsufficientPermissionException;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
@@ -50,8 +54,18 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 			while (!stopRequested.get()) {
 
 				try {
-					enforceBuildTimeQuotas();
 					Thread.sleep(buildTimeQuotaCheckPeriod);
+
+					TransactionTemplate tt = new TransactionTemplate(trxManager);
+					tt.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+
+					tt.execute(new TransactionCallbackWithoutResult() {
+
+						@Override
+						protected void doInTransactionWithoutResult(TransactionStatus status) {
+							enforceBuildTimeQuotas();
+						}
+					});
 				} catch (Throwable t) {
 					LOGGER.warn("Error in check build time quota thread", t);
 					// Continue;
@@ -83,6 +97,7 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 	@Override
 	public void initialize() {
 		super.initialize();
+
 		new CheckBuildTimeQutaThread().start();
 	}
 

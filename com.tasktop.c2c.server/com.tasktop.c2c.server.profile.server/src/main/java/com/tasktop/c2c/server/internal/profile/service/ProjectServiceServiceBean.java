@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
@@ -241,7 +242,10 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW, noRollbackFor = { EntityNotFoundException.class,
+			NoResultException.class })
 	public void initializeApplicationServiceProfileTemplate() {
+
 		ProjectServiceProfile templateServiceProfile = getDefaultTemplate();
 
 		boolean create;
@@ -272,6 +276,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		if (create) {
 			entityManager.persist(templateServiceProfile);
 		}
+
 		entityManager.flush();
 	}
 

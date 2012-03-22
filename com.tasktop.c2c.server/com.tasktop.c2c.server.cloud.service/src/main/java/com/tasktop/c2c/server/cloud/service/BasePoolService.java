@@ -21,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -37,7 +39,7 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.common.service.job.JobService;
 
-public class BasePoolService implements InitializingBean {
+public class BasePoolService implements InitializingBean, ApplicationListener<ContextRefreshedEvent> {
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(BasePoolService.class);
 
@@ -166,8 +168,17 @@ public class BasePoolService implements InitializingBean {
 		Assert.notNull(this.poolSizeStrategy, "A pool size strategy is required.");
 		Assert.notNull(this.trxManager, "A transaction manager is required.");
 		Assert.notNull(this.serviceHostService, "A service host service is required.");
+	}
 
+	boolean didInit = false;
+
+	@Override
+	public void onApplicationEvent(ContextRefreshedEvent event) {
+		if (didInit) {
+			return;
+		}
 		initialize();
+		didInit = true;
 	}
 
 	public void initialize() {
