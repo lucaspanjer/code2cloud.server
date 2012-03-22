@@ -94,8 +94,7 @@ public class AuthenticationToken implements Serializable, Cloneable {
 
 	@JsonIgnore
 	public synchronized void setAuthorities(Collection<? extends GrantedAuthority> authList) {
-		this.authorities.clear();
-		this.authorities.addAll(AuthUtils.toAuthorityStrings(authList));
+		setAuthorities(AuthUtils.toAuthorityStrings(authList));
 	}
 
 	@Override
@@ -157,7 +156,9 @@ public class AuthenticationToken implements Serializable, Cloneable {
 	@Override
 	public AuthenticationToken clone() {
 		try {
-			return (AuthenticationToken) super.clone();
+			AuthenticationToken cloneToken = (AuthenticationToken) super.clone();
+			cloneToken.authorities = new ArrayList<String>(authorities);
+			return cloneToken;
 		} catch (CloneNotSupportedException e) {
 			throw new IllegalStateException(e);
 		}
