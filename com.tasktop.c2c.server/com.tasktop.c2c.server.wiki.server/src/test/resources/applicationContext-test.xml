@@ -16,7 +16,7 @@
 	<import resource="classpath:META-INF/spring/applicationContext-restServer.xml"/>
 	<import resource="classpath:applicationContext-wikiService.xml"/>
 
-	<context:property-placeholder location="classpath*:/META-INF/spring/*.properties, classpath*:/*-test.properties, file:///opt/cloudalm-test/etc/*.properties"/>
+	<context:property-placeholder location="classpath*:/META-INF/spring/*.properties, classpath*:/*-test.properties, file:///opt/code2cloud-test/etc/*.properties"	/>
 
 	<context:component-scan base-package="com.tasktop.c2c.server.wiki.server.tests,com.tasktop.c2c.server.internal.auth.service,com.tasktop.c2c.server.internal.wiki.server">
 	</context:component-scan>

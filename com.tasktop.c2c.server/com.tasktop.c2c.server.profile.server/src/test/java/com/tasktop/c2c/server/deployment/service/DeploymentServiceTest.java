@@ -43,8 +43,6 @@ import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentType;
-import com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService;
-import com.tasktop.c2c.server.deployment.service.ServiceException;
 import com.tasktop.c2c.server.internal.deployment.service.DeploymentConfigurationServiceImpl;
 import com.tasktop.c2c.server.internal.deployment.service.DeploymentService;
 import com.tasktop.c2c.server.internal.deployment.service.DeploymentServiceFactory;
@@ -57,11 +55,11 @@ import com.tasktop.c2c.server.profile.service.ProjectArtifactService;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 
 /**
- * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
+ * @author Clint Morgan (Tasktop Technologies Inc.)
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml" })
+@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml", "/applicationContext-hsql.xml" })
 @Transactional
 public class DeploymentServiceTest {
 

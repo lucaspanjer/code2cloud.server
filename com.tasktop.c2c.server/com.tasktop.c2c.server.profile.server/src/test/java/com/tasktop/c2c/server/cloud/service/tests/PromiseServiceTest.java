@@ -29,11 +29,11 @@ import com.tasktop.c2c.server.cloud.service.PromiseService;
 import com.tasktop.c2c.server.common.service.ValidationException;
 
 /**
- * @author cmorgan (Tasktop Technologies Inc.)
+ * @author Clint Morgan (Tasktop Technologies Inc.)
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml" })
+@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml", "/applicationContext-hsql.xml" })
 @Transactional
 public class PromiseServiceTest {
 
@@ -45,7 +45,7 @@ public class PromiseServiceTest {
 	private PromiseService promiseService;
 
 	@Test
-	public void test() throws InterruptedException, ValidationException {
+	public void testPromise() throws InterruptedException, ValidationException {
 		Long promiseDuration = 500l;
 		String token1 = promiseService.getNewPromiseToken(promiseDuration);
 		Assert.assertEquals(1, promiseService.getNumberOfOutstandingPromises());

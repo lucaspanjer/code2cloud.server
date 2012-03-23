@@ -48,18 +48,18 @@ import com.tasktop.c2c.server.tasks.domain.Priority;
 import com.tasktop.c2c.server.tasks.domain.Product;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity;
+import com.tasktop.c2c.server.tasks.domain.TaskActivity.FieldUpdate;
+import com.tasktop.c2c.server.tasks.domain.TaskActivity.Type;
 import com.tasktop.c2c.server.tasks.domain.TaskSeverity;
 import com.tasktop.c2c.server.tasks.domain.TaskStatus;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
-import com.tasktop.c2c.server.tasks.domain.TaskActivity.FieldUpdate;
-import com.tasktop.c2c.server.tasks.domain.TaskActivity.Type;
 
 /**
- * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
+ * @author Clint Morgan (Tasktop Technologies Inc.)
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml" })
+@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml", "/applicationContext-hsql.xml" })
 @Transactional
 public class NotificationServiceTest {
 

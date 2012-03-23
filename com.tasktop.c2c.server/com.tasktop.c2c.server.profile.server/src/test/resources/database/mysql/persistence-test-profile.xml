@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" 
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
 
-    <persistence-unit name="calmDomain" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="profileDomain" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>com.tasktop.c2c.server.profile.domain.internal.Agreement</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.AgreementProfile</class>
@@ -30,8 +30,7 @@
         <class>com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.QuotaSetting</class>
         <properties>
-            <property name="eclipselink.target-database" value="HSQL"/>
-            <!--value='drop-and-create-tables' to build a new database on each run; value='create-tables' creates new tables if needed; value='none' makes no changes to the database-->
+            <property name="eclipselink.target-database" value="com.tasktop.c2c.server.common.jpa.MySQL55Platform"/>
             <property name="eclipselink.ddl-generation" value="none"/>
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
             <property name="eclipselink.weaving" value="false"/>

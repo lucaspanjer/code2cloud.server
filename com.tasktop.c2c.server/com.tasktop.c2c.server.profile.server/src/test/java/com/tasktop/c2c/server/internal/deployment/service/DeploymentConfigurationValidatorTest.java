@@ -23,11 +23,11 @@ import com.tasktop.c2c.server.common.tests.util.AbstractValidatorTest;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 
 /**
- * @author jhickey
+ * @author Jennifer Hickey
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-test.xml" })
+@ContextConfiguration({ "/applicationContext-hsql.xml" })
 public class DeploymentConfigurationValidatorTest extends AbstractValidatorTest<DeploymentConfiguration> {
 
 	@Override

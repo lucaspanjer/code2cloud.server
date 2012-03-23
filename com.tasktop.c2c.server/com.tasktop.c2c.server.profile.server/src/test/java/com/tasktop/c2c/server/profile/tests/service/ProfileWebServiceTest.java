@@ -73,7 +73,7 @@ import com.tasktop.c2c.server.profile.tests.domain.mock.MockSignUpTokenFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockSshPublicKeyFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml" })
+@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml", "/applicationContext-hsql.xml" })
 @Transactional
 public class ProfileWebServiceTest implements ApplicationContextAware {
 

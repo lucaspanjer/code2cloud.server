@@ -47,7 +47,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,8 +57,6 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.github.api.GitHub;
 import org.springframework.test.annotation.ExpectedException;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
@@ -108,10 +105,8 @@ import com.tasktop.c2c.server.profile.tests.mock.MockTaskServiceProvider;
 import com.tasktop.c2c.server.tasks.domain.Team;
 import com.tasktop.c2c.server.tasks.service.TaskService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml" })
 @Transactional
-public class ProfileServiceTest {
+public abstract class BaseProfileServiceTest {
 
 	@Autowired
 	protected ProfileService profileService;

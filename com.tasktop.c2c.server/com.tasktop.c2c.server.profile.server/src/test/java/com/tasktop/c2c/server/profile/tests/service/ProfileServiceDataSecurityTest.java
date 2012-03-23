@@ -39,7 +39,7 @@ import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectProfileFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-test.xml" })
+@ContextConfiguration({ "/applicationContext-hsql.xml" })
 @Transactional
 public class ProfileServiceDataSecurityTest {
 

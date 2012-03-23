@@ -26,9 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.profile.service.ProfileService;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-test.xml", "/applicationContext-testSecurity.xml" })
+@ContextConfiguration({ "/applicationContext-hsql.xml", "/applicationContext-testSecurity.xml" })
 @Transactional
 public class ProfileServiceSecurityTest {
 

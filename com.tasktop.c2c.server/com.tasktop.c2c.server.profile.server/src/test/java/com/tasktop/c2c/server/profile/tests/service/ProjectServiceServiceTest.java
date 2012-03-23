@@ -44,7 +44,7 @@ import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectServiceFactor
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectServiceProfileFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml" })
+@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml", "/applicationContext-hsql.xml" })
 @Transactional
 public class ProjectServiceServiceTest {
 	@Autowired

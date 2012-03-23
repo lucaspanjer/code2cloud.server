@@ -64,7 +64,7 @@ import com.tasktop.c2c.server.cloud.service.Template;
 import com.tasktop.c2c.server.common.service.job.JobService;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 
-@ContextConfiguration({ "/applicationContext-testNoRollback.xml" })
+@ContextConfiguration({ "/applicationContext-testNoRollback.xml", "/applicationContext-hsql.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 // @Transactional -- If this test is transactional it will fail because the deamon threads will stall waiting on this
 // transaction to complete

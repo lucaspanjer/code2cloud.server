@@ -17,22 +17,9 @@
 	<import resource="classpath:applicationContext-profileService.xml"/>
 	<import resource="classpath:applicationContext-deploymentService.xml"/>
 
-	<context:property-placeholder location="classpath*:/config/*.properties, classpath*:/META-INF/spring/*.properties, classpath*:/*-test.properties, file:///opt/cloudalm-test/etc/*.properties"/>
-
-
+		
 	<context:component-scan base-package="com.tasktop.c2c.server.profile.tests,com.tasktop.c2c.server.internal.auth.service,com.tasktop.c2c.server.internal.profile.service">
 	</context:component-scan>
-
-	<bean class="com.tasktop.c2c.server.common.tests.jpa.SingletonTestEntityManagerFactory" 
-		id="entityManagerFactory" depends-on="liquibase">
-		<property name="delegate">
-			<bean
-				class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-				<property name="dataSource" ref="dataSource" />
-				<property name="persistenceXmlLocation" value="classpath:/persistence-test.xml"/>
-			</bean>
-		</property>
-	</bean>
 
 	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
 		<property name="scopes">
@@ -61,10 +48,5 @@
 	<bean class="com.tasktop.c2c.server.profile.service.HudsonServiceClient">
 		<property name="restTemplate" ref="basicAuthRestTemplate"/>
 	</bean>
-	
-	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase" >
-      <property name="dataSource" ref="dataSource" />
-      <property name="changeLog" value="classpath:data/liquibase-profile-db-master.xml" />
-	 </bean>
-	
+
 </beans>

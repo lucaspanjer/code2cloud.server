@@ -21,13 +21,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-
 import com.tasktop.c2c.server.common.tests.util.TestResourceUtil;
 import com.tasktop.c2c.server.common.tests.util.WebApplicationContainerBean;
 import com.tasktop.c2c.server.profile.service.ProjectArtifactServiceClient;
 import com.tasktop.c2c.server.profile.web.ui.server.ProjectArtifactServiceController;
 
-@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml", "/applicationContext-testSecurity.xml" })
+@ContextConfiguration({ "/applicationContext-testSecurity.xml", "/applicationContext-hsql.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class ProjectArtifactServiceClientTest extends ProjectArtifactServiceTest {

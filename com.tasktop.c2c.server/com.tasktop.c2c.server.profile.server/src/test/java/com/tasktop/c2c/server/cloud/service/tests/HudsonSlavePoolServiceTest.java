@@ -75,7 +75,7 @@ import com.tasktop.c2c.server.profile.service.QuotaService;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectServiceProfileFactory;
 
-@ContextConfiguration({ "/applicationContext-testNoRollback.xml" })
+@ContextConfiguration({ "/applicationContext-hsqlNoRollback.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 // @Transactional DON't want this because..
 public class HudsonSlavePoolServiceTest {
@@ -112,6 +112,8 @@ public class HudsonSlavePoolServiceTest {
 	private ServiceHostService serviceHostService;
 
 	@Autowired
+	@Qualifier("executor")
+	// *Not* jms
 	private JobService jobService;
 
 	@PersistenceContext

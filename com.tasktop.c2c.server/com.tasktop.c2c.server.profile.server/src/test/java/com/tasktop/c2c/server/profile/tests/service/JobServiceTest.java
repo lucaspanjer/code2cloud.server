@@ -37,7 +37,7 @@ import com.tasktop.c2c.server.common.service.job.JobService;
 
 @Ignore("Turned off to avoid build hangs on the CI server caused by a JMS broker issue")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-testNoRollback.xml" })
+@ContextConfiguration({ "/applicationContext-testNoRollback.xml", "/applicationContext-hsql.xml" })
 public class JobServiceTest {
 
 	@PersistenceContext

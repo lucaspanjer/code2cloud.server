@@ -22,9 +22,8 @@ import com.tasktop.c2c.server.common.tests.util.AbstractValidatorTest;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProfileFactory;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-test.xml" })
+@ContextConfiguration({ "/applicationContext-hsql.xml" })
 @Transactional
 public class ProfileValidatorTest extends AbstractValidatorTest<Profile> {
 

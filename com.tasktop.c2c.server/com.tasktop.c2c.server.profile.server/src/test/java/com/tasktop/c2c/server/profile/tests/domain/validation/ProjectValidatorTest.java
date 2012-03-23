@@ -25,7 +25,7 @@ import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-test.xml" })
+@ContextConfiguration({ "/applicationContext-hsql.xml" })
 public class ProjectValidatorTest extends AbstractValidatorTest<Project> {
 
 	@Override

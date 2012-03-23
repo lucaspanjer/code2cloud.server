@@ -46,7 +46,7 @@ import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectServiceProfileFactory;
 
-@ContextConfiguration({ "/applicationContext-testNoRollback.xml" })
+@ContextConfiguration({ "/applicationContext-testNoRollback.xml", "/applicationContext-hsql.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 // FIXME : This test is meant understand the locking requirements of the PoolServices w.r.t the ServiceHostService.
 @Ignore

@@ -37,7 +37,7 @@ import com.tasktop.c2c.server.profile.domain.internal.ProjectServiceProfile;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectServiceProfileFactory;
 
-@ContextConfiguration({ "/applicationContext-test.xml" })
+@ContextConfiguration({ "/applicationContext-hsql.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class ServiceHostServiceTest {

@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import com.tasktop.c2c.server.common.tests.util.TestResourceUtil;
 import com.tasktop.c2c.server.common.tests.util.WebApplicationContainerBean;
 import com.tasktop.c2c.server.profile.service.ProfileWebServiceClient;
@@ -36,6 +35,7 @@ import com.tasktop.c2c.server.profile.service.ProfileWebServiceClient;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class ProfileWebServiceClientTest extends ProfileWebServiceTest {
+
 	@Autowired
 	private ProfileWebServiceClient profileWebServiceClient;
 

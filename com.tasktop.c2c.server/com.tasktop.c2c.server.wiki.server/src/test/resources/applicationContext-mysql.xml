@@ -23,7 +23,7 @@
 			<bean
 				class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 				<property name="dataSource" ref="rawDataSource" />
-				<property name="persistenceXmlLocation" value="classpath:database/mysql/persistence-test-wiki.xml"/>
+				<property name="persistenceXmlLocation" value="/database/mysql/persistence-test-wiki.xml"/>
 			</bean>
 		</property>
 	</bean>
