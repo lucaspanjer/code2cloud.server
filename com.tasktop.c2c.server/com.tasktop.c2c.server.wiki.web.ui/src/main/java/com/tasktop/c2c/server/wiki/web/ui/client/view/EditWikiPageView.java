@@ -161,6 +161,7 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 		}
 
 		driver.edit(page);
+		content.setEditMode();
 		isEditing = true;
 
 		// This must be done after the setValue to avoid null getting inside;
