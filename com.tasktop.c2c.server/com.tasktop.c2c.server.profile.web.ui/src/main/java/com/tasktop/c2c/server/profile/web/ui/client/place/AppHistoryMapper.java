@@ -16,11 +16,8 @@ import com.google.gwt.place.impl.AbstractPlaceHistoryMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
-import com.tasktop.c2c.server.common.profile.web.client.place.AbstractPreAuthorizingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
-import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
-import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 
@@ -67,27 +64,11 @@ public class AppHistoryMapper extends AbstractPlaceHistoryMapper<Place> {
 
 		if (retPlace != null) {
 
-			if (retPlace instanceof AbstractPreAuthorizingPlace) {
-				reloadUserCredentials();
-			}
-
 			return retPlace;
 		}
 
 		AppGinjector.get.instance().getNotifier()
 				.displayMessage(Message.createErrorMessage("Error: Unexpected error (HTTP 404)"));
 		return AppGinjector.get.instance().getPlaceController().getWhere();
-	}
-
-	private void reloadUserCredentials() {
-		AppGinjector.get.instance().getProfileService().getCurrentUserInfo(new AsyncCallbackSupport<UserInfo>() {
-
-			@Override
-			public void success(UserInfo result) {
-				// FIXME batch this up
-				AppGinjector.get.instance().getAppState().setCredentials(result.getCredentials());
-				AppGinjector.get.instance().getAppState().setHasPendingAgreements(result.getHasPendingAgreements());
-			}
-		});
 	}
 }

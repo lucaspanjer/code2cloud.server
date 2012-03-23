@@ -14,10 +14,9 @@ package com.tasktop.c2c.server.profile.web.ui.client.place;
 
 import java.util.LinkedHashMap;
 
-
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
-import com.tasktop.c2c.server.common.profile.web.client.place.AbstractPreAuthorizingPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.LoggedInPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
@@ -25,7 +24,7 @@ import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
-public class EmailVerificationPlace extends AbstractPreAuthorizingPlace {
+public class EmailVerificationPlace extends LoggedInPlace {
 
 	public static class Tokenizer implements PlaceTokenizer<EmailVerificationPlace> {
 
@@ -64,8 +63,12 @@ public class EmailVerificationPlace extends AbstractPreAuthorizingPlace {
 		return PageMappings.VerifyEmail.getUrlForNamedArgs(tokenMap);
 	}
 
+	// TODO convert to batch fetching
+
 	@Override
-	protected void fetchPlaceData() {
+	protected void handleBatchResults() {
+		super.handleBatchResults();
+
 		AppGinjector.get.instance().getProfileService()
 				.verifyEmailToken(verificationToken, new AsyncCallbackSupport<Void>() {
 
