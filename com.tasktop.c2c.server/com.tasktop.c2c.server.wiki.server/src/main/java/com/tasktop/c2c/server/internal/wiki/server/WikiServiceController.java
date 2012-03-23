@@ -426,6 +426,13 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 		return Collections.singletonMap("string", renderPreview(path, markup));
 	}
 
+	@RequestMapping(value = "/page/preview/", method = RequestMethod.POST)
+	public Map<String, String> doRenderPreviewNoPath(HttpServletRequest request, @RequestBody String markup)
+			throws EntityNotFoundException {
+
+		return Collections.singletonMap("string", renderPreview("", markup));
+	}
+
 	@Override
 	public String renderPreview(String pagePath, String markup) throws EntityNotFoundException {
 		return service.renderPreview(pagePath, markup);
