@@ -81,7 +81,7 @@
     <dependent-module archiveName="jsch-0.1.44-1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
-    <dependent-module archiveName="liquibase-core-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/liquibase/liquibase-core/2.0.1/liquibase-core-2.0.1.jar">
+    <dependent-module archiveName="liquibase-core-2.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/liquibase/liquibase-core/2.0.3/liquibase-core-2.0.3.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
     <dependent-module archiveName="log4j-1.2.16.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16.jar">
