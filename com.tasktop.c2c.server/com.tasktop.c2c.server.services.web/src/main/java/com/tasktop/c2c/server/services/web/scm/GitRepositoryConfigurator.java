@@ -42,7 +42,7 @@ public class GitRepositoryConfigurator implements Configurator {
 		try {
 			TenancyContextHolder.createEmptyContext();
 			TenancyContextHolder.getContext().setTenant(new DefaultTenant(configuration.getProjectIdentifier(), null));
-			AuthUtils.assumeSystemIdentity(configuration.getProjectIdentifier());
+			AuthUtils.assumeSystemIdentity(null);
 
 			gitService.createEmptyRepository(gitRepositoryName);
 		} finally {

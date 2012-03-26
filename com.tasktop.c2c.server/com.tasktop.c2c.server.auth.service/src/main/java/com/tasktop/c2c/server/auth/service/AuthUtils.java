@@ -154,9 +154,11 @@ public final class AuthUtils {
 		token.setKey(UUID.randomUUID().toString());
 		token.getAuthorities().add(Role.System);
 		token.getAuthorities().add(Role.User);
+		token.getAuthorities().add(Role.Admin);
 		if (projectIdentifier != null) {
 			token.getAuthorities().add(AuthUtils.toCompoundProjectRole(Role.System, projectIdentifier));
 			token.getAuthorities().add(AuthUtils.toCompoundProjectRole(Role.User, projectIdentifier));
+			token.getAuthorities().add(AuthUtils.toCompoundProjectRole(Role.Admin, projectIdentifier));
 		}
 		return token;
 	}
