@@ -20,8 +20,6 @@ import hudson.model.Hudson;
 import hudson.model.Node;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
 @Extension
 public class PluginImpl extends Plugin implements Describable<PluginImpl> {
@@ -34,9 +32,7 @@ public class PluginImpl extends Plugin implements Describable<PluginImpl> {
 	@Override
 	public void postInitialize() throws Exception {
 		super.postInitialize();
-		// Work-around issue where getNodes will throw NPE if list is null. Ideally we would remove the slaves from
-		// here. Instead, just assume we have no nodes on startup.
-		Hudson.getInstance().setNodes((List<? extends Node>) Collections.EMPTY_LIST);
+		removeSlaves();
 	}
 
 	@Override
@@ -46,6 +42,14 @@ public class PluginImpl extends Plugin implements Describable<PluginImpl> {
 	}
 
 	private void removeSlaves() throws IOException {
+
+		// Work-around issue where getNodes will throw NPE if list is null. Ideally we would remove the slaves from
+		// here. Instead, just assume we have no nodes on startup.
+		try {
+			Hudson.getInstance().getNodes();
+		} catch (Exception e) {
+			return;
+		}
 
 		for (Node slave : Hudson.getInstance().getNodes()) {
 			if (slave instanceof C2CSlave) {
