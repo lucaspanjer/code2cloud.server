@@ -70,7 +70,7 @@ public class ValidationUtils {
 		errorMap.put(errMsgKey, errMsg);
 	}
 
-	private final static String EMAIL_VALIDATION_REGEX = ".+@.+\\.[a-z]+";
+	private final static String EMAIL_VALIDATION_REGEX = ".+@.+\\.[a-zA-Z]+";
 
 	public static boolean isValidEmail(String email) {
 		return email != null && email.matches(EMAIL_VALIDATION_REGEX);
