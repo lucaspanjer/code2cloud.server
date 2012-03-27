@@ -32,6 +32,9 @@ public class MockOrganizationFactory {
 		for (int x = 0; x < count; ++x) {
 			Organization mock = populate(new Organization());
 			if (entityManager != null) {
+				if (mock.getIdentifier() == null) {
+					mock.computeIdentifier();
+				}
 				entityManager.persist(mock);
 			}
 			mocks.add(mock);

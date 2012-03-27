@@ -660,4 +660,23 @@
 	</sql>
 </changeSet>
 
+	<changeSet author="cmorgan" id="createQuotaSettingTable-task4201">
+		<createTable tableName="QUOTASETTING">
+			<column name="ID" type="BIGINT" autoIncrement="true">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="VERSION" type="INT" />
+			<column  name="NAME" type="VARCHAR(255)"/>
+			<column  name="VALUE" type="VARCHAR(255)"/>
+			<column name="PROJECT_ID" type="BIGINT" />
+			<column name="ORGANIZATION_ID" type="BIGINT" />
+		</createTable>
+		<addForeignKeyConstraint baseColumnNames="PROJECT_ID"
+			baseTableName="QUOTASETTING" constraintName="FK_QUOTASETTING_PROJECT"
+			referencedColumnNames="ID" referencedTableName="PROJECT" />
+		<addForeignKeyConstraint baseColumnNames="ORGANIZATION_ID"
+			baseTableName="QUOTASETTING" constraintName="FK_QUOTASETTING_ORGANIZATION"
+			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
+	</changeSet>
+
 </databaseChangeLog>
