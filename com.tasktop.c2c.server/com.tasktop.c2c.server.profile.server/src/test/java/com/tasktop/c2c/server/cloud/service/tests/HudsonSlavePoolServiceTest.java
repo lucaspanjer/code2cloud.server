@@ -65,10 +65,13 @@ import com.tasktop.c2c.server.cloud.service.PoolSizeStrategy;
 import com.tasktop.c2c.server.cloud.service.PromiseService;
 import com.tasktop.c2c.server.cloud.service.RequestBuildSlaveResult;
 import com.tasktop.c2c.server.cloud.service.ServiceHostService;
+import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
+import com.tasktop.c2c.server.profile.domain.internal.QuotaSetting;
 import com.tasktop.c2c.server.profile.service.ConfigurationPropertyService;
+import com.tasktop.c2c.server.profile.service.QuotaService;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectServiceProfileFactory;
 
@@ -98,6 +101,9 @@ public class HudsonSlavePoolServiceTest {
 
 	private HudsonSlavePoolServiceImpl hudsonSlavePoolServiceImpl;
 	private HudsonSlavePoolService hudsonSlavePoolService;
+
+	@Autowired
+	private QuotaService quotaService;
 
 	@Autowired
 	private NodeLifecycleServiceProvider nodeLifecycleServiceProvider;
@@ -152,6 +158,7 @@ public class HudsonSlavePoolServiceTest {
 
 		hudsonSlavePoolServiceImpl.setUpdatePeriod(0);// for testing FIXME
 		hudsonSlavePoolServiceImpl.setServiceHostService(serviceHostService);
+		hudsonSlavePoolServiceImpl.setQuotaService(quotaService);
 		hudsonSlavePoolServiceImpl.setConfigurationPropertyService(mockConfigPropertyService);
 		hudsonSlavePoolServiceImpl.setPoolSizeStrategy(new FixedPoolSizeStrategy(POOL_SIZE, POOL_SIZE));
 		hudsonSlavePoolServiceImpl.setSecurityPolicy(new HudsonSlavePoolSecurityPolicy() {
@@ -334,6 +341,29 @@ public class HudsonSlavePoolServiceTest {
 		}
 
 		context.assertIsSatisfied();
+	}
+
+	@Test
+	public void testMaxConcurrentBuildQuota() throws Exception {
+		hudsonSlavePoolServiceImpl.setPoolSizeStrategy(getDynamicPoolSizeStrategy());
+		hudsonSlavePoolServiceImpl.initialize(); // Kick off threads;
+
+		QuotaSetting quotaSetting = new QuotaSetting();
+		quotaSetting.setName(HudsonSlavePoolService.CONCURRENT_BUILD_QUOTA);
+		quotaSetting.setValue(Integer.toString(1));
+		quotaService.createQuota(quotaSetting);
+
+		waitForAllocations();
+
+		RequestBuildSlaveResult aquireResult = hudsonSlavePoolService.acquireSlave(APPID, null);
+		Assert.assertEquals(RequestBuildSlaveResult.Type.SLAVE, aquireResult.getType());
+
+		try {
+			hudsonSlavePoolService.acquireSlave(APPID, null);
+			Assert.fail("Expect quota validation exection");
+		} catch (ValidationException e) {
+			// expected
+		}
 	}
 
 	private int maxWaits = 50;

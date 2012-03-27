@@ -34,11 +34,11 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.ConfigurationPropertyService;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
+import com.tasktop.c2c.server.profile.service.QuotaService;
 
 @Transactional
 public class HudsonSlavePoolServiceImpl extends BasePoolService implements HudsonSlavePoolService, InitializingBean {
 
-	private static final String CONCURRENT_BUILD_QUOTA = "hudson.maxConcurrentBuilds";
 	private static final String MAX_BUILD_TIME_QUOTA = "hudson.maxBuildTimeInMinutes";
 
 	private int buildTimeQuotaCheckPeriod = 60 * 1000;
@@ -87,6 +87,9 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 	@Qualifier("main")
 	private PromiseService promiseService;
 
+	@Autowired
+	private QuotaService quotaService;
+
 	private Integer maxBuildTimeInMinutes = -1;
 
 	public HudsonSlavePoolServiceImpl() {
@@ -105,7 +108,7 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 	public RequestBuildSlaveResult acquireSlave(String projectIdentifier, String promiseTokenOrNull)
 			throws ValidationException {
 		this.securityPolicy.authorize(projectIdentifier);
-		checkConcurrentBuildQuota(projectIdentifier);
+		quotaService.enforceQuota(CONCURRENT_BUILD_QUOTA, projectIdentifier);
 
 		if (promiseTokenOrNull != null) {
 			String promiseToken = promiseTokenOrNull;
@@ -158,18 +161,6 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 			return new Date(System.currentTimeMillis() + 1000 * 60 * maxBuildTimeInMinutes);
 		}
 		return null;
-	}
-
-	private void checkConcurrentBuildQuota(String projectIdentifier) {
-		String maxSlavesString = configurationPropertyService.getConfigurationValue(CONCURRENT_BUILD_QUOTA);
-		if (maxSlavesString == null) {
-			return;
-		}
-		Integer maxSlaves = Integer.parseInt(maxSlavesString);
-		List<ServiceHost> currentSlaves = serviceHostService.findHostsByTypeAndProject(nodeType, projectIdentifier);
-		if (currentSlaves.size() >= maxSlaves) {
-			throw new IllegalStateException("Already at concurrent build quota");
-		}
 	}
 
 	private void enforceBuildTimeQuotas() {
@@ -242,6 +233,10 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 		}
 
 		return RequestBuildSlaveResult.forSlave(ip, getSlaveDueDate());
+	}
+
+	public void setQuotaService(QuotaService quotaService) {
+		this.quotaService = quotaService;
 	}
 
 }
