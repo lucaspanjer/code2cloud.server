@@ -1504,4 +1504,11 @@
 		</update>
 	</changeSet>
 	
+	<changeSet author="cmorgan" id="task-4234-tasktype">
+		<update tableName="fielddefs">
+			<column name="description" value="Type" />
+			<where>name='cf_tasktype'</where>
+		</update>
+	</changeSet>
+	
 </databaseChangeLog>
