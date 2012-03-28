@@ -33,7 +33,6 @@ import com.tasktop.c2c.server.auth.service.proxy.AuthenticationTokenSerializer;
 import com.tasktop.c2c.server.auth.service.proxy.ProxyHttpServletRequest;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.web.HeaderConstants;
-import com.tasktop.c2c.server.common.service.web.MessageErrorHandlerFilter;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
@@ -48,8 +47,6 @@ import com.tasktop.c2c.server.web.proxy.WebProxy;
 @Component
 @Qualifier("applicationServiceProxy")
 public class ApplicationServiceProxy implements HttpRequestHandler {
-
-	private Logger logger = LoggerFactory.getLogger(MessageErrorHandlerFilter.class);
 
 	private final Logger LOG = LoggerFactory.getLogger(ApplicationServiceProxy.class.getName());
 
@@ -107,14 +104,8 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 		for (WebProxy webProxy : proxies) {
 			if (webProxy.canProxyRequest(targetUrl, proxyRequest)) {
 
-				try {
-					webProxy.proxyRequest(targetUrl, proxyRequest, response);
-				} catch (IOException e) {
-					String message = String.format("Error while proxying service for tenant [%s] to [%s]", tenantId,
-							targetUrl);
-					logger.error(message, e);
-					throw e;
-				}
+				webProxy.proxyRequest(targetUrl, proxyRequest, response);
+
 				handlerFound = true;
 				break;
 			}

@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Conventions;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
@@ -39,7 +40,7 @@ import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 
 import com.tasktop.c2c.server.common.service.HttpStatusCodeException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
-import com.tasktop.c2c.server.common.service.web.Error;
+import com.tasktop.c2c.server.common.service.Security;
 
 /**
  * A servlet filter that manages errors during an http request. Two main parts:
@@ -92,7 +93,18 @@ public class MessageErrorHandlerFilter implements Filter {
 		try {
 			chain.doFilter(request, messageResponse);
 		} catch (Throwable t) {
-			logger.error("", t);
+			String currentTenant = TenancyContextHolder.getContext() == null
+					|| TenancyContextHolder.getContext().getTenant() == null ? "<none>" : TenancyContextHolder
+					.getContext().getTenant().getIdentity().toString();
+			String currentUser = Security.getCurrentUser() == null ? "<none>" : Security.getCurrentUser();
+			HttpServletRequest req = (HttpServletRequest) request;
+			String reqUrl = req.getRequestURL().toString();
+			String queryString = req.getQueryString();
+			if (queryString != null) {
+				reqUrl += "?" + queryString;
+			}
+			logger.error(String.format("Error while prossessing [%s] tenant=[%s] user=[%s]", reqUrl, currentTenant,
+					currentUser), t);
 			messageResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
