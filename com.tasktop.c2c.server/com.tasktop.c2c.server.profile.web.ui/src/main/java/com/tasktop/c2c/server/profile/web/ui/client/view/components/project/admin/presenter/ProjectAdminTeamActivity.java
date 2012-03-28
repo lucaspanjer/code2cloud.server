@@ -22,6 +22,7 @@ import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.ValidationUtils;
 import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamMember;
 import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamSummary;
+import com.tasktop.c2c.server.common.web.client.event.ClearCacheEvent;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -29,6 +30,7 @@ import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.ProjectAdminMenu;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.place.ProjectAdminTeamPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.team.IProjectAdminTeamView;
@@ -75,6 +77,8 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 				.removeTeamMember(project.getIdentifier(), teamMember, new AsyncCallbackSupport<Boolean>(message) {
 					@Override
 					protected void success(Boolean result) {
+						// Because we are not using dispatcher here and GetProjectTeamAction is cachable
+						AppGinjector.get.instance().getEventBus().fireEvent(new ClearCacheEvent());
 					}
 				});
 	}
@@ -87,6 +91,8 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 				.updateTeamMemberRoles(project.getIdentifier(), teamMember, new AsyncCallbackSupport<Boolean>(message) {
 					@Override
 					protected void success(Boolean result) {
+						// Because we are not using dispatcher here and GetProjectTeamAction is cachable
+						AppGinjector.get.instance().getEventBus().fireEvent(new ClearCacheEvent());
 					}
 				});
 	}
