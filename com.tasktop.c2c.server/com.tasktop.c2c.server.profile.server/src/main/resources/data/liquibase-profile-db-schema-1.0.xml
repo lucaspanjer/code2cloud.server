@@ -614,6 +614,7 @@
 			baseTableName="ORGANIZATIONPROFILE" constraintName="FK_OP_ORG_ID"
 			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
 	</changeSet>
+ 
 	<changeSet id="orgProjectNameUniqueness-task4187" author="cmorgan">
 		<dropUniqueConstraint tableName="PROJECT" constraintName="NAME_UNIQUE"/>
 		<dropIndex tableName="PROJECT" indexName="NAME"/>
@@ -621,7 +622,8 @@
 			<column name="NAME" />
 		</createIndex>
 	</changeSet>
-	<changeSet author="mfeichtinger" id="createProjectPreferencesTable-task4146">
+	
+ 	<changeSet author="mfeichtinger" id="createProjectPreferencesTable-task4146">
 		<createTable tableName="PROJECTPREFERENCES">
 			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
@@ -641,24 +643,24 @@
 			baseTableName="PROJECT" constraintName="FK_PROJECT_PROJECTPREFERENCES"
 			referencedColumnNames="ID" referencedTableName="PROJECTPREFERENCES" />
 		<addForeignKeyConstraint baseColumnNames="PROJECTPREFERENCES_ID"
-			baseTableName="ORGANIZATION" constraintName="FK_ORGANIZATION_PROJECTPREFERENCES"
+			baseTableName="ORGANIZATION" constraintName="FK_ORGANIZATION_PROJECTPREFS"
 			referencedColumnNames="ID" referencedTableName="PROJECTPREFERENCES" />
 		<addUniqueConstraint tableName="PROJECT" columnNames="PROJECTPREFERENCES_ID"/>
 		<addUniqueConstraint tableName="ORGANIZATION" columnNames="PROJECTPREFERENCES_ID"/>
 	</changeSet>
 
-<changeSet author="mfeichtinger" id="populateProjectPreferencesTable-task4146">
-	<sql>
-		INSERT INTO PROJECTPREFERENCES (ID, VERSION, WIKILANGUAGE)
-		select ID, 1,'TEXTILE' from PROJECT;
+	<changeSet author="mfeichtinger" id="populateProjectPreferencesTable-task4146">
+		<sql>
+			INSERT INTO PROJECTPREFERENCES (ID, VERSION, WIKILANGUAGE)
+			select ID, 1,'TEXTILE' from PROJECT;
 
-		INSERT INTO PROJECTPREFERENCES (ID, VERSION, WIKILANGUAGE)
-		select ID, 1,'TEXTILE' from ORGANIZATION;
+			INSERT INTO PROJECTPREFERENCES (ID, VERSION, WIKILANGUAGE)
+			select ID, 1,'TEXTILE' from ORGANIZATION;
 
-		UPDATE PROJECT SET PROJECTPREFERENCES_ID = ID;
-		UPDATE ORGANIZATION set PROJECTPREFERENCES_ID = ID;
-	</sql>
-</changeSet>
+			UPDATE PROJECT SET PROJECTPREFERENCES_ID = ID;
+			UPDATE ORGANIZATION set PROJECTPREFERENCES_ID = ID;
+		</sql>
+	</changeSet>
 
 	<changeSet author="cmorgan" id="createQuotaSettingTable-task4201">
 		<createTable tableName="QUOTASETTING">
