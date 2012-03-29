@@ -625,7 +625,7 @@
 	
  	<changeSet author="mfeichtinger" id="createProjectPreferencesTable-task4146">
 		<createTable tableName="PROJECTPREFERENCES">
-			<column name="ID" type="BIGINT" autoIncrement="true">
+			<column name="ID" type="BIGINT">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="VERSION" type="INT" />
@@ -664,7 +664,7 @@
 
 	<changeSet author="cmorgan" id="createQuotaSettingTable-task4201">
 		<createTable tableName="QUOTASETTING">
-			<column name="ID" type="BIGINT" autoIncrement="true">
+			<column name="ID" type="BIGINT">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="VERSION" type="INT" />

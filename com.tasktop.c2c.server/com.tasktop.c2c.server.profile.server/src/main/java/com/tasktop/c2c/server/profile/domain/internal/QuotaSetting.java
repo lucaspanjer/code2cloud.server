@@ -19,7 +19,7 @@ import javax.persistence.ManyToOne;
 /**
  * Represents a general quota that can be enforced. Can be relative to a project or organization.
  * 
- * @author clint.morgan@tasktop.com (Tasktop Technologies Inc.)
+ * @author Clint Morgan (Tasktop Technologies Inc.)
  * 
  */
 @Entity
