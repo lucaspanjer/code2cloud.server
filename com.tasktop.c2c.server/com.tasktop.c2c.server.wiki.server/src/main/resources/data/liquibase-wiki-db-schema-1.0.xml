@@ -237,5 +237,10 @@
 			<column name="SEQ_COUNT" value="1" />
 		</insert>
 	</changeSet>
-
+	<changeSet id="autoIncrementConfigurationProperty" author="lpanjer" dbms="hsqldb, mysql">
+		<addAutoIncrement tableName="ConfigurationProperty" columnName="id" columnDataType="INTEGER" />
+	</changeSet>
+	<changeSet id="dropSequenceTable" author="lpanjer">
+		<dropTable tableName="SEQUENCE"/>
+	</changeSet>
 </databaseChangeLog>

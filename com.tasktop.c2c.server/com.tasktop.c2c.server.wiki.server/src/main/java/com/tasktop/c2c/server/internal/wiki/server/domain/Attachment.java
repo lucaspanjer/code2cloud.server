@@ -20,15 +20,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 import javax.persistence.UniqueConstraint;
 
 @Entity
@@ -44,10 +40,6 @@ public class Attachment extends BaseEntity {
 	private AttachmentContent lastAttachmentContent;
 	private List<AttachmentContent> attachmentContent = new ArrayList<AttachmentContent>();
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "Attachment")
-	@TableGenerator(name = "Attachment", allocationSize = 1)
-	@Override
 	public Long getId() {
 		return super.getId();
 	}

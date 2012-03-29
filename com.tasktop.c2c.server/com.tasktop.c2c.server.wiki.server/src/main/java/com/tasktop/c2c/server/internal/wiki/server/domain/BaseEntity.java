@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.internal.wiki.server.domain;
 
 import java.util.Date;
 
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -30,6 +31,7 @@ public abstract class BaseEntity {
 	private Date creationDate;
 	private Date modificationDate;
 
+	@Id
 	public Long getId() {
 		return id;
 	}

@@ -5,6 +5,7 @@
 
     <persistence-unit name="wikiDomain" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<mapping-file>META-INF/orm-wiki-mysql.xml</mapping-file>
 		<class>com.tasktop.c2c.server.internal.wiki.server.domain.Attachment</class>
 		<class>com.tasktop.c2c.server.internal.wiki.server.domain.AttachmentContent</class>
 		<class>com.tasktop.c2c.server.internal.wiki.server.domain.Page</class>

@@ -16,11 +16,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.TableGenerator;
 
 @Entity
 public class AttachmentContent extends BaseEntity {
@@ -31,10 +27,6 @@ public class AttachmentContent extends BaseEntity {
 	private byte[] content;
 	private int sizeBytes;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "AttachmentContent")
-	@TableGenerator(name = "AttachmentContent", allocationSize = 1)
-	@Override
 	public Long getId() {
 		return super.getId();
 	}

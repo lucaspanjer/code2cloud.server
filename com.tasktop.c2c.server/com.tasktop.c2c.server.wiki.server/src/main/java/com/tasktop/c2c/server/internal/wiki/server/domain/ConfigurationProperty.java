@@ -15,13 +15,9 @@ package com.tasktop.c2c.server.internal.wiki.server.domain;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.TableGenerator;
 
 /**
- * @author Myles Feichtinger(Tasktop Technologies Inc.)
+ * @author Myles Feichtinger (Tasktop Technologies Inc.)
  * 
  */
 @Entity
@@ -30,10 +26,6 @@ public class ConfigurationProperty extends BaseEntity {
 	private String name;
 	private String value;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ConfigurationProperty")
-	@TableGenerator(name = "ConfigurationProperty", allocationSize = 1)
-	@Override
 	public Long getId() {
 		return super.getId();
 	}
