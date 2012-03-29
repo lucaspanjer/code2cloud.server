@@ -33,7 +33,6 @@ import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.QuotaSetting;
 import com.tasktop.c2c.server.profile.service.ProfileService;
-import com.tasktop.c2c.server.profile.service.ProfileServiceQuotaConstants;
 import com.tasktop.c2c.server.profile.service.QuotaService;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockOrganizationFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
@@ -125,18 +124,18 @@ public class QuotaServiceTest {
 
 		// Add global quota
 		QuotaSetting quota = new QuotaSetting();
-		quota.setName(ProfileServiceQuotaConstants.MAX_PROJECTS_QUOTA_NAME);
+		quota.setName(ProfileService.CREATE_PROJECT_QUOTA_NAME);
 		quota.setValue(Integer.toString(1));
 		quota = quotaService.createQuota(quota);
 
 		Project p1 = creatOrgProject(org);
-		quotaService.enforceQuota(ProfileServiceQuotaConstants.MAX_PROJECTS_QUOTA_NAME, p1);
+		quotaService.enforceQuota(ProfileService.CREATE_PROJECT_QUOTA_NAME, p1);
 		org.getProjects().add(p1);
 		entityManager.persist(p1);
 
 		Project p2 = creatOrgProject(org);
 		try {
-			quotaService.enforceQuota(ProfileServiceQuotaConstants.MAX_PROJECTS_QUOTA_NAME, p2);
+			quotaService.enforceQuota(ProfileService.CREATE_PROJECT_QUOTA_NAME, p2);
 			Assert.fail("expected validation exception");
 		} catch (ValidationException e) {
 			// expected
@@ -144,12 +143,12 @@ public class QuotaServiceTest {
 
 		// Now add org-specific quota to override global
 		quota = new QuotaSetting();
-		quota.setName(ProfileServiceQuotaConstants.MAX_PROJECTS_QUOTA_NAME);
+		quota.setName(ProfileService.CREATE_PROJECT_QUOTA_NAME);
 		quota.setValue(Integer.toString(10));
 		quota.setOrganization(org);
 		quota = quotaService.createQuota(quota);
 
-		quotaService.enforceQuota(ProfileServiceQuotaConstants.MAX_PROJECTS_QUOTA_NAME, p2);
+		quotaService.enforceQuota(ProfileService.CREATE_PROJECT_QUOTA_NAME, p2);
 
 	}
 

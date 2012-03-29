@@ -21,17 +21,18 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.QuotaSetting;
+import com.tasktop.c2c.server.profile.domain.internal.ScmRepository;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.service.QuotaEnforcer;
 
 /**
- * Enforce a max project per organization quota.
+ * Enforce a max git repositories per organization quota.
  * 
  * @author clint.morgan@tasktop.com (Tasktop Technologies Inc.)
  * 
  */
 @Component
-public class MaxProjectsQuotaEnforcer implements QuotaEnforcer<Project> {
+public class MaxGitRepositoriesQuotaEnforcer implements QuotaEnforcer<Project> {
 
 	@Inject
 	private ProfileService profileService;
@@ -63,9 +64,16 @@ public class MaxProjectsQuotaEnforcer implements QuotaEnforcer<Project> {
 			throw new IllegalStateException();
 		}
 
-		Integer maxProjects = Integer.parseInt(quota.getValue());
+		Integer maxRepos = Integer.parseInt(quota.getValue());
 
-		if (org.getProjects().size() >= maxProjects) {
+		int numRepos = 0;
+		for (Project p : org.getProjects()) {
+			for (ScmRepository repo : p.getRepositories()) {
+				numRepos++;
+			}
+		}
+
+		if (numRepos >= maxRepos) {
 			throw new ValidationException("Quota Violation", null);
 		}
 

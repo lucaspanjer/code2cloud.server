@@ -82,6 +82,7 @@ import com.tasktop.c2c.server.profile.service.NotificationService;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
+import com.tasktop.c2c.server.profile.service.QuotaService;
 import com.tasktop.c2c.server.profile.service.provider.TaskServiceProvider;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
 import com.tasktop.c2c.server.tasks.domain.Team;
@@ -141,6 +142,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 	@Autowired
 	private IdentityManagmentService identityManagmentService;
+
+	@Autowired
+	private QuotaService quotaService;
 
 	private String profileCreatedTemplate = "com/tasktop/c2c/server/internal/profile/service/template/profileCreated.vm";
 	private String passwordResetTemplate = "com/tasktop/c2c/server/internal/profile/service/template/passwordResetRequest.vm";
@@ -452,6 +456,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		securityPolicy.create(project);
 		setDefaultValuesBeforeCreate(project);
 		validate(project, validator, new ProjectConstraintsValidator());
+		quotaService.enforceQuota(CREATE_PROJECT_QUOTA_NAME, project);
 
 		Profile profile = getProfileInternal(profileId);
 		securityPolicy.modify(profile);

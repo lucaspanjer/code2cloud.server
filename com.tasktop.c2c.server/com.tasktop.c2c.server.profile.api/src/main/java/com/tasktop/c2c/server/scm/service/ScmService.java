@@ -31,6 +31,9 @@ import com.tasktop.c2c.server.profile.domain.scm.ScmSummary;
  */
 public interface ScmService {
 
+	/** Quota name checked when adding scms. See {@link QuotaService}. */
+	String ADD_SCM_QUOTA_NAME = "ADD_SCM";
+
 	List<ScmRepository> getScmRepositories() throws EntityNotFoundException;
 
 	/**

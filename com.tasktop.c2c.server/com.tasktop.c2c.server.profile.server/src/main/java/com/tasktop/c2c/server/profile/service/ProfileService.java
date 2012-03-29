@@ -48,6 +48,8 @@ import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
  */
 public interface ProfileService {
 
+	String CREATE_PROJECT_QUOTA_NAME = "CREATE_PROJECT";
+
 	public Long createProfile(Profile profile) throws ValidationException;
 
 	public void updateProfile(Profile profile) throws EntityNotFoundException, ValidationException;

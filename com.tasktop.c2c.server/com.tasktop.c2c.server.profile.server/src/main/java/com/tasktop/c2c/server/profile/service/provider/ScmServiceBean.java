@@ -42,6 +42,7 @@ import com.tasktop.c2c.server.profile.domain.scm.ScmSummary;
 import com.tasktop.c2c.server.profile.service.GitService;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
+import com.tasktop.c2c.server.profile.service.QuotaService;
 
 @Service("scmService")
 @Qualifier("main")
@@ -63,6 +64,9 @@ public class ScmServiceBean extends AbstractJpaServiceBean implements ScmService
 
 	@Autowired
 	private ProfileServiceConfiguration profileServiceConfiguration;
+
+	@Autowired
+	private QuotaService quotaService;
 
 	private GitService getCurrentService() {
 		String projId = TenancyContextHolder.getContext().getTenant().getIdentity().toString();
@@ -92,6 +96,7 @@ public class ScmServiceBean extends AbstractJpaServiceBean implements ScmService
 	public com.tasktop.c2c.server.profile.domain.scm.ScmRepository createScmRepository(
 			com.tasktop.c2c.server.profile.domain.scm.ScmRepository repository) throws EntityNotFoundException,
 			ValidationException {
+
 		Project project = getCurrentProject();
 		String internalUrlPrefix = profileServiceConfiguration.getHostedScmUrlPrefix(project.getIdentifier());
 
@@ -139,6 +144,8 @@ public class ScmServiceBean extends AbstractJpaServiceBean implements ScmService
 			errors.reject("scmrepo.internal.url.isExternal");
 			throw new ValidationException(errors);
 		}
+
+		quotaService.enforceQuota(ADD_SCM_QUOTA_NAME, repository);
 
 		// Save this to the database now.
 		entityManager.persist(newRepository);

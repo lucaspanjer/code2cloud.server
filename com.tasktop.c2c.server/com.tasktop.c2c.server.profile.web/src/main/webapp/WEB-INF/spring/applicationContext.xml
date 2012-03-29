@@ -112,6 +112,7 @@
 				<ref bean="scmUrlTenantIdStrategy"/>
 			</list>
 		</property>
+		<property name="tenantProvider" ref="profileHubTenantProvider"/>
 	</bean>
 
 </beans>
