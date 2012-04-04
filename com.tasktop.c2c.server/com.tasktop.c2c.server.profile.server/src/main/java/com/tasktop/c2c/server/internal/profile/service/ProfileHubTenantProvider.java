@@ -53,7 +53,7 @@ public class ProfileHubTenantProvider implements TenantProvider {
 				tenant.setOrganizationIdentifier(project.getOrganization().getIdentifier());
 			}
 		} catch (Throwable t) {
-			LOG.warn("caght exception tryng to get project", t);
+			LOG.warn("caught exception trying to get project, ignoring", t);
 		} finally {
 			SecurityContextHolder.getContext().setAuthentication(auth);
 		}
