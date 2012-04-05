@@ -210,8 +210,8 @@
 		</insert>
 	</changeSet>
 	<changeSet author="wikidb" id="createConfigurationProperty" >
-		<createTable tableName="CONFIGURATIONPROPERTY">
-			<column name="ID" type="BIGINT" autoIncrement="true">
+		<createTable tableName="ConfigurationProperty">
+			<column name="ID" type="INTEGER" >
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="VERSION" type="INT" />
@@ -222,11 +222,19 @@
 			<column name="CREATIONDATE" type="DATETIME" />
 			<column name="MODIFICATIONDATE" type="DATETIME" />
 		</createTable>
+		<insert tableName="ConfigurationProperty">
+			<column name="ID" value="1"/>
+			<column name="VERSION" value="1" />
+			<column name="NAME" value="MARKUP_LANGUAGE" />
+			<column name="VALUE"  value="Textile" />
+			<column name="CREATIONDATE" value="NULL" />
+			<column name="MODIFICATIONDATE" value="NULL" />
+		</insert>
 	</changeSet>
 	<changeSet author="mfeichtinger" id="insertConfigurationPropertySequenceInfo">
 		<insert tableName="SEQUENCE">
 			<column name="SEQ_NAME" value="ConfigurationProperty" />
-			<column name="SEQ_COUNT" value="0" />
+			<column name="SEQ_COUNT" value="1" />
 		</insert>
 	</changeSet>
 

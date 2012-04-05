@@ -100,7 +100,6 @@ public abstract class BaseWikiServiceTest {
 		person2.setName("Frank Smith");
 		person2.setLoginName("person2@example.com");
 
-		createMarkupProperty();
 	}
 
 	@After
