@@ -48,7 +48,6 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.job.Job;
-import com.tasktop.c2c.server.common.service.wiki.MarkupLanguageUtil;
 import com.tasktop.c2c.server.common.tests.util.ValidationAssert;
 import com.tasktop.c2c.server.internal.wiki.server.UpdatePageContentJob;
 import com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty;
@@ -117,14 +116,6 @@ public abstract class BaseWikiServiceTest {
 
 	private void logon(Person person) {
 		TestSecurity.login(person);
-	}
-
-	private void createMarkupProperty() {
-		ConfigurationProperty cp = new ConfigurationProperty();
-		cp.setName(MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY);
-		cp.setValue("Textile");
-
-		entityManager.persist(cp);
 	}
 
 	@Test
