@@ -15,8 +15,6 @@ package com.tasktop.c2c.server.internal.profile.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.tenancy.core.Tenant;
 import org.springframework.tenancy.provider.TenantProvider;
@@ -45,7 +43,6 @@ public class ProfileHubTenantProvider implements TenantProvider {
 		tenant.setIdentity(projectId);
 		tenant.setProjectIdentifier(projectId);
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		try {
 			AuthUtils.assumeSystemIdentity(projectId);
 			Project project = profileService.getProjectByIdentifier(projectId);
@@ -54,8 +51,6 @@ public class ProfileHubTenantProvider implements TenantProvider {
 			}
 		} catch (Throwable t) {
 			LOG.warn("caught exception trying to get project, ignoring", t);
-		} finally {
-			SecurityContextHolder.getContext().setAuthentication(auth);
 		}
 
 		return tenant;
