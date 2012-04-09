@@ -12,7 +12,7 @@
 			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
 			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
-	<context:property-placeholder location="/*-test.properties, classpath*:/database/mysql/*-test.properties, file:///opt/code2cloud-test/etc/database/database-mysql.properties" />
+	<context:property-placeholder location="classpath*:/database/mysql/database-test.properties, classpath*:/config/*.properties, classpath*:/META-INF/spring/*.properties, classpath*:/*-test.properties, file:///opt/code2cloud-test/etc/*.properties, file:///opt/code2cloud-test/etc/database/database-mysql.properties" />
 
   	<import resource="classpath:applicationContext-test.xml"/>
 
