@@ -67,10 +67,6 @@ public class TaskListView extends AbstractComposite implements ITaskListView {
 	public TaskListView() {
 		initWidget(uiBinder.createAndBindUi(this));
 
-		if (AuthenticationHelper.isAnonymous()) {
-			// If this user is anonymous, then hide options and features which are only available to logged-in users.
-			newTask.setVisible(false);
-		}
 		createQueryDialog.saveButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -118,6 +114,12 @@ public class TaskListView extends AbstractComposite implements ITaskListView {
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+
+		if (AuthenticationHelper.isAnonymous()) {
+			// If this user is anonymous, then hide options and features which are only available to logged-in users.
+			newTask.setVisible(false);
+		}
+
 	}
 
 	/**
