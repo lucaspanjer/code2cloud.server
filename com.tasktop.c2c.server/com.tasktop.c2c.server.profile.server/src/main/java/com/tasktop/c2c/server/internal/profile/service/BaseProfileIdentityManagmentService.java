@@ -223,6 +223,7 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 		profile.setPassword(passwordEncoder.encodePassword(profile.getPassword(), null));
 		profile.setDisabled(false);
 		entityManager.persist(profile);
+		entityManager.flush();
 		return profile;
 	}
 

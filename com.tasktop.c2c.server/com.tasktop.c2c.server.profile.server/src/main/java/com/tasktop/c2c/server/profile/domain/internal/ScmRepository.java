@@ -19,14 +19,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.tasktop.c2c.server.cloud.domain.ScmLocation;
 import com.tasktop.c2c.server.cloud.domain.ScmType;
 
 @Entity
-@Table(name = "SCMREPOSITORY")
 public class ScmRepository extends BaseEntity {
 
 	private Project project;

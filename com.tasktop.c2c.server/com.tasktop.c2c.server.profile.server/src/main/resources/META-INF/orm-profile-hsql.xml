@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<entity-mappings
+	xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.eclipse.org/eclipselink/xsds/persistence/orm http://www.eclipse.org/eclipselink/xsds/eclipselink_orm_1_2.xsd"
+	version="1.2">
+
+	<persistence-unit-metadata>
+		<persistence-unit-defaults>
+			<!-- <delimited-identifiers/> -->
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.Agreement">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.profile.domain.internal.AgreementProfile">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.profile.domain.internal.ConfigurationProperty">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.profile.domain.internal.EmailVerificationToken">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.profile.domain.internal.InvitationToken">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.profile.domain.internal.NotificationSettings">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.Organization">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.Profile">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.Project">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.ProjectProfile">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.ProjectService">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.profile.domain.internal.ProjectServiceProfile">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.PromiseToken">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.QuotaSetting">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.ScmRepository">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.ServiceHost">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.profile.domain.internal.ServiceHostConfiguration">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.SignUpToken">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.profile.domain.internal.SshPublicKey">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+
+</entity-mappings>

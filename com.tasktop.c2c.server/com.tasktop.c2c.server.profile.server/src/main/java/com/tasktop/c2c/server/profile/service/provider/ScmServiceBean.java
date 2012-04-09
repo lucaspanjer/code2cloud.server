@@ -120,8 +120,7 @@ public class ScmServiceBean extends AbstractJpaServiceBean implements ScmService
 		newRepository.setProject(project);
 
 		// FIXME this can be replaced with a @Secured annotation once projectIdentifier token specialization is
-		// implemented
-		// for this service
+		// implemented for this service
 		securityPolicy.create(newRepository);
 
 		// Validate the internal object.
@@ -149,6 +148,7 @@ public class ScmServiceBean extends AbstractJpaServiceBean implements ScmService
 
 		// Save this to the database now.
 		entityManager.persist(newRepository);
+		entityManager.flush();
 
 		// We add the object to the set after it is persisted - because the hashcode is based upon the ID, if you add it
 		// to the set and then persist it, the ID (and thus the hash) changes and lookups fail (this occurred in unit

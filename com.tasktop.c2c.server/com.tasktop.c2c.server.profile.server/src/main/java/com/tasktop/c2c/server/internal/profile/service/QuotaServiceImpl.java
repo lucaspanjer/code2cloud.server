@@ -45,6 +45,7 @@ public class QuotaServiceImpl extends AbstractJpaServiceBean implements QuotaSer
 	@Override
 	public QuotaSetting createQuota(QuotaSetting quotaSetting) throws EntityNotFoundException {
 		entityManager.persist(quotaSetting);
+		entityManager.flush();
 		return quotaSetting;
 	}
 

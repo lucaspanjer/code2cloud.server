@@ -19,7 +19,7 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 
 /**
- * @author clint.morgan@tasktop.com (Tasktop Technologies Inc.)
+ * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
  * 
  */
 public interface IdentityManagmentService {

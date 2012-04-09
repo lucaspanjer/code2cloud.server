@@ -230,8 +230,6 @@ public abstract class BaseProfileServiceTest {
 		Profile arg = MockProfileFactory.create(null);
 		Long id = profileService.createProfile(arg);
 
-		entityManager.flush();
-
 		assertNotNull(id);
 		Profile profile = entityManager.find(Profile.class, id);
 		assertEquals(id, profile.getId());
@@ -300,10 +298,10 @@ public abstract class BaseProfileServiceTest {
 	public void testGetProfile() throws ValidationException, EntityNotFoundException {
 		Profile profile = MockProfileFactory.create(entityManager);
 
-		Long id = profile.getId();
-
 		entityManager.flush();
 		entityManager.clear();
+
+		Long id = profile.getId();
 
 		Profile profile2 = profileService.getProfile(id);
 		assertNotNull(profile2);
@@ -365,10 +363,10 @@ public abstract class BaseProfileServiceTest {
 		Project project = MockProjectFactory.create(entityManager);
 		entityManager.persist(project.addProfile(profile));
 
-		Long id = project.getId();
-
 		entityManager.flush();
 		entityManager.clear();
+
+		Long id = project.getId();
 
 		Project project2 = profileService.getProjectByIdentifier(project.getIdentifier());
 		assertNotNull(project2);
@@ -386,6 +384,8 @@ public abstract class BaseProfileServiceTest {
 	@Test
 	public void testCreateProject() throws ValidationException, EntityNotFoundException {
 		Profile profile = MockProfileFactory.create(entityManager);
+		entityManager.flush();
+
 		Project project = MockProjectFactory.create(null);
 
 		Long id = profileService.createProject(profile.getId(), project).getId();
@@ -508,38 +508,46 @@ public abstract class BaseProfileServiceTest {
 	@Test
 	public void testUpdateProject() throws ValidationException, EntityNotFoundException {
 
-		List<Job> scheduledJobs = jobService.getScheduledJobs();
+		Profile profile = MockProfileFactory.create(entityManager);
+		Project project = MockProjectFactory.create(null);
+
+		project = profileService.createProject(profile.getId(), project);
+		entityManager.clear();
+
+		String originalIdentity = project.getIdentifier();
+
+		project.setName(project.getName() + "2");
+		project.setDescription(project.getDescription() + "2");
+		project.setIdentifier(project.getIdentifier() + "2");
+		project.setAccessibility(ProjectAccessibility.PUBLIC);
+
+		Project updatedProject = profileService.updateProject(project);
+
+		assertEquals(project.getName(), updatedProject.getName());
+		assertEquals(project.getDescription(), updatedProject.getDescription());
+		assertEquals(project.getAccessibility(), updatedProject.getAccessibility());
+
+		// identifier should never change
+		assertEquals(originalIdentity, updatedProject.getIdentifier());
+	}
+
+	@Test
+	public void testUpdateProjectWikiLanguage() throws ValidationException, EntityNotFoundException {
 
 		Profile profile = MockProfileFactory.create(entityManager);
 		Project project = MockProjectFactory.create(null);
 
 		project = profileService.createProject(profile.getId(), project);
-
-		entityManager.flush();
 		entityManager.clear();
 
-		String originalIdentity = project.getIdentifier();
-
+		assertEquals(WikiMarkupLanguage.TEXTILE, project.getProjectPreferences().getWikiLanguage());
 		project.getProjectPreferences().setWikiLanguage(WikiMarkupLanguage.CONFLUENCE);
-		project.setName(project.getName() + "2");
-		project.setDescription(project.getDescription() + "2");
-		project.setIdentifier(project.getIdentifier() + "2");
-		project.setAccessibility(ProjectAccessibility.PUBLIC);
-		project.setProjectPreferences(project.getProjectPreferences());
-
-		int size = scheduledJobs.size();
+		int size = jobService.getScheduledJobs().size();
 
 		Project updatedProject = profileService.updateProject(project);
 
-		assertEquals(size + 2, scheduledJobs.size());
-
-		assertEquals(project.getName(), updatedProject.getName());
-		assertEquals(project.getDescription(), updatedProject.getDescription());
-		assertEquals(project.getAccessibility(), updatedProject.getAccessibility());
-		assertEquals(project.getProjectPreferences(), updatedProject.getProjectPreferences());
-
-		// identifier should never change
-		assertEquals(originalIdentity, updatedProject.getIdentifier());
+		assertEquals(size + 2, jobService.getScheduledJobs().size());
+		assertEquals(WikiMarkupLanguage.CONFLUENCE, updatedProject.getProjectPreferences().getWikiLanguage());
 	}
 
 	// task 1824
@@ -712,24 +720,28 @@ public abstract class BaseProfileServiceTest {
 	public void testFindProfiles() {
 		int count = 20;
 		int max = count * 3;
-		List<Profile> profiles = MockProfileFactory.create(entityManager, max);
+		List<Profile> profiles = MockProfileFactory.create(null, max);
 		int x = -1;
 		for (Profile profile : profiles) {
 			++x;
+			// 20 profiles with some variant of test123 is username, firstname, or lastname
 			if (x < count) {
 				if (x % 3 == 0) {
-					profile.setUsername("Test123" + x);
+					profile.setUsername("tEst123" + x);
 				} else if (x % 3 == 1) {
-					profile.setFirstName("tEst123" + x + profile.getFirstName());
+					profile.setFirstName("TEST123" + x + profile.getFirstName());
 				} else {
 					profile.setLastName("teSt123" + x + profile.getLastName());
 				}
-			} else {
+			}
+			// 40 more profiles with test123 set only in the email field
+			else {
 				profile.setUsername("abc" + x);
 				profile.setEmail("Test123_" + x + profile.getEmail());
 				profile.setFirstName("abc" + x + profile.getFirstName());
 				profile.setLastName("abc" + x + profile.getLastName());
 			}
+			entityManager.persist(profile);
 		}
 		entityManager.flush();
 		entityManager.clear();

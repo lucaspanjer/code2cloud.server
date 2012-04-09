@@ -465,6 +465,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		project.setId(null);
 		entityManager.persist(project);
+		entityManager.flush();
 
 		if (project.getOrganization() != null) {
 			Organization org = entityManager.find(Organization.class, project.getOrganization().getId());
@@ -481,6 +482,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		projectProfile.setOwner(true);
 
 		entityManager.persist(projectProfile);
+		entityManager.flush();
 
 		try {
 			projectServiceService.provisionDefaultServices(project.getId());
@@ -497,22 +499,13 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	private boolean spaceAvailableForNewProject() {
-
 		try {
-			// First, grab our system maxProject count to see if there's a limit present.
-			ConfigurationProperty maxProjNumProp = getConfigurationProperty(ConfigurationProperty.MAXNUM_PROJECTS_NAME);
-
-			// Convert it to an int since it's stored as a string
-			int maxNum = Integer.parseInt(maxProjNumProp.getValue());
-
-			// Now, count up the number of projects in the system
-			int curNumProjects = getEntityCount(Project.class);
-
-			// Do our check and send back our result.
-			return (curNumProjects < maxNum);
-
+			ConfigurationProperty property = getConfigurationProperty(ConfigurationProperty.MAXNUM_PROJECTS_NAME);
+			int maxNum = Integer.parseInt(property.getValue());
+			int currentProjectCount = getEntityCount(Project.class);
+			return (currentProjectCount < maxNum);
 		} catch (EntityNotFoundException e) {
-			// No config prop present, so that means there's no limit - return true.
+			// No configuration property available, there is no limit
 			return true;
 		}
 	}
@@ -556,11 +549,12 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		securityPolicy.modify(project);
 
-		Project managedProject = project;
-		managedProject = entityManager.find(Project.class, project.getId());
+		Project managedProject = entityManager.find(Project.class, project.getId());
 		if (managedProject == null) {
 			throw new EntityNotFoundException();
 		}
+		entityManager.refresh(managedProject);
+		entityManager.refresh(managedProject.getProjectPreferences());
 
 		validate(project, validator, new ProjectConstraintsValidator());
 
@@ -569,6 +563,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			jobService.schedule(new UpdateProjectWikiPreferencesJob(project, WikiService.MARKUP_LANGUAGE_DB_KEY));
 			jobService.schedule(new UpdateProjectTaskPreferencesJob(project, TaskService.MARKUP_LANGUAGE_DB_KEY));
 		}
+
 		if (!entityManager.contains(project)) {
 			// we disallow change of identifier
 			managedProject.setName(project.getName());
@@ -577,7 +572,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			managedProject.getProjectPreferences().setWikiLanguage(project.getProjectPreferences().getWikiLanguage());
 		}
 
-		// Since our update is now done, return our project to the caller.
 		return managedProject;
 	}
 
@@ -1308,6 +1302,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		validate(token, validator);
 
 		entityManager.persist(token);
+		entityManager.flush();
 		return token;
 	}
 

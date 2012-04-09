@@ -36,6 +36,9 @@ public class MockProfileFactory {
 			}
 			mocks.add(mock);
 		}
+		if (entityManager != null) {
+			entityManager.flush();
+		}
 		return mocks;
 	}
 

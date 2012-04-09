@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 	<changeSet author="profiledb" id="createAgreementTable">
 		<createTable tableName="AGREEMENT">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column defaultValue="" name="TITLE" type="VARCHAR(255)">
@@ -27,7 +27,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createAgreementProfileTable">
 		<createTable tableName="AGREEMENTPROFILE">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="DATEAGREED" type="DATE" />
@@ -38,7 +38,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createConfigurationPropertyTable">
 		<createTable tableName="CONFIGURATIONPROPERTY">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="VERSION" type="INT" />
@@ -52,7 +52,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createDeploymentConfigurationTable">
 		<createTable tableName="DEPLOYMENTCONFIGURATION">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="APIBASEURL" type="VARCHAR(255)" />
@@ -72,7 +72,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createEmailVerificationTokenTable">
 		<createTable tableName="EMAILVERIFICATIONTOKEN">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="create_date" type="DATETIME" />
@@ -91,7 +91,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createInvitationTokenTable">
 		<createTable tableName="INVITATIONTOKEN">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column defaultValue="" name="token" type="VARCHAR(255)">
@@ -127,7 +127,7 @@
 
 	<changeSet author="profiledb" id="createNotificationSettingsTable">
 		<createTable tableName="NOTIFICATIONSETTINGS">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column defaultValueBoolean="true" name="EMAILTASKACTIVITY" type="BOOLEAN">
@@ -138,7 +138,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createPasswordResetTokenTable">
 		<createTable tableName="PASSWORDRESETTOKEN">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="CREATE_DATE" type="DATE" />
@@ -159,7 +159,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createProfileTable">
 		<createTable tableName="PROFILE">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="LASTNAME" type="VARCHAR(255)" />
@@ -192,7 +192,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createProjectTable">
 		<createTable tableName="PROJECT">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="DESCRIPTION" type="VARCHAR(255)" />
@@ -218,7 +218,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createProjectProfileTable">
 		<createTable tableName="PROJECTPROFILE">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column defaultValueBoolean="false" name="OWNER" type="BOOLEAN">
@@ -237,7 +237,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createProjectServiceTable">
 		<createTable tableName="PROJECTSERVICE">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="INTERNALPORT" type="INT" />
@@ -255,7 +255,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createProjectServiceProfileTable">
 		<createTable tableName="PROJECTSERVICEPROFILE">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column defaultValueBoolean="false" name="TEMPLATE" type="BOOLEAN" />
@@ -264,7 +264,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createScmRepositoryTable">
 		<createTable tableName="SCMREPOSITORY">
-			<column name="id" type="BIGINT">
+			<column name="id" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="version" type="INT" />
@@ -292,7 +292,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createServiceHostTable">
 		<createTable tableName="SERVICEHOST">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="INTERNALNETWORKADDRESS" type="VARCHAR(255)" />
@@ -303,7 +303,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createServiceHostPoolTable">
 		<createTable tableName="SERVICEHOSTPOOL">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="HOSTTYPE" type="VARCHAR(255)" />
@@ -314,7 +314,7 @@
 	</changeSet>
 	<changeSet author="profiledb" id="createSignupTokenTable">
 		<createTable tableName="SIGNUPTOKEN">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="create_date" type="DATETIME" />
@@ -333,7 +333,6 @@
 			</column>
 			<column name="VERSION" type="INT" />
 		</createTable>
-
 	</changeSet>
 
 	<changeSet author="profiledb" id="createSignupTokenIndex">
@@ -345,7 +344,7 @@
 
 	<changeSet author="profiledb" id="createSshPublicKeyTable">
 		<createTable tableName="SSHPUBLICKEY">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column defaultValue="" name="ALGORITHM" type="VARCHAR(255)">
@@ -506,7 +505,7 @@
 			<column name="SERVICEHOSTCONFIGURATION_ID" type="BIGINT"></column>
 		</addColumn>
 		<createTable tableName="SERVICEHOSTCONFIGURATION">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="PENDINGALLOCATIONS" type="INT" />
@@ -526,7 +525,7 @@
 	</changeSet>
 	<changeSet author="cmorgan" id="task-2816-fair-hudson-service">
 		<createTable tableName="PROMISETOKEN">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="CREATE_DATE" type="DATETIME" />
@@ -545,7 +544,7 @@
 	</changeSet>
 	<changeSet author="cmorgan" id="createOrganizationTable-task4136">
 		<createTable tableName="ORGANIZATION">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="DESCRIPTION" type="VARCHAR(255)" />
@@ -582,7 +581,7 @@
 	
 	<changeSet author="cmorgan" id="createOrganizationProfileTable-task4136">
 		<createTable tableName="ORGANIZATIONPROFILE">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column defaultValueBoolean="false" name="OWNER" type="BOOLEAN">
@@ -613,7 +612,7 @@
 	
  	<changeSet author="mfeichtinger" id="createProjectPreferencesTable-task4146">
 		<createTable tableName="PROJECTPREFERENCES">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="VERSION" type="INT" />
@@ -652,7 +651,7 @@
 
 	<changeSet author="cmorgan" id="createQuotaSettingTable-task4201">
 		<createTable tableName="QUOTASETTING">
-			<column name="ID" type="BIGINT">
+			<column name="ID" type="BIGINT" autoIncrement="true">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="VERSION" type="INT" />
@@ -668,12 +667,40 @@
 			baseTableName="QUOTASETTING" constraintName="FK_QUOTASETTING_ORGANIZATION"
 			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
 	</changeSet>
-	
+
 	<changeSet id="dropPersistentLoginTable" author="cmorgan">
 		<preConditions onFail="MARK_RAN">
 			<tableExists tableName="PERSISTENT_LOGINS"/>
 		</preConditions>
 		<dropTable tableName="PERSISTENT_LOGINS"/>
+	</changeSet>
+
+	<changeSet id="addAutoincrements-task4274" author="lpanjer" dbms="mysql">
+		<sql>
+			ALTER TABLE AGREEMENT CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE AGREEMENTPROFILE CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE CONFIGURATIONPROPERTY CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE DEPLOYMENTCONFIGURATION CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE EMAILVERIFICATIONTOKEN CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE INVITATIONTOKEN CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE NOTIFICATIONSETTINGS CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE PASSWORDRESETTOKEN CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE PROFILE CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE PROJECT CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE PROJECTPROFILE CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE PROJECTSERVICE CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE PROJECTSERVICEPROFILE CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE SCMREPOSITORY CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE SERVICEHOST CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE SIGNUPTOKEN CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE SSHPUBLICKEY CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE SERVICEHOSTCONFIGURATION CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE PROMISETOKEN CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE ORGANIZATION CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE ORGANIZATIONPROFILE CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE PROJECTPREFERENCES CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+			ALTER TABLE QUOTASETTING CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
+		</sql>
 	</changeSet>
 
 </databaseChangeLog>

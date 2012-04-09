@@ -22,7 +22,7 @@ import com.tasktop.c2c.server.profile.domain.internal.QuotaSetting;
  * Internal Service for interacting with quotas. This includes basic CRUD operations as well as enforcement operations.
  * The enforcement operations use {@link QuotaEnforcer}s for extensibility.
  * 
- * @author clint.morgan@tasktop.com (Tasktop Technologies Inc.)
+ * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
  * 
  */
 public interface QuotaService {

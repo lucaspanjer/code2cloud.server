@@ -5,6 +5,7 @@
 
     <persistence-unit name="profileDomain" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <mapping-file>META-INF/orm-profile-hsql.xml</mapping-file>
         <class>com.tasktop.c2c.server.profile.domain.internal.Agreement</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.AgreementProfile</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.ConfigurationProperty</class>
@@ -35,6 +36,7 @@
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
             <property name="eclipselink.weaving" value="false"/>
             <property name="eclipselink.logging.level" value="INFO"/>
+            <property name="eclipselink.id-validation" value="NULL"/><!-- enable IDs starting at 0 for HSQL -->
         </properties>
     </persistence-unit>
 </persistence>

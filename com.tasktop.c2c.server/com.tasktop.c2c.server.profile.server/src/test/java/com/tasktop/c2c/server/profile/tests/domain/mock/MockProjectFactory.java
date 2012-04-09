@@ -38,6 +38,9 @@ public class MockProjectFactory {
 			}
 			mocks.add(mock);
 		}
+		if (entityManager != null) {
+			entityManager.flush();
+		}
 		return mocks;
 	}
 

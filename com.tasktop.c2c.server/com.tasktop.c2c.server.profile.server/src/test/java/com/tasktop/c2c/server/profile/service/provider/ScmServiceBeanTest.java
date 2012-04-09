@@ -45,7 +45,7 @@ import com.tasktop.c2c.server.profile.service.GitService;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml", "/applicationContext-hsql.xml" })
+@ContextConfiguration({ "/applicationContext-hsql.xml", "/applicationContext-testDisableSecurity.xml" })
 @Transactional
 public class ScmServiceBeanTest {
 

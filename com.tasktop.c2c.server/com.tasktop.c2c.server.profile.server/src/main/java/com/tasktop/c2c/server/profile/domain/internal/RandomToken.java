@@ -24,7 +24,7 @@ import javax.persistence.TemporalType;
  * 
  */
 @MappedSuperclass
-public class RandomToken extends BaseEntity {
+public abstract class RandomToken extends BaseEntity {
 
 	private String token;
 	private Date dateUsed;

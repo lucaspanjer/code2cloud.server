@@ -12,20 +12,15 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.domain.internal;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 @MappedSuperclass
-public class BaseEntity {
+public abstract class BaseEntity {
 
 	private Long id;
 	private Integer version;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getId() {
 		return id;
 	}
