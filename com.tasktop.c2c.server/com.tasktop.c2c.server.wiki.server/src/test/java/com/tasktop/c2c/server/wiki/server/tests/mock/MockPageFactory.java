@@ -38,6 +38,7 @@ public class MockPageFactory {
 			Page mock = populate(new Page(), entityManager, author);
 			if (entityManager != null) {
 				entityManager.persist(mock);
+				entityManager.flush();
 			}
 			mocks.add(mock);
 		}
