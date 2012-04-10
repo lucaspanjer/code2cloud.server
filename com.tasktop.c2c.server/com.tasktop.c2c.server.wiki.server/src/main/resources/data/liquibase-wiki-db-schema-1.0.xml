@@ -173,45 +173,9 @@
 			baseTableName="PageContent" constraintName="FK_PageContent_page_id"
 			referencedColumnNames="id" referencedTableName="Page" />
 	</changeSet>
-	<changeSet author="wikidb" id="createSequenceTable">
-		<createTable tableName="SEQUENCE">
-			<column defaultValue="" name="SEQ_NAME" type="VARCHAR(50)">
-				<constraints nullable="false" primaryKey="true" />
-			</column>
-			<column name="SEQ_COUNT" type="DECIMAL(38,0)" />
-		</createTable>
-	</changeSet>
-	<changeSet author="wikidb" id="insertSequenceInfo" >
-		<insert tableName="SEQUENCE">
-			<column name="SEQ_NAME" value="SEQ_GEN" />
-			<column name="SEQ_COUNT" value="0" />
-		</insert>
-	</changeSet>
-	<changeSet author="lpanjer" id="insertSequenceInfo2" >
-		<insert tableName="SEQUENCE">
-			<column name="SEQ_NAME" value="Attachment" />
-			<column name="SEQ_COUNT" value="0" />
-		</insert>
-		<insert tableName="SEQUENCE">
-			<column name="SEQ_NAME" value="AttachmentContent" />
-			<column name="SEQ_COUNT" value="0" />
-		</insert>
-		<insert tableName="SEQUENCE">
-			<column name="SEQ_NAME" value="Page" />
-			<column name="SEQ_COUNT" value="0" />
-		</insert>
-		<insert tableName="SEQUENCE">
-			<column name="SEQ_NAME" value="Person" />
-			<column name="SEQ_COUNT" value="0" />
-		</insert>
-		<insert tableName="SEQUENCE">
-			<column name="SEQ_NAME" value="PageContent" />
-			<column name="SEQ_COUNT" value="0" />
-		</insert>
-	</changeSet>
 	<changeSet author="wikidb" id="createConfigurationProperty" >
 		<createTable tableName="ConfigurationProperty">
-			<column name="ID" type="INTEGER" >
+			<column name="ID" type="INTEGER">
 				<constraints nullable="false" primaryKey="true" />
 			</column>
 			<column name="VERSION" type="INT" />
@@ -222,25 +186,14 @@
 			<column name="CREATIONDATE" type="DATETIME" />
 			<column name="MODIFICATIONDATE" type="DATETIME" />
 		</createTable>
-		<insert tableName="ConfigurationProperty">
-			<column name="ID" value="1"/>
-			<column name="VERSION" value="1" />
-			<column name="NAME" value="MARKUP_LANGUAGE" />
-			<column name="VALUE"  value="Textile" />
-			<column name="CREATIONDATE" value="NULL" />
-			<column name="MODIFICATIONDATE" value="NULL" />
-		</insert>
-	</changeSet>
-	<changeSet author="mfeichtinger" id="insertConfigurationPropertySequenceInfo">
-		<insert tableName="SEQUENCE">
-			<column name="SEQ_NAME" value="ConfigurationProperty" />
-			<column name="SEQ_COUNT" value="1" />
-		</insert>
 	</changeSet>
 	<changeSet id="autoIncrementConfigurationProperty" author="lpanjer" dbms="hsqldb, mysql">
 		<addAutoIncrement tableName="ConfigurationProperty" columnName="id" columnDataType="INTEGER" />
 	</changeSet>
 	<changeSet id="dropSequenceTable" author="lpanjer">
+		<preConditions onFail="MARK_RAN">
+			<tableExists tableName="SEQUENCE"/>
+		</preConditions>
 		<dropTable tableName="SEQUENCE"/>
 	</changeSet>
 </databaseChangeLog>

@@ -211,27 +211,29 @@ public abstract class BaseWikiServiceTest {
 	public void testRetrieveConfigurationProperty() throws EntityNotFoundException {
 		logon(author);
 
-		final String TEST_CONFIGURATION_PROPERTY = "TEST_CONFIGURATION_PROPERTY";
+		String TEST_CONFIGURATION_PROPERTY = "TEST_CONFIGURATION_PROPERTY";
+		String TEST_VALUE = "test value";
+
 		ConfigurationProperty cp = new ConfigurationProperty();
 		cp.setName(TEST_CONFIGURATION_PROPERTY);
-		cp.setValue("test value");
+		cp.setValue(TEST_VALUE);
 		entityManager.persist(cp);
 		entityManager.flush();
 
 		String property = wikiService.retrieveConfigurationProperty(TEST_CONFIGURATION_PROPERTY);
-		assertTrue(property.equals("test value"));
-
+		assertTrue(property.equals(TEST_VALUE));
 	}
 
 	@Test
 	public void testSetConfigurationProperty() throws ValidationException, EntityNotFoundException {
 		logon(author);
 
-		final String TEST_CONFIGURATION_PROPERTY = "TEST_CONFIGURATION_PROPERTY";
+		String TEST_CONFIGURATION_PROPERTY = "TEST_CONFIGURATION_PROPERTY";
+		String TEST_VALUE = "test value";
 
-		wikiService.setConfigurationProperty(TEST_CONFIGURATION_PROPERTY, "test value");
+		wikiService.setConfigurationProperty(TEST_CONFIGURATION_PROPERTY, TEST_VALUE);
 		String property = wikiService.retrieveConfigurationProperty(TEST_CONFIGURATION_PROPERTY);
-		assertTrue(property.equals("test value"));
+		assertTrue(property.equals(TEST_VALUE));
 	}
 
 	@Test
