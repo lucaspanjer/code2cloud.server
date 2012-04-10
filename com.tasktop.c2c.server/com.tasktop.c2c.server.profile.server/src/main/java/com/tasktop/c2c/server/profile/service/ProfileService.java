@@ -204,4 +204,6 @@ public interface ProfileService {
 	Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException;
 
 	public QueryResult<Project> findProjects(ProjectsQuery query);
+
+	public void deleteProject(String projectIdentifier) throws EntityNotFoundException;
 }

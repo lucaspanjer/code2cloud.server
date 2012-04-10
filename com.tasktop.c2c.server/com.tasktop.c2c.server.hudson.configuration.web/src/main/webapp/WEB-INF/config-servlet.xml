@@ -17,7 +17,7 @@
 	<context:annotation-config/>
 
 	<bean id="configServiceController" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceController">
-		<property name="nodeConfigurationService" ref="nodeConfigurationService"/>
+		<property name="projectServiceManagementService" ref="nodeConfigurationService"/>
 	</bean>
 	
 	<alias name="configServiceController" alias="/config/*"/>

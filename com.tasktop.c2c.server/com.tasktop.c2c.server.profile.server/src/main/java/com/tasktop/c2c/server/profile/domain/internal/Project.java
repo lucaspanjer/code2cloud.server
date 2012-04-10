@@ -96,7 +96,7 @@ public class Project extends BaseEntity {
 	/**
 	 * the profiles that participate in this project
 	 */
-	@OneToMany(cascade = { CascadeType.PERSIST }, mappedBy = "project")
+	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "project")
 	public List<ProjectProfile> getProjectProfiles() {
 		return projectProfiles;
 	}
@@ -123,7 +123,7 @@ public class Project extends BaseEntity {
 		return projectProfile;
 	}
 
-	@OneToOne(cascade = { CascadeType.PERSIST }, optional = true)
+	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, optional = true)
 	@JoinColumn(nullable = true)
 	public ProjectServiceProfile getProjectServiceProfile() {
 		return projectServiceProfile;
@@ -198,7 +198,7 @@ public class Project extends BaseEntity {
 		this.accessibility = accessibility;
 	}
 
-	@OneToOne(cascade = { CascadeType.PERSIST }, optional = false)
+	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, optional = false)
 	@JoinColumn(name = "projectpreferences_id", nullable = false)
 	public ProjectPreferences getProjectPreferences() {
 		return projectPreferences;

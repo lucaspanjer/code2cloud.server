@@ -2,7 +2,7 @@
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
 	<g:HTMLPanel>
 		<ul class="inline-tabs">
-			<li class="">
+			<li >
 				<g:Anchor addStyleNames="button" ui:field="adminSettings">Settings</g:Anchor>
 			</li>
 			<li>
@@ -13,6 +13,9 @@
 			</li>
 			<li>
 				<g:Anchor addStyleNames="button" ui:field="adminTeam">Team</g:Anchor>
+			</li>
+			<li class="right">
+				<g:Anchor  ui:field="deleteProject">Delete Project</g:Anchor>
 			</li>
 		</ul>
 	</g:HTMLPanel>

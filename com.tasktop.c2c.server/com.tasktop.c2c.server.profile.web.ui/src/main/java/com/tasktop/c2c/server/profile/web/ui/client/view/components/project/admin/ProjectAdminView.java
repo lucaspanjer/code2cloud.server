@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -20,6 +19,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.web.ui.client.presenter.ProjectAdminActivity;
 
 public class ProjectAdminView extends Composite {
 
@@ -52,5 +52,13 @@ public class ProjectAdminView extends Composite {
 
 	public void setProject(Project project) {
 		adminMenu.updateUrls(project);
+	}
+
+	/**
+	 * @param projectAdminActivity
+	 */
+	public void setPresenter(ProjectAdminActivity projectAdminActivity) {
+		adminMenu.setPresenter(projectAdminActivity);
+
 	}
 }

@@ -68,6 +68,13 @@
 					p:sqlSizeQuery="SELECT sum( data_length + index_length ) FROM information_schema.TABLES where TABLE_SCHEMA = &quot;{projectIdentifier}_tasks&quot; ; "/>
 			</list>
 		</property>
+		<property name="deprovisioners">
+			<list>
+				<bean class="com.tasktop.c2c.server.configuration.service.DatabaseDumpingDeprovisoiner"
+				 p:dbSuffix="tasks" p:host="${database.host}" p:mysqldumpCommand="${mysqldumpCommand}" p:password="${task.database.password}"
+				 p:user="${task.database.username}" p:toBaseDir="${alm.dataDir}/deleted/task" p:rawDataSource-ref="rawDataSource"/>
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="aopLogger" class="com.tasktop.c2c.server.common.service.ServiceLoggingAdvice"/>

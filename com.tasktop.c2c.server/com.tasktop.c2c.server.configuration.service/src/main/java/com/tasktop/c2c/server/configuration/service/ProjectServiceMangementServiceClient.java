@@ -43,4 +43,11 @@ public class ProjectServiceMangementServiceClient extends AbstractRestServiceCli
 		return template.getForObject(computeUrl("status/{projectId}/{serviceType}"), ServiceCallResult.class,
 				projectIdentifer, serviceType).getProjectServiceStatus();
 	}
+
+	/**
+	 * @param identifier
+	 */
+	public void deprovisionService(ProjectServiceConfiguration configuration) {
+		template.postForObject(computeUrl("deprovision"), configuration, Void.class);
+	}
 }

@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter;
 
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.event.shared.EventBus;
@@ -20,6 +19,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectAdminPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.DeleteProjectAction;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.DeleteProjectResult;
+import com.tasktop.c2c.server.common.web.client.event.ClearCacheEvent;
+import com.tasktop.c2c.server.common.web.client.notification.Message;
+import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
+import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
@@ -47,12 +53,37 @@ public class ProjectAdminActivity extends AbstractActivity implements Splittable
 	}
 
 	private void updateView() {
+		view.setPresenter(this);
 		view.setProject(project);
 	}
 
 	@Override
 	public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 		panel.setWidget(view);
+	}
+
+	/**
+	 * 
+	 */
+	public void deleteProject() {
+		AppGinjector.get
+				.instance()
+				.getDispatchService()
+				.execute(new DeleteProjectAction(project.getIdentifier()),
+						new AsyncCallbackSupport<DeleteProjectResult>(OperationMessage.create("Deleting Project")) {
+
+							@Override
+							protected void success(DeleteProjectResult result) {
+								AppGinjector.get.instance().getEventBus().fireEvent(new ClearCacheEvent());
+
+								Message message = Message
+										.createSuccessMessage("Project deletion is started. This may take some time");
+
+								ProjectsPlace p = ProjectsPlace.createPlace();
+								p.setMessage(message);
+								p.go();
+							}
+						});
 	}
 
 }

@@ -25,21 +25,26 @@ import com.tasktop.c2c.server.common.service.web.AbstractRestService;
 @Controller
 public class ProjectServiceManagementServiceController extends AbstractRestService {
 
-	private ProjectServiceManagementService nodeConfigurationService;
+	private ProjectServiceManagementService projectServiceManagementService;
 
-	public void setNodeConfigurationService(ProjectServiceManagementService nodeConfigurationService) {
-		this.nodeConfigurationService = nodeConfigurationService;
+	public void setProjectServiceManagementService(ProjectServiceManagementService nodeConfigurationService) {
+		this.projectServiceManagementService = nodeConfigurationService;
 	}
 
 	@RequestMapping(value = "/provision", method = RequestMethod.POST)
-	public void configureNode(@RequestBody ProjectServiceConfiguration configuration) {
-		nodeConfigurationService.provisionService(configuration);
+	public void provisionService(@RequestBody ProjectServiceConfiguration configuration) {
+		projectServiceManagementService.provisionService(configuration);
+	}
+
+	@RequestMapping(value = "/deprovision", method = RequestMethod.POST)
+	public void deprovisionService(@RequestBody ProjectServiceConfiguration configuration) {
+		projectServiceManagementService.deprovisionService(configuration);
 	}
 
 	@RequestMapping(value = "/status/{projectIdentifier}/{serviceType}", method = RequestMethod.GET)
 	public ProjectServiceStatus retrieveServiceStatus(@PathVariable("projectIdentifier") String projectIdentifer,
 			@PathVariable("serviceType") ServiceType serviceType) {
-		return nodeConfigurationService.retrieveServiceStatus(projectIdentifer, serviceType);
+		return projectServiceManagementService.retrieveServiceStatus(projectIdentifer, serviceType);
 	}
 
 }

@@ -16,7 +16,8 @@ import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 
 /**
- * Internal service exposed to manage a project's service.
+ * Internal service exposed to manage a project's service from the hub. Intended to be a general interface that each
+ * service type can implement.
  * 
  * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
  * 
@@ -38,5 +39,12 @@ public interface ProjectServiceManagementService {
 	 * @return
 	 */
 	ProjectServiceStatus retrieveServiceStatus(String projectIdentifer, ServiceType serviceType);
+
+	/**
+	 * De-provision (delete) a project service.
+	 * 
+	 * @param projectIdentifier
+	 * */
+	void deprovisionService(ProjectServiceConfiguration configuration);
 
 }

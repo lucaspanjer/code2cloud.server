@@ -72,6 +72,7 @@ import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.Job;
 import com.tasktop.c2c.server.internal.profile.service.EmailJob;
+import com.tasktop.c2c.server.internal.profile.service.InternalProfileService;
 import com.tasktop.c2c.server.internal.profile.service.ReplicateProjectTeamJob;
 import com.tasktop.c2c.server.profile.domain.Email;
 import com.tasktop.c2c.server.profile.domain.internal.Agreement;
@@ -110,6 +111,9 @@ public abstract class BaseProfileServiceTest {
 
 	@Autowired
 	protected ProfileService profileService;
+
+	@Autowired
+	protected InternalProfileService internalProfileService;
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -1555,6 +1559,26 @@ public abstract class BaseProfileServiceTest {
 			project = profileService.createProject(profile.getId(), project);
 			Assert.fail();
 		} catch (ValidationException e) {
+			// expected
+		}
+
+	}
+
+	@Test
+	public void testDoDeleteProject() throws ValidationException, EntityNotFoundException {
+		Profile profile = MockProfileFactory.create(entityManager);
+		Project project = MockProjectFactory.create(null);
+
+		Long id = profileService.createProject(profile.getId(), project).getId();
+		Project created = entityManager.find(Project.class, id);
+		profileService.getProjectByIdentifier(created.getIdentifier());
+
+		internalProfileService.doDeleteProject(created.getIdentifier());
+		entityManager.flush();
+		try {
+			Project deleted = profileService.getProjectByIdentifier(created.getIdentifier());
+			Assert.fail();
+		} catch (EntityNotFoundException e) {
 			// expected
 		}
 

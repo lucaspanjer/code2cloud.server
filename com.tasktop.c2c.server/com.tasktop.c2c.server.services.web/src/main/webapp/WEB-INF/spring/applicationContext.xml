@@ -54,6 +54,13 @@
 					p:metricName="diskUsage" p:path="${maven.repo.base}/{projectIdentifier}"/>
 			</list>
 		</property>
+		
+		<property name="deprovisioners">
+			<list>
+				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisoiner"
+					p:fromBaseDir="${maven.repo.base}" p:toBaseDir="${alm.dataDir}/deleted/maven-repo"/>
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="gitConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
@@ -67,6 +74,13 @@
 			<list>
 				<bean class="com.tasktop.c2c.server.configuration.service.FileSystemMetricCollector" 
 					p:metricName="diskUsage" p:path="${git.root}/{projectIdentifier}"/>
+			</list>
+		</property>
+		
+		<property name="deprovisioners">
+			<list>
+				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisoiner"
+					p:fromBaseDir="${git.root}" p:toBaseDir="${alm.dataDir}/deleted/git-repo"/>
 			</list>
 		</property>
 	</bean>

@@ -12,7 +12,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:property-placeholder location="classpath*:/database/hsql/*-test.properties" />
+	<context:property-placeholder location="classpath*:/database/hsql/*-test.properties, classpath*:/META-INF/spring/*.properties, classpath*:/config/*.properties, classpath*:/*-test.properties" />
 
 	<import resource="applicationContext-test.xml"/>
 	<import resource="applicationContext-testSecurity.xml"/>

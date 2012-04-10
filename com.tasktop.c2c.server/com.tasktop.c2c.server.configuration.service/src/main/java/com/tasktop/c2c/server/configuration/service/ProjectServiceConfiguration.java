@@ -17,8 +17,10 @@ import java.util.Map;
 
 public class ProjectServiceConfiguration {
 
-	/** Property name for the application identifier. */
-	public static final String APPLICATION_ID = "profile.application.identifier";
+	/** Property name for the project identifier. */
+	public static final String PROJECT_ID = "profile.application.identifier";
+	/** Property name for an identifer that will always be unique (even after deletion). */
+	public static final String UNIQUE_IDENTIFER = "profile.project.identifier.unique";
 	/** Property name for the profile protocol. */
 	public static final String PROFILE_PROTOCOL = "profile.protocol";
 	/** Property name for the profile hostname. */
@@ -32,7 +34,7 @@ public class ProjectServiceConfiguration {
 	/** Property Name of the git repository to be created. */
 	public static final String APPLICATION_GIT_URL = "application.git.url";
 	/** Required properties to be sent when configuring a node. */
-	public static final String[] REQUIRED_PROPERTIES = new String[] { ProjectServiceConfiguration.APPLICATION_ID,
+	public static final String[] REQUIRED_PROPERTIES = new String[] { ProjectServiceConfiguration.PROJECT_ID,
 			ProjectServiceConfiguration.PROFILE_PROTOCOL, ProjectServiceConfiguration.PROFILE_HOSTNAME,
 			ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL, ProjectServiceConfiguration.PROFILE_BASE_URL };
 	public static final String MARKUP_LANGUAGE = "markup.language";

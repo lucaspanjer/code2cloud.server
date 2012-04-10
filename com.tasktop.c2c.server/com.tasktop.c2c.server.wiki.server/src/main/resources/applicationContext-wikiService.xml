@@ -60,6 +60,13 @@
 					p:sqlSizeQuery="SELECT sum( data_length + index_length ) FROM information_schema.TABLES where TABLE_SCHEMA = &quot;{projectIdentifier}_wiki&quot; ; "/>
 			</list>
 		</property>
+		<property name="deprovisioners">
+			<list>
+				<bean class="com.tasktop.c2c.server.configuration.service.DatabaseDumpingDeprovisoiner"
+				 p:dbSuffix="wiki" p:host="${database.host}" p:mysqldumpCommand="${mysqldumpCommand}" p:password="${wiki.database.password}"
+				 p:user="${wiki.database.username}" p:toBaseDir="${alm.dataDir}/deleted/wiki" p:rawDataSource-ref="rawDataSource"/>
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="wikiDatabaseConfigurator" class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 

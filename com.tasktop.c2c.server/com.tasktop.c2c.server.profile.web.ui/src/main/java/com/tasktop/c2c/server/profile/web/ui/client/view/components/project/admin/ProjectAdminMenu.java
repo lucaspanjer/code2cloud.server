@@ -12,11 +12,12 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin;
 
-
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -24,6 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectAdminSettingsPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.presenter.ProjectAdminActivity;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.place.ProjectAdminSourcePlace;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.place.ProjectAdminTeamPlace;
 import com.tasktop.c2c.server.tasks.client.place.AbstractProjectAdminTasksPlace;
@@ -56,11 +58,19 @@ public class ProjectAdminMenu extends Composite {
 
 	private Widget selected = null;
 
+	private ProjectAdminActivity presenter;
+
 	public ProjectAdminMenu() {
 		initWidget(ourUiBinder.createAndBindUi(this));
+
+	}
+
+	public void setPresenter(ProjectAdminActivity presenter) {
+		this.presenter = presenter;
 	}
 
 	public void updateUrls(Project project) {
+
 		String projectIdentifier = project.getIdentifier();
 
 		adminSettings.setHref(ProjectAdminSettingsPlace.createPlace(projectIdentifier).getHref());
@@ -98,5 +108,10 @@ public class ProjectAdminMenu extends Composite {
 		}
 		selected = toSelect;
 		selected.addStyleName(SELECTED);
+	}
+
+	@UiHandler("deleteProject")
+	protected void onDeleteProject(ClickEvent e) {
+		ConfirmDeleteProjectDialog.getInstance(presenter).center();
 	}
 }

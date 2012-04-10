@@ -18,7 +18,6 @@ import javax.annotation.Resource;
 
 import org.springframework.web.client.RestTemplate;
 
-import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 
 public class ProjectServiceMangementServiceProvider {
@@ -29,11 +28,11 @@ public class ProjectServiceMangementServiceProvider {
 	@Resource
 	private Map<ServiceType, String> configPathsByServiceType;
 
-	public ProjectServiceMangementServiceClient getNewService(ServiceHost serviceHost, ServiceType type) {
+	public ProjectServiceMangementServiceClient getNewService(String internalNetworkAddress, ServiceType type) {
 		ProjectServiceMangementServiceClient service = new ProjectServiceMangementServiceClient();
 		service.setRestTemplate(template);
 
-		String baseUrl = "http://" + serviceHost.getInternalNetworkAddress() + ":" + ALM_HTTP_PORT + "/"
+		String baseUrl = "http://" + internalNetworkAddress + ":" + ALM_HTTP_PORT + "/"
 				+ configPathsByServiceType.get(type);
 		service.setBaseUrl(baseUrl);
 

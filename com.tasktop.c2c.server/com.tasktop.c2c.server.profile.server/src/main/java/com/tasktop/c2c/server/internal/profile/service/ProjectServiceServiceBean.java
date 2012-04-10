@@ -133,15 +133,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 		AuthUtils.assumeSystemIdentity(project.getIdentifier());
 
-		ProjectServiceConfiguration config = new ProjectServiceConfiguration();
-		config.setProjectIdentifier(project.getIdentifier());
-		config.setProperty(ProjectServiceConfiguration.PROFILE_HOSTNAME, configuration.getWebHost());
-		config.setProperty(ProjectServiceConfiguration.PROFILE_PROTOCOL, configuration.getProfileApplicationProtocol());
-		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_URL, configuration.getProfileBaseUrl());
-		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL,
-				configuration.getServiceUrlPrefix(project.getIdentifier()));
-		config.setProperty(ProjectServiceConfiguration.MARKUP_LANGUAGE, project.getProjectPreferences()
-				.getWikiLanguage().toString());
+		ProjectServiceConfiguration config = createProjectServiceConfiguration(project);
 
 		NodeProvisioningService nodeProvisioningService = nodeProvisioningServiceByType.get(type);
 		if (nodeProvisioningService == null) {
@@ -156,7 +148,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 		// Now configure the host for the new project.
 		ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
-				.getNewService(domainServiceHost, type);
+				.getNewService(domainServiceHost.getInternalNetworkAddress(), type);
 
 		try {
 			LOGGER.info("configuring node for " + type);
@@ -176,6 +168,25 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 			updateScmRepository(project);
 		}
 
+	}
+
+	/**
+	 * @param project
+	 * @return
+	 */
+	private ProjectServiceConfiguration createProjectServiceConfiguration(Project project) {
+		ProjectServiceConfiguration config = new ProjectServiceConfiguration();
+		config.setProjectIdentifier(project.getIdentifier());
+		config.setProperty(ProjectServiceConfiguration.PROFILE_HOSTNAME, configuration.getWebHost());
+		config.setProperty(ProjectServiceConfiguration.PROFILE_PROTOCOL, configuration.getProfileApplicationProtocol());
+		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_URL, configuration.getProfileBaseUrl());
+		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL,
+				configuration.getServiceUrlPrefix(project.getIdentifier()));
+		config.setProperty(ProjectServiceConfiguration.MARKUP_LANGUAGE, project.getProjectPreferences()
+				.getWikiLanguage().toString());
+		config.setProperty(ProjectServiceConfiguration.UNIQUE_IDENTIFER,
+				project.getIdentifier() + "_" + project.getId());
+		return config;
 	}
 
 	private ServiceHost convertToInternal(com.tasktop.c2c.server.cloud.domain.ServiceHost serviceHost) {
@@ -369,8 +380,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 				} else {
 
 					ProjectServiceManagementService serviceMangementService = projectServiceMangementServiceProvider
-							.getNewService(ServiceHostServiceImpl.convertToPublic(service.getServiceHost()),
-									service.getType());
+							.getNewService(service.getServiceHost().getInternalNetworkAddress(), service.getType());
 
 					result.add(serviceMangementService.retrieveServiceStatus(managedProject.getIdentifier(),
 							service.getType()));
@@ -390,5 +400,36 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		result.setServiceType(service.getType());
 		result.setServiceState(ServiceState.UNAVAILABLE);
 		return result;
+	}
+
+	@Override
+	public void doDeprovisionService(Long projectServiceId) throws EntityNotFoundException {
+
+		ProjectService projectService = entityManager.find(ProjectService.class, projectServiceId);
+
+		if (projectService.getServiceHost() != null) {
+			ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
+					.getNewService(projectService.getServiceHost().getInternalNetworkAddress(),
+							projectService.getType());
+
+			ProjectServiceConfiguration config = createProjectServiceConfiguration(projectService
+					.getProjectServiceProfile().getProject());
+
+			try {
+				LOGGER.info(String.format("deprovisioning service [%s] on node [%s]", projectService.getType(),
+						projectService.getServiceHost().getInternalNetworkAddress()));
+				nodeConfigurationService.deprovisionService(config);
+				LOGGER.info("deprovisioning done");
+			} catch (Exception e) {
+				throw new RuntimeException("Caught exception while deprovisioning service", e);
+			}
+		}
+
+		projectService.getProjectServiceProfile().getProjectServices().remove(projectService);
+		if (projectService.getServiceHost() != null) {
+			projectService.getServiceHost().getProjectServices().remove(projectService);
+		}
+		entityManager.remove(projectService);
+
 	}
 }

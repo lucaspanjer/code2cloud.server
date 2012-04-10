@@ -30,8 +30,13 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 		void collect(ProjectServiceStatus status);
 	}
 
+	public interface Deprovisioner {
+		void deprovision(ProjectServiceConfiguration configuration);
+	}
+
 	private List<Configurator> configurators;
 	private List<MetricCollector> metricCollectors = Collections.emptyList();
+	private List<Deprovisioner> deprovisioners = Collections.emptyList();
 
 	@Override
 	public void provisionService(ProjectServiceConfiguration configuration) {
@@ -55,7 +60,7 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 		}
 		config.getProperties().put(ProjectServiceConfiguration.APPLICATION_GIT_PROPERTY,
 				config.getProjectIdentifier() + ".git");
-		config.getProperties().put(ProjectServiceConfiguration.APPLICATION_ID, config.getProjectIdentifier());
+		config.getProperties().put(ProjectServiceConfiguration.PROJECT_ID, config.getProjectIdentifier());
 		String servicePath = config.getProperties().get(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL);
 		config.getProperties().put(ProjectServiceConfiguration.APPLICATION_GIT_URL,
 				servicePath + "scm/" + config.getProjectIdentifier() + ".git");
@@ -76,12 +81,24 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 		return result;
 	}
 
+	@Override
+	public void deprovisionService(ProjectServiceConfiguration configuration) {
+		for (Deprovisioner dp : deprovisioners) {
+			dp.deprovision(configuration);
+		}
+
+	}
+
 	public void setConfigurators(List<Configurator> configurators) {
 		this.configurators = configurators;
 	}
 
 	public void setMetricCollectors(List<MetricCollector> metricCollectors) {
 		this.metricCollectors = metricCollectors;
+	}
+
+	public void setDeprovisioners(List<Deprovisioner> deprovisioners) {
+		this.deprovisioners = deprovisioners;
 	}
 
 }

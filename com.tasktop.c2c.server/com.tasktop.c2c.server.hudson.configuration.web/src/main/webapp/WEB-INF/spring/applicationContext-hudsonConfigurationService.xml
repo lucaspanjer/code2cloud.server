@@ -37,5 +37,14 @@
 					p:metricName="diskUsage" p:path="${alm.dataDir}/hudson-homes/{projectIdentifier}"/>
 			</list>
 		</property>
+		
+		<property name="deprovisioners">
+			<list>
+				<bean class="com.tasktop.c2c.server.hudson.configuration.service.HudsonWarDeprovisioner"
+					p:hudsonWebappsDir="${alm.hudson.webappsDir}"/>
+				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisoiner"
+					p:fromBaseDir="${alm.dataDir}/hudson-homes" p:toBaseDir="${alm.dataDir}/deleted/hudson-homes"/>
+			</list>
+		</property>
 	</bean>
 </beans>

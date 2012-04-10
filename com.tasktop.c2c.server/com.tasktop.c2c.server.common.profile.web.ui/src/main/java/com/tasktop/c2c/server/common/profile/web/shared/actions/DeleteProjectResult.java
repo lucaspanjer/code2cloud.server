@@ -10,18 +10,22 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.internal.profile.service;
+package com.tasktop.c2c.server.common.profile.web.shared.actions;
 
-import com.tasktop.c2c.server.cloud.domain.ServiceType;
-import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import net.customware.gwt.dispatch.shared.AbstractSimpleResult;
 
-public interface InternalApplicationService {
+/**
+ * @author cmorgan (Tasktop Technologies Inc.)
+ * 
+ */
+public class DeleteProjectResult extends AbstractSimpleResult<Boolean> {
 
-	public void initializeApplicationServiceProfileTemplate();
+	protected DeleteProjectResult() {
+		super();
+	}
 
-	public void doProvisionServices(Long projectId, ServiceType serviceType) throws EntityNotFoundException,
-			ProvisioningException;
-
-	public void doDeprovisionService(Long projectServiceId) throws EntityNotFoundException;
+	public DeleteProjectResult(Boolean value) {
+		super(value);
+	}
 
 }

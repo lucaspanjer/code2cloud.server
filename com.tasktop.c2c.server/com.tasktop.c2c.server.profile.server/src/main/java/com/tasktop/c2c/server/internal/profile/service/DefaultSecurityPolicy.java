@@ -174,6 +174,10 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 					return;
 				}
 				break;
+
+			case DELETE:
+				assertOwner(targetProject);
+				return;
 			}
 		} else if (target instanceof ProjectProfile) {
 			ProjectProfile projectLink = (ProjectProfile) target;

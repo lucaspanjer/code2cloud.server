@@ -100,7 +100,7 @@ import com.tasktop.c2c.server.tasks.domain.Team;
 @Service("profileService")
 @Qualifier("main")
 @Transactional(rollbackFor = { Exception.class })
-public class ProfileServiceBean extends AbstractJpaServiceBean implements ProfileService {
+public class ProfileServiceBean extends AbstractJpaServiceBean implements ProfileService, InternalProfileService {
 
 	private static final int MAX_SIZE = 1000;
 
@@ -565,7 +565,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		if (project.getProjectPreferences().getWikiLanguage() != managedProject.getProjectPreferences()
 				.getWikiLanguage()) {
-			jobService.schedule(new UpdateProjectWikiPreferencesJob(project, MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY));
+			jobService
+					.schedule(new UpdateProjectWikiPreferencesJob(project, MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY));
 		}
 		if (!entityManager.contains(project)) {
 			// we disallow change of identifier
@@ -1685,6 +1686,45 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		} else {
 			throw new IllegalArgumentException();
 		}
+	}
+
+	@Override
+	public void deleteProject(String projectIdentifier) throws EntityNotFoundException {
+		Project project = getProjectByIdentifier(projectIdentifier);
+
+		securityPolicy.delete(project);
+
+		for (ProjectService service : project.getProjectServiceProfile().getProjectServices()) {
+			jobService.schedule(new ProjectServiceDeprovisioningJob(project.getIdentifier(), service.getId()));
+		}
+
+	}
+
+	@Override
+	public void doDeprovisionServiceAndDeleteProjectIfReady(String projectIdentifier, Long projectServiceId) throws EntityNotFoundException {
+		internalApplicationService.doDeprovisionService(projectServiceId);
+
+		Project project = getProjectByIdentifier(projectIdentifier);
+		boolean readyToDelete = true;
+		for (ProjectService projectService : project.getProjectServiceProfile().getProjectServices()) {
+			if (projectService.getServiceHost() != null) {
+				readyToDelete = false;
+				break;
+			}
+		}
+
+		if (readyToDelete) {
+			doDeleteProject(projectIdentifier);
+		}
+	}
+
+	@Autowired
+	private InternalApplicationService internalApplicationService;
+
+	@Override
+	public void doDeleteProject(String projectIdentifier) throws EntityNotFoundException {
+		Project project = getProjectByIdentifier(projectIdentifier);
+		entityManager.remove(project);
 	}
 
 }

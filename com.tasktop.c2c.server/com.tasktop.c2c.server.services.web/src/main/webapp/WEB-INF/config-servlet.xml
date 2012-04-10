@@ -10,11 +10,11 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	
 	<bean id="mvnConfigServiceController" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceController">
-		<property name="nodeConfigurationService" ref="mvnConfigurationService"/>	
+		<property name="projectServiceManagementService" ref="mvnConfigurationService"/>	
 	</bean>
 	
 	<bean id="gitConfigServiceController" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceController">
-		<property name="nodeConfigurationService" ref="gitConfigurationService"/>	
+		<property name="projectServiceManagementService" ref="gitConfigurationService"/>	
 	</bean>
 		
 		<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
