@@ -125,7 +125,7 @@ public class CommentsPanel extends Composite {
 	}
 
 	public boolean isDirty() {
-		return comment.getValue() != null && comment.getValue().length() > 0;
+		return comment.getValue() != null && comment.getValue().trim().length() > 0;
 	}
 
 	public String getText() {
