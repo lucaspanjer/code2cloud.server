@@ -4,6 +4,9 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 	
 	<changeSet id="defaultMarkupLangConfigProperty" author="lpanjer">
+		<preConditions onFail="MARK_RAN">
+			<sqlCheck expectedResult="0">SELECT COUNT(*) FROM CONFIGURATIONPROPERTY WHERE NAME='MARKUP_LANGUAGE';</sqlCheck>
+		</preConditions>
 		<insert tableName="ConfigurationProperty">
 			<column name="VERSION" value="1" />
 			<column name="NAME" value="MARKUP_LANGUAGE" />
