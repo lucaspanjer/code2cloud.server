@@ -410,11 +410,8 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 			response.getWriter().write(
 					jsonMapper.writeValueAsString(Collections.singletonMap("uploadResult", new UploadResult(page,
 							allPageAttachments))));
-		} catch (ValidationException e) {
+		} catch (Exception e) {
 			throw new ExceptionWrapper(e.getMessage(), e);
-		} catch (EntityNotFoundException e) {
-			throw new ExceptionWrapper(e.getMessage(), e);
-
 		}
 	}
 

@@ -14,23 +14,28 @@ package com.tasktop.c2c.server.internal.wiki.server.domain.validation;
 
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import com.tasktop.c2c.server.internal.wiki.server.WikiServiceConfiguration;
 import com.tasktop.c2c.server.internal.wiki.server.domain.MediaTypes;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 
+@Component
 public class AttachmentValidator implements Validator {
 
 	private static final Pattern NAME_PATTERN = Pattern.compile("[a-zA-Z0-9_ -]+.[a-zA-Z]{2,7}");
 
+	@Autowired
 	private MediaTypes mediaTypes;
 
-	public AttachmentValidator(MediaTypes mediaTypes) {
-		this.mediaTypes = mediaTypes;
-	}
+	@Autowired
+	private WikiServiceConfiguration configuration;
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -65,5 +70,15 @@ public class AttachmentValidator implements Validator {
 		if (attachment.getContent() == null || attachment.getContent().length == 0) {
 			errors.rejectValue("content", "field.required");
 		}
+		int attachementSize = attachment.getContent().length;
+		if (attachementSize > configuration.getMaxAttachmentSize()) {
+			errors.rejectValue("content", "field.tooLarge",
+					new Object[] { FileUtils.byteCountToDisplaySize(configuration.getMaxAttachmentSize()) },
+					"Field to large");
+		}
+	}
+
+	public void setMediaTypes(MediaTypes mediaTypes) {
+		this.mediaTypes = mediaTypes;
 	}
 }

@@ -22,6 +22,8 @@ import com.tasktop.c2c.server.common.service.BaseProfileConfiguration;
 
 public class WikiServiceConfiguration extends BaseProfileConfiguration {
 
+	private Integer maxAttachmentSize;
+
 	public String getProfileProjectIdentifier() {
 		return (String) TenancyContextHolder.getContext().getTenant().getIdentity();
 	}
@@ -56,6 +58,14 @@ public class WikiServiceConfiguration extends BaseProfileConfiguration {
 
 	public String retrievePropertyConfiguration(String propertyName) {
 		return getServiceUrlPrefix(getProfileProjectIdentifier()) + "wiki/configuration/" + propertyName;
+	}
+
+	public Integer getMaxAttachmentSize() {
+		return maxAttachmentSize;
+	}
+
+	public void setMaxAttachmentSize(Integer maxAttachmentSize) {
+		this.maxAttachmentSize = maxAttachmentSize;
 	}
 
 }

@@ -32,7 +32,8 @@ public class AttachmentValidatorTest {
 
 	@Before
 	public void before() {
-		attachmentValidator = new AttachmentValidator(new MediaTypes());
+		attachmentValidator = new AttachmentValidator();
+		attachmentValidator.setMediaTypes(new MediaTypes());
 		attachment = new Attachment();
 		attachment.setPage(new PageHandle(1));
 		attachment.setContent("111".getBytes());
@@ -46,8 +47,7 @@ public class AttachmentValidatorTest {
 	@Test
 	public void canValidate() {
 		assertTrue(attachmentValidator.supports(Attachment.class));
-		assertFalse(attachmentValidator
-				.supports(com.tasktop.c2c.server.internal.wiki.server.domain.Attachment.class));
+		assertFalse(attachmentValidator.supports(com.tasktop.c2c.server.internal.wiki.server.domain.Attachment.class));
 	}
 
 	@Test

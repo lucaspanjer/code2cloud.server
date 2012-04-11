@@ -16,18 +16,16 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tasktop.c2c.server.common.service.validation.AbstractDomainValidator;
-import com.tasktop.c2c.server.internal.wiki.server.domain.MediaTypes;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.Page;
 
-
 public class DomainValidator extends AbstractDomainValidator implements InitializingBean {
 	@Autowired
-	private MediaTypes mediaTypes;
+	private AttachmentValidator attachmentValidator;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		registerValidator(Page.class, new PageValidator());
-		registerValidator(Attachment.class, new AttachmentValidator(mediaTypes));
+		registerValidator(Attachment.class, attachmentValidator);
 	}
 }
