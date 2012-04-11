@@ -13,9 +13,11 @@
 package com.tasktop.c2c.server.hudson.configuration.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,26 +49,38 @@ public class HudsonWarDeprovisioner implements Deprovisioner {
 				webappName = webappName.substring(0, webappName.length() - 1);
 			}
 			webappName = webappName.replace("/", "#");
-			webappName = webappName + ".war";
 
-			String deployLocation = hudsonWebappsDir + webappName;
-
-			File hudsonDeployFile = new File(deployLocation);
-
-			if (!hudsonDeployFile.exists()) {
-				LOG.info(String.format("Could not delete [%s], does not exist", hudsonDeployFile.getPath()));
-				return;
-			}
-
-			boolean succeeded = hudsonDeployFile.delete();
-			if (!succeeded) {
-				LOG.info(String.format("Could not delete [%s]", hudsonDeployFile.getPath()));
-			}
+			tryDelete(new File(hudsonWebappsDir, webappName));
+			tryDelete(new File(hudsonWebappsDir, webappName + ".war"));
 
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
 		}
 
+	}
+
+	/**
+	 * @param file
+	 */
+	private void tryDelete(File file) {
+		if (!file.exists()) {
+			LOG.info(String.format("Could not delete [%s], does not exist", file.getPath()));
+			return;
+		}
+
+		if (file.isDirectory()) {
+			try {
+				FileUtils.deleteDirectory(file);
+			} catch (IOException e) {
+				LOG.info(String.format("Could not delete [%s]", file.getPath()), e);
+			}
+		} else {
+			boolean succeeded = file.delete();
+			if (!succeeded) {
+				LOG.info(String.format("Could not delete [%s]", file.getPath()));
+			}
+
+		}
 	}
 
 	public void setHudsonWebappsDir(String hudsonWebappsDir) {
