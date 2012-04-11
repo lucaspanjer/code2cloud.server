@@ -14,6 +14,8 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.components.project;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
@@ -24,6 +26,12 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 
 public class NewProjectView extends AbstractProjectView {
+
+	public interface Presenter {
+		void createProject(Project p);
+
+		void doCancel();
+	}
 
 	private static NewProjectView instance = null;
 
@@ -45,22 +53,37 @@ public class NewProjectView extends AbstractProjectView {
 	private static NewProjectViewUiBinder uiBinder = GWT.create(NewProjectViewUiBinder.class);
 
 	@UiField
-	public Panel newProjectForm;
+	protected Panel newProjectForm;
 	@UiField
-	public TextBox name;
+	protected TextBox name;
 	@UiField
-	public TextArea description;
+	protected TextArea description;
 	@UiField
-	public Button createButton;
+	protected Button createButton;
 	@UiField
-	public Button cancelButton;
+	protected Button cancelButton;
 	@UiField
 	public Panel maxProjectsMessagePanel;
 	private Project project;
 
+	private Presenter presenter;
+
 	private NewProjectView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		driver.initialize(this);
+		createButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				presenter.createProject(getProject());
+			}
+		});
+
+		cancelButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				presenter.doCancel();
+			}
+		});
 	}
 
 	public void displayMaxProjectsMessage(boolean show) {
@@ -79,5 +102,9 @@ public class NewProjectView extends AbstractProjectView {
 		driver.flush();
 		super.updateProject(project);
 		return project;
+	}
+
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
 	}
 }

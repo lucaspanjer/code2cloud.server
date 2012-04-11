@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
@@ -27,8 +25,9 @@ import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationNewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView;
+import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView.Presenter;
 
-public class NewProjectPresenter extends AbstractProfilePresenter {
+public class NewProjectPresenter extends AbstractProfilePresenter implements Presenter {
 
 	private final NewProjectView view;
 
@@ -43,23 +42,10 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 		if (place instanceof OrganizationNewProjectPlace) {
 			newProject.setOrganization(((OrganizationNewProjectPlace) place).getOrganization());
 		}
+		view.setPresenter(this);
 		view.setProject(newProject);
 		// Set the createAvailable flag on our view
 		view.displayMaxProjectsMessage(!(place.isCreateAvailable()));
-
-		view.createButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				doCreateProject();
-			}
-		});
-
-		view.cancelButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				doCancel();
-			}
-		});
 
 	}
 
@@ -68,8 +54,8 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 
 	}
 
-	private void doCreateProject() {
-		Project project = view.getProject();
+	@Override
+	public void createProject(Project project) {
 		getProfileService().createProject(getAppState().getCredentials(), project,
 				new AsyncCallbackSupport<String>(new OperationMessage("Creating project...")) {
 					@Override
@@ -84,7 +70,9 @@ public class NewProjectPresenter extends AbstractProfilePresenter {
 				});
 	}
 
-	private void doCancel() {
+	@Override
+	public void doCancel() {
 		ProjectsPlace.createPlace().go();
 	}
+
 }
