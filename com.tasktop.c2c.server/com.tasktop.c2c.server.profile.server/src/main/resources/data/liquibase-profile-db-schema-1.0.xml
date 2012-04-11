@@ -157,23 +157,6 @@
 			<column name="TOKEN" />
 		</createIndex>
 	</changeSet>
-	<changeSet author="profiledb" id="createPersistentLoginsTable">
-		<createTable tableName="PERSISTENT_LOGINS">
-			<column defaultValue="" name="username" type="VARCHAR(64)">
-				<constraints nullable="false" />
-			</column>
-			<column defaultValue="" name="series" type="VARCHAR(64)">
-				<constraints nullable="false" primaryKey="true" />
-			</column>
-			<column defaultValue="" name="token" type="VARCHAR(64)">
-				<constraints nullable="false" />
-			</column>
-			<column defaultValueComputed="CURRENT_TIMESTAMP" name="last_used"
-				type="TIMESTAMP">
-				<constraints nullable="false" />
-			</column>
-		</createTable>
-	</changeSet>
 	<changeSet author="profiledb" id="createProfileTable">
 		<createTable tableName="PROFILE">
 			<column name="ID" type="BIGINT">
@@ -684,6 +667,13 @@
 		<addForeignKeyConstraint baseColumnNames="ORGANIZATION_ID"
 			baseTableName="QUOTASETTING" constraintName="FK_QUOTASETTING_ORGANIZATION"
 			referencedColumnNames="ID" referencedTableName="ORGANIZATION" />
+	</changeSet>
+	
+	<changeSet id="dropPersistentLoginTable" author="cmorgan">
+		<preConditions onFail="MARK_RAN">
+			<tableExists tableName="PERSISTENT_LOGINS"/>
+		</preConditions>
+		<dropTable tableName="PERSISTENT_LOGINS"/>
 	</changeSet>
 
 </databaseChangeLog>
