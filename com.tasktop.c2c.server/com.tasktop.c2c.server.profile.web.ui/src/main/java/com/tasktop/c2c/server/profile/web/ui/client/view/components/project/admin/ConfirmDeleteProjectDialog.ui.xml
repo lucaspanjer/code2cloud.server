@@ -13,7 +13,7 @@
 		</div>
 		<br/>
 		<div>
-			<g:CheckBox ui:field="confirmCheckbox"/> I understand that my project will be permantly deleted.
+			<g:CheckBox ui:field="confirmCheckbox"/> I understand that my project will be permanently deleted.
 		</div>
 		<br/>
 		<div class="center">
