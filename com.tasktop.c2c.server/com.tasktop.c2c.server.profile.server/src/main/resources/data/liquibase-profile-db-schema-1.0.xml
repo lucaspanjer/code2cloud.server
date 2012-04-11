@@ -486,6 +486,11 @@
 			baseTableName="SCMREPOSITORY" constraintName="FK_SCMREPOSITORY_PROJECT_ID"
 			referencedColumnNames="ID" referencedTableName="PROJECT" />
 	</changeSet>
+	<changeSet author="profiledb" id="createInvitationTokenProjFK">
+		<addForeignKeyConstraint baseColumnNames="project_id"
+			baseTableName="INVITATIONTOKEN" constraintName="FK_INVTOKEN_PROJECT_ID"
+			referencedColumnNames="ID" referencedTableName="PROJECT" />
+	</changeSet>
 	<changeSet author="profiledb" id="createSshPublicKeyProfileFK">
 		<addForeignKeyConstraint baseColumnNames="PROFILE_ID"
 			baseTableName="SSHPUBLICKEY" constraintName="FK_SSHPUBLICKEY_PROFILE_ID"

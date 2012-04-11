@@ -71,6 +71,7 @@ import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.Job;
+import com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.internal.profile.service.EmailJob;
 import com.tasktop.c2c.server.internal.profile.service.InternalProfileService;
 import com.tasktop.c2c.server.internal.profile.service.ReplicateProjectTeamJob;
@@ -86,6 +87,7 @@ import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectServiceProfile;
+import com.tasktop.c2c.server.profile.domain.internal.QuotaSetting;
 import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
 import com.tasktop.c2c.server.profile.domain.internal.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.internal.SshPublicKey;
@@ -100,6 +102,7 @@ import com.tasktop.c2c.server.profile.tests.domain.mock.MockAgreementFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockOrganizationFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProfileFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
+import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectInvitationTokenFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectProfileFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockSshPublicKeyFactory;
 import com.tasktop.c2c.server.profile.tests.mock.MockTaskServiceProvider;
@@ -1572,6 +1575,22 @@ public abstract class BaseProfileServiceTest {
 		Long id = profileService.createProject(profile.getId(), project).getId();
 		Project created = entityManager.find(Project.class, id);
 		profileService.getProjectByIdentifier(created.getIdentifier());
+
+		// Add some referencing objects
+		DeploymentConfiguration dep = new DeploymentConfiguration();
+		dep.setProject(created);
+		entityManager.persist(dep);
+
+		InvitationToken token = MockProjectInvitationTokenFactory.create(null);
+		token.setProject(created);
+		token.setIssuingProfile(profile);
+		entityManager.persist(token);
+
+		QuotaSetting qs = new QuotaSetting();
+		qs.setProject(created);
+		qs.setName("name");
+		qs.setValue("value");
+		entityManager.persist(qs);
 
 		internalProfileService.doDeleteProject(created.getIdentifier());
 		entityManager.flush();

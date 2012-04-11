@@ -29,6 +29,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
+import com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 
 /**
@@ -45,6 +46,9 @@ public class Project extends BaseEntity {
 
 	private List<ProjectProfile> projectProfiles = new ArrayList<ProjectProfile>();
 	private List<ScmRepository> repositories = new ArrayList<ScmRepository>();
+	private List<DeploymentConfiguration> deploymentConfigurations = new ArrayList<DeploymentConfiguration>();
+	private List<InvitationToken> invitationTokens = new ArrayList<InvitationToken>();
+	private List<QuotaSetting> quotaSettings = new ArrayList<QuotaSetting>();
 
 	private ProjectServiceProfile projectServiceProfile;
 
@@ -206,5 +210,32 @@ public class Project extends BaseEntity {
 
 	public void setProjectPreferences(ProjectPreferences projectPreferences) {
 		this.projectPreferences = projectPreferences;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, mappedBy = "project")
+	public List<DeploymentConfiguration> getDeploymentConfigurations() {
+		return deploymentConfigurations;
+	}
+
+	public void setDeploymentConfigurations(List<DeploymentConfiguration> deploymentConfigurations) {
+		this.deploymentConfigurations = deploymentConfigurations;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, mappedBy = "project")
+	public List<InvitationToken> getInvitationTokens() {
+		return invitationTokens;
+	}
+
+	public void setInvitationTokens(List<InvitationToken> invitationTokens) {
+		this.invitationTokens = invitationTokens;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, mappedBy = "project")
+	public List<QuotaSetting> getQuotaSettings() {
+		return quotaSettings;
+	}
+
+	public void setQuotaSettings(List<QuotaSetting> quotaSettings) {
+		this.quotaSettings = quotaSettings;
 	}
 }

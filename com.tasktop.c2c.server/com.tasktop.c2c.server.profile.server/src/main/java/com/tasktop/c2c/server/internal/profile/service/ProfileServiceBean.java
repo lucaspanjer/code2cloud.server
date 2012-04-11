@@ -1701,7 +1701,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	@Override
-	public void doDeprovisionServiceAndDeleteProjectIfReady(String projectIdentifier, Long projectServiceId) throws EntityNotFoundException {
+	public void doDeprovisionServiceAndDeleteProjectIfReady(String projectIdentifier, Long projectServiceId)
+			throws EntityNotFoundException {
 		internalApplicationService.doDeprovisionService(projectServiceId);
 
 		Project project = getProjectByIdentifier(projectIdentifier);
@@ -1724,6 +1725,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Override
 	public void doDeleteProject(String projectIdentifier) throws EntityNotFoundException {
 		Project project = getProjectByIdentifier(projectIdentifier);
+		entityManager.refresh(project);
 		entityManager.remove(project);
 	}
 
