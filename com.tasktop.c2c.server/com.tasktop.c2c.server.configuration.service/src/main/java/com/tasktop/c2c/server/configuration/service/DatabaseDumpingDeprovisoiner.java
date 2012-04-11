@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
@@ -116,6 +117,11 @@ public class DatabaseDumpingDeprovisoiner implements Deprovisioner {
 
 			int result = p.waitFor();
 			executorService.shutdown();
+
+			if (!executorService.awaitTermination(100, TimeUnit.SECONDS)) {
+				LOG.warn(String.format("Could not dump database [%s], stalled on thread shutdowns", dbName));
+				return false;
+			}
 
 			ouput.close();
 
