@@ -13,10 +13,14 @@
 package com.tasktop.c2c.server.common.service.web;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +35,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
-import com.tasktop.c2c.server.common.service.web.Error;
 
 /**
  * Base class which wraps an existing service and exposing it over REST. Currently just provides the error handling.
@@ -42,6 +45,33 @@ public abstract class AbstractRestService {
 
 	@Autowired
 	protected MessageSource messageSource;
+	@Autowired
+	protected ObjectMapper jsonMapper;
+
+	/**
+	 * Override the content type and ensuer contentType of text/html. This is needed to avoid browsers wrapping response
+	 * with pre tags on post results.
+	 */
+	public static class TextHtmlContentExceptionWrapper extends Exception {
+		public TextHtmlContentExceptionWrapper(String msg, Throwable cause) {
+			super(msg, cause);
+		}
+	}
+
+	@ExceptionHandler(TextHtmlContentExceptionWrapper.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public void handleExceptionWrapperWithTextHtmlContent(TextHtmlContentExceptionWrapper ex,
+			HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
+		Error e;
+
+		if (ex.getCause() instanceof ValidationException) {
+			e = new Error((ValidationException) ex.getCause(), messageSource);
+		} else {
+			e = new Error(ex.getCause());
+		}
+		response.setContentType("text/html");
+		response.getWriter().write(jsonMapper.writeValueAsString(Collections.singletonMap("error", e)));
+	}
 
 	@ExceptionHandler(ValidationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -30,21 +30,15 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.HandlerMapping;
 
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
@@ -58,7 +52,6 @@ import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.web.AbstractRestService;
-import com.tasktop.c2c.server.common.service.web.Error;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.AttachmentHandle;
 import com.tasktop.c2c.server.wiki.domain.Page;
@@ -328,35 +321,10 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 		return format.format(date);
 	}
 
-	// HACK to override the exception handling an put a content type of plain-text. Required by the js parsing.
-	static class ExceptionWrapper extends Exception {
-		ExceptionWrapper(String msg, Throwable cause) {
-			super(msg, cause);
-		}
-	}
-
-	@Autowired
-	private ObjectMapper jsonMapper;
-
-	@ExceptionHandler(ExceptionWrapper.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public void handleExceptionWrapperWithTextHtmlContent(ExceptionWrapper ex, HttpServletResponse response)
-			throws JsonGenerationException, JsonMappingException, IOException {
-		Error e;
-
-		if (ex.getCause() instanceof ValidationException) {
-			e = new Error((ValidationException) ex.getCause(), messageSource);
-		} else {
-			e = new Error(ex.getCause());
-		}
-		response.setContentType("text/html");
-		response.getWriter().write(jsonMapper.writeValueAsString(Collections.singletonMap("error", e)));
-	}
-
 	@Secured({ Role.Community, Role.User, Role.Admin })
 	@RequestMapping(value = "{pageId}/attachment", method = RequestMethod.POST)
 	public void uploadAttachment(@PathVariable(value = "pageId") Integer pageId, HttpServletRequest request,
-			HttpServletResponse response) throws IOException, FileUploadException, ExceptionWrapper {
+			HttpServletResponse response) throws IOException, FileUploadException, TextHtmlContentExceptionWrapper {
 
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(factory);
@@ -411,7 +379,7 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 					jsonMapper.writeValueAsString(Collections.singletonMap("uploadResult", new UploadResult(page,
 							allPageAttachments))));
 		} catch (Exception e) {
-			throw new ExceptionWrapper(e.getMessage(), e);
+			throw new TextHtmlContentExceptionWrapper(e.getMessage(), e);
 		}
 	}
 

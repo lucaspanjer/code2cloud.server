@@ -131,29 +131,38 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 			public void onSubmitComplete(SubmitCompleteEvent event) {
 				String json = event.getResults();
 				JSONValue value = JSONParser.parseLenient(json);
-				JSONObject uploadResult = value.isObject().get("uploadResult").isObject();
+				JSONValue uploadResultValue = value.isObject().get("uploadResult");
+				JSONObject uploadResult = uploadResultValue == null ? null : value.isObject().get("uploadResult")
+						.isObject();
+
 				if (uploadResult != null) {
-					JSONString errorMessage = uploadResult.get("errorMessage").isString();
-					if (errorMessage != null) {
-						ProfileGinjector.get.instance().getNotifier()
-								.displayMessage(Message.createErrorMessage(errorMessage.stringValue()));
-					} else {
-						// update the taskHandle for the task
-						TaskHandle taskHandle = buildTaskHandle(uploadResult);
-						task.setTaskHandle(taskHandle);
-						// update the the hidden taskHandle field
-						editTaskView.getAttachmentDisplay().setValueHiddenTaskValue(
-								AttachmentUploadUtil.createTaskHandleValue(taskHandle));
+					// update the taskHandle for the task
+					TaskHandle taskHandle = buildTaskHandle(uploadResult);
+					task.setTaskHandle(taskHandle);
+					// update the the hidden taskHandle field
+					editTaskView.getAttachmentDisplay().setValueHiddenTaskValue(
+							AttachmentUploadUtil.createTaskHandleValue(taskHandle));
 
-						// update the attachments table
-						JSONArray attachments = uploadResult.get("attachments").isArray();
-						JSONObject attachmentJSON = attachments.get(0).isObject();
-						Attachment newAttachment = buildAttachment(attachmentJSON);
-						addAttachment(newAttachment);
+					// update the attachments table
+					JSONArray attachments = uploadResult.get("attachments").isArray();
+					JSONObject attachmentJSON = attachments.get(0).isObject();
+					Attachment newAttachment = buildAttachment(attachmentJSON);
+					addAttachment(newAttachment);
 
-						// reset the attachment upload form
-						editTaskView.getAttachmentDisplay().resetForm();
+					// reset the attachment upload form
+					editTaskView.getAttachmentDisplay().resetForm();
+
+				} else {
+					String message = "Error: Unexpected server response";
+					JSONValue errorValue = value.isObject().get("error");
+					JSONObject errorObject = errorValue == null ? null : errorValue.isObject();
+					if (errorObject != null) {
+						JSONString errorMessage = errorObject.get("message").isString();
+						if (errorMessage != null) {
+							message = errorMessage.stringValue();
+						}
 					}
+					ProfileGinjector.get.instance().getNotifier().displayMessage(Message.createErrorMessage(message));
 				}
 			}
 
