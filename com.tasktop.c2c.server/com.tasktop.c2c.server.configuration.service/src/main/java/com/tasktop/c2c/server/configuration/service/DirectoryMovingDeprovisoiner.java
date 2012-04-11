@@ -29,15 +29,17 @@ public class DirectoryMovingDeprovisoiner implements Deprovisioner {
 
 	private String fromBaseDir;
 	private String toBaseDir;
+	private String toDirName = "";
 
 	@Override
 	public void deprovision(ProjectServiceConfiguration configuration) {
 		String projectIdentifier = configuration.getProjectIdentifier();
 		String uniqueProjectIdentifier = configuration.getProperties()
 				.get(ProjectServiceConfiguration.UNIQUE_IDENTIFER);
-		File toBaseDirFile = new File(toBaseDir);
+		File toBaseDirFile = new File(toBaseDir, uniqueProjectIdentifier);
 		File fromDir = new File(fromBaseDir + "/" + projectIdentifier);
-		File toDir = new File(toBaseDir + "/" + uniqueProjectIdentifier);
+
+		File toDir = new File(toBaseDirFile, toDirName);
 
 		if (!fromDir.exists()) {
 			LOG.info(String.format("Could not move [%s], does not exist", fromDir.getPath()));
@@ -61,6 +63,10 @@ public class DirectoryMovingDeprovisoiner implements Deprovisioner {
 
 	public void setToBaseDir(String toBaseDir) {
 		this.toBaseDir = toBaseDir;
+	}
+
+	public void setToDirName(String toDirName) {
+		this.toDirName = toDirName;
 	}
 
 }

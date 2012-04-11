@@ -64,7 +64,7 @@
 			<list>
 				<bean class="com.tasktop.c2c.server.configuration.service.DatabaseDumpingDeprovisoiner"
 				 p:dbSuffix="wiki" p:host="${database.host}" p:mysqldumpCommand="${mysqldumpCommand}" p:password="${wiki.database.password}"
-				 p:user="${wiki.database.username}" p:toBaseDir="${alm.dataDir}/deleted/wiki" p:rawDataSource-ref="rawDataSource"/>
+				 p:user="${wiki.database.username}" p:toBaseDir="${alm.dataDir}/deleted" p:rawDataSource-ref="rawDataSource"/>
 			</list>
 		</property>
 	</bean>

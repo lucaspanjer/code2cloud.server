@@ -49,17 +49,18 @@ public class DatabaseDumpingDeprovisoiner implements Deprovisioner {
 
 	@Override
 	public void deprovision(ProjectServiceConfiguration configuration) {
-		File toBaseDirFile = new File(toBaseDir);
+		String uniqueProjectIdentifier = configuration.getProperties()
+				.get(ProjectServiceConfiguration.UNIQUE_IDENTIFER);
+
+		File toBaseDirFile = new File(toBaseDir, uniqueProjectIdentifier);
 
 		if (!toBaseDirFile.exists()) {
 			toBaseDirFile.mkdirs();
 		}
 
 		String dbName = configuration.getProjectIdentifier() + "_" + dbSuffix;
-		String uniqueProjectIdentifier = configuration.getProperties()
-				.get(ProjectServiceConfiguration.UNIQUE_IDENTIFER);
 
-		File dumpFile = new File(toBaseDirFile, uniqueProjectIdentifier + "_" + dbSuffix + ".sql");
+		File dumpFile = new File(toBaseDirFile, dbName + ".sql");
 		boolean dumped = dumpDatabase(dbName, dumpFile);
 		if (dumped) {
 			try {

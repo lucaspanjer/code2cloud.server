@@ -58,7 +58,7 @@
 		<property name="deprovisioners">
 			<list>
 				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisoiner"
-					p:fromBaseDir="${maven.repo.base}" p:toBaseDir="${alm.dataDir}/deleted/maven-repo"/>
+					p:fromBaseDir="${maven.repo.base}" p:toBaseDir="${alm.dataDir}/deleted/" p:toDirName="maven-repo"/>
 			</list>
 		</property>
 	</bean>
@@ -80,7 +80,7 @@
 		<property name="deprovisioners">
 			<list>
 				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisoiner"
-					p:fromBaseDir="${git.root}" p:toBaseDir="${alm.dataDir}/deleted/git-repo"/>
+					p:fromBaseDir="${git.root}" p:toBaseDir="${alm.dataDir}/deleted/" p:toDirName="git-repo"/>
 			</list>
 		</property>
 	</bean>

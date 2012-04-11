@@ -72,7 +72,7 @@
 			<list>
 				<bean class="com.tasktop.c2c.server.configuration.service.DatabaseDumpingDeprovisoiner"
 				 p:dbSuffix="tasks" p:host="${database.host}" p:mysqldumpCommand="${mysqldumpCommand}" p:password="${task.database.password}"
-				 p:user="${task.database.username}" p:toBaseDir="${alm.dataDir}/deleted/task" p:rawDataSource-ref="rawDataSource"/>
+				 p:user="${task.database.username}" p:toBaseDir="${alm.dataDir}/deleted" p:rawDataSource-ref="rawDataSource"/>
 			</list>
 		</property>
 	</bean>
