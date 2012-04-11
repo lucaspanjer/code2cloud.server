@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.tenancy.core.Tenant;
 import org.springframework.tenancy.provider.TenantProvider;
 
-import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 
@@ -44,7 +43,6 @@ public class ProfileHubTenantProvider implements TenantProvider {
 		tenant.setProjectIdentifier(projectId);
 
 		try {
-			AuthUtils.assumeSystemIdentity(projectId);
 			Project project = profileService.getProjectByIdentifier(projectId);
 			if (project.getOrganization() != null) {
 				tenant.setOrganizationIdentifier(project.getOrganization().getIdentifier());
