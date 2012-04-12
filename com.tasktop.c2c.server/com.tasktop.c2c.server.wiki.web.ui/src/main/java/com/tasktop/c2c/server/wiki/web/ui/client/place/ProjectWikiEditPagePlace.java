@@ -26,13 +26,13 @@ import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SectionPlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
-import com.tasktop.c2c.server.common.service.wiki.MarkupLanguageUtil;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.Page;
+import com.tasktop.c2c.server.wiki.service.WikiService;
 import com.tasktop.c2c.server.wiki.web.ui.client.WikiPageMappings;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.ListAttachmentsAction;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.ListAttachmentsResult;
@@ -121,7 +121,7 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 		super.addActions(actions);
 		actions.add(new RetrievePageAction(projectId, pagePath, false));
 		actions.add(new ListAttachmentsAction(projectId, pagePath));
-		actions.add(new RetrieveConfigurationPropertyAction(projectId, MarkupLanguageUtil.MARKUP_LANGUAGE_DB_KEY));
+		actions.add(new RetrieveConfigurationPropertyAction(projectId, WikiService.MARKUP_LANGUAGE_DB_KEY));
 	}
 
 	protected boolean handleExceptionInResults() {

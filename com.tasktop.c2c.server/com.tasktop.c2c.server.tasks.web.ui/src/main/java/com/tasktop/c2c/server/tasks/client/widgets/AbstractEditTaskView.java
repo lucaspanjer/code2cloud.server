@@ -71,6 +71,7 @@ import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskSeverity;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
+import com.tasktop.c2c.server.tasks.service.TaskService;
 
 public class AbstractEditTaskView extends AbstractComposite implements AbstractEditTaskDisplay, Editor<Task> {
 
@@ -399,6 +400,8 @@ public class AbstractEditTaskView extends AbstractComposite implements AbstractE
 	@Override
 	public void setRepositoryConfiguration(RepositoryConfiguration repositoryConfiguration) {
 		statusEditor.setRepositoryConfiguration(repositoryConfiguration);
+		description.setMarkLanguage(repositoryConfiguration
+				.getConfigurationProperty(TaskService.MARKUP_LANGUAGE_DB_KEY));
 		configureValues(priority, repositoryConfiguration.getPriorities());
 		configureValues(taskType, repositoryConfiguration.getTaskTypes());
 		configureValues(iteration, repositoryConfiguration.getActiveIterations());
@@ -451,6 +454,11 @@ public class AbstractEditTaskView extends AbstractComposite implements AbstractE
 	@Override
 	public void setProjectIdentifier(String projectIdentifier) {
 		description.setProjectId(projectIdentifier);
+	}
+
+	@Override
+	public void setMarkupLanguage(String markupLanguage) {
+		description.setMarkLanguage(markupLanguage);
 	}
 
 }

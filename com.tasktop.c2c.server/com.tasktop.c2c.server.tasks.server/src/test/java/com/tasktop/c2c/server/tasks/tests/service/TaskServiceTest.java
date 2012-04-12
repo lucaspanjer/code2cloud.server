@@ -81,6 +81,7 @@ import com.tasktop.c2c.server.event.domain.Event;
 import com.tasktop.c2c.server.event.domain.TaskActivityEvent;
 import com.tasktop.c2c.server.event.service.EventService;
 import com.tasktop.c2c.server.internal.tasks.domain.Component;
+import com.tasktop.c2c.server.internal.tasks.domain.ConfigurationProperty;
 import com.tasktop.c2c.server.internal.tasks.domain.Milestone;
 import com.tasktop.c2c.server.internal.tasks.domain.Priority;
 import com.tasktop.c2c.server.internal.tasks.domain.Product;
@@ -4520,5 +4521,29 @@ public class TaskServiceTest {
 			// expected
 		}
 
+	}
+
+	@Test
+	public void testRetrieveConfigurationProperty() throws EntityNotFoundException {
+		final String TEST_CONFIGURATION_PROPERTY = "TEST_CONFIGURATION_PROPERTY";
+		ConfigurationProperty cp = new ConfigurationProperty();
+		cp.setName(TEST_CONFIGURATION_PROPERTY);
+		cp.setValue("test value");
+		cp.setId(Long.valueOf(12345));
+		entityManager.persist(cp);
+		entityManager.flush();
+
+		String property = taskService.retrieveConfigurationProperty(TEST_CONFIGURATION_PROPERTY);
+		assertTrue(property.equals("test value"));
+
+	}
+
+	@Test
+	public void testSetConfigurationProperty() throws ValidationException, EntityNotFoundException {
+		final String TEST_CONFIGURATION_PROPERTY = "TEST_CONFIGURATION_PROPERTY";
+
+		taskService.setConfigurationProperty(TEST_CONFIGURATION_PROPERTY, "test value");
+		String property = taskService.retrieveConfigurationProperty(TEST_CONFIGURATION_PROPERTY);
+		assertTrue(property.equals("test value"));
 	}
 }

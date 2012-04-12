@@ -53,7 +53,6 @@ public class MarkupRenderer {
 	WikiServiceConfiguration serviceConfiguration;
 
 	public MarkupRenderer() {
-		// register(MarkupLanguageUtil.createDefaultMarkupLanguage());
 		register(MarkupLanguageUtil.createMarkupLanguages());
 
 		for (Map.Entry<String, MarkupLanguage> languageEntry : markupLanguageByName.entrySet()) {

@@ -217,6 +217,7 @@ public abstract class BaseWikiServiceTest {
 		ConfigurationProperty cp = new ConfigurationProperty();
 		cp.setName(TEST_CONFIGURATION_PROPERTY);
 		cp.setValue(TEST_VALUE);
+		cp.setId(Long.valueOf(12345));
 		entityManager.persist(cp);
 		entityManager.flush();
 

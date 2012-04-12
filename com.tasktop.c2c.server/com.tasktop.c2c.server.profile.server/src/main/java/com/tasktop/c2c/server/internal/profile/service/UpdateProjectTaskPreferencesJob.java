@@ -15,18 +15,18 @@ package com.tasktop.c2c.server.internal.profile.service;
 import org.springframework.context.ApplicationContext;
 
 import com.tasktop.c2c.server.profile.domain.internal.Project;
-import com.tasktop.c2c.server.profile.service.provider.WikiServiceProvider;
-import com.tasktop.c2c.server.wiki.service.WikiService;
+import com.tasktop.c2c.server.profile.service.provider.TaskServiceProvider;
+import com.tasktop.c2c.server.tasks.service.TaskService;
 
 /**
  * @author Myles (Tasktop Technologies Inc.)
  * 
  */
-public class UpdateProjectWikiPreferencesJob extends AbstractUpdateProjectPreferencesJob {
+public class UpdateProjectTaskPreferencesJob extends AbstractUpdateProjectPreferencesJob {
 
 	private static final long serialVersionUID = 1L;
 
-	public UpdateProjectWikiPreferencesJob(Project project, String key) {
+	public UpdateProjectTaskPreferencesJob(Project project, String key) {
 		super(project, key);
 	}
 
@@ -35,11 +35,12 @@ public class UpdateProjectWikiPreferencesJob extends AbstractUpdateProjectPrefer
 		executeAsSystem(applicationContext, getProjectIdentifier(), new Runnable() {
 			@Override
 			public void run() {
-				WikiServiceProvider wikiServiceProvider = applicationContext.getBean("wikiServiceProvider",
-						WikiServiceProvider.class);
-				WikiService wikiService = wikiServiceProvider.getWikiService(getProjectIdentifier());
-				wikiService.setConfigurationProperty(getKey(), getValue());
+				TaskServiceProvider taskServiceProvider = applicationContext.getBean("taskServiceProvider",
+						TaskServiceProvider.class);
+				TaskService taskService = taskServiceProvider.getTaskService(getProjectIdentifier());
+				taskService.setConfigurationProperty(getKey(), getValue());
 			}
 		});
 	}
+
 }

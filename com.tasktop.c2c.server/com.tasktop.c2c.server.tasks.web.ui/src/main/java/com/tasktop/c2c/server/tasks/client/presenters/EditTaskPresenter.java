@@ -39,6 +39,7 @@ import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskHandle;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
+import com.tasktop.c2c.server.tasks.service.TaskService;
 import com.tasktop.c2c.server.tasks.shared.action.UpdateTaskAction;
 import com.tasktop.c2c.server.tasks.shared.action.UpdateTaskResult;
 
@@ -116,6 +117,8 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 		super.populateUi(task);
 		editTaskView.setSelf(getAppState().getSelf());
 		editTaskView.setProjectIdentifier(projectIdentifier);
+		editTaskView.setMarkupLanguage(repositoryConfiguration
+				.getConfigurationProperty(TaskService.MARKUP_LANGUAGE_DB_KEY));
 		editTaskView.setValue(task);
 		if (task.getAssignee() != null) {
 			ownerSet = true; // Prevent overwriting on component change.

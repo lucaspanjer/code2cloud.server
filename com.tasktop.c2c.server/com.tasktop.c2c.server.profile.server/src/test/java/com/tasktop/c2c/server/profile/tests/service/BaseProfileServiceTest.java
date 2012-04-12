@@ -531,7 +531,7 @@ public abstract class BaseProfileServiceTest {
 
 		Project updatedProject = profileService.updateProject(project);
 
-		assertEquals(size + 1, scheduledJobs.size());
+		assertEquals(size + 2, scheduledJobs.size());
 
 		assertEquals(project.getName(), updatedProject.getName());
 		assertEquals(project.getDescription(), updatedProject.getDescription());

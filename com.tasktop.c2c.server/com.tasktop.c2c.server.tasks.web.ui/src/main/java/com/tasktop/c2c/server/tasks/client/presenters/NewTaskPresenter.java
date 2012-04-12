@@ -67,6 +67,7 @@ public class NewTaskPresenter extends AbstractEditTaskPresenter<NewTaskDisplay> 
 	private Task parentTask = null;
 	private Task subTask = null;
 	private Map<String, LastValues> projectIdToLastValues = new HashMap<String, NewTaskPresenter.LastValues>();
+	private String markupLanguage;
 
 	public NewTaskPresenter(NewTaskDisplay view) {
 		super(view);

@@ -30,8 +30,6 @@ import org.eclipse.mylyn.wikitext.twiki.core.TWikiLanguage;
  */
 public class MarkupLanguageUtil {
 
-	public static final String MARKUP_LANGUAGE_DB_KEY = "MARKUP_LANGUAGE";
-
 	private MarkupLanguageUtil() {
 		// No instantiation of this class.
 	}

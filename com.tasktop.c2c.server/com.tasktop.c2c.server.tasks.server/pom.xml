@@ -78,7 +78,23 @@
 			<groupId>org.eclipse.mylyn.docs</groupId>
 			<artifactId>org.eclipse.mylyn.wikitext.textile.core</artifactId>
 		</dependency>
-				<dependency>
+		<dependency>
+			<groupId>org.eclipse.mylyn.docs</groupId>
+			<artifactId>org.eclipse.mylyn.wikitext.confluence.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.mylyn.docs</groupId>
+			<artifactId>org.eclipse.mylyn.wikitext.mediawiki.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.mylyn.docs</groupId>
+			<artifactId>org.eclipse.mylyn.wikitext.tracwiki.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.mylyn.docs</groupId>
+			<artifactId>org.eclipse.mylyn.wikitext.twiki.core</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 		</dependency>

@@ -23,7 +23,7 @@
 			</fieldset>
 		</div>
 		<div class="document-text edit">
-			<h3>Text</h3>
+			<h3>Text (Markup: <g:Label ui:field="markupLanguage"></g:Label>)</h3>
 			<fieldset>
 				<w:EditWikiPanel ui:field="content" visibleLines="30" />
 			</fieldset>

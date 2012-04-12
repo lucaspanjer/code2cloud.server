@@ -66,6 +66,8 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 	@UiField
 	TextBox path;
 	@UiField
+	Label markupLanguage;
+	@UiField
 	EditWikiPanel content;
 
 	@UiField
@@ -135,6 +137,7 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 			}
 		});
 
+		markupLanguage.setText(content.getMarkupLanguage());
 		driver.initialize(this);
 	}
 

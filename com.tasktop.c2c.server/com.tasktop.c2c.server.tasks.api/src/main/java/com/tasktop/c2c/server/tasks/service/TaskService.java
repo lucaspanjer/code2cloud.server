@@ -53,6 +53,8 @@ import com.tasktop.c2c.server.tasks.domain.validation.KeywordValidator;
  */
 public interface TaskService {
 
+	public static final String MARKUP_LANGUAGE_DB_KEY = "MARKUP_LANGUAGE";
+
 	static Region DEFAULT_PAGE_INFO = new Region(0, 20);
 	static SortInfo DEFAULT_SORT_INFO = new SortInfo(TaskFieldConstants.PRIORITY_FIELD, Order.DESCENDING);
 
@@ -423,4 +425,19 @@ public interface TaskService {
 	 * @return rendered html
 	 */
 	String renderWikiMarkupAsHtml(String markup);
+
+	/**
+	 * @param propertyName
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	String retrieveConfigurationProperty(String propertyName) throws EntityNotFoundException;
+
+	/**
+	 * @param name
+	 * @param value
+	 * @return
+	 * @throws ValidationException
+	 */
+	String setConfigurationProperty(String name, String value);
 }
