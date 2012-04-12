@@ -12,12 +12,14 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.tasks.service;
 
+import javax.annotation.Resource;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
@@ -93,4 +95,9 @@ public class InternalTaskServiceBean extends AbstractJpaServiceBean implements I
 		return profile;
 	}
 
+	@Override
+	@Resource(name = "domainValidator")
+	public void setValidator(Validator validator) {
+		this.validator = validator;
+	}
 }

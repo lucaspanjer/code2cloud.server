@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -127,7 +128,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	private TaskCustomFieldService taskCustomFieldService;
 	@Autowired
 	private TaskActivityService activityService;
-	@Autowired
+	@Resource(name = "internalValidator")
 	private Validator internalValidator;
 	@Autowired
 	private EventService eventService;
@@ -2167,5 +2168,11 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	@Override
 	public String renderWikiMarkupAsHtml(String markup) {
 		return wikiRenderer.render(markup);
+	}
+
+	@Override
+	@Resource(name = "domainValidator")
+	public void setValidator(Validator validator) {
+		this.validator = validator;
 	}
 }

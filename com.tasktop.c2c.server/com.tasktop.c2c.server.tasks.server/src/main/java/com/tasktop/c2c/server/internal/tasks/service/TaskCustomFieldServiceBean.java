@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.Table;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
 import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
@@ -675,5 +677,11 @@ public class TaskCustomFieldServiceBean extends AbstractJpaServiceBean implement
 		}
 
 		executeUpdate(statements);
+	}
+
+	@Override
+	@Resource(name = "domainValidator")
+	public void setValidator(Validator validator) {
+		this.validator = validator;
 	}
 }

@@ -69,12 +69,13 @@ public class AttachmentValidator implements Validator {
 		}
 		if (attachment.getContent() == null || attachment.getContent().length == 0) {
 			errors.rejectValue("content", "field.required");
-		}
-		int attachementSize = attachment.getContent().length;
-		if (attachementSize > configuration.getMaxAttachmentSize()) {
-			errors.rejectValue("content", "field.tooLarge",
-					new Object[] { FileUtils.byteCountToDisplaySize(configuration.getMaxAttachmentSize()) },
-					"Field to large");
+		} else {
+			int attachementSize = attachment.getContent().length;
+			if (attachementSize > configuration.getMaxAttachmentSize()) {
+				errors.rejectValue("content", "field.tooLarge",
+						new Object[] { FileUtils.byteCountToDisplaySize(configuration.getMaxAttachmentSize()) },
+						"Field to large");
+			}
 		}
 	}
 

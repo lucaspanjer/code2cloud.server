@@ -21,6 +21,9 @@ import com.tasktop.c2c.server.common.service.BaseProfileConfiguration;
  */
 public class TaskServiceConfiguration extends BaseProfileConfiguration {
 
+	private Integer maxAttachmentSize;
+	private Integer maxAttachmentFilenameSize;
+
 	public String getProfileProjectIdentifier() {
 		return (String) TenancyContextHolder.getContext().getTenant().getIdentity();
 	}
@@ -35,6 +38,22 @@ public class TaskServiceConfiguration extends BaseProfileConfiguration {
 
 	public String getWebUrlForAttachment(Integer attachmentId) {
 		return getExternalTaskServiceUrl() + "/attachment/" + attachmentId;
+	}
+
+	public Integer getMaxAttachmentSize() {
+		return maxAttachmentSize;
+	}
+
+	public void setMaxAttachmentSize(Integer maxAttachmentSize) {
+		this.maxAttachmentSize = maxAttachmentSize;
+	}
+
+	public Integer getMaxAttachmentFilenameSize() {
+		return maxAttachmentFilenameSize;
+	}
+
+	public void setMaxAttachmentFilenameSize(Integer maxAttachmentFilenameSize) {
+		this.maxAttachmentFilenameSize = maxAttachmentFilenameSize;
 	}
 
 }

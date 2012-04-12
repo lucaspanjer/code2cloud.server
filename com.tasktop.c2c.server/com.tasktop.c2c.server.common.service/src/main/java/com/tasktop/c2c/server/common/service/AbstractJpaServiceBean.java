@@ -24,14 +24,11 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.tasktop.c2c.server.common.service.ValidationException;
-
 public class AbstractJpaServiceBean {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
 
-	@Autowired
 	protected Validator validator;
 
 	@Autowired
@@ -102,6 +99,11 @@ public class AbstractJpaServiceBean {
 			}
 		}
 		return clazz.getSimpleName().toLowerCase();
+	}
+
+	@Autowired
+	public void setValidator(Validator validator) {
+		this.validator = validator;
 	}
 
 }
