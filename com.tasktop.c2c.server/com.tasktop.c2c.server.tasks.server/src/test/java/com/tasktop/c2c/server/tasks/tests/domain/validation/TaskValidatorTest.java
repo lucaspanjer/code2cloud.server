@@ -18,11 +18,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.validation.Validator;
 
 import com.tasktop.c2c.server.common.tests.util.AbstractValidatorTest;
 import com.tasktop.c2c.server.common.tests.util.ValidationAssert;
@@ -37,6 +40,11 @@ import com.tasktop.c2c.server.tasks.tests.domain.mock.MockTaskFactory;
 @ContextConfiguration({ "/applicationContext-test.xml" })
 // FIXME this starts the DB and imports the schema. should not be needed.
 public class TaskValidatorTest extends AbstractValidatorTest<Task> {
+
+	@Resource(name = "domainValidator")
+	public void setValidator(Validator validator) {
+		this.validator = validator;
+	}
 
 	@Override
 	protected Task createMock() {

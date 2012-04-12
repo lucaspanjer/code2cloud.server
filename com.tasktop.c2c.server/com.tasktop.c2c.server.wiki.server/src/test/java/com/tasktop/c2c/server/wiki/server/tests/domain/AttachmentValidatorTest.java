@@ -17,23 +17,28 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
-import com.tasktop.c2c.server.internal.wiki.server.domain.MediaTypes;
 import com.tasktop.c2c.server.internal.wiki.server.domain.validation.AttachmentValidator;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.PageHandle;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({ "/applicationContext-hsql.xml" })
+// FIXME, dont need the whole DB
 public class AttachmentValidatorTest {
+	@Autowired
 	private AttachmentValidator attachmentValidator;
 	private Attachment attachment;
 	private Errors errors;
 
 	@Before
 	public void before() {
-		attachmentValidator = new AttachmentValidator();
-		attachmentValidator.setMediaTypes(new MediaTypes());
 		attachment = new Attachment();
 		attachment.setPage(new PageHandle(1));
 		attachment.setContent("111".getBytes());

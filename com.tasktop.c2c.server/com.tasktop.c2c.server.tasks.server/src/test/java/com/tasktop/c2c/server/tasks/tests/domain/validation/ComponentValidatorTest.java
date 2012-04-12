@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.tests.domain.validation;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -21,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.validation.Validator;
 
 import com.tasktop.c2c.server.common.tests.util.AbstractValidatorTest;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConversionContext;
@@ -28,10 +30,14 @@ import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConverter;
 import com.tasktop.c2c.server.tasks.domain.Component;
 import com.tasktop.c2c.server.tasks.tests.domain.mock.MockComponentFactory;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/applicationContext-test.xml" })
 public class ComponentValidatorTest extends AbstractValidatorTest<Component> {
+
+	@Resource(name = "domainValidator")
+	public void setValidator(Validator validator) {
+		this.validator = validator;
+	}
 
 	@PersistenceContext(unitName = "tasksDomain")
 	private EntityManager entityManager;

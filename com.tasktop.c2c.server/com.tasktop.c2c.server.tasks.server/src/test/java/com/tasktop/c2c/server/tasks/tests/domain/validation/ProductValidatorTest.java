@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.tests.domain.validation;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import com.tasktop.c2c.server.common.tests.util.AbstractValidatorTest;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConversionContext;
@@ -33,6 +35,10 @@ import com.tasktop.c2c.server.tasks.tests.domain.mock.MockProductFactory;
 @ContextConfiguration({ "/applicationContext-test.xml" })
 @Transactional
 public class ProductValidatorTest extends AbstractValidatorTest<Product> {
+	@Resource(name = "domainValidator")
+	public void setValidator(Validator validator) {
+		this.validator = validator;
+	}
 
 	@PersistenceContext(unitName = "tasksDomain")
 	private EntityManager entityManager;
@@ -42,8 +48,7 @@ public class ProductValidatorTest extends AbstractValidatorTest<Product> {
 
 	@Override
 	protected Product createMock() {
-		com.tasktop.c2c.server.internal.tasks.domain.Product mockProduct = MockProductFactory
-				.create(entityManager);
+		com.tasktop.c2c.server.internal.tasks.domain.Product mockProduct = MockProductFactory.create(entityManager);
 		entityManager.flush();
 		entityManager.refresh(mockProduct);
 

@@ -28,4 +28,8 @@ public class DomainValidator extends AbstractDomainValidator implements Initiali
 		registerValidator(Page.class, new PageValidator());
 		registerValidator(Attachment.class, attachmentValidator);
 	}
+
+	public void setAttachmentValidator(AttachmentValidator attachmentValidator) {
+		this.attachmentValidator = attachmentValidator;
+	}
 }

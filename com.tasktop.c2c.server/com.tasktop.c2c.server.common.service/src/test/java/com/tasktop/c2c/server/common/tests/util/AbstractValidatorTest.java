@@ -20,7 +20,6 @@ import org.springframework.validation.Validator;
 public abstract class AbstractValidatorTest<T> {
 
 	protected static final String[] BLANK_VALUES = { null, "", "   \n\n" };
-	@Autowired
 	protected Validator validator;
 	protected BeanPropertyBindingResult result;
 	protected T mock;
@@ -42,6 +41,11 @@ public abstract class AbstractValidatorTest<T> {
 
 	protected void assertHaveValidationError(String code, Object... args) {
 		ValidationAssert.assertHaveValidationError(result, code, args);
+	}
+
+	@Autowired
+	public void setValidator(Validator validator) {
+		this.validator = validator;
 	}
 
 }

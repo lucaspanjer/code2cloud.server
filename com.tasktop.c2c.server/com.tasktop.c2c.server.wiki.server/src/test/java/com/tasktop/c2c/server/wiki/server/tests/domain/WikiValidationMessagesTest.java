@@ -14,15 +14,15 @@ package com.tasktop.c2c.server.wiki.server.tests.domain;
 
 import java.util.Arrays;
 
-
 import com.tasktop.c2c.server.common.tests.util.AbstractValidationMessageTest;
+import com.tasktop.c2c.server.internal.wiki.server.domain.validation.AttachmentValidator;
 import com.tasktop.c2c.server.internal.wiki.server.domain.validation.DomainValidator;
-
 
 public class WikiValidationMessagesTest extends AbstractValidationMessageTest {
 
 	public WikiValidationMessagesTest() throws Exception {
 		DomainValidator domainValidator = new DomainValidator();
+		domainValidator.setAttachmentValidator(new AttachmentValidator());
 		domainValidator.afterPropertiesSet();
 		super.computeValidatorJavaFilenames("src/main/java", domainValidator.getValidatorByType().values());
 		super.setMessageBundleFilenames(Arrays.asList("src/main/resources/WikiMessages.properties"));
