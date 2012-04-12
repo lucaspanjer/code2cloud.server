@@ -16,13 +16,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
+import com.tasktop.c2c.server.common.web.client.widgets.chooser.SuggestBoxAware;
 import com.tasktop.c2c.server.tasks.domain.PredefinedTaskQuery;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.shared.QueryState;
@@ -30,19 +31,32 @@ import com.tasktop.c2c.server.tasks.shared.QueryState.QueryType;
 import com.tasktop.c2c.server.tasks.shared.action.TaskQueryAction;
 import com.tasktop.c2c.server.tasks.shared.action.TaskQueryResult;
 
-public class TaskSuggestOracle extends MultiWordSuggestOracle {
+public class TaskSuggestOracle extends MultiWordSuggestOracle implements SuggestBoxAware {
 	private String projectIdentifier;
 
-	public TaskSuggestOracle(String projectIdentifier) {
-		this.projectIdentifier = projectIdentifier;
-	}
+	private HasText suggestBox;
+	private Callback currentCallback;
+	private Request pendingRequest;
+	private Callback pendingCallback;
 
-	public TaskSuggestOracle() {
-	}
+	private Callback serialCallback = new Callback() {
 
-	public void setProjectIdentifier(String projectIdentifier) {
-		this.projectIdentifier = projectIdentifier;
-	}
+		@Override
+		public void onSuggestionsReady(Request request, Response response) {
+			if (suggestBox.getText().equals(request.getQuery())) {
+				currentCallback.onSuggestionsReady(request, response);
+				pendingCallback = null;
+				pendingRequest = null;
+			}
+			currentCallback = null;
+			if (pendingCallback != null) {
+				requestSuggestions(pendingRequest, pendingCallback);
+				pendingRequest = null;
+				pendingCallback = null;
+			}
+
+		}
+	};
 
 	@Override
 	public void requestDefaultSuggestions(final Request request, final Callback callback) {
@@ -70,7 +84,17 @@ public class TaskSuggestOracle extends MultiWordSuggestOracle {
 	}
 
 	@Override
-	public void requestSuggestions(final Request request, final Callback callback) {
+	public final void requestSuggestions(final Request request, final Callback callback) {
+		if (currentCallback != null) {
+			pendingCallback = callback;
+			pendingRequest = request;
+		} else {
+			currentCallback = callback;
+			doRequest(request, serialCallback);
+		}
+	}
+
+	protected void doRequest(final Request request, final Callback callback) {
 		QueryRequest taskQueryRequest = new QueryRequest();
 		taskQueryRequest.setPageInfo(new Region(0, request.getLimit()));
 		AsyncCallback<TaskQueryResult> taskQueryCallback = new AsyncCallback<TaskQueryResult>() {
@@ -103,6 +127,15 @@ public class TaskSuggestOracle extends MultiWordSuggestOracle {
 
 	protected Suggestion toSuggestion(Task task) {
 		return new TaskSuggestion(task);
+	}
+
+	public void setProjectIdentifier(String projectIdentifier) {
+		this.projectIdentifier = projectIdentifier;
+	}
+
+	@Override
+	public void setSuggestBox(HasText suggestBox) {
+		this.suggestBox = suggestBox;
 	}
 
 }

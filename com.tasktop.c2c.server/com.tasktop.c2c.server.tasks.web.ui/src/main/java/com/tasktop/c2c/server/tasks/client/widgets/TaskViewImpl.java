@@ -510,21 +510,22 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	@UiField(provided = true)
 	MultipleTaskProfileChooser watchers = new MultipleTaskProfileChooser(new PersonSuggestOracle(null));
 
-	private TaskSuggestOracle taskOracle = new TaskSuggestOracle();
+	private TaskSuggestOracle blocksTaskOracle = new TaskSuggestOracle();
+	private TaskSuggestOracle subTaskOracle = new TaskSuggestOracle();
 
 	@UiField
 	Panel parentTasksPanel;
 	@UiField
 	Anchor editParentAnchor;
 	@UiField(provided = true)
-	protected ParentTaskChooser blocksTasks = new ParentTaskChooser(taskOracle);
+	protected ParentTaskChooser blocksTasks = new ParentTaskChooser(blocksTaskOracle);
 
 	@UiField
 	Panel subTasksPanel;
 	@UiField
 	Anchor editSubtasksAnchor;
 	@UiField(provided = true)
-	MultiValueChooser<Task> subTasks = new MultiValueChooser<Task>(taskOracle);
+	MultiValueChooser<Task> subTasks = new MultiValueChooser<Task>(subTaskOracle);
 	@UiField
 	FieldSetElement duplicatesElement;
 	@UiField
@@ -1067,7 +1068,8 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		boolean canEdit = !AuthenticationHelper.isAnonymous();
 		newSubTaskLink.setVisible(canEdit);
 		commentsPanel.setProjectIdentifier(projectIdentifier);
-		taskOracle.setProjectIdentifier(projectIdentifier);
+		blocksTaskOracle.setProjectIdentifier(projectIdentifier);
+		subTaskOracle.setProjectIdentifier(projectIdentifier);
 
 	}
 

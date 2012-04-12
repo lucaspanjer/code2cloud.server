@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.common.web.client.widgets.chooser;
 
 import java.util.List;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ScrollEvent;
@@ -95,6 +94,9 @@ public abstract class AbstractValueChooser<T> extends Composite {
 			}
 		});
 		proxy.setSuggestBox(suggestBox);
+		if (oracle instanceof SuggestBoxAware) {
+			((SuggestBoxAware) oracle).setSuggestBox(suggestBox);
+		}
 		return suggestBox;
 	}
 
