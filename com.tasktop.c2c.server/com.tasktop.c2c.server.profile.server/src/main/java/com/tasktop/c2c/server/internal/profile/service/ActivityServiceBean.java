@@ -34,10 +34,10 @@ import org.springframework.tenancy.context.DefaultTenancyContext;
 import org.springframework.tenancy.context.TenancyContext;
 import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.tenancy.core.Tenant;
-import org.springframework.tenancy.provider.DefaultTenant;
 
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.query.QueryUtil;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.activity.BuildActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ScmActivity;
@@ -192,7 +192,7 @@ public class ActivityServiceBean implements ActivityService {
 		private SecurityContext secContect;
 
 		private TenancyCallable(String projectIdentifier) {
-			tenant = new DefaultTenant(projectIdentifier, projectIdentifier);
+			tenant = TenancyUtil.createProjectTenant(projectIdentifier);
 			secContect = SecurityContextHolder.getContext();
 		}
 

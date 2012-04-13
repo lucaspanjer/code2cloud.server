@@ -34,12 +34,17 @@ public final class TenancyUtil {
 	}
 
 	public static void setProjectTenancyContext(String projectIdentifier) {
+		ProfileHubTenant tenant = createProjectTenant(projectIdentifier);
+		TenancyContextHolder.createEmptyContext();
+		TenancyContextHolder.getContext().setTenant(tenant);
+	}
+
+	public static ProfileHubTenant createProjectTenant(String projectIdentifier) {
 		projectIdentifier = projectIdentifier.toLowerCase();
 		ProfileHubTenant tenant = new ProfileHubTenant();
 		tenant.setProjectIdentifier(projectIdentifier);
 		tenant.setIdentity(projectIdentifier);
-		TenancyContextHolder.createEmptyContext();
-		TenancyContextHolder.getContext().setTenant(tenant);
+		return tenant;
 	}
 
 	public static String getCurrentTenantProjectIdentifer() {
