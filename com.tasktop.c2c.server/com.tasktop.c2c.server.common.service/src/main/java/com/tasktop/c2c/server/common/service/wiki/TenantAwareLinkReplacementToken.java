@@ -13,7 +13,8 @@
 package com.tasktop.c2c.server.common.service.wiki;
 
 import org.eclipse.mylyn.wikitext.core.parser.markup.PatternBasedElementProcessor;
-import org.springframework.tenancy.context.TenancyContextHolder;
+
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 /**
  * <p>
@@ -47,7 +48,7 @@ public class TenantAwareLinkReplacementToken extends LinkReplacementToken {
 		return new PatternBasedElementProcessor() {
 			public void emit() {
 				// Get our tenant from the TenancyContext
-				String projectId = String.valueOf(TenancyContextHolder.getContext().getTenant().getIdentity());
+				String projectId = TenancyUtil.getCurrentTenantProjectIdentifer();
 
 				// Do our custom formatting on the HREF, but make sure the original text is unmodified.
 				getBuilder().link(String.format(replacementString, projectId, group(1)), group(0));

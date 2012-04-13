@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.tenancy.core.Tenant;
 import org.springframework.tenancy.provider.TenantProvider;
 
+import com.tasktop.c2c.server.common.service.web.ProfileHubTenant;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 
@@ -36,7 +37,7 @@ public class ProfileHubTenantProvider implements TenantProvider {
 
 	@Override
 	public Tenant findTenant(Object identityObj) {
-		String projectId = identityObj.toString();
+		String projectId = identityObj.toString().toLowerCase();
 
 		ProfileHubTenant tenant = new ProfileHubTenant();
 		tenant.setIdentity(projectId);

@@ -12,9 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.tasks.service;
 
-import org.springframework.tenancy.context.TenancyContextHolder;
-
 import com.tasktop.c2c.server.common.service.BaseProfileConfiguration;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 /**
  * Simple container class for the configuration needed by task service.
@@ -25,7 +24,7 @@ public class TaskServiceConfiguration extends BaseProfileConfiguration {
 	private Integer maxAttachmentFilenameSize;
 
 	public String getProfileProjectIdentifier() {
-		return (String) TenancyContextHolder.getContext().getTenant().getIdentity();
+		return TenancyUtil.getCurrentTenantProjectIdentifer();
 	}
 
 	public String getExternalTaskServiceUrl() {

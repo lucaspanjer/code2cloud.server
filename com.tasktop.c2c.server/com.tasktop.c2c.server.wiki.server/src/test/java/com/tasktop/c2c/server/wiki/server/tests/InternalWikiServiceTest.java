@@ -23,13 +23,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.internal.wiki.server.InternalWikiService;
 import com.tasktop.c2c.server.internal.wiki.server.domain.MarkupRenderer;
 import com.tasktop.c2c.server.internal.wiki.server.domain.Page;
@@ -52,8 +51,7 @@ public class InternalWikiServiceTest {
 	@Before
 	public void setUpRenderer() {
 		// Insert a stub tenancyContext - it's required because it's inserted into in-page URLs by the renderer.
-		TenancyContextHolder.setContext(TenancyContextHolder.createEmptyContext());
-		TenancyContextHolder.getContext().setTenant(new DefaultTenant("someProjectId", null));
+		TenancyUtil.setProjectTenancyContext("projectId");
 	}
 
 	@Test

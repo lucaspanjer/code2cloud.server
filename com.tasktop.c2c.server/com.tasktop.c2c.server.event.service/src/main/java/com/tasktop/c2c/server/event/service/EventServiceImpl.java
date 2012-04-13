@@ -23,11 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.common.service.domain.Role;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.event.domain.Event;
 
 @Service("eventService")
@@ -61,8 +60,7 @@ public class EventServiceImpl implements EventService {
 		@Override
 		public Object call() throws Exception {
 
-			TenancyContextHolder.createEmptyContext();
-			TenancyContextHolder.getContext().setTenant(new DefaultTenant(event.getProjectId(), null));
+			TenancyUtil.setProjectTenancyContext(event.getProjectId());
 
 			AuthUtils.assumeSystemIdentity(event.getProjectId());
 
@@ -78,7 +76,7 @@ public class EventServiceImpl implements EventService {
 					}
 				}
 			} finally {
-				TenancyContextHolder.clearContext();
+				TenancyUtil.clearContext();
 				SecurityContextHolder.clearContext();
 			}
 			return null;

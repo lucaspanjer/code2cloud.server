@@ -14,11 +14,10 @@ package com.tasktop.c2c.server.auth.service.proxy;
 
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.springframework.http.client.CommonsClientHttpRequestFactory;
-import org.springframework.tenancy.context.TenancyContextHolder;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.web.HeaderConstants;
-
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 public class ProxyPreAuthHttpRequestFactory extends CommonsClientHttpRequestFactory {
 
@@ -37,10 +36,8 @@ public class ProxyPreAuthHttpRequestFactory extends CommonsClientHttpRequestFact
 		}
 
 		// Also setup the tenancy context header
-		if (TenancyContextHolder.getContext() != null && TenancyContextHolder.getContext().getTenant() != null
-				&& TenancyContextHolder.getContext().getTenant().getIdentity() != null) {
-			httpMethod.addRequestHeader(HeaderConstants.TENANT_HEADER, (String) TenancyContextHolder.getContext()
-					.getTenant().getIdentity());
+		if (TenancyUtil.getCurrentTenantProjectIdentifer() != null) {
+			httpMethod.addRequestHeader(HeaderConstants.TENANT_HEADER, TenancyUtil.getCurrentTenantProjectIdentifer());
 		}
 	}
 }

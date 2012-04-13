@@ -22,10 +22,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.util.StopWatch;
 
 import com.tasktop.c2c.server.common.service.logging.NoLog;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 public class ServiceLoggingAdvice {
 
@@ -118,10 +118,6 @@ public class ServiceLoggingAdvice {
 	}
 
 	private String getProjectId() {
-		if (TenancyContextHolder.getContext().getTenant() == null
-				|| TenancyContextHolder.getContext().getTenant().getIdentity() == null) {
-			return null;
-		}
-		return TenancyContextHolder.getContext().getTenant().getIdentity().toString();
+		return TenancyUtil.getCurrentTenantProjectIdentifer();
 	}
 }

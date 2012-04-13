@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.internal.QuotaSetting;
 import com.tasktop.c2c.server.profile.service.QuotaEnforcer;
 import com.tasktop.c2c.server.profile.service.QuotaService;

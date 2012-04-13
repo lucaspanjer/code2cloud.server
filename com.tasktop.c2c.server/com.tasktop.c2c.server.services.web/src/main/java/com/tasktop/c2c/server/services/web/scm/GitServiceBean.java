@@ -52,11 +52,11 @@ import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.FileUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.tenancy.context.TenancyContextHolder;
 
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.query.QueryUtil;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.scm.Commit;
 import com.tasktop.c2c.server.profile.domain.scm.ScmSummary;
@@ -206,7 +206,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 	}
 
 	private File getTenantBaseDir() {
-		return new File(basePath, (String) TenancyContextHolder.getContext().getTenant().getIdentity());
+		return new File(basePath, TenancyUtil.getCurrentTenantProjectIdentifer());
 	}
 
 	private File getTenantHostedBaseDir() {

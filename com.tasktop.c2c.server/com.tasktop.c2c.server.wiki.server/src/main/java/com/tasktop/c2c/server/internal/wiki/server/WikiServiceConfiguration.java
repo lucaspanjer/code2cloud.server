@@ -15,17 +15,17 @@ package com.tasktop.c2c.server.internal.wiki.server;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.web.util.UriUtils;
 
 import com.tasktop.c2c.server.common.service.BaseProfileConfiguration;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 public class WikiServiceConfiguration extends BaseProfileConfiguration {
 
 	private Integer maxAttachmentSize;
 
 	public String getProfileProjectIdentifier() {
-		return (String) TenancyContextHolder.getContext().getTenant().getIdentity();
+		return TenancyUtil.getCurrentTenantProjectIdentifer();
 	}
 
 	public String computeWebUrlForPage(String pagePath) {

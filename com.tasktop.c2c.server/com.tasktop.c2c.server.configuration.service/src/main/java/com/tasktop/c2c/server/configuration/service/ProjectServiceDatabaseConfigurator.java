@@ -25,8 +25,8 @@ import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.tenancy.context.TenancyContext;
 import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
 
 /**
@@ -159,10 +159,7 @@ public class ProjectServiceDatabaseConfigurator implements Configurator, Resourc
 	}
 
 	private void setTenancyContext(String projectIdentifier) {
-		TenancyContextHolder.createEmptyContext();
-		DefaultTenant tenant = new DefaultTenant();
-		tenant.setIdentity(projectIdentifier);
-		TenancyContextHolder.getContext().setTenant(tenant);
+		TenancyUtil.setProjectTenancyContext(projectIdentifier);
 	}
 
 	@Override

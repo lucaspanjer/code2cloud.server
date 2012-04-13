@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.web.HttpRequestHandler;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
@@ -33,6 +32,7 @@ import com.tasktop.c2c.server.auth.service.proxy.AuthenticationTokenSerializer;
 import com.tasktop.c2c.server.auth.service.proxy.ProxyHttpServletRequest;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.web.HeaderConstants;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
@@ -95,7 +95,7 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 		authenticationToken = internalAuthenticationService.specializeAuthenticationToken(authenticationToken, project);
 
 		tokenSerializer.serialize(proxyRequest, authenticationToken);
-		String tenantId = (String) TenancyContextHolder.getContext().getTenant().getIdentity();
+		String tenantId = TenancyUtil.getCurrentTenantProjectIdentifer();
 		proxyRequest.addHeader(HeaderConstants.TENANT_HEADER, tenantId);
 
 		LOG.info("Proxying service [" + service.getType() + "] to url [" + targetUrl + "]");

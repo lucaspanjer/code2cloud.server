@@ -21,7 +21,8 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.resolver.FileResolver;
 import org.eclipse.jgit.transport.resolver.RepositoryResolver;
 import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
-import org.springframework.tenancy.context.TenancyContextHolder;
+
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -45,8 +46,7 @@ public class MultiTenantRepositoryResolver extends FileResolver<HttpServletReque
 	 * @return
 	 */
 	private String resolveTenantName(String name) {
-		return TenancyContextHolder.getContext().getTenant().getIdentity() + "/" + GitConstants.HOSTED_GIT_DIR + "/"
-				+ name;
+		return TenancyUtil.getCurrentTenantProjectIdentifer() + "/" + GitConstants.HOSTED_GIT_DIR + "/" + name;
 	}
 
 	/**

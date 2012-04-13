@@ -18,10 +18,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.tenancy.context.DefaultTenancyContext;
-import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.common.service.wiki.MarkupLanguageUtil;
 
 /**
@@ -31,13 +29,12 @@ public class MarkupLanguageUtilTest {
 
 	@Before
 	public void setupTenancyContext() {
-		TenancyContextHolder.setContext(new DefaultTenancyContext());
-		TenancyContextHolder.getContext().setTenant(new DefaultTenant("tenant-id", null));
+		TenancyUtil.setProjectTenancyContext("tenant-id");
 	}
 
 	@After
 	public void tearDownTenancyContext() {
-		TenancyContextHolder.clearContext();
+		TenancyUtil.clearContext();
 	}
 
 	@Test

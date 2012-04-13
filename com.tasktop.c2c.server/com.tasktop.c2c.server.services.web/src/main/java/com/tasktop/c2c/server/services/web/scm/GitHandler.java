@@ -31,7 +31,6 @@ import org.eclipse.jgit.transport.resolver.ServiceNotAuthorizedException;
 import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.web.HttpRequestHandler;
 
 import com.tasktop.c2c.server.common.service.Security;
@@ -39,6 +38,7 @@ import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.io.FlushingChunkedOutputStream;
 import com.tasktop.c2c.server.common.service.io.MultiplexingOutputStream;
 import com.tasktop.c2c.server.common.service.io.PacketType;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 /**
  * A handler for Git requests initiated via SSH at the ALM hub.
@@ -143,7 +143,7 @@ public class GitHandler implements HttpRequestHandler {
 				// permissions check
 				if (!Security.hasOneOfRoles(command.getRoles())) {
 					log.info("Access denied to " + Security.getCurrentUser() + " for " + command.getCommandName()
-							+ " on " + TenancyContextHolder.getContext().getTenant() + " " + requestPath);
+							+ " on " + TenancyUtil.getCurrentTenantProjectIdentifer() + " " + requestPath);
 					response.sendError(HttpServletResponse.SC_FORBIDDEN);
 					return;
 				}

@@ -10,7 +10,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.internal.profile.service;
+package com.tasktop.c2c.server.common.service.web;
 
 import org.springframework.tenancy.context.TenancyContext;
 import org.springframework.tenancy.context.TenancyContextHolder;
@@ -25,6 +25,7 @@ import org.springframework.tenancy.core.Tenant;
 public final class TenancyUtil {
 
 	public static void setOrganizationTenancyContext(String organizationIdentifier) {
+		organizationIdentifier = organizationIdentifier.toLowerCase();
 		ProfileHubTenant tenant = new ProfileHubTenant();
 		tenant.setOrganizationIdentifier(organizationIdentifier);
 		tenant.setIdentity(organizationIdentifier);
@@ -33,6 +34,7 @@ public final class TenancyUtil {
 	}
 
 	public static void setProjectTenancyContext(String projectIdentifier) {
+		projectIdentifier = projectIdentifier.toLowerCase();
 		ProfileHubTenant tenant = new ProfileHubTenant();
 		tenant.setProjectIdentifier(projectIdentifier);
 		tenant.setIdentity(projectIdentifier);
@@ -74,6 +76,11 @@ public final class TenancyUtil {
 	}
 
 	private TenancyUtil() {
+
+	}
+
+	public static void clearContext() {
+		TenancyContextHolder.clearContext();
 
 	}
 }

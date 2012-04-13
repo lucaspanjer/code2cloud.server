@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
@@ -36,6 +35,7 @@ import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.Region;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
@@ -88,7 +88,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	private DeploymentServiceFactory cloudFoundryServiceFactory = new CloudFoundryServiceFactoryImpl();
 
 	private String getProjectIdentifier() {
-		return TenancyContextHolder.getContext().getTenant().getIdentity().toString();
+		return TenancyUtil.getCurrentTenantProjectIdentifer();
 	}
 
 	private Project getProject() {
@@ -102,8 +102,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#listDeployments(org.cloudfoundry
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#listDeployments(org.cloudfoundry
 	 * .code.server .common.service.domain.Region)
 	 */
 	@Override
@@ -142,8 +141,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#createDeployment(org.cloudfoundry
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#createDeployment(org.cloudfoundry
 	 * .code.server .deployment.domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -199,8 +197,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		return deploymentConfiguration;
 	}
 
-	private com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration findDeploymetByName(
-			String name) {
+	private com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration findDeploymetByName(String name) {
 		try {
 			return (com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration) entityManager
 					.createQuery(
@@ -244,8 +241,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#updateDeployment(org.cloudfoundry
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#updateDeployment(org.cloudfoundry
 	 * .code.server .deployment.domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -320,8 +316,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	 * @param existingDeploymentConfiguration
 	 * @return
 	 */
-	private boolean shouldDeployOnUpdate(
-			DeploymentConfiguration deploymentConfiguration,
+	private boolean shouldDeployOnUpdate(DeploymentConfiguration deploymentConfiguration,
 			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration existingDeploymentConfiguration) {
 		if (deploymentConfiguration.getDeploymentType() == null
 				|| !deploymentConfiguration.getDeploymentType().equals(DeploymentType.MANUAL)) {
@@ -345,8 +340,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#deleteDeployment(org.cloudfoundry
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#deleteDeployment(org.cloudfoundry
 	 * .code.server .deployment.domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -369,8 +363,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#startDeployment(org.cloudfoundry
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#startDeployment(org.cloudfoundry
 	 * .code.server .deployment.domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -396,8 +389,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#stopDeployment(org.cloudfoundry
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#stopDeployment(org.cloudfoundry
 	 * .code.server .deployment.domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -415,8 +407,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#restartDeployment(org.cloudfoundry
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#restartDeployment(org.cloudfoundry
 	 * .code.server .deployment.domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -439,8 +430,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#createService(org.cloudfoundry
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#createService(org.cloudfoundry
 	 * .code.server .deployment.domain.DeploymentService)
 	 */
 	@Override
@@ -454,8 +444,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#getAvailableMemoryConfigurations()
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#getAvailableMemoryConfigurations()
 	 */
 	@Override
 	public List<Integer> getAvailableMemoryConfigurations(DeploymentConfiguration deploymentConfiguration)
@@ -474,8 +463,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#getAvailableServiceConfigurations
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#getAvailableServiceConfigurations
 	 * ()
 	 */
 	@Override
@@ -493,8 +481,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#validateCredentials(java.lang.
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#validateCredentials(java.lang.
 	 * String, java.lang.String, java.lang.String)
 	 */
 	// TODO, push down to service.
@@ -521,8 +508,8 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService
-	 * #onBuildCompleted(java.lang.String, com.tasktop.c2c.server.profile.domain.build.BuildDetails)
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService #onBuildCompleted(java.lang.String,
+	 * com.tasktop.c2c.server.profile.domain.build.BuildDetails)
 	 */
 	@Override
 	// TODO explicit security check.

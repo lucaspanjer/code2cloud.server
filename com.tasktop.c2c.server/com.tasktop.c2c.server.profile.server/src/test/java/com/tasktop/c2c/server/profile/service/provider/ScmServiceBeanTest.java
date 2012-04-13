@@ -30,7 +30,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +38,7 @@ import com.tasktop.c2c.server.cloud.domain.ScmLocation;
 import com.tasktop.c2c.server.cloud.domain.ScmType;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ScmRepository;
 import com.tasktop.c2c.server.profile.service.GitService;
@@ -80,9 +80,7 @@ public class ScmServiceBeanTest {
 	}
 
 	private void putProjectInTenancyContext(Project proj) {
-		DefaultTenant tenant = new DefaultTenant();
-		tenant.setIdentity(proj.getIdentifier());
-		TenancyContextHolder.getContext().setTenant(tenant);
+		TenancyUtil.setProjectTenancyContext(proj.getIdentifier());
 	}
 
 	@Test

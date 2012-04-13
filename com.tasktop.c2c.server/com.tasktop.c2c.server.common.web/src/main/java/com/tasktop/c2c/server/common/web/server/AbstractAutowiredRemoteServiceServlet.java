@@ -32,8 +32,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
-import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -237,14 +235,6 @@ public abstract class AbstractAutowiredRemoteServiceServlet extends RemoteServic
 	private Locale getLocale() {
 		// FIXME get user's locale
 		return Locale.ENGLISH;
-	}
-
-	// REVIEW ugly that we have to do this in so many methods..
-	protected void setTenancyContext(String projectIdentifier) {
-		TenancyContextHolder.createEmptyContext();
-		DefaultTenant tenant = new DefaultTenant();
-		tenant.setIdentity(projectIdentifier);
-		TenancyContextHolder.getContext().setTenant(tenant);
 	}
 
 }

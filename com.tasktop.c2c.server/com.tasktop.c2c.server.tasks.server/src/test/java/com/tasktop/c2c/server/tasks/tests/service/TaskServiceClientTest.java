@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +43,7 @@ import com.tasktop.c2c.server.auth.service.proxy.RequestHeaders;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.common.tests.util.TestResourceUtil;
 import com.tasktop.c2c.server.common.tests.util.WebApplicationContainerBean;
 import com.tasktop.c2c.server.internal.tasks.service.TaskServiceConfiguration;
@@ -160,8 +160,8 @@ public class TaskServiceClientTest extends TaskServiceTest {
 		Attachment a = taskService.retrieveAttachment(attachmentHandle.getId());
 
 		// We don't go through the proxy
-		String url = a.getUrl().replace(
-				"alm/s/" + TenancyContextHolder.getContext().getTenant().getIdentity() + "/tasks/", "tasks/");
+		String url = a.getUrl()
+				.replace("alm/s/" + TenancyUtil.getCurrentTenantProjectIdentifer() + "/tasks/", "tasks/");
 
 		WebConversation wc = new WebConversation();
 		WebRequest req = new GetMethodWebRequest(url);

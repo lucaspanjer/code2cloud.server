@@ -32,7 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Conventions;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
@@ -93,9 +92,8 @@ public class MessageErrorHandlerFilter implements Filter {
 		try {
 			chain.doFilter(request, messageResponse);
 		} catch (Throwable t) {
-			String currentTenant = TenancyContextHolder.getContext() == null
-					|| TenancyContextHolder.getContext().getTenant() == null ? "<none>" : TenancyContextHolder
-					.getContext().getTenant().getIdentity().toString();
+			String currentTenant = TenancyUtil.getCurrentTenantProjectIdentifer() == null ? "<none>" : TenancyUtil
+					.getCurrentTenantProjectIdentifer();
 			String currentUser = Security.getCurrentUser() == null ? "<none>" : Security.getCurrentUser();
 			HttpServletRequest req = (HttpServletRequest) request;
 			String reqUrl = req.getRequestURL().toString();

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.common.web.server.AbstractAutowiredRemoteServiceServlet;
 import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
 import com.tasktop.c2c.server.common.web.shared.ValidationFailedException;
@@ -188,6 +189,10 @@ public class DeploymentServiceImpl extends AbstractAutowiredRemoteServiceServlet
 		} catch (ServiceException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	protected void setTenancyContext(String projectIdentifier) {
+		TenancyUtil.setProjectTenancyContext(projectIdentifier);
 	}
 
 }

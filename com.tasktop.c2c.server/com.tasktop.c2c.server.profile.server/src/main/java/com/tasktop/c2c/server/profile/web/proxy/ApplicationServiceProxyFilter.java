@@ -26,10 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 
@@ -56,8 +56,8 @@ public class ApplicationServiceProxyFilter extends GenericFilterBean {
 		if (pathInfo != null) {
 			Matcher matcher = pathPattern.matcher(pathInfo);
 			if (matcher.matches()) {
-				String projectIdentifier = matcher.group(1);
-				if (!projectIdentifier.equals(TenancyContextHolder.getContext().getTenant().getIdentity())) {
+				String projectIdentifier = matcher.group(1).toLowerCase();
+				if (!projectIdentifier.equals(TenancyUtil.getCurrentTenantProjectIdentifer())) {
 					throw new IllegalStateException("Tenancy context not set correctly");
 				}
 				String uri = matcher.group(2);

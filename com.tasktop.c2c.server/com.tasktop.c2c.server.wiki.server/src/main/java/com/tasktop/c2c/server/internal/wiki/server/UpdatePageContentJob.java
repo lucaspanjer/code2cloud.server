@@ -15,10 +15,9 @@ package com.tasktop.c2c.server.internal.wiki.server;
 import org.springframework.context.ApplicationContext;
 import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.tenancy.core.Tenant;
-import org.springframework.tenancy.provider.DefaultTenant;
 
 import com.tasktop.c2c.server.common.service.job.Job;
-
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 /**
  * a job for updating PageContent
@@ -41,7 +40,8 @@ public class UpdatePageContentJob extends Job {
 
 	@Override
 	public void execute(ApplicationContext applicationContext) {
-		TenancyContextHolder.getContext().setTenant(new DefaultTenant(tenantIdentity, null));
+		TenancyUtil.setProjectTenancyContext(tenantIdentity.toString());
+
 		try {
 			InternalWikiService service = applicationContext.getBean(InternalWikiService.class);
 			service.updatePageContent();

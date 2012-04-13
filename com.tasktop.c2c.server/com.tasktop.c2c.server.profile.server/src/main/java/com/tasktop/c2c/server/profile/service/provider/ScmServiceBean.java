@@ -22,7 +22,6 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 
@@ -32,6 +31,7 @@ import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.Region;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.internal.profile.service.SecurityPolicy;
 import com.tasktop.c2c.server.internal.profile.service.WebServiceDomain;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -69,12 +69,12 @@ public class ScmServiceBean extends AbstractJpaServiceBean implements ScmService
 	private QuotaService quotaService;
 
 	private GitService getCurrentService() {
-		String projId = TenancyContextHolder.getContext().getTenant().getIdentity().toString();
+		String projId = TenancyUtil.getCurrentTenantProjectIdentifer();
 		return gitServiceProvider.getService(projId);
 	}
 
 	private Project getCurrentProject() throws EntityNotFoundException {
-		String projId = TenancyContextHolder.getContext().getTenant().getIdentity().toString();
+		String projId = TenancyUtil.getCurrentTenantProjectIdentifer();
 		return profileService.getProjectByIdentifier(projId);
 	}
 

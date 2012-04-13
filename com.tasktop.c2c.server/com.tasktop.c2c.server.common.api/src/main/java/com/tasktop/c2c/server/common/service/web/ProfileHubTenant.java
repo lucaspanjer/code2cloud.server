@@ -10,7 +10,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.internal.profile.service;
+package com.tasktop.c2c.server.common.service.web;
 
 import org.springframework.tenancy.core.Tenant;
 import org.springframework.tenancy.provider.DefaultTenant;

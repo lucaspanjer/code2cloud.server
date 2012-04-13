@@ -13,12 +13,10 @@
 package com.tasktop.c2c.server.profile.service.provider;
 
 import org.springframework.stereotype.Service;
-import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.tasks.service.TaskService;
 import com.tasktop.c2c.server.tasks.service.TaskServiceClient;
-
 
 @Service("taskServiceProvider")
 public class TaskServiceProvider extends AbstractPreAuthServiceProvider<TaskServiceClient> {
@@ -36,15 +34,8 @@ public class TaskServiceProvider extends AbstractPreAuthServiceProvider<TaskServ
 	}
 
 	public TaskService getTaskService(String projectIdentifier) {
-		setTenancyContext(projectIdentifier);
+		TenancyUtil.setProjectTenancyContext(projectIdentifier);
 		return getService(projectIdentifier);
-	}
-
-	private void setTenancyContext(String projectIdentifier) {
-		TenancyContextHolder.createEmptyContext();
-		DefaultTenant tenant = new DefaultTenant();
-		tenant.setIdentity(projectIdentifier);
-		TenancyContextHolder.getContext().setTenant(tenant);
 	}
 
 }

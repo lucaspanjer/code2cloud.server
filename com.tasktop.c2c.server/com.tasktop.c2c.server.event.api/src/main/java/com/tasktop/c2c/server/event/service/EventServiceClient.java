@@ -12,9 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.event.service;
 
-import org.springframework.tenancy.context.TenancyContextHolder;
-
 import com.tasktop.c2c.server.common.service.web.AbstractTrustedHostRestServiceClient;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.event.domain.Event;
 
 /**
@@ -31,7 +30,7 @@ public class EventServiceClient extends AbstractTrustedHostRestServiceClient imp
 	public void publishEvent(Event event) {
 		String currentProjectId;
 		if (projectId == null) {
-			currentProjectId = TenancyContextHolder.getContext().getTenant().getIdentity().toString();
+			currentProjectId = TenancyUtil.getCurrentTenantProjectIdentifer();
 		} else {
 			currentProjectId = projectId;
 		}

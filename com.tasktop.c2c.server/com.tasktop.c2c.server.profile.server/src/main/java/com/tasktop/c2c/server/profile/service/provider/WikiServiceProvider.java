@@ -13,12 +13,10 @@
 package com.tasktop.c2c.server.profile.service.provider;
 
 import org.springframework.stereotype.Service;
-import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.wiki.service.WikiService;
 import com.tasktop.c2c.server.wiki.service.WikiServiceClient;
-
 
 @Service("wikiServiceProvider")
 public class WikiServiceProvider extends AbstractPreAuthServiceProvider<WikiServiceClient> {
@@ -36,15 +34,8 @@ public class WikiServiceProvider extends AbstractPreAuthServiceProvider<WikiServ
 	}
 
 	public WikiService getWikiService(String projectIdentifier) {
-		setTenancyContext(projectIdentifier);
+		TenancyUtil.setProjectTenancyContext(projectIdentifier);
 		return getService(projectIdentifier);
-	}
-
-	private void setTenancyContext(String projectIdentifier) {
-		TenancyContextHolder.createEmptyContext();
-		DefaultTenant tenant = new DefaultTenant();
-		tenant.setIdentity(projectIdentifier);
-		TenancyContextHolder.getContext().setTenant(tenant);
 	}
 
 }

@@ -17,9 +17,8 @@ import net.customware.gwt.dispatch.shared.Result;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.common.web.server.AbstractActionHandler;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
 
@@ -34,12 +33,7 @@ public abstract class AbstractProfileActionHandler<A extends Action<R>, R extend
 	@Qualifier("main")
 	protected ProfileWebService profileWebService;
 
-	// FIXME copied from AARS
-	// REVIEW ugly that we have to do this in so many methods..
 	protected void setTenancyContext(String projectIdentifier) {
-		TenancyContextHolder.createEmptyContext();
-		DefaultTenant tenant = new DefaultTenant();
-		tenant.setIdentity(projectIdentifier);
-		TenancyContextHolder.getContext().setTenant(tenant);
+		TenancyUtil.setProjectTenancyContext(projectIdentifier);
 	}
 }

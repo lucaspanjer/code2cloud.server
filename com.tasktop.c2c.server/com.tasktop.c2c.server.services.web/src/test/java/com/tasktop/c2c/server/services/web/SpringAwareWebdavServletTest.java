@@ -22,11 +22,8 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
-import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 
-import com.tasktop.c2c.server.services.web.SpringAwareWebdavServlet;
-import com.tasktop.c2c.server.services.web.TenantAwareWebDavStore;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 public class SpringAwareWebdavServletTest {
 
@@ -57,12 +54,7 @@ public class SpringAwareWebdavServletTest {
 		servlet.setServletContext(new MockServletContext());
 		servlet.init();
 
-		DefaultTenant tenant = new DefaultTenant();
-		tenant.setData("data");
-		tenant.setIdentity(tenantFolder.getName());
-
-		TenancyContextHolder.createEmptyContext();
-		TenancyContextHolder.getContext().setTenant(tenant);
+		TenancyUtil.setProjectTenancyContext(tenantFolder.getName());
 	}
 
 	@After

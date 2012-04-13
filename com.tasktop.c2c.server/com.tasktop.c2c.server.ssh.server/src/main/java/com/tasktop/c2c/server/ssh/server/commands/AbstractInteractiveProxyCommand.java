@@ -45,8 +45,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
-import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
@@ -58,6 +56,7 @@ import com.tasktop.c2c.server.common.service.io.InputPipe;
 import com.tasktop.c2c.server.common.service.io.MultiplexingInputStream;
 import com.tasktop.c2c.server.common.service.io.PacketType;
 import com.tasktop.c2c.server.common.service.web.HeaderConstants;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
@@ -185,8 +184,7 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 										.getAuthorities()));
 						try {
 							// setup the tenancy context
-							TenancyContextHolder.createEmptyContext();
-							TenancyContextHolder.getContext().setTenant(new DefaultTenant(projectId, null));
+							TenancyUtil.setProjectTenancyContext(projectId);
 							try {
 								if (!hasRequiredRoles()) {
 									getLogger().info(
@@ -208,7 +206,7 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 								callback.onExit(-1, t.getClass().getSimpleName() + ": " + t.getMessage());
 								getLogger().error(t.getMessage(), t);
 							} finally {
-								TenancyContextHolder.clearContext();
+								TenancyUtil.clearContext();
 							}
 						} finally {
 							SecurityContextHolder.clearContext();

@@ -33,7 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -56,6 +55,7 @@ import com.tasktop.c2c.server.common.service.domain.criteria.ColumnCriteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
 import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.event.domain.TaskActivityEvent;
 import com.tasktop.c2c.server.event.service.EventService;
 import com.tasktop.c2c.server.event.service.EventServiceClient;
@@ -844,7 +844,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	 */
 	private void sendActivityEvent(List<TaskActivity> activities) {
 		TaskActivityEvent event = new TaskActivityEvent();
-		event.setProjectId(TenancyContextHolder.getContext().getTenant().getIdentity().toString());
+		event.setProjectId(TenancyUtil.getCurrentTenantProjectIdentifer());
 		event.setTaskActivities(activities);
 		eventService.publishEvent(event);
 	}

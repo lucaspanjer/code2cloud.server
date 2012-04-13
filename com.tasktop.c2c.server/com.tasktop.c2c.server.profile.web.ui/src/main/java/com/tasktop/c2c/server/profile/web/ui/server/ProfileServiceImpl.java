@@ -44,6 +44,7 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.common.web.server.AbstractAutowiredRemoteServiceServlet;
 import com.tasktop.c2c.server.common.web.shared.AuthenticationFailedException;
 import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
@@ -639,5 +640,9 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	@Override
 	public QueryResult<Project> findProjects(ProjectsQuery query) {
 		return profileWebService.findProjects(query);
+	}
+
+	protected void setTenancyContext(String projectIdentifier) {
+		TenancyUtil.setProjectTenancyContext(projectIdentifier);
 	}
 }

@@ -38,7 +38,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
@@ -48,6 +47,7 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.job.Job;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.common.tests.util.ValidationAssert;
 import com.tasktop.c2c.server.internal.wiki.server.UpdatePageContentJob;
 import com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty;
@@ -89,7 +89,7 @@ public abstract class BaseWikiServiceTest {
 	public void before() {
 		if (TenancyContextHolder.getContext().getTenant() == null) {
 			tenantSet = true;
-			TenancyContextHolder.getContext().setTenant(new DefaultTenant("test", "test"));
+			TenancyUtil.setProjectTenancyContext("test");
 		}
 		author = new Person();
 		author.setName("Joe Bloe");

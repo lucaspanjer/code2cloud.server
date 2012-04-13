@@ -20,9 +20,9 @@ import net.sf.webdav.LocalFileSystemStore;
 import net.sf.webdav.StoredObject;
 
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.tenancy.context.TenancyContextHolder;
 
 import com.tasktop.c2c.server.common.service.domain.Role;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 public class TenantAwareWebDavStore extends LocalFileSystemStore {
 
@@ -35,7 +35,7 @@ public class TenantAwareWebDavStore extends LocalFileSystemStore {
 		// Task 1122 - strip out relative paths to prevent directory traversal attacks
 		String retUri = uri.replaceAll("/\\.\\./", "/").replaceAll("/\\.\\.", "/");
 
-		return TenancyContextHolder.getContext().getTenant().getIdentity() + "/" + retUri;
+		return TenancyUtil.getCurrentTenantProjectIdentifer() + "/" + retUri;
 	}
 
 	@Override

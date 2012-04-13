@@ -22,12 +22,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jgit.http.server.GitServlet;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.web.context.ServletConfigAware;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.domain.Role;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -74,8 +74,8 @@ public class GitSmartHttpServlet extends GitServlet implements InitializingBean,
 			// Our request was rejected - time to send back an appropriate error.
 			if (roles.contains(Role.Anonymous)) {
 				// This was an anonymous request, so prompt the user for credentials - perhaps they can still do this.
-				response.addHeader("WWW-Authenticate", String.format("Basic realm=\"%s\"", TenancyContextHolder
-						.getContext().getTenant().getIdentity()));
+				response.addHeader("WWW-Authenticate",
+						String.format("Basic realm=\"%s\"", TenancyUtil.getCurrentTenantProjectIdentifer()));
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please login to continue");
 			} else {
 				// This user was authenticated, but this request is not allowed for permissions reasons - reject it.

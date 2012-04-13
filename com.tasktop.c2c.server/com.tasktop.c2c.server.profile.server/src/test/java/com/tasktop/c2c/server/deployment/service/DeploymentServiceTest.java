@@ -32,13 +32,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.DefaultTenant;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
@@ -77,8 +76,7 @@ public class DeploymentServiceTest {
 	@Before
 	public void setup() throws Exception {
 		Project mock = MockProjectFactory.create(entityManager);
-		TenancyContextHolder.createEmptyContext();
-		TenancyContextHolder.getContext().setTenant(new DefaultTenant(mock.getIdentifier(), mock));
+		TenancyUtil.setProjectTenancyContext(mock.getIdentifier());
 
 		context = new JUnit4Mockery();
 		final DeploymentServiceFactory mockCloudServiceFactory = context.mock(DeploymentServiceFactory.class);

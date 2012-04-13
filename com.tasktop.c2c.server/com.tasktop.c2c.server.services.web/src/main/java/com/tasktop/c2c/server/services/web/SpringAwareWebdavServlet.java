@@ -48,13 +48,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.web.context.ServletContextAware;
-
 
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.domain.Role;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 // This class is based upon net.sf.webdav.WebDavServletBean and net.sf.webdav.WebdavServlet, however they
 // were written in such a way that they did not work correctly with Spring, and also suppressed security
@@ -156,8 +155,8 @@ public class SpringAwareWebdavServlet extends HttpServlet implements ServletCont
 			// Our request was rejected - time to send back an appropriate error.
 			if (roles.contains(Role.Anonymous)) {
 				// This was an anonymous request, so prompt the user for credentials - perhaps they can still do this.
-				resp.addHeader("WWW-Authenticate", String.format("Basic realm=\"%s\"", TenancyContextHolder
-						.getContext().getTenant().getIdentity()));
+				resp.addHeader("WWW-Authenticate",
+						String.format("Basic realm=\"%s\"", TenancyUtil.getCurrentTenantProjectIdentifer()));
 				resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please login to continue");
 			} else {
 				// This user was authenticated, but this request is not allowed for permissions reasons - reject it.
