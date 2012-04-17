@@ -44,7 +44,7 @@
 		p:webHost="${profile.application.host}"
 		p:baseContextPath="${profile.prefix.path}"
 		p:serviceProxyPath="${profile.serviceProxy.path}"
-		p:maxAttachmentSize="${wiki.attachemnt.maxSize}"
+		p:maxAttachmentSize="${wiki.attachment.maxSize}"
 	/>
 	
 	<bean id="wikiConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
