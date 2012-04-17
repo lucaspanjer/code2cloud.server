@@ -62,6 +62,15 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 	public EditTaskPresenter(EditTaskDisplay view) {
 		super(view);
 
+		editTaskView.getAttachmentDisplay().addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+			@Override
+			public void onSubmitComplete(SubmitCompleteEvent event) {
+				String json = event.getResults();
+				handleAttachmentUploadResultJson(json);
+			}
+
+		});
+
 	}
 
 	public EditTaskPresenter() {
@@ -125,81 +134,66 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 		}
 	}
 
-	@Override
-	public void bind() {
-		super.bind();
+	private void handleAttachmentUploadResultJson(String json) {
+		JSONValue value = JSONParser.parseLenient(json);
+		JSONValue uploadResultValue = value.isObject().get("uploadResult");
+		JSONObject uploadResult = uploadResultValue == null ? null : value.isObject().get("uploadResult").isObject();
 
-		editTaskView.getAttachmentDisplay().addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-			@Override
-			public void onSubmitComplete(SubmitCompleteEvent event) {
-				String json = event.getResults();
-				JSONValue value = JSONParser.parseLenient(json);
-				JSONValue uploadResultValue = value.isObject().get("uploadResult");
-				JSONObject uploadResult = uploadResultValue == null ? null : value.isObject().get("uploadResult")
-						.isObject();
+		if (uploadResult != null) {
+			// update the taskHandle for the task
+			TaskHandle taskHandle = buildTaskHandle(uploadResult);
+			task.setTaskHandle(taskHandle);
+			// update the the hidden taskHandle field
+			editTaskView.getAttachmentDisplay().setValueHiddenTaskValue(
+					AttachmentUploadUtil.createTaskHandleValue(taskHandle));
 
-				if (uploadResult != null) {
-					// update the taskHandle for the task
-					TaskHandle taskHandle = buildTaskHandle(uploadResult);
-					task.setTaskHandle(taskHandle);
-					// update the the hidden taskHandle field
-					editTaskView.getAttachmentDisplay().setValueHiddenTaskValue(
-							AttachmentUploadUtil.createTaskHandleValue(taskHandle));
+			// update the attachments table
+			JSONArray attachments = uploadResult.get("attachments").isArray();
+			JSONObject attachmentJSON = attachments.get(0).isObject();
+			Attachment newAttachment = buildAttachment(attachmentJSON);
+			addAttachment(newAttachment);
 
-					// update the attachments table
-					JSONArray attachments = uploadResult.get("attachments").isArray();
-					JSONObject attachmentJSON = attachments.get(0).isObject();
-					Attachment newAttachment = buildAttachment(attachmentJSON);
-					addAttachment(newAttachment);
+			// reset the attachment upload form
+			editTaskView.getAttachmentDisplay().resetForm();
 
-					// reset the attachment upload form
-					editTaskView.getAttachmentDisplay().resetForm();
-
-				} else {
-					String message = "Error: Unexpected server response";
-					JSONValue errorValue = value.isObject().get("error");
-					JSONObject errorObject = errorValue == null ? null : errorValue.isObject();
-					if (errorObject != null) {
-						JSONString errorMessage = errorObject.get("message").isString();
-						if (errorMessage != null) {
-							message = errorMessage.stringValue();
-						}
-					}
-					ProfileGinjector.get.instance().getNotifier().displayMessage(Message.createErrorMessage(message));
+		} else {
+			String message = "Error: Unexpected server response";
+			JSONValue errorValue = value.isObject().get("error");
+			JSONObject errorObject = errorValue == null ? null : errorValue.isObject();
+			if (errorObject != null) {
+				JSONString errorMessage = errorObject.get("message").isString();
+				if (errorMessage != null) {
+					message = errorMessage.stringValue();
 				}
 			}
-
-			private TaskHandle buildTaskHandle(JSONObject uploadResult) {
-				JSONObject taskHandleJSON = uploadResult.get("taskHandle").isObject();
-				TaskHandle taskHandle = new TaskHandle();
-				taskHandle.setId(Integer.valueOf(taskHandleJSON.get("id").isNumber().toString()));
-				taskHandle.setVersion(taskHandleJSON.get("version").isString().stringValue());
-				return taskHandle;
-			}
-
-			private Attachment buildAttachment(JSONObject attachmentJSON) {
-				Attachment newAttachment = new Attachment();
-				newAttachment.setId(Integer.valueOf(attachmentJSON.get("id").isNumber().toString()));
-				newAttachment.setFilename(attachmentJSON.get("filename").isString().stringValue());
-				newAttachment.setDescription(attachmentJSON.get("description").isString().stringValue());
-				newAttachment.setByteSize(Integer.valueOf(attachmentJSON.get("byteSize").isNumber().toString()));
-				newAttachment.setUrl(attachmentJSON.get("url").isString().stringValue());
-				TaskUserProfile taskUserProfile = toTaskUserProfile(getAppState().getSelf());
-				newAttachment.setSubmitter(taskUserProfile);
-				return newAttachment;
-			}
-		});
-
+			ProfileGinjector.get.instance().getNotifier().displayMessage(Message.createErrorMessage(message));
+		}
 	}
 
-	public void setAttachments(List<Attachment> attachments) {
-		editTaskView.getAttachmentDisplay().setAttachments(attachments);
+	private TaskHandle buildTaskHandle(JSONObject uploadResult) {
+		JSONObject taskHandleJSON = uploadResult.get("taskHandle").isObject();
+		TaskHandle taskHandle = new TaskHandle();
+		taskHandle.setId(Integer.valueOf(taskHandleJSON.get("id").isNumber().toString()));
+		taskHandle.setVersion(taskHandleJSON.get("version").isString().stringValue());
+		return taskHandle;
+	}
+
+	private Attachment buildAttachment(JSONObject attachmentJSON) {
+		Attachment newAttachment = new Attachment();
+		newAttachment.setId(Integer.valueOf(attachmentJSON.get("id").isNumber().toString()));
+		newAttachment.setFilename(attachmentJSON.get("filename").isString().stringValue());
+		newAttachment.setDescription(attachmentJSON.get("description").isString().stringValue());
+		newAttachment.setByteSize(Integer.valueOf(attachmentJSON.get("byteSize").isNumber().toString()));
+		newAttachment.setUrl(attachmentJSON.get("url").isString().stringValue());
+		TaskUserProfile taskUserProfile = toTaskUserProfile(getAppState().getSelf());
+		newAttachment.setSubmitter(taskUserProfile);
+		return newAttachment;
 	}
 
 	public void addAttachment(Attachment attachment) {
 		List<Attachment> attachments = editTaskView.getAttachmentDisplay().getAttachments();
 		attachments.add(attachment);
-		setAttachments(attachments);
+		editTaskView.getAttachmentDisplay().setAttachments(attachments);
 	}
 
 	@Override
