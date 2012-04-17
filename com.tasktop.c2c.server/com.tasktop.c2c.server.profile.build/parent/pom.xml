@@ -40,13 +40,13 @@
 			<name>Code2Cloud internal repo</name>
 			<url>https://q.tasktop.com/alm/s/c2c/maven/</url>
 		</repository>
-		<!--
+		
 		<repository>
 			<id>spring-tenancy</id>
 			<name>Spring Tenancy</name>
-			<url>https://r.tasktop.com.com/s/spring-tenancy/maven/</url>
+			<url>https://r.tasktop.com/s/spring-tenancy/maven/</url>
 		</repository>
-		-->
+		
 		<repository>
             <id>guice-maven</id>
             <name>guice maven</name>
