@@ -196,7 +196,7 @@
 		</preConditions>
 		<dropTable tableName="SEQUENCE"/>
 	</changeSet>
-	<changeSet author="cmorgan" id="modifyAttachmentContentSize-task2154">
+	<changeSet author="cmorgan" id="modifyAttachmentContentSize-task2154" dbms="hsqldb, mysql">
 		<modifyDataType tableName="AttachmentContent" columnName="content" newDataType="MEDIUMBLOB"/>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMBLOB" with="VARBINARY(16777215)"/>
