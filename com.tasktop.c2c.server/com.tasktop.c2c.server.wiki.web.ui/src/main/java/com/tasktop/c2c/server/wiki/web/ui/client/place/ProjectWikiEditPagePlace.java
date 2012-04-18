@@ -137,10 +137,10 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 		if (!isNew) {
 			page = retrievePageResult.get();
 			attachements = getResult(ListAttachmentsResult.class).get();
-		} else {
-			RetrieveConfigurationPropertyResult retrieveConfigurationPropertyResult = getResult(RetrieveConfigurationPropertyResult.class);
-			markupLanguage = retrieveConfigurationPropertyResult.get();
 		}
+		RetrieveConfigurationPropertyResult retrieveConfigurationPropertyResult = getResult(RetrieveConfigurationPropertyResult.class);
+		markupLanguage = retrieveConfigurationPropertyResult.get();
+
 		createBreadcrumbs(project);
 		onPlaceDataFetched();
 	}

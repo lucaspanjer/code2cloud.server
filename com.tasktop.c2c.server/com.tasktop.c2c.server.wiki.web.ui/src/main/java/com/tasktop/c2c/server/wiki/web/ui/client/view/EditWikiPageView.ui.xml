@@ -61,6 +61,14 @@
  						</g:HTMLPanel>
 		<div class="clear"></div>
    	  </div>
+   	  	 <div class="attachments edit">
+ 						<g:HTMLPanel ui:field="changeMarkupPanel">
+ 						<h3>Change wiki markup to current language preference (<g:Label ui:field="currentLangPref" />)</h3>
+						<fieldset>
+							<g:Button ui:field='changeMarkup' addStyleNames="button special">Change</g:Button>  </fieldset>
+ 						</g:HTMLPanel>
+	<div class="clear"></div>
+   	  </div>
 		<div class="save top-margin">
 			<g:Button ui:field="saveButton" addStyleNames="button special right">Save</g:Button>
 			<g:Button ui:field="cancelButton" addStyleNames="button right">Cancel</g:Button>
