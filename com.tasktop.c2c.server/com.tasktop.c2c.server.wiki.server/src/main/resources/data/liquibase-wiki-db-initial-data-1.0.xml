@@ -5,7 +5,7 @@
 	
 	<changeSet id="defaultMarkupLangConfigProperty" author="lpanjer" dbms="mysql, hsqldb">
 		<preConditions onFail="MARK_RAN">
-			<sqlCheck expectedResult="0">SELECT COUNT(*) FROM CONFIGURATIONPROPERTY WHERE NAME='MARKUP_LANGUAGE';</sqlCheck>
+			<sqlCheck expectedResult="0">SELECT COUNT(*) FROM ConfigurationProperty WHERE NAME='MARKUP_LANGUAGE';</sqlCheck>
 		</preConditions>
 		<insert tableName="ConfigurationProperty">
 			<column name="VERSION" value="1" />
