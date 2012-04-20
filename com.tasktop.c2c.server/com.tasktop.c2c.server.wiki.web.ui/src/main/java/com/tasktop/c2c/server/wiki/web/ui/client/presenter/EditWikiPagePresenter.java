@@ -80,6 +80,13 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 				attachmentsSubmitted(event);
 			}
 		});
+		view.addChangeMarkupClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				doChangeMarkup(view.getPage());
+			}
+		});
 	}
 
 	public EditWikiPagePresenter() {
@@ -111,10 +118,18 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 
 		void setMarkupLanguage(String markupLanguage);
 
+		void setCurrentMarkupPreference(String markupLanguage);
+
 		/**
 		 * @return
 		 */
 		boolean isDirty();
+
+		void setChangeMarkupPanelVisible(boolean visible);
+
+		void addChangeMarkupClickHandler(ClickHandler clickHandler);
+
+		String getMarkupPreference();
 
 	}
 
@@ -149,7 +164,12 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 		view.setAttachments(place.getAttachements());
 		view.setProjectIdentifier(projectIdentifier);
 		view.setMarkupLanguage(page.getMarkupLanguage());
-
+		view.setCurrentMarkupPreference(place.getMarkupLanguage());
+		if (page.getMarkupLanguage().equals(place.getMarkupLanguage())) {
+			view.setChangeMarkupPanelVisible(false);
+		} else {
+			view.setChangeMarkupPanelVisible(true);
+		}
 	}
 
 	public void setPath(String path) {
@@ -250,6 +270,23 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 						}
 					});
 		}
+	}
+
+	protected void doChangeMarkup(Page page) {
+		page.setMarkupLanguage(view.getMarkupPreference());
+		getDispatchService().execute(new UpdatePageAction(getProjectIdentifier(), page),
+				new AsyncCallbackSupport<UpdatePageResult>(new OperationMessage("Updating Page...")) {
+					@Override
+					protected void success(UpdatePageResult result) {
+						Page savedPage = result.get();
+						ProjectWikiViewPagePlace place = ProjectWikiViewPagePlace.createPlaceForPage(
+								getProjectIdentifier(), savedPage.getPath());
+						place.displayOnArrival(Message.createSuccessMessage("Page updated"));
+						place.go();
+
+					}
+				});
+
 	}
 
 	/**

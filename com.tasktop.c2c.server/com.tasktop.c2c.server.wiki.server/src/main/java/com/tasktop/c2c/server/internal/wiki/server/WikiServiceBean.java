@@ -319,7 +319,10 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		}
 
 		String newContent = wikiPage.getContent();
-		if (!page.getLastPageContent().getContent().equals(newContent)) {
+		if (!page.getLastPageContent().getContent().equals(newContent)
+				|| !page.getMarkupLanguage().equals(wikiPage.getMarkupLanguage())) {
+			page.setMarkupLanguage(wikiPage.getMarkupLanguage());
+
 			Person author = getCurrentPerson();
 
 			PageContent pageContent = new PageContent();

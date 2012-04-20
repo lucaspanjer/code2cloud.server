@@ -81,6 +81,14 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 	@UiField
 	Button attachmentSubmit;
 
+	@UiField
+	Panel changeMarkupPanel;
+	@UiField
+	Button changeMarkup;
+	@UiField
+	@Ignore
+	Label currentLangPref;
+
 	private Collection<GroupAccess> availableAccessSettings;
 
 	private static final class GroupAccessRenderer implements Renderer<GroupAccess> {
@@ -193,6 +201,11 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 		content.setMarkLanguage(markupLanguage);
 	}
 
+	@Override
+	public void setCurrentMarkupPreference(String markupLanguage) {
+		currentLangPref.setText(markupLanguage);
+	}
+
 	public Page getPage() {
 		updateModel();
 		return page;
@@ -207,6 +220,11 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 	public void addSaveClickHandler(final ClickHandler clickHandler) {
 		saveButton2.addClickHandler(clickHandler);
 		saveButton.addClickHandler(clickHandler);
+	}
+
+	@Override
+	public void addChangeMarkupClickHandler(final ClickHandler clickHandler) {
+		changeMarkup.addClickHandler(clickHandler);
 	}
 
 	@Override
@@ -245,6 +263,15 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 	@Override
 	public void clearAttachementForm() {
 		attachmentForm.reset();
+	}
+
+	public void setChangeMarkupPanelVisible(boolean visible) {
+		changeMarkupPanel.setVisible(visible);
+	}
+
+	@Override
+	public String getMarkupPreference() {
+		return currentLangPref.getText();
 	}
 
 	private boolean isEditing;
