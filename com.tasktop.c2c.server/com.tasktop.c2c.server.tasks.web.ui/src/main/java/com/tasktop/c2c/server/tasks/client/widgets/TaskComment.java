@@ -16,7 +16,6 @@ import static com.tasktop.c2c.server.common.web.client.widgets.Format.stringValu
 
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -30,6 +29,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonDetailPopupPanel;
@@ -63,7 +63,8 @@ public class TaskComment extends Composite {
 				existingText = "";
 			}
 			String replyText = "(In reply to comment #" + commentNumber + ")\n";
-			replyText += RegExp.compile("^", "gm").replace(comment.getCommentText(), "> ");
+			replyText += RegExp.compile("^", "gm").replace(StringUtils.chopLongLinesAtSpaces(80, comment.getCommentText()),
+					"> ");
 
 			String newText;
 			int cursorPosition = getCommentCursorPosition();
