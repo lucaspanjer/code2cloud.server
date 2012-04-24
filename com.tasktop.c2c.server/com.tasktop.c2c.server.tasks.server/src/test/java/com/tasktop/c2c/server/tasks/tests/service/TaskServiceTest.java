@@ -2566,6 +2566,7 @@ public class TaskServiceTest {
 			assertNotNull(keyword.getName());
 			assertNotNull(keyword.getDescription());
 		}
+		assertNotNull(ctx.getMarkupLanguage());
 
 		int numComponentsFound = 0;
 		for (com.tasktop.c2c.server.tasks.domain.Product product : ctx.getProducts()) {

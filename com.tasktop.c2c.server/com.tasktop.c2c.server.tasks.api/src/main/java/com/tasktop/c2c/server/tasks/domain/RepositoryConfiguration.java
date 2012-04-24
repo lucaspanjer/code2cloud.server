@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.tasktop.c2c.server.tasks.service.TaskService;
+
 /**
  * Container class for Task Repository configuration
  * 
@@ -348,6 +350,10 @@ public class RepositoryConfiguration implements Serializable {
 
 	public String getConfigurationProperty(String key) {
 		return configurationProperties.get(key);
+	}
+
+	public String getMarkupLanguage() {
+		return configurationProperties.get(TaskService.MARKUP_LANGUAGE_DB_KEY);
 	}
 
 }

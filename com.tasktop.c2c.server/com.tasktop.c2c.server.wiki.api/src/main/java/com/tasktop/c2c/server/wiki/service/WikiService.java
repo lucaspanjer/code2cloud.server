@@ -218,11 +218,11 @@ public interface WikiService {
 	 */
 	public String retrieveConfigurationProperty(String propertyName) throws EntityNotFoundException;
 
-	PageOutline retrieveOutlineByPath(String path) throws EntityNotFoundException;
+	public PageOutline retrieveOutlineByPath(String path) throws EntityNotFoundException;
 
-	String renderPreview(String pagePath, String markup) throws EntityNotFoundException;
+	public String renderPreview(String pagePath, String markup) throws EntityNotFoundException;
 
-	void restorePage(Integer pageId) throws EntityNotFoundException;
+	public void restorePage(Integer pageId) throws EntityNotFoundException;
 
 	/**
 	 * @param name

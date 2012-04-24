@@ -1428,6 +1428,10 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return results;
 	}
 
+	private String getMarkupLanguage() {
+		return getConfigurationProperties().get(TaskService.MARKUP_LANGUAGE_DB_KEY);
+	}
+
 	@SuppressWarnings("unchecked")
 	private <T> List<T> getAll(Class<?> internalClass, Class<T> resultClass, String orderByField) {
 		String queryStr = String.format("select curTarget from %s curTarget order by curTarget.%s",
