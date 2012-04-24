@@ -1553,7 +1553,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			needPubParam = true;
 			whereString = "WHERE project.accessibility = :public ";
 			break;
-		// TODO
 		default:
 			throw new IllegalStateException();
 		}
@@ -1690,8 +1689,13 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		securityPolicy.delete(project);
 
-		for (ProjectService service : project.getProjectServiceProfile().getProjectServices()) {
-			jobService.schedule(new ProjectServiceDeprovisioningJob(project.getIdentifier(), service.getId()));
+		if (project.getProjectServiceProfile() == null
+				|| project.getProjectServiceProfile().getProjectServices().isEmpty()) {
+			doDeleteProject(projectIdentifier);
+		} else {
+			for (ProjectService service : project.getProjectServiceProfile().getProjectServices()) {
+				jobService.schedule(new ProjectServiceDeprovisioningJob(project.getIdentifier(), service.getId()));
+			}
 		}
 
 	}
