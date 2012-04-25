@@ -181,6 +181,8 @@ public class MySQLSqlDialect extends SqlDialect {
 
 	@Override
 	public String showColumns(String tablename) {
-		return String.format("show columns from %s ", quoteIdentifier(tablename));
+		return String.format(
+				"SELECT column_name from information_schema.columns where table_schema=Schema() AND table_name = %s",
+				literal(tablename));
 	}
 }
