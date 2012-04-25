@@ -103,14 +103,14 @@ public class TaskCustomFieldServiceBean extends AbstractJpaServiceBean implement
 			List<CustomFieldValue> values = new ArrayList<CustomFieldValue>(resultList.size());
 			for (Object[] result : resultList) {
 				CustomFieldValue value = new CustomFieldValue();
-				value.setId((Integer) result[0]);
+				value.setId(((Number) result[0]).intValue());
 				value.setValue((String) result[1]);
-				if (result[2] instanceof Integer) {
-					value.setIsActive(((Integer) result[2]) == 1);
+				if (result[2] instanceof Number) {
+					value.setIsActive(((Number) result[2]).intValue() == 1);
 				} else if (result[2] instanceof Boolean) {
 					value.setIsActive((Boolean) result[2]);
 				}
-				Integer sortKey = (Integer) result[3];
+				Integer sortKey = ((Number) result[3]).intValue();
 				value.setSortkey(sortKey.shortValue());
 				values.add(value);
 			}
@@ -394,11 +394,8 @@ public class TaskCustomFieldServiceBean extends AbstractJpaServiceBean implement
 	private String insertCustomFieldValue(FieldDescriptor descriptor, CustomFieldValue value) {
 		String tableName = computeTableName(descriptor);
 
-		return String.format("insert into %s (%s, %s) values (%s, %s)",//
-				sqlDialect.quoteIdentifier(tableName),//
-				sqlDialect.quoteIdentifier("value"),//
-				sqlDialect.quoteIdentifier("sortkey"),//
-				sqlDialect.literal(value.getValue()), sqlDialect.literal(value.getSortkey()));
+		return sqlDialect.insert(tableName, "id", new String[] { "value", "sortkey" },
+				new String[] { sqlDialect.literal(value.getValue()), sqlDialect.literal(value.getSortkey()) });
 	}
 
 	@Override

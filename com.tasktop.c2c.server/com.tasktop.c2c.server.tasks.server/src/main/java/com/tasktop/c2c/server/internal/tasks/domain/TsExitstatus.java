@@ -40,7 +40,6 @@ public class TsExitstatus implements java.io.Serializable {
 	}
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "jobid", unique = true, nullable = false)
 	public Integer getJobid() {
 		return this.jobid;

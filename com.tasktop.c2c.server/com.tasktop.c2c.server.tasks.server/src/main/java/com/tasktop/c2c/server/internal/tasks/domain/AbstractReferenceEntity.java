@@ -12,10 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.tasks.domain;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
@@ -28,7 +25,6 @@ public abstract class AbstractReferenceEntity implements java.io.Serializable {
 	private short sortkey;
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
 	public Short getId() {
 		return this.id;
@@ -40,6 +36,9 @@ public abstract class AbstractReferenceEntity implements java.io.Serializable {
 
 	@Column(name = "value", unique = true, nullable = false, length = 64)
 	public String getValue() {
+		if (this.value == null) {
+			return ""; // Workaround for oracle db
+		}
 		return this.value;
 	}
 

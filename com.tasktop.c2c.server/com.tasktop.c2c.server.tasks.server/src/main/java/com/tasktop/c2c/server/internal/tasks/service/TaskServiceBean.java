@@ -429,7 +429,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	public QueryResult<Task> findTasksWithCriteria(Criteria criteria, QuerySpec querySpec) {
 		QuerySpec impliedQuerySpec = getImpliedQuerySpec(querySpec);
 
-		TaskQuery taskQuery = TaskQuery.create(taskCustomFieldService, criteria, impliedQuerySpec.getSortInfo());
+		TaskQuery taskQuery = TaskQuery.create(taskCustomFieldService, criteria, impliedQuerySpec.getSortInfo(),
+				configuration);
 		int totalResultsCount = taskQuery.countResults(entityManager);
 		List<com.tasktop.c2c.server.internal.tasks.domain.Task> results = taskQuery.getResults(entityManager,
 				impliedQuerySpec.getRegion());
@@ -1014,7 +1015,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	private void checkForUpdateCollision(long lastUpdateTimeFromDB, String versionFromToUpdate)
 			throws ConcurrentUpdateException {
 		if (lastUpdateTimeFromDB != Long.parseLong(versionFromToUpdate)) {
-			throw new ConcurrentUpdateException();
+			throw new ConcurrentUpdateException(String.format("DB version: [%s], version provided: [%s]",
+					lastUpdateTimeFromDB, versionFromToUpdate));
 		}
 	}
 
@@ -1480,6 +1482,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 				com.tasktop.c2c.server.internal.tasks.domain.Task.class, taskHandle.getId());
 		TaskUserProfile user = getLoggedInTaskUserProfile();
 
+		entityManager.refresh(managedTask); // So that we get the latest/rounded value
 		checkForUpdateCollision(managedTask.getDeltaTs().getTime(), taskHandle.getVersion());
 
 		com.tasktop.c2c.server.internal.tasks.domain.Attachment internalAttachment = saveAttachment(attachment,
@@ -1504,17 +1507,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		sendActivityEvent(activities);
 
 		return new AttachmentHandle(internalAttachment.getId(), new TaskHandle(managedTask.getId(),
-				Long.toString(convertToMySQLTimeInMilliseconds(managedTask.getDeltaTs()))));
-	}
-
-	/**
-	 * Mysql drop the millisecond resolution on dates.
-	 * 
-	 * @return
-	 */
-	private long convertToMySQLTimeInMilliseconds(Date date) {
-		long fullTime = date.getTime();
-		return fullTime - (fullTime % 1000);
+				Long.toString(managedTask.getDeltaTs().getTime())));
 	}
 
 	private com.tasktop.c2c.server.internal.tasks.domain.Attachment saveAttachment(Attachment attachment,

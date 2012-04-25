@@ -59,7 +59,6 @@ public class Flagtypes implements java.io.Serializable {
 	}
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
 	public Short getId() {
 		return this.id;

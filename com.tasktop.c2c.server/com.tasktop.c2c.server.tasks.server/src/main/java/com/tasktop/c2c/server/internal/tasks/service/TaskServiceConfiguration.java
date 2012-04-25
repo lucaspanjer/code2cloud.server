@@ -22,6 +22,7 @@ public class TaskServiceConfiguration extends BaseProfileConfiguration {
 
 	private Integer maxAttachmentSize;
 	private Integer maxAttachmentFilenameSize;
+	private boolean treatEmptyStringAsNullInDatabase;
 
 	public String getProfileProjectIdentifier() {
 		return TenancyUtil.getCurrentTenantProjectIdentifer();
@@ -53,6 +54,14 @@ public class TaskServiceConfiguration extends BaseProfileConfiguration {
 
 	public void setMaxAttachmentFilenameSize(Integer maxAttachmentFilenameSize) {
 		this.maxAttachmentFilenameSize = maxAttachmentFilenameSize;
+	}
+
+	public boolean isTreatEmptyStringAsNullInDatabase() {
+		return treatEmptyStringAsNullInDatabase;
+	}
+
+	public void setTreatEmptyStringAsNullInDatabase(boolean treatEmptyStringAsNullInDatabase) {
+		this.treatEmptyStringAsNullInDatabase = treatEmptyStringAsNullInDatabase;
 	}
 
 }

@@ -13,7 +13,7 @@
 package com.tasktop.c2c.server.tasks.domain;
 
 /**
- * A minimal representaiton of a task with enough information needed to retrieve a task, as well as check for concurrent
+ * A minimal representation of a task with enough information needed to retrieve a task, as well as check for concurrent
  * updates.
  * 
  */
@@ -41,5 +41,10 @@ public class TaskHandle extends AbstractDomainObject {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	@Override
+	public String toString() {
+		return "{id: [" + getId() + "], version: [" + version + "]}";
 	}
 }

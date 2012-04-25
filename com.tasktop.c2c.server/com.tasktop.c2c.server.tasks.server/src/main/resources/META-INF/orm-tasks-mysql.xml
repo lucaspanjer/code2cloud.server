@@ -1,0 +1,391 @@
+<?xml version="1.0"?>
+<entity-mappings
+	xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.eclipse.org/eclipselink/xsds/persistence/orm http://www.eclipse.org/eclipselink/xsds/eclipselink_orm_1_2.xsd"
+	version="1.2">
+
+	<persistence-unit-metadata>
+		<persistence-unit-defaults>
+			<delimited-identifiers />
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<object-type-converter name="booleanToByte"
+		data-type="java.lang.Byte" object-type="java.lang.Boolean">
+		<conversion-value data-value="1" object-value="true" />
+		<conversion-value data-value="0" object-value="false" />
+	</object-type-converter>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.AttachmentData">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Attachment">
+		<attributes>
+			<id name="id">
+				<column name="attach_id" unique="true" nullable="false" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.BugGroupMap">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Task">
+		<attributes>
+			<id name="id">
+				<column name="bug_id" unique="true" nullable="false" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.TaskActivity">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.BugSeeAlso">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.TaskSeverity">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.TaskFulltext">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.TaskStatus">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.BzSchema">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.CategoryGroupMap">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Cc">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Classification">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.ComponentCc">
+		
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Component">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Dependency">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Duplicate">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.EmailSetting">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Fielddef">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Flagexclusions">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Flaginclusions">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Flags">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Flagtypes">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.GroupControlMap">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.GroupGroupMap">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Group">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Keyworddef">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Keyword">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Logincookie">
+
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.LoginFailure">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Comment">
+		<attributes>
+			<id name="id">
+				<column name="comment_id" unique="true" nullable="false" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Milestone">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Namedquery">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.internal.tasks.domain.NamedqueryLinkInFooter">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.internal.tasks.domain.NamedqueryGroupMap">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.OpSys">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Priority">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Product">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Profile">
+		<attributes>
+			<id name="id">
+				<column name="userid" unique="true" nullable="false" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.ProfileActivity">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.ProfileSetting">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Quips">
+		<attributes>
+			<id name="quipid">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.RepPlatform">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Resolution">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.SavedTaskQuery">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Series">
+		<attributes>
+			<id name="seriesId">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.SeriesCategories">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.SeriesData">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Setting">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.SettingValue">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.StatusWorkflow">
+		
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Token">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.TsError">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.TsExitstatus">
+		<attributes>
+			<id name="jobid">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.TsFuncmap">
+		<attributes>
+			<id name="funcid">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.TsJob">
+		<attributes>
+			<id name="jobid">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.TsNote">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.UserGroupMap">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Version">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Vote">
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.Watch">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.WhineEvent">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.WhineQuery">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.WhineSchedule">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tasktop.c2c.server.internal.tasks.domain.TaskType">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
+		class="com.tasktop.c2c.server.internal.tasks.domain.ConfigurationProperty">
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+
+</entity-mappings>

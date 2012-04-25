@@ -123,4 +123,29 @@ public abstract class SqlDialect {
 
 	public abstract List<String> dropColumn(String tableName, String columnName);
 
+	public String insert(String tableName, String autoIncCol, String[] columns, String[] values) {
+		if (columns.length != values.length) {
+			throw new IllegalArgumentException();
+		}
+		StringBuilder result = new StringBuilder();
+		result.append(String.format("insert into %s (", quoteIdentifier(tableName)));
+		for (int i = 0; i < columns.length; i++) {
+			if (i > 0) {
+				result.append(", ");
+			}
+			result.append(quoteIdentifier(columns[i]));
+		}
+		result.append(") values (");
+
+		for (int i = 0; i < values.length; i++) {
+			if (i > 0) {
+				result.append(", ");
+			}
+			result.append(values[i]);
+		}
+		result.append(")");
+
+		return result.toString();
+	}
+
 }

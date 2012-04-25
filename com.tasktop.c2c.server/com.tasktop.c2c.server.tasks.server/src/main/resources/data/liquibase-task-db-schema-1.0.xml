@@ -14,6 +14,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createAttachmentsTable">
 		<createTable tableName="attachments">
@@ -55,8 +58,11 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	<modifySql dbms="hsqldb">
+    	<modifySql dbms="hsqldb, oracle">
          	<replace replace="TINYTEXT" with="VARCHAR(255)"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createBugGroupMapTable">
@@ -71,6 +77,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createBugSeeAlsoTable">
 		<createTable tableName="bug_see_also">
@@ -83,6 +92,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createBugSeverityTable">
@@ -190,8 +202,8 @@
 			<column defaultValueNumeric="1" name="cclist_accessible" type="TINYINT">
 				<constraints nullable="false" />
 			</column>
-			<column defaultValueNumeric="0.00" name="estimated_time" type="DECIMAL(7,2)">
-				<constraints nullable="false" />
+			<column name="estimated_time" type="DECIMAL(7,2)" >
+				<constraints nullable="true" />
 			</column>
 			<column defaultValueNumeric="0.00" name="remaining_time" type="DECIMAL(7,2)">
 				<constraints nullable="false" />
@@ -209,8 +221,11 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+    	 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createBugsActivityTable">
@@ -234,8 +249,11 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	<modifySql dbms="hsqldb">
+    	<modifySql dbms="hsqldb, oracle">
          	<replace replace="TINYTEXT" with="VARCHAR(255)"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<!-- TODO need a DB-agnostic way to enable fulltext indexing. This is in 
@@ -260,11 +278,14 @@
 			FULLTEXT KEY
 			bugs_fulltext_comments_noprivate_idx (comments_noprivate))ENGINE=MyISAM DEFAULT CHARSET=utf8 "/>
     	</modifySql>
-		 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+		 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
     	 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createBzSchemaTable">
@@ -289,6 +310,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createCCTable">
 		<createTable tableName="cc">
@@ -301,6 +325,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createCfIterationTable">
@@ -350,8 +377,8 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+		 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createComponentCCTable">
@@ -365,6 +392,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createComponentsTable">
@@ -384,11 +414,14 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+		 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createDepsTable">
@@ -403,6 +436,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createDuplicatesTable">
 		<createTable tableName="duplicates">
@@ -415,6 +451,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createEmailSettingTable">
@@ -431,6 +470,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createFieldDefsTable">
@@ -472,8 +514,11 @@
 		<modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	<modifySql dbms="hsqldb">
+    	<modifySql dbms="hsqldb, oracle">
          	<replace replace="TINYTEXT" with="VARCHAR(255)"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagExclusionsTable">
@@ -519,6 +564,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagTypesTable">
 		<createTable tableName="flagtypes">
@@ -553,11 +601,14 @@
 			<column name="grant_group_id" type="MEDIUMINT" />
 			<column name="request_group_id" type="MEDIUMINT" />
 		</createTable>
-		 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+		 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createGroupControlMapTable">
@@ -593,6 +644,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createGroupGroupMapTable">
 		<createTable tableName="group_group_map">
@@ -608,6 +662,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createGroupsTable">
@@ -632,14 +689,17 @@
 			</column>
 			<column name="icon_url" type="TINYTEXT" />
 		</createTable>
-		 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+		 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	<modifySql dbms="hsqldb">
+    	<modifySql dbms="hsqldb, oracle">
          	<replace replace="TINYTEXT" with="VARCHAR(255)"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createKeywordDefsTable">
@@ -652,8 +712,8 @@
 			</column>
 			<column name="description" type="MEDIUMTEXT" />
 		</createTable>
-		 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+		 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createKeywordsTable">
@@ -667,6 +727,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createLoginFailureTable">
@@ -684,6 +747,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createLoginCookiesTable">
 		<createTable tableName="logincookies">
@@ -700,6 +766,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createLongdescsTable">
@@ -736,8 +805,11 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
+    	 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createMilestonesTable">
@@ -757,6 +829,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createNamedQueriesTable">
@@ -780,8 +855,11 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
+    	 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createNamedQueriesLinkInFooterTable">
@@ -796,6 +874,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createNamedQueryGroupMapTable">
 		<createTable tableName="namedquery_group_map">
@@ -808,6 +889,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createOpSysTable">
@@ -877,8 +961,8 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+		 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createProfileSettingTable">
@@ -895,6 +979,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createProfilesTable">
@@ -923,8 +1010,11 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
+    	 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createProfilesActivityTable">
@@ -947,7 +1037,10 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	<modifySql dbms="hsqldb">
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
+    	<modifySql dbms="hsqldb, oracle">
          	<replace replace="TINYTEXT" with="VARCHAR(255)"/>
     	</modifySql>
 	</changeSet>
@@ -967,8 +1060,11 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
+    	 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createRepPlatformTable">
@@ -1040,8 +1136,11 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
+    	 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createSeriesCategoriesTable">
@@ -1068,6 +1167,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createSettingTable">
@@ -1125,7 +1227,10 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	<modifySql dbms="hsqldb">
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
+    	<modifySql dbms="hsqldb, oracle">
          	<replace replace="TINYTEXT" with="VARCHAR(255)"/>
     	</modifySql>
 	</changeSet>
@@ -1219,6 +1324,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createVersionsTable">
 		<createTable tableName="versions">
@@ -1234,6 +1342,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createVotesTable">
@@ -1251,6 +1362,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createWatchTable">
 		<createTable tableName="watch">
@@ -1263,6 +1377,9 @@
 		</createTable>
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createWhineEventsTable">
@@ -1282,8 +1399,11 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
+    	 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createWhineQueriesTable">
@@ -1310,6 +1430,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createWhineSchedulesTable">
 		<createTable tableName="whine_schedules">
@@ -1332,6 +1455,9 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
+    	</modifySql>
 	</changeSet>
 	<changeSet author="taskdb" id="createAttachmentsCreationTsIndex">
 		<createIndex indexName="attachments_creation_ts_idx"
@@ -1340,7 +1466,7 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createAttachmentsModTimeIndex">
-		<createIndex indexName="attachments_modification_time_idx"
+		<createIndex indexName="attachments_mod_time_idx"
 			tableName="attachments" unique="false">
 			<column name="modification_time" />
 		</createIndex>
@@ -1380,7 +1506,7 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createBugSevVisValueIndex">
-		<createIndex indexName="bug_severity_visibility_value_id_idx"
+		<createIndex indexName="bug_sev_vis_value_id_idx"
 			tableName="bug_severity" unique="false">
 			<column name="visibility_value_id" />
 		</createIndex>
@@ -1399,7 +1525,7 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createBugStatusVisValueIndex">
-		<createIndex indexName="bug_status_visibility_value_id_idx"
+		<createIndex indexName="bug_status_vis_value_id_idx"
 			tableName="bug_status" unique="false">
 			<column name="visibility_value_id" />
 		</createIndex>
@@ -1489,7 +1615,7 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createCatGroupMapCatIndex">
-		<createIndex indexName="category_group_map_category_id_idx"
+		<createIndex indexName="cat_group_map_cat_id_idx"
 			tableName="category_group_map" unique="true">
 			<column name="category_id" />
 			<column name="group_id" />
@@ -1516,7 +1642,7 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createIterationVisValueIndex">
-		<createIndex indexName="cf_iteration_visibility_value_id_idx"
+		<createIndex indexName="cf_iter_vis_val_id_idx"
 			tableName="cf_iteration" unique="false">
 			<column name="visibility_value_id" />
 		</createIndex>
@@ -1535,7 +1661,7 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createTaskTypeVisValueIndex">
-		<createIndex indexName="cf_tasktype_visibility_value_id_idx"
+		<createIndex indexName="cf_tasktype_vis_val_id_idx"
 			tableName="cf_tasktype" unique="false">
 			<column name="visibility_value_id" />
 		</createIndex>
@@ -1568,7 +1694,7 @@
 	</changeSet>
 	<changeSet author="taskdb"
 		id="createComponentsInitialQaContactProfilesIndex">
-		<createIndex indexName="fk_components_initialqacontact_profiles_userid"
+		<createIndex indexName="fk_cmpts_iqacont_prof_userid"
 			tableName="components" unique="false">
 			<column name="initialqacontact" />
 		</createIndex>
@@ -1617,19 +1743,19 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagtypesGrantGroupIndex">
-		<createIndex indexName="fk_flagtypes_grant_group_id_groups_id"
+		<createIndex indexName="fk_flgtyps_grnt_grp_id_grps_id"
 			tableName="flagtypes" unique="false">
 			<column name="grant_group_id" />
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagtypesRequestGroupIndex">
-		<createIndex indexName="fk_flagtypes_request_group_id_groups_id"
+		<createIndex indexName="fk_flgtyps_req_grp_id_grps_id"
 			tableName="flagtypes" unique="false">
 			<column name="request_group_id" />
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createGroupControlMapProductIndex">
-		<createIndex indexName="group_control_map_product_id_idx"
+		<createIndex indexName="grp_ctrl_map_prod_id_idx"
 			tableName="group_control_map" unique="true">
 			<column name="product_id" />
 			<column name="group_id" />
@@ -1696,7 +1822,7 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createNamedQueriesLinkInFooterIndex">
-		<createIndex indexName="namedqueries_link_in_footer_id_idx"
+		<createIndex indexName="namedqrys_link_in_fter_id_idx"
 			tableName="namedqueries_link_in_footer" unique="true">
 			<column name="namedquery_id" />
 			<column name="user_id" />
@@ -1735,7 +1861,7 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createPriorityVisValueIndex">
-		<createIndex indexName="priority_visibility_value_id_idx"
+		<createIndex indexName="priority_vis_value_id_idx"
 			tableName="priority" unique="false">
 			<column name="visibility_value_id" />
 		</createIndex>
@@ -1747,7 +1873,7 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createProfileSettingValueIndex">
-		<createIndex indexName="profile_setting_value_unique_idx"
+		<createIndex indexName="profile_setting_val_unique_idx"
 			tableName="profile_setting" unique="true">
 			<column name="user_id" />
 			<column name="setting_name" />
@@ -1766,13 +1892,13 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createProfilesActivityProfilesWhenIndex">
-		<createIndex indexName="profiles_activity_profiles_when_idx"
+		<createIndex indexName="prof_activity_profs_when_idx"
 			tableName="profiles_activity" unique="false">
 			<column name="profiles_when" />
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createQuipsUserIndex">
-		<createIndex indexName="fk_quips_userid_profiles_userid"
+		<createIndex indexName="fk_quips_userid_profs_userid"
 			tableName="quips" unique="false">
 			<column name="userid" />
 		</createIndex>
@@ -1791,7 +1917,7 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createRepPlatformVisValueIndex">
-		<createIndex indexName="rep_platform_visibility_value_id_idx"
+		<createIndex indexName="rep_pltfrm_vis_value_id_idx"
 			tableName="rep_platform" unique="false">
 			<column name="visibility_value_id" />
 		</createIndex>
@@ -1810,7 +1936,7 @@
 		</createIndex>
 	</changeSet>
 	<changeSet author="taskdb" id="createResolutionVisValueIndex">
-		<createIndex indexName="resolution_visibility_value_id_idx"
+		<createIndex indexName="resolution_vis_value_id_idx"
 			tableName="resolution" unique="false">
 			<column name="visibility_value_id" />
 		</createIndex>
@@ -1958,558 +2084,479 @@
 
 	<changeSet author="taskdb" id="createAttachDataAttachFK">
 		<addForeignKeyConstraint baseColumnNames="id"
-			baseTableName="attach_data" constraintName="fk_attach_data_id_attachments_attach_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="attach_id"
+			baseTableName="attach_data" constraintName="fk_atch_data_id_atchs_attch_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="attach_id"
 			referencedTableName="attachments" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createAttachBugFK">
 		<addForeignKeyConstraint baseColumnNames="bug_id"
-			baseTableName="attachments" constraintName="fk_attachments_bug_id_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			baseTableName="attachments" constraintName="fk_atchs_bug_id_bugs_bug_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createAttachSubmitterFK">
 		<addForeignKeyConstraint baseColumnNames="submitter_id"
-			baseTableName="attachments" constraintName="fk_attachments_submitter_id_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="attachments" constraintName="fk_atchs_subm_id_prof_usrid"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createBugGroupMapFK">
 		<addForeignKeyConstraint baseColumnNames="bug_id"
-			baseTableName="bug_group_map" constraintName="fk_bug_group_map_bug_id_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			baseTableName="bug_group_map" constraintName="fk_bg_grp_map_bg_id_bgs_bg_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createBugGroupMapGroupFK">
 		<addForeignKeyConstraint baseColumnNames="group_id"
-			baseTableName="bug_group_map" constraintName="fk_bug_group_map_group_id_groups_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="groups"
+			baseTableName="bug_group_map" constraintName="fk_bg_grp_map_grp_id_grps_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="groups"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createBugsAssignedToFK">
 		<addForeignKeyConstraint baseColumnNames="assigned_to"
-			baseTableName="bugs" constraintName="fk_bugs_assigned_to_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="bugs" constraintName="fk_bugs_assned_to_pros_userid"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createBugsComponentsFK">
 		<addForeignKeyConstraint baseColumnNames="component_id"
-			baseTableName="bugs" constraintName="fk_bugs_component_id_components_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="components"
+			baseTableName="bugs" constraintName="fk_bugs_component_id_cmpnts_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="id" referencedTableName="components"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createBugsProductFK">
 		<addForeignKeyConstraint baseColumnNames="product_id"
 			baseTableName="bugs" constraintName="fk_bugs_product_id_products_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="products"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="products"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createBugsReporterProfilesFK">
 		<addForeignKeyConstraint baseColumnNames="reporter"
-			baseTableName="bugs" constraintName="fk_bugs_reporter_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="bugs" constraintName="fk_bgs_rptr_profs_usrid"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createBugsActivityAttachFK">
 		<addForeignKeyConstraint baseColumnNames="attach_id"
-			baseTableName="bugs_activity" constraintName="fk_bugs_activity_attach_id_attachments_attach_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="attach_id"
+			baseTableName="bugs_activity" constraintName="fk_bgs_aty_atch_id_ats_atch_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="attach_id"
 			referencedTableName="attachments" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createBugsActivityBugsFK">
 		<addForeignKeyConstraint baseColumnNames="bug_id"
-			baseTableName="bugs_activity" constraintName="fk_bugs_activity_bug_id_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			baseTableName="bugs_activity" constraintName="fk_bgs_aty_bug_id_bugs_bug_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createBugsActivityFieldFK">
 		<addForeignKeyConstraint baseColumnNames="fieldid"
-			baseTableName="bugs_activity" constraintName="fk_bugs_activity_fieldid_fielddefs_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="fielddefs"
+			baseTableName="bugs_activity" constraintName="fk_bugs_aty_fldid_flddefs_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fielddefs"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createBugsActivityWhoFK">
 		<addForeignKeyConstraint baseColumnNames="who"
-			baseTableName="bugs_activity" constraintName="fk_bugs_activity_who_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="bugs_activity" constraintName="fk_bugs_acty_who_profs_userid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createCategoryGroupMapSeriesFK">
 		<addForeignKeyConstraint baseColumnNames="category_id"
 			baseTableName="category_group_map"
-			constraintName="fk_category_group_map_category_id_series_categories_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="series_categories"
+			constraintName="fk_ct_grp_map_ct_id_srs_cts_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="id" referencedTableName="series_categories"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createCategoryGroupMapGroupsFK">
 		<addForeignKeyConstraint baseColumnNames="group_id"
-			baseTableName="category_group_map" constraintName="fk_category_group_map_group_id_groups_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="groups"
+			baseTableName="category_group_map" constraintName="fk_ca_grp_map_grp_id_grps_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="groups"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createCCBugsFK">
 		<addForeignKeyConstraint baseColumnNames="bug_id"
 			baseTableName="cc" constraintName="fk_cc_bug_id_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createCCWhoFK">
 		<addForeignKeyConstraint baseColumnNames="who"
 			baseTableName="cc" constraintName="fk_cc_who_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createComponentCcComponentFK">
 		<addForeignKeyConstraint baseColumnNames="component_id"
-			baseTableName="component_cc" constraintName="fk_component_cc_component_id_components_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="components"
+			baseTableName="component_cc" constraintName="fk_cmpt_cc_cmpt_id_cmpts_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="components"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createComponentCCUserFK">
 		<addForeignKeyConstraint baseColumnNames="user_id"
-			baseTableName="component_cc" constraintName="fk_component_cc_user_id_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="component_cc" constraintName="fk_cmpt_cc_usr_id_profs_usrid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createComponentIntialOwnerFK">
 		<addForeignKeyConstraint baseColumnNames="initialowner"
-			baseTableName="components" constraintName="fk_components_initialowner_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="components" constraintName="fk_cmpts_iownr_profs_userid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createComponentProductFK">
 		<addForeignKeyConstraint baseColumnNames="product_id"
-			baseTableName="components" constraintName="fk_components_product_id_products_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="products"
+			baseTableName="components" constraintName="fk_cmpts_prod_id_prods_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="id" referencedTableName="products"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createDepsBlockedBugsFK">
 		<addForeignKeyConstraint baseColumnNames="blocked"
-			baseTableName="dependencies" constraintName="fk_dependencies_blocked_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			baseTableName="dependencies" constraintName="fk_depens_blocked_bugs_bug_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createDepsDependsOnBugsFK">
 		<addForeignKeyConstraint baseColumnNames="dependson"
-			baseTableName="dependencies" constraintName="fk_dependencies_dependson_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			baseTableName="dependencies" constraintName="fk_depends_depson_bugs_bug_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createDuplicatesDupeBugFK">
 		<addForeignKeyConstraint baseColumnNames="dupe"
-			baseTableName="duplicates" constraintName="fk_duplicates_dupe_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			baseTableName="duplicates" constraintName="fk_dups_dupe_bugs_bug_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createDuplicatesDupeOfBugsFK">
 		<addForeignKeyConstraint baseColumnNames="dupe_of"
-			baseTableName="duplicates" constraintName="fk_duplicates_dupe_of_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			baseTableName="duplicates" constraintName="fk_dups_dupe_of_bugs_bug_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createEmailSettingUserFK">
 		<addForeignKeyConstraint baseColumnNames="user_id"
-			baseTableName="email_setting" constraintName="fk_email_setting_user_id_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="email_setting" constraintName="fk_eml_stng_usr_id_profs_usrid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFieldDefsValueFK">
 		<addForeignKeyConstraint baseColumnNames="value_field_id"
-			baseTableName="fielddefs" constraintName="fk_fielddefs_value_field_id_fielddefs_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="fielddefs"
+			baseTableName="fielddefs" constraintName="fk_fldefs_val_fld_id_fldefs_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fielddefs"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFieldDefsVisFK">
 		<addForeignKeyConstraint baseColumnNames="visibility_field_id"
-			baseTableName="fielddefs" constraintName="fk_fielddefs_visibility_field_id_fielddefs_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="fielddefs"
+			baseTableName="fielddefs" constraintName="fk_fldefs_vis_fld_id_fldefs_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fielddefs"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagExclusionsComponentFK">
 		<addForeignKeyConstraint baseColumnNames="component_id"
-			baseTableName="flagexclusions" constraintName="fk_flagexclusions_component_id_components_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="components"
+			baseTableName="flagexclusions" constraintName="fk_flgexcls_cmpt_id_cmpts_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="components"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagExclusionsProductFK">
 		<addForeignKeyConstraint baseColumnNames="product_id"
-			baseTableName="flagexclusions" constraintName="fk_flagexclusions_product_id_products_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="products"
+			baseTableName="flagexclusions" constraintName="fk_flgexcls_pro_id_prods_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="products"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagExclusionsTypeFK">
 		<addForeignKeyConstraint baseColumnNames="type_id"
-			baseTableName="flagexclusions" constraintName="fk_flagexclusions_type_id_flagtypes_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="flagtypes"
+			baseTableName="flagexclusions" constraintName="fk_flgexcls_typ_id_flgtyps_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="id" referencedTableName="flagtypes"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagInclusionsComponentFK">
 		<addForeignKeyConstraint baseColumnNames="component_id"
-			baseTableName="flaginclusions" constraintName="fk_flaginclusions_component_id_components_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="components"
+			baseTableName="flaginclusions" constraintName="fk_flgincls_cmpt_id_cmpnts_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="components"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagInclusionsProductFK">
 		<addForeignKeyConstraint baseColumnNames="product_id"
-			baseTableName="flaginclusions" constraintName="fk_flaginclusions_product_id_products_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="products"
+			baseTableName="flaginclusions" constraintName="fk_flgincls_prod_id_prods_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="products"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagInclusionsTypeFK">
 		<addForeignKeyConstraint baseColumnNames="type_id"
-			baseTableName="flaginclusions" constraintName="fk_flaginclusions_type_id_flagtypes_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="flagtypes"
+			baseTableName="flaginclusions" constraintName="fk_flagincls_typ_id_flgtyps_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="flagtypes"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagsAttachFK">
 		<addForeignKeyConstraint baseColumnNames="attach_id"
-			baseTableName="flags" constraintName="fk_flags_attach_id_attachments_attach_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="attach_id"
+			baseTableName="flags" constraintName="fk_flgs_atch_id_atchts_atch_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="attach_id"
 			referencedTableName="attachments" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagsBugsFK">
 		<addForeignKeyConstraint baseColumnNames="bug_id"
 			baseTableName="flags" constraintName="fk_flags_bug_id_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagsRequesteeProfilesFK">
 		<addForeignKeyConstraint baseColumnNames="requestee_id"
-			baseTableName="flags" constraintName="fk_flags_requestee_id_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="flags" constraintName="fk_flgs_reqe_id_profs_usrid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagsSetterProfileFK">
 		<addForeignKeyConstraint baseColumnNames="setter_id"
-			baseTableName="flags" constraintName="fk_flags_setter_id_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="flags" constraintName="fk_flgs_ster_id_profs_usrid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createFlagsTypeFK">
 		<addForeignKeyConstraint baseColumnNames="type_id"
-			baseTableName="flags" constraintName="fk_flags_type_id_flagtypes_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="flagtypes"
+			baseTableName="flags" constraintName="fk_flgs_type_id_flagtypes_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="flagtypes"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createGroupControlGroupFK">
 		<addForeignKeyConstraint baseColumnNames="group_id"
-			baseTableName="group_control_map" constraintName="fk_group_control_map_group_id_groups_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="groups"
+			baseTableName="group_control_map" constraintName="fk_grp_ctrl_map_grp_id_grps_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="groups"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createGroupControlProductFK">
 		<addForeignKeyConstraint baseColumnNames="product_id"
-			baseTableName="group_control_map" constraintName="fk_group_control_map_product_id_products_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="products"
+			baseTableName="group_control_map" constraintName="fk_grp_ctrl_map_prd_id_prds_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="products"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createGroupMapGrantorFK">
 		<addForeignKeyConstraint baseColumnNames="grantor_id"
-			baseTableName="group_group_map" constraintName="fk_group_group_map_grantor_id_groups_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="groups"
+			baseTableName="group_group_map" constraintName="fk_grp_grp_mp_grntr_id_grps_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="groups"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createGroupMapMemberFK">
 		<addForeignKeyConstraint baseColumnNames="member_id"
-			baseTableName="group_group_map" constraintName="fk_group_group_map_member_id_groups_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="groups"
+			baseTableName="group_group_map" constraintName="fk_grp_grp_map_mmbr_id_grps_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="groups"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createKeywordsBugFK">
 		<addForeignKeyConstraint baseColumnNames="bug_id"
 			baseTableName="keywords" constraintName="fk_keywords_bug_id_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createKeywordsDefFK">
 		<addForeignKeyConstraint baseColumnNames="keywordid"
-			baseTableName="keywords" constraintName="fk_keywords_keywordid_keyworddefs_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="keyworddefs"
+			baseTableName="keywords" constraintName="fk_kywrds_kywrdid_kywrddefs_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="keyworddefs"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createLoginFailureUserFK">
 		<addForeignKeyConstraint baseColumnNames="user_id"
-			baseTableName="login_failure" constraintName="fk_login_failure_user_id_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="login_failure" constraintName="fk_lgin_flr_usr_id_profs_usrid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createLoginCookiesUserFk">
 		<addForeignKeyConstraint baseColumnNames="userid"
-			baseTableName="logincookies" constraintName="fk_logincookies_userid_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="logincookies" constraintName="fk_lgincoks_usrid_profs_usrid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createLongdescsBugFK">
 		<addForeignKeyConstraint baseColumnNames="bug_id"
-			baseTableName="longdescs" constraintName="fk_longdescs_bug_id_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			baseTableName="longdescs" constraintName="fk_lngdscs_bug_id_bugs_bug_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createLongdescsWhoFK">
 		<addForeignKeyConstraint baseColumnNames="who"
-			baseTableName="longdescs" constraintName="fk_longdescs_who_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="longdescs" constraintName="fk_lngdscs_who_profs_userid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createMilestonesProductFK">
 		<addForeignKeyConstraint baseColumnNames="product_id"
-			baseTableName="milestones" constraintName="fk_milestones_product_id_products_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="products"
+			baseTableName="milestones" constraintName="fk_milestones_prod_id_prod_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="products"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createNamedQueriesUserFK">
 		<addForeignKeyConstraint baseColumnNames="userid"
-			baseTableName="namedqueries" constraintName="fk_namedqueries_userid_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="namedqueries" constraintName="fk_nmdqs_usrid_profs_userid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createNamedQueriesLinkInFooterQueryFK">
 		<addForeignKeyConstraint baseColumnNames="namedquery_id"
 			baseTableName="namedqueries_link_in_footer"
-			constraintName="fk_namedqueries_link_in_footer_namedquery_id_namedqueries_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="namedqueries"
+			constraintName="fk_nqs_lnk_n_ftr_nq_id_nqs_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="namedqueries"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createNamedQueriesLinkInFooterUserFK">
 		<addForeignKeyConstraint baseColumnNames="user_id"
 			baseTableName="namedqueries_link_in_footer"
-			constraintName="fk_namedqueries_link_in_footer_user_id_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			constraintName="fk_nqs_lnk_usr_id_prfs_usrid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createNamedQueryGroupFK">
 		<addForeignKeyConstraint baseColumnNames="group_id"
-			baseTableName="namedquery_group_map" constraintName="fk_namedquery_group_map_group_id_groups_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="groups"
+			baseTableName="namedquery_group_map" constraintName="fk_nmdqry_grp_mp_gp_id_grps_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="groups"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createNamedQueryGroupQueryFK">
 		<addForeignKeyConstraint baseColumnNames="namedquery_id"
-			baseTableName="namedquery_group_map" constraintName="fk_namedquery_group_map_namedquery_id_namedqueries_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="namedqueries"
+			baseTableName="namedquery_group_map" constraintName="fk_nqy_grp_mp_nqy_id_nqys_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="id" referencedTableName="namedqueries"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createProductsClassificationFK">
 		<addForeignKeyConstraint baseColumnNames="classification_id"
-			baseTableName="products" constraintName="fk_products_classification_id_classifications_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="classifications"
+			baseTableName="products" constraintName="fk_prods_class_id_class_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="id" referencedTableName="classifications"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createProfileSettingFK">
 		<addForeignKeyConstraint baseColumnNames="setting_name"
-			baseTableName="profile_setting" constraintName="fk_profile_setting_setting_name_setting_name"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="name" referencedTableName="setting"
+			baseTableName="profile_setting" constraintName="fk_prof_stng_stng_nm_stng_name"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="name" referencedTableName="setting"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createProfileSettingUserFK">
 		<addForeignKeyConstraint baseColumnNames="user_id"
-			baseTableName="profile_setting" constraintName="fk_profile_setting_user_id_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="profile_setting" constraintName="fk_prof_stng_usr_id_prof_usrid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createProfileActivityFieldFK">
 		<addForeignKeyConstraint baseColumnNames="fieldid"
-			baseTableName="profiles_activity" constraintName="fk_profiles_activity_fieldid_fielddefs_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="fielddefs"
+			baseTableName="profiles_activity" constraintName="fk_profs_acty_fldid_flddefs_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fielddefs"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createProfileActivityUserFK">
 		<addForeignKeyConstraint baseColumnNames="userid"
-			baseTableName="profiles_activity" constraintName="fk_profiles_activity_userid_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="profiles_activity" constraintName="fk_prfs_acty_usrid_prfs_usrid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createProfileActivityWhoFK">
 		<addForeignKeyConstraint baseColumnNames="who"
-			baseTableName="profiles_activity" constraintName="fk_profiles_activity_who_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="profiles_activity" constraintName="fk_profs_acty_who_profs_usrid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createSeriesCategoryFK">
 		<addForeignKeyConstraint baseColumnNames="category"
-			baseTableName="series" constraintName="fk_series_category_series_categories_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="series_categories"
+			baseTableName="series" constraintName="fk_srs_cat_srs_cats_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="id" referencedTableName="series_categories"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createSeriesCreatorUserFK">
 		<addForeignKeyConstraint baseColumnNames="creator"
-			baseTableName="series" constraintName="fk_series_creator_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="series" constraintName="fk_srs_crtr_profs_userid"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createSeriesSubcategorySeriesFK">
 		<addForeignKeyConstraint baseColumnNames="subcategory"
-			baseTableName="series" constraintName="fk_series_subcategory_series_categories_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="series_categories"
+			baseTableName="series" constraintName="fk_sers_subcat_srs_cats_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="id" referencedTableName="series_categories"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createSeriesDataSeriesFK">
 		<addForeignKeyConstraint baseColumnNames="series_id"
-			baseTableName="series_data" constraintName="fk_series_data_series_id_series_series_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="series_id"
+			baseTableName="series_data" constraintName="fk_srs_dta_srs_id_srs_srs_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="series_id"
 			referencedTableName="series" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createSettingValueNameFK">
 		<addForeignKeyConstraint baseColumnNames="name"
-			baseTableName="setting_value" constraintName="fk_setting_value_name_setting_name"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="name" referencedTableName="setting"
+			baseTableName="setting_value" constraintName="fk_stng_val_nm_stng_nm"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="name" referencedTableName="setting"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createStatusWorkflowNewStatusFK">
 		<addForeignKeyConstraint baseColumnNames="new_status"
-			baseTableName="status_workflow" constraintName="fk_status_workflow_new_status_bug_status_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="bug_status"
+			baseTableName="status_workflow" constraintName="fk_st_wrkflw_nw_st_bg_st_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="bug_status"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createStatusWorksflowOldStatusFK">
 		<addForeignKeyConstraint baseColumnNames="old_status"
-			baseTableName="status_workflow" constraintName="fk_status_workflow_old_status_bug_status_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="bug_status"
+			baseTableName="status_workflow" constraintName="fk_st_wrkflw_old_st_bug_st_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="bug_status"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createTokensUserFK">
 		<addForeignKeyConstraint baseColumnNames="userid"
-			baseTableName="tokens" constraintName="fk_tokens_userid_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="tokens" constraintName="fk_tkns_usrid_profs_usrid"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createUserGroupMapGroupFK">
 		<addForeignKeyConstraint baseColumnNames="group_id"
-			baseTableName="user_group_map" constraintName="fk_user_group_map_group_id_groups_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="groups"
+			baseTableName="user_group_map" constraintName="fk_usr_grp_map_grp_id_grps_id"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="id" referencedTableName="groups"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createUserGroupMapUserFK">
 		<addForeignKeyConstraint baseColumnNames="user_id"
-			baseTableName="user_group_map" constraintName="fk_user_group_map_user_id_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="user_group_map" constraintName="fk_usr_grp_m_usr_id_prfs_usrid"
+			deferrable="false" initiallyDeferred="false"  referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createVersionsProductFk">
 		<addForeignKeyConstraint baseColumnNames="product_id"
-			baseTableName="versions" constraintName="fk_versions_product_id_products_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="products"
+			baseTableName="versions" constraintName="fk_vrns_prod_id_prods_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="products"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createVotesBugFK">
 		<addForeignKeyConstraint baseColumnNames="bug_id"
 			baseTableName="votes" constraintName="fk_votes_bug_id_bugs_bug_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="bug_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="bug_id"
 			referencedTableName="bugs" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createVotesWhoFK">
 		<addForeignKeyConstraint baseColumnNames="who"
-			baseTableName="votes" constraintName="fk_votes_who_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="votes" constraintName="fk_votes_who_profs_userid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createWatchedUserFK">
 		<addForeignKeyConstraint baseColumnNames="watched"
-			baseTableName="watch" constraintName="fk_watch_watched_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="watch" constraintName="fk_watch_watched_profs_usrid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createWatcherUserFK">
 		<addForeignKeyConstraint baseColumnNames="watcher"
-			baseTableName="watch" constraintName="fk_watch_watcher_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="watch" constraintName="fk_watch_watcher_profs_userid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createWhineEventOwnerFK">
 		<addForeignKeyConstraint baseColumnNames="owner_userid"
-			baseTableName="whine_events" constraintName="fk_whine_events_owner_userid_profiles_userid"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="userid"
+			baseTableName="whine_events" constraintName="fk_whn_evts_ownr_uid_prfs_uid"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="userid"
 			referencedTableName="profiles" referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createWhineQueriesEventFK">
 		<addForeignKeyConstraint baseColumnNames="eventid"
-			baseTableName="whine_queries" constraintName="fk_whine_queries_eventid_whine_events_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="whine_events"
+			baseTableName="whine_queries" constraintName="fk_wn_qrys_evtid_wn_evts_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="whine_events"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="taskdb" id="createWhineSchedulesEventFK">
 		<addForeignKeyConstraint baseColumnNames="eventid"
-			baseTableName="whine_schedules" constraintName="fk_whine_schedules_eventid_whine_events_id"
-			deferrable="false" initiallyDeferred="false" onDelete="CASCADE"
-			onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="whine_events"
+			baseTableName="whine_schedules" constraintName="fk_wn_schs_evntid_whn_evnts_id"
+			deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="whine_events"
 			referencesUniqueColumn="false" />
 	</changeSet>
 	<changeSet author="cmorgan" id="createSavedTaskQueryTable">
@@ -2532,13 +2579,14 @@
 		 <modifySql dbms="hsqldb">
          	<replace replace="MEDIUMINT" with="INT"/>
     	</modifySql>
-    	 <modifySql dbms="hsqldb">
-         	<replace replace="MEDIUMTEXT" with="VARCHAR(8000)"/>
+    	 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
+    	</modifySql>
+    	<modifySql dbms="oracle">
+    		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
 	</changeSet>
-	<changeSet author="cmorgan" id="allowNullEsitmate-task2769">
-		<sql>ALTER TABLE bugs MODIFY estimated_time DECIMAL(7,2) DEFAULT NULL</sql>
-	</changeSet>
+	
 	<changeSet author="mfeichtinger" id="createConfigurationProperty" >
 		<createTable tableName="ConfigurationProperty">
 			<column name="ID" type="BIGINT" autoIncrement="true">

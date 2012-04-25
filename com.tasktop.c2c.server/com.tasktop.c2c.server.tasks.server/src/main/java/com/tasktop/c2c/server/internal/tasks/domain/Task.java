@@ -14,8 +14,6 @@ package com.tasktop.c2c.server.internal.tasks.domain;
 
 // Generated May 26, 2010 11:31:55 AM by Hibernate Tools 3.3.0.GA
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -109,7 +106,6 @@ public class Task extends AbstractIdentified<Integer> implements Serializable {
 
 	@ActivityIgnored
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "bug_id", unique = true, nullable = false)
 	@Override
 	public Integer getId() {
@@ -375,7 +371,7 @@ public class Task extends AbstractIdentified<Integer> implements Serializable {
 		this.cclistAccessible = cclistAccessible;
 	}
 
-	@Column(name = "estimated_time", nullable = false, precision = 7)
+	@Column(name = "estimated_time", nullable = true, precision = 7)
 	public BigDecimal getEstimatedTime() {
 		return this.estimatedTime;
 	}

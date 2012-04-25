@@ -43,6 +43,7 @@ import com.tasktop.c2c.server.internal.tasks.domain.Task;
 import com.tasktop.c2c.server.internal.tasks.domain.TaskSeverity;
 import com.tasktop.c2c.server.internal.tasks.domain.TaskStatus;
 import com.tasktop.c2c.server.internal.tasks.service.TaskCustomFieldService;
+import com.tasktop.c2c.server.internal.tasks.service.TaskServiceConfiguration;
 import com.tasktop.c2c.server.tasks.domain.FieldDescriptor;
 import com.tasktop.c2c.server.tasks.domain.FieldType;
 import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
@@ -80,13 +81,16 @@ public class TaskQuery {
 	private TaskCustomFieldService customFieldService;
 
 	private Map<String, FieldDescriptor> customFieldByName;
+	private boolean treatEmptyStringAsNull = false;
 
 	private TaskQuery() {
 		aliasedItems.put(TASK, builder);
 	}
 
-	public static TaskQuery create(TaskCustomFieldService customFieldService, Criteria criteria, SortInfo sortInfo) {
+	public static TaskQuery create(TaskCustomFieldService customFieldService, Criteria criteria, SortInfo sortInfo,
+			TaskServiceConfiguration configuration) {
 		TaskQuery taskQuery = new TaskQuery();
+		taskQuery.treatEmptyStringAsNull = configuration.isTreatEmptyStringAsNullInDatabase();
 		taskQuery.setCustomFieldService(customFieldService);
 		taskQuery.setCriteria(criteria);
 		taskQuery.computeSortExpression(sortInfo);
@@ -290,7 +294,7 @@ public class TaskQuery {
 		aliasedItems.put("e" + aliasedItems.size(), expression);
 	}
 
-	private static Expression computeExpression(Expression expression, ColumnCriteria criteria, Class<?> valueClass) {
+	private Expression computeExpression(Expression expression, ColumnCriteria criteria, Class<?> valueClass) {
 		Object value = criteria.getColumnValue();
 		// Special case: dates get serialized over REST API as longs.
 		if (value instanceof Long && valueClass.equals(Date.class)) {
@@ -303,8 +307,14 @@ public class TaskQuery {
 		}
 		switch (criteria.getOperator()) {
 		case EQUALS:
+			if (valueClass.equals(String.class) && value.toString().isEmpty() && treatEmptyStringAsNull) {
+				return expression.isNull();
+			}
 			return expression.equal(value);
 		case NOT_EQUALS:
+			if (valueClass.equals(String.class) && value.toString().isEmpty() && treatEmptyStringAsNull) {
+				return expression.not().isNull();
+			}
 			return expression.notEqual(value);
 		case STRING_CONTAINS:
 			return expression.like("%" + value.toString() + "%");

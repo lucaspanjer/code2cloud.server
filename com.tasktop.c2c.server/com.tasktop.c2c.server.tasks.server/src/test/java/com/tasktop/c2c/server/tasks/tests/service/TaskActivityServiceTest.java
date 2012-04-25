@@ -110,8 +110,8 @@ public class TaskActivityServiceTest {
 		assertEquals("Expected 1 activity, but found " + activity, 1, activity.size());
 		TaskActivity taskActivity = activity.get(0);
 		assertEquals(fieldName, taskActivity.getFielddefs().getName());
-		assertEquals(removed, taskActivity.getId().getRemoved());
-		assertEquals(added, taskActivity.getId().getAdded());
+		assertEquals(removed, taskActivity.getRemoved());
+		assertEquals(added, taskActivity.getAdded());
 	}
 
 	@Test
@@ -333,8 +333,8 @@ public class TaskActivityServiceTest {
 		assertEquals("Expected 1 activity, but found " + activity, 1, activity.size());
 		TaskActivity taskActivity = activity.get(0);
 
-		assertEquals(originalComment.getThetext(), taskActivity.getId().getRemoved());
-		String added = taskActivity.getId().getAdded();
+		assertEquals(originalComment.getThetext(), taskActivity.getRemoved());
+		String added = taskActivity.getAdded();
 		assertTrue(added.endsWith("..."));
 
 		String addedWithoutEllipses = added.substring(0, added.length() - 3);

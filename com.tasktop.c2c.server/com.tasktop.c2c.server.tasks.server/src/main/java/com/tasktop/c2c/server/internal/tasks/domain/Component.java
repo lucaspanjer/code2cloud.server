@@ -53,7 +53,6 @@ public class Component extends AbstractIdentified<Short> implements java.io.Seri
 	}
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
 	@Override
 	public Short getId() {

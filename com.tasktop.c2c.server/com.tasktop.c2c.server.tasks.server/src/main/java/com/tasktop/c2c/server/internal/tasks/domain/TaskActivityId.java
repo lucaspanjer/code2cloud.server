@@ -32,8 +32,6 @@ public class TaskActivityId implements java.io.Serializable {
 	private int who;
 	private Date bugWhen;
 	private int fieldid;
-	private String added;
-	private String removed;
 
 	public TaskActivityId() {
 	}
@@ -43,12 +41,6 @@ public class TaskActivityId implements java.io.Serializable {
 		this.who = who;
 		this.bugWhen = bugWhen;
 		this.fieldid = fieldid;
-	}
-
-	public TaskActivityId(int bugId, int who, Date bugWhen, int fieldid, String added, String removed) {
-		this(bugId, who, bugWhen, fieldid);
-		this.added = added;
-		this.removed = removed;
 	}
 
 	@Column(name = "bug_id", nullable = false)
@@ -88,24 +80,6 @@ public class TaskActivityId implements java.io.Serializable {
 		this.fieldid = fieldid;
 	}
 
-	@Column(name = "added")
-	public String getAdded() {
-		return this.added;
-	}
-
-	public void setAdded(String added) {
-		this.added = added;
-	}
-
-	@Column(name = "removed")
-	public String getRemoved() {
-		return this.removed;
-	}
-
-	public void setRemoved(String removed) {
-		this.removed = removed;
-	}
-
 	public boolean equals(Object other) {
 		if ((this == other))
 			return true;
@@ -119,11 +93,7 @@ public class TaskActivityId implements java.io.Serializable {
 				&& (this.getWho() == castOther.getWho())
 				&& ((this.getBugWhen() == castOther.getBugWhen()) || (this.getBugWhen() != null
 						&& castOther.getBugWhen() != null && this.getBugWhen().equals(castOther.getBugWhen())))
-				&& (this.getFieldid() == castOther.getFieldid())
-				&& ((this.getAdded() == castOther.getAdded()) || (this.getAdded() != null
-						&& castOther.getAdded() != null && this.getAdded().equals(castOther.getAdded())))
-				&& ((this.getRemoved() == castOther.getRemoved()) || (this.getRemoved() != null
-						&& castOther.getRemoved() != null && this.getRemoved().equals(castOther.getRemoved())));
+				&& (this.getFieldid() == castOther.getFieldid());
 	}
 
 	public int hashCode() {
@@ -133,15 +103,13 @@ public class TaskActivityId implements java.io.Serializable {
 		result = 37 * result + this.getWho();
 		result = 37 * result + (getBugWhen() == null ? 0 : this.getBugWhen().hashCode());
 		result = 37 * result + this.getFieldid();
-		result = 37 * result + (getAdded() == null ? 0 : this.getAdded().hashCode());
-		result = 37 * result + (getRemoved() == null ? 0 : this.getRemoved().hashCode());
 		return result;
 	}
 
 	@Override
 	public String toString() {
 		return "TaskActivityId [bugId=" + bugId + ", who=" + who + ", bugWhen=" + bugWhen + ", fieldid=" + fieldid
-				+ ", added=" + added + ", removed=" + removed + "]";
+				+ "]";
 	}
 
 }

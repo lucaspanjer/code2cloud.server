@@ -14,8 +14,6 @@ package com.tasktop.c2c.server.internal.tasks.domain;
 
 // Generated May 26, 2010 11:31:55 AM by Hibernate Tools 3.3.0.GA
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +21,6 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -64,7 +61,6 @@ public class Attachment extends AbstractIdentified<Integer> implements java.io.S
 	}
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "attach_id", unique = true, nullable = false)
 	@Override
 	public Integer getId() {

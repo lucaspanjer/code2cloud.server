@@ -19,10 +19,9 @@ import org.springframework.stereotype.Component;
 import com.tasktop.c2c.server.internal.tasks.domain.Fielddef;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity;
-import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity.FieldUpdate;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity.Type;
-
+import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
 
 @Component
 public class TaskActivityConverter implements ObjectConverter<TaskActivity> {
@@ -59,8 +58,8 @@ public class TaskActivityConverter implements ObjectConverter<TaskActivity> {
 		} else {
 			fieldUpdate.setFieldName(fielddef.getName());
 		}
-		fieldUpdate.setNewValue(source.getId().getAdded());
-		fieldUpdate.setOldValue(source.getId().getRemoved());
+		fieldUpdate.setNewValue(source.getAdded());
+		fieldUpdate.setOldValue(source.getRemoved());
 		targetObject.setFieldUpdates(Arrays.asList(fieldUpdate));
 
 		targetObject.setTask((Task) converter.convert(source.getBugs(), context));

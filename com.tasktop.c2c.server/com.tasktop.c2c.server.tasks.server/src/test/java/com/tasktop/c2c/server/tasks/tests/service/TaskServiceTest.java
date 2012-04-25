@@ -24,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,7 +43,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.sql.DataSource;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.After;
@@ -97,6 +95,7 @@ import com.tasktop.c2c.server.internal.tasks.domain.conversion.ProductConverter;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.ProfileConverter;
 import com.tasktop.c2c.server.internal.tasks.service.TaskCustomFieldService;
 import com.tasktop.c2c.server.internal.tasks.service.TaskServiceDependencies;
+import com.tasktop.c2c.server.internal.tasks.service.sql.SqlDialect;
 import com.tasktop.c2c.server.tasks.domain.AbstractDomainObject;
 import com.tasktop.c2c.server.tasks.domain.AbstractReferenceValue;
 import com.tasktop.c2c.server.tasks.domain.AttachmentHandle;
@@ -144,13 +143,7 @@ public class TaskServiceTest {
 	@PersistenceContext(unitName = "tasksDomain")
 	protected EntityManager entityManager;
 
-	@Qualifier("switching")
-	@Autowired
-	private DataSource dataSource;
-
 	protected Profile currentUser = null;
-
-	private static boolean didAutoIncrement = false;
 
 	@Autowired
 	private DomainConverter domainConverter;
@@ -160,23 +153,16 @@ public class TaskServiceTest {
 
 	@Autowired
 	protected TaskCustomFieldService customFieldService;
+
+	@Autowired
+	SqlDialect sqlDialect;
+
 	private Set<FieldDescriptor> createdFields = new HashSet<FieldDescriptor>();
 
 	private String[] taskTypeValues;
 	private String[] iterationValues;
 
 	private Event lastEvent = null;
-
-	@Before
-	public void resetAutoIncrements() throws SQLException {
-		if (didAutoIncrement) {
-			return;
-		}
-		for (String tablename : Arrays.asList("components", "bugs")) {
-			dataSource.getConnection().createStatement().execute("ALTER TABLE " + tablename + " AUTO_INCREMENT=5");
-		}
-		didAutoIncrement = true;
-	}
 
 	protected void setupAuthContext() {
 		if (currentUser == null) {
@@ -209,10 +195,12 @@ public class TaskServiceTest {
 		});
 	}
 
-	private String[] computeCustomFieldValues(String tableName) {
+	// TODO - only call this where needed
+	protected String[] computeCustomFieldValues(String tableName) {
 		@SuppressWarnings("unchecked")
 		List<String> results = entityManager.createNativeQuery(
-				String.format("select `value` from %s order by sortkey", tableName)).getResultList();
+				String.format("select %s from %s order by %s", sqlDialect.quoteIdentifier("value"),
+						sqlDialect.quoteIdentifier(tableName), sqlDialect.quoteIdentifier("sortkey"))).getResultList();
 		return results.toArray(new String[results.size()]);
 	}
 
@@ -1579,7 +1567,7 @@ public class TaskServiceTest {
 		assertEquals(iteration.getValue(), updated.getIteration().getValue());
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testUpdateWithInvalidIterationCustomField() throws Exception {
 
 		Iteration iteration = new Iteration(iterationValues[0]);
@@ -1595,7 +1583,12 @@ public class TaskServiceTest {
 		created.setIteration(iteration);
 
 		// This should blow up.
-		taskService.updateTask(created);
+		try {
+			taskService.updateTask(created);
+			Assert.fail();
+		} catch (ValidationException e) {
+			// expected
+		}
 	}
 
 	@Test(expected = EntityNotFoundException.class)

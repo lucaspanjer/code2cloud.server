@@ -14,8 +14,6 @@ package com.tasktop.c2c.server.internal.tasks.domain;
 
 // Generated May 26, 2010 11:31:55 AM by Hibernate Tools 3.3.0.GA
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +23,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -66,7 +63,6 @@ public class Product extends AbstractIdentified<Short> implements java.io.Serial
 	}
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
 	@Override
 	public Short getId() {
@@ -180,7 +176,7 @@ public class Product extends AbstractIdentified<Short> implements java.io.Serial
 		this.flaginclusionses = flaginclusionses;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
 	public Set<Component> getComponents() {
 		return this.components;
 	}
@@ -189,7 +185,7 @@ public class Product extends AbstractIdentified<Short> implements java.io.Serial
 		this.components = components;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "products")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "products", cascade = CascadeType.REMOVE)
 	@OrderBy("id")
 	public List<Version> getVersionses() {
 		return this.versionses;
@@ -199,7 +195,7 @@ public class Product extends AbstractIdentified<Short> implements java.io.Serial
 		this.versionses = versionses;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "products")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "products", cascade = CascadeType.REMOVE)
 	public Set<GroupControlMap> getGroupControlMaps() {
 		return this.groupControlMaps;
 	}
@@ -208,7 +204,7 @@ public class Product extends AbstractIdentified<Short> implements java.io.Serial
 		this.groupControlMaps = groupControlMaps;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
 	@OrderBy("sortkey")
 	public List<Milestone> getMilestones() {
 		return this.milestones;
@@ -218,7 +214,7 @@ public class Product extends AbstractIdentified<Short> implements java.io.Serial
 		this.milestones = milestoneses;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "products")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "products", cascade = CascadeType.REMOVE)
 	public Set<Flagexclusions> getFlagexclusionses() {
 		return this.flagexclusionses;
 	}

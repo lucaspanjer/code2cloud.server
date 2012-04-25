@@ -14,8 +14,6 @@ package com.tasktop.c2c.server.internal.tasks.domain;
 
 // Generated May 26, 2010 11:31:55 AM by Hibernate Tools 3.3.0.GA
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -23,7 +21,6 @@ import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -57,7 +54,6 @@ public class Comment extends AbstractIdentified<Integer> implements java.io.Seri
 	}
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "comment_id", unique = true, nullable = false)
 	@Override
 	public Integer getId() {
@@ -108,7 +104,7 @@ public class Comment extends AbstractIdentified<Integer> implements java.io.Seri
 		this.workTime = workTime;
 	}
 
-	@Column(name = "thetext", nullable = false, length = 16777215)
+	@Column(name = "thetext", nullable = true, length = 16777215)
 	public String getThetext() {
 		return this.thetext;
 	}

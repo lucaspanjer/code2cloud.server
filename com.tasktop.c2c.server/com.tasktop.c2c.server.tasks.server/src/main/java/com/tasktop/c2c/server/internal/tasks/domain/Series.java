@@ -55,7 +55,6 @@ public class Series implements java.io.Serializable {
 	}
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "series_id", unique = true, nullable = false)
 	public Integer getSeriesId() {
 		return this.seriesId;

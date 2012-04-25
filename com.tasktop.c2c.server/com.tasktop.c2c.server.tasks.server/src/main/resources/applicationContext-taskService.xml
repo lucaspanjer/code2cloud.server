@@ -24,7 +24,7 @@
 	
 	<bean class="com.tasktop.c2c.server.internal.tasks.service.TaskTenantAwareDataSource" id="dataSource"
 		p:wrappedDataSource-ref="rawDataSource"
-		p:language="MYSQL"
+		p:language="${task.database.dialect}"
 	>
 		<qualifier value="switching"/>
 	</bean>
@@ -52,6 +52,7 @@
 		p:serviceProxyPath="${profile.serviceProxy.path}"
 		p:maxAttachmentFilenameSize="${task.attachment.filename.maxSize}"
 		p:maxAttachmentSize="${task.attachment.maxSize}"
+		p:treatEmptyStringAsNullInDatabase="${task.database.emptyStringAsNull}"
 	/>
 
 	<bean id="taskServiceManagementService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">

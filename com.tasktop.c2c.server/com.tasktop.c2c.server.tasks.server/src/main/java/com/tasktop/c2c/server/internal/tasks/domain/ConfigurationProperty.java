@@ -12,12 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.tasks.domain;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
@@ -35,7 +32,6 @@ public class ConfigurationProperty {
 	private Integer version;
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	public Long getId() {
 		return id;
 	}

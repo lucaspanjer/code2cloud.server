@@ -59,9 +59,9 @@ import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConversionC
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConverter;
 import com.tasktop.c2c.server.tasks.domain.Attachment;
 import com.tasktop.c2c.server.tasks.domain.Comment;
-import com.tasktop.c2c.server.tasks.domain.WorkLog;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity.FieldUpdate;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity.Type;
+import com.tasktop.c2c.server.tasks.domain.WorkLog;
 import com.tasktop.c2c.server.tasks.service.TaskService;
 
 /**
@@ -158,24 +158,19 @@ public class TaskActivityService {
 
 		if (!originalTask.getDependenciesesForDependson().equals(newTask.getDependenciesesForDependson())) {
 			TaskActivity activity = createActivity(fielddefByName, originalTask, user, updateTime, "dependson");
-			activity.getId()
-					.setAdded(
-							getDepsAdded(originalTask.getDependenciesesForDependson(),
-									newTask.getDependenciesesForDependson()));
-			activity.getId().setRemoved(
-					getDepsRemoved(originalTask.getDependenciesesForDependson(),
-							newTask.getDependenciesesForDependson()));
+			activity.setAdded(getDepsAdded(originalTask.getDependenciesesForDependson(),
+					newTask.getDependenciesesForDependson()));
+			activity.setRemoved(getDepsRemoved(originalTask.getDependenciesesForDependson(),
+					newTask.getDependenciesesForDependson()));
 			activities.add(activity);
 		}
 
 		if (!originalTask.getDependenciesesForBlocked().equals(newTask.getDependenciesesForBlocked())) {
 			TaskActivity activity = createActivity(fielddefByName, originalTask, user, updateTime, "blocked");
-			activity.getId().setAdded(
-					getBlockedAdded(originalTask.getDependenciesesForBlocked(), newTask.getDependenciesesForBlocked()));
-			activity.getId()
-					.setRemoved(
-							getBlockedRemoved(originalTask.getDependenciesesForBlocked(),
-									newTask.getDependenciesesForBlocked()));
+			activity.setAdded(getBlockedAdded(originalTask.getDependenciesesForBlocked(),
+					newTask.getDependenciesesForBlocked()));
+			activity.setRemoved(getBlockedRemoved(originalTask.getDependenciesesForBlocked(),
+					newTask.getDependenciesesForBlocked()));
 			activities.add(activity);
 		}
 
@@ -186,10 +181,10 @@ public class TaskActivityService {
 			TaskActivity activity = createActivity(fielddefByName, originalTask, user, updateTime, "longdesc");
 
 			String newComment = newTask.getComments().get(0).getThetext();
-			activity.getId().setAdded(newComment);
+			activity.setAdded(newComment);
 
 			String oldComment = originalTask.getComments().get(0).getThetext();
-			activity.getId().setRemoved(oldComment);
+			activity.setRemoved(oldComment);
 
 			activities.add(activity);
 		}
@@ -207,8 +202,8 @@ public class TaskActivityService {
 
 			if (ccRemoved != null || ccAdded != null) {
 				TaskActivity activity = createActivity(fielddefByName, originalTask, user, updateTime, "cc");
-				activity.getId().setAdded(ccAdded == null ? "" : ccAdded);
-				activity.getId().setRemoved(ccRemoved == null ? "" : ccRemoved);
+				activity.setAdded(ccAdded == null ? "" : ccAdded);
+				activity.setRemoved(ccRemoved == null ? "" : ccRemoved);
 				activities.add(activity);
 			}
 		}
@@ -225,10 +220,12 @@ public class TaskActivityService {
 
 						TaskActivity activity = new TaskActivity();
 						activity.setId(new TaskActivityId(originalTask.getId(), user.getId(), updateTime, fielddef
-								.getId(), valueAdded, valueRemoved));
+								.getId()));
 						activity.setProfiles(user);
 						activity.setBugs(originalTask);
 						activity.setFielddefs(fielddef);
+						activity.setAdded(valueAdded);
+						activity.setRemoved(valueRemoved);
 						activities.add(activity);
 					}
 				}
@@ -247,8 +244,8 @@ public class TaskActivityService {
 		// activity can only handle 255 characters for both added and removed
 		// so first we truncate the data to fit.
 
-		activity.getId().setAdded(truncateActivityData(activity.getId().getAdded()));
-		activity.getId().setRemoved(truncateActivityData(activity.getId().getRemoved()));
+		activity.setAdded(truncateActivityData(activity.getAdded()));
+		activity.setRemoved(truncateActivityData(activity.getRemoved()));
 
 		entityManager.persist(activity);
 	}
@@ -325,11 +322,12 @@ public class TaskActivityService {
 			String valueRemoved = toActivityValue(originalValue);
 
 			TaskActivity activity = new TaskActivity();
-			activity.setId(new TaskActivityId(oldTask.getId(), user.getId(), updateTime, fielddef.getId(), valueAdded,
-					valueRemoved));
+			activity.setId(new TaskActivityId(oldTask.getId(), user.getId(), updateTime, fielddef.getId()));
 			activity.setProfiles(user);
 			activity.setBugs(oldTask);
 			activity.setFielddefs(fielddef);
+			activity.setAdded(valueAdded);
+			activity.setRemoved(valueRemoved);
 
 			activities.add(activity);
 		}
@@ -623,8 +621,7 @@ public class TaskActivityService {
 
 	}
 
-	private void collapseSimultaneousUpdates(
-			List<com.tasktop.c2c.server.tasks.domain.TaskActivity> updateActivities) {
+	private void collapseSimultaneousUpdates(List<com.tasktop.c2c.server.tasks.domain.TaskActivity> updateActivities) {
 		com.tasktop.c2c.server.tasks.domain.TaskActivity last = null;
 		Iterator<com.tasktop.c2c.server.tasks.domain.TaskActivity> it = updateActivities.iterator();
 
@@ -656,8 +653,7 @@ public class TaskActivityService {
 	 * @return
 	 */
 	private List<com.tasktop.c2c.server.tasks.domain.TaskActivity> deduceActivitiesFromTask(
-			DomainConversionContext conversionContext, com.tasktop.c2c.server.tasks.domain.Task task,
-			Date referenceDate) {
+			DomainConversionContext conversionContext, com.tasktop.c2c.server.tasks.domain.Task task, Date referenceDate) {
 		List<com.tasktop.c2c.server.tasks.domain.TaskActivity> result = new ArrayList<com.tasktop.c2c.server.tasks.domain.TaskActivity>();
 
 		if (referenceDate == null || task.getCreationDate().compareTo(referenceDate) >= 0) {
@@ -684,8 +680,7 @@ public class TaskActivityService {
 		return result;
 	}
 
-	com.tasktop.c2c.server.tasks.domain.TaskActivity constructCreated(
-			com.tasktop.c2c.server.tasks.domain.Task task) {
+	com.tasktop.c2c.server.tasks.domain.TaskActivity constructCreated(com.tasktop.c2c.server.tasks.domain.Task task) {
 		com.tasktop.c2c.server.tasks.domain.TaskActivity result = new com.tasktop.c2c.server.tasks.domain.TaskActivity();
 		result.setActivityType(Type.CREATED);
 		result.setTask(task);
@@ -695,8 +690,8 @@ public class TaskActivityService {
 		return result;
 	}
 
-	com.tasktop.c2c.server.tasks.domain.TaskActivity constructComment(
-			com.tasktop.c2c.server.tasks.domain.Task task, Comment comment) {
+	com.tasktop.c2c.server.tasks.domain.TaskActivity constructComment(com.tasktop.c2c.server.tasks.domain.Task task,
+			Comment comment) {
 		com.tasktop.c2c.server.tasks.domain.TaskActivity result = new com.tasktop.c2c.server.tasks.domain.TaskActivity();
 
 		result.setActivityType(Type.COMMENTED);
@@ -708,8 +703,8 @@ public class TaskActivityService {
 		return result;
 	}
 
-	com.tasktop.c2c.server.tasks.domain.TaskActivity constructWorkLog(
-			com.tasktop.c2c.server.tasks.domain.Task task, WorkLog workLog) {
+	com.tasktop.c2c.server.tasks.domain.TaskActivity constructWorkLog(com.tasktop.c2c.server.tasks.domain.Task task,
+			WorkLog workLog) {
 		com.tasktop.c2c.server.tasks.domain.TaskActivity result = new com.tasktop.c2c.server.tasks.domain.TaskActivity();
 
 		result.setActivityType(Type.LOGGED_TIME);
@@ -721,8 +716,8 @@ public class TaskActivityService {
 		return result;
 	}
 
-	com.tasktop.c2c.server.tasks.domain.TaskActivity constructAttachment(
-			com.tasktop.c2c.server.tasks.domain.Task task, Attachment attachment) {
+	com.tasktop.c2c.server.tasks.domain.TaskActivity constructAttachment(com.tasktop.c2c.server.tasks.domain.Task task,
+			Attachment attachment) {
 		com.tasktop.c2c.server.tasks.domain.TaskActivity result = new com.tasktop.c2c.server.tasks.domain.TaskActivity();
 		result.setActivityType(Type.ATTACHED);
 		result.setTask(task);

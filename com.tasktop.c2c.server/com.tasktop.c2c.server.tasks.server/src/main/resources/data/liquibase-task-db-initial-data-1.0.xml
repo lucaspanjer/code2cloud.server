@@ -1428,60 +1428,74 @@
 	</changeSet>
 	<changeSet author="taskdb" id="insertTaskTypes">
 		<insert tableName="cf_tasktype">
+			<column name="id" value="1"/>
 			<column name="value" value="Task" />
 			<column name="sortkey" value="0" />
 		</insert>
 		<insert tableName="cf_tasktype">
+			<column name="id" value="2"/>
 			<column name="value" value="Defect" />
 			<column name="sortkey" value="10" />
 		</insert>
 		<insert tableName="cf_tasktype">
+			<column name="id" value="3"/>
 			<column name="value" value="Feature" />
 			<column name="sortkey" value="20" />
 		</insert>
 	</changeSet>
 	<changeSet author="taskdb" id="insertIterations">
 		<insert tableName="cf_iteration">
+			<column name="id" value="1"/>
 			<column name="value" value="---" />
 			<column name="sortkey" value="0" />
 		</insert>
 		<insert tableName="cf_iteration">
+			<column name="id" value="2"/>
 			<column name="value" value="1" />
 			<column name="sortkey" value="10" />
 		</insert>
 		<insert tableName="cf_iteration">
+			<column name="id" value="3"/>
 			<column name="value" value="2" />
 			<column name="sortkey" value="20" />
 		</insert>
 		<insert tableName="cf_iteration">
+			<column name="id" value="4"/>
 			<column name="value" value="3" />
 			<column name="sortkey" value="30" />
 		</insert>
 		<insert tableName="cf_iteration">
+			<column name="id" value="5"/>
 			<column name="value" value="4" />
 			<column name="sortkey" value="40" />
 		</insert>
 		<insert tableName="cf_iteration">
+			<column name="id" value="6"/>
 			<column name="value" value="5" />
 			<column name="sortkey" value="50" />
 		</insert>
 		<insert tableName="cf_iteration">
+			<column name="id" value="7"/>
 			<column name="value" value="6" />
 			<column name="sortkey" value="60" />
 		</insert>
 		<insert tableName="cf_iteration">
+			<column name="id" value="8"/>
 			<column name="value" value="7" />
 			<column name="sortkey" value="70" />
 		</insert>
 		<insert tableName="cf_iteration">
+			<column name="id" value="9"/>
 			<column name="value" value="8" />
 			<column name="sortkey" value="80" />
 		</insert>
 		<insert tableName="cf_iteration">
+			<column name="id" value="10"/>
 			<column name="value" value="9" />
 			<column name="sortkey" value="90" />
 		</insert>
 		<insert tableName="cf_iteration">
+			<column name="id" value="11"/>
 			<column name="value" value="10" />
 			<column name="sortkey" value="100" />
 		</insert>

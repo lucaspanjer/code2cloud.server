@@ -28,7 +28,7 @@
 			<bean
 				class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 				<property name="dataSource" ref="dataSource" />
-				<property name="persistenceXmlLocation" value="classpath:/persistence-test-tasks.xml"/>
+				<property name="persistenceXmlLocation" value="classpath:/META-INF/persistence-tasks-mysql.xml"/>
 			</bean>
 		</property>
 	</bean>

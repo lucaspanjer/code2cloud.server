@@ -156,8 +156,7 @@ public class TaskDomain {
 		return target;
 	}
 
-	public static void makeDescriptionTheEarliestComment(
-			com.tasktop.c2c.server.internal.tasks.domain.Task internalTask) {
+	public static void makeDescriptionTheEarliestComment(com.tasktop.c2c.server.internal.tasks.domain.Task internalTask) {
 		Date now = new Date();
 		Comment descriptionComment = internalTask.getComments().get(0);
 
@@ -463,7 +462,7 @@ public class TaskDomain {
 		managedTarget.setTaskType(source.getTaskType());
 		managedTarget.setExternalTaskRelations(source.getExternalTaskRelations());
 
-		if (!managedTarget.getStatusWhiteboard().isEmpty()) {
+		if (StringUtils.isNotEmpty(managedTarget.getStatusWhiteboard())) {
 			// A non-empty statusWhiteboard means we store description there for backward compatibility. (See discussion
 			// in Task 422)
 			managedTarget.setStatusWhiteboard(source.getStatusWhiteboard());
@@ -555,8 +554,7 @@ public class TaskDomain {
 		}
 	}
 
-	public static void fillManaged(Product managedProduct,
-			com.tasktop.c2c.server.tasks.domain.Product domainProduct) {
+	public static void fillManaged(Product managedProduct, com.tasktop.c2c.server.tasks.domain.Product domainProduct) {
 		managedProduct.setName(domainProduct.getName());
 		managedProduct.setDescription(domainProduct.getDescription());
 		managedProduct.setIsactive(domainProduct.getIsActive());

@@ -37,6 +37,8 @@ public class TaskActivity implements java.io.Serializable {
 	private Attachment attachment;
 	private Profile profiles;
 	private Fielddef fielddefs;
+	private String added;
+	private String removed;
 
 	public TaskActivity() {
 	}
@@ -45,9 +47,7 @@ public class TaskActivity implements java.io.Serializable {
 	@AttributeOverrides({ @AttributeOverride(name = "bugId", column = @Column(name = "bug_id", nullable = false)),
 			@AttributeOverride(name = "who", column = @Column(name = "who", nullable = false)),
 			@AttributeOverride(name = "bugWhen", column = @Column(name = "bug_when", nullable = false, length = 19)),
-			@AttributeOverride(name = "fieldid", column = @Column(name = "fieldid", nullable = false)),
-			@AttributeOverride(name = "added", column = @Column(name = "added")),
-			@AttributeOverride(name = "removed", column = @Column(name = "removed")) })
+			@AttributeOverride(name = "fieldid", column = @Column(name = "fieldid", nullable = false)) })
 	public TaskActivityId getId() {
 		return this.id;
 	}
@@ -96,10 +96,35 @@ public class TaskActivity implements java.io.Serializable {
 		this.fielddefs = fielddefs;
 	}
 
+	@Column(name = "added")
+	public String getAdded() {
+		return handleNull(this.added);
+	}
+
+	public void setAdded(String added) {
+		this.added = added;
+	}
+
+	@Column(name = "removed")
+	public String getRemoved() {
+		return handleNull(this.removed);
+	}
+
+	public void setRemoved(String removed) {
+		this.removed = removed;
+	}
+
+	private String handleNull(String s) {
+		if (s == null) {
+			return "";
+		}
+		return s;
+	}
+
 	@Override
 	public String toString() {
-		return "TaskActivity [field=" + fielddefs.getName() + ", removed=" + id.getRemoved() + ", added="
-				+ id.getAdded() + "]";
+		return "TaskActivity [field=" + fielddefs.getName() + ", removed=" + getRemoved() + ", added=" + getAdded()
+				+ "]";
 	}
 
 }

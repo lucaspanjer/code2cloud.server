@@ -39,23 +39,4 @@ public class Milestone extends AbstractReferenceValue implements Serializable {
 		}
 	}
 
-	@Override
-	public String getValue() {
-		return super.getValue();
-	}
-
-	@Override
-	public void setValue(String value) {
-		super.setValue(value);
-	}
-
-	@Override
-	public Short getSortkey() {
-		return super.getSortkey();
-	}
-
-	@Override
-	public void setSortkey(Short sortkey) {
-		super.setSortkey(sortkey);
-	}
 }
