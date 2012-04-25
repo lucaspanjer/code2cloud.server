@@ -148,4 +148,8 @@ public abstract class SqlDialect {
 		return result.toString();
 	}
 
+	public abstract String showTables();
+
+	public abstract String showColumns(String tablename);
+
 }

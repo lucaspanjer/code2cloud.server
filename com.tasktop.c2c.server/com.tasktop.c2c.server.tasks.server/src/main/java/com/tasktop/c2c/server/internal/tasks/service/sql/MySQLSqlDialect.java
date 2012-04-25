@@ -173,4 +173,14 @@ public class MySQLSqlDialect extends SqlDialect {
 	protected String getStringEscapeCharacter() {
 		return "\\";
 	}
+
+	@Override
+	public String showTables() {
+		return "show tables";
+	}
+
+	@Override
+	public String showColumns(String tablename) {
+		return String.format("show columns from %s ", quoteIdentifier(tablename));
+	}
 }

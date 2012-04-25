@@ -251,8 +251,8 @@ public class TaskCustomFieldServiceBean extends AbstractJpaServiceBean implement
 
 	private boolean tableExists(String tableName) {
 
-		for (String table : (List<String>) entityManager.createNativeQuery("show tables").getResultList()) {
-			if (tableName.equals(table)) {
+		for (String table : (List<String>) entityManager.createNativeQuery(sqlDialect.showTables()).getResultList()) {
+			if (tableName.equalsIgnoreCase(table)) {
 				return true;
 			}
 		}
@@ -260,11 +260,14 @@ public class TaskCustomFieldServiceBean extends AbstractJpaServiceBean implement
 	}
 
 	private boolean columnExists(String tableName, String columnName) {
-		int size = entityManager
-				.createNativeQuery(
-						String.format("show columns from %s like '%s'", sqlDialect.quoteIdentifier(tableName),
-								columnName)).getResultList().size();
-		return size == 1;
+
+		for (String column : (List<String>) entityManager.createNativeQuery(sqlDialect.showColumns(tableName))
+				.getResultList()) {
+			if (column.equalsIgnoreCase(columnName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
