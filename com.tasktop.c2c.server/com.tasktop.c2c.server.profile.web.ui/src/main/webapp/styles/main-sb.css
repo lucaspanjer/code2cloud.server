@@ -4200,6 +4200,14 @@ textarea {
 
 .wikiContent td {
   padding: 2px;
+  border: 1px solid LightGray;
+}
+
+.wikiContent th {
+  padding: 2px;
+  border: 1px solid LightGray;
+  font-weight: bold;
+  background-color: #F1F1F1;
 }
 
 .wikiContentExtras {
