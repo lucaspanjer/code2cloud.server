@@ -36,6 +36,15 @@
 		<h4 id="Links">Links</h4><p>[Title|http://www.example.com]<br/>
 		[Title|http://www.example.com|tip]</p>
 		
+		<h4 id="Anchors">Anchors</h4>
+		<table><tbody>
+		<tr><td>{anchor:anchorname}</td><td><em>Creates anchor 'anchorname'</em> </td></tr>
+		<tr><td>[Title|#anchorname]</td><td><em>Links to anchor 'anchorname'</em> </td></tr>
+		</tbody></table>
+
+		<h4 id="Tables">Tables</h4>
+		<p>||heading 1||heading 2||heading 3||<br/>|col A1|col A2|col A3|<br/>|col B1|col B2|col B3|</p>
+		
 		<h4 id="Text Breaks">Text Breaks</h4>
 		<table><tbody>
 		<tr><td>(empty line)</td><td><em>produces a new paragraph</em> </td></tr>
