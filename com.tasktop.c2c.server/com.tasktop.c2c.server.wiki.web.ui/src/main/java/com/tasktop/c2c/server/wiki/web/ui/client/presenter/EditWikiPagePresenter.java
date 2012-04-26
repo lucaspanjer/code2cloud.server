@@ -27,6 +27,7 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
+import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
@@ -131,6 +132,10 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 
 		String getMarkupPreference();
 
+		/**
+		 * @return
+		 */
+		HasEnabled getSaveHasEnabled();
 	}
 
 	public void setPlace(Place p) {
@@ -245,8 +250,10 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 
 	protected void doSave(Page page) {
 		if (page.getId() == null) {
-			getDispatchService().execute(new CreatePageAction(getProjectIdentifier(), page),
-					new AsyncCallbackSupport<CreatePageResult>(new OperationMessage("Creating Page...")) {
+			getDispatchService().execute(
+					new CreatePageAction(getProjectIdentifier(), page),
+					new AsyncCallbackSupport<CreatePageResult>(new OperationMessage("Creating Page..."), null, view
+							.getSaveHasEnabled()) {
 						@Override
 						protected void success(CreatePageResult result) {
 							Page savedPage = result.get();
@@ -258,8 +265,10 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 						}
 					});
 		} else {
-			getDispatchService().execute(new UpdatePageAction(getProjectIdentifier(), page),
-					new AsyncCallbackSupport<UpdatePageResult>(new OperationMessage("Saving Page...")) {
+			getDispatchService().execute(
+					new UpdatePageAction(getProjectIdentifier(), page),
+					new AsyncCallbackSupport<UpdatePageResult>(new OperationMessage("Saving Page..."), null, view
+							.getSaveHasEnabled()) {
 						@Override
 						protected void success(UpdatePageResult result) {
 							Page savedPage = result.get();

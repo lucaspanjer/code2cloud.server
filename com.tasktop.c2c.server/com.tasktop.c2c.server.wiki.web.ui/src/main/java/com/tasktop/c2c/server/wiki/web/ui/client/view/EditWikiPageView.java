@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
+import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -35,6 +36,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.view.CompositeClickHandlers;
+import com.tasktop.c2c.server.common.web.client.view.CompositeHasEnabled;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.Page;
 import com.tasktop.c2c.server.wiki.domain.Page.GroupAccess;
@@ -211,6 +213,10 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 		return page;
 	}
 
+	public HasEnabled getSaveHasEnabled() {
+		return new CompositeHasEnabled(saveButton, saveButton2);
+	}
+
 	protected void updateModel() {
 		driver.flush();
 		isEditing = false;
@@ -218,8 +224,8 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 
 	@Override
 	public void addSaveClickHandler(final ClickHandler clickHandler) {
-		saveButton2.addClickHandler(clickHandler);
 		saveButton.addClickHandler(clickHandler);
+		saveButton2.addClickHandler(clickHandler);
 	}
 
 	@Override

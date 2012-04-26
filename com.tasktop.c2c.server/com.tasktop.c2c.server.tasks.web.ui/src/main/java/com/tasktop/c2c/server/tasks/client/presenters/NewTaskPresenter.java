@@ -67,7 +67,6 @@ public class NewTaskPresenter extends AbstractEditTaskPresenter<NewTaskDisplay> 
 	private Task parentTask = null;
 	private Task subTask = null;
 	private Map<String, LastValues> projectIdToLastValues = new HashMap<String, NewTaskPresenter.LastValues>();
-	private String markupLanguage;
 
 	public NewTaskPresenter(NewTaskDisplay view) {
 		super(view);
@@ -135,8 +134,10 @@ public class NewTaskPresenter extends AbstractEditTaskPresenter<NewTaskDisplay> 
 		populateModel();
 		projectIdToLastValues.put(projectIdentifier, new LastValues(task));
 		CreateTaskAction action = new CreateTaskAction(projectIdentifier, task);
-		getDispatchService().execute(action,
-				new AsyncCallbackSupport<CreateTaskResult>(new OperationMessage("Creating Task...")) {
+		getDispatchService().execute(
+				action,
+				new AsyncCallbackSupport<CreateTaskResult>(new OperationMessage("Creating Task..."), null, editTaskView
+						.getSaveHasEnabled()) {
 					@Override
 					protected void success(CreateTaskResult actionResult) {
 						Task result = actionResult.get();

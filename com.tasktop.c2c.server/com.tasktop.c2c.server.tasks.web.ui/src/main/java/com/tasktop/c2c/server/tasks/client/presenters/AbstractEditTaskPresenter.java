@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.tasks.client.presenters;
 
 import java.util.List;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;

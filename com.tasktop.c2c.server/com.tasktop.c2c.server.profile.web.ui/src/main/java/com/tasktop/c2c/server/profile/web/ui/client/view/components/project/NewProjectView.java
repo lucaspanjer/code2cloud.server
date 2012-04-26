@@ -98,6 +98,10 @@ public class NewProjectView extends AbstractProjectView {
 		super.setProject(project);
 	}
 
+	public Button getCreateButton() {
+		return createButton;
+	}
+
 	public Project getProject() {
 		driver.flush();
 		super.updateProject(project);

@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets;
 
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.tasktop.c2c.server.common.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
@@ -46,5 +47,7 @@ public interface TaskView extends IsWidget {
 	void reEnterEditMode();
 
 	void updateTask(Task task);
+
+	FocusWidget getCommentButton();
 
 }

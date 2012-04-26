@@ -47,6 +47,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -1432,5 +1433,9 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	@Override
 	public void reEnterEditMode() {
 		startInlineEdit(lastEditedField);
+	}
+
+	public FocusWidget getCommentButton() {
+		return commentsPanel.postComment;
 	}
 }

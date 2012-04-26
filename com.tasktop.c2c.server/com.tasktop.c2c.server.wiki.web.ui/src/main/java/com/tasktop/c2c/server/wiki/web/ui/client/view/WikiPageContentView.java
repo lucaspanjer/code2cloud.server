@@ -129,6 +129,11 @@ public class WikiPageContentView extends AbstractComposite implements RenderedWi
 	}
 
 	@Override
+	public Anchor getDeleteButton() {
+		return deleteButton;
+	}
+
+	@Override
 	public void setEnableHeader(boolean enable) {
 		pageLabel.setVisible(enable);
 	}

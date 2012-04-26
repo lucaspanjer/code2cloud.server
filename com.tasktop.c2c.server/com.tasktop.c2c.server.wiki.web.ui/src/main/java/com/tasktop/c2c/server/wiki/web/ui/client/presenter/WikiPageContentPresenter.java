@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.wiki.web.ui.client.presenter;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.web.client.navigation.Navigation;
@@ -123,6 +124,11 @@ public class WikiPageContentPresenter extends AbstractWikiPresenter implements S
 		 * @param canRestore
 		 */
 		void setEnableRestore(boolean canRestore);
+
+		/**
+		 * @return
+		 */
+		Anchor getDeleteButton();
 	}
 
 	public void setPage(Page page) {
@@ -221,7 +227,7 @@ public class WikiPageContentPresenter extends AbstractWikiPresenter implements S
 	protected void doDelete() {
 		final Page deleted = page;
 		getDispatchService().execute(new DeletePageAction(getProjectIdentifier(), page.getId()),
-				new AsyncCallbackSupport<DeletePageResult>() {
+				new AsyncCallbackSupport<DeletePageResult>(null, null, view.getDeleteButton()) {
 					@Override
 					protected void success(DeletePageResult result) {
 						Action undo = new Action("Undo",

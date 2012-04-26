@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.wiki.web.ui.client.view;
 
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;

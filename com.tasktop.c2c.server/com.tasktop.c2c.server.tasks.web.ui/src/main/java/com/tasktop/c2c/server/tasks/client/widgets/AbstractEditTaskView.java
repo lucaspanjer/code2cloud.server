@@ -36,6 +36,7 @@ import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.testing.PassthroughRenderer;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SuggestOracle;
@@ -47,6 +48,7 @@ import com.google.gwt.user.datepicker.client.DatePicker;
 import com.tasktop.c2c.server.common.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.view.CompositeClickHandlers;
+import com.tasktop.c2c.server.common.web.client.view.CompositeHasEnabled;
 import com.tasktop.c2c.server.common.web.client.widgets.DynamicFormPanel;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.MultiValueChooser;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.SingleValueChooser;
@@ -461,4 +463,8 @@ public class AbstractEditTaskView extends AbstractComposite implements AbstractE
 		description.setMarkLanguage(markupLanguage);
 	}
 
+	@Override
+	public HasEnabled getSaveHasEnabled() {
+		return new CompositeHasEnabled(saveTaskButton, saveTaskButton2);
+	}
 }

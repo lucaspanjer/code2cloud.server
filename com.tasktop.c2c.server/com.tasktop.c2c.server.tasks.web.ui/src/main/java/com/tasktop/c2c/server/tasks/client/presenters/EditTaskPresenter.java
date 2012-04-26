@@ -100,8 +100,10 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 		populateModel();
 
 		UpdateTaskAction action = new UpdateTaskAction(projectIdentifier, task);
-		getDispatchService().execute(action,
-				new AsyncCallbackSupport<UpdateTaskResult>(new OperationMessage("Saving Task...")) {
+		getDispatchService().execute(
+				action,
+				new AsyncCallbackSupport<UpdateTaskResult>(new OperationMessage("Saving Task..."), null, editTaskView
+						.getSaveHasEnabled()) {
 
 					@Override
 					protected void success(UpdateTaskResult actionResult) {

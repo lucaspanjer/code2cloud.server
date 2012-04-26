@@ -90,8 +90,10 @@ public class TaskPresenterImpl extends AbstractTaskPresenter implements TaskPres
 		if (comment != null && comment.length() > 0) {
 			task.addComment(comment);
 			UpdateTaskAction action = new UpdateTaskAction(projectIdentifier, task);
-			getDispatchService().execute(action,
-					new AsyncCallbackSupport<UpdateTaskResult>(new OperationMessage("Posting Comment...")) {
+			getDispatchService().execute(
+					action,
+					new AsyncCallbackSupport<UpdateTaskResult>(new OperationMessage("Posting Comment..."), null,
+							taskView.getCommentButton()) {
 						@Override
 						protected void success(UpdateTaskResult actionResult) {
 							Task result = actionResult.get();

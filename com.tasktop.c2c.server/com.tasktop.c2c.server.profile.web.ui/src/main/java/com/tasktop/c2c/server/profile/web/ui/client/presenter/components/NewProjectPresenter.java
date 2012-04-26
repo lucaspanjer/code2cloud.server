@@ -56,8 +56,11 @@ public class NewProjectPresenter extends AbstractProfilePresenter implements Pre
 
 	@Override
 	public void createProject(Project project) {
-		getProfileService().createProject(getAppState().getCredentials(), project,
-				new AsyncCallbackSupport<String>(new OperationMessage("Creating project...")) {
+		getProfileService().createProject(
+				getAppState().getCredentials(),
+				project,
+				new AsyncCallbackSupport<String>(new OperationMessage("Creating project..."), null, view
+						.getCreateButton()) {
 					@Override
 					protected void success(final String projectIdentifier) {
 						ProjectHomePlace
@@ -65,6 +68,7 @@ public class NewProjectPresenter extends AbstractProfilePresenter implements Pre
 								.displayOnArrival(
 										Message.createSuccessMessage("Project created! Provisioning project services..."))
 								.go();
+
 					}
 
 				});

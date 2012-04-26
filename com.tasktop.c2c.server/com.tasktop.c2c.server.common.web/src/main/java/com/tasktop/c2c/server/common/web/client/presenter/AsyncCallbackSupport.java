@@ -14,8 +14,8 @@ package com.tasktop.c2c.server.common.web.client.presenter;
 
 import java.util.List;
 
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasEnabled;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.Notifier;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
@@ -40,26 +40,45 @@ public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 	private Notifier notifier = CommonGinjector.get.instance().getNotifier();
 
 	public AsyncCallbackSupport() {
-		this(null, null);
+		setup(null, null, null);
 	}
 
 	public AsyncCallbackSupport(OperationMessage operationMessage) {
-		this(operationMessage, null);
+		setup(operationMessage, null, null);
 	}
 
 	public AsyncCallbackSupport(ErrorCapableView overrideView) {
-		this(null, overrideView);
+		setup(null, overrideView, null);
 	}
 
 	public AsyncCallbackSupport(OperationMessage operationMessage, ErrorCapableView overrideView) {
+		setup(operationMessage, overrideView, null);
+	}
+
+	public AsyncCallbackSupport(OperationMessage operationMessage, ErrorCapableView overrideView,
+			HasEnabled buttonToEnable) {
+		setup(operationMessage, overrideView, buttonToEnable);
+	}
+
+	private void setup(OperationMessage operationMessage, ErrorCapableView overrideView, HasEnabled buttonsToEnable) {
 		this.operationMessage = operationMessage;
 		this.overrideErrorView = overrideView;
+		this.hasEnabled = buttonsToEnable;
 		operationStart();
 	}
 
 	private void operationStart() {
+		setButtonToEnableState(false);
 		if (operationMessage != null) {
 			notifier.displayMessage(operationMessage.getProgressMessage());
+		}
+	}
+
+	private HasEnabled hasEnabled;
+
+	private void setButtonToEnableState(boolean enabled) {
+		if (hasEnabled != null) {
+			hasEnabled.setEnabled(enabled);
 		}
 	}
 
@@ -73,6 +92,7 @@ public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 	public final void onSuccess(T result) {
 		operationEnd();
 		success(result);
+		setButtonToEnableState(true);
 	}
 
 	protected abstract void success(T result);
@@ -86,6 +106,7 @@ public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 			Message message = new Message(0, errorMsg, Message.MessageType.ERROR);
 			notifier.displayMessage(message);
 		}
+		setButtonToEnableState(true);
 	}
 
 	protected List<String> getErrors(Throwable exception) {

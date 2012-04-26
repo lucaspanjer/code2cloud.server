@@ -16,6 +16,7 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.tasktop.c2c.server.common.profile.web.client.presenter.person.ProjectPersonService;
@@ -69,4 +70,6 @@ public interface AbstractEditTaskDisplay extends IsWidget, HasValue<Task> {
 	void setProjectIdentifier(String projectIdentifier);
 
 	void setMarkupLanguage(String markupLanguage);
+
+	HasEnabled getSaveHasEnabled();
 }
