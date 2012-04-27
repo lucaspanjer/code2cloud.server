@@ -20,18 +20,17 @@ import java.io.IOException;
 import java.util.Collections;
 
 public class C2CSlave extends AbstractCloudSlave {
-	private static final String remoteFS = "/home/c2c/hudson";
-	private static final int numExecutors = 1;
-	private static final Mode mode = Mode.NORMAL;
-	private static final String label = "Code2Cloud";
-	private static final String nodeDescription = "Code2Cloud builder";
+	private static final int NUMEXECUTORS = 1;
+	private static final Mode MODE = Mode.NORMAL;
+	private static final String LABEL = "Code2Cloud";
+	private static final String NODE_DESC = "Code2Cloud builder";
 
 	private String address;
 	private C2CSlaveCloud cloud;
 
-	public C2CSlave(String name, C2CSlaveCloud cloud) throws FormException, IOException {
-		super(name, nodeDescription, remoteFS, numExecutors, mode, label, new C2CComputerLauncher(cloud.getSshUser(),
-				cloud.getSshKeyFilePath()), new C2CRetentionStrategy(), Collections.EMPTY_LIST);
+	public C2CSlave(String name, C2CSlaveCloud cloud, String remoteFilesystemPath) throws FormException, IOException {
+		super(name, NODE_DESC, remoteFilesystemPath, NUMEXECUTORS, MODE, LABEL, new C2CComputerLauncher(
+				cloud.getSshUser(), cloud.getSshKeyFilePath()), new C2CRetentionStrategy(), Collections.EMPTY_LIST);
 		this.cloud = cloud;
 	}
 
