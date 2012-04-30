@@ -1,0 +1,11 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+			 xmlns:g='urn:import:com.google.gwt.user.client.ui'
+			 xmlns:a="urn:import:com.tasktop.c2c.server.common.web.client.widgets">
+			 
+	<g:HTMLPanel>
+
+		<g:SimplePanel ui:field="contentContainer"/>
+			<div class="clear"/>
+
+	</g:HTMLPanel>
+</ui:UiBinder>

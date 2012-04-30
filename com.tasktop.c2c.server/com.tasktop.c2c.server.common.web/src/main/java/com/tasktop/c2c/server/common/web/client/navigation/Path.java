@@ -41,6 +41,7 @@ public class Path {
 
 	public static final String PROJECT_BASE = "projects";
 	public static final String PROJECT_ID = "projectIdentifier";
+	public static final String ORGANIZATION_ID = "organizationIdentifier";
 
 	private final String path;
 	private final String hashtag;

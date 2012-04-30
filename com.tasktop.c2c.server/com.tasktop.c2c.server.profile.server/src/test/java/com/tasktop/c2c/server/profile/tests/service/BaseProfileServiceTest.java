@@ -1612,6 +1612,52 @@ public abstract class BaseProfileServiceTest {
 		} catch (EntityNotFoundException e) {
 			// expected
 		}
+	}
 
+	@Test
+	public void testGetOwnedOrganizations() {
+		Profile mockProfile = MockProfileFactory.create(entityManager);
+		logon(mockProfile);
+
+		List<Organization> organizations = profileService.getOwnedOrganizations();
+		assertEquals(organizations.size(), 0);
+
+		Organization mockOrg = MockOrganizationFactory.create(entityManager);
+
+		OrganizationProfile orgProf = new OrganizationProfile();
+		orgProf.setProfile(mockProfile);
+		orgProf.setOwner(true);
+		orgProf.setUser(true);
+		orgProf.setOrganization(mockOrg);
+		entityManager.persist(orgProf);
+
+		entityManager.flush();
+
+		List<Organization> organizations2 = profileService.getOwnedOrganizations();
+		assertEquals(organizations2.size(), 1);
+	}
+
+	@Test
+	public void testUpdateOrganization() throws EntityNotFoundException, ValidationException {
+		Organization mockOrg = MockOrganizationFactory.create(entityManager);
+
+		profileService.createOrganization(mockOrg);
+
+		com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences preferences = new com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences();
+		preferences.setWikiLanguage(WikiMarkupLanguage.CONFLUENCE);
+
+		String originalIdentifier = mockOrg.getIdentifier();
+
+		mockOrg.setName(mockOrg.getName() + "2");
+		mockOrg.setDescription(mockOrg.getDescription() + "2");
+		mockOrg.setIdentifier(mockOrg.getIdentifier() + "2");
+		mockOrg.setProjectPreferences(preferences);
+
+		Organization newOrg = profileService.updateOrganization(mockOrg);
+
+		assertEquals(newOrg.getName(), mockOrg.getName());
+		assertEquals(newOrg.getDescription(), mockOrg.getDescription());
+		assertEquals(newOrg.getProjectPreferences(), mockOrg.getProjectPreferences());
+		assertEquals(originalIdentifier, mockOrg.getIdentifier());
 	}
 }

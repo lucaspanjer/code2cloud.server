@@ -393,7 +393,7 @@ public class WebServiceDomain {
 		target.setId(org.getId());
 		target.setIdentifier(org.getIdentifier());
 		target.setName(org.getName());
-
+		target.setProjectPreferences(copy(org.getProjectPreferences()));
 		return target;
 	}
 
@@ -422,8 +422,8 @@ public class WebServiceDomain {
 				target.getMembers().add(copy(op.getProfile()));
 			}
 		}
+		target.setProjectPreferences(copy(org.getProjectPreferences()));
 
 		return target;
 	}
-
 }

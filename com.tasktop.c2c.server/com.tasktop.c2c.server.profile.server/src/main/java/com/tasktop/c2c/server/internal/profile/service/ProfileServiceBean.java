@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.internal.profile.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -63,6 +64,7 @@ import com.tasktop.c2c.server.profile.domain.internal.ConfigurationProperty;
 import com.tasktop.c2c.server.profile.domain.internal.EmailVerificationToken;
 import com.tasktop.c2c.server.profile.domain.internal.InvitationToken;
 import com.tasktop.c2c.server.profile.domain.internal.Organization;
+import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -1620,14 +1622,14 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		public void validate(Object target, Errors errors) {
 			Organization organization = (Organization) target;
 			if (organization.getName() != null && organization.getName().trim().length() > 0) {
-				List<Project> projectsWithName = entityManager
+				List<Organization> orgsWithName = entityManager
 						.createQuery(
 								"select e from " + Organization.class.getSimpleName()
 										+ " e where e.name = :name or e.identifier = :identifier")
 						.setParameter("name", organization.getName())
 						.setParameter("identifier", organization.getIdentifier()).getResultList();
-				if (!projectsWithName.isEmpty()) {
-					if (projectsWithName.size() != 1 || !projectsWithName.get(0).equals(organization)) {
+				if (!orgsWithName.isEmpty()) {
+					if (orgsWithName.size() != 1 || !orgsWithName.get(0).equals(organization)) {
 						errors.reject("nameUnique", new Object[] { organization.getName() }, null);
 					}
 				}
@@ -1729,4 +1731,53 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		entityManager.remove(project);
 	}
 
+	@Override
+	public List<Organization> getOwnedOrganizations() {
+		List<Organization> orgs = new LinkedList<Organization>();
+		List<OrganizationProfile> orgProfiles = entityManager
+				.createQuery(
+						"select e from " + OrganizationProfile.class.getSimpleName()
+								+ " e where e.profile.id = :profileId")
+				.setParameter("profileId", getCurrentUserProfile().getId()).getResultList();
+
+		for (OrganizationProfile orgProfile : orgProfiles) {
+			orgs.add(orgProfile.getOrganization());
+		}
+
+		return orgs;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.tasktop.c2c.server.profile.service.ProfileService#updateOrganization(com.tasktop.c2c.server.profile.domain
+	 * .project.Organization)
+	 */
+	@Secured(Role.User)
+	@Override
+	public Organization updateOrganization(Organization organization) throws EntityNotFoundException,
+			ValidationException {
+
+		securityPolicy.modify(organization);
+
+		Organization managedOrganization = entityManager.find(Organization.class, organization.getId());
+		if (managedOrganization == null) {
+			throw new EntityNotFoundException();
+		}
+		entityManager.refresh(managedOrganization);
+		entityManager.refresh(managedOrganization.getProjectPreferences());
+
+		validate(managedOrganization, validator, new OrganizationConstraintsValidator());
+
+		if (!entityManager.contains(organization)) {
+			// we disallow change of identifier
+			managedOrganization.setName(organization.getName());
+			managedOrganization.setDescription(organization.getDescription());
+			managedOrganization.getProjectPreferences().setWikiLanguage(
+					organization.getProjectPreferences().getWikiLanguage());
+		}
+
+		return managedOrganization;
+	}
 }

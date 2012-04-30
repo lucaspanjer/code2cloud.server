@@ -1,0 +1,26 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+			 xmlns:g='urn:import:com.google.gwt.user.client.ui' 		
+			 xmlns:a="urn:import:com.tasktop.c2c.server.common.web.client.widgets">
+			 
+	<g:HTMLPanel>
+		<div class="add-form project-admin left">
+			<h4>Properties
+				<g:Anchor ui:field="editButton" addStyleNames="misc-icon edit right"><span/>Edit
+				</g:Anchor>
+			</h4>
+			<fieldset>
+				<label>Name:</label>
+				<g:Label ui:field="name"/>
+			</fieldset>
+			<fieldset>
+				<label>Description:</label>
+				<g:Label addStyleNames="description" ui:field="description"/>
+			</fieldset>
+			<fieldset>
+				<label>Wiki Markup:</label>
+				<g:ValueListBox ui:field="wikiLanguageListBox" />
+			</fieldset>
+			
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder>

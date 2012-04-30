@@ -21,6 +21,7 @@ public class Organization extends AbstractEntity {
 	private String description;
 	private List<Profile> members;
 	private List<Project> projects;
+	private ProjectPreferences preferences;
 
 	public Organization() {
 		// Default constructor, does nothing.
@@ -64,6 +65,14 @@ public class Organization extends AbstractEntity {
 
 	public void setProjects(List<Project> projects) {
 		this.projects = projects;
+	}
+
+	public ProjectPreferences getProjectPreferences() {
+		return preferences;
+	}
+
+	public void setProjectPreferences(ProjectPreferences preferences) {
+		this.preferences = preferences;
 	}
 
 }

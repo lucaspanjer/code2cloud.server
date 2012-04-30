@@ -206,4 +206,14 @@ public interface ProfileService {
 	public QueryResult<Project> findProjects(ProjectsQuery query);
 
 	public void deleteProject(String projectIdentifier) throws EntityNotFoundException;
+
+	public List<Organization> getOwnedOrganizations();
+
+	/**
+	 * @param organization
+	 * @return
+	 * @throws EntityNotFoundException
+	 * @throws ValidationException
+	 */
+	Organization updateOrganization(Organization organization) throws EntityNotFoundException, ValidationException;
 }

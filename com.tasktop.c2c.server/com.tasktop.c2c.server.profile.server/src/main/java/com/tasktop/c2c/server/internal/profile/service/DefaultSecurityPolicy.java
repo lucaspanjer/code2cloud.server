@@ -237,6 +237,10 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 			case RETRIEVE:
 				assertMember(org);
 				return;
+			case MODIFY:
+				assertMember(org);
+				assertOwner(org);
+				return;
 			}
 		}
 		// if we reach here then we're trying to do something for which there
@@ -298,7 +302,7 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 	}
 
 	private void assertOwner(Organization target) throws InsufficientPermissionsException {
-		String adminRole = AuthUtils.toCompoundProjectRole(Role.Admin, target.getIdentifier());
+		String adminRole = AuthUtils.toCompoundOrganizationRole(Role.Admin, target.getIdentifier());
 
 		if (Security.hasRole(adminRole)) {
 			// is an admin

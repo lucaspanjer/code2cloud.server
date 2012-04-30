@@ -64,6 +64,7 @@ public abstract class AbstractProjectView extends Composite implements Editor<Pr
 
 		wikiLanguageListBox.setValue(project.getProjectPreferences().getWikiLanguage());
 		wikiLanguageListBox.setAcceptableValues(Arrays.asList(WikiMarkupLanguage.values()));
+
 	}
 
 	/**

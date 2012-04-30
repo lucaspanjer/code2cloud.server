@@ -30,7 +30,7 @@ public class MockOrganizationFactory {
 	public static List<Organization> create(EntityManager entityManager, int count) {
 		List<Organization> mocks = new ArrayList<Organization>(count);
 		for (int x = 0; x < count; ++x) {
-			Organization mock = populate(new Organization());
+			Organization mock = populate(new Organization(), entityManager);
 			if (entityManager != null) {
 				if (mock.getIdentifier() == null) {
 					mock.computeIdentifier();
@@ -42,10 +42,11 @@ public class MockOrganizationFactory {
 		return mocks;
 	}
 
-	private synchronized static Organization populate(Organization mock) {
+	private synchronized static Organization populate(Organization mock, EntityManager entityManager) {
 		int index = ++created;
 		mock.setName("project" + index);
 		mock.setDescription("A description about org " + index);
+		mock.setProjectPreferences(MockProjectPreferencesFactory.create(entityManager));
 		return mock;
 	}
 

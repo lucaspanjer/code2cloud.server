@@ -382,4 +382,10 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 	public Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException {
 		return webServiceDomain.copy(profileService.getOrganizationByIdentfier(orgIdentifier));
 	}
+
+	@Override
+	public Organization updateOrganization(Organization organization) throws EntityNotFoundException,
+			ValidationException {
+		return webServiceDomain.copy(profileService.updateOrganization(webServiceDomain.copy(organization)));
+	}
 }

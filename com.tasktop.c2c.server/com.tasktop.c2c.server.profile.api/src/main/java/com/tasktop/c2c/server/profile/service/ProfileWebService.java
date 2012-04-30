@@ -160,4 +160,14 @@ public interface ProfileWebService {
 	Organization createOrganization(Organization org) throws ValidationException;
 
 	Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException;
+
+	/**
+	 * @param organization
+	 * @return
+	 * @throws EntityNotFoundException
+	 * @throws ValidationException
+	 */
+	public Organization updateOrganization(Organization organization) throws EntityNotFoundException,
+			ValidationException;
+
 }

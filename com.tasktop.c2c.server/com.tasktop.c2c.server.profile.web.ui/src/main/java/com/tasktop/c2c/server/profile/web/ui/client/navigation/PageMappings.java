@@ -25,6 +25,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.place.EmailVerificationPlace
 import com.tasktop.c2c.server.profile.web.ui.client.place.HelpPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.InvitationCreatorPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationAdminPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectAdminSettingsPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDashboardPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDeploymentPlace;
@@ -79,5 +80,7 @@ public class PageMappings {
 			"admin/invitationCreator");
 	public static PageMapping AdminProfiles = new PageMapping(new AdminProfilePlace.Tokenizer(), "admin/profile");
 	public static PageMapping ProjectAdmin = ProjectAdminSettingsPlace.ProjectAdminSettings;
+	public static PageMapping OrgAdminPlace = new PageMapping(new OrganizationAdminPlace.Tokenizer(), "o/admin/{"
+			+ Path.ORGANIZATION_ID + "}");
 
 }

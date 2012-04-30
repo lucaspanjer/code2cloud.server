@@ -400,4 +400,13 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 			throws EntityNotFoundException {
 		return profileWebService.getOrganizationByIdentfier(orgIdentifier);
 	}
+
+	@Section("Organizations")
+	@Title("Update Organization")
+	@Override
+	@RequestMapping(value = "organization/update/{id}", method = RequestMethod.POST)
+	public Organization updateOrganization(Organization organization) throws EntityNotFoundException,
+			ValidationException {
+		return profileWebService.updateOrganization(organization);
+	}
 }

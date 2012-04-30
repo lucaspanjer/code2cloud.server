@@ -19,7 +19,11 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences;
 
 /**
  * An organization groups together related users and projects.
@@ -33,6 +37,8 @@ public class Organization extends BaseEntity {
 
 	private List<Project> projects = new ArrayList<Project>();
 	private List<OrganizationProfile> organizationProfiles = new ArrayList<OrganizationProfile>();
+
+	private ProjectPreferences preferences;
 
 	public Organization() {
 		super();
@@ -111,4 +117,13 @@ public class Organization extends BaseEntity {
 		this.organizationProfiles = organizationProfiles;
 	}
 
+	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, optional = false)
+	@JoinColumn(name = "projectpreferences_id", nullable = false)
+	public ProjectPreferences getProjectPreferences() {
+		return preferences;
+	}
+
+	public void setProjectPreferences(ProjectPreferences preferences) {
+		this.preferences = preferences;
+	}
 }

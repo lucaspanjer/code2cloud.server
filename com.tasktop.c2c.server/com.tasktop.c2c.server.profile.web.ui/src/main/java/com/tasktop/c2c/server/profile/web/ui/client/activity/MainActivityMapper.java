@@ -33,6 +33,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.place.AppSectionPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.HelpPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.InvitationCreatorPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationAdminPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDashboardPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDeploymentPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectInvitationPlace;
@@ -49,6 +50,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.CreateI
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.DeploymentsPresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.HelpPresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.NewProjectPresenter;
+import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.OrganizationAdminPresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.PasswordResetPresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.PasswordResetRequestPresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.ProjectDashboardPresenter;
@@ -519,6 +521,10 @@ public class MainActivityMapper implements ActivityMapper {
 			return activity;
 		} else if (place instanceof ProjectAdminPlace) {
 			ProjectAdminActivity activity = new ProjectAdminActivity();
+			activity.setPlace(place);
+			return activity;
+		} else if (place instanceof OrganizationAdminPlace) {
+			OrganizationAdminPresenter activity = new OrganizationAdminPresenter();
 			activity.setPlace(place);
 			return activity;
 		}

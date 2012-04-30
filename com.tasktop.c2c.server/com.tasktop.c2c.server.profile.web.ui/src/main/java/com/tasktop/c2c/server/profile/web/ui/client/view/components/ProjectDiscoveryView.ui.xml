@@ -18,7 +18,7 @@
                   </ul>
           </div>
           <div class="right">
-          <a ui:field="createAnchorElement" class="button special right"><span>Create Project</span></a>
+          	<a ui:field="createAnchorElement" class="button special right"><span>Create Project</span></a>
           </div>
           <div class="clear"></div>
  			</div>

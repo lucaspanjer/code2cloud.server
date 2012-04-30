@@ -17,6 +17,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
+import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectPreferences;
@@ -35,13 +36,16 @@ public class NewProjectPresenter extends AbstractProfilePresenter implements Pre
 		super(projectsView);
 		this.view = projectsView;
 		Project newProject = new Project();
+		newProject.setAccessibility(ProjectAccessibility.PRIVATE);
 		ProjectPreferences prefs = new ProjectPreferences();
 		prefs.setWikiLanguage(WikiMarkupLanguage.TEXTILE);
-		newProject.setProjectPreferences(prefs);
-		newProject.setAccessibility(ProjectAccessibility.PRIVATE);
 		if (place instanceof OrganizationNewProjectPlace) {
-			newProject.setOrganization(((OrganizationNewProjectPlace) place).getOrganization());
+			Organization organization = ((OrganizationNewProjectPlace) place).getOrganization();
+			newProject.setOrganization(organization);
+			prefs.setWikiLanguage(organization.getProjectPreferences().getWikiLanguage());
 		}
+		newProject.setProjectPreferences(prefs);
+
 		view.setPresenter(this);
 		view.setProject(newProject);
 		// Set the createAvailable flag on our view

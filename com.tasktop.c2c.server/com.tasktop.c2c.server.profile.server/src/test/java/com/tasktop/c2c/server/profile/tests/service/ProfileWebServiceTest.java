@@ -66,6 +66,7 @@ import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockAgreementFactory;
+import com.tasktop.c2c.server.profile.tests.domain.mock.MockOrganizationFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProfileFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectInvitationTokenFactory;
@@ -609,6 +610,10 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		org.setIdentifier("abccccapplication");
 		org.setDescription("Org description; blah blah blah.");
 
+		com.tasktop.c2c.server.profile.domain.project.ProjectPreferences preferences = new com.tasktop.c2c.server.profile.domain.project.ProjectPreferences();
+		preferences.setWikiLanguage(WikiMarkupLanguage.TEXTILE);
+		org.setProjectPreferences(preferences);
+
 		Organization created = profileWebService.createOrganization(org);
 		assertNotNull(created);
 
@@ -635,9 +640,35 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		assertEquals(1, org.getProjects().size());
 	}
 
+	@Test
+	public void testUpdateOrganization() throws ValidationException, EntityNotFoundException {
+
+		com.tasktop.c2c.server.profile.domain.internal.Organization mockOrg = MockOrganizationFactory
+				.create(entityManager);
+
+		Organization org = profileWebService.getOrganizationByIdentfier(mockOrg.getIdentifier());
+		com.tasktop.c2c.server.profile.domain.project.ProjectPreferences preferences = org.getProjectPreferences();
+		preferences.setWikiLanguage(WikiMarkupLanguage.CONFLUENCE);
+
+		String originalIdentifier = org.getIdentifier();
+
+		org.setName(org.getName() + "2");
+		org.setDescription(org.getDescription() + "2");
+		org.setIdentifier(org.getIdentifier() + "2");
+		org.setProjectPreferences(org.getProjectPreferences());
+
+		Organization newOrg = profileWebService.updateOrganization(org);
+
+		assertEquals(org.getName(), newOrg.getName());
+		assertEquals(org.getDescription(), newOrg.getDescription());
+		assertEquals(originalIdentifier, newOrg.getIdentifier());
+		assertEquals(org.getProjectPreferences(), newOrg.getProjectPreferences());
+	}
+
 	private void setProjectPrefs(com.tasktop.c2c.server.profile.domain.project.Project project) {
 		com.tasktop.c2c.server.profile.domain.project.ProjectPreferences projectPreferences = new com.tasktop.c2c.server.profile.domain.project.ProjectPreferences();
 		projectPreferences.setWikiLanguage(WikiMarkupLanguage.TEXTILE);
 		project.setProjectPreferences(projectPreferences);
 	}
+
 }
