@@ -51,6 +51,7 @@ public class MockProjectFactory {
 		mock.setDescription("A description about project " + index);
 		mock.setAccessibility(ProjectAccessibility.PRIVATE);
 		mock.setProjectPreferences(preferences);
+		mock.setIsDeleted(false);
 		return mock;
 	}
 }

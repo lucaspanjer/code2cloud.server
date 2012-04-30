@@ -1074,7 +1074,8 @@ public abstract class BaseProfileServiceTest {
 		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("tesT123", new QueryRequest(region,
 				null)));
 		assertNotNull(result);
-		assertEquals(count, result.getTotalResultSize().intValue());
+		assertEquals(count - (count / 4), result.getTotalResultSize().intValue()); // a quarter of projects are marked
+																					// deleted
 		assertEquals(region.getSize().intValue(), result.getResultPage().size());
 	}
 
@@ -1090,22 +1091,25 @@ public abstract class BaseProfileServiceTest {
 		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("tesT123", new QueryRequest(region,
 				null)));
 		assertNotNull(result);
-		assertEquals(count, result.getTotalResultSize().intValue());
+		assertEquals(count - (count / 4), result.getTotalResultSize().intValue()); // a quarter of projects are marked
+																					// deleted
 		assertEquals(region.getSize().intValue(), result.getResultPage().size());
 	}
 
 	private void setupProjects(int count, Boolean createPublic, Profile profile) {
-		int max = count * 3;
+		int max = count * 4;
 		List<Project> projects = MockProjectFactory.create(entityManager, max);
 		int x = -1;
 		for (Project project : projects) {
 			project.setAccessibility(createPublic ? ProjectAccessibility.PUBLIC : ProjectAccessibility.PRIVATE);
 			++x;
 			if (x < count) {
-				if (x % 3 == 0) {
+				if (x % 4 == 0) {
 					project.setName("Test123" + x + project.getName());
-				} else if (x % 3 == 1) {
+				} else if (x % 4 == 1) {
 					project.setDescription("tEst123" + x + project.getDescription());
+				} else if (x % 4 == 2) {
+					project.setIsDeleted(true);
 				} else {
 					project.setIdentifier("teSt123" + x + project.getIdentifier());
 				}
@@ -1659,5 +1663,36 @@ public abstract class BaseProfileServiceTest {
 		assertEquals(newOrg.getDescription(), mockOrg.getDescription());
 		assertEquals(newOrg.getProjectPreferences(), mockOrg.getProjectPreferences());
 		assertEquals(originalIdentifier, mockOrg.getIdentifier());
+	}
+
+	@Test(expected = EntityNotFoundException.class)
+	public void testUpdatePartiallyDeletedProject() throws EntityNotFoundException, ValidationException {
+		Project project = changeDeletedProject();
+		profileService.updateProject(project);
+	}
+
+	@Test(expected = EntityNotFoundException.class)
+	public void testGetPartiallyDeletedProjectByIdentifier() throws EntityNotFoundException, ValidationException {
+		Project project = changeDeletedProject();
+		profileService.getProjectByIdentifier(project.getIdentifier());
+	}
+
+	@Test(expected = EntityNotFoundException.class)
+	public void testGetPartiallyDeletedProject() throws EntityNotFoundException, ValidationException {
+		Project project = changeDeletedProject();
+		profileService.getProject(project.getId());
+	}
+
+	private Project changeDeletedProject() throws EntityNotFoundException, ValidationException {
+		Profile profile = MockProfileFactory.create(entityManager);
+		Project project = MockProjectFactory.create(null);
+
+		project = profileService.createProject(profile.getId(), project);
+
+		project.setIsDeleted(true);
+		entityManager.persist(project);
+
+		project.setName(project.getName() + "2");
+		return project;
 	}
 }

@@ -43,6 +43,7 @@ public class Project extends BaseEntity {
 	private String description;
 	private ProjectAccessibility accessibility;
 	private ProjectPreferences projectPreferences;
+	private Boolean deleted = false;
 
 	private List<ProjectProfile> projectProfiles = new ArrayList<ProjectProfile>();
 	private List<ScmRepository> repositories = new ArrayList<ScmRepository>();
@@ -237,5 +238,15 @@ public class Project extends BaseEntity {
 
 	public void setQuotaSettings(List<QuotaSetting> quotaSettings) {
 		this.quotaSettings = quotaSettings;
+	}
+
+	@Basic
+	@Column
+	public Boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.deleted = isDeleted;
 	}
 }

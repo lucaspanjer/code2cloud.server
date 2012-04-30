@@ -702,5 +702,13 @@
 			ALTER TABLE QUOTASETTING CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
 		</sql>
 	</changeSet>
+	
+	<changeSet id="addDeletedColumn-task4267" author="mfeichtinger">
+		<addColumn tableName="Project">
+			<column name="DELETED" type="BOOLEAN" defaultValueBoolean="false">
+			</column>
+		</addColumn>
+	</changeSet>
+	
 
 </databaseChangeLog>

@@ -552,6 +552,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		securityPolicy.modify(project);
 
 		Project managedProject = entityManager.find(Project.class, project.getId());
+		verifyProjectDeletion(managedProject);
 		if (managedProject == null) {
 			throw new EntityNotFoundException();
 		}
@@ -582,6 +583,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	public Project getProject(Long id) throws EntityNotFoundException {
 		if (id != null) {
 			Project project = entityManager.find(Project.class, id);
+			verifyProjectDeletion(project);
 			if (project != null) {
 
 				securityPolicy.retrieve(project);
@@ -605,6 +607,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 			securityPolicy.retrieve(project);
 
+			verifyProjectDeletion(project);
+
 			return project;
 		} catch (NoResultException e) {
 			throw new EntityNotFoundException();
@@ -626,6 +630,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 					.setParameter("id", profile.getId()).getResultList();
 
 			for (Project project : projects) {
+				verifyProjectDeletion(project);
 				securityPolicy.retrieve(project);
 			}
 			return projects;
@@ -772,6 +777,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			throw new EntityNotFoundException();
 		}
 
+		verifyProjectDeletion(token.getProject());
 		return token.getProject();
 	}
 
@@ -1176,7 +1182,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (profile != null) {
 			coreQuery += ", IN(project.projectProfiles) pp ";
 		}
-		coreQuery += "WHERE (LOWER(project.name) LIKE :q OR LOWER(project.description) LIKE :q OR LOWER(project.identifier) LIKE :q) AND (project.accessibility = :public";
+		coreQuery += "WHERE (LOWER(project.name) LIKE :q OR LOWER(project.description) LIKE :q OR LOWER(project.identifier) LIKE :q) AND (project.accessibility = :public AND project.deleted = false";
 
 		if (profile != null) {
 			coreQuery += " OR pp.profile.id = :id";
@@ -1562,6 +1568,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (orgIdentifierOrNull != null) {
 			whereString += " AND project.organization.identifier = :orgId ";
 		}
+		whereString += "AND project.deleted = false ";
 
 		Query totalResultQuery = entityManager
 				.createQuery("SELECT count(DISTINCT project) " + fromString + whereString);
@@ -1688,7 +1695,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Override
 	public void deleteProject(String projectIdentifier) throws EntityNotFoundException {
 		Project project = getProjectByIdentifier(projectIdentifier);
-
+		project.setIsDeleted(true);
 		securityPolicy.delete(project);
 
 		if (project.getProjectServiceProfile() == null
@@ -1779,5 +1786,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		}
 
 		return managedOrganization;
+	}
+
+	private void verifyProjectDeletion(Project project) throws EntityNotFoundException {
+		if (project != null && project.isDeleted() != null && project.isDeleted()) {
+			throw new EntityNotFoundException();
+		}
 	}
 }
