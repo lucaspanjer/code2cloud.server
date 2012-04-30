@@ -160,7 +160,7 @@ public class C2CSlaveCloud extends Cloud {
 					throw new RuntimeException("Unable to aquire slave node after [" + numFailures + "] tries.");
 				}
 				long sleepTime = (long) Math.pow(10, numFailures + 1);
-				LOGGER.info("No slave node available. Sleeping [" + sleepTime + "] before retrying.");
+				LOGGER.info("Error requesting slave. Sleeping [" + sleepTime + "] before retrying.", e);
 				try {
 					Thread.sleep(sleepTime);
 				} catch (InterruptedException e1) {
