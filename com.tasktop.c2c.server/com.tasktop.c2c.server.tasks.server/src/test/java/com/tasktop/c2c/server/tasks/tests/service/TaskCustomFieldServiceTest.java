@@ -33,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.internal.tasks.service.TaskCustomFieldService;
-import com.tasktop.c2c.server.internal.tasks.service.sql.SqlDialect;
 import com.tasktop.c2c.server.tasks.domain.CustomFieldValue;
 import com.tasktop.c2c.server.tasks.domain.FieldDescriptor;
 import com.tasktop.c2c.server.tasks.domain.FieldType;
@@ -46,9 +45,6 @@ public class TaskCustomFieldServiceTest extends AbstractSqlTest {
 
 	@Autowired
 	private TaskCustomFieldService service;
-
-	@Autowired
-	private SqlDialect sqlDialect;
 
 	private Set<FieldDescriptor> createdFields = new HashSet<FieldDescriptor>();
 
