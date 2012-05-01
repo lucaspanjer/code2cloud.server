@@ -704,7 +704,7 @@
 	</changeSet>
 	
 	<changeSet id="addDeletedColumn-task4267" author="mfeichtinger">
-		<addColumn tableName="Project">
+		<addColumn tableName="PROJECT">
 			<column name="DELETED" type="BOOLEAN" defaultValueBoolean="false">
 			</column>
 		</addColumn>
