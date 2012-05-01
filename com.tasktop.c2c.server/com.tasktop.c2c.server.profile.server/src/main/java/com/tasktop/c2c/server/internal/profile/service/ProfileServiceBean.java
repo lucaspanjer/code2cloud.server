@@ -596,6 +596,12 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 	@Override
 	public Project getProjectByIdentifier(String identity) throws EntityNotFoundException {
+		Project p = getProjectByIdentifierInternal(identity);
+		verifyProjectDeletion(p);
+		return p;
+	}
+
+	private Project getProjectByIdentifierInternal(String identity) throws EntityNotFoundException {
 		if (identity == null) {
 			throw new IllegalArgumentException();
 		}
@@ -606,8 +612,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 					.setParameter("i", identity).getSingleResult();
 
 			securityPolicy.retrieve(project);
-
-			verifyProjectDeletion(project);
 
 			return project;
 		} catch (NoResultException e) {
@@ -1714,7 +1718,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			throws EntityNotFoundException {
 		internalApplicationService.doDeprovisionService(projectServiceId);
 
-		Project project = getProjectByIdentifier(projectIdentifier);
+		Project project = getProjectByIdentifierInternal(projectIdentifier);
 		boolean readyToDelete = true;
 		for (ProjectService projectService : project.getProjectServiceProfile().getProjectServices()) {
 			if (projectService.getServiceHost() != null) {
@@ -1733,7 +1737,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 	@Override
 	public void doDeleteProject(String projectIdentifier) throws EntityNotFoundException {
-		Project project = getProjectByIdentifier(projectIdentifier);
+		Project project = getProjectByIdentifierInternal(projectIdentifier);
 		entityManager.refresh(project);
 		entityManager.remove(project);
 	}
