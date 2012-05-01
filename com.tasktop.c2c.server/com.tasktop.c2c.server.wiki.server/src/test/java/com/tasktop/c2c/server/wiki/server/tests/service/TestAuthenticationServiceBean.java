@@ -45,5 +45,6 @@ public class TestAuthenticationServiceBean extends AbstractAuthenticationService
 	protected void addAuthorities(Object data, AuthenticationToken token) {
 		super.addAuthorities(data, token);
 		token.getAuthorities().add(Role.User + "/1");
+		token.getAuthorities().add(Role.Admin);
 	}
 }
