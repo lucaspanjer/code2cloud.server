@@ -4240,3 +4240,9 @@ ul.saved-queries li:hover div.hover-edit {
 	opacity: 1.0;
 }
 
+.gwt-DecoratedPopupPanel {
+	overflow-y: auto !important;
+	overflow-x: hidden !important;
+	max-height: 100%;
+}
+
