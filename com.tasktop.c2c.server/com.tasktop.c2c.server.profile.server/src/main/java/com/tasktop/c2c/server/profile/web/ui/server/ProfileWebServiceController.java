@@ -403,9 +403,9 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 
 	@Section("Organizations")
 	@Title("Update Organization")
+	@RequestMapping(value = "organization/update", method = RequestMethod.POST)
 	@Override
-	@RequestMapping(value = "organization/update/{id}", method = RequestMethod.POST)
-	public Organization updateOrganization(Organization organization) throws EntityNotFoundException,
+	public Organization updateOrganization(@RequestBody Organization organization) throws EntityNotFoundException,
 			ValidationException {
 		return profileWebService.updateOrganization(organization);
 	}

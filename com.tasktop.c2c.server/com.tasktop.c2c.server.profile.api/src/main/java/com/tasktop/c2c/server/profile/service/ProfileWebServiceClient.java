@@ -746,13 +746,6 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.tasktop.c2c.server.profile.service.ProfileWebService#updateOrganization(com.tasktop.c2c.server.profile.domain
-	 * .project.Organization)
-	 */
 	public Organization updateOrganization(Organization organization) throws EntityNotFoundException,
 			ValidationException {
 		try {
@@ -760,7 +753,7 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 				public Organization getValue(ServiceCallResult result) {
 					return result.getOrganization();
 				}
-			}.doCall("organization/update/{id}", organization.getIdentifier());
+			}.doCall("organization/update", organization);
 		} catch (WrappedCheckedException e) {
 			convertEntityNotFoundException(e);
 			throw e;
