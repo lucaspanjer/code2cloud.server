@@ -610,7 +610,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		return attachmentHandle;
 	}
 
-	@Secured({ Role.Admin })
+	@Secured({ Role.Community, Role.User, Role.Admin })
 	@Override
 	public String setConfigurationProperty(String name, String value) {
 		com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty property;
