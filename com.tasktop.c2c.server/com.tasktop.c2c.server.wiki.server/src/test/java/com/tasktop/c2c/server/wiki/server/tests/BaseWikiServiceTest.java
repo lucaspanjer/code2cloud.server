@@ -118,6 +118,10 @@ public abstract class BaseWikiServiceTest {
 		TestSecurity.login(person);
 	}
 
+	private void logonAsAdmin(Person person) {
+		TestSecurity.loginAsAdmin(person);
+	}
+
 	@Test
 	public void testCreatePage_RequiresLogon() throws ValidationException, EntityNotFoundException {
 		try {
@@ -227,7 +231,7 @@ public abstract class BaseWikiServiceTest {
 
 	@Test
 	public void testSetConfigurationProperty() throws ValidationException, EntityNotFoundException {
-		logon(author);
+		logonAsAdmin(author);
 
 		String TEST_CONFIGURATION_PROPERTY = "TEST_CONFIGURATION_PROPERTY";
 		String TEST_VALUE = "test value";

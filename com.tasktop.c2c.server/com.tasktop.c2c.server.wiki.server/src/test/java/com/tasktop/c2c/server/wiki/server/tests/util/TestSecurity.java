@@ -38,6 +38,12 @@ public class TestSecurity {
 		login(token);
 	}
 
+	public static void loginAsAdmin(Person profile) {
+		AuthenticationToken token = createToken(profile);
+		token.getAuthorities().add(Role.Admin);
+		login(token);
+	}
+
 	public static AuthenticationToken createToken(Person profile) {
 		List<String> roles = new ArrayList<String>();
 		// add the default role
