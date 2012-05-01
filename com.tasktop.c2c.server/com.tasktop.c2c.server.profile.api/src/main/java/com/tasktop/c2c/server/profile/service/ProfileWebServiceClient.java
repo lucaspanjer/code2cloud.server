@@ -756,7 +756,7 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 	public Organization updateOrganization(Organization organization) throws EntityNotFoundException,
 			ValidationException {
 		try {
-			return new GetCall<Organization>() {
+			return new PostCall<Organization>() {
 				public Organization getValue(ServiceCallResult result) {
 					return result.getOrganization();
 				}
