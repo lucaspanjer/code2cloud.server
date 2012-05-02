@@ -741,15 +741,6 @@ public class TaskServiceClient extends AbstractRestServiceClient implements Task
 		}.doCall("team", team);
 	}
 
-	public List<Keyword> listAllKeywords() {
-		return new GetCall<List<Keyword>>() {
-
-			public List<Keyword> getValue(ServiceCallResult result) {
-				return result.getKeywordList();
-			}
-		}.doCall("keywords");
-	}
-
 	public Keyword createKeyword(Keyword keyword) throws ValidationException {
 		try {
 			return new PostCall<Keyword>() {

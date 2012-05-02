@@ -468,15 +468,6 @@ public class TaskServiceController extends AbstractRestService implements TaskSe
 		service.replicateTeam(team);
 	}
 
-	@Title("List Tags")
-	@Documentation("List all tags.")
-	@Section("Tags")
-	@RequestMapping(value = "/keywords", method = RequestMethod.GET)
-	@Override
-	public List<Keyword> listAllKeywords() {
-		return service.listAllKeywords();
-	}
-
 	@Title("Create Tag")
 	@Documentation("Create a new tag.")
 	@Section("Tags")

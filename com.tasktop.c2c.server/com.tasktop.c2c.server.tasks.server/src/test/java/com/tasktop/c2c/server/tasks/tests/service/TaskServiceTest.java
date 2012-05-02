@@ -4098,7 +4098,7 @@ public class TaskServiceTest {
 	public void updateKeyword() throws ValidationException, EntityNotFoundException {
 		Keyword newKeyword = new Keyword("name", "description");
 		Keyword createdKeyword = taskService.createKeyword(newKeyword);
-		List<Keyword> allKeywords = taskService.listAllKeywords();
+		List<Keyword> allKeywords = taskService.getRepositoryContext().getKeywords();
 		assertTrue(allKeywords.get(allKeywords.size() - 1).equals(createdKeyword));
 
 		createdKeyword.setName("name2");
@@ -4111,11 +4111,11 @@ public class TaskServiceTest {
 		Keyword newKeyword = new Keyword("name", "description");
 		Keyword createdKeyword = taskService.createKeyword(newKeyword);
 
-		List<Keyword> allKeywords = taskService.listAllKeywords();
+		List<Keyword> allKeywords = taskService.getRepositoryContext().getKeywords();
 		int numKeywords = allKeywords.size();
 
 		taskService.deleteKeyword(createdKeyword.getId());
-		List<Keyword> afterKeywords = taskService.listAllKeywords();
+		List<Keyword> afterKeywords = taskService.getRepositoryContext().getKeywords();
 		assertEquals(numKeywords - 1, afterKeywords.size());
 	}
 

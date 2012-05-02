@@ -1273,12 +1273,6 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return result;
 	}
 
-	@Override
-	@Secured({ Role.Observer, Role.User })
-	public List<Keyword> listAllKeywords() {
-		return findAllKeywords();
-	}
-
 	@SuppressWarnings("unchecked")
 	private List<StateTransition> computeStateTransitions() {
 		Query query = entityManager.createQuery("select e.oldStatus, e.newStatus, e.id.requireComment from "

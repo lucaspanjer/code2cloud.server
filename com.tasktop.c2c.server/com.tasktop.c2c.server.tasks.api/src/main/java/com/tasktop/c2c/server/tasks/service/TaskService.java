@@ -347,13 +347,6 @@ public interface TaskService {
 	void replicateTeam(Team team);
 
 	/**
-	 * Get a list of all keywords
-	 * 
-	 * @return the keywords
-	 */
-	List<Keyword> listAllKeywords();
-
-	/**
 	 * Create a new keyword.
 	 * 
 	 * @param keyword
