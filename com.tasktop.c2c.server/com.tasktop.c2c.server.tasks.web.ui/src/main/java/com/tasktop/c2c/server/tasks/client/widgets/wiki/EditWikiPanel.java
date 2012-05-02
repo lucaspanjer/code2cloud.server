@@ -110,12 +110,21 @@ public class EditWikiPanel extends Composite implements HasValue<String>, IsEdit
 
 		boolean isEditing = toggleButton.getValue();
 		if (isEditing) {
-			panel.setWidget(text);
+			switchToEditMode();
 		} else {
 			preRender();
 			renderWikiPreview(text.getValue());
 		}
 		helpAnchor.setVisible(isEditing);
+	}
+
+	protected void switchToEditMode() {
+		int currentHTMLHeight = html.getElement().getOffsetHeight();
+		panel.setWidget(text);
+
+		if (currentHTMLHeight > text.getOffsetHeight()) {
+			text.setHeight(currentHTMLHeight + "px");
+		}
 	}
 
 	public void addToggleListener(ValueChangeHandler<Boolean> handler) {
