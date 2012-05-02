@@ -1074,8 +1074,7 @@ public abstract class BaseProfileServiceTest {
 		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("tesT123", new QueryRequest(region,
 				null)));
 		assertNotNull(result);
-		assertEquals(count - (count / 4), result.getTotalResultSize().intValue()); // a quarter of projects are marked
-																					// deleted
+		assertEquals(count, result.getTotalResultSize().intValue());
 		assertEquals(region.getSize().intValue(), result.getResultPage().size());
 	}
 
@@ -1091,25 +1090,22 @@ public abstract class BaseProfileServiceTest {
 		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("tesT123", new QueryRequest(region,
 				null)));
 		assertNotNull(result);
-		assertEquals(count - (count / 4), result.getTotalResultSize().intValue()); // a quarter of projects are marked
-																					// deleted
+		assertEquals(count, result.getTotalResultSize().intValue());
 		assertEquals(region.getSize().intValue(), result.getResultPage().size());
 	}
 
 	private void setupProjects(int count, Boolean createPublic, Profile profile) {
-		int max = count * 4;
+		int max = count * 3;
 		List<Project> projects = MockProjectFactory.create(entityManager, max);
 		int x = -1;
 		for (Project project : projects) {
 			project.setAccessibility(createPublic ? ProjectAccessibility.PUBLIC : ProjectAccessibility.PRIVATE);
 			++x;
 			if (x < count) {
-				if (x % 4 == 0) {
+				if (x % 3 == 0) {
 					project.setName("Test123" + x + project.getName());
-				} else if (x % 4 == 1) {
+				} else if (x % 3 == 1) {
 					project.setDescription("tEst123" + x + project.getDescription());
-				} else if (x % 4 == 2) {
-					project.setIsDeleted(true);
 				} else {
 					project.setIdentifier("teSt123" + x + project.getIdentifier());
 				}
@@ -1695,4 +1691,93 @@ public abstract class BaseProfileServiceTest {
 		project.setName(project.getName() + "2");
 		return project;
 	}
+
+	@Test(expected = EntityNotFoundException.class)
+	public void testGetDeletedProfileProjects() throws EntityNotFoundException {
+
+		Profile profile = MockProfileFactory.create(entityManager);
+		Project project = MockProjectFactory.create(entityManager);
+		entityManager.persist(project);
+		Project deletedProject = MockProjectFactory.create(entityManager);
+		deletedProject.setIsDeleted(true);
+		entityManager.persist(deletedProject.addProfile(profile));
+
+		profileService.getProfileProjects(profile.getId());
+	}
+
+	@Test
+	public void testFindPublicDeletedProjects() throws EntityNotFoundException {
+		setupDeletedAndNonDeletedProject(true, null);
+
+		Region region = new Region(0, 2);
+		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("Test123", new QueryRequest(region,
+				null)));
+		assertEquals(1, result.getTotalResultSize().intValue());
+	}
+
+	@Test
+	public void testFindPrivateDeletedProjects() throws EntityNotFoundException {
+		Profile mockProfile = MockProfileFactory.create(entityManager);
+		logon(mockProfile);
+		setupDeletedAndNonDeletedProject(false, mockProfile);
+
+		Region region = new Region(0, 2);
+		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("Test123", new QueryRequest(region,
+				null)));
+		assertEquals(1, result.getTotalResultSize().intValue());
+	}
+
+	private void setupDeletedAndNonDeletedProject(boolean isPublic, Profile profile) {
+		List<Project> projects = MockProjectFactory.create(entityManager, 2);
+		int x = 1;
+		for (Project project : projects) {
+			if (x == 1) {
+				project.setIsDeleted(true);
+			}
+			project.setName("Test123" + x);
+			project.setIdentifier("Test123" + x);
+			project.setAccessibility(isPublic ? ProjectAccessibility.PUBLIC : ProjectAccessibility.PRIVATE);
+			if (profile != null) {
+				ProjectProfile mock = new ProjectProfile();
+				mock.setProfile(profile);
+				mock.setProject(project);
+				entityManager.persist(mock);
+			}
+			x++;
+		}
+
+		entityManager.flush();
+		entityManager.clear();
+	}
+
+	@Test
+	public void testFindDeletedProjectsByRelationship() throws ValidationException, EntityNotFoundException {
+		Profile profile = setupProfile(false);
+		Project project = MockProjectFactory.create(null);
+		Long id = profileService.createProject(profile.getId(), project).getId();
+
+		Project project2 = entityManager.find(Project.class, id);
+		project2.setIsDeleted(true);
+
+		QueryResult<Project> projects = profileService.findProjects(new ProjectsQuery(ProjectRelationship.ALL, null));
+		Assert.assertEquals((Integer) 0, projects.getTotalResultSize());
+	}
+
+	@Test(expected = EntityNotFoundException.class)
+	public void testGetDeletedProjectForInvitationToken() throws ValidationException, EntityNotFoundException {
+		Profile profile = MockProfileFactory.create(entityManager);
+		Project project = MockProjectFactory.create(null);
+		Long id = profileService.createProject(profile.getId(), project).getId();
+		Project created = entityManager.find(Project.class, id);
+		created.setIsDeleted(true);
+
+		InvitationToken token = MockProjectInvitationTokenFactory.create(null);
+		token.setProject(created);
+		token.setIssuingProfile(profile);
+		entityManager.persist(token);
+
+		profileService.getProjectForInvitationToken(token.getToken());
+
+	}
+
 }

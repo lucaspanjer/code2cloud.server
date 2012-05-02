@@ -1186,13 +1186,13 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (profile != null) {
 			coreQuery += ", IN(project.projectProfiles) pp ";
 		}
-		coreQuery += "WHERE (LOWER(project.name) LIKE :q OR LOWER(project.description) LIKE :q OR LOWER(project.identifier) LIKE :q) AND (project.accessibility = :public AND project.deleted = false";
+		coreQuery += "WHERE (LOWER(project.name) LIKE :q OR LOWER(project.description) LIKE :q OR LOWER(project.identifier) LIKE :q) AND (project.accessibility = :public ";
 
 		if (profile != null) {
 			coreQuery += " OR pp.profile.id = :id";
 		}
 
-		coreQuery += ")";
+		coreQuery += ")  AND project.deleted = false";
 
 		if (orgIdentifierOrNull != null) {
 			coreQuery += " AND project.organization.identifier =  :orgId";
@@ -1548,7 +1548,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		boolean needPubParam = false;
 		switch (projectRelationship) {
 		case ALL:
-			whereString = "WHERE project.accessibility = :public OR pp.profile.id = :id ";
+			whereString = "WHERE (project.accessibility = :public OR pp.profile.id = :id) ";
 			needPubParam = true;
 			break;
 		case MEMBER:
@@ -1572,7 +1572,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (orgIdentifierOrNull != null) {
 			whereString += " AND project.organization.identifier = :orgId ";
 		}
-		whereString += "AND project.deleted = false ";
+		whereString += " AND project.deleted = false ";
 
 		Query totalResultQuery = entityManager
 				.createQuery("SELECT count(DISTINCT project) " + fromString + whereString);
