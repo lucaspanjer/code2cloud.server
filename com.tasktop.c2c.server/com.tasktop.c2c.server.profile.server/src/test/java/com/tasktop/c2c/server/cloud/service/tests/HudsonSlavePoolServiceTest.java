@@ -37,6 +37,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,7 +54,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.cloud.service.DynamicPoolSizeStrategy;
-import com.tasktop.c2c.server.cloud.service.FinishReleaseHudsonSlaveJob;
 import com.tasktop.c2c.server.cloud.service.FixedPoolSizeStrategy;
 import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolSecurityPolicy;
 import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolService;
@@ -161,6 +161,7 @@ public class HudsonSlavePoolServiceTest {
 		hudsonSlavePoolServiceImpl.setUpdatePeriod(0);// for testing FIXME
 		hudsonSlavePoolServiceImpl.setServiceHostService(serviceHostService);
 		hudsonSlavePoolServiceImpl.setQuotaService(quotaService);
+		hudsonSlavePoolServiceImpl.setNodeCleaningService(mockNodeCleaningService);
 		hudsonSlavePoolServiceImpl.setConfigurationPropertyService(mockConfigPropertyService);
 		hudsonSlavePoolServiceImpl.setPoolSizeStrategy(new FixedPoolSizeStrategy(POOL_SIZE, POOL_SIZE));
 		hudsonSlavePoolServiceImpl.setSecurityPolicy(new HudsonSlavePoolSecurityPolicy() {
@@ -203,9 +204,10 @@ public class HudsonSlavePoolServiceTest {
 	// Should only run once per suite
 	private void doStaticSetup() {
 
-		((GenericApplicationContext) applicationContext).getBeanFactory().registerSingleton("mockNodeCleaningService",
-				mockNodeCleaningService);
-		FinishReleaseHudsonSlaveJob.setCleaningServiceBeanName("mockNodeCleaningService");
+		((BeanDefinitionRegistry) ((GenericApplicationContext) applicationContext).getBeanFactory())
+				.removeBeanDefinition("hudsonSlavePoolService");
+		((GenericApplicationContext) applicationContext).getBeanFactory().registerSingleton("hudsonSlavePoolService",
+				hudsonSlavePoolServiceImpl);
 
 		new TransactionTemplate(trxManager).execute(new TransactionCallbackWithoutResult() {
 

@@ -12,21 +12,11 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.cloud.service;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
-import com.tasktop.c2c.server.cloud.domain.ServiceHost;
-import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.job.Job;
 
 public class FinishReleaseHudsonSlaveJob extends Job {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(FinishReleaseHudsonSlaveJob.class);
-
-	private static String cleaningServiceBeanName = "hudsonSlaveNodeCleaningService";
 
 	private String projectId;
 	private Long serviceHostId;
@@ -38,33 +28,13 @@ public class FinishReleaseHudsonSlaveJob extends Job {
 
 	@Override
 	public void execute(ApplicationContext applicationContext) {
-		final ServiceHostService serviceHostService = applicationContext.getBean(ServiceHostService.class);
-		NodeCleaningService nodeCleaningService = applicationContext.getBean(cleaningServiceBeanName,
-				NodeCleaningService.class);
 		try {
-
-			// DO the node-deallocation first so it functions as an auth check that the projected did own it, and thus
-			// it can be freed.
-			final ServiceHost node = serviceHostService.retrieve(serviceHostId);
-			serviceHostService.deallocateHostFromProject(node, projectId);
-
-			nodeCleaningService.cleanNode(node);
-
-		} catch (EntityNotFoundException e) {
-			LOGGER.warn("", e);
-		} catch (IOException e) {
-			LOGGER.warn("", e);
+			final HudsonSlavePoolServiceInternal hudsonSlavePoolServiceInternal = applicationContext.getBean(
+					"hudsonSlavePoolService", HudsonSlavePoolServiceInternal.class);
+			hudsonSlavePoolServiceInternal.doReleaseSlave(projectId, serviceHostId);
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
-
-	}
-
-	/**
-	 * Set the name of the bean to be used for the node cleaning service. Usefull for testing.
-	 * 
-	 * @param name
-	 */
-	public static void setCleaningServiceBeanName(String name) {
-		cleaningServiceBeanName = name;
 	}
 
 }

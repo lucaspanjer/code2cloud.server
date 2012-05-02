@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.cloud.service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -37,7 +38,8 @@ import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 import com.tasktop.c2c.server.profile.service.QuotaService;
 
 @Transactional
-public class HudsonSlavePoolServiceImpl extends BasePoolService implements HudsonSlavePoolService, InitializingBean {
+public class HudsonSlavePoolServiceImpl extends BasePoolService implements HudsonSlavePoolService,
+		HudsonSlavePoolServiceInternal, InitializingBean {
 
 	private static final String MAX_BUILD_TIME_QUOTA = "hudson.maxBuildTimeInMinutes";
 
@@ -89,6 +91,8 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 
 	@Autowired
 	private QuotaService quotaService;
+	@Autowired
+	private NodeCleaningService nodeCleaningService;
 
 	private Integer maxBuildTimeInMinutes = -1;
 
@@ -237,6 +241,29 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 
 	public void setQuotaService(QuotaService quotaService) {
 		this.quotaService = quotaService;
+	}
+
+	@Override
+	public void doReleaseSlave(String projectId, Long serviceHostId) {
+		try {
+
+			// DO the node-deallocation first so it functions as an auth check that the projected did own it, and thus
+			// it can be freed.
+			final ServiceHost node = serviceHostService.retrieve(serviceHostId);
+			serviceHostService.deallocateHostFromProject(node, projectId);
+
+			nodeCleaningService.cleanNode(node);
+
+		} catch (EntityNotFoundException e) {
+			LOGGER.warn("", e);
+		} catch (IOException e) {
+			LOGGER.warn("", e);
+		}
+
+	}
+
+	public void setNodeCleaningService(NodeCleaningService nodeCleaningService) {
+		this.nodeCleaningService = nodeCleaningService;
 	}
 
 }

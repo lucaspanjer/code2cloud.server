@@ -37,6 +37,7 @@ import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
 import com.tasktop.c2c.server.cloud.domain.ScmLocation;
 import com.tasktop.c2c.server.cloud.domain.ScmType;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
+import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolServiceInternal;
 import com.tasktop.c2c.server.cloud.service.NodeProvisioningService;
 import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
@@ -75,6 +76,9 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 	@Autowired
 	private ProjectServiceMangementServiceProvider projectServiceMangementServiceProvider;
+
+	@Autowired
+	private HudsonSlavePoolServiceInternal hudsonSlavePoolServiceInternal;
 
 	private boolean updateServiceTemplateOnStart = true;
 
@@ -408,28 +412,43 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		ProjectService projectService = entityManager.find(ProjectService.class, projectServiceId);
 
 		if (projectService.getServiceHost() != null) {
-			ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
-					.getNewService(projectService.getServiceHost().getInternalNetworkAddress(),
-							projectService.getType());
+			LOGGER.info(String.format("deprovisioning service [%s] on node [%s]", projectService.getType(),
+					projectService.getServiceHost().getInternalNetworkAddress()));
 
-			ProjectServiceConfiguration config = createProjectServiceConfiguration(projectService
-					.getProjectServiceProfile().getProject());
+			switch (projectService.getType()) {
+			case BUILD:
+			case MAVEN:
+			case SCM:
+			case TASKS:
+			case WIKI:
+			default:
+				deprovisionServiceViaServiceManageService(projectService);
+				break;
+			case BUILD_SLAVE:
 
-			try {
-				LOGGER.info(String.format("deprovisioning service [%s] on node [%s]", projectService.getType(),
-						projectService.getServiceHost().getInternalNetworkAddress()));
-				nodeConfigurationService.deprovisionService(config);
-				LOGGER.info("deprovisioning done");
-			} catch (Exception e) {
-				throw new RuntimeException("Caught exception while deprovisioning service", e);
+				hudsonSlavePoolServiceInternal.doReleaseSlave(projectService.getProjectServiceProfile()
+						.getProject().getIdentifier(), projectService.getServiceHost().getId());
+				break;
 			}
+			LOGGER.info("deprovisioning done");
+
 		}
+
+	}
+
+	private void deprovisionServiceViaServiceManageService(ProjectService projectService) {
+		ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
+				.getNewService(projectService.getServiceHost().getInternalNetworkAddress(), projectService.getType());
+
+		ProjectServiceConfiguration config = createProjectServiceConfiguration(projectService
+				.getProjectServiceProfile().getProject());
+
+		nodeConfigurationService.deprovisionService(config);
 
 		projectService.getProjectServiceProfile().getProjectServices().remove(projectService);
 		if (projectService.getServiceHost() != null) {
 			projectService.getServiceHost().getProjectServices().remove(projectService);
 		}
 		entityManager.remove(projectService);
-
 	}
 }
