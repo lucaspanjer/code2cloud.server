@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jgit.http.server.GitServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.context.ServletConfigAware;
 
@@ -34,6 +36,8 @@ import com.tasktop.c2c.server.common.service.web.TenancyUtil;
  * 
  */
 public class GitSmartHttpServlet extends GitServlet implements InitializingBean, ServletConfigAware {
+
+	private static final Logger LOG = LoggerFactory.getLogger(GitSmartHttpServlet.class.getName());
 
 	private ServletConfig servletConfig;
 
@@ -57,11 +61,16 @@ public class GitSmartHttpServlet extends GitServlet implements InitializingBean,
 
 	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		String url = request.getRequestURI();
+		url = url + request.getQueryString() == null || request.getQueryString().isEmpty() ? "" : ("?" + request
+				.getQueryString());
+
+		LOG.info(String.format("Serving git request at [%s]", url));
 
 		if (!validRequest(request)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST,
 					"The given Git request was not considered a valid Git command which is recognized by this service.");
-
+			LOG.info("done. bad request");
 			// We're done here, so bail out.
 			return;
 		}
@@ -83,12 +92,12 @@ public class GitSmartHttpServlet extends GitServlet implements InitializingBean,
 						"Insufficient permissions to perform this Git request");
 			}
 
-			// We're done here, so bail out.
+			LOG.info("done. insuffecient auth");
 			return;
 		}
 
-		// If we got here, we have a valid request and sufficient permissions to perform it - go ahead and do it now.
 		super.service(request, response);
+		LOG.info("done.");
 	}
 
 	private boolean validRequest(HttpServletRequest request) {
