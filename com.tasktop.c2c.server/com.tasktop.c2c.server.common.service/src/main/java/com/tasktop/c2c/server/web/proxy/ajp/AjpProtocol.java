@@ -328,7 +328,7 @@ public class AjpProtocol {
 					int chunkSize = processRequestBody(packet, outputStream, bytesWritten, contentLength, requestInput,
 							requestedSize);
 					bytesWritten += chunkSize;
-					debug("sent [" + chunkSize + "] bytes of body check", connection);
+					debug("sent [" + chunkSize + "] bytes of body chunk", connection);
 					break;
 				case SEND_HEADERS: {
 					response.reset();
