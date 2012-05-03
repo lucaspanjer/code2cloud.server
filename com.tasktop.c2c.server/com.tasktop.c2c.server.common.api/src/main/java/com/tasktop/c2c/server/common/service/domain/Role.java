@@ -21,7 +21,9 @@ public final class Role {
 	public static final String Anonymous = "ROLE_ANONYMOUS";
 	public static final String System = "ROLE_SYSTEM";
 	public static final String Admin = "ROLE_ADMIN";
+	/** A Logged-in user that is not necessarily a member of a project, but has access. */
 	public static final String Community = "ROLE_COMMUNITY";
+	/** An anon user that has read only access to a project. */
 	public static final String Observer = "ROLE_OBSERVER";
 	public static final String User = "ROLE_USER";
 	/**
