@@ -14,7 +14,7 @@
 
 	<context:property-placeholder location="classpath*:/database/hsql/database-test.properties, classpath*:/config/*.properties, classpath*:/META-INF/spring/*.properties, classpath*:/*-test.properties, file:///opt/code2cloud-test/etc/*.properties"/>
 
-  	<import resource="classpath:applicationContext-test.xml"/>	
+  	<import resource="classpath:applicationContext-profileTest.xml"/>	
 
 	<bean id="entityManagerFactory" depends-on="liquibase" 
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

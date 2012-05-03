@@ -629,6 +629,13 @@
 			</dependency>
 			<dependency>
 				<groupId>com.tasktop.c2c.server</groupId>
+				<artifactId>profile.server</artifactId>
+				<version>${com.tasktop.c2c.server.version}</version>
+				<classifier>tests</classifier>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.tasktop.c2c.server</groupId>
 				<artifactId>cloud.api</artifactId>
 				<version>${com.tasktop.c2c.server.version}</version>
 			</dependency>
