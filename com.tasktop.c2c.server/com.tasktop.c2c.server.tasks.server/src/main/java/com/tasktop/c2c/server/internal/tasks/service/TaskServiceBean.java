@@ -2184,7 +2184,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		this.validator = validator;
 	}
 
-	@Secured({ Role.Community, Role.User, Role.Admin })
+	@Secured({ Role.Admin })
 	@Override
 	public String setConfigurationProperty(String name, String value) {
 		ConfigurationProperty property;
@@ -2201,7 +2201,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return property.getValue();
 	}
 
-	@Secured({ Role.User })
+	@Secured({ Role.Observer, Role.User })
 	@Override
 	public String retrieveConfigurationProperty(String propertyName) throws EntityNotFoundException {
 		ConfigurationProperty property = findConfigurationProperty(propertyName);
