@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -34,6 +33,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.Section;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
@@ -52,6 +52,8 @@ public class HeaderView extends AbstractComposite {
 	private static HeaderView instance = null;
 
 	public static HeaderView getInstance() {
+		ProfileGinjector.get.instance().getAppResources().appCss().ensureInjected();
+
 		if (instance == null) {
 			instance = new HeaderView();
 		}

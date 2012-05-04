@@ -4,15 +4,16 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:a="urn:import:com.tasktop.c2c.server.common.web.client.widgets"
 	xmlns:t="urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.components">
+   	<ui:with field='res' type='com.tasktop.c2c.server.common.profile.web.client.AppResources'/>
 
-	<g:HTMLPanel styleName="header-wrapper">
-		<div class="header">
-  			<div class="header-nav">
-				<a class="logo" href="#">Code2Cloud</a>
-				<a:FormSectionPanel styleName="search">
+	<g:HTMLPanel styleName="{res.appCss.headerWrapper}">
+		<div class="{res.appCss.header}">
+  			<div class="{res.appCss.headerNav}">
+				<a class="logo" href="#">Home</a> <!-- Text not displayed -->
+				<a:FormSectionPanel styleName="{res.appCss.search}">
 					<g:HTMLPanel>
-						<g:TextBox ui:field="search" addStyleNames="search"/>
-						<g:Button ui:field="searchButton" addStyleNames="search-button"><span class="search-button-img">Search</span></g:Button>
+						<g:TextBox ui:field="search" addStyleNames="{res.appCss.search}"/>
+						<g:Button ui:field="searchButton" addStyleNames="{res.appCss.searchButton}"><span class="search-button-img">Search</span></g:Button>
 					</g:HTMLPanel>
 				</a:FormSectionPanel>
 				<div class="account-information right">

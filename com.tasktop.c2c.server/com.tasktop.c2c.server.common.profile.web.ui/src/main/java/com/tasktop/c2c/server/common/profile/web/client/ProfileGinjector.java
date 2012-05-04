@@ -20,6 +20,8 @@ public interface ProfileGinjector extends CommonGinjector {
 
 	AppResources getAppResources();
 
+	AppMessages messages();
+
 	ProfileServiceAsync getProfileService();
 
 	AppState getAppState();

@@ -1,6 +1,8 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'
 			 xmlns:cellview="urn:import:com.google.gwt.user.cellview.client">
+    <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.AppMessages"/>
+			 
 	<g:HTMLPanel>
 		<div>
 			<div class="auth">
@@ -48,7 +50,7 @@
 						<p>
 							Associate your
 							<a href="http://www.github.com" target="_blank" class="underline">GitHub</a>
-							account with your Code2Cloud account.
+							account with your <ui:text from='{msg.code2Cloud}'/> account.
 						</p>
 						<g:FormPanel ui:field="githubForm" method="POST" action="api/connect/github">
 							<!-- Only here because we need to add a "hidden" to this form sometimes. FormPanel only allows one child widget though, so we make that a FlowPanel and add children there. -->

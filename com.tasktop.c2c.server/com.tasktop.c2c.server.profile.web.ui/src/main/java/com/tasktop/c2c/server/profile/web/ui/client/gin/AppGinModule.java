@@ -43,7 +43,7 @@ public class AppGinModule extends AbstractGinModule {
 
 	@Override
 	protected void configure() {
-		bind(AppShell.class).to(StandardApplicationView.class).in(Singleton.class);
+		bind(AppShell.class).toProvider(StandardApplicationViewProvider.class).in(Singleton.class);
 		bind(NotificationPanel.class).in(Singleton.class);
 		bind(AppState.class).in(Singleton.class);
 		bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
@@ -57,7 +57,7 @@ public class AppGinModule extends AbstractGinModule {
 
 	}
 
-	static class SchedulerProvider implements Provider<Scheduler> {
+	public static class SchedulerProvider implements Provider<Scheduler> {
 
 		@Override
 		public Scheduler get() {
@@ -65,7 +65,15 @@ public class AppGinModule extends AbstractGinModule {
 		}
 	}
 
-	static class PlaceHistoryHandlerProvider implements Provider<PlaceHistoryHandler> {
+	public static class StandardApplicationViewProvider implements Provider<StandardApplicationView> {
+
+		@Override
+		public StandardApplicationView get() {
+			return StandardApplicationView.getInstance();
+		}
+	}
+
+	public static class PlaceHistoryHandlerProvider implements Provider<PlaceHistoryHandler> {
 
 		private final PlaceHistoryMapper placeHistoryMapper;
 		private final PlaceController placeController;

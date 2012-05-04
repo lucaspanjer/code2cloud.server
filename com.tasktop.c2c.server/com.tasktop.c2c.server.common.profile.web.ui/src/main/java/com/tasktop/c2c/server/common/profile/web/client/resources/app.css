@@ -1,0 +1,119 @@
+@external .external-nav, .internal-nav, .prefix, .header, .footer, .search, .search-button, .headerNav; 
+
+
+.headerWrapper {
+  background: #EFF5F9;
+  border-bottom: 1px solid #BCC8D1;
+  box-shadow: inset 0 -1px 3px #BCC8D1;
+}
+
+.header {
+	width: 100%;
+	height: 40px;
+	background: #4d85b6; /* Old browsers */
+	background: literal("-moz-linear-gradient(top, #4d85b6 0%, #2b5480 100%)"); /* FF3.6+ */
+	background: literal("-webkit-gradient(linear, left top, left bottom, color-stop(0%,#4d85b6), color-stop(100%,#2b5480))"); /* Chrome,Safari4+ */
+	background: literal("-webkit-linear-gradient(top, #4d85b6 0%, #2b5480 100%)"); /* Chrome10+,Safari5.1+ */
+	background: literal("-o-linear-gradient(top, #4d85b6 0%,#2b5480 100%)"); /* Opera11.10+ */
+	background: literal("-ms-linear-gradient(top, #4d85b6 0%,#2b5480 100%)"); /* IE10+ */
+	background: literal("linear-gradient(top, #4d85b6 0%,#2b5480 100%)"); /* W3C */
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.headerNav {
+	width: 1000px;
+	margin: 0 auto;
+	position: relative;
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.header .prefix {
+	font-size: 12px;
+	vertical-align: top;
+}
+
+.header div.search {
+  position: absolute;
+  right: 100px;
+  padding: 5px;
+}
+
+.header input.search:focus {
+  color: #313131;
+  font-style: normal;
+  background: #ffffff;
+}
+	
+.header input.search{
+  display: block;
+  float: left;
+  width: 150px;
+  height: 20px;
+  border: none;
+  line-height: 16px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  padding: 0 0 0 8px;
+  margin: 2;
+  color: #636663;
+  background: #fff;
+  -moz-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+  -webkit-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+}
+
+.header .search-button {
+  display: block;
+  float: left;
+  width: 22px;
+  height: 20px;
+  border: 1px solid #cfcfcf;
+  background: #f0f0f0; /* Old browsers */
+  background: literal("-moz-linear-gradient(top, #f0f0f0 0%, #cfcfcf 100%)"); /* FF3.6+ */
+  background: literal("-webkit-gradient(linear, left top, left bottom, color-stop(0%,#f0f0f0), color-stop(100%,#cfcfcf))"); /* Chrome,Safari4+ */
+  background: literal("-webkit-linear-gradient(top, #f0f0f0 0%,#cfcfcf 100%)"); /* Chrome10+,Safari5.1+ */
+  background: literal("-o-linear-gradient(top, #f0f0f0 0%,#cfcfcf 100%)"); /* Opera11.10+ */
+  background: literal("-ms-linear-gradient(top, #f0f0f0 0%,#cfcfcf 100%)"); /* IE10+ */
+  background: linear-gradient(top, #f0f0f0 0%,#cfcfcf 100%); /* W3C */
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  text-indent: -9999px;
+  cursor: pointer;
+  margin-left: 2px;
+  color: #333333;
+}
+
+
+
+.external-nav,
+.internal-nav,
+.container {
+	width: 1000px;
+	margin: 0 auto;
+	padding: 20px 0;
+}
+.container {
+  background: none repeat scroll 0 0 #FFFFFF;
+  padding-bottom: 50px;
+  min-height: 80%;
+}
+
+.footerStretch {
+	background-color: #e4e4e4;
+  	border-top: 1px solid #cccccc;
+	width: 100%;
+	height: 50px;
+	padding-top: 23px;
+}
+
+.footer {
+	width: 1000px;
+	margin: 0 auto;	
+}
+

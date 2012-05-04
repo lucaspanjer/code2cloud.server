@@ -3,8 +3,11 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:a='urn:import:com.tasktop.c2c.server.common.web.client.widgets'>
+    <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.AppMessages"/>
+	
 	<g:HTMLPanel debugId="sign-up-page" >
-	<g:FlowPanel debugId="messagePanel" ui:field="messagePanel" styleName="warningMessage signUpMessage" visible="false"><g:Label>Code2Cloud is currently invitation only.</g:Label></g:FlowPanel>
+	<g:FlowPanel debugId="messagePanel" ui:field="messagePanel" styleName="warningMessage signUpMessage" visible="false">
+	<g:Label><ui:text from='{msg.code2Cloud}'/> is currently invitation only.</g:Label></g:FlowPanel>
 	<g:HTMLPanel debugId="issuingUserHeader" ui:field="issuingUserHeader" visible="false">
 		<div class="page-menu">
 			<div class="left">
@@ -60,8 +63,8 @@
 						<div class="headingMedium">GitHub Credentials</div>
 						<div class="git-hub-details-content">
 							<p>
-								You can link your <a href="http://www.github.com" class="underline">GitHub</a> account to your Code2Cloud account.
-								After linking your accounts, you can sign in to Code2Cloud using either your Code2Cloud credentials or your GitHub credentials.
+								You can link your <a href="http://www.github.com" class="underline">GitHub</a> account to your <ui:text from='{msg.code2Cloud}'/> account.
+								After linking your accounts, you can sign in to <ui:text from='{msg.code2Cloud}'/> using either your <ui:text from='{msg.code2Cloud}'/> credentials or your GitHub credentials.
 							</p>
 							<g:HTMLPanel ui:field="linkGithubPanel" debugId="linkGithubPanel">
 								<div class="text-center ">
@@ -80,8 +83,8 @@
 									<div class="clear"/>
 								</div>
 								<div class="text-center ">
-									<div class="headingSmall">Now Create Your Code2Cloud Account</div>
-									<p>To complete Sign Up, enter account information in the form to the left to create your Code2Cloud account.</p>
+									<div class="headingSmall">Now Create Your <ui:text from='{msg.code2Cloud}'/> Account</div>
+									<p>To complete Sign Up, enter account information in the form to the left to create your <ui:text from='{msg.code2Cloud}'/> account.</p>
 								</div>
 							</g:HTMLPanel>
 						</div>

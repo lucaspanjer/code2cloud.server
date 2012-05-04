@@ -116,12 +116,12 @@ a.project-nav-item {
   filter: alpha(opacity=100);
 }
 
-.menu .search-button .search-button-img {
+.menu .searchButton .search-button-img {
 	margin-left: -4px;
 	margin-top: 2px;
 }
 
-.header-nav .search-button .search-button-img {
+.headerNav .searchButton .search-button-img {
 	margin-top: 0px;
 	margin-left: -2px;
 }

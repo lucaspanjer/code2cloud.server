@@ -12,22 +12,20 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view;
 
-import java.util.Date;
-
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
-import com.google.gwt.user.client.ui.*;
-
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.event.AppScrollEvent;
 import com.tasktop.c2c.server.profile.web.ui.client.AppShell;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
-
 
 public class StandardApplicationView extends Composite implements AppShell {
 
@@ -42,26 +40,33 @@ public class StandardApplicationView extends Composite implements AppShell {
 	AcceptsOneWidget menuContainer;
 	@UiField
 	AcceptsOneWidget contentContainer;
-
 	@UiField
-	Label year;
+	protected SimplePanel footerContainer;
 
 	private boolean scrollNotificationScheduled = false;
-	public StandardApplicationView() {
+
+	private static StandardApplicationView instance;
+
+	public static StandardApplicationView getInstance() {
+		if (instance == null) {
+			ProfileGinjector.get.instance().getAppResources().appCss().ensureInjected();
+			instance = new StandardApplicationView();
+		}
+		return instance;
+	}
+
+	private StandardApplicationView() {
 		if (!GWT.isClient()) {
 			return;
 		}
 		initWidget(uiBinder.createAndBindUi(this));
-
-		// Automatically calculate our copyright year
-		DateTimeFormat dtf = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.YEAR);
-		year.setText(dtf.format(new Date()));
-
-		//It would be nice for this not to be here, but for now it is.
+		Footer footer = GWT.create(Footer.class);
+		footerContainer.setWidget(footer);
+		// It would be nice for this not to be here, but for now it is.
 		addDomHandler(new ScrollHandler() {
 			@Override
 			public void onScroll(ScrollEvent event) {
-				//Debouncing logic
+				// Debouncing logic
 				if (!scrollNotificationScheduled) {
 					scrollNotificationScheduled = true;
 					AppGinjector.get.instance().getScheduler().scheduleFixedDelay(new Scheduler.RepeatingCommand() {

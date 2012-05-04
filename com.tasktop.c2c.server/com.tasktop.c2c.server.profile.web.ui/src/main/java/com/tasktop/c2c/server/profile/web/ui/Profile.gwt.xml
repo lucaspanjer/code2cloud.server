@@ -39,5 +39,9 @@
 		 <exclude name="**/test/*"/>
 	</source>
 	<source path="shared"/>
+	
+	<replace-with class="com.tasktop.c2c.server.profile.web.ui.client.view.FooterView"> 
+		<when-type-is class="com.tasktop.c2c.server.profile.web.ui.client.view.Footer"/> 
+	</replace-with> 
 
 </module>

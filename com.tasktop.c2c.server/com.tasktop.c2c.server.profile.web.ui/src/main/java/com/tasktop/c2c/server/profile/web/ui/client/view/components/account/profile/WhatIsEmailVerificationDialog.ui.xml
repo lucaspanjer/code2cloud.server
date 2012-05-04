@@ -1,6 +1,8 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.AppMessages"/>
+	
 	<ui:style>
 		.popup {
 			width: 400px;
@@ -11,7 +13,7 @@
 	<g:HTMLPanel styleName="{style.popup}">
 		<p>When you create your account or modify your account email address, we'll send a verification link to the email address you used.</p>
 		<p>Click the link in that email to verify that you own the email address.</p>
-		<p>Email verification is required to access certain Code2Cloud features, such a system alerts.</p>
+		<p>Email verification is required to access certain <ui:text from='{msg.code2Cloud}'/> features, such a system alerts.</p>
 		<div class="center">
 			<g:Button ui:field="okButton" styleName="button">OK</g:Button>
 		</div>

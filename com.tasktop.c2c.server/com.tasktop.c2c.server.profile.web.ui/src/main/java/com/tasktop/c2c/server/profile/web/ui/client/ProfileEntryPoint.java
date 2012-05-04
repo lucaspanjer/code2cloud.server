@@ -40,7 +40,7 @@ import com.tasktop.c2c.server.wiki.web.ui.client.WikiPageMappings;
 public class ProfileEntryPoint implements EntryPoint {
 
 	private static ProfileEntryPoint instance;
-	private final AppGinjector injector = AppGinjector.get.instance();
+	protected AppGinjector injector;
 
 	public ProfileEntryPoint() {
 		instance = this;
@@ -89,13 +89,18 @@ public class ProfileEntryPoint implements EntryPoint {
 		WikiPageMappings.ProjectWiki.hashCode();
 		PageMappings.Discover.hashCode();
 
-		// FIXME better way?
-		CommonGinjector.get.override(injector);
-		ProfileGinjector.get.override(injector);
+		initializeInjector();
 	}
 
 	public static ProfileEntryPoint getInstance() {
 		return instance;
+	}
+
+	protected void initializeInjector() {
+		injector = AppGinjector.get.instance();
+		// FIXME better way?
+		CommonGinjector.get.override(injector);
+		ProfileGinjector.get.override(injector);
 	}
 
 	public EventBus getEventBus() {

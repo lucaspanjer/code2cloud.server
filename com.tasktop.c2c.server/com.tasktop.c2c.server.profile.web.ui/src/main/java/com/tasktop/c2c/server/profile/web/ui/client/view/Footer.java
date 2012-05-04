@@ -1,6 +1,5 @@
 /*******************************************************************************
  * Copyright (c) 2010, 2012 Tasktop Technologies
- * Copyright (c) 2010, 2011 SpringSource, a division of VMware
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,21 +9,14 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.common.profile.web.client;
+package com.tasktop.c2c.server.profile.web.ui.client.view;
 
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.IsWidget;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
- * 
+ *
  */
-public interface AppResources extends ClientBundle {
-
-	@Source("resources/throbber.gif")
-	ImageResource throbber();
-
-	@Source("resources/app.css")
-	AppCssResource appCss();
+public interface Footer extends IsWidget {
 
 }

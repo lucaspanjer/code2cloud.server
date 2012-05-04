@@ -57,6 +57,7 @@
 					<include>**/*.ui.xml</include>
 					<include>**/*.gif</include>
 					<include>**/*.png</include>
+					<include>**/*.css</include>
 				</includes>
 			</resource>
 			<resource>
