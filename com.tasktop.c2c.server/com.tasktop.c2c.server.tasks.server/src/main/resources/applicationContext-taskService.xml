@@ -68,7 +68,7 @@
 			<list>
 				<bean class="com.tasktop.c2c.server.configuration.service.DatabaseMetricCollector" 
 					p:metricName="diskUsage" p:dataSource-ref="rawDataSource" 
-					p:sqlSizeQuery="SELECT sum( data_length + index_length ) FROM information_schema.TABLES where TABLE_SCHEMA = &quot;{projectIdentifier}_tasks&quot; ; "/>
+					p:sqlSizeQuery="${task.database.sizeQuery}"/>
 			</list>
 		</property>
 		<property name="deprovisioners">
