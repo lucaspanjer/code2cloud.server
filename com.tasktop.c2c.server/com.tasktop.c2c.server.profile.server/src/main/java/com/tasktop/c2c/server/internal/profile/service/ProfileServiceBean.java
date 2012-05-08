@@ -172,25 +172,29 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		public void validate(Object target, Errors errors) {
 			Profile profile = (Profile) target;
 			if (profile.getUsername() != null && profile.getUsername().trim().length() > 0) {
-				List<Profile> usersWithUsername = entityManager
-						.createQuery(
-								"select e from " + Profile.class.getSimpleName() + " e where e.username = :username")
-						.setParameter("username", profile.getUsername()).getResultList();
-				if (!usersWithUsername.isEmpty()) {
-					if (usersWithUsername.size() != 1 || !usersWithUsername.get(0).equals(profile)) {
+
+				try {
+					Profile userWithUsername = identityManagmentService.getProfileByUsername(profile.getUsername());
+					if (!userWithUsername.equals(profile)) {
 						errors.reject("profile.usernameUnique", new Object[] { profile.getUsername() }, null);
 					}
+
+				} catch (EntityNotFoundException e) {
+					// Expected
 				}
+
 			}
 			if (profile.getEmail() != null && profile.getEmail().trim().length() > 0) {
-				List<Profile> usersWithEmail = entityManager
-						.createQuery("select e from " + Profile.class.getSimpleName() + " e where e.email = :email")
-						.setParameter("email", profile.getEmail()).getResultList();
-				if (!usersWithEmail.isEmpty()) {
-					if (usersWithEmail.size() != 1 || !usersWithEmail.get(0).equals(profile)) {
+
+				try {
+					Profile userWithEmail = identityManagmentService.getProfileByEmail(profile.getEmail());
+					if (!userWithEmail.equals(profile)) {
 						errors.reject("profile.emailUnique", new Object[] { profile.getEmail() }, null);
 					}
+				} catch (EntityNotFoundException e) {
+					// expected
 				}
+
 			}
 		}
 
@@ -406,7 +410,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (emailAddress != null) {
 			String queryAddress = emailAddress.trim();
 			try {
-				return getEntityByField("email", queryAddress, Profile.class);
+				Profile result = identityManagmentService.getProfileByEmail(queryAddress);
+				securityPolicy.retrieve(result);
+				return result;
 			} catch (EntityNotFoundException e) {
 				// ignore, we'll fall through and return null
 				// FIXME for consistency, shouldn't we throw an EntityNotFoundException?

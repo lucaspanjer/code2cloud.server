@@ -34,4 +34,6 @@ public interface IdentityManagmentService {
 
 	Profile updateProfile(Profile profile) throws EntityNotFoundException;
 
+	Profile getProfileByEmail(String email) throws EntityNotFoundException;
+
 }

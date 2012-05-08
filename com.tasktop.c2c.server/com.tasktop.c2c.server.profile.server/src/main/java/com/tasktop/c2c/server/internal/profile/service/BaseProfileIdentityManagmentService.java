@@ -70,6 +70,20 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 	}
 
 	@Override
+	public Profile getProfileByEmail(String email) throws EntityNotFoundException {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Profile> query = criteriaBuilder.createQuery(Profile.class);
+		Root<Profile> root = query.from(Profile.class);
+		query.select(root).where(criteriaBuilder.equal(root.get("email"), email));
+
+		try {
+			return entityManager.createQuery(query).getSingleResult();
+		} catch (NoResultException e) {
+			throw new EntityNotFoundException("user with email [" + email + "] not found");
+		}
+	}
+
+	@Override
 	public Profile validateCredentials(String username, String password) throws AuthenticationException {
 		if (username == null || password == null) {
 			// Bail out now.

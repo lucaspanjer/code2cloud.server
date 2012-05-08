@@ -167,7 +167,7 @@
 				<constraints nullable="false" />
 			</column>
 			<column defaultValue="" name="EMAIL" type="VARCHAR(255)">
-				<constraints nullable="false" unique="true" />
+				<constraints nullable="false"  />
 			</column>
 			<column name="FIRSTNAME" type="VARCHAR(255)" />
 			<column defaultValue="" name="PASSWORD" type="VARCHAR(255)">
@@ -185,8 +185,7 @@
 	</changeSet>
 	
 	<changeSet author="profiledb" id="createProfileUserIndex">
-		<createIndex indexName="USERNAME" tableName="PROFILE"
-			unique="true">
+		<createIndex indexName="USERNAME" tableName="PROFILE">
 			<column name="USERNAME" />
 		</createIndex>
 	</changeSet>
