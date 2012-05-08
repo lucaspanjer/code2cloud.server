@@ -39,7 +39,7 @@ public class ProfileHubTenantProvider implements TenantProvider {
 	public Tenant findTenant(Object identityObj) {
 		String projectId = identityObj.toString().toLowerCase();
 
-		ProfileHubTenant tenant = new ProfileHubTenant();
+		ProfileHubTenant tenant = createNewTenant();
 		tenant.setIdentity(projectId);
 		tenant.setProjectIdentifier(projectId);
 
@@ -49,10 +49,14 @@ public class ProfileHubTenantProvider implements TenantProvider {
 				tenant.setOrganizationIdentifier(project.getOrganization().getIdentifier());
 			}
 		} catch (Throwable t) {
-			LOG.warn("caught exception trying to get project, ignoring", t);
+			LOG.debug("caught exception trying to get project, ignoring", t);
 		}
 
 		return tenant;
+	}
+
+	protected ProfileHubTenant createNewTenant() {
+		return new ProfileHubTenant();
 	}
 
 }
