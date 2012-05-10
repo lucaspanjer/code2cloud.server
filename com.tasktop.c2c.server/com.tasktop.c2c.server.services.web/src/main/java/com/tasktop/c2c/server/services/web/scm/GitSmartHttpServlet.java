@@ -62,8 +62,9 @@ public class GitSmartHttpServlet extends GitServlet implements InitializingBean,
 	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String url = request.getRequestURI();
-		url = url + request.getQueryString() == null || request.getQueryString().isEmpty() ? "" : ("?" + request
-				.getQueryString());
+		if (request.getQueryString() != null && !request.getQueryString().isEmpty()) {
+			url = url + "?" + request.getQueryString();
+		}
 
 		LOG.info(String.format("Serving git request at [%s]", url));
 
