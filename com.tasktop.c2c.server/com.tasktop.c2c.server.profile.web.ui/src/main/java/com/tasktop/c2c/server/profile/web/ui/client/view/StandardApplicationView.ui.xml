@@ -9,7 +9,7 @@
 				<g:SimplePanel ui:field="headerContainer"/>
 				<g:SimplePanel ui:field="menuContainer"/>
 			</div>
-			<div class="{res.appCss.container}">
+			<div class="{res.appCss.container}" id="main-content-container-div">
 				<g:SimplePanel ui:field="contentContainer" />
 			</div>
 

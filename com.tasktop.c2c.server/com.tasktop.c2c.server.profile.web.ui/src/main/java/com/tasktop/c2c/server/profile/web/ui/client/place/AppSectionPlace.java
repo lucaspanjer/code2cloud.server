@@ -18,7 +18,6 @@ import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
 
-
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
@@ -35,6 +34,7 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 /**
@@ -45,18 +45,28 @@ import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
  */
 public class AppSectionPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace,
 		BreadcrumbPlace, SectionPlace, WindowTitlePlace {
+	static {
+		AppGinjector.get.instance().getAppResources().appCss().ensureInjected();
+	}
 
 	public enum AppSection {
-		HEADER("header-wrapper"), FOOTER("footer-stretch");
+		HEADER("header-wrapper", AppGinjector.get.instance().getAppResources().appCss().headerWrapper()), //
+		FOOTER("footer-stretch", AppGinjector.get.instance().getAppResources().appCss().footerStretch());
 
 		private final String styleName;
+		private final String pathName;
 
-		private AppSection(String styleName) {
+		private AppSection(String pathName, String styleName) {
 			this.styleName = styleName;
+			this.pathName = pathName;
 		}
 
 		public String getStyleName() {
 			return styleName;
+		}
+
+		public String getPathName() {
+			return pathName;
 		}
 	}
 
@@ -87,10 +97,10 @@ public class AppSectionPlace extends AbstractBatchFetchingPlace implements Headi
 		return new AppSectionPlace(projectId, sectionStyle);
 	}
 
-	private AppSectionPlace(String projectId, String sectionStyle) {
+	private AppSectionPlace(String projectId, String sectionPathName) {
 		this.projectId = projectId;
 		for (AppSection s : AppSection.values()) {
-			if (s.getStyleName().equals(sectionStyle)) {
+			if (s.getPathName().equals(sectionPathName)) {
 				this.appSection = s;
 			}
 		}
@@ -113,7 +123,7 @@ public class AppSectionPlace extends AbstractBatchFetchingPlace implements Headi
 		LinkedHashMap<String, String> tokenMap = new LinkedHashMap<String, String>();
 
 		tokenMap.put(Path.PROJECT_ID, projectId);
-		tokenMap.put(SECTION, appSection.getStyleName());
+		tokenMap.put(SECTION, appSection.getPathName());
 
 		return PageMappings.AppSection.getUrlForNamedArgs(tokenMap);
 	}

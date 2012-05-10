@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
@@ -21,6 +20,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.AppSectionPlace.AppSection;
 
 public class AppSectionView extends AbstractComposite {
@@ -107,7 +107,7 @@ public class AppSectionView extends AbstractComposite {
 
 		while (curWidget.getParentElement() != null) {
 			String styleName = curWidget.getAttribute("class");
-			if (styleName.contains("container")) {
+			if (styleName.contains(AppGinjector.get.instance().getAppResources().appCss().container())) {
 				// This is our container - return its parent, since it'll also contain the footer wrapper.
 				return curWidget.getParentElement();
 			} else {
@@ -116,7 +116,6 @@ public class AppSectionView extends AbstractComposite {
 			}
 		}
 
-		// Should never happen.
-		return null;
+		throw new IllegalStateException("Coud not find parent widget");
 	}
 }
