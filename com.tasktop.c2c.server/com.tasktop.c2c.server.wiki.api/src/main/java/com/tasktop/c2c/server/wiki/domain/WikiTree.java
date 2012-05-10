@@ -12,11 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.wiki.domain;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -24,38 +21,13 @@ import java.util.Map;
  */
 public class WikiTree {
 
-	// FIXME hacky one level deep.
-	public static final WikiTree construtTreeModel(List<Page> allpages) {
-		Map<String, WikiTree> treesByDirectory = new HashMap<String, WikiTree>();
-
-		WikiTree root = new WikiTree("/", new ArrayList<WikiTree>());
-		treesByDirectory.put("/", root);
-
-		for (Page page : allpages) {
-			int lastSlash = page.getPath().lastIndexOf("/");
-			if (lastSlash == -1) {
-				root.getChildren().add(new WikiTree(page));
-			} else {
-				String dirName = page.getPath().substring(0, lastSlash);
-				WikiTree dirTree = treesByDirectory.get(dirName);
-				if (dirTree == null) {
-					dirTree = new WikiTree(dirName, new ArrayList<WikiTree>());
-					root.getChildren().add(dirTree);
-					treesByDirectory.put(dirName, dirTree);
-				}
-				dirTree.getChildren().add(new WikiTree(page));
-			}
-		}
-
-		return root;
-	}
-
 	public enum Type {
 		DIRECTORY, PAGE_HEADER, PAGE_OUTLINE_ITEM, NO_OUTLINE
 	};
 
 	private Type type;
 	private String path;
+	private String parentRelativePath;
 	private Page page;
 	private PageOutlineItem pageOutlineItem;
 	private List<WikiTree> children;
@@ -73,6 +45,7 @@ public class WikiTree {
 	public WikiTree(Page page) {
 		this.page = page;
 		this.type = Type.PAGE_HEADER;
+		this.path = "/" + page.getPath();
 		this.children = Collections.emptyList();
 	}
 
@@ -148,6 +121,34 @@ public class WikiTree {
 	 */
 	public PageOutlineItem getPageOutlineItem() {
 		return pageOutlineItem;
+	}
+
+	@Override
+	public String toString() {
+		if (type == null) {
+			return super.toString();
+		}
+		switch (type) {
+		case DIRECTORY:
+			return "{type=DIR, path: [" + path + "], numChildren [" + (children == null ? "0" : children.size()) + "]}";
+		case PAGE_HEADER:
+			return "{type=PAGE_HEADER, path: [" + path + "]}";
+		case NO_OUTLINE:
+			return "no outline";
+		case PAGE_OUTLINE_ITEM:
+			return "outline";
+		default:
+			return super.toString();
+		}
+
+	}
+
+	public String getParentRelativePath() {
+		return parentRelativePath;
+	}
+
+	public void setParentRelativePath(String parentRelativePath) {
+		this.parentRelativePath = parentRelativePath;
 	}
 
 }

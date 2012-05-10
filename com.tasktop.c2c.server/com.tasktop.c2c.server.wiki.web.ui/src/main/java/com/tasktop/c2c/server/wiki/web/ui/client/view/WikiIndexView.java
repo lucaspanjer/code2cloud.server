@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.wiki.domain.Page;
-import com.tasktop.c2c.server.wiki.domain.WikiTree;
+import com.tasktop.c2c.server.wiki.domain.WikiTreeModelBuilder;
 import com.tasktop.c2c.server.wiki.web.ui.client.place.ProjectWikiHomePlace;
 import com.tasktop.c2c.server.wiki.web.ui.client.presenter.WikiIndexPresenter.WikiIndexDisplay;
 
@@ -84,7 +84,7 @@ public class WikiIndexView extends AbstractComposite implements WikiIndexDisplay
 		pagePanel.clear();
 		if (treeView) {
 			WikiTreeView treeView = new WikiTreeView();
-			treeView.setWikiTree(projectIdentifier, WikiTree.construtTreeModel(pages));
+			treeView.setWikiTree(projectIdentifier, WikiTreeModelBuilder.construtTreeModel(pages));
 			pagePanel.add(treeView);
 		} else {
 			if (pages != null && !pages.isEmpty()) {

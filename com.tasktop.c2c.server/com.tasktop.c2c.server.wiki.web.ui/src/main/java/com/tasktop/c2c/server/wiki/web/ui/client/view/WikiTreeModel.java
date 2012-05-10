@@ -125,17 +125,16 @@ public class WikiTreeModel implements TreeViewModel {
 		public void render(com.google.gwt.cell.client.Cell.Context context, WikiTree value, SafeHtmlBuilder sb) {
 			switch (value.getType()) {
 			case DIRECTORY:
-				sb.append(template.wikiDirectory(value.getPath(), value.getChildren().size()));
+				sb.append(template.wikiDirectory(value.getParentRelativePath(), value.getChildren().size()));
 				break;
 			case PAGE_HEADER:
 				Page page = value.getPage();
 				String url = ProjectWikiViewPagePlace.createPlaceForPage(projectId, page.getPath()).getHref();
-				String pageNameWithoutDir = page.getPath();
-				int i = pageNameWithoutDir.indexOf("/");
-				if (i != -1) {
-					pageNameWithoutDir = pageNameWithoutDir.substring(i + 1);
+				String parentRelativePath = value.getParentRelativePath();
+				if (parentRelativePath.isEmpty()) {
+					parentRelativePath = "<root>";
 				}
-				sb.append(template.wikiPageHeader(pageNameWithoutDir, url,
+				sb.append(template.wikiPageHeader(parentRelativePath, url,
 						Format.stringValueDate(page.getCreationDate()) + " by " + page.getOriginalAuthor().getName(),
 						Format.stringValueDate(page.getModificationDate()) + " by " + page.getLastAuthor().getName()));
 				break;
