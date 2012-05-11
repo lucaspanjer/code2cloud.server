@@ -277,6 +277,9 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 		return service.updateAttachment(attachment);
 	}
 
+	@Section(value = "Attachments")
+	@Title("Retrieve Image")
+	@Documentation("Retrieve an Image from a Page")
 	@RequestMapping(value = "{pageId}/attachment/{name:.*}", method = RequestMethod.GET)
 	public void getImage(@PathVariable(value = "pageId") Integer pageId,
 			@PathVariable(value = "name") String imageName, HttpServletRequest request, HttpServletResponse response)
@@ -321,6 +324,8 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 		return format.format(date);
 	}
 
+	@Section(value = "Attachments")
+	@Title("Upload Attachment")
 	@Secured({ Role.Community, Role.User, Role.Admin })
 	@RequestMapping(value = "{pageId}/attachment", method = RequestMethod.POST)
 	public void uploadAttachment(@PathVariable(value = "pageId") Integer pageId, HttpServletRequest request,
@@ -383,6 +388,8 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 		}
 	}
 
+	@Section(value = "Wiki Pages", order = 0)
+	@Title("Render a Page Preview")
 	@RequestMapping(value = "/page/preview/**", method = RequestMethod.POST)
 	public Map<String, String> doRenderPreview(HttpServletRequest request, @RequestBody String markup)
 			throws EntityNotFoundException {
@@ -391,6 +398,8 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 		return Collections.singletonMap("string", renderPreview(path, markup));
 	}
 
+	@Section(value = "Wiki Pages", order = 0)
+	@Title("Render a Page Preview")
 	@RequestMapping(value = "/page/preview/", method = RequestMethod.POST)
 	public Map<String, String> doRenderPreviewNoPath(HttpServletRequest request, @RequestBody String markup)
 			throws EntityNotFoundException {
@@ -405,7 +414,7 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 
 	@Section(value = "Wiki Pages", order = 0)
 	@Title("Restore a deleted Page")
-	@Documentation("Restore a page by its id. ")
+	@Documentation("Restore a page by its id.")
 	@RequestMapping(value = "/page/{pageId}/restore", method = RequestMethod.GET)
 	@Override
 	public void restorePage(@PathVariable("pageId") Integer pageId) throws EntityNotFoundException {
@@ -429,6 +438,9 @@ public class WikiServiceController extends AbstractRestService implements WikiSe
 		return service.retrieveConfigurationProperty(propertyName);
 	}
 
+	@Section("Service Configuration Properties")
+	@Title("Set Configuration Property")
+	@Documentation("Set a configuration property by name.")
 	@RequestMapping(value = "/configuration", method = RequestMethod.POST)
 	public Map<String, String> doSetConfigurationProperty(@RequestBody Map<String, String> propertyMap)
 			throws ValidationException, EntityNotFoundException {

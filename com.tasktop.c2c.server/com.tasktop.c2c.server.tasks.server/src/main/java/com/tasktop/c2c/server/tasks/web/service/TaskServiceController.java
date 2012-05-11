@@ -710,7 +710,7 @@ public class TaskServiceController extends AbstractRestService implements TaskSe
 
 	@Title("Create Saved Query")
 	@Documentation("Create a saved query.")
-	@Section("Configuration")
+	@Section(value = "Search", order = 10)
 	@RequestMapping(value = "/task/query", method = RequestMethod.POST)
 	@Override
 	public SavedTaskQuery createQuery(@RequestBody SavedTaskQuery query) throws ValidationException {
@@ -719,7 +719,7 @@ public class TaskServiceController extends AbstractRestService implements TaskSe
 
 	@Title("Modify Saved Query")
 	@Documentation("Modify a query.  The given query must have an id.")
-	@Section("Configuration")
+	@Section(value = "Search", order = 10)
 	@RequestMapping(value = "/task/query/{queryId}", method = RequestMethod.POST)
 	public SavedTaskQuery updateQuery(@PathVariable(value = "queryId") Integer queryId,
 			@RequestBody SavedTaskQuery query) throws EntityNotFoundException, ValidationException {
@@ -735,7 +735,7 @@ public class TaskServiceController extends AbstractRestService implements TaskSe
 
 	@Title("Delete a Saved Query")
 	@Documentation("Delete a query.")
-	@Section("Configuration")
+	@Section(value = "Search", order = 10)
 	@Override
 	@RequestMapping(value = "/task/query/{queryId}", method = RequestMethod.DELETE)
 	public void deleteQuery(@PathVariable(value = "queryId") Integer queryId) throws EntityNotFoundException,
