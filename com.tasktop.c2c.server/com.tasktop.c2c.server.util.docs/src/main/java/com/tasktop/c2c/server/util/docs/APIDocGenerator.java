@@ -61,7 +61,6 @@ import com.tasktop.c2c.server.common.service.domain.criteria.ColumnCriteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
 import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
-import com.tasktop.c2c.server.internal.wiki.server.WikiServiceController;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
@@ -69,7 +68,6 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
-import com.tasktop.c2c.server.profile.web.ui.server.ProfileWebServiceController;
 import com.tasktop.c2c.server.tasks.domain.Comment;
 import com.tasktop.c2c.server.tasks.domain.CommentType;
 import com.tasktop.c2c.server.tasks.domain.Component;
@@ -83,6 +81,7 @@ import com.tasktop.c2c.server.tasks.domain.Priority;
 import com.tasktop.c2c.server.tasks.domain.Product;
 import com.tasktop.c2c.server.tasks.domain.QuerySpec;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
+import com.tasktop.c2c.server.tasks.domain.SavedTaskQuery;
 import com.tasktop.c2c.server.tasks.domain.StateTransition;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity;
@@ -117,9 +116,9 @@ public class APIDocGenerator {
 	private File outputFolder;
 	private List<Class<?>> apiClasses = new ArrayList<Class<?>>();
 	{
-		apiClasses.add(WikiServiceController.class);
+		// apiClasses.add(WikiServiceController.class);
 		apiClasses.add(TaskServiceController.class);
-		apiClasses.add(ProfileWebServiceController.class);
+		// apiClasses.add(ProfileWebServiceController.class);
 	}
 
 	private Dictionary dictionary = new Dictionary();
@@ -368,8 +367,18 @@ public class APIDocGenerator {
 			return createTaskRepositoryConfiguration();
 		} else if (classType == Keyword.class) {
 			return createTaskKeyword();
+		} else if (classType == SavedTaskQuery.class) {
+			return createSavedTaskQuery();
 		}
 		return classType.newInstance();
+	}
+
+	private SavedTaskQuery createSavedTaskQuery() {
+		SavedTaskQuery stq = new SavedTaskQuery();
+		stq.setName("My Query");
+		CriteriaQueryArguments cta = createTaskCriteriaQueryArguments();
+		stq.setQueryString(cta.getCriteria().toQueryString());
+		return stq;
 	}
 
 	private RepositoryConfiguration createTaskRepositoryConfiguration() {
