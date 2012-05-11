@@ -82,7 +82,7 @@ import com.tasktop.c2c.server.profile.service.ProfileWebService;
 @Title("Profile Service")
 @Documentation("A service for managing a users profile, consisting of identity, projects and project teams.\n"
 		+ "The profile service methods are available by appending the URI to the base URL\n"
-		+ "https://{hostname}/{prefix}/api + URI, for example: https://code.cloudfoundry.com/api/profile")
+		+ "https://{hostname}/{prefix}/api + URI, for example: https://example.com/api/profile")
 @Controller
 public class ProfileWebServiceController extends AbstractRestService implements ProfileWebService {
 
@@ -370,6 +370,9 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 		return null;
 	}
 
+	@Section("Projects")
+	@Title("Get Project Service Status")
+	@Documentation("Retrieve a report of all a project's services and current status.")
 	@Override
 	@RequestMapping(value = "projects/{" + PROJECT_IDENTIFIER_URLPARAM + "}/status", method = RequestMethod.GET)
 	public List<ProjectServiceStatus> computeProjectServicesStatus(

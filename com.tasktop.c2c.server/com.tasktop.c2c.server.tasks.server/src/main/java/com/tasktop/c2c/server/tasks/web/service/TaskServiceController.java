@@ -76,7 +76,7 @@ import com.tasktop.c2c.server.tasks.service.TaskService;
 @Title("Task Service")
 @Documentation("A task service for managing the tasks database for a Code2Cloud project.\n"
 		+ "The task service methods are available by appending the URI to the base URL\n"
-		+ "https://{hostname}/s/{projectIdentifier}/tasks + URI, for example: https://code.cloudfoundry.com/s/cf-code/tasks/task/1")
+		+ "https://{hostname}/s/{projectIdentifier}/tasks + URI, for example: https://example.com/s/projectabc/tasks/task/1")
 @Controller
 @Qualifier("webservice")
 public class TaskServiceController extends AbstractRestService implements TaskService {
@@ -733,6 +733,9 @@ public class TaskServiceController extends AbstractRestService implements TaskSe
 		return service.updateQuery(query);
 	}
 
+	@Title("Delete a Saved Query")
+	@Documentation("Delete a query.")
+	@Section("Configuration")
 	@Override
 	@RequestMapping(value = "/task/query/{queryId}", method = RequestMethod.DELETE)
 	public void deleteQuery(@PathVariable(value = "queryId") Integer queryId) throws EntityNotFoundException,
@@ -833,8 +836,8 @@ public class TaskServiceController extends AbstractRestService implements TaskSe
 		return service.renderWikiMarkupAsHtml(markup);
 	}
 
-	@Section("Configuration Properties")
-	@Title("Configuration Property")
+	@Section("Service Configuration Properties")
+	@Title("Retrieve Configuration Property")
 	@Documentation("Retrieve setting by name.")
 	@RequestMapping(value = "/configuration/{propertyName}", method = RequestMethod.GET)
 	public Map<String, String> doRetrieveConfigurationProperty(@PathVariable(value = "propertyName") String propertyName)
@@ -847,6 +850,9 @@ public class TaskServiceController extends AbstractRestService implements TaskSe
 		return service.retrieveConfigurationProperty(propertyName);
 	}
 
+	@Section("Service Configuration Properties")
+	@Title("Set Configuration Property")
+	@Documentation("Set a configuration property by name.")
 	@RequestMapping(value = "/configuration", method = RequestMethod.POST)
 	public Map<String, String> doSetConfigurationProperty(@RequestBody Map<String, String> propertyMap)
 			throws ValidationException, EntityNotFoundException {
