@@ -545,7 +545,7 @@ public class TaskServiceClient extends AbstractRestServiceClient implements Task
 		}.doCall("activity/" + urlParam);
 	}
 
-	public java.util.List<TaskActivity> listActivity(java.util.Date date) {
+	public List<TaskActivity> listActivity(Date date) {
 		return new GetCall<List<TaskActivity>>() {
 
 			public List<TaskActivity> getValue(ServiceCallResult result) {
