@@ -1149,17 +1149,9 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 	}
 
-	private boolean repoConfigHasCustomFields(RepositoryConfiguration repositoryConfiguration) {
-		return !(repositoryConfiguration.getCustomFields() == null || repositoryConfiguration.getCustomFields()
-				.isEmpty());
-	}
-
 	private void updateCustomFields(Task task) {
 		customFieldsPanel.clear();
 
-		if (!repoConfigHasCustomFields(repositoryConfiguration)) {
-			return;
-		}
 		List<CustomField> customFields = new ArrayList<CustomField>(repositoryConfiguration.getCustomFields().size());
 
 		for (FieldDescriptor field : repositoryConfiguration.getCustomFields()) {
@@ -1425,8 +1417,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 	@Override
 	public boolean isDirty() {
-		return commentsPanel.isDirty() || driver.isDirty()
-				|| (repoConfigHasCustomFields(repositoryConfiguration) && customFieldDriver.isDirty());
+		return commentsPanel.isDirty() || driver.isDirty() || customFieldDriver.isDirty();
 	}
 
 	@Override
