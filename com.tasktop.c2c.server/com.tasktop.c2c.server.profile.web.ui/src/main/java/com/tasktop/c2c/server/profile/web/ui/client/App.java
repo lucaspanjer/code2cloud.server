@@ -12,6 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -62,12 +65,14 @@ public class App {
 		$wnd._gaq.push([ '_trackPageview', url.split('#')[1] ]);
 	}-*/;
 
+	private static Logger appLogger = Logger.getLogger("App");
+
 	private void addHandlers() {
 		GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
 			@Override
 			public void onUncaughtException(Throwable e) {
 				injector.getNotifier().displayMessage(Message.createErrorMessage("A client-side error has occurred"));
-				GWT.log("Uncaught exception escaped", e);
+				appLogger.log(Level.SEVERE, "Client side error", e);
 			}
 		});
 
