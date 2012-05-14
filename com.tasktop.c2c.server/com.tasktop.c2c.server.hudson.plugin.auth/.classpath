@@ -115,7 +115,7 @@
   <classpathentry kind="var" path="M2_REPO/net/sourceforge/nekohtml/nekohtml/1.9.13/nekohtml-1.9.13.jar" sourcepath="M2_REPO/net/sourceforge/nekohtml/nekohtml/1.9.13/nekohtml-1.9.13-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jvnet/hudson/netx/0.5-hudson-2/netx-0.5-hudson-2.jar" sourcepath="M2_REPO/org/jvnet/hudson/netx/0.5-hudson-2/netx-0.5-hudson-2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/openid4java/openid4java-nodeps/0.9.6/openid4java-nodeps-0.9.6.jar" sourcepath="M2_REPO/org/openid4java/openid4java-nodeps/0.9.6/openid4java-nodeps-0.9.6-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.confluence.core/1.6.0-SNAPSHOT/org.eclipse.mylyn.wikitext.confluence.core-1.6.0-SNAPSHOT.jar" sourcepath="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.confluence.core/1.6.0-SNAPSHOT/org.eclipse.mylyn.wikitext.confluence.core-1.6.0-SNAPSHOT-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.confluence.core/1.6.0-SNAPSHOT/org.eclipse.mylyn.wikitext.confluence.core-1.6.0-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.core/1.6.0-SNAPSHOT/org.eclipse.mylyn.wikitext.core-1.6.0-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.mediawiki.core/1.6.0-SNAPSHOT/org.eclipse.mylyn.wikitext.mediawiki.core-1.6.0-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.textile.core/1.6.0-SNAPSHOT/org.eclipse.mylyn.wikitext.textile.core-1.6.0-SNAPSHOT.jar"/>

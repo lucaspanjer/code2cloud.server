@@ -15,6 +15,8 @@ package com.tasktop.c2c.server.profile.domain.project;
 import java.util.Date;
 import java.util.List;
 
+import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
+
 /**
  * A legal agreement.
  * 

@@ -17,14 +17,12 @@
 		ignore-resource-not-found="true"/>
 
 	<import resource="classpath:META-INF/spring/applicationContext-restServer.xml"/>
-	<security:global-method-security secured-annotations="enabled" />
+	<import resource="classpath:/applicationContext-scmService.xml"/>
 	
-	<context:annotation-config/>	
-	<context:component-scan base-package=" com.tasktop.c2c.server.services.web"/> 
+	<security:global-method-security secured-annotations="enabled" />	
 	
 	
-	<bean id="gitService" class="com.tasktop.c2c.server.services.web.scm.GitServiceBean" p:basePath="${git.root}"/>
-	<bean id="scmApi" class="com.tasktop.c2c.server.services.web.scm.GitServiceController" p:gitService-ref="gitService"/>
+	<bean id="scmApi" class="com.tasktop.c2c.server.scm.web.ScmServiceController" />
 	
 	
 	<bean id="tenancyContextIntegrationFilter" class="org.springframework.tenancy.web.TenancyContextIntegrationFilter">
@@ -42,7 +40,7 @@
 	<bean id="mvnConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
 		<property name="configurators">
 			<list> 
-				<bean id="mavenRepoConfigurator" class="com.tasktop.c2c.server.services.web.scm.MavenRepositoryConfigurator"
+				<bean id="mavenRepoConfigurator" class="com.tasktop.c2c.server.services.web.MavenRepositoryConfigurator"
 					p:mavenRoot="${maven.repo.base}"
 				/>
 			</list>
@@ -89,7 +87,7 @@
 		
 	<aop:config>
 		<aop:aspect ref="aopLogger">
-			<aop:pointcut id="serviceCall" expression="execution(public * com.tasktop.c2c.server.services.web.scm.GitServiceBean.*(..))"/>
+			<aop:pointcut id="serviceCall" expression="bean(gitService)"/>
 			<aop:around pointcut-ref="serviceCall" method="doLogging"/>
 		</aop:aspect>
 	</aop:config>

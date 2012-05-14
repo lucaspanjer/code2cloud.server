@@ -44,12 +44,13 @@ import com.tasktop.c2c.server.profile.domain.activity.ScmActivity;
 import com.tasktop.c2c.server.profile.domain.activity.TaskActivity;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
 import com.tasktop.c2c.server.profile.domain.build.JobSummary;
-import com.tasktop.c2c.server.profile.domain.scm.Commit;
 import com.tasktop.c2c.server.profile.service.ActivityService;
 import com.tasktop.c2c.server.profile.service.HudsonService;
 import com.tasktop.c2c.server.profile.service.provider.HudsonServiceProvider;
+import com.tasktop.c2c.server.profile.service.provider.ScmServiceProvider;
 import com.tasktop.c2c.server.profile.service.provider.TaskServiceProvider;
 import com.tasktop.c2c.server.profile.service.provider.WikiServiceProvider;
+import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.service.ScmService;
 import com.tasktop.c2c.server.tasks.service.TaskService;
 import com.tasktop.c2c.server.wiki.domain.WikiActivity;
@@ -68,8 +69,8 @@ public class ActivityServiceBean implements ActivityService {
 	@Resource(name = "wikiServiceProvider")
 	private WikiServiceProvider wikiServiceProvider;
 
-	@Resource(name = "scmService")
-	private ScmService scmService;
+	@Resource(name = "scmServiceProvider")
+	private ScmServiceProvider scmServiceProvider;
 
 	private ExecutorService activityThreadPool = Executors.newCachedThreadPool();
 
@@ -140,6 +141,7 @@ public class ActivityServiceBean implements ActivityService {
 
 			@Override
 			protected List<ProjectActivity> callAsTenant() throws Exception {
+				ScmService scmService = scmServiceProvider.getService(projectIdentifier);
 				List<Commit> activity = scmService.getLog(region);
 				List<ProjectActivity> results = new ArrayList<ProjectActivity>(activity.size());
 

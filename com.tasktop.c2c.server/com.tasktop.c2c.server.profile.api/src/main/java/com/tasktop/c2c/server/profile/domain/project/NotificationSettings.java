@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.domain.project;
 
+import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
+
 /**
  * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
  * 

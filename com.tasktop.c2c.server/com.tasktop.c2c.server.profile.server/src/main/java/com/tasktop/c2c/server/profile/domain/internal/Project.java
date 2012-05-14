@@ -26,7 +26,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
 import com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration;
@@ -46,7 +45,6 @@ public class Project extends BaseEntity {
 	private Boolean deleted = false;
 
 	private List<ProjectProfile> projectProfiles = new ArrayList<ProjectProfile>();
-	private List<ScmRepository> repositories = new ArrayList<ScmRepository>();
 	private List<DeploymentConfiguration> deploymentConfigurations = new ArrayList<DeploymentConfiguration>();
 	private List<InvitationToken> invitationTokens = new ArrayList<InvitationToken>();
 	private List<QuotaSetting> quotaSettings = new ArrayList<QuotaSetting>();
@@ -150,16 +148,6 @@ public class Project extends BaseEntity {
 			}
 			setIdentifier(baseId + getName().trim().replaceAll("[^a-zA-Z0-9\\.]", "-").toLowerCase());
 		}
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, mappedBy = "project")
-	@OrderBy("url")
-	public List<ScmRepository> getRepositories() {
-		return repositories;
-	}
-
-	public void setRepositories(List<ScmRepository> repositories) {
-		this.repositories = repositories;
 	}
 
 	@Transient

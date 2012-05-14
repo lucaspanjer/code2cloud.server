@@ -31,6 +31,10 @@
 			<artifactId>wiki.api</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>scm.api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<scope>test</scope>

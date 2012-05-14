@@ -12,19 +12,18 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.source;
 
+import java.util.List;
 
 import com.tasktop.c2c.server.common.web.client.view.ErrorCapableView;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
-
-import java.util.List;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 public interface IProjectAdminSourceView<P extends IProjectAdminSourceView.Presenter> {
 
 	void setPresenter(P presenter);
 
 	public static interface Presenter {
-		void onDeleteRepository(Long repositoryId);
+		void onDeleteRepository(ScmRepository repository);
 
 		void onCreateRepository(ErrorCapableView view, ScmRepository repository);
 

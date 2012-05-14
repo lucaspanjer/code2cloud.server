@@ -132,6 +132,9 @@
     <dependent-module archiveName="com.tasktop.c2c.server.profile.api.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.tasktop.c2c.server.profile.api/com.tasktop.c2c.server.profile.api">
       <dependency-type>uses</dependency-type>
     </dependent-module>
+    <dependent-module archiveName="com.tasktop.c2c.server.scm.api.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.tasktop.c2c.server.scm.api/com.tasktop.c2c.server.scm.api">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
     <dependent-module archiveName="slf4j-api-1.6.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>

@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 public class ScmItemView extends Composite {
 

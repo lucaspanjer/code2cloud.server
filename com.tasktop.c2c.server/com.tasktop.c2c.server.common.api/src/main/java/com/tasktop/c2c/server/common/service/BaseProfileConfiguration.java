@@ -72,4 +72,8 @@ public class BaseProfileConfiguration {
 		return getProfileBaseUrl() + "/" + serviceProxyPath + "/" + projectId + "/";
 	}
 
+	public String getHostedScmUrlPrefix(String projectId) {
+		return getServiceUrlPrefix(projectId) + "scm/";
+	}
+
 }

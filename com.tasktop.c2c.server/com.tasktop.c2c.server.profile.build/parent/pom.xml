@@ -715,6 +715,16 @@
 				<version>${com.tasktop.c2c.server.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.tasktop.c2c.server</groupId>
+				<artifactId>scm.api</artifactId>
+				<version>${com.tasktop.c2c.server.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.tasktop.c2c.server</groupId>
+				<artifactId>scm.server</artifactId>
+				<version>${com.tasktop.c2c.server.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>net.sourceforge.winstone</groupId>
 				<artifactId>winstone</artifactId>
 				<version>0.9.10</version>

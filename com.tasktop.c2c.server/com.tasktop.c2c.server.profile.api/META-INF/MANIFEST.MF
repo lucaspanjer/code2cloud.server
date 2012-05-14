@@ -9,9 +9,7 @@ Export-Package: com.tasktop.c2c.server.profile.domain,
  com.tasktop.c2c.server.profile.domain.activity,
  com.tasktop.c2c.server.profile.domain.build,
  com.tasktop.c2c.server.profile.domain.project,
- com.tasktop.c2c.server.profile.domain.scm,
- com.tasktop.c2c.server.profile.service,
- com.tasktop.c2c.server.scm.service
+ com.tasktop.c2c.server.profile.service
 Require-Bundle: com.tasktop.c2c.server.common.api;bundle-version="0.1.0",
  com.tasktop.c2c.server.tasks.api;bundle-version="0.1.0",
  com.tasktop.c2c.server.wiki.api;bundle-version="1.0.0",

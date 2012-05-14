@@ -15,13 +15,12 @@ package com.tasktop.c2c.server.profile.web.ui.client.graphs;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.Color3D;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.visualizations.PieChart;
-import com.tasktop.c2c.server.profile.domain.project.Profile;
+import com.tasktop.c2c.server.scm.domain.Profile;
 
 /**
  * A summary pie chart of open tasks by severity.

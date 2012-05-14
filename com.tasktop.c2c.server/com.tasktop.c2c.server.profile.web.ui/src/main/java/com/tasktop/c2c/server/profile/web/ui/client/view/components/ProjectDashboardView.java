@@ -15,18 +15,17 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 import java.util.List;
 import java.util.Map;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
-import com.tasktop.c2c.server.profile.domain.project.Profile;
-import com.tasktop.c2c.server.profile.domain.scm.ScmSummary;
 import com.tasktop.c2c.server.profile.web.ui.client.GoogleVisLoader;
 import com.tasktop.c2c.server.profile.web.ui.client.graphs.ActivitySparkTimeline;
 import com.tasktop.c2c.server.profile.web.ui.client.graphs.CommitsByAuthorPieChart;
+import com.tasktop.c2c.server.scm.domain.Profile;
+import com.tasktop.c2c.server.scm.domain.ScmSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 
 public class ProjectDashboardView extends AbstractComposite {

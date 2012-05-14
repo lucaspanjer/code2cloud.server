@@ -15,24 +15,9 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.tasktop.c2c.server</groupId>
-			<artifactId>profile.api</artifactId>
+			<artifactId>scm.server</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.tasktop.c2c.server</groupId>
-			<artifactId>configuration.service</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.tasktop.c2c.server</groupId>
-			<artifactId>auth.service</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jgit</groupId>
-			<artifactId>org.eclipse.jgit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jgit</groupId>
-			<artifactId>org.eclipse.jgit.http.server</artifactId>
-		</dependency>
+	
 		<dependency>
 			<groupId>net.sf.webdav-servlet</groupId>
 			<artifactId>webdav-servlet</artifactId>

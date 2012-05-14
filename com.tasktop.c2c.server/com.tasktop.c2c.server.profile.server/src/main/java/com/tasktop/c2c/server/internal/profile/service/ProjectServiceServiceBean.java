@@ -34,8 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
-import com.tasktop.c2c.server.cloud.domain.ScmLocation;
-import com.tasktop.c2c.server.cloud.domain.ScmType;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolServiceInternal;
 import com.tasktop.c2c.server.cloud.service.NodeProvisioningService;
@@ -49,7 +47,6 @@ import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServi
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectServiceProfile;
-import com.tasktop.c2c.server.profile.domain.internal.ScmRepository;
 import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
@@ -168,10 +165,6 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 			}
 		}
 
-		if (type.equals(ServiceType.SCM)) {
-			updateScmRepository(project);
-		}
-
 	}
 
 	/**
@@ -195,41 +188,6 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 	private ServiceHost convertToInternal(com.tasktop.c2c.server.cloud.domain.ServiceHost serviceHost) {
 		return entityManager.find(ServiceHost.class, serviceHost.getId());
-	}
-
-	private void updateScmRepository(Project project) {
-
-		try {
-			// The external service URL is calculated here and associated with the returned Project. This URL is
-			// persisted.
-			com.tasktop.c2c.server.profile.domain.project.Project serviceUrlEnabledProject = profileWebService
-					.getProjectByIdentifier(project.getIdentifier());
-
-			String scmServiceUrl = null;
-
-			for (com.tasktop.c2c.server.profile.domain.project.ProjectService curService : serviceUrlEnabledProject
-					.getProjectServices()) {
-				if (ServiceType.SCM.equals(curService.getServiceType())) {
-					scmServiceUrl = curService.getUrl();
-				}
-			}
-
-			// If we didn't have an SCM service provisioned, we probably had an external Git URL - skip this.
-			if (scmServiceUrl != null) {
-				// Register our new Git repository with our SCM config, and save it to the DB.
-				ScmRepository newRepo = new ScmRepository();
-				newRepo.setType(ScmType.GIT);
-				newRepo.setScmLocation(ScmLocation.CODE2CLOUD);
-				newRepo.setUrl(String.format("%s%s.git", scmServiceUrl, project.getIdentifier()));
-				newRepo.setProject(project);
-				project.getRepositories().add(newRepo);
-
-				entityManager.persist(newRepo);
-				entityManager.persist(project);
-			}
-		} catch (EntityNotFoundException enfe) {
-			LOGGER.error("Unable to load project with identifier: " + project.getIdentifier());
-		}
 	}
 
 	private void updateTemplateServiceConfiguration(Project project) {
@@ -426,8 +384,8 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 				break;
 			case BUILD_SLAVE:
 
-				hudsonSlavePoolServiceInternal.doReleaseSlave(projectService.getProjectServiceProfile()
-						.getProject().getIdentifier(), projectService.getServiceHost().getId());
+				hudsonSlavePoolServiceInternal.doReleaseSlave(projectService.getProjectServiceProfile().getProject()
+						.getIdentifier(), projectService.getServiceHost().getId());
 				break;
 			}
 			LOGGER.info("deprovisioning done");

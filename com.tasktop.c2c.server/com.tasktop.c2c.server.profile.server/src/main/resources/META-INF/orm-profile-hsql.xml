@@ -147,13 +147,6 @@
 			</id>
 		</attributes>
 	</entity>
-	<entity class="com.tasktop.c2c.server.profile.domain.internal.ScmRepository">
-		<attributes>
-			<id name="id">
-				<generated-value strategy="IDENTITY" />
-			</id>
-		</attributes>
-	</entity>
 	<entity class="com.tasktop.c2c.server.profile.domain.internal.ServiceHost">
 		<attributes>
 			<id name="id">

@@ -89,16 +89,12 @@
 	<aop:config>
 		<aop:aspect ref="aopLogger">
 			<aop:pointcut id="serviceCall" expression="bean(profileService) || bean(projectServiceService) || bean(applicationServiceProxy) 
-			|| bean(hudsonSlavePoolService) || bean(authenticationService) || bean(deploymentConfigurationService) || bean(scmService) 
+			|| bean(hudsonSlavePoolService) || bean(authenticationService) || bean(deploymentConfigurationService)  
 			|| bean(activityService) || bean(projectArtifactService)"/>
 			<aop:around pointcut-ref="serviceCall" method="doLogging"/>
 		</aop:aspect>
 	</aop:config>
 
-	<bean id="scmUrlTenantIdStrategy"
-		class="org.springframework.tenancy.web.UrlTenantIdentifcationStrategy"
-		p:urlPattern=".*/scm/([^/]*)/.*"
-	/>
 	
 	<bean id="serviceProxyUrlTenantIdStrategy"
 		class="org.springframework.tenancy.web.UrlTenantIdentifcationStrategy"
@@ -109,7 +105,6 @@
 		<property name="tenantIdentificationStrategyChain">
 			<list>
 				<ref bean="serviceProxyUrlTenantIdStrategy"/>
-				<ref bean="scmUrlTenantIdStrategy"/>
 			</list>
 		</property>
 		<property name="tenantProvider" ref="profileHubTenantProvider"/>

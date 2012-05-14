@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.profile.web.shared;
 
+import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
+
 @SuppressWarnings("serial")
 @Deprecated
 public class Profile extends AbstractEntity implements Comparable<Profile> {

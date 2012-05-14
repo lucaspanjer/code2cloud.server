@@ -31,6 +31,9 @@
 		<module>../com.tasktop.c2c.server.wiki.server</module>
 		<module>../com.tasktop.c2c.server.wiki.web</module>
 
+		
+		<module>../com.tasktop.c2c.server.scm.api</module>
+		<module>../com.tasktop.c2c.server.scm.server</module>
 		<module>../com.tasktop.c2c.server.services.web</module>
 
 		<module>../com.tasktop.c2c.server.ssh.server</module>

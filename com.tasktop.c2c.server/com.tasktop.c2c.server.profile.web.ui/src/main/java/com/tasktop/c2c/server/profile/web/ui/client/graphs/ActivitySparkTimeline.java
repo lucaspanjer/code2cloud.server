@@ -19,7 +19,7 @@ import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.visualizations.ImageSparklineChart;
-import com.tasktop.c2c.server.profile.domain.scm.ScmSummary;
+import com.tasktop.c2c.server.scm.domain.ScmSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
 

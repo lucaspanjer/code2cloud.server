@@ -15,6 +15,8 @@ package com.tasktop.c2c.server.profile.domain.project;
 import java.util.Date;
 import java.util.List;
 
+import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
+
 /**
  * A release of project. Collects together multiple artifacts (jars, wars, etc) along with metadata about the release.
  * Some project artifacts may not have their id specified if they're transient.

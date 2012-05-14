@@ -28,10 +28,10 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.tasktop.c2c.server.cloud.domain.ScmLocation;
-import com.tasktop.c2c.server.cloud.domain.ScmType;
 import com.tasktop.c2c.server.common.web.client.view.errors.ErrorCabableDialogBox;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
+import com.tasktop.c2c.server.scm.domain.ScmLocation;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
+import com.tasktop.c2c.server.scm.domain.ScmType;
 
 /**
  * @author Clint Morgan (Tasktop Technologies Inc.)

@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.domain.project;
 
+import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
+
 @SuppressWarnings("serial")
 public class Profile extends AbstractEntity implements Comparable<Profile> {
 	private String username;

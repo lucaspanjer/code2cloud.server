@@ -16,7 +16,7 @@ import java.util.List;
 
 import net.customware.gwt.dispatch.shared.AbstractSimpleResult;
 
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)

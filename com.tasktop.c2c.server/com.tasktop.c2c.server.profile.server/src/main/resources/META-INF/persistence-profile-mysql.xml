@@ -17,7 +17,6 @@
         <class>com.tasktop.c2c.server.profile.domain.internal.ProjectScmConfiguration</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.ProjectService</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.ProjectServiceProfile</class>
-        <class>com.tasktop.c2c.server.profile.domain.internal.ScmRepository</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.ServiceHost</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.ServiceHostConfiguration</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.SignUpToken</class>

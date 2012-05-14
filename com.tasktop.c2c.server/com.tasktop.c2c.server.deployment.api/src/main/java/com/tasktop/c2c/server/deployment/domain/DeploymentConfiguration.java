@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.tasktop.c2c.server.profile.domain.project.AbstractEntity;
+import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
 
 /**
  * Represents a configuration for a deployment.

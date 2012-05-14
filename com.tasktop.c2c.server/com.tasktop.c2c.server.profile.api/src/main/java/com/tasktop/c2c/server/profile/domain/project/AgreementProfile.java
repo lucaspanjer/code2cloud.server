@@ -14,6 +14,8 @@ package com.tasktop.c2c.server.profile.domain.project;
 
 import java.util.Date;
 
+import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
+
 /**
  * A record of a user's agreement to a legal agreement.
  * 

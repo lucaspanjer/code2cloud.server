@@ -33,7 +33,7 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 @RemoteServiceRelativePath("profileService")
 public interface ProfileService extends RemoteService {
@@ -83,7 +83,7 @@ public interface ProfileService extends RemoteService {
 	void createProjectGitRepository(String projectIdentifier, ScmRepository repository)
 			throws ValidationFailedException, NoSuchEntityException;
 
-	public void deleteProjectGitRepository(String projectIdentifier, Long repositoryId) throws NoSuchEntityException;
+	public void deleteProjectGitRepository(String projectIdentifier, ScmRepository repo) throws NoSuchEntityException;
 
 	public void inviteUserForProject(String email, String projectIdentifier) throws NoSuchEntityException;
 

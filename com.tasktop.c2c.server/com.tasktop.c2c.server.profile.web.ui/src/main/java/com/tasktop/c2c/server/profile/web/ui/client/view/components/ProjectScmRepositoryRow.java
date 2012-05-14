@@ -21,10 +21,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.tasktop.c2c.server.cloud.domain.ScmLocation;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
+import com.tasktop.c2c.server.scm.domain.ScmLocation;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 public class ProjectScmRepositoryRow extends Composite {
 

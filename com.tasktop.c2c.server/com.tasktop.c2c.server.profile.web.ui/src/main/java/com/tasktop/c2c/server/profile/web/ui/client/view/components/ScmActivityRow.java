@@ -23,8 +23,8 @@ import com.tasktop.c2c.server.common.web.client.widgets.HasExpandingTextPanel;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonLabel;
 import com.tasktop.c2c.server.profile.domain.activity.ScmActivity;
-import com.tasktop.c2c.server.profile.domain.scm.Commit;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
+import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskHyperlinkDetector;
 
 public class ScmActivityRow extends HasExpandingTextPanel {

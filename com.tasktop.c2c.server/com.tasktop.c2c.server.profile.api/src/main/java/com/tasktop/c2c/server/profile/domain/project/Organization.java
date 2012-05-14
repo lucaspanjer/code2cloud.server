@@ -14,6 +14,8 @@ package com.tasktop.c2c.server.profile.domain.project;
 
 import java.util.List;
 
+import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
+
 @SuppressWarnings("serial")
 public class Organization extends AbstractEntity {
 	private String identifier;

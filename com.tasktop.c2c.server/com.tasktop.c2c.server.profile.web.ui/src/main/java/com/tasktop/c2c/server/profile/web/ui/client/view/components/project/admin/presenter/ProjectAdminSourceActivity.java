@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.adm
 
 import java.util.List;
 
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -28,12 +27,12 @@ import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.common.web.client.view.ErrorCapableView;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.place.ProjectAdminSourcePlace;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.source.IProjectAdminSourceView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.source.ProjectScmAdminView;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 public class ProjectAdminSourceActivity extends AbstractActivity implements IProjectAdminSourceView.Presenter,
 		SplittableActivity {
@@ -78,15 +77,15 @@ public class ProjectAdminSourceActivity extends AbstractActivity implements IPro
 	}
 
 	@Override
-	public void onDeleteRepository(final Long repositoryId) {
+	public void onDeleteRepository(final ScmRepository repo) {
 		OperationMessage message = new OperationMessage("Deleting repository");
 		message.setSuccessText("Repository deleted");
 		ProfileEntryPoint.getInstance().getProfileService()
-				.deleteProjectGitRepository(projectIdentifier, repositoryId, new AsyncCallbackSupport<Void>(message) {
+				.deleteProjectGitRepository(projectIdentifier, repo, new AsyncCallbackSupport<Void>(message) {
 					@Override
 					protected void success(Void result) {
 						for (ScmRepository repository : repositories) {
-							if (repository.getId().equals(repositoryId)) {
+							if (repository.equals(repo)) {
 								repositories.remove(repository);
 								break;
 							}

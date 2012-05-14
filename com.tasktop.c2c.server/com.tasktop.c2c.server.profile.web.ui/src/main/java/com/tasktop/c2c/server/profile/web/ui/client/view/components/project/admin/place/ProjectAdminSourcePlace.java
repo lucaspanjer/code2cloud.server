@@ -30,9 +30,9 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectScmRep
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectAdminSettingsPlace;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 public class ProjectAdminSourcePlace extends ProjectAdminPlace implements BreadcrumbPlace {
 

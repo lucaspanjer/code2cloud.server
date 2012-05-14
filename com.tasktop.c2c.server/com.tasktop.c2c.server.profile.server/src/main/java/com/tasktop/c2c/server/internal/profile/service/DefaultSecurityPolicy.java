@@ -32,7 +32,6 @@ import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
-import com.tasktop.c2c.server.profile.domain.internal.ScmRepository;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 
 /**
@@ -196,19 +195,6 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 				assertOwner(token.getProject());
 				return;
 			case MODIFY:
-				return;
-			}
-		} else if (target instanceof ScmRepository) {
-			ScmRepository repo = (ScmRepository) target;
-			switch (operation) {
-			case CREATE:
-			case DELETE:
-				assertOwner(repo.getProject());
-				return;
-			case RETRIEVE:
-				if (!ProjectAccessibility.PUBLIC.equals(repo.getProject().getAccessibility())) {
-					assertMember(repo.getProject());
-				}
 				return;
 			}
 		} else if (target instanceof ConfigurationProperty) {

@@ -12,7 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.domain.activity;
 
-import com.tasktop.c2c.server.profile.domain.scm.Commit;
+import com.tasktop.c2c.server.scm.domain.Commit;
 
 @SuppressWarnings("serial")
 public class ScmActivity extends ProjectActivity {

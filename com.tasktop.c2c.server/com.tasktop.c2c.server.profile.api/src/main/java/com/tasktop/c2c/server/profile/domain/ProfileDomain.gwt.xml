@@ -3,7 +3,6 @@
   <!-- Specify the paths for translatable code -->
   <source path='build'/>
   <source path='activity'/>
-  <source path='scm'/>
   
   <!-- Note: These DO's mostly exist in profile.web too. -->
   <source path='project'/>

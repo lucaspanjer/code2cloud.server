@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
+import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
 
 @SuppressWarnings("serial")
 public class Project extends AbstractEntity {
 	private String identifier;
 	private String name;
 	private String description;
-	private Boolean isPublic;
 	private ProjectAccessibility accessibility;
 	private ProjectPreferences projectPreferences;
 	private List<ProjectService> projectServices;
@@ -131,7 +131,8 @@ public class Project extends AbstractEntity {
 	}
 
 	/**
-	 * @param projectPreferences the projectPreferences to set
+	 * @param projectPreferences
+	 *            the projectPreferences to set
 	 */
 	public void setProjectPreferences(ProjectPreferences projectPreferences) {
 		this.projectPreferences = projectPreferences;

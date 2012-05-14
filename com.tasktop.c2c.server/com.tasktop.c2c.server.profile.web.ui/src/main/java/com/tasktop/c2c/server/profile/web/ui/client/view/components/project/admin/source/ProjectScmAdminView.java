@@ -24,9 +24,9 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
-import com.tasktop.c2c.server.cloud.domain.ScmLocation;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
+import com.tasktop.c2c.server.scm.domain.ScmLocation;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 public class ProjectScmAdminView extends AbstractComposite implements
 		IProjectAdminSourceView<IProjectAdminSourceView.Presenter> {

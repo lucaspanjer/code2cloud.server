@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.domain.project;
 
+import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
+
 /**
  * An artifact from a release. TODO: The inputStream is when creating an artifact. This must be pushed to a non-GWT DO.
  * 

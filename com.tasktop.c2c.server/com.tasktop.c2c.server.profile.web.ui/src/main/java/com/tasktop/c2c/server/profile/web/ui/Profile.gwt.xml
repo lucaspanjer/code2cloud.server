@@ -22,6 +22,7 @@
 	<inherits name="com.tasktop.c2c.server.deployment.domain.DeploymentDomain"/>
 	<inherits name="com.tasktop.c2c.server.common.service.domain.CommonDomain"/>
 	<inherits name="com.tasktop.c2c.server.cloud.domain.CloudDomain"/>
+	<inherits name="com.tasktop.c2c.server.scm.domain.ScmDomain"/>
 	<inherits name="com.google.gwt.visualization.Visualization"/>
 		<inherits name="com.tasktop.c2c.server.common.profile.web.ProfileUi"/>
 	<inherits name="com.tasktop.c2c.server.wiki.WikiApi"/>

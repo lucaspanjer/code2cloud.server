@@ -59,12 +59,13 @@ import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
 import com.tasktop.c2c.server.profile.service.ActivityService;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
 import com.tasktop.c2c.server.profile.service.provider.HudsonServiceProvider;
+import com.tasktop.c2c.server.profile.service.provider.ScmServiceProvider;
 import com.tasktop.c2c.server.profile.service.provider.TaskServiceProvider;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.service.ScmService;
 
 @SuppressWarnings("serial")
@@ -89,8 +90,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	private ActivityService activityService;
 
 	@Autowired
-	@Qualifier("main")
-	private ScmService scmService;
+	private ScmServiceProvider scmServiceProvider;
 
 	@Autowired
 	private TaskServiceProvider taskServiceProvider;
@@ -123,6 +123,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		ScmService scmService = scmServiceProvider.getService(projectIdentifier);
 		try {
 			dashboard.setScmSummaries(scmService.getScmSummary(numDays));
 		} catch (Exception e) {
@@ -418,6 +419,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	public void createProjectGitRepository(String projectIdentifier, ScmRepository scmRepository)
 			throws NoSuchEntityException, ValidationFailedException {
 		setTenancyContext(projectIdentifier);
+		ScmService scmService = scmServiceProvider.getService(projectIdentifier);
 
 		try {
 			scmService.createScmRepository(scmRepository);
@@ -432,11 +434,13 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	}
 
 	@Override
-	public void deleteProjectGitRepository(String projectIdentifier, Long repositoryId) throws NoSuchEntityException {
+	public void deleteProjectGitRepository(String projectIdentifier, ScmRepository repository)
+			throws NoSuchEntityException {
 		setTenancyContext(projectIdentifier);
+		ScmService scmService = scmServiceProvider.getService(projectIdentifier);
 
 		try {
-			scmService.deleteScmRepository(repositoryId);
+			scmService.deleteScmRepository(repository);
 		} catch (EntityNotFoundException enfe) {
 			handle(enfe);
 			throw new IllegalStateException();

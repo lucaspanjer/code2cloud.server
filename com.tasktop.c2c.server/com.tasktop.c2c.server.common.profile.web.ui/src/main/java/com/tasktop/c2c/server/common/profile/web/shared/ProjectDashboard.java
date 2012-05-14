@@ -16,10 +16,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-
 import com.tasktop.c2c.server.profile.domain.build.HudsonStatus;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.domain.scm.ScmSummary;
+import com.tasktop.c2c.server.scm.domain.ScmSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 
 @SuppressWarnings("serial")
@@ -29,7 +28,7 @@ public class ProjectDashboard implements Serializable {
 	private List<TaskSummary> taskSummaries;
 	private List<ScmSummary> scmSummaries;
 	private HudsonStatus buildStatus;
-	private Map<com.tasktop.c2c.server.profile.domain.project.Profile, Integer> commitsByAuthor;
+	private Map<com.tasktop.c2c.server.scm.domain.Profile, Integer> commitsByAuthor;
 
 	public void setTaskSummaries(List<TaskSummary> taskSummaries) {
 		this.taskSummaries = taskSummaries;
@@ -67,11 +66,11 @@ public class ProjectDashboard implements Serializable {
 		return taskSummaries.get(taskSummaries.size() - 1);
 	}
 
-	public void setCommitsByAuthor(Map<com.tasktop.c2c.server.profile.domain.project.Profile, Integer> commitsByAuthor) {
+	public void setCommitsByAuthor(Map<com.tasktop.c2c.server.scm.domain.Profile, Integer> commitsByAuthor) {
 		this.commitsByAuthor = commitsByAuthor;
 	}
 
-	public Map<com.tasktop.c2c.server.profile.domain.project.Profile, Integer> getCommitsByAuthor() {
+	public Map<com.tasktop.c2c.server.scm.domain.Profile, Integer> getCommitsByAuthor() {
 		return commitsByAuthor;
 	}
 

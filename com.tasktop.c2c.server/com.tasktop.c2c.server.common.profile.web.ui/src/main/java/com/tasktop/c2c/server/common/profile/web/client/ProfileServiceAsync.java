@@ -28,7 +28,7 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 public interface ProfileServiceAsync {
 
@@ -75,7 +75,7 @@ public interface ProfileServiceAsync {
 
 	void isWatchingProject(String projectIdentifier, AsyncCallback<Boolean> callback);
 
-	void deleteProjectGitRepository(String projectIdentifier, Long repositoryId,
+	void deleteProjectGitRepository(String projectIdentifier, ScmRepository repo,
 			AsyncCallback<Void> asyncCallbackSupport);
 
 	void createProjectGitRepository(String projectIdentifier, ScmRepository repository,

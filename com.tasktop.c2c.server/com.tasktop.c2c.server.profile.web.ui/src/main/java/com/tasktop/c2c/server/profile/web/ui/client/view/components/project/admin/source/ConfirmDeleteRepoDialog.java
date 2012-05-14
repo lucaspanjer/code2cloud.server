@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 /**
  * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
@@ -91,7 +91,7 @@ public class ConfirmDeleteRepoDialog extends DialogBox implements
 
 	@UiHandler("deleteButton")
 	void onDelete(ClickEvent event) {
-		presenter.onDeleteRepository(repository.getId());
+		presenter.onDeleteRepository(repository);
 		hide();
 	}
 

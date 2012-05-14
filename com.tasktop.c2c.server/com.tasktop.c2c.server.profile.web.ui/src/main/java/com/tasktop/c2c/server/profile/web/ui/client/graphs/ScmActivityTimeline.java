@@ -19,7 +19,7 @@ import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.LegendPosition;
 import com.google.gwt.visualization.client.visualizations.AreaChart;
-import com.tasktop.c2c.server.profile.domain.scm.ScmSummary;
+import com.tasktop.c2c.server.scm.domain.ScmSummary;
 
 public class ScmActivityTimeline extends AreaChart {
 	public void draw(List<ScmSummary> summaries) {

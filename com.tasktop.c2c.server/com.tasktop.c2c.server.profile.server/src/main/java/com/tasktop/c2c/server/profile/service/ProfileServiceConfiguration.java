@@ -24,7 +24,6 @@ public class ProfileServiceConfiguration extends BaseProfileConfiguration {
 
 	private Boolean invitationOnlySignUp;
 	private String signupNotificationEmail;
-	private int sshPort = 22;
 
 	public ProfileServiceConfiguration() {
 	}
@@ -39,18 +38,6 @@ public class ProfileServiceConfiguration extends BaseProfileConfiguration {
 
 	public String getSignUpInvitationURL(String token) {
 		return getProfileBaseUrl() + "/#signup/" + token;
-	}
-
-	public String getHostedScmUrlPrefix(String projectId) {
-		return getServiceUrlPrefix(projectId) + "scm/";
-	}
-
-	public int getPublicSshPort() {
-		return sshPort;
-	}
-
-	public void setPublicSshPort(int sshPort) {
-		this.sshPort = sshPort;
 	}
 
 	public String getEmailVerificationURL(String token) {

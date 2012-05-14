@@ -23,7 +23,6 @@ import com.tasktop.c2c.server.internal.profile.crypto.OpenSSHPublicKeyReader;
 import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
-import com.tasktop.c2c.server.profile.domain.internal.ScmRepository;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.project.NotificationSettings;
@@ -89,23 +88,6 @@ public class WebServiceDomain {
 		p.setWikiLanguage(projectPreferences.getWikiLanguage());
 
 		return p;
-	}
-
-	public com.tasktop.c2c.server.profile.domain.scm.ScmRepository copy(ScmRepository internalRepo) {
-		com.tasktop.c2c.server.profile.domain.scm.ScmRepository domainRepo = new com.tasktop.c2c.server.profile.domain.scm.ScmRepository();
-		domainRepo.setId(internalRepo.getId());
-		domainRepo.setProject(copy(internalRepo.getProject()));
-		domainRepo.setUrl(internalRepo.getUrl());
-		domainRepo.setAlternateUrl(internalRepo.computeSshUrl(serviceConfiguration.getWebHost(),
-				serviceConfiguration.getPublicSshPort()));
-		domainRepo.setScmLocation(internalRepo.getScmLocation());
-		domainRepo.setType(internalRepo.getType());
-		int lastSlash = internalRepo.getUrl().lastIndexOf("/");
-		if (lastSlash != -1) {
-			domainRepo.setName(internalRepo.getUrl().substring(lastSlash + 1));
-		}
-
-		return domainRepo;
 	}
 
 	private List<ProjectService> copyProjectServices(

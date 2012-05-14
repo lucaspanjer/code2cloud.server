@@ -34,7 +34,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
-import com.tasktop.c2c.server.profile.domain.scm.ScmRepository;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.wiki.domain.Page;
 import com.tasktop.c2c.server.wiki.web.ui.client.place.ProjectWikiViewPagePlace;
 import com.tasktop.c2c.server.wiki.web.ui.client.presenter.WikiPageContentPresenter;

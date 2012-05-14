@@ -261,26 +261,6 @@
 			<column name="VERSION" type="INT" />
 		</createTable>
 	</changeSet>
-	<changeSet author="profiledb" id="createScmRepositoryTable">
-		<createTable tableName="SCMREPOSITORY">
-			<column name="id" type="BIGINT" autoIncrement="true">
-				<constraints nullable="false" primaryKey="true" />
-			</column>
-			<column name="version" type="INT" />
-			<column defaultValue="" name="type" type="VARCHAR(255)">
-				<constraints nullable="false" />
-			</column>
-			<column defaultValue="" name="location" type="VARCHAR(255)">
-				<constraints nullable="false" />
-			</column>
-			<column defaultValue="" name="url" type="VARCHAR(4000)">
-				<constraints nullable="false" />
-			</column>
-			<column name="project_id" type="BIGINT">
-				<constraints nullable="false" />
-			</column>
-		</createTable>
-	</changeSet>
 	<changeSet author="profiledb" id="createSequenceTable">
 		<createTable tableName="SEQUENCE">
 			<column defaultValue="" name="SEQ_NAME" type="VARCHAR(50)">
@@ -461,11 +441,6 @@
 		<addForeignKeyConstraint baseColumnNames="SERVICEHOST_ID"
 			baseTableName="PROJECTSERVICE" constraintName="FK_PS_SH_ID"
 			referencedColumnNames="ID" referencedTableName="SERVICEHOST" />
-	</changeSet>
-	<changeSet author="profiledb" id="createScmRepoProjFK">
-		<addForeignKeyConstraint baseColumnNames="project_id"
-			baseTableName="SCMREPOSITORY" constraintName="FK_SCMREPOSITORY_PROJECT_ID"
-			referencedColumnNames="ID" referencedTableName="PROJECT" />
 	</changeSet>
 	<changeSet author="profiledb" id="createInvitationTokenProjFK">
 		<addForeignKeyConstraint baseColumnNames="project_id"
@@ -681,7 +656,6 @@
 			ALTER TABLE PROJECTPROFILE CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
 			ALTER TABLE PROJECTSERVICE CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
 			ALTER TABLE PROJECTSERVICEPROFILE CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
-			ALTER TABLE SCMREPOSITORY CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
 			ALTER TABLE SERVICEHOST CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
 			ALTER TABLE SIGNUPTOKEN CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;
 			ALTER TABLE SSHPUBLICKEY CHANGE ID ID BIGINT(20) NOT NULL AUTO_INCREMENT;

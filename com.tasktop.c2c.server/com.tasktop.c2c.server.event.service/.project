@@ -8,6 +8,7 @@
     <project>com.tasktop.c2c.server.common.service</project>
     <project>com.tasktop.c2c.server.event.api</project>
     <project>com.tasktop.c2c.server.profile.api</project>
+    <project>com.tasktop.c2c.server.scm.api</project>
     <project>com.tasktop.c2c.server.tasks.api</project>
     <project>com.tasktop.c2c.server.wiki.api</project>
   </projects>

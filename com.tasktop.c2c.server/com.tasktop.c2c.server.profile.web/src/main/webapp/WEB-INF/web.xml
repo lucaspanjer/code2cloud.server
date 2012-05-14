@@ -102,11 +102,6 @@
 	    <load-on-startup>1</load-on-startup>
   	</servlet>
 	<servlet>
-		<servlet-name>scm</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet>
 		<servlet-name>profileServiceServlet</servlet-name>
 		<servlet-class>com.tasktop.c2c.server.profile.web.ui.server.ProfileServiceImpl</servlet-class>
 		<load-on-startup>1</load-on-startup>
@@ -146,10 +141,6 @@
 	<servlet-mapping><!-- General GWT Action Dispatch -->
 		<servlet-name>dispatchServiceServlet</servlet-name>
 		<url-pattern>/profile/dispatch</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping><!-- SCM service for external repositories -->
-		<servlet-name>scm</servlet-name>
-		<url-pattern>/scm/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping><!-- Profile Service API -->
 		<servlet-name>api</servlet-name>

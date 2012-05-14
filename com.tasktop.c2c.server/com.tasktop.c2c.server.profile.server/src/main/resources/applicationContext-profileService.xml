@@ -48,7 +48,6 @@
 		p:baseContextPath="${profile.prefix.path}"
 		p:serviceProxyPath="${profile.serviceProxy.path}"
 		p:invitationOnlySignUp="${profile.invitationOnlySignUp}"
-		p:publicSshPort="${ssh.server.publicPort}"
 		p:signupNotificationEmail="${profile.signup.notifyEmail}"
 	/>
 	
