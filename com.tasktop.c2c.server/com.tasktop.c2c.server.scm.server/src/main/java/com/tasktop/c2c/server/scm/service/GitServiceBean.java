@@ -111,6 +111,11 @@ public class GitServiceBean implements GitService, InitializingBean {
 		for (ObjectId parentId : revCommit.getParents()) {
 			commit.getParents().add(parentId.getName());
 		}
+		if (revCommit.getCommitterIdent() != null && !revCommit.getAuthorIdent().equals(revCommit.getCommitterIdent())) {
+			commit.setCommitter(fromPersonIdent(revCommit.getCommitterIdent()));
+			commit.setCommitDate(revCommit.getCommitterIdent().getWhen());
+		}
+
 		return commit;
 	}
 

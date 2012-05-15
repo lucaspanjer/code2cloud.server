@@ -12,6 +12,7 @@
 package com.tasktop.c2c.server.scm.web.ui.client.view;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.i18n.shared.DateTimeFormat;
@@ -25,6 +26,7 @@ import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
 import com.tasktop.c2c.server.scm.domain.Commit;
@@ -83,8 +85,14 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 	@UiField
 	protected Label repository;
 	@UiField
-	DisclosurePanel patchPanel;
-
+	protected DisclosurePanel patchPanel;
+	@UiField
+	protected DivElement committerInfoDiv;
+	@Path("committer.email")
+	@UiField
+	protected Label committerEmail;
+	@UiField(provided = true)
+	protected DateLabel commitDate = new DateLabel(DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM));
 	private String projectId;
 
 	/**
@@ -116,6 +124,8 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 		}
 
 		authorImage.setUrl(Avatar.computeAvatarUrl(commit.getAuthor().getGravatarHash(), Avatar.Size.MEDIUM));
+
+		UIObject.setVisible(committerInfoDiv, commit.getCommitter() != null);
 
 	}
 

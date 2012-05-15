@@ -54,7 +54,7 @@
 			<div class="{style.commitMeta}">
 				<div class="left">
 					<label>Date:</label> 
-					<span class="date"><g:DateLabel ui:field='date'/></span>
+					<g:DateLabel ui:field='date'/>
 				</div>
 			</div>
 			<br/>
@@ -62,6 +62,12 @@
 				<div class="left">
 					<label>Author:</label>
 					<g:Label ui:field='authorEmail'/>  
+				</div>
+				<div ui:field="committerInfoDiv" class="right">
+					Committed by 
+					<g:Label ui:field='committerEmail'/>
+					on
+					<g:DateLabel ui:field='commitDate'/>
 				</div>
 			</div>
 			<div class="clear"/>

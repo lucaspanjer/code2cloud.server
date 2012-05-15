@@ -22,13 +22,13 @@ public class Commit implements Serializable {
 	private String commitId;
 	private Profile author;
 	private Date date;
+	private Profile committer; // may be null
+	private Date commitDate;
 	private String comment;
 	private List<String> parents;
 
 	private List<DiffEntry> changes;
 	private String diffText;
-
-	// TODO files and lines added/removed
 
 	public Commit() {
 
@@ -107,5 +107,21 @@ public class Commit implements Serializable {
 
 	public String getMinimizedCommitId() {
 		return getCommitId().length() > 6 ? getCommitId().substring(0, 7) : getCommitId();
+	}
+
+	public Profile getCommitter() {
+		return committer;
+	}
+
+	public void setCommitter(Profile commiter) {
+		this.committer = commiter;
+	}
+
+	public Date getCommitDate() {
+		return commitDate;
+	}
+
+	public void setCommitDate(Date commitDate) {
+		this.commitDate = commitDate;
 	}
 }
