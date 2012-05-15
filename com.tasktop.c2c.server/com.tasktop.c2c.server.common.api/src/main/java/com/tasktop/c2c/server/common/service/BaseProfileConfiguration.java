@@ -47,6 +47,9 @@ public class BaseProfileConfiguration {
 
 	public void setServiceProxyPath(String serviceProxyPath) {
 		this.serviceProxyPath = serviceProxyPath;
+		if (!this.serviceProxyPath.startsWith("/") && !this.serviceProxyPath.isEmpty()) {
+			this.serviceProxyPath = "/" + this.serviceProxyPath;
+		}
 	}
 
 	public String getBaseContextPath() {
@@ -69,7 +72,7 @@ public class BaseProfileConfiguration {
 	}
 
 	public String getServiceUrlPrefix(String projectId) {
-		return getProfileBaseUrl() + "/" + serviceProxyPath + "/" + projectId + "/";
+		return getProfileBaseUrl() + getServiceProxyPath() + "/" + projectId + "/";
 	}
 
 	public String getHostedScmUrlPrefix(String projectId) {
