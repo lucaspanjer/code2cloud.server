@@ -44,6 +44,7 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace implement
 	protected boolean requiresUserInfo = true;
 	protected boolean readyToGo = false;
 	private BatchResult results;
+	private List<Integer> resultIndexToIgnoreExceptions = new ArrayList<Integer>();
 
 	protected void setUserInfo(UserInfo ui) {
 		ProfileGinjector.get.instance().getAppState().setCredentials(ui.getCredentials());
@@ -155,7 +156,11 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace implement
 	}
 
 	protected boolean hasException(String exceptionClassName) {
+		int i = 0;
 		for (Throwable t : results.getExceptions()) {
+			if (resultIndexToIgnoreExceptions.contains(i++)) {
+				continue;
+			}
 			DispatchException dispatchException = (DispatchException) t;
 			if (dispatchException != null) {
 				if (exceptionClassName == null
@@ -180,6 +185,11 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace implement
 	/** Override to add more actions. Don't forget to call super. */
 	protected void addActions(List<Action<?>> actions) {
 
+	}
+
+	protected final void addActionAndIgnoreFailure(List<Action<?>> actions, Action<?> action) {
+		resultIndexToIgnoreExceptions.add(actions.size());
+		actions.add(action);
 	}
 
 	protected final void fetchPlaceData() {

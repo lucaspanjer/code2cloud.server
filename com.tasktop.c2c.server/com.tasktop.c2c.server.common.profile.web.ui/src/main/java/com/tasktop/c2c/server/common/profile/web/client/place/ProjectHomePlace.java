@@ -17,19 +17,15 @@ import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
 
-
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
-import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectActivityAction;
-import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectActivityResult;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectScmRepositoriesAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectScmRepositoriesResult;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
-import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
@@ -66,7 +62,6 @@ public class ProjectHomePlace extends AbstractBatchFetchingPlace implements Head
 	private String projectId;
 	private Project project;
 	private List<ScmRepository> repositories;
-	private List<ProjectActivity> projectActivity;
 	private List<Breadcrumb> breadcrumbs;
 
 	public static ProjectHomePlace createPlace(String projectId) {
@@ -117,10 +112,6 @@ public class ProjectHomePlace extends AbstractBatchFetchingPlace implements Head
 		return repositories;
 	}
 
-	public List<ProjectActivity> getProjectActivity() {
-		return projectActivity;
-	}
-
 	@Override
 	public List<Breadcrumb> getBreadcrumbs() {
 		return breadcrumbs;
@@ -130,16 +121,18 @@ public class ProjectHomePlace extends AbstractBatchFetchingPlace implements Head
 	protected void addActions(List<Action<?>> actions) {
 		super.addActions(actions);
 		actions.add(new GetProjectAction(projectId));
-		actions.add(new GetProjectScmRepositoriesAction(projectId));
-		actions.add(new GetProjectActivityAction(projectId, true));
+		addActionAndIgnoreFailure(actions, new GetProjectScmRepositoriesAction(projectId));
 	}
 
 	@Override
 	protected void handleBatchResults() {
 		super.handleBatchResults();
 		project = getResult(GetProjectResult.class).get();
-		repositories = getResult(GetProjectScmRepositoriesResult.class).get();
-		projectActivity = getResult(GetProjectActivityResult.class).get();
+
+		GetProjectScmRepositoriesResult getReposResult = getResult(GetProjectScmRepositoriesResult.class);
+		if (getReposResult != null) {
+			repositories = getReposResult.get();
+		}
 		createBreadcrumbs(project);
 		onPlaceDataFetched();
 	}

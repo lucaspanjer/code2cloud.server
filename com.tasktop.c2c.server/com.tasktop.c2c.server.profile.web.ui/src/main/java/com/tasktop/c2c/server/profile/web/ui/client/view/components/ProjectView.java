@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -29,7 +28,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
-import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.profile.domain.project.Project;
@@ -84,8 +82,6 @@ public class ProjectView extends AbstractComposite {
 	@UiField
 	DivElement mavenSectionDiv;
 
-	private List<ScmRepository> repositories;
-
 	private ProjectView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		setupSelectOnClick(mavenUrlTextBox);
@@ -101,10 +97,23 @@ public class ProjectView extends AbstractComposite {
 		});
 	}
 
-	public void setProjectData(Project project, List<ScmRepository> repositoryNames) {
+	public void setProject(Project project) {
 		this.project = project;
-		this.repositories = repositoryNames;
-		updateUi();
+
+		description.setText(project.getDescription());
+
+		wikiHomePageLink.setHref(ProjectWikiViewPagePlace.createPlaceForPage(project.getIdentifier(),
+				ProjectHomePlace.WIKI_HOME_PAGE).getHref());
+	}
+
+	public void setScmRepositories(List<ScmRepository> repositories) {
+		scmPanel.clear();
+
+		if (repositories != null) {
+			for (ScmRepository repository : repositories) {
+				scmPanel.add(new ProjectScmRepositoryRow(repository));
+			}
+		}
 	}
 
 	/**
@@ -126,39 +135,6 @@ public class ProjectView extends AbstractComposite {
 			wikiPagePresenter.setEnableHeader(false);
 			wikiPagePresenter.go(wikiContentPanel);
 		}
-	}
-
-	private void updateUi() {
-
-		description.setText(project.getDescription());
-		scmPanel.clear();
-
-		for (ScmRepository repository : repositories) {
-			scmPanel.add(new ProjectScmRepositoryRow(repository));
-
-		}
-
-		ProjectService mavenService = null;
-		if (project.getProjectServices() != null) {
-			for (ProjectService service : project.getProjectServices()) {
-				if (service.getServiceType().equals(ServiceType.MAVEN)) {
-					mavenService = service;
-					break;
-				}
-			}
-		}
-
-		if (mavenService != null) {
-			mavenUrlTextBox.setText(mavenService.getUrl());
-			mavenDavUrlTextBox.setText("dav:" + mavenService.getUrl());
-		} else {
-			mavenUrlTextBox.setText("");
-			mavenDavUrlTextBox.setText("");
-		}
-
-		wikiHomePageLink.setHref(ProjectWikiViewPagePlace.createPlaceForPage(project.getIdentifier(),
-				ProjectHomePlace.WIKI_HOME_PAGE).getHref());
-
 	}
 
 	private void setHasWikiHome(boolean hasWikiHome) {
@@ -186,8 +162,17 @@ public class ProjectView extends AbstractComposite {
 		// wikiHomePageLink.setVisible(hasWiki);
 	}
 
-	public void setHasMavenService(boolean hasMaven) {
+	public void setMavenService(ProjectService mavenService) {
+		boolean hasMaven = mavenService != null;
 		UIObject.setVisible(mavenSectionDiv, hasMaven);
+
+		if (hasMaven) {
+			mavenUrlTextBox.setText(mavenService.getUrl());
+			mavenDavUrlTextBox.setText("dav:" + mavenService.getUrl());
+		} else {
+			mavenUrlTextBox.setText("");
+			mavenDavUrlTextBox.setText("");
+		}
 	}
 
 	public void setHasScmService(boolean hasScm) {

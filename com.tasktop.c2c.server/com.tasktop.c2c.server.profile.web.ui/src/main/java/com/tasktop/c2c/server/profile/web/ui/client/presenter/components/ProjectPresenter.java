@@ -12,12 +12,15 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-import net.customware.gwt.dispatch.shared.DispatchException;
+import java.util.List;
 
+import net.customware.gwt.dispatch.shared.DispatchException;
 
 import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectActivityAction;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectActivityResult;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
@@ -47,11 +50,12 @@ public class ProjectPresenter extends AbstractProfilePresenter implements Splitt
 		ProjectHomePlace place = (ProjectHomePlace) p;
 
 		this.project = place.getProject();
-		view.setProjectData(place.getProject(), place.getRepositories());
-		view.activityView.renderActivity(place.getProjectActivity());
+		view.setProject(place.getProject());
+		view.activityView.clear();
 
-		if (isWikiServiceAvailable(project)) {
-			view.setHasWikiService(true);
+		boolean hasWiki = isServiceAvailable(ServiceType.WIKI);
+		view.setHasWikiService(hasWiki);
+		if (hasWiki) {
 			AppGinjector.get
 					.instance()
 					.getDispatchService()
@@ -75,15 +79,34 @@ public class ProjectPresenter extends AbstractProfilePresenter implements Splitt
 									}
 								}
 							});
-		} else {
-			view.setHasWikiService(false);
 		}
-		view.setHasMavenService(!project.getProjectServicesOfType(ServiceType.MAVEN).isEmpty());
-		view.setHasScmService(!project.getProjectServicesOfType(ServiceType.SCM).isEmpty());
+		List<ProjectService> mavenServices = project.getProjectServicesOfType(ServiceType.MAVEN);
+		view.setMavenService(mavenServices.isEmpty() ? null : mavenServices.get(0));
+
+		boolean hasScm = isServiceAvailable(ServiceType.SCM);
+		view.setHasScmService(hasScm);
+
+		if (hasScm) {
+			view.setScmRepositories(place.getRepositories());
+		}
+
+		AppGinjector.get
+				.instance()
+				.getDispatchService()
+				.execute(new GetProjectActivityAction(project.getIdentifier(), true),
+						new AsyncCallbackSupport<GetProjectActivityResult>() {
+
+							@Override
+							protected void success(GetProjectActivityResult result) {
+								view.activityView.renderActivity(result.get());
+
+							}
+						});
+
 	}
 
-	private boolean isWikiServiceAvailable(Project p) {
-		for (ProjectService wikiService : p.getProjectServicesOfType(ServiceType.WIKI)) {
+	private boolean isServiceAvailable(ServiceType type) {
+		for (ProjectService wikiService : project.getProjectServicesOfType(type)) {
 			if (wikiService.isAvailable()) {
 				return true;
 			}
