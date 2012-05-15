@@ -12,10 +12,10 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.widgets.Format;
@@ -25,6 +25,7 @@ import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonLab
 import com.tasktop.c2c.server.profile.domain.activity.ScmActivity;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.web.ui.client.place.ScmCommitPlace;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskHyperlinkDetector;
 
 public class ScmActivityRow extends HasExpandingTextPanel {
@@ -37,18 +38,21 @@ public class ScmActivityRow extends HasExpandingTextPanel {
 		initWidget(uiBinder.createAndBindUi(this));
 		super.setupWidgets();
 		expandingTextLabel.addHyperlinkDetector(new TaskHyperlinkDetector(scmActivity.getProjectIdentifier()));
-		renderCommit(scmActivity.getCommit());
+		renderCommit(scmActivity);
 	}
 
 	@UiField
-	Label commitLabel;
+	Anchor commitLabel;
 	@UiField
 	PersonLabel personLabel;
 	@UiField
 	Label dateLabel;
 
-	private void renderCommit(Commit commit) {
-		commitLabel.setText(commit.getNumber().length() > 6 ? commit.getNumber().substring(0, 7) : commit.getNumber());
+	private void renderCommit(ScmActivity activity) {
+		Commit commit = activity.getCommit();
+		commitLabel.setText(commit.getMinimizedCommitId());
+		commitLabel.setHref(ScmCommitPlace.createPlace(activity.getProjectIdentifier(), commit.getRepository(),
+				commit.getCommitId()).getHref());
 		Person person = new Person(commit.getAuthor().getUsername(), commit.getAuthor().toFullName());
 		Person self = ProfileEntryPoint.getInstance().getAppState().getSelf();
 		personLabel.setAsSelf(self != null && person.getIdentity().equals(self.getIdentity()));

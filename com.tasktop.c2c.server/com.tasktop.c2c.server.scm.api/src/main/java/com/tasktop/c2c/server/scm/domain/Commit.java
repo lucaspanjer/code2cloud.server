@@ -14,14 +14,19 @@ package com.tasktop.c2c.server.scm.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class Commit implements Serializable {
 	private String repository;
-	private String number;
+	private String commitId;
 	private Profile author;
 	private Date date;
 	private String comment;
+	private List<String> parents;
+
+	private List<DiffEntry> changes;
+	private String diffText;
 
 	// TODO files and lines added/removed
 
@@ -30,18 +35,18 @@ public class Commit implements Serializable {
 	}
 
 	public Commit(String number, Profile author, Date date, String comment) {
-		this.number = number;
+		this.commitId = number;
 		this.author = author;
 		this.date = date;
 		this.comment = comment;
 	}
 
-	public void setNumber(String number) {
-		this.number = number;
+	public void setCommitId(String number) {
+		this.commitId = number;
 	}
 
-	public String getNumber() {
-		return number;
+	public String getCommitId() {
+		return commitId;
 	}
 
 	public void setDate(Date date) {
@@ -74,5 +79,33 @@ public class Commit implements Serializable {
 
 	public String getRepository() {
 		return repository;
+	}
+
+	public List<String> getParents() {
+		return parents;
+	}
+
+	public void setParents(List<String> parents) {
+		this.parents = parents;
+	}
+
+	public String getDiffText() {
+		return diffText;
+	}
+
+	public void setDiffText(String diffText) {
+		this.diffText = diffText;
+	}
+
+	public List<DiffEntry> getChanges() {
+		return changes;
+	}
+
+	public void setChanges(List<DiffEntry> changes) {
+		this.changes = changes;
+	}
+
+	public String getMinimizedCommitId() {
+		return getCommitId().length() > 6 ? getCommitId().substring(0, 7) : getCommitId();
 	}
 }

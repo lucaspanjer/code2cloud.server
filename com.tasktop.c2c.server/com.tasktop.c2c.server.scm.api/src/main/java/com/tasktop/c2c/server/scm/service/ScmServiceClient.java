@@ -67,6 +67,7 @@ public class ScmServiceClient extends AbstractRestServiceClient implements ScmSe
 		private ScmRepository scmRepository;
 		private List<ScmRepository> scmRepositoryList;
 		private List<ScmSummary> scmSummaryList;
+		private Commit commit;
 
 		public List<Commit> getCommitList() {
 			return commitList;
@@ -106,6 +107,14 @@ public class ScmServiceClient extends AbstractRestServiceClient implements ScmSe
 
 		public void setScmSummaryList(List<ScmSummary> scmSummaryList) {
 			this.scmSummaryList = scmSummaryList;
+		}
+
+		public Commit getCommit() {
+			return commit;
+		}
+
+		public void setCommit(Commit commit) {
+			this.commit = commit;
 		}
 	}
 
@@ -251,5 +260,22 @@ public class ScmServiceClient extends AbstractRestServiceClient implements ScmSe
 				return result.getScmSummaryList();
 			}
 		}.doCall(url);
+	}
+
+	public static final String GET_COMMIT_URL = "commit/{repoName}/{commitId}";
+
+	public Commit getCommit(String repoName, String commitId) throws EntityNotFoundException {
+
+		try {
+			return new GetCall<Commit>() {
+				@Override
+				public Commit getValue(ServiceCallResult result) {
+					return result.getCommit();
+				}
+			}.doCall(GET_COMMIT_URL, repoName, commitId);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+		}
+		throw new IllegalStateException();
 	}
 }

@@ -101,6 +101,7 @@
   <classpathentry kind="src" path="/com.tasktop.c2c.server.profile.api"/>
   <classpathentry kind="var" path="M2_REPO/org/jvnet/hudson/main/remoting/1.384/remoting-1.384.jar" sourcepath="M2_REPO/org/jvnet/hudson/main/remoting/1.384/remoting-1.384-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jvnet/robust-http-client/robust-http-client/1.1/robust-http-client-1.1.jar" sourcepath="M2_REPO/org/jvnet/robust-http-client/robust-http-client/1.1/robust-http-client-1.1-sources.jar"/>
+  <classpathentry kind="src" path="/com.tasktop.c2c.server.scm.api"/>
   <classpathentry kind="var" path="M2_REPO/net/java/sezpoz/sezpoz/1.7/sezpoz-1.7.jar" sourcepath="M2_REPO/net/java/sezpoz/sezpoz/1.7/sezpoz-1.7-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar" sourcepath="M2_REPO/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-aop/3.0.5.RELEASE/spring-aop-3.0.5.RELEASE.jar" sourcepath="M2_REPO/org/springframework/spring-aop/3.0.5.RELEASE/spring-aop-3.0.5.RELEASE-sources.jar"/>

@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,7 +45,6 @@ import com.tasktop.c2c.server.scm.service.ScmServiceClient.CommitsForAuthor;
 		+ "The SCM service methods are available by appending the URI to the base URL\n"
 		+ "https://{hostname}/s/{projectIdentifier}/scm + URI, for example: https://code.cloudfoundry.com/s/code2cloud/scm/summary")
 @Controller
-@RequestMapping("/{projectIdentifier}/")
 public class ScmServiceController extends AbstractRestService implements ScmService {
 
 	@Resource(name = "scmService")
@@ -122,5 +122,12 @@ public class ScmServiceController extends AbstractRestService implements ScmServ
 	@RequestMapping(value = ScmServiceClient.GET_SCM_REPOSITORIES_URL, method = RequestMethod.GET)
 	public List<ScmRepository> getScmRepositories() throws EntityNotFoundException {
 		return scmService.getScmRepositories();
+	}
+
+	@Override
+	@RequestMapping(value = ScmServiceClient.GET_COMMIT_URL, method = RequestMethod.GET)
+	public Commit getCommit(@PathVariable("repoName") String repoName, @PathVariable("commitId") String commitId)
+			throws EntityNotFoundException {
+		return scmService.getCommit(repoName, commitId);
 	}
 }

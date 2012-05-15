@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' 
+	xmlns:p="urn:import:com.tasktop.c2c.server.common.web.client.widgets.chooser.person" 
+	xmlns:h="urn:import:com.tasktop.c2c.server.common.web.client.widgets.hyperlink">
+<ui:style>
+.commitMeta {
+	width: 100%;
+	display: inline
+}
+.commitMeta label {
+	font-weight: bold
+}
+
+.commitMeta div.repository {
+	padding-left: 10px
+}
+.comment {
+	width: 100%;
+}
+.parentsPanel {
+	display: inline
+}
+.image {
+	padding-right: 10px
+}
+
+</ui:style>
+	
+		<g:HTMLPanel>
+		<div>
+			<div class="left {style.image}">
+				<g:Image ui:field="authorImage"/>
+			</div>
+			<div>
+			<div class="{style.commitMeta}">
+			  	<div class="left">
+			  		<div class="left">
+						<label>Commit:</label> 
+						<g:Label ui:field='minimizedCommitId'/>
+					</div>
+			  		<div class="right {style.repository}">
+						<label>Repository:</label> 
+						<g:Label ui:field='repository'/>
+					</div>
+				</div>
+				<div class="right">
+					<label>Parent:</label> 
+					<g:FlowPanel ui:field='parentsPanel' styleName="{style.parentsPanel}"/>
+				</div>
+			</div>	
+			<br/>
+			<div class="{style.commitMeta}">
+				<div class="left">
+					<label>Date:</label> 
+					<span class="date"><g:DateLabel ui:field='date'/></span>
+				</div>
+			</div>
+			<br/>
+			<div class="{style.commitMeta}">
+				<div class="left">
+					<label>Author:</label>
+					<g:Label ui:field='authorEmail'/>  
+				</div>
+			</div>
+			<div class="clear"/>
+			</div>
+			</div>
+			<div class="spacer clear small"/>
+
+			<div class="{style.comment}">
+				<p>
+					<g:Label ui:field='comment'/>
+				</p>
+			</div>
+
+			<div class="spacer clear small"/>
+			<div>
+				<h4>Changes</h4>
+				<g:FlowPanel ui:field='filesPanel' styleName="{style.parentsPanel}"/>
+			</div>
+			<div class="spacer clear small"/>
+			<g:DisclosurePanel ui:field="patchPanel" title="Patch Text" open="false" width="100%">
+				<g:header>Full Patch Text</g:header>
+				<g:HTMLPanel>
+					<pre>
+						<g:Label ui:field="diffText"/>
+					</pre>
+				</g:HTMLPanel>
+			</g:DisclosurePanel>
+			
+	</g:HTMLPanel>
+</ui:UiBinder>

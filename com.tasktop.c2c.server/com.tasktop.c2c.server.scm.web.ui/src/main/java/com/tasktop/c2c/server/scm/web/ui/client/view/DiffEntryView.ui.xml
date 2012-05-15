@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' 
+	xmlns:p="urn:import:com.tasktop.c2c.server.common.web.client.widgets.chooser.person" 
+	xmlns:h="urn:import:com.tasktop.c2c.server.common.web.client.widgets.hyperlink">
+<ui:style>
+	.operation {
+	font-style:italic;
+}
+	.fileName {
+	font-family: monospace; 
+}
+	.line div {
+	display: inline
+}
+	.added {
+	color: green
+}
+	.removed {
+	color: red
+}
+</ui:style>
+
+		<g:HTMLPanel>
+			<div class="{style.line}">
+				<g:Label ui:field="operationName" styleName="{style.operation}"/>
+				<g:Label ui:field="fileName" styleName="{style.fileName}"/>
+				<div class="{style.line}">
+					<div class="{style.added}">
+						<g:Label ui:field="numAdded"/>
+					</div>
+					<div class="{style.removed}">
+						<g:Label ui:field="numRemoved"/>
+					</div>
+				</div>
+			</div>
+			
+	</g:HTMLPanel>
+</ui:UiBinder>

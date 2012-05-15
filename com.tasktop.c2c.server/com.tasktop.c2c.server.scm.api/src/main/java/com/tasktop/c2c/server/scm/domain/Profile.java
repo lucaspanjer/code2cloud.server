@@ -17,6 +17,7 @@ import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
 @SuppressWarnings("serial")
 public class Profile extends AbstractEntity {
 	private String email;
+	private String gravatarHash;
 	private String firstName;
 	private String lastName;
 	private String username;
@@ -55,6 +56,14 @@ public class Profile extends AbstractEntity {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getGravatarHash() {
+		return gravatarHash;
+	}
+
+	public void setGravatarHash(String gravatarHash) {
+		this.gravatarHash = gravatarHash;
 	}
 
 }

@@ -14,6 +14,7 @@
     <project>com.tasktop.c2c.server.hudson.plugin.configuration</project>
     <project>com.tasktop.c2c.server.hudson.plugin.ui</project>
     <project>com.tasktop.c2c.server.profile.api</project>
+    <project>com.tasktop.c2c.server.scm.api</project>
     <project>com.tasktop.c2c.server.tasks.api</project>
     <project>com.tasktop.c2c.server.wiki.api</project>
   </projects>

@@ -12,6 +12,7 @@ S * Copyright (c) 2010, 2012 Tasktop Technologies
  ******************************************************************************/
 package com.tasktop.c2c.server.scm.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -28,13 +29,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -42,12 +42,16 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.lib.RepositoryCache.FileKey;
+import org.eclipse.jgit.patch.FileHeader;
+import org.eclipse.jgit.patch.HunkHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepository;
-import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.URIish;
+import org.eclipse.jgit.treewalk.CanonicalTreeParser;
+import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.FileUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -56,11 +60,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 
+import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
+import com.tasktop.c2c.server.common.service.identity.Gravatar;
 import com.tasktop.c2c.server.common.service.query.QueryUtil;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.DiffEntry.ChangeType;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmLocation;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
@@ -73,87 +80,19 @@ public class GitServiceBean implements GitService, InitializingBean {
 	private static final String GIT_DIR_SUFFIX = ".git";
 
 	@Value("${git.root}")
-	private String basePath;
+	String basePath;
 
 	@Autowired
 	private ScmServiceConfiguration profileServiceConfiguration;
 
-	/** Time between fetches for a repo. */
-	private long milisecondsBetweenUpdates = 5 * 60 * 1000;
-
-	/** Time between scans for new repos to fetch. */
-	private long milisecondsBetweenScans = 1000;
-
-	private AtomicBoolean stopRequest = new AtomicBoolean(false);
-
-	private ExecutorService threadPool = Executors.newCachedThreadPool();
-	private Map<String, Long> lastUpdateTimeByRepoPath = new HashMap<String, Long>();
-
 	@Value("${git.startThreads}")
 	private boolean startThreads = true;
-
-	private class WorkerThread extends Thread {
-		@Override
-		public void run() {
-			while (!stopRequest.get()) {
-				try {
-					triggerMirroredFetches();
-					Thread.sleep(milisecondsBetweenScans);
-				} catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	private void triggerMirroredFetches() {
-		Long reFetchTime = System.currentTimeMillis() - milisecondsBetweenUpdates;
-		for (File projectRoot : new File(basePath).listFiles()) {
-			File mirroredRepos = new File(projectRoot, GitConstants.MIRRORED_GIT_DIR);
-			if (!mirroredRepos.exists()) {
-				continue;
-			}
-			for (final File mirroredRepo : mirroredRepos.listFiles()) {
-				String repoPath = mirroredRepo.getAbsolutePath();
-				Long lastFetch = lastUpdateTimeByRepoPath.get(repoPath);
-				if (lastFetch == null || lastFetch < reFetchTime) {
-					lastUpdateTimeByRepoPath.put(repoPath, System.currentTimeMillis());
-					threadPool.execute(new Runnable() {
-
-						@Override
-						public void run() {
-							doMirrorFetch(mirroredRepo);
-
-						}
-					});
-				}
-			}
-		}
-	}
-
-	// TODO make these from cache
-	private void doMirrorFetch(File mirroredRepo) {
-		try {
-			Git git = new Git(new FileRepository(mirroredRepo));
-			git.fetch().setRefSpecs(new RefSpec("refs/heads/*:refs/heads/*")).setThin(true).call();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JGitInternalException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidRemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	private List<Commit> getLog(Repository repository, Region region) {
 		List<Commit> result = new ArrayList<Commit>();
 
 		for (RevCommit revCommit : getAllCommits(repository)) {
-			Commit commit = new Commit(revCommit.getName(), fromPersonIdent(revCommit.getAuthorIdent()), revCommit
-					.getAuthorIdent().getWhen(), revCommit.getFullMessage());
+			Commit commit = createCommit(revCommit);
 			commit.setRepository(repository.getDirectory().getName());
 			result.add(commit);
 		}
@@ -161,10 +100,25 @@ public class GitServiceBean implements GitService, InitializingBean {
 		return result;
 	}
 
+	/**
+	 * @param revCommit
+	 * @return
+	 */
+	private Commit createCommit(RevCommit revCommit) {
+		Commit commit = new Commit(revCommit.getName(), fromPersonIdent(revCommit.getAuthorIdent()), revCommit
+				.getAuthorIdent().getWhen(), revCommit.getFullMessage());
+		commit.setParents(new ArrayList<String>(revCommit.getParentCount()));
+		for (ObjectId parentId : revCommit.getParents()) {
+			commit.getParents().add(parentId.getName());
+		}
+		return commit;
+	}
+
 	private Profile fromPersonIdent(PersonIdent person) {
 		Profile result = new Profile();
 		result.setEmail(person.getEmailAddress());
 		result.setUsername(person.getEmailAddress());
+		result.setGravatarHash(Gravatar.computeHash(person.getEmailAddress()));
 		int firstSpace = person.getName().indexOf(" ");
 		String firstName = firstSpace == -1 ? "" : person.getName().substring(0, firstSpace);
 		String lastName = firstSpace == -1 ? person.getName() : person.getName().substring(firstSpace + 1);
@@ -265,9 +219,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 		if (hostedDir.exists()) {
 			for (File repoDir : hostedDir.listFiles()) {
 				try {
-					FileKey key = FileKey.exact(repoDir, FS.DETECTED);
-					Repository repo = RepositoryCache.open(key, true);
-					result.add(repo);
+					result.add(getHostedRepository(repoDir.getName()));
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
@@ -278,7 +230,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 		if (mirroredDir.exists()) {
 			for (File repoDir : mirroredDir.listFiles()) {
 				try {
-					result.add(new FileRepository(repoDir));
+					result.add(getMirroredRepository(repoDir.getName()));
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
@@ -286,6 +238,17 @@ public class GitServiceBean implements GitService, InitializingBean {
 		}
 
 		return result;
+	}
+
+	private Repository getHostedRepository(String name) throws IOException {
+		File repoDir = new File(getTenantHostedBaseDir(), name);
+		FileKey key = FileKey.exact(repoDir, FS.DETECTED);
+		Repository repo = RepositoryCache.open(key, true);
+		return repo;
+	}
+
+	private Repository getMirroredRepository(String name) throws IOException {
+		return new FileRepository(new File(getTenantMirroredBaseDir(), name));
 	}
 
 	public void setBasePath(String basePath) {
@@ -542,7 +505,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (startThreads) {
-			new WorkerThread().start();
+			new FetchWorkerThread(this).start();
 		}
 	}
 
@@ -555,5 +518,114 @@ public class GitServiceBean implements GitService, InitializingBean {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public Commit getCommitWithDiff(String repositoryName, String commitId) throws EntityNotFoundException {
+		try {
+			for (ScmRepository repo : getHostedRepositories()) {
+				if (repo.getName().equals(repositoryName)) {
+					Repository jgitRepo = getHostedRepository(repositoryName);
+					return getCommitInternal(repositoryName, jgitRepo, commitId);
+				}
+			}
+			// FIXME potential that an external repo is shadowned by the internal one
+			for (ScmRepository repo : getExternalRepositories()) {
+				if (repo.getName().equals(repositoryName)) {
+					Repository jgitRepo = getMirroredRepository(repositoryName);
+					return getCommitInternal(repositoryName, jgitRepo, commitId);
+				}
+			}
+			throw new EntityNotFoundException();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (GitAPIException e) {
+			throw new RuntimeException(e);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private Commit getCommitInternal(String repositoryName, Repository repo, String commitId) throws IOException,
+			GitAPIException, EntityNotFoundException {
+
+		ObjectId thisC = repo.resolve(commitId);
+
+		if (thisC == null) {
+			throw new EntityNotFoundException();
+		}
+
+		RevWalk walk = new RevWalk(repo);
+		RevCommit theCommit = walk.parseCommit(thisC);
+
+		Commit result = createCommit(theCommit);
+		result.setRepository(repositoryName);
+
+		// FIXME how to handle merges? there can be real diffs there
+		// FIXME line count not working
+		if (theCommit.getParentCount() == 1) {
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+			DiffFormatter diffFormatter = new DiffFormatter(output);
+			diffFormatter.setRepository(repo);
+			diffFormatter.setPathFilter(TreeFilter.ALL);
+
+			RevTree tree = walk.parseTree(thisC);
+			CanonicalTreeParser thisTreeParser = new CanonicalTreeParser();
+			thisTreeParser.reset(repo.newObjectReader(), tree);
+
+			ObjectId parentC = theCommit.getParent(0);
+			RevTree parentTree = walk.parseTree(parentC);
+			CanonicalTreeParser parentTreeParser = new CanonicalTreeParser();
+			parentTreeParser.reset(repo.newObjectReader(), parentTree);
+
+			List<DiffEntry> diffEntries = diffFormatter.scan(parentTreeParser, thisTreeParser);
+			diffFormatter.format(diffEntries);
+			diffFormatter.flush();
+
+			result.setChanges(new ArrayList<com.tasktop.c2c.server.scm.domain.DiffEntry>());
+			for (DiffEntry de : diffEntries) {
+				com.tasktop.c2c.server.scm.domain.DiffEntry publicDiffEntry = copy(de);
+				result.getChanges().add(publicDiffEntry);
+				FileHeader header = diffFormatter.toFileHeader(de);
+				int linesAdded = 0;
+				int linesRemoved = 0;
+				for (HunkHeader edit : header.getHunks()) {
+					linesAdded += edit.getOldImage().getLinesAdded();
+					linesRemoved += edit.getOldImage().getLinesDeleted();
+				}
+				publicDiffEntry.setLinesAdded(linesAdded);
+				publicDiffEntry.setLinesRemoved(linesRemoved);
+			}
+
+			String theDiff = new String(output.toByteArray());
+			result.setDiffText(theDiff);
+		}
+
+		return result;
+	}
+
+	private com.tasktop.c2c.server.scm.domain.DiffEntry copy(DiffEntry target) {
+		com.tasktop.c2c.server.scm.domain.DiffEntry result = new com.tasktop.c2c.server.scm.domain.DiffEntry();
+		switch (target.getChangeType()) {
+		case ADD:
+			result.setChangeType(ChangeType.ADD);
+			break;
+		case COPY:
+			result.setChangeType(ChangeType.COPY);
+			break;
+		case DELETE:
+			result.setChangeType(ChangeType.DELETE);
+			break;
+		case MODIFY:
+			result.setChangeType(ChangeType.MODIFY);
+			break;
+		case RENAME:
+			result.setChangeType(ChangeType.RENAME);
+			break;
+		}
+		result.setNewPath(target.getNewPath());
+		result.setOldPath(target.getOldPath());
+		return result;
 	}
 }

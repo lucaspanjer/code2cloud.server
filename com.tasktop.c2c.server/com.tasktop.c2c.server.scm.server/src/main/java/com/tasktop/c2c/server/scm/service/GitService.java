@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.scm.service;
 import java.util.List;
 import java.util.Map;
 
+import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.domain.Profile;
@@ -76,5 +77,13 @@ public interface GitService {
 	 * @return
 	 */
 	List<ScmRepository> listRepositories();
+
+	/**
+	 * @param repositoryName
+	 * @param commitId
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	Commit getCommitWithDiff(String repositoryName, String commitId) throws EntityNotFoundException;
 
 }

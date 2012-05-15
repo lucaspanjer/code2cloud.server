@@ -87,7 +87,7 @@
 		
 	<aop:config>
 		<aop:aspect ref="aopLogger">
-			<aop:pointcut id="serviceCall" expression="bean(gitService)"/>
+			<aop:pointcut id="serviceCall" expression="bean(scmService)"/>
 			<aop:around pointcut-ref="serviceCall" method="doLogging"/>
 		</aop:aspect>
 	</aop:config>

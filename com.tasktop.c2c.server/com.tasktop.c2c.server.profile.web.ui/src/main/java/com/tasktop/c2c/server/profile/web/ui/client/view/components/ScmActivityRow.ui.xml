@@ -11,7 +11,7 @@
 	   			<g:Anchor ui:field='expandButton' styleName="button right"></g:Anchor>
 			  	<p:PersonLabel ui:field="personLabel"/>
 				Committed
-				<g:Label ui:field='commitLabel'/>
+				<g:Anchor ui:field='commitLabel'/>
 	   			<span class="date"><g:Label ui:field='dateLabel'/></span>
 			    <br/>
 			    <h:HyperlinkingLabel ui:field="expandingTextLabel"/>

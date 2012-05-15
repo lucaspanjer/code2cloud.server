@@ -27,8 +27,8 @@
 		<inherits name="com.tasktop.c2c.server.common.profile.web.ProfileUi"/>
 	<inherits name="com.tasktop.c2c.server.wiki.WikiApi"/>
 	<inherits name="com.tasktop.c2c.server.tasks.TaskUi"/>
-	<!-- FIXME Remove once wiki.web.ui is merged -->
 	<inherits name="com.tasktop.c2c.server.wiki.web.ui.WikiUi"/>
+	<inherits name="com.tasktop.c2c.server.scm.web.ui.ScmUi"/>
 	<inherits name="com.google.gwt.place.Place"/>
 	<inherits name="com.google.gwt.activity.Activity"/>
 	<inherits name="com.google.gwt.inject.Inject"/>

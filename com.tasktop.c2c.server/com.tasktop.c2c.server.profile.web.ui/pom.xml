@@ -28,6 +28,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>scm.web.ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
 			<artifactId>deployment.api</artifactId>
 		</dependency>
 		<dependency>

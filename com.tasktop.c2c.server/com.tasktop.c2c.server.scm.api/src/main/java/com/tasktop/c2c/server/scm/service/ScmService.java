@@ -72,4 +72,6 @@ public interface ScmService {
 	List<ScmSummary> getScmSummary(int numDays);
 
 	Map<Profile, Integer> getNumCommitsByAuthor(int numDays);
+
+	Commit getCommit(String repoName, String commitId) throws EntityNotFoundException;
 }

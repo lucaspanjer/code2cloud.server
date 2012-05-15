@@ -69,6 +69,8 @@ import com.tasktop.c2c.server.profile.web.ui.client.view.components.ProjectInvit
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.SignInView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.presenter.AccountActivity;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView;
+import com.tasktop.c2c.server.scm.web.ui.client.place.ScmCommitPlace;
+import com.tasktop.c2c.server.scm.web.ui.client.presenter.ScmCommitPresenter;
 import com.tasktop.c2c.server.tasks.client.place.ProjectEditTaskPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectNewTaskPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTaskHistoryPlace;
@@ -525,6 +527,10 @@ public class MainActivityMapper implements ActivityMapper {
 			return activity;
 		} else if (place instanceof OrganizationAdminPlace) {
 			OrganizationAdminPresenter activity = new OrganizationAdminPresenter();
+			activity.setPlace(place);
+			return activity;
+		} else if (place instanceof ScmCommitPlace) {
+			ScmCommitPresenter activity = new ScmCommitPresenter();
 			activity.setPlace(place);
 			return activity;
 		}

@@ -612,6 +612,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.tasktop.c2c.server</groupId>
+				<artifactId>scm.web.ui</artifactId>
+				<version>${com.tasktop.c2c.server.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.tasktop.c2c.server</groupId>
 				<artifactId>tasks.server</artifactId>
 				<version>${com.tasktop.c2c.server.version}</version>
 			</dependency>

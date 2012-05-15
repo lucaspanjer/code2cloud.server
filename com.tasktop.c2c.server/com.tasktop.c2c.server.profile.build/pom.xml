@@ -33,6 +33,7 @@
 
 		
 		<module>../com.tasktop.c2c.server.scm.api</module>
+		<module>../com.tasktop.c2c.server.scm.web.ui</module>
 		<module>../com.tasktop.c2c.server.scm.server</module>
 		<module>../com.tasktop.c2c.server.services.web</module>
 
