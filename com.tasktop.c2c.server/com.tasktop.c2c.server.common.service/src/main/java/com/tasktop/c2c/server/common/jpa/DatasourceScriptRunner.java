@@ -52,7 +52,9 @@ public class DatasourceScriptRunner implements InitializingBean {
 				}
 			}
 		} finally {
-			c.close();
+			if (c != null) {
+				c.close();
+			}
 		}
 
 	}
