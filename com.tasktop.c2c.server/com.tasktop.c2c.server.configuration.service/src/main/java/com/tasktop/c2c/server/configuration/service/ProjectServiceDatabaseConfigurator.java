@@ -66,6 +66,10 @@ public class ProjectServiceDatabaseConfigurator implements Configurator, Resourc
 			String createStmt = "create database `" + dbName + "`";
 			if (dbType.toUpperCase().startsWith("HSQL")) {
 				createStmt = "create schema " + dbName;
+			} else if (dbType.toUpperCase().startsWith("ORACLE")) {
+				createStmt = "create user " + dbName + " identified by " + dbName;
+				s.execute(createStmt);
+				createStmt = "grant unlimited tablespace to " + dbName;
 			}
 			s.execute(createStmt);
 
