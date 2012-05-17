@@ -18,6 +18,7 @@ import java.util.List;
 import net.customware.gwt.dispatch.shared.Action;
 
 import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
@@ -26,6 +27,7 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectScmRep
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectScmRepositoriesResult;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
+import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
@@ -122,6 +124,13 @@ public class ProjectHomePlace extends AbstractBatchFetchingPlace implements Head
 		super.addActions(actions);
 		actions.add(new GetProjectAction(projectId));
 		addActionAndIgnoreFailure(actions, new GetProjectScmRepositoriesAction(projectId));
+	}
+
+	protected boolean handleExceptionInResults() {
+		// Assume it's a page not found
+		ProfileGinjector.get.instance().getNotifier()
+				.displayMessage(Message.createErrorMessage("Project with identifier \"" + projectId + "\" not found."));
+		return false;
 	}
 
 	@Override
