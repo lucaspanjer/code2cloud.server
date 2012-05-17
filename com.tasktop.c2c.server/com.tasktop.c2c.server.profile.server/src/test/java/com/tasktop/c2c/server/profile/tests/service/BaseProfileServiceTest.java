@@ -119,7 +119,7 @@ public abstract class BaseProfileServiceTest {
 	protected InternalProfileService internalProfileService;
 
 	@PersistenceContext
-	private EntityManager entityManager;
+	protected EntityManager entityManager;
 
 	@Autowired
 	private MockJobService jobService;
@@ -178,9 +178,13 @@ public abstract class BaseProfileServiceTest {
 		}.hasRole(role);
 	}
 
-	@Test(expected = AuthenticationException.class)
+	protected Profile createMockProfile(EntityManager entityManager) {
+		return MockProfileFactory.create(entityManager);
+	}
+
+	@Test
 	public void testAuthenticate() throws AuthenticationException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 
 		String originalPassword = profile.getPassword();
 		profile.setPassword(passwordEncoder.encodePassword(originalPassword, null));
@@ -193,7 +197,7 @@ public abstract class BaseProfileServiceTest {
 		projectProfile.setUser(true);
 		profile.getProjectProfiles().add(projectProfile);
 
-		profileService.authenticate(profile.getUsername(), originalPassword);
+		Long profileId = profileService.authenticate(profile.getUsername(), originalPassword);
 
 		assertEquals(profile.getUsername(), Security.getCurrentUser());
 
@@ -219,6 +223,9 @@ public abstract class BaseProfileServiceTest {
 
 		try {
 			profileService.authenticate(profile.getUsername(), originalPassword + "BAD PASSWORD");
+			Assert.fail("expect exception");
+		} catch (AuthenticationException e) {
+			// Expected
 		} finally {
 			// There should be an exception, and our existing credentials should be wiped out
 			assertNull(SecurityContextHolder.getContext().getAuthentication());
@@ -227,7 +234,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateProfile() throws ValidationException {
-		Profile arg = MockProfileFactory.create(null);
+		Profile arg = createMockProfile(null);
 		Long id = profileService.createProfile(arg);
 
 		assertNotNull(id);
@@ -243,8 +250,8 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = ValidationException.class)
 	public void testCreateProfileUsernameNonunique() throws ValidationException {
-		Profile profileExists = MockProfileFactory.create(entityManager);
-		Profile arg = MockProfileFactory.create(null);
+		Profile profileExists = createMockProfile(entityManager);
+		Profile arg = createMockProfile(null);
 		arg.setUsername(profileExists.getUsername());
 		try {
 			profileService.createProfile(arg);
@@ -256,8 +263,8 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = ValidationException.class)
 	public void testCreateProfileEmailNonunique() throws ValidationException {
-		Profile profileExists = MockProfileFactory.create(entityManager);
-		Profile arg = MockProfileFactory.create(null);
+		Profile profileExists = createMockProfile(entityManager);
+		Profile arg = createMockProfile(null);
 		arg.setEmail(profileExists.getEmail());
 		try {
 			profileService.createProfile(arg);
@@ -277,7 +284,7 @@ public abstract class BaseProfileServiceTest {
 
 		};
 		for (String escapeSequence : testEscapeSequences) {
-			Profile arg = MockProfileFactory.create(null);
+			Profile arg = createMockProfile(null);
 			String username = "abc123" + escapeSequence;
 			arg.setUsername(username);
 			try {
@@ -296,7 +303,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testGetProfile() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 
 		entityManager.flush();
 		entityManager.clear();
@@ -311,7 +318,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testGetProfileByEmail() {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 
 		entityManager.flush();
 		entityManager.clear();
@@ -323,7 +330,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = EntityNotFoundException.class)
 	public void testGetProfileByUsername() throws Exception {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 
 		entityManager.flush();
 		entityManager.clear();
@@ -337,7 +344,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testGetProject() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
 		entityManager.persist(project.addProfile(profile));
 
@@ -359,7 +366,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testGetProjectByIdentity() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
 		entityManager.persist(project.addProfile(profile));
 
@@ -383,7 +390,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testCreateProject() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		entityManager.flush();
 
 		Project project = MockProjectFactory.create(null);
@@ -403,7 +410,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = ValidationException.class)
 	public void testCreateProjectNameNonunique() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project projectExists = MockProjectFactory.create(entityManager);
 		Project project = MockProjectFactory.create(null);
 		project.setName(projectExists.getName());
@@ -419,7 +426,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testCreateProjectNonAsciiCharacters() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(null);
 		project.setName("Project Name With Non-Ascii\u00E4");
 		project.setDescription("a description with non-ascii\u00E4");
@@ -448,7 +455,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = ValidationException.class)
 	public void testCreateProjectDescriptionTooLong() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(null);
 
 		String string256 = RandomStringUtils.randomAlphanumeric(256);
@@ -480,7 +487,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = ValidationException.class)
 	public void testCreateProjectMaxProjectsReached() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(null);
 
 		for (ConfigurationProperty existingProperty : (List<ConfigurationProperty>) entityManager.createQuery(
@@ -508,7 +515,7 @@ public abstract class BaseProfileServiceTest {
 	@Test
 	public void testUpdateProject() throws ValidationException, EntityNotFoundException {
 
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(null);
 
 		project = profileService.createProject(profile.getId(), project);
@@ -534,7 +541,7 @@ public abstract class BaseProfileServiceTest {
 	@Test
 	public void testUpdateProjectWikiLanguage() throws ValidationException, EntityNotFoundException {
 
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(null);
 
 		project = profileService.createProject(profile.getId(), project);
@@ -553,7 +560,7 @@ public abstract class BaseProfileServiceTest {
 	// task 1824
 	@Test(expected = ValidationException.class)
 	public void testUpdateProject_DescriptionTooLong() throws EntityNotFoundException, ValidationException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(null);
 
 		project = profileService.createProject(profile.getId(), project);
@@ -567,7 +574,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = EntityNotFoundException.class)
 	public void testUpdateProject_ProjectNotFound() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(null);
 
 		project = profileService.createProject(profile.getId(), project);
@@ -582,7 +589,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testGetProfileProjects() throws EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		List<Project> projects = MockProjectFactory.create(entityManager, 5);
 		for (Project project : projects) {
 			entityManager.persist(project.addProfile(profile));
@@ -605,7 +612,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = EntityNotFoundException.class)
 	public void testUpdateProfileNotFound() throws Exception {
-		Profile profile = MockProfileFactory.create(null);
+		Profile profile = createMockProfile(null);
 		profile.setId(123L);
 
 		// should throw EntityNotFoundException
@@ -615,7 +622,7 @@ public abstract class BaseProfileServiceTest {
 	@Test
 	public void testUpdateProfile() throws ValidationException, EntityNotFoundException {
 
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		entityManager.flush();
 		entityManager.clear();
 
@@ -635,7 +642,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testCreatePasswordResetToken() throws EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		profileService.requestPasswordReset(profile.getEmail());
 		Profile profile2 = entityManager.find(Profile.class, profile.getId());
 		assertEquals(1, profile2.getPasswordResetTokens().size());
@@ -646,7 +653,7 @@ public abstract class BaseProfileServiceTest {
 		List<Job> scheduledJobs = jobService.getScheduledJobs();
 		assertEquals(0, scheduledJobs.size());
 
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		profileService.requestPasswordReset(profile.getEmail());
 		PasswordResetToken token = profile.getPasswordResetTokens().get(0);
 		profileService.resetPassword(token.getToken(), "abc123ABC)$(^");
@@ -667,7 +674,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = ValidationException.class)
 	public void testPasswordResetWithUnsafePassword() throws EntityNotFoundException, ValidationException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		profileService.requestPasswordReset(profile.getEmail());
 		PasswordResetToken token = profile.getPasswordResetTokens().get(0);
 
@@ -683,7 +690,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = EntityNotFoundException.class)
 	public void testPasswordResetTokenAlreadyUsed() throws EntityNotFoundException, ValidationException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		profileService.requestPasswordReset(profile.getEmail());
 		PasswordResetToken token = profile.getPasswordResetTokens().get(0);
 		profileService.resetPassword(token.getToken(), "abc123ABC)$(^");
@@ -694,7 +701,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testIsTokenAvailableTokenIsValid() throws Exception {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		profileService.requestPasswordReset(profile.getEmail());
 		PasswordResetToken token = profile.getPasswordResetTokens().get(0);
 
@@ -703,7 +710,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = EntityNotFoundException.class)
 	public void testIsTokenAvailableTokenIsUsed() throws Exception {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		profileService.requestPasswordReset(profile.getEmail());
 		PasswordResetToken token = profile.getPasswordResetTokens().get(0);
 		profileService.resetPassword(token.getToken(), "abc123ABC)$(^");
@@ -767,8 +774,8 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testRemoveProjectProfile() throws EntityNotFoundException, ValidationException {
-		Profile profile = MockProfileFactory.create(entityManager);
-		Profile profile2 = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
+		Profile profile2 = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
 
 		ProjectProfile projectProfile = addProject(profile, project);
@@ -796,7 +803,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testGetProjectProfile() throws EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
 
 		ProjectProfile projectProfile = addProject(profile, project);
@@ -809,8 +816,8 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testUpdateProjectProfile() throws EntityNotFoundException, ValidationException {
-		Profile profile = MockProfileFactory.create(entityManager);
-		Profile profile2 = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
+		Profile profile2 = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
 
 		ProjectProfile projectProfile = addProject(profile, project);
@@ -831,7 +838,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = ValidationException.class)
 	public void testUpdateProjectProfileOwnerCannotDisownProject() throws EntityNotFoundException, ValidationException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		logon(profile);
 		Project project = MockProjectFactory.create(entityManager);
 
@@ -851,7 +858,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testGetPendingAgreements() throws EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		logon(profile);
 		MockAgreementFactory.create(entityManager);
 
@@ -865,7 +872,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testApproveAgreement() throws EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		logon(profile);
 		Agreement agreement = MockAgreementFactory.create(entityManager);
 
@@ -882,7 +889,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testGetApprovedAgreements() throws EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		logon(profile);
 		Agreement a = MockAgreementFactory.create(entityManager);
 
@@ -904,7 +911,7 @@ public abstract class BaseProfileServiceTest {
 		Project mockProject = MockProjectFactory.create(entityManager);
 
 		// Create a user, who will be an administrator on this project
-		Profile mockProfile = MockProfileFactory.create(entityManager);
+		Profile mockProfile = createMockProfile(entityManager);
 		logon(mockProfile);
 		ProjectProfile adminLink = new ProjectProfile();
 		adminLink.setProject(mockProject);
@@ -939,7 +946,7 @@ public abstract class BaseProfileServiceTest {
 		Project mockProject = MockProjectFactory.create(entityManager);
 
 		// Create a user, who will be an administrator on this project
-		Profile mockProfile = MockProfileFactory.create(entityManager);
+		Profile mockProfile = createMockProfile(entityManager);
 		logon(mockProfile);
 		ProjectProfile adminLink = new ProjectProfile();
 		adminLink.setProject(mockProject);
@@ -952,7 +959,7 @@ public abstract class BaseProfileServiceTest {
 		profileService.inviteUserForProject(testEmail, mockProject.getIdentifier());
 
 		// Create a second user, who will accept this invitation
-		Profile invitedProfile = MockProfileFactory.create(entityManager);
+		Profile invitedProfile = createMockProfile(entityManager);
 		logon(invitedProfile);
 
 		for (ProjectProfile projectProfile : mockProject.getProjectProfiles()) {
@@ -999,7 +1006,7 @@ public abstract class BaseProfileServiceTest {
 		Project mockProject = MockProjectFactory.create(entityManager);
 
 		// Create a user, who will be an administrator on this project
-		Profile mockProfile = MockProfileFactory.create(entityManager);
+		Profile mockProfile = createMockProfile(entityManager);
 		logon(mockProfile);
 		ProjectProfile adminProjectProfile = new ProjectProfile();
 		adminProjectProfile.setProject(mockProject);
@@ -1012,7 +1019,7 @@ public abstract class BaseProfileServiceTest {
 		profileService.inviteUserForProject(testEmail, mockProject.getIdentifier());
 
 		// Create a second user, who will accept this invitation
-		Profile invitedProfile = MockProfileFactory.create(entityManager);
+		Profile invitedProfile = createMockProfile(entityManager);
 		logon(invitedProfile);
 
 		for (ProjectProfile projectProfile : mockProject.getProjectProfiles()) {
@@ -1029,7 +1036,7 @@ public abstract class BaseProfileServiceTest {
 		Project mockProject = MockProjectFactory.create(entityManager);
 
 		// Create a user, who will be an administrator on this project
-		Profile mockProfile = MockProfileFactory.create(entityManager);
+		Profile mockProfile = createMockProfile(entityManager);
 		logon(mockProfile);
 		ProjectProfile adminProjectProfile = new ProjectProfile();
 		adminProjectProfile.setProject(mockProject);
@@ -1042,7 +1049,7 @@ public abstract class BaseProfileServiceTest {
 		profileService.inviteUserForProject(testEmail, mockProject.getIdentifier());
 
 		// Create a second user, who will accept this invitation
-		Profile invitedProfile = MockProfileFactory.create(entityManager);
+		Profile invitedProfile = createMockProfile(entityManager);
 		logon(invitedProfile);
 
 		for (ProjectProfile projectProfile : mockProject.getProjectProfiles()) {
@@ -1080,7 +1087,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testFindPrivateProjects() {
-		Profile mockProfile = MockProfileFactory.create(entityManager);
+		Profile mockProfile = createMockProfile(entityManager);
 		logon(mockProfile);
 
 		int count = 20;
@@ -1129,7 +1136,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testWatchProject() throws Exception {
-		Profile mockProfile = MockProfileFactory.create(entityManager);
+		Profile mockProfile = createMockProfile(entityManager);
 		logon(mockProfile);
 
 		Project project = MockProjectFactory.create(entityManager);
@@ -1143,7 +1150,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testUnwatchProject() throws Exception {
-		Profile mockProfile = MockProfileFactory.create(entityManager);
+		Profile mockProfile = createMockProfile(entityManager);
 		logon(mockProfile);
 
 		Project project = MockProjectFactory.create(entityManager);
@@ -1159,7 +1166,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testIsWatchingProject() throws Exception {
-		Profile mockProfile = MockProfileFactory.create(entityManager);
+		Profile mockProfile = createMockProfile(entityManager);
 		logon(mockProfile);
 
 		Project project = MockProjectFactory.create(entityManager);
@@ -1246,7 +1253,7 @@ public abstract class BaseProfileServiceTest {
 		List<Job> scheduledJobs = jobService.getScheduledJobs();
 		assertEquals(0, scheduledJobs.size());
 
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		SignUpToken internalToken = profileService.createSignUpToken(profile.getFirstName(), profile.getLastName(),
 				profile.getEmail());
 
@@ -1296,7 +1303,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testReplicateUserTeam() throws EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
 		project.addProfile(profile);
 
@@ -1339,8 +1346,8 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testReplicateTeamGetsScheduledOnTeamModification() throws EntityNotFoundException, ValidationException {
-		Profile profile = MockProfileFactory.create(entityManager);
-		Profile profile2 = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
+		Profile profile2 = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
 
 		entityManager.flush();
@@ -1368,7 +1375,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testReplicateTeamGetsScheduledOnNameChange() throws EntityNotFoundException, ValidationException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
 		project.addProfile(profile);
 
@@ -1383,7 +1390,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testCreateSshPublicKey() throws ValidationException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		entityManager.flush();
 		logon(profile);
 
@@ -1401,7 +1408,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void createSshPublicKeySpec_BlankKeyText() { // task 2359
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		entityManager.flush();
 		logon(profile);
 
@@ -1421,7 +1428,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testListSshPublicKeys() throws ValidationException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		SshPublicKey publicKey = MockSshPublicKeyFactory.create(entityManager, profile);
 		entityManager.flush();
 
@@ -1440,19 +1447,16 @@ public abstract class BaseProfileServiceTest {
 
 	private int nextProfileNum = 0;
 
-	private Profile setupProfile(Boolean isAdmin) throws ValidationException {
-		Profile internalProfile = new Profile();
+	protected Profile setupProfile(Boolean isAdmin) throws ValidationException {
+		Profile internalProfile = createMockProfile(null);
 		internalProfile.setEmail("email@profile" + nextProfileNum++ + ".clm");
 		internalProfile.setFirstName("First");
 		internalProfile.setLastName("Last" + nextProfileNum);
-		internalProfile.setUsername(internalProfile.getEmail());
-		String pwd = "abcd123$";
-		internalProfile.setPassword(pwd);
 		internalProfile.setAdmin(isAdmin);
 		profileService.createProfile(internalProfile);
 
 		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(internalProfile.getUsername(), pwd));
+				new UsernamePasswordAuthenticationToken(internalProfile.getUsername(), internalProfile.getPassword()));
 
 		return internalProfile;
 	}
@@ -1581,7 +1585,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testDoDeleteProject() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(null);
 
 		Long id = profileService.createProject(profile.getId(), project).getId();
@@ -1616,7 +1620,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testGetOwnedOrganizations() {
-		Profile mockProfile = MockProfileFactory.create(entityManager);
+		Profile mockProfile = createMockProfile(entityManager);
 		logon(mockProfile);
 
 		List<Organization> organizations = profileService.getOwnedOrganizations();
@@ -1680,7 +1684,7 @@ public abstract class BaseProfileServiceTest {
 	}
 
 	private Project changeDeletedProject() throws EntityNotFoundException, ValidationException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(null);
 
 		project = profileService.createProject(profile.getId(), project);
@@ -1695,7 +1699,7 @@ public abstract class BaseProfileServiceTest {
 	@Test(expected = EntityNotFoundException.class)
 	public void testGetDeletedProfileProjects() throws EntityNotFoundException {
 
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
 		entityManager.persist(project);
 		Project deletedProject = MockProjectFactory.create(entityManager);
@@ -1717,7 +1721,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testFindPrivateDeletedProjects() throws EntityNotFoundException {
-		Profile mockProfile = MockProfileFactory.create(entityManager);
+		Profile mockProfile = createMockProfile(entityManager);
 		logon(mockProfile);
 		setupDeletedAndNonDeletedProject(false, mockProfile);
 
@@ -1765,7 +1769,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = EntityNotFoundException.class)
 	public void testGetDeletedProjectForInvitationToken() throws ValidationException, EntityNotFoundException {
-		Profile profile = MockProfileFactory.create(entityManager);
+		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(null);
 		Long id = profileService.createProject(profile.getId(), project).getId();
 		Project created = entityManager.find(Project.class, id);

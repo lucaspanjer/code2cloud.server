@@ -13,7 +13,9 @@
 package com.tasktop.c2c.server.profile.tests.domain.mock;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -50,7 +52,19 @@ public class MockProfileFactory {
 		profile.setPassword("123456aA@" + index);
 		profile.setUsername(profile.getEmail());
 		profile.setEmailVerified(false);
+		passwordByUserName.put(profile.getUsername(), profile.getPassword());
 		return profile;
+	}
+
+	private static final Map<String, String> passwordByUserName = new HashMap<String, String>();
+
+	/**
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public static Boolean areCredentialsValid(String username, String password) {
+		return password.equals(passwordByUserName.get(username));
 	}
 
 }
