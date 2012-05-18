@@ -317,6 +317,9 @@ public class GitServiceBean implements GitService, InitializingBean {
 	@Override
 	public List<Commit> getLogForBranch(String repoName, String branchName, Region region)
 			throws EntityNotFoundException {
+		if (region == null) {
+			region = new Region(0, 100);
+		}
 		try {
 			Repository repo;
 			repo = findRepositoryByName(repoName);
@@ -324,6 +327,9 @@ public class GitServiceBean implements GitService, InitializingBean {
 			RevWalk revWal = new RevWalk(repo);
 
 			Ref branchRef = repo.getRef(branchName);
+			if (branchRef == null) {
+				throw new EntityNotFoundException();
+			}
 			revWal.markStart(revWal.parseCommit(branchRef.getObjectId()));
 
 			Iterator<RevCommit> iterator = revWal.iterator();

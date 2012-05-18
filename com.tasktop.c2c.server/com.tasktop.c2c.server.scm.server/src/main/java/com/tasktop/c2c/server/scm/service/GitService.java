@@ -23,7 +23,7 @@ import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
 
 /**
- * Serivce for interacting with a project's git repository. Allows to create and delete new internal/external
+ * Service for interacting with a project's git repository. Allows to create and delete new internal/external
  * repositories and to obtain summary and log information. Standard git operations (e.g., clone or push) are done using
  * standard git protocol(s) and tools.
  * 

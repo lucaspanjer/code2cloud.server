@@ -33,6 +33,7 @@ import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmLocation;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
+import com.tasktop.c2c.server.scm.domain.ScmType;
 
 @Service("scmService")
 @Qualifier("main")
@@ -89,6 +90,9 @@ public class ScmServiceBean extends AbstactServiceBean implements ScmService {
 			Errors errors = createErrors(repository);
 			errors.reject("scmrepo.internal.url.isExternal");
 			throw new ValidationException(errors);
+		}
+		if (!ScmType.GIT.equals(repository.getType())) {
+			throw new IllegalStateException("only git repos supported");
 		}
 
 		if (repository.getScmLocation().equals(ScmLocation.EXTERNAL)) {
