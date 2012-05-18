@@ -61,6 +61,7 @@ import com.tasktop.c2c.server.common.service.domain.criteria.ColumnCriteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
 import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
+import com.tasktop.c2c.server.internal.wiki.server.WikiServiceController;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
@@ -68,6 +69,7 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
+import com.tasktop.c2c.server.profile.web.ui.server.ProfileWebServiceController;
 import com.tasktop.c2c.server.tasks.domain.Comment;
 import com.tasktop.c2c.server.tasks.domain.CommentType;
 import com.tasktop.c2c.server.tasks.domain.Component;
@@ -116,9 +118,10 @@ public class APIDocGenerator {
 	private File outputFolder;
 	private List<Class<?>> apiClasses = new ArrayList<Class<?>>();
 	{
-		// apiClasses.add(WikiServiceController.class);
+		apiClasses.add(WikiServiceController.class);
 		apiClasses.add(TaskServiceController.class);
-		// apiClasses.add(ProfileWebServiceController.class);
+		apiClasses.add(ProfileWebServiceController.class);
+		// apiClasses.add(ScmServiceController.class);
 	}
 
 	private Dictionary dictionary = new Dictionary();

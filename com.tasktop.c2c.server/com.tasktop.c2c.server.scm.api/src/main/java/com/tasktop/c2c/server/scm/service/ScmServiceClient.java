@@ -29,7 +29,7 @@ import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
 
 /**
- * A client to communicate to the scm REST webservice.
+ * A client to communicate to the SCM REST service.
  */
 @Service
 public class ScmServiceClient extends AbstractRestServiceClient implements ScmService {

@@ -20,19 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tasktop.c2c.server</groupId>
-			<artifactId>common.api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.tasktop.c2c.server</groupId>
-			<artifactId>profile.api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.tasktop.c2c.server</groupId>
 			<artifactId>profile.server</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.tasktop.c2c.server</groupId>
-			<artifactId>wiki.api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.tasktop.c2c.server</groupId>
@@ -40,11 +28,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tasktop.c2c.server</groupId>
-			<artifactId>tasks.api</artifactId>
+			<artifactId>tasks.server</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.tasktop.c2c.server</groupId>
-			<artifactId>tasks.server</artifactId>
+			<artifactId>scm.server</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
