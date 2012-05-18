@@ -158,4 +158,15 @@ public class ScmServiceBean extends AbstactServiceBean implements ScmService {
 		return gitService.getCommitWithDiff(repoName, commitId);
 	}
 
+	@Override
+	public List<Commit> getLog(String repoName, Region region) throws EntityNotFoundException {
+		return gitService.getLog(repoName, region);
+	}
+
+	@Override
+	public List<Commit> getLogForBranch(String repoName, String branchName, Region region)
+			throws EntityNotFoundException {
+		return gitService.getLogForBranch(repoName, branchName, region);
+	}
+
 }

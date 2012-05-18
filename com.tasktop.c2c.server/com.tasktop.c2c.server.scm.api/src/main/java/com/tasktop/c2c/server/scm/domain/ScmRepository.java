@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.scm.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class ScmRepository implements Serializable {
@@ -22,6 +23,7 @@ public class ScmRepository implements Serializable {
 	private ScmType type;
 	private ScmLocation scmLocation;
 	private String alternateUrl;
+	private List<String> branches;
 
 	public String getUrl() {
 		return url;
@@ -99,4 +101,18 @@ public class ScmRepository implements Serializable {
 			return false;
 		return true;
 	}
+
+	public List<String> getBranches() {
+		return branches;
+	}
+
+	public void setBranches(List<String> branches) {
+		this.branches = branches;
+	}
+
+	@Override
+	public String toString() {
+		return "{repo: [" + name + "]}";
+	}
+
 }

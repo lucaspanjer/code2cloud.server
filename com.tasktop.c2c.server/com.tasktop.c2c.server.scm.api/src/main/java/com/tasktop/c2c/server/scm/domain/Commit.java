@@ -106,7 +106,7 @@ public class Commit implements Serializable {
 	}
 
 	public String getMinimizedCommitId() {
-		return getCommitId().length() > 6 ? getCommitId().substring(0, 7) : getCommitId();
+		return minimizeCommitId(commitId);
 	}
 
 	public Profile getCommitter() {
@@ -123,5 +123,17 @@ public class Commit implements Serializable {
 
 	public void setCommitDate(Date commitDate) {
 		this.commitDate = commitDate;
+	}
+
+	@Override
+	public String toString() {
+		return "{repo: [" + repository + "], id:[" + getMinimizedCommitId() + "]}";
+	}
+
+	public static String minimizeCommitId(String commitId) {
+		if (commitId == null) {
+			return null;
+		}
+		return commitId.length() > 6 ? commitId.substring(0, 7) : commitId;
 	}
 }

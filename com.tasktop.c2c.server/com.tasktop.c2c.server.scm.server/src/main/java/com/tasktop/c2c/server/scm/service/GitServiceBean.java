@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -262,24 +263,6 @@ public class GitServiceBean implements GitService, InitializingBean {
 
 	@Secured({ Role.Observer, Role.User })
 	@Override
-	public List<String> getRepositoryNames() {
-		List<String> result = new ArrayList<String>();
-
-		File[] fileList = getTenantHostedBaseDir().listFiles();
-
-		if (fileList != null) {
-			for (File file : fileList) {
-				if (file.isDirectory() && file.getName().endsWith(GIT_DIR_SUFFIX)) {
-					result.add(file.getName().substring(0, file.getName().length() - GIT_DIR_SUFFIX.length()));
-				}
-			}
-		}
-
-		return result;
-	}
-
-	@Secured({ Role.Observer, Role.User })
-	@Override
 	// FIXME region is not really respected but...
 	public List<Commit> getLog(Region region) {
 		List<Commit> result = new ArrayList<Commit>();
@@ -300,6 +283,89 @@ public class GitServiceBean implements GitService, InitializingBean {
 		QueryUtil.applyRegionToList(result, region);
 
 		return result;
+	}
+
+	@Secured({ Role.Observer, Role.User })
+	@Override
+	public List<Commit> getLog(String repoName, Region region) throws EntityNotFoundException {
+		try {
+			Repository repo;
+			repo = findRepositoryByName(repoName);
+			List<Commit> result = getLog(repo, region);
+			repo.close();
+
+			Collections.sort(result, new Comparator<Commit>() {
+
+				@Override
+				public int compare(Commit o1, Commit o2) {
+					return o2.getDate().compareTo(o1.getDate());
+				}
+			});
+
+			QueryUtil.applyRegionToList(result, region);
+
+			return result;
+
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Secured({ Role.Observer, Role.User })
+	@Override
+	public List<Commit> getLogForBranch(String repoName, String branchName, Region region)
+			throws EntityNotFoundException {
+		try {
+			Repository repo;
+			repo = findRepositoryByName(repoName);
+
+			RevWalk revWal = new RevWalk(repo);
+
+			Ref branchRef = repo.getRef(branchName);
+			revWal.markStart(revWal.parseCommit(branchRef.getObjectId()));
+
+			Iterator<RevCommit> iterator = revWal.iterator();
+
+			int current = 0;
+			// Skip the first
+			while (current < region.getOffset() && iterator.hasNext()) {
+				current++;
+				iterator.next();
+			}
+			int page = 0;
+
+			List<Commit> result = new ArrayList<Commit>();
+			while (iterator.hasNext() && page < region.getSize()) {
+				RevCommit commit = iterator.next();
+				result.add(createCommit(commit));
+				page++;
+			}
+
+			return result;
+
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private Repository findRepositoryByName(String repositoryName) throws IOException, URISyntaxException,
+			EntityNotFoundException {
+		for (ScmRepository repo : getHostedRepositories()) {
+			if (repo.getName().equals(repositoryName)) {
+				return getHostedRepository(repositoryName);
+			}
+		}
+		// FIXME potential that an external repo is shadowned by the internal one
+		for (ScmRepository repo : getExternalRepositories()) {
+			if (repo.getName().equals(repositoryName)) {
+				return getMirroredRepository(repositoryName);
+			}
+		}
+		throw new EntityNotFoundException();
 	}
 
 	@Secured({ Role.Observer, Role.User })
@@ -332,8 +398,8 @@ public class GitServiceBean implements GitService, InitializingBean {
 	@Override
 	public List<ScmRepository> listRepositories() {
 		List<ScmRepository> result = new ArrayList<ScmRepository>();
-		result.addAll(getHostedRepositories());
 		try {
+			result.addAll(getHostedRepositories());
 			result.addAll(getExternalRepositories());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -343,7 +409,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 		return result;
 	}
 
-	private List<ScmRepository> getHostedRepositories() {
+	private List<ScmRepository> getHostedRepositories() throws IOException {
 		List<ScmRepository> result = new ArrayList<ScmRepository>();
 
 		File hostedDir = getTenantHostedBaseDir();
@@ -358,10 +424,29 @@ public class GitServiceBean implements GitService, InitializingBean {
 						.getCurrentTenantProjectIdentifer()) + repo.getName()); // FIXME
 				repo.setAlternateUrl(computeSshUrl(repo));
 				result.add(repo);
+
+				Git git = Git.open(new File(hostedDir, repoName));
+
+				setBranches(repo, git);
 			}
 		}
 
 		return result;
+	}
+
+	/**
+	 * @param repo
+	 * @param git
+	 */
+	private void setBranches(ScmRepository repo, Git git) {
+		repo.setBranches(new ArrayList<String>());
+		for (Ref ref : git.branchList().call()) {
+			String refName = ref.getName();
+			if (refName.startsWith(Constants.R_HEADS)) {
+				refName = refName.substring(Constants.R_HEADS.length());
+			}
+			repo.getBranches().add(refName);
+		}
 	}
 
 	private String computeSshUrl(ScmRepository repo) {
@@ -409,8 +494,9 @@ public class GitServiceBean implements GitService, InitializingBean {
 
 				Git git = Git.open(new File(hostedDir, repoName));
 				RemoteConfig config = new RemoteConfig(git.getRepository().getConfig(), Constants.DEFAULT_REMOTE_NAME);
-
 				repo.setUrl(config.getURIs().get(0).toString());
+
+				setBranches(repo, git);
 
 				result.add(repo);
 			}
@@ -528,20 +614,8 @@ public class GitServiceBean implements GitService, InitializingBean {
 	@Override
 	public Commit getCommitWithDiff(String repositoryName, String commitId) throws EntityNotFoundException {
 		try {
-			for (ScmRepository repo : getHostedRepositories()) {
-				if (repo.getName().equals(repositoryName)) {
-					Repository jgitRepo = getHostedRepository(repositoryName);
-					return getCommitInternal(repositoryName, jgitRepo, commitId);
-				}
-			}
-			// FIXME potential that an external repo is shadowned by the internal one
-			for (ScmRepository repo : getExternalRepositories()) {
-				if (repo.getName().equals(repositoryName)) {
-					Repository jgitRepo = getMirroredRepository(repositoryName);
-					return getCommitInternal(repositoryName, jgitRepo, commitId);
-				}
-			}
-			throw new EntityNotFoundException();
+			Repository jgitRepo = findRepositoryByName(repositoryName);
+			return getCommitInternal(repositoryName, jgitRepo, commitId);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} catch (GitAPIException e) {

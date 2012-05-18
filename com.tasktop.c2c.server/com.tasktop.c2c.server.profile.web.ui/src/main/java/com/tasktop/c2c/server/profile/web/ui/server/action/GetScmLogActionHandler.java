@@ -22,25 +22,30 @@ import com.tasktop.c2c.server.common.profile.web.ui.server.AbstractProfileAction
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.profile.service.provider.ScmServiceProvider;
 import com.tasktop.c2c.server.scm.service.ScmService;
-import com.tasktop.c2c.server.scm.web.ui.client.shared.action.GetScmCommitAction;
-import com.tasktop.c2c.server.scm.web.ui.client.shared.action.GetScmCommitResult;
+import com.tasktop.c2c.server.scm.web.ui.client.shared.action.GetScmLogAction;
+import com.tasktop.c2c.server.scm.web.ui.client.shared.action.GetScmLogResult;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
 @Component
-public class GetScmCommitActionHandler extends AbstractProfileActionHandler<GetScmCommitAction, GetScmCommitResult> {
+public class GetScmLogActionHandler extends AbstractProfileActionHandler<GetScmLogAction, GetScmLogResult> {
 
 	@Autowired
 	private ScmServiceProvider scmServiceProvider;
 
 	@Override
-	public GetScmCommitResult execute(GetScmCommitAction action, ExecutionContext context) throws DispatchException {
+	public GetScmLogResult execute(GetScmLogAction action, ExecutionContext context) throws DispatchException {
 		try {
 			setTenancyContext(action.getProjectId());
 			ScmService scmService = scmServiceProvider.getService(action.getProjectId());
-			return new GetScmCommitResult(scmService.getCommit(action.getRepoName(), action.getCommitId()));
+			if (action.getBranchName() == null) {
+				return new GetScmLogResult(scmService.getLog(action.getRepoName(), action.getRegion()));
+			} else {
+				return new GetScmLogResult(scmService.getLogForBranch(action.getRepoName(), action.getBranchName(),
+						action.getRegion()));
+			}
 		} catch (EntityNotFoundException e) {
 			handle(e);
 		}

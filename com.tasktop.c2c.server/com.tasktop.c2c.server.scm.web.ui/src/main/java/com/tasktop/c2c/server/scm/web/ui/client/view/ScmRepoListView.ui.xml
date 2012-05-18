@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' 
+	xmlns:p="urn:import:com.tasktop.c2c.server.common.web.client.widgets.chooser.person" 
+	xmlns:h="urn:import:com.tasktop.c2c.server.common.web.client.widgets.hyperlink"
+	xmlns:cellview="urn:import:com.google.gwt.user.cellview.client">
+<ui:style>
+div.list {
+	width: 60%;
+}
+
+</ui:style>
+	
+	<g:HTMLPanel>
+		<div class="{style.list}">
+			<div class="spacer clear"/>	
+			<cellview:CellList ui:field="repoCellList"/>
+			<cellview:SimplePager ui:field="pager" />
+			<div class="space  clear"/>
+		</div>	
+	</g:HTMLPanel>
+</ui:UiBinder>

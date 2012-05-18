@@ -278,4 +278,39 @@ public class ScmServiceClient extends AbstractRestServiceClient implements ScmSe
 		}
 		throw new IllegalStateException();
 	}
+
+	public static final String GET_LOG_FOR_REPO_URL = "repository/{repo}/repolog";
+
+	public List<Commit> getLog(String repoName, Region region) {
+		// Calculate the correct URL now.
+		String url = GET_LOG_FOR_REPO_URL;
+		if (region != null) {
+			url = String.format("%s?%s=%s&%s=%s", url, OFFSET_URL_PARAM, region.getOffset(), PAGESIZE_URL_PARAM,
+					region.getSize());
+		}
+
+		return new GetCall<List<Commit>>() {
+			public List<Commit> getValue(ServiceCallResult result) {
+				return result.getCommitList();
+			}
+		}.doCall(url, repoName);
+	}
+
+	public static final String GET_LOG_FOR_BRANCH_URL = "repository/{repo}/branch/{branch}/branchlog";
+
+	public List<Commit> getLogForBranch(String repoName, String branchName, Region region) {
+		// Calculate the correct URL now.
+		String url = GET_LOG_FOR_BRANCH_URL;
+		if (region != null) {
+			url = String.format("%s?%s=%s&%s=%s", url, OFFSET_URL_PARAM, region.getOffset(), PAGESIZE_URL_PARAM,
+					region.getSize());
+		}
+
+		return new GetCall<List<Commit>>() {
+			public List<Commit> getValue(ServiceCallResult result) {
+				return result.getCommitList();
+			}
+		}.doCall(url, repoName, branchName);
+	}
+
 }

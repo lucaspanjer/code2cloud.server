@@ -97,4 +97,8 @@ public class TaskHyperlinkDetector implements HyperlinkDetector {
 		return offset;
 	}
 
+	public void setProjectIdentity(String projectIdentity) {
+		this.projectIdentity = projectIdentity;
+	}
+
 }

@@ -1,0 +1,35 @@
+
+.commitCell > div > img {
+	display: inline;
+	float: left;
+	padding-right: 5px; 
+}
+
+.commitCell > div {
+	display: inline-block;
+}
+
+.commitCell > div > div{
+	display: block;
+}
+
+.commitCellMessage {
+	font-weight: bold;
+	font-size: 13px;
+}
+
+.commitCellAuthor {
+	font-size: 11px;
+	color: #888;
+}
+
+.repoCellName {
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.spacer {
+	margin: 3px 0;
+	border-top: 2px solid #EDEEED;
+}
+

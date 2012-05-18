@@ -38,11 +38,10 @@
 			  	<div class="left">
 			  		<div class="left">
 						<label>Commit:</label> 
-						<g:Label ui:field='minimizedCommitId'/>
+						<g:Label ui:field='commitId'/>
 					</div>
 			  		<div class="right {style.repository}">
-						<label>Repository:</label> 
-						<g:Label ui:field='repository'/>
+						(<g:Label ui:field='repository'/>)
 					</div>
 				</div>
 				<div class="right">
@@ -77,7 +76,7 @@
 
 			<div class="{style.comment}">
 				<p>
-					<g:Label ui:field='comment'/>
+					<h:HyperlinkingLabel ui:field='commentLabel'/>
 				</p>
 			</div>
 

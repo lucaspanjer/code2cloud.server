@@ -39,6 +39,8 @@ import com.tasktop.c2c.server.profile.web.ui.client.place.UserAccountPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.place.ProjectAdminSourcePlace;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.place.ProjectAdminTeamPlace;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmCommitPlace;
+import com.tasktop.c2c.server.scm.web.ui.client.place.ScmPlace;
+import com.tasktop.c2c.server.scm.web.ui.client.place.ScmRepoPlace;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -84,5 +86,7 @@ public class PageMappings {
 	public static PageMapping OrgAdminPlace = new PageMapping(new OrganizationAdminPlace.Tokenizer(), "o/admin/{"
 			+ Path.ORGANIZATION_ID + "}");
 	public static PageMapping ScmCommit = ScmCommitPlace.SCM_COMMIT;
+	public static PageMapping ScmLog = ScmRepoPlace.SCM_LOG;
+	public static PageMapping Scm = ScmPlace.SCM_PLACE;
 
 }

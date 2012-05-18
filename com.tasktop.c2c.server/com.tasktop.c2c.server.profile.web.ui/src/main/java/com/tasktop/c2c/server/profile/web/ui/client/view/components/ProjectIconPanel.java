@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -37,6 +36,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDashboardPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDeploymentPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectTeamPlace;
+import com.tasktop.c2c.server.scm.web.ui.client.place.ScmPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTasksPlace;
 import com.tasktop.c2c.server.wiki.web.ui.client.place.ProjectWikiHomePlace;
 
@@ -53,6 +53,8 @@ public class ProjectIconPanel extends Composite {
 	Anchor dashboard;
 	@UiField
 	Anchor tasks;
+	@UiField
+	Anchor source;
 	@UiField
 	Anchor builds;
 	@UiField
@@ -91,6 +93,7 @@ public class ProjectIconPanel extends Composite {
 		activateIfNotDisabled(deployments);
 		activateIfNotDisabled(team);
 		activateIfNotDisabled(wiki);
+		activateIfNotDisabled(source);
 	}
 
 	private void activateIfNotDisabled(Anchor anchor) {
@@ -108,6 +111,7 @@ public class ProjectIconPanel extends Composite {
 		deployments.removeStyleName(ACTIVE_STYLE);
 		team.removeStyleName(ACTIVE_STYLE);
 		wiki.removeStyleName(ACTIVE_STYLE);
+		source.removeStyleName(ACTIVE_STYLE);
 
 		// No active icon? Bail out now that all are deactivated.
 		if (activeIcon == null) {
@@ -136,6 +140,9 @@ public class ProjectIconPanel extends Composite {
 			break;
 		case WIKI:
 			wiki.addStyleName(ACTIVE_STYLE);
+			break;
+		case SCM:
+			source.addStyleName(ACTIVE_STYLE);
 			break;
 		}
 	}
@@ -186,6 +193,10 @@ public class ProjectIconPanel extends Composite {
 					setServiceLinkEnabled(isAvailable, deployments,
 							ProjectDeploymentPlace.createPlace(project.getIdentifier()).getHref());
 					break;
+				case SCM:
+					setServiceLinkEnabled(isAvailable, source, ScmPlace.createPlace(project.getIdentifier()).getHref());
+					break;
+
 				default:
 					break;
 				}
@@ -242,6 +253,7 @@ public class ProjectIconPanel extends Composite {
 		wiki.setVisible(false);
 		deployments.setVisible(false);
 		builds.setVisible(false);
+		source.setVisible(false);
 	}
 
 	private void setServiceLinkEnabled(boolean isEnabled, Anchor link, String href) {

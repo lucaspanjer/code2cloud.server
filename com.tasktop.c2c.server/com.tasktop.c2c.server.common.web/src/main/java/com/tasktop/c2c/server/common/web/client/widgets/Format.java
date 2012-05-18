@@ -38,8 +38,16 @@ public class Format {
 		if (!GWT.isClient()) {
 			return value == null ? "" : value.toGMTString();
 		}
-		DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("MMM d, yyyy h:mm a");
+		DateTimeFormat dateTimeFormat = getDateTimeFormat();
 		return value == null ? "" : dateTimeFormat.format(value);
+	}
+
+	/**
+	 * @return
+	 */
+	public static DateTimeFormat getDateTimeFormat() {
+		DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("MMM d, yyyy h:mm a");
+		return dateTimeFormat;
 	}
 
 	public static String stringValueTime(Date value) {

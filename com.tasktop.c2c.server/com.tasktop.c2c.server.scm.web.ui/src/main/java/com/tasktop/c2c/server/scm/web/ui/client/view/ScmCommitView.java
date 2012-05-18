@@ -15,8 +15,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
-import com.google.gwt.i18n.shared.DateTimeFormat;
-import com.google.gwt.i18n.shared.DateTimeFormat.PredefinedFormat;
+import com.google.gwt.editor.ui.client.adapters.HasTextEditor;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
@@ -29,9 +28,12 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
+import com.tasktop.c2c.server.common.web.client.widgets.Format;
+import com.tasktop.c2c.server.common.web.client.widgets.hyperlink.HyperlinkingLabel;
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.domain.DiffEntry;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmCommitPlace;
+import com.tasktop.c2c.server.tasks.client.widgets.TaskHyperlinkDetector;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -60,22 +62,26 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 
 	private ScmCommitView() {
 		initWidget(uiBinder.createAndBindUi(this));
+		comment = HasTextEditor.of(commentLabel);
 		driver.initialize(this);
 		patchPanel.getHeader().getElement().getParentElement().setClassName(""); // prevent style collision
+		commentLabel.addHyperlinkDetector(taskHyperlinkDetector);
 
 	}
 
 	@UiField
-	protected Label minimizedCommitId;
+	protected Label commitId;
 	@UiField
 	@Path("author.email")
 	protected Label authorEmail;
 	@UiField
 	protected Image authorImage;
 	@UiField(provided = true)
-	protected DateLabel date = new DateLabel(DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM));
+	protected DateLabel date = new DateLabel(Format.getDateTimeFormat());
 	@UiField
-	protected Label comment;
+	protected HyperlinkingLabel commentLabel;
+	private TaskHyperlinkDetector taskHyperlinkDetector = new TaskHyperlinkDetector(null);
+	protected HasTextEditor comment;
 	@UiField
 	protected Panel parentsPanel;
 	@UiField
@@ -92,7 +98,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 	@UiField
 	protected Label committerEmail;
 	@UiField(provided = true)
-	protected DateLabel commitDate = new DateLabel(DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM));
+	protected DateLabel commitDate = new DateLabel(Format.getDateTimeFormat());
 	private String projectId;
 
 	/**
@@ -109,8 +115,8 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 			} else {
 				needSep = true;
 			}
-			parentsPanel.add(new Anchor(parentId, ScmCommitPlace.createPlace(projectId, commit.getRepository(),
-					parentId).getHref()));
+			parentsPanel.add(new Anchor(Commit.minimizeCommitId(parentId), ScmCommitPlace.createPlace(projectId,
+					commit.getRepository(), parentId).getHref()));
 		}
 		filesPanel.clear();
 
@@ -131,6 +137,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+		taskHyperlinkDetector.setProjectIdentity(projectId);
 	}
 
 }

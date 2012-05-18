@@ -22,7 +22,6 @@ import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -31,7 +30,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.cellview.client.CellList.Style;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
@@ -45,6 +43,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
+import com.tasktop.c2c.server.common.web.client.view.NoCellListStyle;
 import com.tasktop.c2c.server.common.web.client.widgets.Pager;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.project.Project;
@@ -118,7 +117,7 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 	private ProjectDiscoveryView() {
 		initWidget(uiBinder.createAndBindUi(this));
 
-		projectList = new CellList<Project>(new ProjectCell(), new NoCellStyle());
+		projectList = new CellList<Project>(new ProjectCell(), new NoCellListStyle());
 		model = new SingleSelectionModel<Project>();
 
 		// Hide the options menu - we never want to show it here.
@@ -185,60 +184,6 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 			}
 		});
-	}
-
-	// No cell styles. This appears to be the only way to get the CellList to not plug in a bunch of default, undesired
-	// style info.
-	private class NoCellStyle implements CellList.Style, CellList.Resources {
-		@Override
-		public String cellListEvenItem() {
-			return "ZorkNarf";
-		}
-
-		@Override
-		public String cellListKeyboardSelectedItem() {
-			return "ZorkNarf";
-		}
-
-		@Override
-		public String cellListOddItem() {
-			return "ZorkNarf";
-		}
-
-		@Override
-		public String cellListSelectedItem() {
-			return "ZorkNarf";
-		}
-
-		@Override
-		public String cellListWidget() {
-			return "ZorkNarf";
-		}
-
-		@Override
-		public String getName() {
-			return "NoStyle";
-		}
-
-		@Override
-		public boolean ensureInjected() {
-			return true;
-		}
-
-		@Override
-		public String getText() {
-			return "";
-		}
-
-		@Override
-		public ImageResource cellListSelectedBackground() {
-			return null;
-		}
-
-		@Override
-		public Style cellListStyle() {
-			return this;
-		}
 	}
 
 	private void updateSelectedProject(final Project newProject) {

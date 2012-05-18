@@ -74,4 +74,21 @@ public interface ScmService {
 	Map<Profile, Integer> getNumCommitsByAuthor(int numDays);
 
 	Commit getCommit(String repoName, String commitId) throws EntityNotFoundException;
+
+	/**
+	 * @param repoName
+	 * @param region
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	List<Commit> getLog(String repoName, Region region) throws EntityNotFoundException;
+
+	/**
+	 * @param repoName
+	 * @param branchName
+	 * @param region
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	List<Commit> getLogForBranch(String repoName, String branchName, Region region) throws EntityNotFoundException;
 }

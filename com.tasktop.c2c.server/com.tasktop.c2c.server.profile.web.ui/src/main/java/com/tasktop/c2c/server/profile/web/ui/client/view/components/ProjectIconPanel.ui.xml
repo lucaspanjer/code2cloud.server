@@ -18,6 +18,9 @@
 						<g:Anchor ui:field="wiki" styleName="button project-nav-item">Wiki</g:Anchor>
 					</div>
 					<div class="left">
+						<g:Anchor ui:field="source" styleName="button project-nav-item">Source</g:Anchor>
+					</div>
+					<div class="left">
 						<g:Anchor ui:field="builds" styleName="button project-nav-item">Builds</g:Anchor>
 					</div>
 					<div class="left">

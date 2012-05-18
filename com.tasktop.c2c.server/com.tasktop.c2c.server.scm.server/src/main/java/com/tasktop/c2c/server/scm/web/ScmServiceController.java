@@ -54,6 +54,8 @@ public class ScmServiceController extends AbstractRestService implements ScmServ
 		Region retRegion = null;
 		if (offset != null && pageSize != null) {
 			retRegion = new Region(offset, pageSize);
+		} else {
+			retRegion = new Region(0, 25);
 		}
 
 		return retRegion;
@@ -129,5 +131,33 @@ public class ScmServiceController extends AbstractRestService implements ScmServ
 	public Commit getCommit(@PathVariable("repoName") String repoName, @PathVariable("commitId") String commitId)
 			throws EntityNotFoundException {
 		return scmService.getCommit(repoName, commitId);
+	}
+
+	@RequestMapping(value = ScmServiceClient.GET_LOG_FOR_REPO_URL, method = RequestMethod.GET)
+	public List<Commit> getLog(@PathVariable("repo") String repoName,
+			@RequestParam(required = false, value = ScmServiceClient.PAGESIZE_URL_PARAM) Integer pageSize,
+			@RequestParam(required = false, value = ScmServiceClient.OFFSET_URL_PARAM) Integer offset)
+			throws EntityNotFoundException {
+		return this.getLog(repoName, createRegion(offset, pageSize));
+	}
+
+	@Override
+	public List<Commit> getLog(String repoName, Region region) throws EntityNotFoundException {
+		return scmService.getLog(repoName, region);
+	}
+
+	@RequestMapping(value = ScmServiceClient.GET_LOG_FOR_BRANCH_URL, method = RequestMethod.GET)
+	public List<Commit> getLogForBranch(@PathVariable("repo") String repoName,
+			@PathVariable("branch") String branchName,
+			@RequestParam(required = false, value = ScmServiceClient.PAGESIZE_URL_PARAM) Integer pageSize,
+			@RequestParam(required = false, value = ScmServiceClient.OFFSET_URL_PARAM) Integer offset)
+			throws EntityNotFoundException {
+		return this.getLogForBranch(repoName, branchName, createRegion(offset, pageSize));
+	}
+
+	@Override
+	public List<Commit> getLogForBranch(String repoName, String branchName, Region region)
+			throws EntityNotFoundException {
+		return scmService.getLogForBranch(repoName, branchName, region);
 	}
 }

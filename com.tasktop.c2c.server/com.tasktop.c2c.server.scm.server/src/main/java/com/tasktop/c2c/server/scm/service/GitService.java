@@ -32,13 +32,6 @@ import com.tasktop.c2c.server.scm.domain.ScmSummary;
  */
 public interface GitService {
 
-	/**
-	 * Get all the repository names.
-	 * 
-	 * @return
-	 */
-	List<String> getRepositoryNames();
-
 	void addExternalRepository(String url);
 
 	void removeExternalRepository(String url);
@@ -85,5 +78,22 @@ public interface GitService {
 	 * @throws EntityNotFoundException
 	 */
 	Commit getCommitWithDiff(String repositoryName, String commitId) throws EntityNotFoundException;
+
+	/**
+	 * @param repoName
+	 * @param region
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	List<Commit> getLog(String repoName, Region region) throws EntityNotFoundException;
+
+	/**
+	 * @param repoName
+	 * @param branchName
+	 * @param region
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	List<Commit> getLogForBranch(String repoName, String branchName, Region region) throws EntityNotFoundException;
 
 }
