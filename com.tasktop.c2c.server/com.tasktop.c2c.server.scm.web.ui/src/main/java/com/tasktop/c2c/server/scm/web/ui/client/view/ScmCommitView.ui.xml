@@ -41,7 +41,7 @@
 						<g:Label ui:field='commitId'/>
 					</div>
 			  		<div class="right {style.repository}">
-						(<g:Label ui:field='repository'/>)
+						(<g:Anchor ui:field='repository'/>)
 					</div>
 				</div>
 				<div class="right">

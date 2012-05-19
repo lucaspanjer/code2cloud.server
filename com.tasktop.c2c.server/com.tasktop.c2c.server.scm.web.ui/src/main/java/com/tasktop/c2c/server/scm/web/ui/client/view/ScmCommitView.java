@@ -33,6 +33,7 @@ import com.tasktop.c2c.server.common.web.client.widgets.hyperlink.HyperlinkingLa
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.domain.DiffEntry;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmCommitPlace;
+import com.tasktop.c2c.server.scm.web.ui.client.place.ScmRepoPlace;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskHyperlinkDetector;
 
 /**
@@ -89,7 +90,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 	@UiField
 	protected Label diffText;
 	@UiField
-	protected Label repository;
+	protected Anchor repository;
 	@UiField
 	protected DisclosurePanel patchPanel;
 	@UiField
@@ -106,6 +107,9 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 	 */
 	public void setCommit(Commit commit) {
 		driver.edit(commit);
+
+		repository.setText(commit.getRepository());
+		repository.setHref(ScmRepoPlace.createPlace(projectId, commit.getRepository()).getHref());
 
 		parentsPanel.clear();
 		boolean needSep = false;

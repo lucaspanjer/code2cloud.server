@@ -6,15 +6,25 @@
 	xmlns:h="urn:import:com.tasktop.c2c.server.common.web.client.widgets.hyperlink"
 	xmlns:cellview="urn:import:com.google.gwt.user.cellview.client">
 <ui:style>
+.branch select {
+	width: 80px;
+}
 
+.heading div, .heading h3 {
+	display: inline;
+}
+
+.heading h3 {
+	padding-right: 10px;
+	font-size: 18px;
+}
 
 </ui:style>
 	
 	<g:HTMLPanel>
-		<div>
-			<h3>Repository: <g:Label ui:field="name"/></h3>
-			<br/>
-			Branch: <g:ValueListBox ui:field="branches"/>
+		<div class="{style.heading}">
+			<h3><g:Label ui:field="name"/></h3>
+			<div class="{style.branch}"><g:ValueListBox ui:field="branches"/></div>
 		</div>
 		<div class="spacer clear"/>	
 		<cellview:CellList ui:field="commitCellList"/>
