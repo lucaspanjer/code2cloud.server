@@ -183,7 +183,6 @@ public class ScmRepoView extends Composite implements Editor<ScmRepository>, ISc
 	@Override
 	public void setRepository(ScmRepository repository) {
 		this.repository = repository;
-		this.branches.setAcceptableValues(repository.getBranches());
 		this.name.setText(repository.getName());
 
 	}
@@ -196,6 +195,7 @@ public class ScmRepoView extends Composite implements Editor<ScmRepository>, ISc
 	public void setBranch(String branch) {
 		branches.setVisible(branch != null);
 		this.branches.setValue(branch, false);
+		this.branches.setAcceptableValues(repository.getBranches());
 	}
 
 }
