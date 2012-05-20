@@ -81,10 +81,11 @@
 			</div>
 
 			<div class="spacer clear small"/>
-			<div>
-				<h4>Changes</h4>
+			<g:DisclosurePanel ui:field="changesPanel" open="true" width="100%">
+				<g:header>Files</g:header>
 				<g:FlowPanel ui:field='filesPanel' styleName="{style.parentsPanel}"/>
-			</div>
+			</g:DisclosurePanel>
+			
 			<div class="spacer clear small"/>
 			<g:DisclosurePanel ui:field="patchPanel" title="Patch Text" open="false" width="100%">
 				<g:header>Full Patch Text</g:header>

@@ -66,6 +66,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 		comment = HasTextEditor.of(commentLabel);
 		driver.initialize(this);
 		patchPanel.getHeader().getElement().getParentElement().setClassName(""); // prevent style collision
+		changesPanel.getHeader().getElement().getParentElement().setClassName(""); // prevent style collision
 		commentLabel.addHyperlinkDetector(taskHyperlinkDetector);
 
 	}
@@ -87,6 +88,8 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 	protected Panel parentsPanel;
 	@UiField
 	protected Panel filesPanel;
+	@UiField
+	protected DisclosurePanel changesPanel;
 	@UiField
 	protected Label diffText;
 	@UiField
@@ -112,25 +115,31 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 		repository.setHref(ScmRepoPlace.createPlace(projectId, commit.getRepository()).getHref());
 
 		parentsPanel.clear();
-		boolean needSep = false;
-		for (String parentId : commit.getParents()) {
-			if (needSep) {
-				parentsPanel.add(new Label(","));
-			} else {
-				needSep = true;
+		if (commit.getParents().isEmpty()) {
+			patchPanel.add(new Label("None"));
+		} else {
+			boolean needSep = false;
+			for (String parentId : commit.getParents()) {
+				if (needSep) {
+					parentsPanel.add(new Label(","));
+				} else {
+					needSep = true;
+				}
+				parentsPanel.add(new Anchor(Commit.minimizeCommitId(parentId), ScmCommitPlace.createPlace(projectId,
+						commit.getRepository(), parentId).getHref()));
 			}
-			parentsPanel.add(new Anchor(Commit.minimizeCommitId(parentId), ScmCommitPlace.createPlace(projectId,
-					commit.getRepository(), parentId).getHref()));
 		}
-		filesPanel.clear();
 
+		filesPanel.clear();
 		if (commit.getChanges() != null) {
 			for (DiffEntry diffEntry : commit.getChanges()) {
 				filesPanel.add(new DiffEntryView(diffEntry));
 			}
 			patchPanel.setVisible(true);
+			changesPanel.setVisible(true);
 		} else {
 			patchPanel.setVisible(false);
+			changesPanel.setVisible(false);
 		}
 
 		authorImage.setUrl(Avatar.computeAvatarUrl(commit.getAuthor().getGravatarHash(), Avatar.Size.MEDIUM));

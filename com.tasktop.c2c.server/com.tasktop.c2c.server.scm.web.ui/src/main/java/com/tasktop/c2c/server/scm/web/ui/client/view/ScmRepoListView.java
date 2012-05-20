@@ -97,8 +97,10 @@ public class ScmRepoListView extends Composite {
 
 	private String projectId;
 
+	private static final int PAGE_SIZE = 20;
+
 	private void setupList() {
-		repoCellList.setPageSize(40);
+		repoCellList.setPageSize(PAGE_SIZE);
 		repoCellList.setSelectionModel(new NoSelectionModel<ScmRepository>());
 		repoCellList.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.DISABLED);
 		pager.setDisplay(repoCellList);
@@ -108,6 +110,7 @@ public class ScmRepoListView extends Composite {
 
 	public void setRepositories(List<ScmRepository> repos) {
 		dataProvider.setList(repos);
+		pager.setVisible(repos.size() > PAGE_SIZE);
 	}
 
 	public void setProjectId(String projectId) {
