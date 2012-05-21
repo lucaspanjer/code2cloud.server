@@ -116,7 +116,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 
 		parentsPanel.clear();
 		if (commit.getParents().isEmpty()) {
-			patchPanel.add(new Label("None"));
+			parentsPanel.add(new Label("None"));
 		} else {
 			boolean needSep = false;
 			for (String parentId : commit.getParents()) {
