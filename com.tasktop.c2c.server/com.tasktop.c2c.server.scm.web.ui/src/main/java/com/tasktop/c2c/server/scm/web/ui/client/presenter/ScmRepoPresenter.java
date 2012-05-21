@@ -81,7 +81,7 @@ public class ScmRepoPresenter extends AbstractPresenter implements IScmRepoView.
 
 							@Override
 							protected void success(GetScmLogResult result) {
-								view.setData(region, result.get());
+								view.setData(thisRegion, result.get());
 							}
 						});
 

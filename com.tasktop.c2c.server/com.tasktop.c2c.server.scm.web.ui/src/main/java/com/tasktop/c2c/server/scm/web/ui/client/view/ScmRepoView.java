@@ -74,7 +74,7 @@ public class ScmRepoView extends Composite implements Editor<ScmRepository>, ISc
 
 		@Override
 		public void render(com.google.gwt.cell.client.Cell.Context context, Commit value, SafeHtmlBuilder sb) {
-			String dateString = Format.stringValueDateTime(value.getDate());
+			String dateString = value.getDate() == null ? "" : Format.stringValueDateTime(value.getDate());
 			String avatarUrl = Avatar.computeAvatarUrl(value.getAuthor().getGravatarHash(), Avatar.Size.SMALL);
 			String message = trimMessage(value.getComment());
 			String commitUrl = ScmCommitPlace.createPlace(projectId, repository.getName(), value.getCommitId())
@@ -159,6 +159,7 @@ public class ScmRepoView extends Composite implements Editor<ScmRepository>, ISc
 		commitCellList.setSelectionModel(new NoSelectionModel<Commit>());
 		commitCellList.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.DISABLED);
 		pager.setDisplay(commitCellList);
+		// pager.setRangeLimited(false);
 
 	}
 
@@ -172,12 +173,13 @@ public class ScmRepoView extends Composite implements Editor<ScmRepository>, ISc
 
 	@Override
 	public void setData(Region region, List<Commit> list) {
+		boolean hasMore = region.getSize() == list.size();
+		commitCellList.setRowData(region.getOffset(), list);
+		commitCellList.setRowCount(region.getOffset() + list.size(), !hasMore);
 		if (commitCellList.getVisibleRange().getStart() != region.getOffset()
 				|| commitCellList.getVisibleRange().getLength() != region.getSize()) {
 			commitCellList.setVisibleRange(region.getOffset(), region.getSize());
 		}
-		commitCellList.setRowCount(region.getOffset() + list.size(), false);
-		commitCellList.setRowData(region.getOffset(), list);
 	}
 
 	@Override
