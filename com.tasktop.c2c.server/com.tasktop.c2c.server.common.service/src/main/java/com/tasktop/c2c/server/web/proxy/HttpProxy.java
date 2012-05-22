@@ -20,31 +20,61 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.client.ClientHttpRequest;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.http.client.CommonsClientHttpRequestFactory;
+import org.apache.commons.httpclient.methods.DeleteMethod;
+import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.HeadMethod;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
+import org.apache.commons.httpclient.methods.OptionsMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.TraceMethod;
 import org.springframework.stereotype.Component;
 
 @Component
 public class HttpProxy extends WebProxy {
 	private static Pattern targetUrlPattern = Pattern.compile("https?://.+");
 
-	private ClientHttpRequestFactory requestFactory = new CommonsClientHttpRequestFactory();
+	private HttpClient httpClient;
+
+	private HttpMethodProvider httpMethodProvider = new HttpMethodProvider() {
+
+		@Override
+		public HttpMethod getMethod(String httpMethod, String uri) {
+			if (httpMethod.equals("GET")) {
+				return new GetMethod(uri);
+			} else if (httpMethod.equals("DELETE")) {
+				return new DeleteMethod(uri);
+			} else if (httpMethod.equals("HEAD")) {
+				return new HeadMethod(uri);
+			} else if (httpMethod.equals("OPTIONS")) {
+				return new OptionsMethod(uri);
+			} else if (httpMethod.equals("POST")) {
+				return new PostMethod(uri);
+			} else if (httpMethod.equals("PUT")) {
+				return new PutMethod(uri);
+			} else if (httpMethod.equals("TRACE")) {
+				return new TraceMethod(uri);
+			}
+			throw new IllegalArgumentException("Invalid HTTP method: " + httpMethod);
+		}
+	};
 
 	public HttpProxy() {
-		((CommonsClientHttpRequestFactory) requestFactory).getHttpClient().getParams()
-				.setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
+		httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
+		httpClient.getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
+		httpClient.getHttpConnectionManager().getParams().setSoTimeout(60 * 1000);
 		headerFilter = new CookieHeaderFilter();
 		ExcludeHeaderFilter excludeHeaders = new ExcludeHeaderFilter();
 		excludeHeaders.getExcludedRequestHeaders().addAll(Arrays.asList("Connection", "Accept-Encoding"));
@@ -58,20 +88,26 @@ public class HttpProxy extends WebProxy {
 	}
 
 	@Override
-	protected void proxy(String targetUrl, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	protected void proxy(String targetUrl, final HttpServletRequest request, final HttpServletResponse response)
+			throws IOException {
 
-		ClientHttpResponse proxyResponse = null;
 		try {
-			ClientHttpRequest proxyRequest = createProxyRequest(targetUrl, request);
-			proxyResponse = proxyRequest.execute();
-			copyProxyReponse(proxyResponse, response);
+			final HttpMethod proxyRequest = createProxyRequest(targetUrl, request);
+
+			if (proxyRequest instanceof EntityEnclosingMethod) {
+				EntityEnclosingMethod entityEnclosingMethod = (EntityEnclosingMethod) proxyRequest;
+				RequestEntity requestEntity = new InputStreamRequestEntity(request.getInputStream(),
+						request.getContentLength(), request.getContentType());
+				entityEnclosingMethod.setRequestEntity(requestEntity);
+			}
+			int code = httpClient.executeMethod(proxyRequest);
+			response.setStatus(code);
+			copyProxyReponse(proxyRequest, response);
+
 		} catch (ConnectException e) {
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Internal connection issue");
 			return;
-		} finally {
-			if (proxyResponse != null) {
-				proxyResponse.close();
-			}
+
 		}
 	}
 
@@ -79,7 +115,7 @@ public class HttpProxy extends WebProxy {
 		return url.replace(" ", "%20");
 	}
 
-	ClientHttpRequest createProxyRequest(String targetUrl, HttpServletRequest request) throws IOException {
+	private HttpMethod createProxyRequest(String targetUrl, HttpServletRequest request) throws IOException {
 		URI targetUri;
 		try {
 			targetUri = new URI(uriEncode(targetUrl));
@@ -87,9 +123,7 @@ public class HttpProxy extends WebProxy {
 			throw new RuntimeException(e);
 		}
 
-		// FIXME this prevents proxying webDav methods
-		ClientHttpRequest proxyRequest = requestFactory.createRequest(targetUri,
-				HttpMethod.valueOf(request.getMethod()));
+		HttpMethod commonsHttpMethod = httpMethodProvider.getMethod(request.getMethod(), targetUri.toString());
 
 		Enumeration<String> headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
@@ -99,38 +133,51 @@ public class HttpProxy extends WebProxy {
 				String headerValue = headerVals.nextElement();
 				headerValue = headerFilter.processRequestHeader(headerName, headerValue);
 				if (headerValue != null) {
-					proxyRequest.getHeaders().add(headerName, headerValue);
+					commonsHttpMethod.addRequestHeader(new Header(headerName, headerValue));
 				}
 
 			}
 		}
 
-		if (request.getContentLength() > 0) {
-			// FIXME: do all clients send a content length?
-			copy(request.getInputStream(), proxyRequest.getBody());
+		return commonsHttpMethod;
+	}
+
+	void copyProxyReponse(HttpMethod proxyResponse, HttpServletResponse response) throws IOException {
+		copy(proxyResponse.getResponseBodyAsStream(), response.getOutputStream());
+		copyProxyHeaders(proxyResponse.getResponseHeaders(), response);
+		response.setContentLength(getResponseContentLength(proxyResponse));
+		if (proxyResponse.getStatusLine() != null) {
+			int statCode = proxyResponse.getStatusCode();
+			response.setStatus(statCode);
+		}
+	}
+
+	public int getResponseContentLength(HttpMethod httpMethod) {
+		Header[] headers = httpMethod.getResponseHeaders("Content-Length");
+		if (headers.length == 0) {
+			return -1;
 		}
 
-		return proxyRequest;
+		for (int i = headers.length - 1; i >= 0; i--) {
+			Header header = headers[i];
+			try {
+				return Integer.parseInt(header.getValue());
+			} catch (NumberFormatException e) {
+
+			}
+			// See if we can have better luck with another header, if present
+		}
+		return -1;
 	}
 
-	void copyProxyReponse(ClientHttpResponse proxyResponse, HttpServletResponse response) throws IOException {
-		response.reset();
-		response.setStatus(proxyResponse.getStatusCode().value());
-		copyProxyHeaders(proxyResponse.getHeaders(), response);
-		copy(proxyResponse.getBody(), response.getOutputStream());
-	}
-
-	private void copyProxyHeaders(HttpHeaders headers, HttpServletResponse response) {
-		for (Entry<String, List<String>> headerEntry : headers.entrySet()) {
-			String header = headerEntry.getKey();
-			for (String value : headerEntry.getValue()) {
-				value = headerFilter.processResponseHeader(header, value);
-				if (value != null) {
-					response.addHeader(header, value);
-				}
+	private void copyProxyHeaders(Header[] headers, HttpServletResponse response) {
+		for (Header h : headers) {
+			String header = h.getName();
+			String valR = headerFilter.processResponseHeader(header, h.getValue());
+			if (valR != null) {
+				response.addHeader(header, valR);
 			}
 		}
-		response.setContentLength((int) headers.getContentLength());
 	}
 
 	private static int RESPONSE_BUFFER_SIZE = 10 * 1024;
@@ -147,8 +194,12 @@ public class HttpProxy extends WebProxy {
 
 	}
 
-	public void setRequestFactory(ClientHttpRequestFactory requestFactory) {
-		this.requestFactory = requestFactory;
+	public void setHttpClient(HttpClient client) {
+		this.httpClient = client;
+	}
+
+	public void setHttpMethodProvider(HttpMethodProvider httpMethodProvider) {
+		this.httpMethodProvider = httpMethodProvider;
 	}
 
 }
