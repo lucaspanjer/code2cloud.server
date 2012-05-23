@@ -112,6 +112,8 @@ import com.tasktop.c2c.server.tasks.service.TaskService;
 @Transactional
 public abstract class BaseProfileServiceTest {
 
+	public static final String NOTFOUND_SUFFIX = "NOTFOUND";
+
 	@Autowired
 	protected ProfileService profileService;
 
@@ -324,7 +326,7 @@ public abstract class BaseProfileServiceTest {
 		entityManager.clear();
 
 		Profile profile2 = profileService.getProfileByEmail(profile.getEmail());
-		assertNull(profileService.getProfileByEmail(profile.getEmail() + "NOTFOUND"));
+		assertNull(profileService.getProfileByEmail(profile.getEmail() + NOTFOUND_SUFFIX));
 		assertEquals(profile.getId(), profile2.getId());
 	}
 
@@ -339,7 +341,7 @@ public abstract class BaseProfileServiceTest {
 		assertNotNull(profile2);
 		assertEquals(profile.getId(), profile2.getId());
 
-		profileService.getProfileByUsername(profile.getUsername() + " NOTFOUND");
+		profileService.getProfileByUsername(profile.getUsername() + NOTFOUND_SUFFIX);
 	}
 
 	@Test

@@ -173,11 +173,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			Profile profile = (Profile) target;
 			if (profile.getUsername() != null && profile.getUsername().trim().length() > 0) {
 
-					if (identityManagmentService.usernameExists(profile.getUsername())) {
-						errors.reject("profile.usernameUnique", new Object[] { profile.getUsername() }, null);
-					}
-
-			
+				if (identityManagmentService.usernameExists(profile.getUsername())) {
+					errors.reject("profile.usernameUnique", new Object[] { profile.getUsername() }, null);
+				}
 
 			}
 			if (profile.getEmail() != null && profile.getEmail().trim().length() > 0) {
@@ -301,7 +299,10 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		securityPolicy.modify(profile);
 
-		Profile currentProfile = identityManagmentService.getProfileByUsername(profile.getUsername());
+		Profile currentProfile = entityManager.find(Profile.class, profile.getId());
+		if (currentProfile == null) {
+			throw new EntityNotFoundException();
+		}
 
 		boolean passwordReset = false;
 		boolean nameChanged = true;
