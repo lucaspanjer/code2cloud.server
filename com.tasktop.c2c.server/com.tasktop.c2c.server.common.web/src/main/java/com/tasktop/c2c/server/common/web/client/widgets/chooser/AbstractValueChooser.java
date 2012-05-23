@@ -199,7 +199,7 @@ public abstract class AbstractValueChooser<T> extends Composite {
 	}
 
 	public void addLabel(Label label) {
-		label.addStyleName("peopleChooserLabel");
+		label.addStyleName("peopleChooserLabel"); // REVIEW: Why couple styling here.
 		label.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

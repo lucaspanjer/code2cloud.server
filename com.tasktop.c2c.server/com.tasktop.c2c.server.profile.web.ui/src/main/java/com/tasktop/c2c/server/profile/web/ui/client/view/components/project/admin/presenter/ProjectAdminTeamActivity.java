@@ -132,6 +132,11 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 
 	@Override
 	public void addToProject(final Profile user) {
+		if (user == null) {
+			ProfileGinjector.get.instance().getNotifier()
+					.displayMessage(Message.createErrorMessage("Please select a user first"));
+			return;
+		}
 		AppGinjector.get
 				.instance()
 				.getDispatchService()
