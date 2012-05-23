@@ -50,6 +50,7 @@ public final class TenancyUtil {
 	 * @param projectIdentifier
 	 */
 	public static void setProjectTenancyContext(String projectIdentifier) {
+		projectIdentifier = projectIdentifier.toLowerCase();
 		if (TenancyContextHolder.getContext() != null && TenancyContextHolder.getContext().getTenant() != null) {
 			Tenant tenant = TenancyContextHolder.getContext().getTenant();
 			if (tenant instanceof ProfileHubTenant) {
