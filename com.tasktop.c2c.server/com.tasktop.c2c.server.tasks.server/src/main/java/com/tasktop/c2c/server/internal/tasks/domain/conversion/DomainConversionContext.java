@@ -19,7 +19,6 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-
 import com.tasktop.c2c.server.internal.tasks.domain.AbstractReferenceEntity;
 import com.tasktop.c2c.server.internal.tasks.domain.Product;
 import com.tasktop.c2c.server.tasks.domain.Milestone;
@@ -36,6 +35,8 @@ public class DomainConversionContext {
 	private final Map<Object, Object> domainObjectByEntity;
 	private final Map<Object, Object> entityByKey;
 
+	private String wikiMarkup;
+
 	public DomainConversionContext(EntityManager entityManager) {
 		this.entityManager = entityManager;
 		domainObjectByEntity = new HashMap<Object, Object>();
@@ -43,18 +44,19 @@ public class DomainConversionContext {
 	}
 
 	private DomainConversionContext(EntityManager entityManager, Map<Object, Object> domainObjectByEntity,
-			Map<Object, Object> entityByKey, boolean thin) {
+			Map<Object, Object> entityByKey, boolean thin, String wikiMarkup) {
 		this.entityManager = entityManager;
 		this.domainObjectByEntity = domainObjectByEntity;
 		this.entityByKey = entityByKey;
 		this.thin = thin;
+		this.wikiMarkup = wikiMarkup;
 	}
 
 	/**
 	 * create a thin context that is a sub-context
 	 */
 	public DomainConversionContext subcontext() {
-		return new DomainConversionContext(entityManager, domainObjectByEntity, entityByKey, true);
+		return new DomainConversionContext(entityManager, domainObjectByEntity, entityByKey, true, wikiMarkup);
 	}
 
 	public void put(AbstractReferenceEntity entity) {
@@ -93,8 +95,8 @@ public class DomainConversionContext {
 	@SuppressWarnings("unchecked")
 	public void fillMilestone() {
 		List<com.tasktop.c2c.server.internal.tasks.domain.Milestone> entities = entityManager.createQuery(
-				"select e from " + com.tasktop.c2c.server.internal.tasks.domain.Milestone.class.getSimpleName()
-						+ " e").getResultList();
+				"select e from " + com.tasktop.c2c.server.internal.tasks.domain.Milestone.class.getSimpleName() + " e")
+				.getResultList();
 		for (com.tasktop.c2c.server.internal.tasks.domain.Milestone entity : entities) {
 			put(entity);
 		}
@@ -194,9 +196,9 @@ public class DomainConversionContext {
 				milestone = (com.tasktop.c2c.server.internal.tasks.domain.Milestone) entityManager
 						.createQuery(
 								"select e from "
-										+ com.tasktop.c2c.server.internal.tasks.domain.Milestone.class
-												.getSimpleName() + " e where e.value = :v and e.product = :p")
-						.setParameter("v", value).setParameter("p", product).getSingleResult();
+										+ com.tasktop.c2c.server.internal.tasks.domain.Milestone.class.getSimpleName()
+										+ " e where e.value = :v and e.product = :p").setParameter("v", value)
+						.setParameter("p", product).getSingleResult();
 			} catch (NoResultException e) {
 				// expected
 			}
@@ -219,6 +221,14 @@ public class DomainConversionContext {
 			domainObjectByEntity.put(entity, object);
 		}
 		return object;
+	}
+
+	public String getWikiMarkup() {
+		return wikiMarkup;
+	}
+
+	public void setWikiMarkup(String wikiMarkup) {
+		this.wikiMarkup = wikiMarkup;
 	}
 
 }

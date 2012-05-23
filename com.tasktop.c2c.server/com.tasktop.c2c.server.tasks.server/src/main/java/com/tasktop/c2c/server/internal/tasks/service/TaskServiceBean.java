@@ -331,7 +331,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	}
 
 	private DomainConversionContext createTaskQueryDomainConversionContext(QuerySpec querySpec) {
-		DomainConversionContext conversionContext = new DomainConversionContext(entityManager);
+		DomainConversionContext conversionContext = createTaskConversionContext();
 		conversionContext.setThin(querySpec.getThin());
 		// pre-fill common attributes so that we can minimize the number of queries that we perform
 		conversionContext.fill(com.tasktop.c2c.server.internal.tasks.domain.TaskSeverity.class);
@@ -1148,7 +1148,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 				com.tasktop.c2c.server.internal.tasks.domain.Task.class, taskId);
 		entityManager.refresh(task); // REVIEW, needed for new subTasks, etc
 
-		Task result = mapToDomainObject(task, new DomainConversionContext(entityManager));
+		Task result = mapToDomainObject(task, createTaskConversionContext());
 		injectAttachmentData(result);
 
 		return result;
@@ -1293,8 +1293,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		Query query = entityManager.createQuery("select e from " + Keyworddef.class.getSimpleName() + " e");
 		List<Keyword> keywords = new ArrayList<Keyword>();
 
-		keywords = (List<Keyword>) domainConverter.convert(query.getResultList(), new DomainConversionContext(
-				entityManager));
+		keywords = (List<Keyword>) domainConverter.convert(query.getResultList(), createSimpleConversionContext());
 		return keywords;
 	}
 
@@ -1422,16 +1421,12 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return results;
 	}
 
-	private String getMarkupLanguage() {
-		return getConfigurationProperties().get(TaskService.MARKUP_LANGUAGE_DB_KEY);
-	}
-
 	@SuppressWarnings("unchecked")
 	private <T> List<T> getAll(Class<?> internalClass, Class<T> resultClass, String orderByField) {
 		String queryStr = String.format("select curTarget from %s curTarget order by curTarget.%s",
 				internalClass.getSimpleName(), orderByField);
 		Query query = entityManager.createQuery(queryStr);
-		return (List<T>) domainConverter.convert(query.getResultList(), new DomainConversionContext(entityManager));
+		return (List<T>) domainConverter.convert(query.getResultList(), createSimpleConversionContext());
 	}
 
 	private List<TaskUserProfile> getUsers() {
@@ -1455,8 +1450,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 		AttachmentData data = find(AttachmentData.class, attachmentId);
 
-		Attachment attachment = (Attachment) domainConverter.convert(internalAttachment, new DomainConversionContext(
-				entityManager));
+		Attachment attachment = (Attachment) domainConverter.convert(internalAttachment,
+				createSimpleConversionContext());
 		attachment.setAttachmentData(data.getThedata());
 		attachment.setByteSize(attachment.getAttachmentData().length);
 		attachment.setUrl(configuration.getWebUrlForAttachment(attachmentId));
@@ -1571,7 +1566,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 		// reload the product to get the associate milestones and components
 		entityManager.refresh(internalProduct);
-		return (Product) domainConverter.convert(internalProduct, new DomainConversionContext(entityManager));
+		return (Product) domainConverter.convert(internalProduct, createSimpleConversionContext());
 	}
 
 	@Override
@@ -1582,7 +1577,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		}
 		com.tasktop.c2c.server.internal.tasks.domain.Product product = find(
 				com.tasktop.c2c.server.internal.tasks.domain.Product.class, productId.shortValue());
-		return (Product) domainConverter.convert(product, new DomainConversionContext(entityManager));
+		return (Product) domainConverter.convert(product, createSimpleConversionContext());
 	}
 
 	@Override
@@ -1600,7 +1595,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		entityManager.flush();
 		entityManager.refresh(managedProduct);
 
-		return (Product) domainConverter.convert(managedProduct, new DomainConversionContext(entityManager));
+		return (Product) domainConverter.convert(managedProduct, createSimpleConversionContext());
 	}
 
 	private void internalValidate(com.tasktop.c2c.server.internal.tasks.domain.Product managedProduct)
@@ -1751,8 +1746,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		// Perform our save now - if this throws an exception, then that'll prevent the return from firing.
 		entityManager.flush();
 
-		Product retProduct = (Product) domainConverter.convert(managedProduct, new DomainConversionContext(
-				entityManager));
+		Product retProduct = (Product) domainConverter.convert(managedProduct, createSimpleConversionContext());
 
 		return retProduct;
 	}
@@ -1822,7 +1816,21 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		entityManager.flush();
 		entityManager.refresh(internalComponent);
 
-		return (Component) domainConverter.convert(internalComponent, new DomainConversionContext(entityManager));
+		return (Component) domainConverter.convert(internalComponent, createSimpleConversionContext());
+	}
+
+	private DomainConversionContext createSimpleConversionContext() {
+		return new DomainConversionContext(entityManager);
+	}
+
+	private DomainConversionContext createTaskConversionContext() {
+		DomainConversionContext ctx = createSimpleConversionContext();
+		try {
+			ctx.setWikiMarkup(retrieveConfigurationProperty(MARKUP_LANGUAGE_DB_KEY));
+		} catch (EntityNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+		return ctx;
 	}
 
 	@Override
@@ -1834,7 +1842,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		com.tasktop.c2c.server.internal.tasks.domain.Component component = find(
 				com.tasktop.c2c.server.internal.tasks.domain.Component.class, componentId.shortValue());
 
-		return (Component) domainConverter.convert(component, new DomainConversionContext(entityManager));
+		return (Component) domainConverter.convert(component, createSimpleConversionContext());
 	}
 
 	@Override
@@ -1850,7 +1858,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		entityManager.flush();
 		entityManager.refresh(managedComponent);
 
-		return (Component) domainConverter.convert(managedComponent, new DomainConversionContext(entityManager));
+		return (Component) domainConverter.convert(managedComponent, createSimpleConversionContext());
 	}
 
 	@Override
@@ -1961,7 +1969,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		}
 
 		Keyworddef keyworddef = createManaged(keyword);
-		return (Keyword) domainConverter.convert(keyworddef, new DomainConversionContext(entityManager));
+		return (Keyword) domainConverter.convert(keyworddef, createSimpleConversionContext());
 	}
 
 	private Keyworddef createManaged(Keyword keyword) {
@@ -1986,7 +1994,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		keyworddef.setDescription(keyword.getDescription());
 		entityManager.persist(keyworddef);
 
-		return (Keyword) domainConverter.convert(keyworddef, new DomainConversionContext(entityManager));
+		return (Keyword) domainConverter.convert(keyworddef, createSimpleConversionContext());
 	}
 
 	@Override
@@ -2014,7 +2022,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		managedQuery.setProfile(getLoggedInDomainProfile());
 		entityManager.persist(managedQuery);
 		entityManager.flush();
-		return (SavedTaskQuery) domainConverter.convert(managedQuery, new DomainConversionContext(entityManager));
+		return (SavedTaskQuery) domainConverter.convert(managedQuery, createSimpleConversionContext());
 	}
 
 	private void verifyQueryNameUnique(SavedTaskQuery query) throws ValidationException {
@@ -2053,7 +2061,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		}
 		TaskDomain.fillManaged(managedQuery, query);
 
-		return (SavedTaskQuery) domainConverter.convert(managedQuery, new DomainConversionContext(entityManager));
+		return (SavedTaskQuery) domainConverter.convert(managedQuery, createSimpleConversionContext());
 	}
 
 	private List<SavedTaskQuery> listSavedQueries() {
@@ -2175,7 +2183,11 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 	@Override
 	public String renderWikiMarkupAsHtml(String markup) {
-		return wikiRenderer.render(markup);
+		try {
+			return wikiRenderer.render(markup, retrieveConfigurationProperty(MARKUP_LANGUAGE_DB_KEY));
+		} catch (EntityNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override

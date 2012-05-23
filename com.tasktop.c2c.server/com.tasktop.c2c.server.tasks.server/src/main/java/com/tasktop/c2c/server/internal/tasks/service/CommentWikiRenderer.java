@@ -20,14 +20,10 @@ import java.util.Map;
 import org.eclipse.mylyn.wikitext.core.parser.MarkupParser;
 import org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder;
 import org.eclipse.mylyn.wikitext.core.parser.markup.MarkupLanguage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.wiki.MarkupLanguageUtil;
 import com.tasktop.c2c.server.common.service.wiki.WebSafeHtmlDocumentBuilder;
-import com.tasktop.c2c.server.tasks.service.TaskService;
 
 /**
  * @author Lucas Panjer (Tasktop Technologies Inc.)
@@ -37,10 +33,6 @@ import com.tasktop.c2c.server.tasks.service.TaskService;
 public class CommentWikiRenderer {
 
 	Map<String, MarkupLanguage> markupLanguageByName;
-
-	@Qualifier("main")
-	@Autowired
-	private TaskService service;
 
 	public CommentWikiRenderer() {
 		markupLanguageByName = getMarkupMap(MarkupLanguageUtil.createMarkupLanguages());
@@ -55,18 +47,10 @@ public class CommentWikiRenderer {
 		return markupLanguageByName;
 	}
 
-	public String render(String markupText) {
+	public String render(String markupText, String markupLanguageName) {
 		StringWriter writer = new StringWriter();
-		String selectedLanguage = null;
-		try {
-			selectedLanguage = service.retrieveConfigurationProperty(TaskService.MARKUP_LANGUAGE_DB_KEY);
-		} catch (EntityNotFoundException e) {
-			throw new RuntimeException(e);
-		}
 
-		// markup language cannot be shared between threads
-		// MarkupLanguage markupLanguage = this.markupLanguage.clone();
-		MarkupLanguage markupLanguage = markupLanguageByName.get(selectedLanguage);
+		MarkupLanguage markupLanguage = markupLanguageByName.get(markupLanguageName);
 
 		HtmlDocumentBuilder builder = new WebSafeHtmlDocumentBuilder(writer);
 		MarkupParser parser = new MarkupParser(markupLanguage);

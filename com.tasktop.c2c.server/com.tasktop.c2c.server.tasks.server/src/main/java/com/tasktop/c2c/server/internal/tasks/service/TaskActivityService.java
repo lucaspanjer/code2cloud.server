@@ -572,6 +572,12 @@ public class TaskActivityService {
 		conversionContext.fill(com.tasktop.c2c.server.internal.tasks.domain.Priority.class);
 		conversionContext.fill(com.tasktop.c2c.server.internal.tasks.domain.Resolution.class);
 		conversionContext.fillMilestone();
+		try {
+			conversionContext.setWikiMarkup(taskService
+					.retrieveConfigurationProperty(TaskService.MARKUP_LANGUAGE_DB_KEY));
+		} catch (EntityNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 		return conversionContext;
 	}
 

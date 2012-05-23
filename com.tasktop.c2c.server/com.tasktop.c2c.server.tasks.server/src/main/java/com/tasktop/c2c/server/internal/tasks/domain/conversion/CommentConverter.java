@@ -46,7 +46,7 @@ public class CommentConverter implements ObjectConverter<Comment> {
 		target.setAuthor((TaskUserProfile) converter.convert(source.getProfile(), context));
 		target.setCommentType(CommentType.getCommentType(source.getType()));
 		target.setExtraData(source.getExtraData());
-		target.setWikiRenderedText(renderer.render(source.getThetext()));
+		target.setWikiRenderedText(renderer.render(source.getThetext(), context.getWikiMarkup()));
 	}
 
 	@Override

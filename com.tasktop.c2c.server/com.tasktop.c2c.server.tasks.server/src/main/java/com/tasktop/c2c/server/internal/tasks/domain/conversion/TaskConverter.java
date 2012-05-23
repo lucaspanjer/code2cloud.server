@@ -119,7 +119,7 @@ public class TaskConverter implements ObjectConverter<Task> {
 			target.setWikiRenderedDescription("");
 		} else {
 			target.setDescription(sourceComments.get(0).getThetext());
-			target.setWikiRenderedDescription(renderer.render(target.getDescription()));
+			target.setWikiRenderedDescription(renderer.render(target.getDescription(), context.getWikiMarkup()));
 
 			for (int i = 1; i < sourceComments.size(); i++) {
 				com.tasktop.c2c.server.internal.tasks.domain.Comment sourceComment = sourceComments.get(i);
@@ -181,7 +181,8 @@ public class TaskConverter implements ObjectConverter<Task> {
 				// A non-empty statusWhiteboard means we store description there for backward compatibility. (See
 				// discussion in Task 422)
 				target.setDescription(source.getStatusWhiteboard());
-				target.setWikiRenderedDescription(renderer.render(source.getStatusWhiteboard()));
+				// REVIEW do we really need this for subtasks?
+				target.setWikiRenderedDescription(renderer.render(source.getStatusWhiteboard(), context.getWikiMarkup()));
 			}
 			target.setAttachments((List<Attachment>) converter.convert(source.getAttachments(), subcontext));
 		} else {
