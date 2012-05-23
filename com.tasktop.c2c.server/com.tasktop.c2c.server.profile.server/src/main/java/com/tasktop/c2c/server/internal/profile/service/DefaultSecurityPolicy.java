@@ -41,7 +41,7 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
  */
 @Service("securityPolicy")
 @Transactional
-public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
+public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean, HasEnabled {
 
 	private enum Operation {
 		/**
@@ -307,10 +307,12 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 		throw new InsufficientPermissionsException();
 	}
 
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	@Override
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
