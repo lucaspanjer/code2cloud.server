@@ -10,23 +10,25 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.profile.web.ui.client.view;
+package com.tasktop.c2c.server.common.profile.web.shared.actions;
 
-import com.tasktop.c2c.server.common.web.client.view.Avatar;
-import com.tasktop.c2c.server.common.web.client.view.Avatar.Size;
+import net.customware.gwt.dispatch.shared.AbstractSimpleResult;
+
+import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class ProfileAvatar {
-	/**
-	 * Compute the Avatar image URL. Prefer using {@link #computeAvatar(Profile)} instead, for consistent HTML.
-	 */
-	public static String computeAvatarUrl(Profile profile, Size size) {
-		String gravatarHash = profile.getGravatarHash();
-		return Avatar.computeAvatarUrl(gravatarHash, size);
+public class FindProfilesResult extends AbstractSimpleResult<QueryResult<Profile>> {
+
+	protected FindProfilesResult() {
+		super();
+	}
+
+	public FindProfilesResult(QueryResult<Profile> value) {
+		super(value);
 	}
 
 }

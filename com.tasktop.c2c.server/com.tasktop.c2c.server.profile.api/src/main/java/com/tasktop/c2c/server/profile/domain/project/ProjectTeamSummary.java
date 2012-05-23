@@ -10,17 +10,15 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.common.profile.web.shared;
+package com.tasktop.c2c.server.profile.domain.project;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 @SuppressWarnings("serial")
 public class ProjectTeamSummary implements Serializable {
 
 	private List<ProjectTeamMember> members;
-	private Set<ProjectRole> roles;
 
 	public List<ProjectTeamMember> getMembers() {
 		return members;
@@ -30,15 +28,4 @@ public class ProjectTeamSummary implements Serializable {
 		this.members = members;
 	}
 
-	public Set<ProjectRole> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<ProjectRole> roles) {
-		this.roles = roles;
-	}
-
-	public boolean hasRole(ProjectRole role) {
-		return roles != null && roles.contains(role);
-	}
 }

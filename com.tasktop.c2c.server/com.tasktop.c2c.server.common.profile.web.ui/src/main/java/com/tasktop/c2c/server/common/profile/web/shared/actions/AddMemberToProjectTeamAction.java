@@ -10,23 +10,37 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.profile.web.ui.client.view;
+package com.tasktop.c2c.server.common.profile.web.shared.actions;
 
-import com.tasktop.c2c.server.common.web.client.view.Avatar;
-import com.tasktop.c2c.server.common.web.client.view.Avatar.Size;
+import net.customware.gwt.dispatch.shared.Action;
+
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class ProfileAvatar {
+public class AddMemberToProjectTeamAction implements Action<GetProjectTeamResult> {
+	private String projectId;
+	private Profile profile;
+
+	public AddMemberToProjectTeamAction(String projectId, Profile profile) {
+		this.projectId = projectId;
+		this.profile = profile;
+	}
+
+	protected AddMemberToProjectTeamAction() {
+	}
+
 	/**
-	 * Compute the Avatar image URL. Prefer using {@link #computeAvatar(Profile)} instead, for consistent HTML.
+	 * @return the projectId
 	 */
-	public static String computeAvatarUrl(Profile profile, Size size) {
-		String gravatarHash = profile.getGravatarHash();
-		return Avatar.computeAvatarUrl(gravatarHash, size);
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public Profile getProfile() {
+		return profile;
 	}
 
 }

@@ -32,11 +32,11 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.NoSelectionModel;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectRole;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamMember;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
+import com.tasktop.c2c.server.profile.domain.project.ProjectRole;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 
 public class ProjectTeamView extends AbstractComposite {
 

@@ -26,6 +26,16 @@ public final class TenancyUtil {
 
 	public static void setOrganizationTenancyContext(String organizationIdentifier) {
 		organizationIdentifier = organizationIdentifier.toLowerCase();
+
+		if (TenancyContextHolder.getContext() != null && TenancyContextHolder.getContext().getTenant() != null) {
+			Tenant tenant = TenancyContextHolder.getContext().getTenant();
+			if (tenant instanceof ProfileHubTenant) {
+				ProfileHubTenant phTenant = (ProfileHubTenant) tenant;
+				phTenant.setOrganizationIdentifier(organizationIdentifier);
+				return;
+			}
+		}
+
 		ProfileHubTenant tenant = new ProfileHubTenant();
 		tenant.setOrganizationIdentifier(organizationIdentifier);
 		tenant.setIdentity(organizationIdentifier);
@@ -33,7 +43,21 @@ public final class TenancyUtil {
 		TenancyContextHolder.getContext().setTenant(tenant);
 	}
 
+	/**
+	 * Sets the project identifier of the tenancy context. If an appropriate context already exists, then it is
+	 * modified.
+	 * 
+	 * @param projectIdentifier
+	 */
 	public static void setProjectTenancyContext(String projectIdentifier) {
+		if (TenancyContextHolder.getContext() != null && TenancyContextHolder.getContext().getTenant() != null) {
+			Tenant tenant = TenancyContextHolder.getContext().getTenant();
+			if (tenant instanceof ProfileHubTenant) {
+				ProfileHubTenant phTenant = (ProfileHubTenant) tenant;
+				phTenant.setProjectIdentifier(projectIdentifier);
+				return;
+			}
+		}
 		ProfileHubTenant tenant = createProjectTenant(projectIdentifier);
 		TenancyContextHolder.createEmptyContext();
 		TenancyContextHolder.getContext().setTenant(tenant);

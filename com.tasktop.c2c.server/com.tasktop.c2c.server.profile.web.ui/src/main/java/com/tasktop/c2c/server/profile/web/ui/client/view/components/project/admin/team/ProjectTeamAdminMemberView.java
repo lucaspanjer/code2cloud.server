@@ -23,8 +23,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectRole;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamMember;
+import com.tasktop.c2c.server.profile.domain.project.ProjectRole;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 
 public class ProjectTeamAdminMemberView extends Composite {
 

@@ -14,7 +14,9 @@ package com.tasktop.c2c.server.internal.profile.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,7 +33,10 @@ import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
 import com.tasktop.c2c.server.profile.domain.project.ProjectPreferences;
+import com.tasktop.c2c.server.profile.domain.project.ProjectRole;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamSummary;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
@@ -408,4 +413,44 @@ public class WebServiceDomain {
 
 		return target;
 	}
+
+	public ProjectTeamSummary copyTeamSummary(com.tasktop.c2c.server.profile.domain.internal.Project project) {
+		ProjectTeamSummary summary = new ProjectTeamSummary();
+
+		List<ProjectTeamMember> teamMemberList = new ArrayList<ProjectTeamMember>();
+		for (ProjectProfile projectProfile : project.getProjectProfiles()) {
+			// if the profile only has the Community role then they are just watching and don't appear in the team
+			// list.
+			Set<ProjectRole> profileRoles = new HashSet<ProjectRole>();
+
+			if (projectProfile.getUser()) {
+				profileRoles.add(ProjectRole.MEMBER);
+			}
+
+			if (projectProfile.getOwner()) {
+				profileRoles.add(ProjectRole.OWNER);
+			}
+
+			if (profileRoles.size() == 0) {
+				// We had a user with only the community role - skip them, as they aren't really a part of the
+				// project
+				// team (they are just watching the project).
+				continue;
+			}
+
+			Profile domainProfile = copy(projectProfile.getProfile());
+
+			ProjectTeamMember projectTeamMember = new ProjectTeamMember();
+			projectTeamMember.setProfile(domainProfile);
+			projectTeamMember.setRoles(profileRoles);
+
+			teamMemberList.add(projectTeamMember);
+		}
+
+		Collections.sort(teamMemberList);
+		summary.setMembers(teamMemberList);
+		return summary;
+
+	}
+
 }

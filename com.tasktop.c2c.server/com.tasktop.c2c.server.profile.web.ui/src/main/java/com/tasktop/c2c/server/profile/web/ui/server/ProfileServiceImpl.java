@@ -34,15 +34,11 @@ import org.springframework.validation.Errors;
 
 import com.tasktop.c2c.server.common.profile.web.client.ProfileService;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
-import com.tasktop.c2c.server.common.profile.web.shared.Profile;
 import com.tasktop.c2c.server.common.profile.web.shared.ProjectDashboard;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectRole;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamMember;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
-import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.common.web.server.AbstractAutowiredRemoteServiceServlet;
@@ -53,7 +49,10 @@ import com.tasktop.c2c.server.internal.profile.service.WebServiceDomain;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
+import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectRole;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
@@ -318,7 +317,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 		}
 		List<Profile> profiles = new ArrayList<Profile>();
 		for (ProjectProfile profile : project.getProjectProfiles()) {
-			Profile copy = WebDomain.copy(profile.getProfile());
+			Profile copy = webServiceDomain.copy(profile.getProfile());
 			if (matches(query, copy)) {
 				profiles.add(copy);
 			}
@@ -334,19 +333,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 			profile.setEmail(null);
 		}
 		return profiles;
-	}
-
-	@Override
-	public QueryResult<Profile> findProfiles(String query, QueryRequest request) {
-		QueryResult<com.tasktop.c2c.server.profile.domain.internal.Profile> result = profileService.findProfiles(query,
-				request.getPageInfo(), request.getSortInfo());
-		QueryResult<Profile> queryResult = new QueryResult<Profile>(result.getOffset(), result.getPageSize(),
-				WebDomain.copy(result.getResultPage()), result.getTotalResultSize());
-		// don't leak email addresses
-		for (Profile profile : queryResult.getResultPage()) {
-			profile.setEmail(null);
-		}
-		return queryResult;
 	}
 
 	private Boolean matches(String query, Profile profile) {

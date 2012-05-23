@@ -17,18 +17,17 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
-import com.tasktop.c2c.server.common.profile.web.shared.Profile;
 import com.tasktop.c2c.server.common.profile.web.shared.ProjectDashboard;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamMember;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
-import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.web.shared.AuthenticationFailedException;
 import com.tasktop.c2c.server.common.web.shared.AuthenticationRequiredException;
 import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
 import com.tasktop.c2c.server.common.web.shared.ValidationFailedException;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
+import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
@@ -65,8 +64,6 @@ public interface ProfileService extends RemoteService {
 	public List<Profile> getProfiles(String projectIdentifier) throws NoSuchEntityException;
 
 	public List<Profile> getProfiles(String projectIdentifier, String query, int limit) throws NoSuchEntityException;
-
-	public QueryResult<Profile> findProfiles(String query, QueryRequest request);
 
 	public Boolean updateTeamMemberRoles(String projectIdentifier, ProjectTeamMember member)
 			throws NoSuchEntityException, ValidationFailedException;

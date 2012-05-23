@@ -7,8 +7,7 @@
 		<div class="deployment project-admin left">
 			<h3>Team Management</h3>
 			<g:FlowPanel ui:field="teamMembersPanel"/>
-			<g:TextBox ui:field="inviteEmail" addStyleNames="text" />
-			<g:Button ui:field="inviteButton" addStyleNames="invite button">Invite</g:Button>
+			<g:SimplePanel ui:field="addMemberPanel"/>
 		</div>
 		<!-- Project Tab Contents End -->
 		<div class="project-help right">

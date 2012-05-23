@@ -187,6 +187,9 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean {
 			case MODIFY:
 				assertOwner(projectLink.getProject());
 				return;
+			case CREATE:
+				assertOwner(projectLink.getProject());
+				return;
 			}
 		} else if (target instanceof InvitationToken) {
 			InvitationToken token = (InvitationToken) target;

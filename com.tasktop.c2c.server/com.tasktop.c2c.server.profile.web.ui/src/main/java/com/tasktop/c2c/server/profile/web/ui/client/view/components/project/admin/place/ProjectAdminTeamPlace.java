@@ -23,12 +23,12 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectAdminPlace;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamSummary;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectTeamAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectTeamResult;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamSummary;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectAdminSettingsPlace;
 

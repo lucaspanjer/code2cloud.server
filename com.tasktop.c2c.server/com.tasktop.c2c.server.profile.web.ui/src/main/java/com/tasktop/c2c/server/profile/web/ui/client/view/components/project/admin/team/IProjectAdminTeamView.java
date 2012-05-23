@@ -12,11 +12,11 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.team;
 
-
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamMember;
-import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
-
 import java.util.List;
+
+import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
+import com.tasktop.c2c.server.profile.domain.project.Profile;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 
 public interface IProjectAdminTeamView<T extends IProjectAdminTeamView.Presenter> {
 
@@ -31,6 +31,10 @@ public interface IProjectAdminTeamView<T extends IProjectAdminTeamView.Presenter
 
 		void sendInvite(String email);
 
+		void addToProject(Profile profile);
+
 		Person getSelf();
+
+		String getProjectIdentifier();
 	}
 }

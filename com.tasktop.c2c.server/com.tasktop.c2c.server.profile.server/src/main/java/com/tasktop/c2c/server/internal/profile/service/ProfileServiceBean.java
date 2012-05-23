@@ -164,7 +164,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		this.jobService = jobService;
 	}
 
-	private final class AccountConstraintsValidator implements Validator {
+	private final class ProfileConstraintsCreateValidator implements Validator {
 		// FIXME: we could move this into a registered validator if we could
 		// figure out how to inject the entity manager (request scope)
 		@SuppressWarnings("unchecked")
@@ -173,17 +173,41 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			Profile profile = (Profile) target;
 			if (profile.getUsername() != null && profile.getUsername().trim().length() > 0) {
 
-				try {
-					Profile userWithUsername = identityManagmentService.getProfileByUsername(profile.getUsername());
-					if (!userWithUsername.equals(profile)) {
+					if (identityManagmentService.usernameExists(profile.getUsername())) {
 						errors.reject("profile.usernameUnique", new Object[] { profile.getUsername() }, null);
 					}
 
+			
+
+			}
+			if (profile.getEmail() != null && profile.getEmail().trim().length() > 0) {
+
+				try {
+					Profile userWithEmail = identityManagmentService.getProfileByEmail(profile.getEmail());
+					if (!userWithEmail.equals(profile)) {
+						errors.reject("profile.emailUnique", new Object[] { profile.getEmail() }, null);
+					}
 				} catch (EntityNotFoundException e) {
-					// Expected
+					// expected
 				}
 
 			}
+		}
+
+		@Override
+		public boolean supports(Class<?> clazz) {
+			return Profile.class.isAssignableFrom(clazz);
+		}
+	}
+
+	private final class ProfileConstraintsUpdateValidator implements Validator {
+		// FIXME: we could move this into a registered validator if we could
+		// figure out how to inject the entity manager (request scope)
+		@SuppressWarnings("unchecked")
+		@Override
+		public void validate(Object target, Errors errors) {
+			Profile profile = (Profile) target;
+
 			if (profile.getEmail() != null && profile.getEmail().trim().length() > 0) {
 
 				try {
@@ -249,7 +273,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		securityPolicy.create(profile);
 
-		validate(profile, validator, new AccountConstraintsValidator(), new ProfilePasswordValidator());
+		validate(profile, validator, new ProfileConstraintsCreateValidator(), new ProfilePasswordValidator());
 		profile.setNotificationSettings(notificationService.constructDefaultSettings());
 
 		Profile created = identityManagmentService.createProfile(profile);
@@ -294,7 +318,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		// Validation
 		List<Validator> validators = new ArrayList<Validator>();
 		validators.add(validator);
-		validators.add(new AccountConstraintsValidator());
+		validators.add(new ProfileConstraintsUpdateValidator());
 		if (passwordReset) {
 			validators.add(new ProfilePasswordValidator());
 		}
@@ -337,6 +361,16 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			projectProfile = managedApplicationProfile;
 		}
 		validate(projectProfile, validator);
+	}
+
+	@Secured(Role.User)
+	@Override
+	public void createProjectProfile(String projectId, String username) throws EntityNotFoundException {
+		Profile profile = identityManagmentService.getProfileByUsername(username);
+		Project project = getProjectByIdentifier(projectId);
+		ProjectProfile pp = addProjectProfileInternal(project, profile);
+		securityPolicy.create(pp);
+
 	}
 
 	@Secured(Role.User)
@@ -889,40 +923,22 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	@Secured(Role.User)
-	@SuppressWarnings("unchecked")
 	@Override
 	public QueryResult<Profile> findProfiles(String queryText, Region region, SortInfo sortInfo) {
-		queryText = queryText == null ? "" : queryText.trim();
-		queryText = queryText.toLowerCase();
-		queryText += "%";
-
-		String coreQuery = "from " + Profile.class.getSimpleName() + " p where " + "LOWER(p.firstName) like :q OR "
-				+ "LOWER(p.lastName) like :q OR " + "LOWER(p.username) like :q";
-		Query query = entityManager.createQuery("select p "
-				+ coreQuery
-				+ " "
-				+ createSortClause("p", Profile.class, sortInfo, new SortInfo("firstName"), new SortInfo("lastName"),
-						new SortInfo("username")));
-		query.setParameter("q", queryText.trim());
 		if (region == null) {
 			region = new Region(0, 100);
 		} else if (region.getSize() > MAX_SIZE) {
 			region.setSize(MAX_SIZE);
 		}
-		query.setFirstResult(region.getOffset());
-		query.setMaxResults(region.getSize());
+		QueryResult<Profile> result = identityManagmentService.findProfiles(queryText, region, sortInfo);
 
-		Long totalSize = (Long) entityManager.createQuery("select count(p) " + coreQuery).setParameter("q", queryText)
-				.getSingleResult();
-
-		List<Profile> results = query.getResultList();
-		for (Profile profile : results) {
+		for (Profile profile : result.getResultPage()) {
 			securityPolicy.retrieve(profile);
 		}
-		return new QueryResult<Profile>(region, results, totalSize.intValue());
+		return result;
 	}
 
-	private String createSortClause(String entityAlias, Class<? extends BaseEntity> entity, SortInfo... sortInfos) {
+	static String createSortClause(String entityAlias, Class<? extends BaseEntity> entity, SortInfo... sortInfos) {
 		String sql = "order by";
 		if (sortInfos != null) {
 			int count = 0;
@@ -941,7 +957,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		return sql;
 	}
 
-	private boolean hasPersistentField(Class<? extends BaseEntity> entity, String fieldName) {
+	private static boolean hasPersistentField(Class<? extends BaseEntity> entity, String fieldName) {
 		Class<?> clazz = entity;
 		while (clazz != Object.class) {
 			try {
@@ -955,7 +971,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		return false;
 	}
 
-	private void addProjectProfileInternal(Project project, Profile profile) {
+	private ProjectProfile addProjectProfileInternal(Project project, Profile profile) {
 		List<ProjectProfile> projectProfiles = project.getProjectProfiles();
 		ProjectProfile projectProfile = null;
 		for (ProjectProfile curProjectProfile : projectProfiles) {
@@ -964,7 +980,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 				// If we're already marked as a user, then bail out now
 				if (curProjectProfile.getUser()) {
-					return;
+					return curProjectProfile;
 				} else {
 					break;
 				}
@@ -989,6 +1005,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			// If this is new, save it now.
 			entityManager.persist(projectProfile);
 		}
+		return projectProfile;
 
 	}
 
@@ -1803,4 +1820,5 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			throw new EntityNotFoundException();
 		}
 	}
+
 }

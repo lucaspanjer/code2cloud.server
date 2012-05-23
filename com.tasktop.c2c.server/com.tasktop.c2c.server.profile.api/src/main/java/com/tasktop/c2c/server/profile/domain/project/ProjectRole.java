@@ -10,35 +10,22 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.common.profile.web.shared;
+package com.tasktop.c2c.server.profile.domain.project;
 
 import java.io.Serializable;
-import java.util.Set;
 
-@SuppressWarnings("serial")
-public class ProjectTeamMember implements Serializable, Comparable<ProjectTeamMember> {
-	private Profile profile;
-	private Set<ProjectRole> roles;
+public enum ProjectRole implements Serializable {
 
-	public Profile getProfile() {
-		return profile;
+	MEMBER("Member"), OWNER("Owner");
+
+	private final String label;
+
+	private ProjectRole(String label) {
+		this.label = label;
 	}
 
-	public void setProfile(Profile profile) {
-		this.profile = profile;
-	}
-
-	public Set<ProjectRole> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<ProjectRole> roles) {
-		this.roles = roles;
-	}
-
-	@Override
-	public int compareTo(ProjectTeamMember o) {
-		return profile.compareTo(o.profile);
+	public String getLabel() {
+		return label;
 	}
 
 }

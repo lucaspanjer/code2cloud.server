@@ -33,7 +33,10 @@ import org.springframework.social.github.api.GitHub;
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.domain.QueryResult;
+import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
+import com.tasktop.c2c.server.common.service.domain.SortInfo;
 import com.tasktop.c2c.server.profile.domain.internal.Agreement;
 import com.tasktop.c2c.server.profile.domain.internal.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
@@ -66,6 +69,16 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 			return entityManager.createQuery(query).getSingleResult();
 		} catch (NoResultException e) {
 			throw new EntityNotFoundException("user [" + username + "] not found");
+		}
+	}
+
+	@Override
+	public boolean usernameExists(String username) {
+		try {
+			getProfileByUsername(username);
+			return true;
+		} catch (EntityNotFoundException e) {
+			return false;
 		}
 	}
 
@@ -266,5 +279,31 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 
 	protected void resetPassword(Profile profile, String password) {
 		profile.setPassword(passwordEncoder.encodePassword(profile.getPassword(), null));
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public QueryResult<Profile> findProfiles(String queryText, Region region, SortInfo sortInfo) {
+		queryText = queryText == null ? "" : queryText.trim();
+		queryText = queryText.toLowerCase();
+		queryText += "%";
+
+		String coreQuery = "from " + Profile.class.getSimpleName() + " p where " + "LOWER(p.firstName) like :q OR "
+				+ "LOWER(p.lastName) like :q OR " + "LOWER(p.username) like :q";
+		Query query = entityManager.createQuery("select p "
+				+ coreQuery
+				+ " "
+				+ ProfileServiceBean.createSortClause("p", Profile.class, sortInfo, new SortInfo("firstName"),
+						new SortInfo("lastName"), new SortInfo("username")));
+		query.setParameter("q", queryText.trim());
+
+		query.setFirstResult(region.getOffset());
+		query.setMaxResults(region.getSize());
+
+		Long totalSize = (Long) entityManager.createQuery("select count(p) " + coreQuery).setParameter("q", queryText)
+				.getSingleResult();
+		List<Profile> results = query.getResultList();
+
+		return new QueryResult<Profile>(region, results, totalSize.intValue());
 	}
 }

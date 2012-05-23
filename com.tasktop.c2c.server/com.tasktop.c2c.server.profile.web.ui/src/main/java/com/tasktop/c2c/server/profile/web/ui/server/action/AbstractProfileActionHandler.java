@@ -18,6 +18,7 @@ import net.customware.gwt.dispatch.shared.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.tasktop.c2c.server.internal.profile.service.WebServiceDomain;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
 
@@ -34,6 +35,9 @@ public abstract class AbstractProfileActionHandler<A extends Action<R>, R extend
 
 	@Autowired
 	protected ProfileServiceConfiguration configuration;
+
+	@Autowired
+	protected WebServiceDomain webServiceDomain;
 
 	public AbstractProfileActionHandler() {
 		super();

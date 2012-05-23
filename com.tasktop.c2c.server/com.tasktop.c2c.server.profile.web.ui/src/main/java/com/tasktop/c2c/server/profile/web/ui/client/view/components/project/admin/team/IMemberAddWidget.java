@@ -1,6 +1,5 @@
 /*******************************************************************************
  * Copyright (c) 2010, 2012 Tasktop Technologies
- * Copyright (c) 2010, 2011 SpringSource, a division of VMware
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,22 +9,16 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.common.profile.web.shared;
+package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.team;
 
-import java.io.Serializable;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public enum ProjectRole implements Serializable {
+/**
+ * @author cmorgan (Tasktop Technologies Inc.)
+ * 
+ */
+public interface IMemberAddWidget extends IsWidget {
+	void setPresenter(IProjectAdminTeamView.Presenter presenter);
 
-	MEMBER("Member"), OWNER("Owner");
-
-	private final String label;
-
-	private ProjectRole(String label) {
-		this.label = label;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
+	void clearInput();
 }

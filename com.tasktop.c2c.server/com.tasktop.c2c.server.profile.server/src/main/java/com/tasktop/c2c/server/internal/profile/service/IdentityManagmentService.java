@@ -16,6 +16,9 @@ import java.util.List;
 
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.domain.QueryResult;
+import com.tasktop.c2c.server.common.service.domain.Region;
+import com.tasktop.c2c.server.common.service.domain.SortInfo;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 
 /**
@@ -26,6 +29,8 @@ public interface IdentityManagmentService {
 
 	Profile getProfileByUsername(String username) throws EntityNotFoundException;
 
+	boolean usernameExists(String username);
+
 	Profile validateCredentials(String username, String password) throws AuthenticationException;
 
 	List<String> computeAuthorities(Profile profile);
@@ -35,5 +40,7 @@ public interface IdentityManagmentService {
 	Profile updateProfile(Profile profile) throws EntityNotFoundException;
 
 	Profile getProfileByEmail(String email) throws EntityNotFoundException;
+
+	QueryResult<Profile> findProfiles(String queryText, Region region, SortInfo sortInfo);
 
 }

@@ -12,15 +12,14 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.event;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
-import com.tasktop.c2c.server.common.profile.web.shared.Profile;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamMember;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
+import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.ConfirmLeaveProjectDialog;
 

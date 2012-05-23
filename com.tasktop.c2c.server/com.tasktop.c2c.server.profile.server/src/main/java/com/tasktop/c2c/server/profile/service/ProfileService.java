@@ -216,4 +216,11 @@ public interface ProfileService {
 	 * @throws ValidationException
 	 */
 	Organization updateOrganization(Organization organization) throws EntityNotFoundException, ValidationException;
+
+	/**
+	 * @param projectId
+	 * @param id
+	 * @throws EntityNotFoundException
+	 */
+	void createProjectProfile(String projectId, String username) throws EntityNotFoundException;
 }

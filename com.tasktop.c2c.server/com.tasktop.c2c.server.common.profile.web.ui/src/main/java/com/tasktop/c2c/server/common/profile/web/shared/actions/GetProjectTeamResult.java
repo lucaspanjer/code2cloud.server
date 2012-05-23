@@ -12,7 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.profile.web.shared.actions;
 
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamSummary;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamSummary;
 
 import net.customware.gwt.dispatch.shared.AbstractSimpleResult;
 

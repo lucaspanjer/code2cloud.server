@@ -15,13 +15,12 @@ package com.tasktop.c2c.server.common.profile.web.client.presenter.person;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileServiceAsync;
-import com.tasktop.c2c.server.common.profile.web.shared.Profile;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.ValueSuggestionService.Callback;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
+import com.tasktop.c2c.server.profile.domain.project.Profile;
 
 public class AbstractPersonService {
 

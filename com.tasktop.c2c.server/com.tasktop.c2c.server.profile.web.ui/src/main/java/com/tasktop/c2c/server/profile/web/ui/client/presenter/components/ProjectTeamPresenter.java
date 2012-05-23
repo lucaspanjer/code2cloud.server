@@ -14,8 +14,8 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
 
 import com.google.gwt.place.shared.Place;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamSummary;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamSummary;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectTeamPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.ProjectTeamView;

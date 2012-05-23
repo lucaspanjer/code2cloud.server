@@ -16,14 +16,13 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
-import com.tasktop.c2c.server.common.profile.web.shared.Profile;
 import com.tasktop.c2c.server.common.profile.web.shared.ProjectDashboard;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamMember;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
-import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
+import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
@@ -50,8 +49,6 @@ public interface ProfileServiceAsync {
 	void getProfiles(String projectIdentifier, AsyncCallback<List<Profile>> callback);
 
 	void getProfiles(String projectIdentifier, String query, int limit, AsyncCallback<List<Profile>> callback);
-
-	void findProfiles(String query, QueryRequest request, AsyncCallback<QueryResult<Profile>> callback);
 
 	void updateTeamMemberRoles(String projectIdentifier, ProjectTeamMember member, AsyncCallback<Boolean> callback);
 

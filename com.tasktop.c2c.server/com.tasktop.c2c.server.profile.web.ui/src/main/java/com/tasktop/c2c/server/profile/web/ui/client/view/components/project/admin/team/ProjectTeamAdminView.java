@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.adm
 
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -22,14 +21,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.presenter.person.PersonUtil;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamMember;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 
 public class ProjectTeamAdminView extends Composite implements IProjectAdminTeamView<IProjectAdminTeamView.Presenter> {
 
@@ -48,24 +45,25 @@ public class ProjectTeamAdminView extends Composite implements IProjectAdminTeam
 	}
 
 	@UiField
-	Panel teamMembersPanel;
+	protected Panel teamMembersPanel;
 
 	@UiField
-	public TextBox inviteEmail;
-	@UiField
-	public Button inviteButton;
+	protected SimplePanel addMemberPanel;
+
+	private IMemberAddWidget memberAddWidget = GWT.create(IMemberAddWidget.class);
 
 	private Presenter presenter;
 
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+		memberAddWidget.setPresenter(presenter);
 		setProjectTeamMembers(presenter.getTeamMembers());
 	}
 
 	public ProjectTeamAdminView() {
 		initWidget(uiBinder.createAndBindUi(this));
-		inviteEmail.getElement().setPropertyString("placeholder", "Enter Email Address");
+		addMemberPanel.setWidget(memberAddWidget);
 	}
 
 	private void setProjectTeamMembers(List<ProjectTeamMember> teamMembers) {
@@ -111,9 +109,8 @@ public class ProjectTeamAdminView extends Composite implements IProjectAdminTeam
 		presenter.updateTeamMember(teamMember);
 	}
 
-	@UiHandler("inviteButton")
-	void onInviteUser(ClickEvent event) {
-		presenter.sendInvite(inviteEmail.getText());
+	public void clearInput() {
+		memberAddWidget.clearInput();
 	}
 
 }

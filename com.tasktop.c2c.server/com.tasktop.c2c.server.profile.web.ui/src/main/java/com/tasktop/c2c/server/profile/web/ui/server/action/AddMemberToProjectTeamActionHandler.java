@@ -17,7 +17,7 @@ import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.stereotype.Component;
 
-import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectTeamAction;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.AddMemberToProjectTeamAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectTeamResult;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -28,17 +28,21 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectTeamSummary;
  * 
  */
 @Component
-public class GetProjectTeamActionHandler extends
-		AbstractProfileActionHandler<GetProjectTeamAction, GetProjectTeamResult> {
+public class AddMemberToProjectTeamActionHandler extends
+		AbstractProfileActionHandler<AddMemberToProjectTeamAction, GetProjectTeamResult> {
 
 	@Override
-	public GetProjectTeamResult execute(GetProjectTeamAction action, ExecutionContext context) throws DispatchException {
+	public GetProjectTeamResult execute(AddMemberToProjectTeamAction action, ExecutionContext context)
+			throws DispatchException {
 		try {
 			setTenancyContext(action.getProjectId());
-			Project project = profileService.getProjectByIdentifier(action.getProjectId());
 
+			profileService.createProjectProfile(action.getProjectId(), action.getProfile().getUsername());
+
+			Project project = profileService.getProjectByIdentifier(action.getProjectId());
 			ProjectTeamSummary summary = webServiceDomain.copyTeamSummary(project);
 			return new GetProjectTeamResult(summary);
+
 		} catch (EntityNotFoundException e) {
 			handle(e);
 		}

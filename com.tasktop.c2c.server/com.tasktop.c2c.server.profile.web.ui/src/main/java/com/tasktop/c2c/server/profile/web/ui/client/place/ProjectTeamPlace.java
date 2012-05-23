@@ -28,7 +28,6 @@ import com.tasktop.c2c.server.common.profile.web.client.place.Section;
 import com.tasktop.c2c.server.common.profile.web.client.place.SectionPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectTeamSummary;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectTeamAction;
@@ -36,6 +35,7 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectTeamRe
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTeamSummary;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 public class ProjectTeamPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace,

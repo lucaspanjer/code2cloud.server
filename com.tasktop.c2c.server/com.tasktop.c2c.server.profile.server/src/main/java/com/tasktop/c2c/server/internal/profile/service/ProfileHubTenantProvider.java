@@ -20,7 +20,6 @@ import org.springframework.tenancy.core.Tenant;
 import org.springframework.tenancy.provider.TenantProvider;
 
 import com.tasktop.c2c.server.common.service.web.ProfileHubTenant;
-import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 
 /**
@@ -43,14 +42,14 @@ public class ProfileHubTenantProvider implements TenantProvider {
 		tenant.setIdentity(projectId);
 		tenant.setProjectIdentifier(projectId);
 
-		try {
-			Project project = profileService.getProjectByIdentifier(projectId);
-			if (project.getOrganization() != null) {
-				tenant.setOrganizationIdentifier(project.getOrganization().getIdentifier());
-			}
-		} catch (Throwable t) {
-			LOG.debug("caught exception trying to get project, ignoring", t);
-		}
+		// try {
+		// Project project = profileService.getProjectByIdentifier(projectId);
+		// if (project.getOrganization() != null) {
+		// tenant.setOrganizationIdentifier(project.getOrganization().getIdentifier());
+		// }
+		// } catch (Throwable t) {
+		// LOG.debug("caught exception trying to get project, ignoring", t);
+		// }
 
 		return tenant;
 	}
