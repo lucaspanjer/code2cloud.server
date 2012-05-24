@@ -1463,6 +1463,16 @@ public abstract class BaseProfileServiceTest {
 		return internalProfile;
 	}
 
+	private Organization setupOrganization() throws ValidationException, EntityNotFoundException {
+		Organization org = MockOrganizationFactory.create(null);
+		org = profileService.createOrganization(org);
+		assertEquals(0, org.getProjects().size());
+		assertNotNull(org.getIdentifier());
+		org = profileService.getOrganizationByIdentfier(org.getIdentifier());
+		assertNotNull(org);
+		return org;
+	}
+
 	@Test
 	public void testfindProjectsByRelationship() throws ValidationException, EntityNotFoundException {
 		Profile profile = setupProfile(false);
@@ -1490,18 +1500,7 @@ public abstract class BaseProfileServiceTest {
 	public void testCreateOrganizationWithProjects() throws ValidationException, EntityNotFoundException {
 		Profile profile = setupProfile();
 
-		Organization org = MockOrganizationFactory.create(null);
-		org = profileService.createOrganization(org);
-		assertEquals(0, org.getProjects().size());
-		assertNotNull(org.getIdentifier());
-		org = profileService.getOrganizationByIdentfier(org.getIdentifier());
-		assertNotNull(org);
-
-		OrganizationProfile op = new OrganizationProfile();
-		op.setOrganization(org);
-		op.setProfile(profile);
-		org.getOrganizationProfiles().add(op);
-		entityManager.persist(op);
+		Organization org = setupOrganization();
 
 		ProjectsQuery query = new ProjectsQuery(ProjectRelationship.ALL, null);
 		query.setOrganizationIdentifier(org.getIdentifier());
@@ -1534,12 +1533,67 @@ public abstract class BaseProfileServiceTest {
 
 		assertEquals(1, (int) queryResult.getTotalResultSize());
 
+		query = new ProjectsQuery(ProjectRelationship.ORGANIZATION_PRIVATE, null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		queryResult = profileService.findProjects(query);
+
+		assertEquals(0, (int) queryResult.getTotalResultSize());
+
 		query = new ProjectsQuery(project.getIdentifier(), null);
 		query.setOrganizationIdentifier(org.getIdentifier());
 		queryResult = profileService.findProjects(query);
 
 		assertEquals(1, (int) queryResult.getTotalResultSize());
 
+	}
+
+	@Test
+	public void testFindOrganizationPrivateProjects() throws ValidationException, EntityNotFoundException {
+		Profile profile = setupProfile();
+
+		Profile profile2 = setupProfile();
+
+		Organization org = setupOrganization();
+		Organization org2 = setupOrganization();
+
+		Project project = MockProjectFactory.create(null);
+		project.setOrganization(org2);
+		project = profileService.createProject(profile.getId(), project);
+
+		Project project2 = MockProjectFactory.create(null);
+		project2.setOrganization(org);
+		project2 = profileService.createProject(profile2.getId(), project2);
+
+		createOrgPrivateProject(org, profile);
+		createOrgPrivateProject(org2, profile);
+		createOrgPrivateProject(org, profile2);
+		createOrgPrivateProject(org2, profile2);
+
+		org = profileService.getOrganizationByIdentfier(org.getIdentifier());
+		assertEquals(3, org.getProjects().size());
+
+		ProjectsQuery query = new ProjectsQuery(ProjectRelationship.ORGANIZATION_PRIVATE, null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		QueryResult<Project> queryResult = profileService.findProjects(query);
+
+		assertEquals(2, (int) queryResult.getTotalResultSize());
+
+	}
+
+	private Project createOrgPrivateProject(Organization org, Profile profile) throws EntityNotFoundException,
+			ValidationException {
+		Project orgPrivateProject = MockProjectFactory.create(null);
+		orgPrivateProject.setOrganization(org);
+		orgPrivateProject.setAccessibility(ProjectAccessibility.ORGANIZATION_PRIVATE);
+		orgPrivateProject = profileService.createProject(profile.getId(), orgPrivateProject);
+
+		OrganizationProfile op = new OrganizationProfile();
+		op.setOrganization(org);
+		op.setProfile(profile);
+		org.getOrganizationProfiles().add(op);
+		entityManager.persist(op);
+
+		return orgPrivateProject;
 	}
 
 	@Test

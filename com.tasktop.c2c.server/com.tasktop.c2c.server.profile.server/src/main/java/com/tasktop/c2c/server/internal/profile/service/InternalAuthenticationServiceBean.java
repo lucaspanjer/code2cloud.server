@@ -53,6 +53,7 @@ public class InternalAuthenticationServiceBean implements InternalAuthentication
 			case ORGANIZATION_PRIVATE:
 				if (userIsMemberOfProjectOrg(token.getUsername(), project)) {
 					token.getAuthorities().add(Role.Community);
+					token.getAuthorities().add(Role.Observer);
 				}
 			case PRIVATE:
 				// nothing

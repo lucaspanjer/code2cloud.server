@@ -62,9 +62,15 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 			this.currentOrganization = ((OrganizationProjectsPlace) p).getOrganization();
 			ProjectDiscoveryView.getInstance().createAnchorElement.setHref(OrganizationNewProjectPlace.createPlace(
 					currentOrganization.getIdentifier()).getHref());
+			ProjectDiscoveryView.getInstance().setOrganizationFilterVisible(true);
+			ProjectDiscoveryView.getInstance().setPublicFilterVisible(false);
+			ProjectDiscoveryView.getInstance().setWatcherFilterVisible(false);
 		} else {
 			this.currentOrganization = null;
 			ProjectDiscoveryView.getInstance().createAnchorElement.setHref(NewProjectPlace.createPlace().getHref());
+			ProjectDiscoveryView.getInstance().setOrganizationFilterVisible(false);
+			ProjectDiscoveryView.getInstance().setPublicFilterVisible(true);
+			ProjectDiscoveryView.getInstance().setWatcherFilterVisible(true);
 		}
 		ProjectDiscoveryView.getInstance().pager.setPageSize(currentQueryRequest.getPageInfo().getSize());
 		ProjectDiscoveryView.getInstance().setPresenter(ProjectDiscoveryPresenter.this);

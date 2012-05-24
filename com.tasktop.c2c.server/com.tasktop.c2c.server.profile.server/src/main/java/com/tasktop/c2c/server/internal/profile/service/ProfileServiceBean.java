@@ -1570,9 +1570,15 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		String whereString;
 		boolean needIdParam = true;
 		boolean needPubParam = false;
+		boolean needPrivParam = false;
 		switch (projectRelationship) {
 		case ALL:
-			whereString = "WHERE (project.accessibility = :public OR pp.profile.id = :id) ";
+			whereString = "WHERE (project.accessibility = :public OR pp.profile.id = :id";
+			if (orgIdentifierOrNull != null) {
+				whereString += " OR project.accessibility = :organizationPrivate";
+				needPrivParam = true;
+			}
+			whereString += ") ";
 			needPubParam = true;
 			break;
 		case MEMBER:
@@ -1580,6 +1586,14 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			break;
 		case OWNER:
 			whereString = "WHERE pp.profile.id = :id AND pp.owner = true ";
+			break;
+		case ORGANIZATION_PRIVATE: // requires an organization
+			if (orgIdentifierOrNull == null) {
+				throw new IllegalArgumentException();
+			}
+			whereString = "WHERE project.accessibility = :organizationPrivate ";
+			needPrivParam = true;
+			needIdParam = false;
 			break;
 		case WATCHER:
 			whereString = "WHERE pp.profile.id = :id AND pp.community = true ";
@@ -1603,6 +1617,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (needPubParam) {
 			totalResultQuery.setParameter("public", ProjectAccessibility.PUBLIC);
 		}
+		if (needPrivParam) {
+			totalResultQuery.setParameter("organizationPrivate", ProjectAccessibility.ORGANIZATION_PRIVATE);
+		}
 		if (needIdParam) {
 			totalResultQuery.setParameter("id", profile.getId());
 		}
@@ -1616,6 +1633,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 				+ createSortClause("project", Project.class, new SortInfo("name")));
 		if (needPubParam) {
 			q.setParameter("public", ProjectAccessibility.PUBLIC);
+		}
+		if (needPrivParam) {
+			q.setParameter("organizationPrivate", ProjectAccessibility.ORGANIZATION_PRIVATE);
 		}
 		if (needIdParam) {
 			q.setParameter("id", profile.getId());
@@ -1673,6 +1693,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 	}
 
+	@Secured(Role.User)
 	@Override
 	public Organization createOrganization(Organization org) throws ValidationException {
 

@@ -12,6 +12,7 @@
           <div class="left" ui:field="filterDivElement">
             <ul class="project-filter right">
                           <li><g:Anchor ui:field="publicFilterAnchor" styleName="button first">Public</g:Anchor></li>
+                          <li><g:Anchor ui:field="organizationFilterAnchor" styleName="button first">Organization Shared</g:Anchor></li>
                           <li><g:Anchor ui:field="watcherFilterAnchor" styleName="button">Watcher</g:Anchor></li>
                           <li><g:Anchor ui:field="memberFilterAnchor" styleName="button">Member</g:Anchor></li>
                           <li><g:Anchor ui:field="ownerFilterAnchor" styleName="button">Owner</g:Anchor></li>

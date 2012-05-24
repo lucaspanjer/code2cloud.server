@@ -13,5 +13,5 @@
 package com.tasktop.c2c.server.profile.domain.project;
 
 public enum ProjectRelationship {
-	PUBLIC, WATCHER, MEMBER, OWNER, ALL;
+	PUBLIC, WATCHER, ORGANIZATION_PRIVATE, MEMBER, OWNER, ALL;
 }

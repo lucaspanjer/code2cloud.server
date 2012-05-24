@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.tests.service;
 
+import java.util.Arrays;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -30,10 +32,14 @@ import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.profile.domain.internal.Organization;
+import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
+import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.service.ProfileService;
+import com.tasktop.c2c.server.profile.tests.domain.mock.MockOrganizationFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProfileFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectProfileFactory;
@@ -77,6 +83,7 @@ public class ProfileServiceDataSecurityTest {
 
 		profile.setPassword(null);
 		profile2.setPassword(null);
+
 	}
 
 	@After
@@ -291,5 +298,38 @@ public class ProfileServiceDataSecurityTest {
 		profileService.getProfile(profile.getId());
 		profileService.getProfileByEmail(profile.getEmail());
 		profileService.getProfileByUsername(profile.getUsername());
+	}
+
+	@Test
+	public void testRetrieveMemberOrgPrivateProject() throws EntityNotFoundException, ValidationException {
+		retrieveOrgPrivateProject(true);
+	}
+
+	@Test(expected = InsufficientPermissionsException.class)
+	public void testRetrieveNonMemberOrgPrivateProject() throws EntityNotFoundException, ValidationException {
+		retrieveOrgPrivateProject(false);
+	}
+
+	private void retrieveOrgPrivateProject(boolean isUser) throws ValidationException, EntityNotFoundException {
+		Organization org = MockOrganizationFactory.create(null);
+		org = profileService.createOrganization(org);
+
+		OrganizationProfile op = new OrganizationProfile();
+		op.setOrganization(org);
+		op.setProfile(profile);
+		op.setUser(isUser);
+		org.getOrganizationProfiles().add(op);
+
+		entityManager.persist(op);
+		profile.setOrganizationProfiles(Arrays.asList(op));
+
+		logon(profile);
+
+		Project project = MockProjectFactory.create(null);
+		project.setOrganization(org);
+		project.setAccessibility(ProjectAccessibility.ORGANIZATION_PRIVATE);
+		project = profileService.createProject(profile.getId(), project);
+
+		profileService.getProjectByIdentifier(project.getIdentifier());
 	}
 }

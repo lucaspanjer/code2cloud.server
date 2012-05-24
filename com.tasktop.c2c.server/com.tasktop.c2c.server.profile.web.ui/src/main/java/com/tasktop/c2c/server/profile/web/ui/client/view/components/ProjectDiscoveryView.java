@@ -77,6 +77,8 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 	@UiField
 	Anchor watcherFilterAnchor;
 	@UiField
+	Anchor organizationFilterAnchor;
+	@UiField
 	Anchor memberFilterAnchor;
 	@UiField
 	Anchor ownerFilterAnchor;
@@ -142,8 +144,8 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 	 * 
 	 */
 	private void setupFilterAnchors() {
-		filterAnchors = new Anchor[] { publicFilterAnchor, watcherFilterAnchor, memberFilterAnchor, ownerFilterAnchor,
-				allFilterAnchor };
+		filterAnchors = new Anchor[] { publicFilterAnchor, watcherFilterAnchor, organizationFilterAnchor,
+				memberFilterAnchor, ownerFilterAnchor, allFilterAnchor };
 		publicFilterAnchor.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -157,6 +159,14 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 			@Override
 			public void onClick(ClickEvent event) {
 				selectedFilterChanged(ProjectRelationship.WATCHER);
+
+			}
+		});
+		organizationFilterAnchor.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				selectedFilterChanged(ProjectRelationship.ORGANIZATION_PRIVATE);
 
 			}
 		});
@@ -399,6 +409,9 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 		case OWNER:
 			updateFilterStyle(ownerFilterAnchor);
 			break;
+		case ORGANIZATION_PRIVATE:
+			updateFilterStyle(organizationFilterAnchor);
+			break;
 		case PUBLIC:
 			updateFilterStyle(publicFilterAnchor);
 			break;
@@ -420,5 +433,17 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 	public HasData<Project> getProjectsDisplay() {
 		return projectList;
+	}
+
+	public void setOrganizationFilterVisible(boolean visible) {
+		organizationFilterAnchor.setVisible(visible);
+	}
+
+	public void setPublicFilterVisible(boolean visible) {
+		publicFilterAnchor.setVisible(visible);
+	}
+
+	public void setWatcherFilterVisible(boolean visible) {
+		watcherFilterAnchor.setVisible(visible);
 	}
 }

@@ -114,7 +114,7 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 		if (retProfile != null && retProfile.getDisabled() != null && retProfile.getDisabled()) {
 			throw new AuthenticationException("Account disabled");
 		}
-
+		entityManager.refresh(retProfile);
 		return retProfile;
 	}
 
