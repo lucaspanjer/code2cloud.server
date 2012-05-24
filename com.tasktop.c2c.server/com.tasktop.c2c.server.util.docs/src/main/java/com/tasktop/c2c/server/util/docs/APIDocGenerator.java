@@ -140,7 +140,7 @@ public class APIDocGenerator {
 		createAPIDocs(args, generateDocs);
 	}
 
-	private static void createAPIDocs(String[] args, APIDocGenerator generateDocs) throws IOException {
+	protected static void createAPIDocs(String[] args, APIDocGenerator generateDocs) throws IOException {
 		CmdLineParser cmdLineParser = new CmdLineParser(generateDocs);
 		try {
 			cmdLineParser.parseArgument(args);
