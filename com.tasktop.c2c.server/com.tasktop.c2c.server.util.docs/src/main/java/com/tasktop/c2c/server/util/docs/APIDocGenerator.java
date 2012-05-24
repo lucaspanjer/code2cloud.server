@@ -117,17 +117,15 @@ public class APIDocGenerator {
 
 	private File outputFolder;
 	private List<Class<?>> apiClasses = new ArrayList<Class<?>>();
-	{
-		apiClasses.add(WikiServiceController.class);
-		apiClasses.add(TaskServiceController.class);
-		apiClasses.add(ProfileWebServiceController.class);
-		// apiClasses.add(ScmServiceController.class);
-	}
 
 	private Dictionary dictionary = new Dictionary();
 
 	public File getOutputFolder() {
 		return outputFolder;
+	}
+
+	public List<Class<?>> getApiClasses() {
+		return apiClasses;
 	}
 
 	@Option(name = "-output", required = true)
@@ -138,6 +136,11 @@ public class APIDocGenerator {
 	public static void main(String[] args) throws IOException {
 
 		APIDocGenerator generateDocs = new APIDocGenerator();
+
+		createAPIDocs(args, generateDocs);
+	}
+
+	private static void createAPIDocs(String[] args, APIDocGenerator generateDocs) throws IOException {
 		CmdLineParser cmdLineParser = new CmdLineParser(generateDocs);
 		try {
 			cmdLineParser.parseArgument(args);
@@ -153,6 +156,10 @@ public class APIDocGenerator {
 	}
 
 	public void generateDocs() {
+		apiClasses.add(WikiServiceController.class);
+		apiClasses.add(TaskServiceController.class);
+		apiClasses.add(ProfileWebServiceController.class);
+
 		for (Class<?> apiClass : apiClasses) {
 			generateDocs(apiClass);
 		}
@@ -287,7 +294,7 @@ public class APIDocGenerator {
 		}
 	}
 
-	private Object instantiateModel(Type type, Method m, boolean asReturnValue, boolean thin)
+	protected Object instantiateModel(Type type, Method m, boolean asReturnValue, boolean thin)
 			throws InstantiationException, IllegalAccessException {
 		ParameterizedType parameterizedType = (ParameterizedType) (type instanceof ParameterizedType ? type : null);
 		Class<?> classType = (Class<?>) (parameterizedType == null ? (Class<?>) type : parameterizedType.getRawType());
