@@ -311,6 +311,8 @@ public class ProfileServiceDataSecurityTest {
 	}
 
 	private void retrieveOrgPrivateProject(boolean isUser) throws ValidationException, EntityNotFoundException {
+		logon(profile);
+
 		Organization org = MockOrganizationFactory.create(null);
 		org = profileService.createOrganization(org);
 

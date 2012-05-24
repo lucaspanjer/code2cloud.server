@@ -100,7 +100,7 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 	public Profile validateCredentials(String username, String password) throws AuthenticationException {
 		if (username == null || password == null) {
 			// Bail out now.
-			return null;
+			throw new AuthenticationException("Credentials not provided");
 		}
 
 		// First, try the password matcher.
@@ -113,8 +113,11 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 
 		if (retProfile != null && retProfile.getDisabled() != null && retProfile.getDisabled()) {
 			throw new AuthenticationException("Account disabled");
+		} else if (retProfile == null) {
+			throw new AuthenticationException("Username and password do no match");
 		}
 		entityManager.refresh(retProfile);
+
 		return retProfile;
 	}
 

@@ -101,7 +101,8 @@ public class InternalAuthenticationServiceTest {
 
 		origToken.getAuthorities().clear();
 		AuthenticationToken specToken = service.specializeAuthenticationToken(origToken, project1);
-		assertEquals(1, specToken.getAuthorities().size());
+		assertEquals(2, specToken.getAuthorities().size());
 		Assert.assertTrue(specToken.getAuthorities().contains(Role.Community));
+		Assert.assertTrue(specToken.getAuthorities().contains(Role.Observer));
 	}
 }
