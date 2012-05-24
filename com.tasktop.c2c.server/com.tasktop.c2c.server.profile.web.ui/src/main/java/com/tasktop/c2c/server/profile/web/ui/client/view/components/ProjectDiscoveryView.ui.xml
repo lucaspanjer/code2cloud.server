@@ -43,10 +43,6 @@
 								<g:Anchor ui:field="watchLink" styleName="button watch right"><span></span>Watch</g:Anchor>
 							</h2>
 							<div class="clear"></div>
-							<div class="nav-bar" style="display:none">
-								<c:ProjectIconPanel ui:field="iconPanel" addStyles="left"/>
-								 <div class="clear"></div>
-							</div>
 							<p ui:field="projectDesc"></p>
 							<div class="activities">
 								<c:SimpleActivityView ui:field='activityView'/>	

@@ -103,8 +103,6 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 	Anchor watchLink;
 	@UiField
 	ParagraphElement projectDesc;
-	@UiField
-	ProjectIconPanel iconPanel;
 
 	@UiField
 	Anchor closeLink;
@@ -121,9 +119,6 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 		projectList = new CellList<Project>(new ProjectCell(), new NoCellListStyle());
 		model = new SingleSelectionModel<Project>();
-
-		// Hide the options menu - we never want to show it here.
-		iconPanel.setOptionsVisible(false);
 
 		model.addSelectionChangeHandler(new Handler() {
 
@@ -223,10 +218,6 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 								}
 							}
 						});
-
-		// Set up our icon panel
-		iconPanel.setProject(newProject);
-		iconPanel.activateAllIcons();
 
 		// Make our popup visible.
 		projectPopup.setVisible(true);
