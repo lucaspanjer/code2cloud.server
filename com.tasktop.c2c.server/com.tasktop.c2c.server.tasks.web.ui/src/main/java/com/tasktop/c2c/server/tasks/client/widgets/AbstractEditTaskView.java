@@ -100,6 +100,8 @@ public class AbstractEditTaskView extends AbstractComposite implements AbstractE
 	@Path("")
 	protected StatusEditorView statusEditor;
 
+	private RepositoryConfiguration repositoryConfiguration;
+
 	@UiField(provided = true)
 	protected MultiValueChooser<Keyword> keywords = new MultiValueChooser<Keyword>(new KeywordSuggestOracle(null));
 	@UiField(provided = true)
@@ -114,7 +116,9 @@ public class AbstractEditTaskView extends AbstractComposite implements AbstractE
 			List<Suggestion> suggestions = new ArrayList<Suggestion>();
 
 			boolean foundExact = false;
-			for (String release : product.getValue().getReleaseTags()) {
+			Product selectedProduct = repositoryConfiguration.getProducts().get(
+					repositoryConfiguration.getProducts().indexOf(product.getValue()));
+			for (String release : selectedProduct.getReleaseTags()) {
 				if (release.equals(request.getQuery())) {
 					foundExact = true;
 				}
@@ -400,6 +404,7 @@ public class AbstractEditTaskView extends AbstractComposite implements AbstractE
 
 	@Override
 	public void setRepositoryConfiguration(RepositoryConfiguration repositoryConfiguration) {
+		this.repositoryConfiguration = repositoryConfiguration;
 		statusEditor.setRepositoryConfiguration(repositoryConfiguration);
 		description.setMarkLanguage(repositoryConfiguration.getMarkupLanguage());
 		configureValues(priority, repositoryConfiguration.getPriorities());
