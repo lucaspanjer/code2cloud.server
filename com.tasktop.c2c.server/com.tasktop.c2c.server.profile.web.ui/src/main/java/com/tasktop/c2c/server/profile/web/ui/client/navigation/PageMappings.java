@@ -83,8 +83,8 @@ public class PageMappings {
 			"admin/invitationCreator");
 	public static PageMapping AdminProfiles = new PageMapping(new AdminProfilePlace.Tokenizer(), "admin/profile");
 	public static PageMapping ProjectAdmin = ProjectAdminSettingsPlace.ProjectAdminSettings;
-	public static PageMapping OrgAdminPlace = new PageMapping(new OrganizationAdminPlace.Tokenizer(), "o/admin/{"
-			+ Path.ORGANIZATION_ID + "}");
+	public static PageMapping OrgAdminPlace = new PageMapping(new OrganizationAdminPlace.Tokenizer(), "o/{"
+			+ Path.ORGANIZATION_ID + "}/admin");
 	public static PageMapping ScmCommit = ScmCommitPlace.SCM_COMMIT;
 	public static PageMapping ScmLog = ScmRepoPlace.SCM_LOG;
 	public static PageMapping Scm = ScmPlace.SCM_PLACE;
