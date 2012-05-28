@@ -27,6 +27,7 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationAdminPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationNewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.ProjectDiscoveryView;
@@ -62,19 +63,24 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 			this.currentOrganization = ((OrganizationProjectsPlace) p).getOrganization();
 			ProjectDiscoveryView.getInstance().createAnchorElement.setHref(OrganizationNewProjectPlace.createPlace(
 					currentOrganization.getIdentifier()).getHref());
-			ProjectDiscoveryView.getInstance().setOrganizationFilterVisible(true);
-			ProjectDiscoveryView.getInstance().setPublicFilterVisible(false);
-			ProjectDiscoveryView.getInstance().setWatcherFilterVisible(false);
+			ProjectDiscoveryView.getInstance().orgAdminElement.setHref(OrganizationAdminPlace.createPlace(
+					currentOrganization.getIdentifier()).getHref());
+			setOrganizationLayout(true);
 		} else {
 			this.currentOrganization = null;
 			ProjectDiscoveryView.getInstance().createAnchorElement.setHref(NewProjectPlace.createPlace().getHref());
-			ProjectDiscoveryView.getInstance().setOrganizationFilterVisible(false);
-			ProjectDiscoveryView.getInstance().setPublicFilterVisible(true);
-			ProjectDiscoveryView.getInstance().setWatcherFilterVisible(true);
+			setOrganizationLayout(false);
 		}
 		ProjectDiscoveryView.getInstance().pager.setPageSize(currentQueryRequest.getPageInfo().getSize());
 		ProjectDiscoveryView.getInstance().setPresenter(ProjectDiscoveryPresenter.this);
 		update();
+	}
+
+	private void setOrganizationLayout(boolean isOrganization) {
+		ProjectDiscoveryView.getInstance().setOrganizationFilterVisible(isOrganization);
+		ProjectDiscoveryView.getInstance().setPublicFilterVisible(!isOrganization);
+		ProjectDiscoveryView.getInstance().setWatcherFilterVisible(!isOrganization);
+		ProjectDiscoveryView.getInstance().setOrgAdminButtonVisible(isOrganization);
 	}
 
 	@Override

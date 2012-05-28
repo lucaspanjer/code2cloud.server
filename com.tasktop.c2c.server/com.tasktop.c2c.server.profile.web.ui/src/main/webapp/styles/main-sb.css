@@ -2997,6 +2997,10 @@ a.red-link {
 	font-size:16px;
 }
 
+.button.special.org-admin{
+	margin-right:5px;
+}
+
 .button.special:hover {
   border: 1px solid #1C5CA7;
   background: #568EBF;

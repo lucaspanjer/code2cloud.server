@@ -20,6 +20,7 @@
                   </ul>
           </div>
           <div class="right">
+          	<a ui:field="orgAdminElement" class="button special org-admin"><span>Administer Organization</span></a>
           	<a ui:field="createAnchorElement" class="button special right"><span>Create Project</span></a>
           </div>
           <div class="clear"></div>

@@ -88,6 +88,8 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 	@UiField
 	public AnchorElement createAnchorElement;
+	@UiField
+	public AnchorElement orgAdminElement;
 
 	@UiField
 	Panel projectsPanel;
@@ -436,5 +438,9 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 	public void setWatcherFilterVisible(boolean visible) {
 		watcherFilterAnchor.setVisible(visible);
+	}
+
+	public void setOrgAdminButtonVisible(boolean visible) {
+		UIObject.setVisible(orgAdminElement, visible);
 	}
 }
