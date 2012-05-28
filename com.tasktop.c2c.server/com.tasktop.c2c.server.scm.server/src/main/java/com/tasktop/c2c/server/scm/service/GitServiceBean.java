@@ -43,6 +43,7 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.lib.RepositoryCache.FileKey;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.patch.FileHeader;
 import org.eclipse.jgit.patch.HunkHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -395,6 +396,9 @@ public class GitServiceBean implements GitService, InitializingBean {
 		try {
 			FileRepository repo = new FileRepository(gitDir);
 			repo.create();
+			StoredConfig config = repo.getConfig();
+			config.setBoolean("receive", null, "denynonfastforwards", true);
+			config.save();
 			repo.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
