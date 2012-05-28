@@ -116,7 +116,9 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 		} else if (retProfile == null) {
 			throw new AuthenticationException("Username and password do no match");
 		}
-		entityManager.refresh(retProfile);
+		if (entityManager.contains(retProfile)) {
+			entityManager.refresh(retProfile);
+		}
 
 		return retProfile;
 	}
