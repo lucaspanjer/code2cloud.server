@@ -48,8 +48,8 @@ class FetchWorkerThread extends Thread {
 	public void run() {
 		while (!stopRequest.get()) {
 			try {
-				triggerMirroredFetches();
 				Thread.sleep(milisecondsBetweenScans);
+				triggerMirroredFetches();
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
