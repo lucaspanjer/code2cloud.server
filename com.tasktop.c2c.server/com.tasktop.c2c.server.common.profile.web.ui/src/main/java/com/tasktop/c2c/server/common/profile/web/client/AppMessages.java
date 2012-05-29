@@ -33,7 +33,7 @@ public interface AppMessages extends Messages {
 
 	@DefaultMessage("Want to participate in a project you see, or create your own public or private project? "
 			+ "Code2Cloud is currently in beta and is accepting requests to join. "
-			+ "<em>Just send your first name, last name, and email address to <a href=\"mailto:dev-c2c@tasktop.com\">dev-c2c@tasktop.com</a>.</em> ")
+			+ "<em>Just send your first name, last name, and email address to <a href=\"mailto:engineering-c2c@tasktop.com\">engineering-c2c@tasktop.com</a>.</em> ")
 	SafeHtml participateInstructions();
 
 }
