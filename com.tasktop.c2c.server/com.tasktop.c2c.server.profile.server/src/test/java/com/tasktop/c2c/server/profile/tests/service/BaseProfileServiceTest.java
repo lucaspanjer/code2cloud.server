@@ -1085,6 +1085,12 @@ public abstract class BaseProfileServiceTest {
 		assertNotNull(result);
 		assertEquals(count, result.getTotalResultSize().intValue());
 		assertEquals(region.getSize().intValue(), result.getResultPage().size());
+
+		region = new Region(count / 2, count / 2);
+		result = profileService.findProjects(new ProjectsQuery("tesT123", new QueryRequest(region, null)));
+		assertNotNull(result);
+		assertEquals(count, result.getTotalResultSize().intValue());
+		assertEquals(region.getSize().intValue(), result.getResultPage().size());
 	}
 
 	@Test

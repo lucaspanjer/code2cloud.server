@@ -14,7 +14,7 @@
 		<spring.core.version>3.0.5.RELEASE</spring.core.version>
 		<spring.security.version>3.1.0.RC2</spring.security.version>
 		<spring.social.version>1.0.0.RC2</spring.social.version>
-		<com.tasktop.c2c.eclipselink.version>2.2.0</com.tasktop.c2c.eclipselink.version>
+		<com.tasktop.c2c.eclipselink.version>2.3.2</com.tasktop.c2c.eclipselink.version>
 		<gwt.version>2.4.0</gwt.version>
 	    <maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
 	    <bouncycastle.version>1.46</bouncycastle.version>

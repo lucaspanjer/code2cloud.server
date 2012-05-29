@@ -426,7 +426,7 @@ public class TaskQuery {
 		query.setIsExecutionClone(true);
 		if (mode != QueryMode.COUNT) {
 			query.setFirstResult(region.getOffset());
-			query.setMaxRows(region.getSize());
+			query.setMaxRows(region.getOffset() + region.getSize());
 			if (orderingExpression != null) {
 				query.addOrdering(orderingExpression);
 			}
