@@ -77,7 +77,7 @@ public class NewTaskPresenter extends AbstractEditTaskPresenter<NewTaskDisplay> 
 	}
 
 	@Override
-	protected void fetchTask() {
+	protected void renderTask() {
 		task = new Task();
 
 		task.setStatus(repositoryConfiguration.getDefaultStatus());

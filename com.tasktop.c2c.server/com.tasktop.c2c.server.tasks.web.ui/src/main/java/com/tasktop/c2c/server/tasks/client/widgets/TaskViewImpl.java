@@ -1114,6 +1114,8 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		driver.edit(task);
 
 		updateAcceptableValues();
+		updateIterations(repositoryConfiguration.getValidIterationsForTask(task));
+
 		for (InlineEditableField<?> f : inlineEditFields) {
 			f.renderTask(task);
 		}
@@ -1393,11 +1395,14 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	private void updateAcceptableValues() {
 		priority.setAcceptableValues(repositoryConfiguration.getPriorities());
 		severity.setAcceptableValues(repositoryConfiguration.getSeverities());
-		iteration.setAcceptableValues(repositoryConfiguration.getActiveIterations());
 		product.setAcceptableValues(repositoryConfiguration.getProducts());
 		component.setAcceptableValues(repositoryConfiguration.getComponents(product.getValue()));
 		milestone.setAcceptableValues(repositoryConfiguration.getMilestones(product.getValue()));
 		taskType.setAcceptableValues(repositoryConfiguration.getTaskTypes());
+	}
+
+	private void updateIterations(List<Iteration> iterations) {
+		iteration.setAcceptableValues(iterations);
 	}
 
 	public void setPersonServices(ProjectPersonService personService, Person self) {

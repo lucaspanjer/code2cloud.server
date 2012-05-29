@@ -23,6 +23,7 @@ import com.tasktop.c2c.server.common.profile.web.client.presenter.person.Project
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.tasks.client.widgets.presenter.person.KeywordSuggestService;
 import com.tasktop.c2c.server.tasks.domain.Component;
+import com.tasktop.c2c.server.tasks.domain.Iteration;
 import com.tasktop.c2c.server.tasks.domain.Milestone;
 import com.tasktop.c2c.server.tasks.domain.Product;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
@@ -57,6 +58,8 @@ public interface AbstractEditTaskDisplay extends IsWidget, HasValue<Task> {
 	void setSelectedMilestone(Milestone milestone);
 
 	public void setRepositoryConfiguration(RepositoryConfiguration repositoryConfiguration);
+
+	public void setIterations(List<Iteration> iterations);
 
 	public void clearFoundInReleases();
 

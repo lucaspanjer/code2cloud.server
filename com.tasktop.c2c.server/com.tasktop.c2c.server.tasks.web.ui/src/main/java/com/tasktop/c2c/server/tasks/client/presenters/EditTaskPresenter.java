@@ -85,7 +85,7 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 	}
 
 	@Override
-	protected void fetchTask() {
+	protected void renderTask() {
 		populateUi(task);
 	}
 
@@ -200,6 +200,7 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 	public void configure(RepositoryConfiguration configuration) {
 		super.configure(configuration);
 		editTaskView.setRepositoryConfiguration(configuration);
+		editTaskView.setIterations(repositoryConfiguration.getValidIterationsForTask(task));
 
 	}
 }

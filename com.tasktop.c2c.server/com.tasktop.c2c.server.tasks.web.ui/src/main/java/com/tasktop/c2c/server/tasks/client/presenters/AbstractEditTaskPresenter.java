@@ -56,10 +56,10 @@ public abstract class AbstractEditTaskPresenter<EditTaskViewType extends Abstrac
 		editTaskView.setProjectIdentifier(projectIdentifier);
 		configure(repositoryConfiguration);
 		ownerSet = false;
-		fetchTask();
+		renderTask();
 	}
 
-	protected abstract void fetchTask();
+	protected abstract void renderTask();
 
 	protected void productChanged(ValueChangeEvent<Product> event) {
 		Product product = event.getValue();

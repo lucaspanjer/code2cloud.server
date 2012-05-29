@@ -409,10 +409,14 @@ public class AbstractEditTaskView extends AbstractComposite implements AbstractE
 		description.setMarkLanguage(repositoryConfiguration.getMarkupLanguage());
 		configureValues(priority, repositoryConfiguration.getPriorities());
 		configureValues(taskType, repositoryConfiguration.getTaskTypes());
-		configureValues(iteration, repositoryConfiguration.getActiveIterations());
 		configureValues(product, repositoryConfiguration.getProducts());
 		configureValues(severity, repositoryConfiguration.getSeverities());
 		this.customFieldDescriptors = getRelevantCustomFields(repositoryConfiguration.getCustomFields());
+	}
+
+	@Override
+	public void setIterations(List<Iteration> iterations) {
+		configureValues(iteration, iterations);
 	}
 
 	protected List<FieldDescriptor> getRelevantCustomFields(List<FieldDescriptor> fieldDescriptors) {

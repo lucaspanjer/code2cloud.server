@@ -184,6 +184,18 @@ public class RepositoryConfiguration implements Serializable {
 		return result;
 	}
 
+	public List<Iteration> getValidIterationsForTask(Task task) {
+
+		List<Iteration> activeIterations = getActiveIterations();
+		Iteration currentIteration = getIterations().get(getIterations().indexOf(task.getIteration()));
+
+		if (!activeIterations.contains(currentIteration)) {
+			activeIterations.add(currentIteration);
+			Collections.sort(activeIterations);
+		}
+		return activeIterations;
+	}
+
 	public Iteration getDefaultIteration() {
 		return defaultIteration;
 	}
