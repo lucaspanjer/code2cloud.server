@@ -123,7 +123,7 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 		return retProfile;
 	}
 
-	private Profile checkIfCredentialsMatchOnPassword(String username, String password) {
+	protected Profile checkIfCredentialsMatchOnPassword(String username, String password) {
 		try {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Profile> query = criteriaBuilder.createQuery(Profile.class);
