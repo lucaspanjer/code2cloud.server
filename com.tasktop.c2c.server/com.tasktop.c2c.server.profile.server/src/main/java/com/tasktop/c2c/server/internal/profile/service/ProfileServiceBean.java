@@ -68,6 +68,7 @@ import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
+import com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.RandomToken;
@@ -78,6 +79,7 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
+import com.tasktop.c2c.server.profile.domain.project.WikiMarkupLanguage;
 import com.tasktop.c2c.server.profile.domain.validation.ProfilePasswordValidator;
 import com.tasktop.c2c.server.profile.service.EmailService;
 import com.tasktop.c2c.server.profile.service.NotificationService;
@@ -1700,6 +1702,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		// Compute identifer
 		if (org.getIdentifier() == null) {
 			org.computeIdentifier();
+		}
+
+		if (org.getProjectPreferences() == null) {
+			org.setProjectPreferences(new ProjectPreferences());
+			org.getProjectPreferences().setWikiLanguage(WikiMarkupLanguage.TEXTILE);
 		}
 
 		securityPolicy.create(org);
