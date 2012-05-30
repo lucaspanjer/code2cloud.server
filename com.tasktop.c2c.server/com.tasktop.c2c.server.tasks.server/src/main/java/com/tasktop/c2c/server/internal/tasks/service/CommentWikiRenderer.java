@@ -52,6 +52,11 @@ public class CommentWikiRenderer {
 
 		MarkupLanguage markupLanguage = markupLanguageByName.get(markupLanguageName);
 
+		if (markupLanguage == null) {
+			throw new IllegalStateException();
+		}
+		markupLanguage = markupLanguage.clone();
+
 		HtmlDocumentBuilder builder = new WebSafeHtmlDocumentBuilder(writer);
 		MarkupParser parser = new MarkupParser(markupLanguage);
 
