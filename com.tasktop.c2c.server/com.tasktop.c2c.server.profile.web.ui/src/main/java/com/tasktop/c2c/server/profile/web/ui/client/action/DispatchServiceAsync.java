@@ -30,7 +30,6 @@ import net.customware.gwt.dispatch.shared.BatchAction;
 import net.customware.gwt.dispatch.shared.BatchResult;
 import net.customware.gwt.dispatch.shared.Result;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -49,7 +48,7 @@ public class DispatchServiceAsync extends AbstractDispatchAsync {
 
 	private static StandardDispatchServiceAsync realService = null;
 
-	private static StandardDispatchServiceAsync getRealService() {
+	public static StandardDispatchServiceAsync getRealService() {
 		// This hack is to work around gwt deferred binding bug
 		if (realService == null) {
 			realService = GWT.create(StandardDispatchService.class);
