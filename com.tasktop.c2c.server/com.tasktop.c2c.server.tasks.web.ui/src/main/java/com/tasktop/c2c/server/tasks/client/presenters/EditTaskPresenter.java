@@ -199,8 +199,5 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 	@Override
 	public void configure(RepositoryConfiguration configuration) {
 		super.configure(configuration);
-		editTaskView.setRepositoryConfiguration(configuration);
-		editTaskView.setIterations(repositoryConfiguration.getValidIterationsForTask(task));
-
 	}
 }

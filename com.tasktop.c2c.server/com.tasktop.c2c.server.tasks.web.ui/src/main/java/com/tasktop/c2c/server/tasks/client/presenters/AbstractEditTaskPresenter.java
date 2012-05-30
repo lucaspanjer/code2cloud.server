@@ -130,7 +130,11 @@ public abstract class AbstractEditTaskPresenter<EditTaskViewType extends Abstrac
 
 	public void configure(RepositoryConfiguration configuration) {
 		editTaskView.setRepositoryConfiguration(configuration);
-		editTaskView.setIterations(configuration.getActiveIterations());
+		if (task != null) {
+			editTaskView.setIterations(repositoryConfiguration.getValidIterationsForTask(task));
+		} else {
+			editTaskView.setIterations(configuration.getActiveIterations());
+		}
 	}
 
 	public void populateUi(Task task) {
