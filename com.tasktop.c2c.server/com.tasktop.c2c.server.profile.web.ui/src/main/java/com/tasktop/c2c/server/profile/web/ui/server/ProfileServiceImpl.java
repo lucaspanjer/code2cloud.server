@@ -59,7 +59,6 @@ import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.service.ActivityService;
-import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
 import com.tasktop.c2c.server.profile.service.provider.HudsonServiceProvider;
 import com.tasktop.c2c.server.profile.service.provider.ScmServiceProvider;
@@ -69,12 +68,6 @@ import com.tasktop.c2c.server.scm.service.ScmService;
 
 @SuppressWarnings("serial")
 public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet implements ProfileService {
-
-	@Autowired
-	private ProfileServiceConfiguration configuration;
-
-	@Autowired
-	private ProfileServiceConfiguration profileServiceConfiguration;
 
 	@Autowired
 	@Qualifier("main")
