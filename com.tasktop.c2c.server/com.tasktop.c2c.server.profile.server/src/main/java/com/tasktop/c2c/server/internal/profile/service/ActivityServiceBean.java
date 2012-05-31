@@ -56,7 +56,7 @@ import com.tasktop.c2c.server.tasks.service.TaskService;
 import com.tasktop.c2c.server.wiki.domain.WikiActivity;
 import com.tasktop.c2c.server.wiki.service.WikiService;
 
-@Service
+@Service("activityService")
 @Qualifier("main")
 public class ActivityServiceBean implements ActivityService {
 
