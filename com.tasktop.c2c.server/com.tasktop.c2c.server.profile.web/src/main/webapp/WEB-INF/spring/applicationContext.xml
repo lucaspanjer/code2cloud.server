@@ -17,8 +17,7 @@
 	<import resource="classpath:applicationContext-githubConnector.xml"/>
 	<import resource="classpath:META-INF/spring/applicationContext-authenticationService.xml"/>
 	<import resource="classpath:applicationContext-jms.xml"/>
-	<import resource="classpath:META-INF/spring/applicationContext-httpProxy.xml"/>
-	<import resource="classpath:META-INF/spring/applicationContext-ajpProxy.xml"/>
+	<import resource="classpath:applicationContext-webProxy.xml"/>
     <import resource="classpath:applicationContext-sshService.xml"/>
     <import resource="classpath:applicationContext-eventService.xml"/>
 
@@ -33,15 +32,6 @@
 	
 	<bean class="net.customware.gwt.dispatch.server.BatchActionHandler"/>
 	
-	<bean class="com.tasktop.c2c.server.profile.web.proxy.ApplicationServiceProxy" id="applicationServiceProxy" autowire="byType">
-		<property name="proxies">
-			<list value-type="com.tasktop.c2c.server.web.proxy.WebProxy">
-				<ref bean="ajpProxy"/>
-				<ref bean="httpProxy"/>
-			</list>
-		</property>
-	</bean>
-
 	<bean
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
 		id="entityManagerFactory"

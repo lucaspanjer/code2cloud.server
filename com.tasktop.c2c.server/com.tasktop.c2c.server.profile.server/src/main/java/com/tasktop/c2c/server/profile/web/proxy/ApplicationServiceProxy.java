@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
 
@@ -56,6 +57,9 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 	private InternalAuthenticationService internalAuthenticationService;
 
 	private AuthenticationTokenSerializer tokenSerializer = new AuthenticationTokenSerializer();
+
+	@Value("${alm.proxy.disableAjp}")
+	private boolean disableAjp = false;
 
 	@Override
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
@@ -119,7 +123,7 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 	private String constructTargetUrl(ProjectService service, String uri, HttpServletRequest request) {
 		String queryString = request.getQueryString() == null || request.getQueryString().isEmpty() ? ""
 				: ("?" + request.getQueryString());
-		return service.computeInternalProxyUri(uri) + queryString;
+		return service.computeInternalProxyUri(uri, !disableAjp) + queryString;
 	}
 
 	public List<WebProxy> getProxies() {
@@ -128,6 +132,10 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 
 	public void setProxies(List<WebProxy> proxies) {
 		this.proxies = proxies;
+	}
+
+	public void setDisableAjp(boolean disableAjp) {
+		this.disableAjp = disableAjp;
 	}
 
 }

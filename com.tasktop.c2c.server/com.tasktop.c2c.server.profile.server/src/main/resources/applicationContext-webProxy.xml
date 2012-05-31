@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+	<import resource="classpath:META-INF/spring/applicationContext-httpProxy.xml"/>
+	<import resource="classpath:META-INF/spring/applicationContext-ajpProxy.xml"/>
+	
+	<bean class="com.tasktop.c2c.server.profile.web.proxy.ApplicationServiceProxy" id="applicationServiceProxy" autowire="byType">
+		<property name="proxies">
+			<list value-type="com.tasktop.c2c.server.web.proxy.WebProxy">
+				<ref bean="ajpProxy"/>
+				<ref bean="httpProxy"/>
+			</list>
+		</property>
+		<property name="disableAjp" value="${alm.proxy.disableAjp}"/>
+	</bean>
+
+
+</beans>
