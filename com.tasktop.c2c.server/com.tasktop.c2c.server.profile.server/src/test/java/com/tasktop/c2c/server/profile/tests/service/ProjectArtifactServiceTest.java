@@ -12,11 +12,10 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.tests.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -28,6 +27,7 @@ import org.junit.Test;
 
 import com.tasktop.c2c.server.profile.domain.build.BuildArtifact;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
+import com.tasktop.c2c.server.profile.domain.build.HudsonStatus;
 import com.tasktop.c2c.server.profile.domain.build.JobSummary;
 import com.tasktop.c2c.server.profile.domain.project.ProjectArtifact;
 import com.tasktop.c2c.server.profile.domain.project.ProjectArtifacts;
@@ -40,11 +40,11 @@ public class ProjectArtifactServiceTest {
 
 	private Mockery context;
 	protected ProjectArtifactService projectArtifactService;
-	private Map<JobSummary, List<BuildDetails>> mockBuildHistory = new HashMap<JobSummary, List<BuildDetails>>();
+	private HudsonStatus mockBuildStatusWithHistory = new HudsonStatus();
 
 	@Before
 	public void setup() {
-
+		mockBuildStatusWithHistory.setJobs(new ArrayList<JobSummary>());
 		context = new JUnit4Mockery();
 		final ServiceProvider hudsonServiceProvider = context.mock(ServiceProvider.class);
 		final HudsonService hudsonService = context.mock(HudsonService.class);
@@ -53,8 +53,8 @@ public class ProjectArtifactServiceTest {
 				allowing(hudsonServiceProvider).getService(with(any(String.class)));
 				will(returnValue(hudsonService));
 
-				allowing(hudsonService).getBuildHistory();
-				will(returnValue(mockBuildHistory));
+				allowing(hudsonService).getStatusWithBuildHistory();
+				will(returnValue(mockBuildStatusWithHistory));
 			}
 		});
 
@@ -68,7 +68,8 @@ public class ProjectArtifactServiceTest {
 		JobSummary jobWithNoBuilds = new JobSummary();
 		jobWithNoBuilds.setName("jobWithNoBuilds");
 		jobWithNoBuilds.setUrl("url");
-		mockBuildHistory.put(jobWithNoBuilds, Collections.EMPTY_LIST);
+		jobWithNoBuilds.setBuilds(Collections.EMPTY_LIST);
+		mockBuildStatusWithHistory.getJobs().add(jobWithNoBuilds);
 
 		List<ProjectArtifacts> releases = projectArtifactService.listProjectArtifacts("projId");
 		Assert.assertEquals(0, releases.size());
@@ -78,7 +79,8 @@ public class ProjectArtifactServiceTest {
 		jobWithNoArtifacts.setUrl("url");
 		BuildDetails build1 = new BuildDetails();
 		build1.setTimestamp(System.currentTimeMillis());
-		mockBuildHistory.put(jobWithNoArtifacts, Collections.singletonList(build1));
+		jobWithNoArtifacts.setBuilds(Collections.singletonList(build1));
+		mockBuildStatusWithHistory.getJobs().add(jobWithNoArtifacts);
 
 		releases = projectArtifactService.listProjectArtifacts("projId");
 		Assert.assertEquals(0, releases.size());
@@ -98,7 +100,8 @@ public class ProjectArtifactServiceTest {
 		artifact2.setFileName("filename.jar");
 		artifact2.setRelativePath("path/filename.jar");
 		build1.setArtifacts(Arrays.asList(artifact1, artifact2));
-		mockBuildHistory.put(jobWithArtifacts, Collections.singletonList(build1));
+		jobWithArtifacts.setBuilds(Collections.singletonList(build1));
+		mockBuildStatusWithHistory.getJobs().add(jobWithArtifacts);
 
 		JobSummary job2WithArtifacts = new JobSummary();
 		job2WithArtifacts.setName("job2WithArtifacts");
@@ -113,7 +116,8 @@ public class ProjectArtifactServiceTest {
 		artifact2.setFileName("filename.jar");
 		artifact2.setRelativePath("path/filename.jar");
 		build1.setArtifacts(Arrays.asList(artifact1, artifact2));
-		mockBuildHistory.put(job2WithArtifacts, Collections.singletonList(build1));
+		job2WithArtifacts.setBuilds(Collections.singletonList(build1));
+		mockBuildStatusWithHistory.getJobs().add(job2WithArtifacts);
 
 		releases = projectArtifactService.listProjectArtifacts("projId");
 		Assert.assertEquals(2, releases.size());

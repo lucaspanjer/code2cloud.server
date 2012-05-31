@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,6 +41,7 @@ import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ScmActivity;
 import com.tasktop.c2c.server.profile.domain.activity.TaskActivity;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
+import com.tasktop.c2c.server.profile.domain.build.HudsonStatus;
 import com.tasktop.c2c.server.profile.domain.build.JobSummary;
 import com.tasktop.c2c.server.profile.service.ActivityService;
 import com.tasktop.c2c.server.profile.service.HudsonService;
@@ -111,12 +110,12 @@ public class ActivityServiceBean implements ActivityService {
 			@Override
 			protected List<ProjectActivity> callAsTenant() throws Exception {
 				final HudsonService hudsonService = hudsonServiceProvider.getService(projectIdentifier);
-				Map<JobSummary, List<BuildDetails>> builds = hudsonService.getBuildHistory();
-				List<ProjectActivity> results = new ArrayList<ProjectActivity>(builds.size());
+				HudsonStatus status = hudsonService.getStatusWithBuildHistory();
+				List<ProjectActivity> results = new ArrayList<ProjectActivity>(status.getJobs().size());
 
-				for (Entry<JobSummary, List<BuildDetails>> entry : builds.entrySet()) {
-					for (BuildDetails buildDetails : entry.getValue()) {
-						results.add(new BuildActivity(buildDetails, entry.getKey()));
+				for (JobSummary job : status.getJobs()) {
+					for (BuildDetails buildDetails : job.getBuilds()) {
+						results.add(new BuildActivity(buildDetails, job));
 					}
 				}
 				return results;

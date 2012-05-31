@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.profile.domain.build;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
@@ -23,6 +24,8 @@ public class JobSummary implements Serializable {
 	private String name;
 	private String url;
 	private String color;
+
+	private List<BuildDetails> builds;
 
 	public String getName() {
 		return name;
@@ -46,6 +49,14 @@ public class JobSummary implements Serializable {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+
+	public List<BuildDetails> getBuilds() {
+		return builds;
+	}
+
+	public void setBuilds(List<BuildDetails> builds) {
+		this.builds = builds;
 	}
 
 }

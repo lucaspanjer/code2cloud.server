@@ -20,12 +20,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +35,6 @@ import com.tasktop.c2c.server.profile.domain.build.JobSummary;
 import com.tasktop.c2c.server.profile.domain.project.ProjectArtifact;
 import com.tasktop.c2c.server.profile.domain.project.ProjectArtifacts;
 import com.tasktop.c2c.server.profile.domain.project.ProjectArtifacts.Type;
-import com.tasktop.c2c.server.profile.service.HudsonService;
-import com.tasktop.c2c.server.profile.service.ProjectArtifactService;
 import com.tasktop.c2c.server.profile.service.provider.ServiceProvider;
 
 @Service("projectArtifactService")
@@ -47,9 +43,6 @@ public class ProjectArtifactServiceImpl implements ProjectArtifactService {
 
 	@Resource(name = "hudsonServiceProvider")
 	private ServiceProvider<HudsonService> hudsonServiceProvider;
-
-	@Autowired
-	private ProfileServiceConfiguration profileServiceConfiguration;
 
 	public void setHudsonServiceProvider(ServiceProvider<HudsonService> hudsonServiceProvider) {
 		this.hudsonServiceProvider = hudsonServiceProvider;
@@ -95,12 +88,12 @@ public class ProjectArtifactServiceImpl implements ProjectArtifactService {
 		HudsonService hudonService = hudsonServiceProvider.getService(projectIdentifier);
 		List<ProjectArtifacts> result = new ArrayList<ProjectArtifacts>();
 
-		for (Entry<JobSummary, List<BuildDetails>> entry : hudonService.getBuildHistory().entrySet()) {
-			for (BuildDetails buildDetails : entry.getValue()) {
+		for (JobSummary job : hudonService.getStatusWithBuildHistory().getJobs()) {
+			for (BuildDetails buildDetails : job.getBuilds()) {
 				if (buildDetails.getArtifacts() == null || buildDetails.getArtifacts().isEmpty()) {
 					continue;
 				}
-				result.add(constructProjectArtifacts(entry.getKey(), buildDetails));
+				result.add(constructProjectArtifacts(job, buildDetails));
 			}
 		}
 

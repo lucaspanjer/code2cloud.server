@@ -15,13 +15,10 @@ package com.tasktop.c2c.server.profile.service;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Map;
 
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
 import com.tasktop.c2c.server.profile.domain.build.HudsonStatus;
 import com.tasktop.c2c.server.profile.domain.build.JobDetails;
-import com.tasktop.c2c.server.profile.domain.build.JobSummary;
 
 public interface HudsonService {
 	HudsonStatus getStatus();
@@ -30,7 +27,8 @@ public interface HudsonService {
 
 	BuildDetails getBuildDetails(String jobName, int buildNumber);
 
-	Map<JobSummary, List<BuildDetails>> getBuildHistory();
+	/** Job summaries with the build detail filled in. */
+	HudsonStatus getStatusWithBuildHistory();
 
 	/**
 	 * Download an artifact from hudson. If this is invoked on the hub node, then we will download directly from the

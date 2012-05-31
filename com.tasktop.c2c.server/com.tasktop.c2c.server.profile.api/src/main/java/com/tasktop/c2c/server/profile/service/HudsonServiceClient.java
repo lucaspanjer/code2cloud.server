@@ -18,23 +18,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 
-
 import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
-import com.tasktop.c2c.server.profile.domain.build.BuildSummary;
 import com.tasktop.c2c.server.profile.domain.build.HudsonStatus;
 import com.tasktop.c2c.server.profile.domain.build.JobDetails;
-import com.tasktop.c2c.server.profile.domain.build.JobSummary;
 
 public class HudsonServiceClient extends AbstractRestServiceClient implements HudsonService {
 
@@ -52,23 +45,11 @@ public class HudsonServiceClient extends AbstractRestServiceClient implements Hu
 		return template.getForObject(url, BuildDetails.class);
 	}
 
-	public Map<JobSummary, List<BuildDetails>> getBuildHistory() {
-		final Map<JobSummary, List<BuildDetails>> result = new HashMap<JobSummary, List<BuildDetails>>();
-		HudsonStatus status = getStatus();
+	private static final String buildHistoryTreeFilter = "?tree=jobs[name,url,color,builds[url,duration,timestamp,result,number,actions[causes[shortDescription]]]]";
 
-		for (JobSummary job : status.getJobs()) {
-			List<BuildDetails> details = new ArrayList<BuildDetails>();
-			JobDetails jobDetails = getJobDetails(job.getName());
-			// Just get the last 10 builds
-			int endIndex = Math.min(10, jobDetails.getBuilds().size());
-			List<BuildSummary> builds = jobDetails.getBuilds().subList(0, endIndex);
-			for (BuildSummary buildSummary : builds) {
-				details.add(getBuildDetails(job.getName(), buildSummary.getNumber()));
-			}
-			result.put(job, details);
-		}
-
-		return result;
+	public HudsonStatus getStatusWithBuildHistory() {
+		String url = computeUrl("api/json" + buildHistoryTreeFilter);
+		return template.getForObject(url, HudsonStatus.class);
 	}
 
 	/*
