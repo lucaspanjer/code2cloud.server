@@ -586,6 +586,15 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (project.getAccessibility() == null) {
 			project.setAccessibility(ProjectAccessibility.PRIVATE);
 		}
+		if (project.getProjectPreferences() == null) {
+			project.setProjectPreferences(createDefaultProjectPrefernces());
+		}
+	}
+
+	private ProjectPreferences createDefaultProjectPrefernces() {
+		ProjectPreferences result = new ProjectPreferences();
+		result.setWikiLanguage(WikiMarkupLanguage.TEXTILE);
+		return result;
 	}
 
 	@Secured(Role.User)
@@ -1705,8 +1714,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		}
 
 		if (org.getProjectPreferences() == null) {
-			org.setProjectPreferences(new ProjectPreferences());
-			org.getProjectPreferences().setWikiLanguage(WikiMarkupLanguage.TEXTILE);
+			org.setProjectPreferences(createDefaultProjectPrefernces());
 		}
 
 		securityPolicy.create(org);

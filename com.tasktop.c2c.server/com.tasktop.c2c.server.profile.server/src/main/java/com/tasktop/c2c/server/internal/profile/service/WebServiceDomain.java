@@ -165,6 +165,9 @@ public class WebServiceDomain {
 	}
 
 	public com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences copy(ProjectPreferences p) {
+		if (p == null) {
+			return null;
+		}
 		com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences projectPreferences = new com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences();
 		projectPreferences.setId(p.getId());
 		projectPreferences.setWikiLanguage(p.getWikiLanguage());
