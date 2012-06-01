@@ -45,7 +45,7 @@ public class HudsonServiceClient extends AbstractRestServiceClient implements Hu
 		return template.getForObject(url, BuildDetails.class);
 	}
 
-	private static final String buildHistoryTreeFilter = "?tree=jobs[name,url,color,builds[url,duration,timestamp,result,number,actions[causes[shortDescription]]]]";
+	private static final String buildHistoryTreeFilter = "?tree=jobs[name,url,color,builds[url,duration,timestamp,building,result,number,actions[causes[shortDescription]]]]";
 
 	public HudsonStatus getStatusWithBuildHistory() {
 		String url = computeUrl("api/json" + buildHistoryTreeFilter);
