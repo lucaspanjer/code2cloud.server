@@ -55,10 +55,9 @@ public class ProjectDashboardView extends AbstractComposite {
 		GoogleVisLoader.ensureGoogleVisLoaded(new Runnable() {
 			@Override
 			public void run() {
-				if (commitsByAuthorPieChart == null) {
-					commitsByAuthorPieChart = new CommitsByAuthorPieChart();
-					commitsByAuthorPanel.add(commitsByAuthorPieChart);
-				}
+				commitsByAuthorPieChart = new CommitsByAuthorPieChart();
+				commitsByAuthorPanel.clear();
+				commitsByAuthorPanel.add(commitsByAuthorPieChart);
 
 				commitsByAuthorPieChart.draw(commitsByAuthor);
 			}
