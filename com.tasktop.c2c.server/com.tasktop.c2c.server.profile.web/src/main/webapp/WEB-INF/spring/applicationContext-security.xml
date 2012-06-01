@@ -51,6 +51,10 @@
 		p:authenticationManager-ref="authenticationManager"
 		p:rememberMeServices-ref="rememberMeServices"
 	/>
+	
+	<!--  This section never needs any filters to be run -->
+	<s:http pattern="/profile/deferredjs/**,/index.html,/styles/**,/content/**,/images/**,/scripts/**" security="none"/>
+	
 
 	<s:http use-expressions="true" realm="Code2Cloud" create-session="always">
 		<s:http-basic />
