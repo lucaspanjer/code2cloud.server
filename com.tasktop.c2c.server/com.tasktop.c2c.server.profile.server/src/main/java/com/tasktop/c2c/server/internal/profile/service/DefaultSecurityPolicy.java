@@ -12,16 +12,14 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.profile.service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
+import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.domain.Role;
@@ -70,8 +68,8 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean, 
 		RETRIEVE
 	}
 
-	@PersistenceContext
-	protected EntityManager entityManager;
+	@Autowired
+	private IdentityManagmentService identityManagmentService;
 
 	private boolean enabled = true;
 
@@ -254,11 +252,8 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean, 
 
 		if (currentUser != null) {
 			try {
-				return (Profile) entityManager
-						.createQuery("select e from " + Profile.class.getSimpleName() + " e where e.username = :u")
-						.setParameter("u", currentUser).getSingleResult();
-
-			} catch (NoResultException e) {
+				return identityManagmentService.getProfileByUsername(currentUser);
+			} catch (EntityNotFoundException e) {
 				// expected
 			}
 		}

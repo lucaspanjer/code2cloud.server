@@ -1687,16 +1687,16 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		@Override
 		public void validate(Object target, Errors errors) {
 			Organization organization = (Organization) target;
-			if (organization.getName() != null && organization.getName().trim().length() > 0) {
-				List<Organization> orgsWithName = entityManager
+			if (organization.getIdentifier() != null && organization.getIdentifier().trim().length() > 0) {
+				List<Organization> orgsWithIdentifier = entityManager
 						.createQuery(
 								"select e from " + Organization.class.getSimpleName()
-										+ " e where e.name = :name or e.identifier = :identifier")
-						.setParameter("name", organization.getName())
+										+ " e where e.identifier = :identifier")
 						.setParameter("identifier", organization.getIdentifier()).getResultList();
-				if (!orgsWithName.isEmpty()) {
-					if (orgsWithName.size() != 1 || !orgsWithName.get(0).equals(organization)) {
-						errors.reject("nameUnique", new Object[] { organization.getName() }, null);
+				if (!orgsWithIdentifier.isEmpty()) {
+					if (orgsWithIdentifier.size() != 1 || !orgsWithIdentifier.get(0).equals(organization)) {
+						errors.reject("organization.identifierUnique", new Object[] { organization.getIdentifier() },
+								null);
 					}
 				}
 			}

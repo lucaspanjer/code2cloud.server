@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.domain.Role;
-import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
 
@@ -51,7 +50,7 @@ public class InternalAuthenticationServiceBean implements InternalAuthentication
 				}
 				break;
 			case ORGANIZATION_PRIVATE:
-				if (userIsMemberOfProjectOrg(token.getUsername(), project)) {
+				if (userIsMemberOfProjectOrg(originalToken, project)) {
 					token.getAuthorities().add(Role.Community);
 					token.getAuthorities().add(Role.Observer);
 				}
@@ -64,8 +63,8 @@ public class InternalAuthenticationServiceBean implements InternalAuthentication
 		return token;
 	}
 
-	private boolean userIsMemberOfProjectOrg(String username, Project project) {
-		if (username == null) {
+	private boolean userIsMemberOfProjectOrg(AuthenticationToken authToken, Project project) {
+		if (authToken == null || authToken.getAuthorities() == null) {
 			return false;
 		}
 
@@ -73,13 +72,10 @@ public class InternalAuthenticationServiceBean implements InternalAuthentication
 			return false;
 		}
 
-		for (OrganizationProfile op : project.getOrganization().getOrganizationProfiles()) {
-			if (op.getProfile().getUsername().equals(username)) {
-				return true;
-			}
-		}
+		String expectedRole = AuthUtils
+				.toCompoundOrganizationRole(Role.User, project.getOrganization().getIdentifier());
 
-		return false;
+		return authToken.getAuthorities().contains(expectedRole);
 	}
 
 }
