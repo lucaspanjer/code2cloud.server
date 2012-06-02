@@ -46,9 +46,8 @@ public class ServiceLoggingAdvice {
 		}
 
 		StringBuilder msg = new StringBuilder();
-		logCall(pjp, t, result, msg);
 
-		msg.append(" (time: ").append(stopWatch.getLastTaskTimeMillis() + "ms)");
+		msg.append("(time: ").append(stopWatch.getLastTaskTimeMillis() + "ms)");
 		msg.append(" (user: ");
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -61,7 +60,9 @@ public class ServiceLoggingAdvice {
 		}
 		msg.append(")");
 
-		msg.append(" (project: ").append(getProjectId()).append(")");
+		msg.append(" (project: ").append(getProjectId()).append(") ");
+
+		logCall(pjp, t, result, msg);
 
 		logger.info(msg.toString());
 
