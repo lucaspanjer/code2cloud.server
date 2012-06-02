@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
+import com.tasktop.c2c.server.profile.domain.activity.ProjectDashboard;
 
 @Service
 @Qualifier("webservice-client")
@@ -88,6 +89,18 @@ public class ActivityServiceClient extends AbstractRestServiceClient implements 
 	@Qualifier("basicAuth")
 	public void setRestTemplate(RestTemplate template) {
 		super.setRestTemplate(template);
+	}
+
+	public static final String DASHBOARD_URL = "dashboard/{projectId}";
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.tasktop.c2c.server.profile.service.ActivityService#getDashboard(java.lang.String)
+	 */
+	public ProjectDashboard getDashboard(String projectIdentifier) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

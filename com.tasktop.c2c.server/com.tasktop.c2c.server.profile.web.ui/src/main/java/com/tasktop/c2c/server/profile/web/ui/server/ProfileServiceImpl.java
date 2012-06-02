@@ -34,7 +34,6 @@ import org.springframework.validation.Errors;
 
 import com.tasktop.c2c.server.common.profile.web.client.ProfileService;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectDashboard;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
@@ -47,6 +46,7 @@ import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
 import com.tasktop.c2c.server.common.web.shared.ValidationFailedException;
 import com.tasktop.c2c.server.internal.profile.service.WebServiceDomain;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
+import com.tasktop.c2c.server.profile.domain.activity.ProjectDashboard;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
@@ -98,41 +98,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 
 	@Override
 	public ProjectDashboard getDashboard(String projectIdentifier) throws NoSuchEntityException {
-		setTenancyContext(projectIdentifier);
-		ProjectDashboard dashboard = new ProjectDashboard();
-		int numDays = 60;
-
-		try {
-			dashboard.setProject(profileWebService.getProjectByIdentifier(projectIdentifier));
-		} catch (EntityNotFoundException e1) {
-			throw new NoSuchEntityException();
-		}
-
-		// Let some these services fails and still return data.
-		try {
-			dashboard.setTaskSummaries(taskServiceProvider.getTaskService(projectIdentifier).getHistoricalSummary(
-					numDays));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		ScmService scmService = scmServiceProvider.getService(projectIdentifier);
-		try {
-			dashboard.setScmSummaries(scmService.getScmSummary(numDays));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		try {
-			dashboard.setCommitsByAuthor(scmService.getNumCommitsByAuthor(numDays));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		try {
-			dashboard.setBuildStatus(hudsonServiceProvider.getHudsonService(projectIdentifier).getStatus());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return dashboard;
+		return activityService.getDashboard(projectIdentifier);
 	}
 
 	@Override

@@ -17,11 +17,11 @@ import java.util.List;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Timer;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectDashboard;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
+import com.tasktop.c2c.server.profile.domain.activity.ProjectDashboard;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDashboardPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;

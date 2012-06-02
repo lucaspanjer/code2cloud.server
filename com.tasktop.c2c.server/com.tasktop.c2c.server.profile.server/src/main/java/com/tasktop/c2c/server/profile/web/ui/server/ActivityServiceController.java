@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.server;
 
+import static com.tasktop.c2c.server.profile.service.ActivityServiceClient.DASHBOARD_URL;
 import static com.tasktop.c2c.server.profile.service.ActivityServiceClient.GET_RECENT_ACTIVITY_URL;
 import static com.tasktop.c2c.server.profile.service.ActivityServiceClient.GET_SHORT_ACTIVITY_LIST_URL;
 import static com.tasktop.c2c.server.profile.service.ActivityServiceClient.PROJECT_IDENTIFIER_URLPARAM;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.web.AbstractRestService;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
+import com.tasktop.c2c.server.profile.domain.activity.ProjectDashboard;
 import com.tasktop.c2c.server.profile.service.ActivityService;
 
 @Controller
@@ -87,5 +89,11 @@ public class ActivityServiceController extends AbstractRestService implements Ac
 			writer.write(mapper.writeValueAsString(item));
 		}
 		response.getWriter().write("]}");
+	}
+
+	@RequestMapping(value = DASHBOARD_URL, method = RequestMethod.GET)
+	@Override
+	public ProjectDashboard getDashboard(@PathVariable("projectId") String projectIdentifier) {
+		return activityService.getDashboard(projectIdentifier);
 	}
 }

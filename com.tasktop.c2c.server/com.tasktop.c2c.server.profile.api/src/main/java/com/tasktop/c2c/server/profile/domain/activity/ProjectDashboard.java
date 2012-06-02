@@ -10,21 +10,19 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.common.profile.web.shared;
+package com.tasktop.c2c.server.profile.domain.activity;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 import com.tasktop.c2c.server.profile.domain.build.HudsonStatus;
-import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 
 @SuppressWarnings("serial")
 public class ProjectDashboard implements Serializable {
 
-	private Project project;
 	private List<TaskSummary> taskSummaries;
 	private List<ScmSummary> scmSummaries;
 	private HudsonStatus buildStatus;
@@ -52,14 +50,6 @@ public class ProjectDashboard implements Serializable {
 
 	public HudsonStatus getBuildStatus() {
 		return buildStatus;
-	}
-
-	public void setProject(Project project) {
-		this.project = project;
-	}
-
-	public Project getProject() {
-		return project;
 	}
 
 	public TaskSummary getLatestTaskSummary() {

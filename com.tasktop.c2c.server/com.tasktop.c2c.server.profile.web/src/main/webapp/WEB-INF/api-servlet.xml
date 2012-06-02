@@ -49,6 +49,7 @@
 		<property name="mappings">
 			<value>
 				/activity/**=activityServiceController 
+				/dashboard/**=activityServiceController 
 				/artifact/**=projectArtifactServiceController 
 				/connect/**=externalConnectController 
 				/signin/**=externalSigninController 

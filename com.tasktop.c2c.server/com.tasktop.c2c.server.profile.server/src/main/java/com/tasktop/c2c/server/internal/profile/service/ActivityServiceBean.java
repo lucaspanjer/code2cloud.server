@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -38,6 +39,7 @@ import com.tasktop.c2c.server.common.service.query.QueryUtil;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.activity.BuildActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
+import com.tasktop.c2c.server.profile.domain.activity.ProjectDashboard;
 import com.tasktop.c2c.server.profile.domain.activity.ScmActivity;
 import com.tasktop.c2c.server.profile.domain.activity.TaskActivity;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
@@ -185,6 +187,71 @@ public class ActivityServiceBean implements ActivityService {
 		QueryUtil.applyRegionToList(results, region);
 
 		return results;
+	}
+
+	@Override
+	public ProjectDashboard getDashboard(final String projectIdentifier) {
+		final ProjectDashboard dashboard = new ProjectDashboard();
+		final int numDays = 60;
+
+		List<Callable<Object>> jobs = new ArrayList<Callable<Object>>();
+
+		jobs.add(new TenancyCallable<Object>(projectIdentifier) {
+
+			@Override
+			protected Object callAsTenant() throws Exception {
+				dashboard.setTaskSummaries(taskServiceProvider.getTaskService(projectIdentifier).getHistoricalSummary(
+						numDays));
+				return null;
+			}
+		});
+
+		jobs.add(new TenancyCallable<Object>(projectIdentifier) {
+
+			@Override
+			protected Object callAsTenant() throws Exception {
+				ScmService scmService = scmServiceProvider.getService(projectIdentifier);
+				dashboard.setScmSummaries(scmService.getScmSummary(numDays));
+
+				return null;
+			}
+		});
+
+		jobs.add(new TenancyCallable<Object>(projectIdentifier) {
+
+			@Override
+			protected Object callAsTenant() throws Exception {
+				ScmService scmService = scmServiceProvider.getService(projectIdentifier);
+				dashboard.setCommitsByAuthor(scmService.getNumCommitsByAuthor(numDays));
+
+				return null;
+			}
+		});
+
+		jobs.add(new TenancyCallable<Object>(projectIdentifier) {
+
+			@Override
+			protected Object callAsTenant() throws Exception {
+				dashboard.setBuildStatus(hudsonServiceProvider.getHudsonService(projectIdentifier).getStatus());
+				return null;
+			}
+		});
+
+		try {
+			List<Future<Object>> futures = activityThreadPool.invokeAll(jobs);
+
+			for (Future<?> future : futures) {
+				try {
+					future.get();
+				} catch (ExecutionException e) {
+					// continue
+				}
+			}
+		} catch (InterruptedException e) {
+			// interrupted, ignore
+		}
+
+		return dashboard;
 	}
 
 	private static abstract class TenancyCallable<T> implements Callable<T> {

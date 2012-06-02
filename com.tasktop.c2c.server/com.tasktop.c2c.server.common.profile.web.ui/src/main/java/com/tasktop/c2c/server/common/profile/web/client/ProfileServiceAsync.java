@@ -16,10 +16,10 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
-import com.tasktop.c2c.server.common.profile.web.shared.ProjectDashboard;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
+import com.tasktop.c2c.server.profile.domain.activity.ProjectDashboard;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;

@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.profile.service;
 import java.util.List;
 
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
+import com.tasktop.c2c.server.profile.domain.activity.ProjectDashboard;
 
 /**
  * Service for retrieving information about recent activity for a project.
@@ -26,5 +27,11 @@ public interface ActivityService {
 	List<ProjectActivity> getRecentActivity(String projectIdentifier);
 
 	List<ProjectActivity> getShortActivityList(final String projectIdentifier);
+
+	/**
+	 * @param projectIdentifier
+	 * @return
+	 */
+	ProjectDashboard getDashboard(String projectIdentifier);
 
 }
