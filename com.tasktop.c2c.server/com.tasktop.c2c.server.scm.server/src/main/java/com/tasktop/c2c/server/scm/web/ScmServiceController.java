@@ -147,8 +147,9 @@ public class ScmServiceController extends AbstractRestService implements ScmServ
 	}
 
 	@RequestMapping(value = ScmServiceClient.GET_LOG_FOR_BRANCH_URL, method = RequestMethod.GET)
-	public List<Commit> getLogForBranch(@PathVariable("repo") String repoName,
-			@PathVariable("branch") String branchName,
+	public List<Commit> getLogForBranch(
+			@PathVariable("repo") String repoName,
+			@RequestParam(required = false, value = ScmServiceClient.BRANCH_PARAM, defaultValue = "master") String branchName,
 			@RequestParam(required = false, value = ScmServiceClient.PAGESIZE_URL_PARAM) Integer pageSize,
 			@RequestParam(required = false, value = ScmServiceClient.OFFSET_URL_PARAM) Integer offset)
 			throws EntityNotFoundException {
