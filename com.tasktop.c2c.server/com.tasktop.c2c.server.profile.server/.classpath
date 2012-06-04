@@ -78,7 +78,7 @@
   <classpathentry kind="var" path="M2_REPO/jtidy/jtidy/4aug2000r7-dev/jtidy-4aug2000r7-dev.jar" sourcepath="M2_REPO/jtidy/jtidy/4aug2000r7-dev/jtidy-4aug2000r7-dev-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/junit/junit/4.7/junit-4.7.jar" sourcepath="M2_REPO/junit/junit/4.7/junit-4.7-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/activemq/kahadb/5.4.2/kahadb-5.4.2.jar" sourcepath="M2_REPO/org/apache/activemq/kahadb/5.4.2/kahadb-5.4.2-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/liquibase/liquibase-core/2.0.3/liquibase-core-2.0.3.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/liquibase/liquibase-core/2.0.3/liquibase-core-2.0.3.jar" sourcepath="M2_REPO/org/liquibase/liquibase-core/2.0.3/liquibase-core-2.0.3-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16.jar" sourcepath="M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/mysql/mysql-connector-java/5.1.12/mysql-connector-java-5.1.12.jar"/>
   <classpathentry kind="var" path="M2_REPO/net/oauth/core/oauth/20100527/oauth-20100527.jar" sourcepath="M2_REPO/net/oauth/core/oauth/20100527/oauth-20100527-sources.jar"/>
