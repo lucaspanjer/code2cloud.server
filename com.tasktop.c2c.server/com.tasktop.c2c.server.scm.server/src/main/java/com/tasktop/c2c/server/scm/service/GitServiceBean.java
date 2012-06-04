@@ -23,13 +23,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeSet;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -79,8 +79,6 @@ import com.tasktop.c2c.server.scm.domain.ScmType;
 @Component
 public class GitServiceBean implements GitService, InitializingBean {
 
-	private static final String GIT_DIR_SUFFIX = ".git";
-
 	@Value("${git.root}")
 	String basePath;
 
@@ -93,7 +91,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 	private List<Commit> getLog(Repository repository, Region region) {
 		List<Commit> result = new ArrayList<Commit>();
 
-		for (RevCommit revCommit : getAllCommits(repository)) {
+		for (RevCommit revCommit : getAllCommits(repository, region)) {
 			Commit commit = createCommit(revCommit);
 			commit.setRepository(repository.getDirectory().getName());
 			result.add(commit);
@@ -158,25 +156,31 @@ public class GitServiceBean implements GitService, InitializingBean {
 		return result;
 	}
 
-	private void addCommitsToSummary(Repository repo, List<ScmSummary> summary) {
-		Date firstDate = summary.get(0).getDate();
+	private void addCommitsToSummary(Repository repo, final List<ScmSummary> summary) {
+		final Date firstDate = summary.get(0).getDate();
 
-		for (RevCommit revCommit : getAllCommits(repo)) {
-			Date commitDate = revCommit.getAuthorIdent().getWhen();
-			if (commitDate.before(firstDate)) {
-				continue;
-			}
-			for (int i = 0; i < summary.size(); i++) {
-				if (i == summary.size() - 1) {
-					summary.get(i).setAmount(summary.get(i).getAmount() + 1);
-				} else if (summary.get(i).getDate().before(commitDate)
-						&& commitDate.before(summary.get(i + 1).getDate())) {
-					summary.get(i).setAmount(summary.get(i).getAmount() + 1);
-					break;
+		CommitVisitor visitor = new CommitVisitor() {
+
+			@Override
+			public void visit(RevCommit revCommit) {
+				Date commitDate = revCommit.getAuthorIdent().getWhen();
+				if (commitDate.before(firstDate)) {
+					return;
 				}
-			}
+				for (int i = 0; i < summary.size(); i++) {
+					if (i == summary.size() - 1) {
+						summary.get(i).setAmount(summary.get(i).getAmount() + 1);
+					} else if (summary.get(i).getDate().before(commitDate)
+							&& commitDate.before(summary.get(i + 1).getDate())) {
+						summary.get(i).setAmount(summary.get(i).getAmount() + 1);
+						break;
+					}
+				}
 
-		}
+			}
+		};
+
+		visitAllCommitsAfter(repo, firstDate, visitor);
 	}
 
 	private File getTenantBaseDir() {
@@ -191,24 +195,93 @@ public class GitServiceBean implements GitService, InitializingBean {
 		return new File(getTenantBaseDir(), GitConstants.MIRRORED_GIT_DIR);
 	}
 
-	private List<RevCommit> getAllCommits(Repository repository) {
-		List<RevCommit> result = new ArrayList<RevCommit>();
+	public interface CommitVisitor {
+		void visit(RevCommit commit);
+	}
+
+	private void visitAllCommitsAfter(Repository repository, Date maxDate, CommitVisitor visitor) {
+		Set<ObjectId> visited = new java.util.HashSet<ObjectId>();
 
 		try {
-			RevWalk revWal = new RevWalk(repository);
-			Set<ObjectId> objectsSeen = new HashSet<ObjectId>();
 
-			Map<String, Ref> refs = repository.getAllRefs();
-			for (Entry<String, Ref> entry : refs.entrySet()) {
+			for (Entry<String, Ref> entry : repository.getAllRefs().entrySet()) {
 				if (entry.getValue().getName().startsWith(Constants.R_HEADS)) {
+					RevWalk revWal = new RevWalk(repository);
 					revWal.markStart(revWal.parseCommit(entry.getValue().getObjectId()));
+
+					int commitsPastDate = 0;
+					for (RevCommit revCommit : revWal) {
+						if (revCommit.getCommitterIdent().getWhen().getTime() < maxDate.getTime()) {
+							commitsPastDate++;
+						} else {
+							commitsPastDate = 0;
+							if (visited.add(revCommit)) {
+								visitor.visit(revCommit);
+							} else {
+								break;
+							}
+						}
+						if (commitsPastDate > 5) {
+							break;
+						}
+
+					}
+					revWal.dispose();
+
 				}
 			}
-			for (RevCommit revCommit : revWal) {
-				if (objectsSeen.contains(revCommit.getId())) {
-					continue;
+
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	private List<RevCommit> getAllCommits(Repository repository, Region region) {
+		TreeSet<RevCommit> result = new TreeSet<RevCommit>(new Comparator<RevCommit>() {
+
+			@Override
+			public int compare(RevCommit o1, RevCommit o2) {
+				return o2.getCommitTime() - o1.getCommitTime();
+			}
+		});
+		Set<ObjectId> visited = new java.util.HashSet<ObjectId>();
+		int maxResultsToConsider = -1;
+		if (region != null) {
+			maxResultsToConsider = region.getOffset() + region.getSize();
+		}
+		long minTime = -1;
+
+		try {
+
+			for (Ref ref : getRefsToAdd(repository)) {
+				RevWalk revWal = new RevWalk(repository);
+				revWal.markStart(revWal.parseCommit(ref.getObjectId()));
+
+				int index = 0;
+				for (RevCommit revCommit : revWal) {
+					if (region != null && index >= region.getOffset() && index < region.getOffset() + region.getSize()) {
+						if (minTime > 0 && revCommit.getCommitTime() < minTime) {
+							break;
+						}
+						if (visited.add(revCommit.getId())) {
+							result.add(revCommit);
+
+							if (result.size() > maxResultsToConsider) {
+								RevCommit last = result.last();
+								result.remove(last);
+								minTime = last.getCommitTime();
+							}
+						} else {
+							break; // Done with this branch
+						}
+					}
+					index++;
+					if (region != null && index >= region.getOffset() + region.getSize()) {
+						break;
+					}
+
 				}
-				result.add(revCommit);
 
 			}
 
@@ -216,6 +289,22 @@ public class GitServiceBean implements GitService, InitializingBean {
 			throw new RuntimeException(e);
 		}
 
+		return new ArrayList<RevCommit>(result);
+	}
+
+	private List<Ref> getRefsToAdd(Repository repository) {
+		List<Ref> result = new ArrayList<Ref>();
+		Ref master = null;
+		for (Entry<String, Ref> entry : repository.getAllRefs().entrySet()) {
+			if (entry.getValue().getName().equals(Constants.R_HEADS + Constants.MASTER)) {
+				master = entry.getValue();
+			} else if (entry.getValue().getName().startsWith(Constants.R_HEADS)) {
+				result.add(entry.getValue());
+			}
+		}
+		if (master != null) {
+			result.add(0, master);
+		}
 		return result;
 	}
 
@@ -264,7 +353,6 @@ public class GitServiceBean implements GitService, InitializingBean {
 
 	@Secured({ Role.Observer, Role.User })
 	@Override
-	// FIXME region is not really respected but...
 	public List<Commit> getLog(Region region) {
 		List<Commit> result = new ArrayList<Commit>();
 
@@ -405,6 +493,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 		}
 	}
 
+	@Secured({ Role.Observer, Role.User })
 	@Override
 	public List<ScmRepository> listRepositories() {
 		List<ScmRepository> result = new ArrayList<ScmRepository>();
@@ -528,31 +617,33 @@ public class GitServiceBean implements GitService, InitializingBean {
 		return result;
 	}
 
-	private void addCommitsToCommitsByAuthor(Map<Profile, Integer> commitsByAuthor,
-			Map<String, Profile> profilesByName, Repository repository, int numDays) {
+	private void addCommitsToCommitsByAuthor(final Map<Profile, Integer> commitsByAuthor,
+			final Map<String, Profile> profilesByName, Repository repository, int numDays) {
 
 		Date firstDay = new Date(System.currentTimeMillis() - MILLISECONDS_PER_DAY * numDays);
 
-		for (RevCommit c : getAllCommits(repository)) {
-			if (c.getAuthorIdent().getWhen().before(firstDay)) {
-				continue;
-			}
+		CommitVisitor visitor = new CommitVisitor() {
 
-			Profile p = profilesByName.get(c.getAuthorIdent().getName());
-			if (p == null) {
-				p = fromPersonIdent(c.getAuthorIdent());
-				p.setId((long) profilesByName.size()); // wrong id but need for eq/hash
-				profilesByName.put(c.getAuthorIdent().getName(), p);
-			}
+			@Override
+			public void visit(RevCommit c) {
+				Profile p = profilesByName.get(c.getAuthorIdent().getName());
+				if (p == null) {
+					p = fromPersonIdent(c.getAuthorIdent());
+					p.setId((long) profilesByName.size()); // wrong id but need for eq/hash
+					profilesByName.put(c.getAuthorIdent().getName(), p);
+				}
 
-			Integer count = commitsByAuthor.get(p);
-			if (count == null) {
-				count = 0;
-			}
-			count++;
-			commitsByAuthor.put(p, count);
+				Integer count = commitsByAuthor.get(p);
+				if (count == null) {
+					count = 0;
+				}
+				count++;
+				commitsByAuthor.put(p, count);
 
-		}
+			}
+		};
+
+		visitAllCommitsAfter(repository, firstDay, visitor);
 	}
 
 	static String getRepoDirNameFromExternalUrl(String url) {
@@ -610,6 +701,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 		}
 	}
 
+	@Secured({ Role.Admin })
 	@Override
 	public void removeInternalRepository(String name) {
 		File hostedDir = getTenantHostedBaseDir();
