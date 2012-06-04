@@ -36,7 +36,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="com.google.gwt.eclipse.core.moduleClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.DevMode"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -logLevel INFO -codeServerPort 9997 -port 8888 -war /opt/workspace-c2c/code2cloud.server/com.tasktop.c2c.server/com.tasktop.c2c.server.profile.web/target/profile.web-0.1.0-SNAPSHOT com.tasktop.c2c.server.profile.web.ui.Profile com.tasktop.c2c.server.profile.web.ui.Profile com.tasktop.c2c.server.profile.web.ui.Profile com.tasktop.c2c.server.profile.web.ProfileWeb"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -logLevel INFO -codeServerPort 9997 -port 8888 -war ${project_loc}/target/profile.web-0.1.0-SNAPSHOT com.tasktop.c2c.server.profile.web.ui.Profile com.tasktop.c2c.server.profile.web.ui.Profile com.tasktop.c2c.server.profile.web.ui.Profile com.tasktop.c2c.server.profile.web.ProfileWeb"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="com.tasktop.c2c.server.profile.web"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-XstartOnFirstThread -Xmx1024m -XX:MaxPermSize=512m"/>
 </launchConfiguration>
