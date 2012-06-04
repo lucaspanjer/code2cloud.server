@@ -33,7 +33,6 @@ public class ProjectValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		ValidationUtils.rejectIfEmpty(errors, "name", "field.required");
-		ValidationUtils.rejectIfEmpty(errors, "description", "field.required");
 		Project project = (Project) target;
 		String name = project.getName();
 

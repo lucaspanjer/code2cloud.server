@@ -342,8 +342,10 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 			// First, get the values we will care about during rendering. Make sure these are rendered safe to avoid
 			// XSS.
-			SafeHtml safeDesc = SafeHtmlUtils.fromString(value.getDescription());
-
+			SafeHtml safeDesc = SafeHtmlUtils.fromString("");
+			if (value.getDescription() != null) {
+				safeDesc = SafeHtmlUtils.fromString(value.getDescription());
+			}
 			boolean isSelected = projectList.getSelectionModel().isSelected(value);
 
 			// Only generate a pointer if this item is selected
