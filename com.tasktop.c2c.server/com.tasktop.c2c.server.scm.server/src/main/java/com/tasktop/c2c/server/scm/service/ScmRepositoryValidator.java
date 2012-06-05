@@ -39,8 +39,8 @@ public class ScmRepositoryValidator implements Validator {
 
 		ScmRepository repo = (ScmRepository) target;
 
-		if (repo.getScmLocation().equals(ScmLocation.EXTERNAL) && !repo.getUrl().startsWith("ssh:")
-				&& !urlValidator.isValid(repo.getUrl())) {
+		if (repo.getScmLocation().equals(ScmLocation.EXTERNAL) && repo.getUrl() != null
+				&& !repo.getUrl().startsWith("ssh:") && !urlValidator.isValid(repo.getUrl())) {
 			errors.reject("url.invalid");
 		}
 	}

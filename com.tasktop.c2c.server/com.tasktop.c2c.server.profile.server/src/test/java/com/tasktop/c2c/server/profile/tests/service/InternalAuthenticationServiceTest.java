@@ -26,7 +26,6 @@ import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.internal.profile.service.InternalAuthenticationServiceBean;
 import com.tasktop.c2c.server.profile.domain.internal.Organization;
-import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
@@ -93,13 +92,10 @@ public class InternalAuthenticationServiceTest {
 		Profile p = MockProfileFactory.create(null);
 		p.setUsername(origToken.getUsername());
 		Organization org = MockOrganizationFactory.create(null);
-		OrganizationProfile op = new OrganizationProfile();
-		op.setProfile(p);
-		op.setOrganization(org);
-		org.getOrganizationProfiles().add(op);
 		project1.setOrganization(org);
 
 		origToken.getAuthorities().clear();
+		origToken.getAuthorities().add(AuthUtils.toCompoundOrganizationRole(Role.User, org.getIdentifier()));
 		AuthenticationToken specToken = service.specializeAuthenticationToken(origToken, project1);
 		assertEquals(2, specToken.getAuthorities().size());
 		Assert.assertTrue(specToken.getAuthorities().contains(Role.Community));

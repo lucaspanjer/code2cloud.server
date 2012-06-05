@@ -260,14 +260,15 @@ public class GitServiceBean implements GitService, InitializingBean {
 
 				int index = 0;
 				for (RevCommit revCommit : revWal) {
-					if (region != null && index >= region.getOffset() && index < region.getOffset() + region.getSize()) {
+					if (region == null
+							|| (index >= region.getOffset() && index < region.getOffset() + region.getSize())) {
 						if (minTime > 0 && revCommit.getCommitTime() < minTime) {
 							break;
 						}
 						if (visited.add(revCommit.getId())) {
 							result.add(revCommit);
 
-							if (result.size() > maxResultsToConsider) {
+							if (maxResultsToConsider > 0 && result.size() > maxResultsToConsider) {
 								RevCommit last = result.last();
 								result.remove(last);
 								minTime = last.getCommitTime();
