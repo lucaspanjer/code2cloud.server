@@ -108,9 +108,9 @@ public class ProjectAdminSourcePlace extends ProjectAdminPlace implements Breadc
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetProjectScmRepositoriesAction(projectIdentifer));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetProjectScmRepositoriesAction(projectIdentifer));
 	}
 
 	@Override

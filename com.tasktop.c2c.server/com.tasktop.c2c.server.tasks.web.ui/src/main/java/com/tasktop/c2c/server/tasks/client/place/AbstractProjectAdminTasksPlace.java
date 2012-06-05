@@ -36,9 +36,9 @@ public abstract class AbstractProjectAdminTasksPlace extends ProjectAdminPlace {
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetRepositoryConfigurationAction(projectIdentifer));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetRepositoryConfigurationAction(projectIdentifer));
 	}
 
 	@Override

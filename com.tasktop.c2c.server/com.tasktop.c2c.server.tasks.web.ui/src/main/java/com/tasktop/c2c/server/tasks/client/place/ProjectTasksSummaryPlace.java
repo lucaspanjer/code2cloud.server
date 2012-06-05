@@ -150,8 +150,8 @@ public class ProjectTasksSummaryPlace extends AbstractProjectTaskBatchingPlace {
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
+	protected void addActions() {
+		super.addActions();
 		Criteria productCriteria = new ColumnCriteria(TaskFieldConstants.PRODUCT_FIELD, Criteria.Operator.EQUALS,
 				productId);
 		NaryCriteria fullQuery = new NaryCriteria(Criteria.Operator.AND, productCriteria);
@@ -172,7 +172,7 @@ public class ProjectTasksSummaryPlace extends AbstractProjectTaskBatchingPlace {
 		QueryRequest queryRequest = new QueryRequest(new Region(0, 25000), new SortInfo(
 				TaskFieldConstants.TASK_ID_FIELD, SortInfo.Order.ASCENDING));
 
-		actions.add(new GetTaskSummaryAction(projectId, fullQuery.toQueryString(), queryRequest));
+		addAction(new GetTaskSummaryAction(projectId, fullQuery.toQueryString(), queryRequest));
 	}
 
 	@Override

@@ -82,9 +82,9 @@ public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implement
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetProjectForInvitationTokenAction(invitationToken));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetProjectForInvitationTokenAction(invitationToken));
 	}
 
 	protected boolean handleExceptionInResults(Action<?> action, DispatchException dispatchException) {

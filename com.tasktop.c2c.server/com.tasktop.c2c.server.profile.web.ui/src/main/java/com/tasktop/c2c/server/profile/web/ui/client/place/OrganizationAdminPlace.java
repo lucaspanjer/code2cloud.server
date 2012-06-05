@@ -99,9 +99,9 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetOrganizationAction(organizationId));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetOrganizationAction(organizationId));
 	}
 
 	@Override

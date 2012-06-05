@@ -114,11 +114,11 @@ public class ProjectWikiHomePlace extends AbstractProjectWikiPlace implements He
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
+	protected void addActions() {
+		super.addActions();
 		QueryRequest queryRequest = new QueryRequest();
 		queryRequest.setPageInfo(new Region(0, 5000));
-		actions.add(new FindPagesAction(projectId, query, queryRequest));
+		addAction(new FindPagesAction(projectId, query, queryRequest));
 
 	}
 

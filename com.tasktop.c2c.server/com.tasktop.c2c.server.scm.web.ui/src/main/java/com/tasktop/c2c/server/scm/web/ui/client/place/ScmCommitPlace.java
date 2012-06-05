@@ -107,10 +107,10 @@ public class ScmCommitPlace extends AbstractBatchFetchingPlace implements Headin
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetProjectAction(projectId));
-		actions.add(new GetScmCommitAction(repositoryName, commitId, projectId));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetProjectAction(projectId));
+		addAction(new GetScmCommitAction(repositoryName, commitId, projectId));
 	}
 
 	@Override

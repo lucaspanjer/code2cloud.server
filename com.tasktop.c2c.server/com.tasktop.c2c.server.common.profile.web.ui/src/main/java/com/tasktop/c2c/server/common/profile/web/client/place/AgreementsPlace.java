@@ -83,9 +83,9 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetPendingAgreementsAction());
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetPendingAgreementsAction());
 	}
 
 	@Override

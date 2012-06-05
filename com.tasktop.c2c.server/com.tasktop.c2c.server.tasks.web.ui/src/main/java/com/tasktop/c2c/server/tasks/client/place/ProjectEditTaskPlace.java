@@ -86,10 +86,10 @@ public class ProjectEditTaskPlace extends AbstractProjectTaskBatchingPlace imple
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetRepositoryConfigurationAction(projectId));
-		actions.add(new GetTaskAction(projectId, taskId));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetRepositoryConfigurationAction(projectId));
+		addAction(new GetTaskAction(projectId, taskId));
 	}
 
 	@Override

@@ -152,10 +152,10 @@ public class AppSectionPlace extends AbstractBatchFetchingPlace implements Headi
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
+	protected void addActions() {
+		super.addActions();
 		if (AppSection.HEADER.equals(appSection)) {
-			actions.add(new GetProjectAction(projectId));
+			addAction(new GetProjectAction(projectId));
 		}
 	}
 

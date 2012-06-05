@@ -187,9 +187,9 @@ public class ProjectTasksSummaryListPlace extends AbstractProjectTaskBatchingPla
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetProductsAction(projectId));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetProductsAction(projectId));
 	}
 
 	@Override

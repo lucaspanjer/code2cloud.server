@@ -78,9 +78,9 @@ public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, Wind
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetProjectCreateAvailableAction());
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetProjectCreateAvailableAction());
 	}
 
 	@Override

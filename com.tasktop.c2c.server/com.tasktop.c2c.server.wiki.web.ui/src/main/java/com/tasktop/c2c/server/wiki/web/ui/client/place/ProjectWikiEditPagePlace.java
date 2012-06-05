@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -117,11 +115,11 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new RetrievePageAction(projectId, pagePath, false));
-		actions.add(new ListAttachmentsAction(projectId, pagePath));
-		actions.add(new RetrieveConfigurationPropertyAction(projectId, WikiService.MARKUP_LANGUAGE_DB_KEY));
+	protected void addActions() {
+		super.addActions();
+		addActionAndIgnoreFailure(new RetrievePageAction(projectId, pagePath, false));
+		addAction(new ListAttachmentsAction(projectId, pagePath));
+		addAction(new RetrieveConfigurationPropertyAction(projectId, WikiService.MARKUP_LANGUAGE_DB_KEY));
 	}
 
 	@Override

@@ -274,9 +274,9 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetRepositoryConfigurationAction(projectId));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetRepositoryConfigurationAction(projectId));
 	}
 
 	@Override

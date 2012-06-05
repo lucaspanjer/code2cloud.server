@@ -122,11 +122,11 @@ public class ProjectNewTaskPlace extends AbstractProjectTaskBatchingPlace implem
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetRepositoryConfigurationAction(projectId));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetRepositoryConfigurationAction(projectId));
 		if (this.parentId != null) {
-			actions.add(new GetTaskAction(projectId, parentId));
+			addAction(new GetTaskAction(projectId, parentId));
 		}
 
 	}

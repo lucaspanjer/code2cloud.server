@@ -75,9 +75,9 @@ public class ProjectAdminTeamPlace extends ProjectAdminPlace {
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetProjectTeamAction(projectIdentifer));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetProjectTeamAction(projectIdentifer));
 	}
 
 	@Override

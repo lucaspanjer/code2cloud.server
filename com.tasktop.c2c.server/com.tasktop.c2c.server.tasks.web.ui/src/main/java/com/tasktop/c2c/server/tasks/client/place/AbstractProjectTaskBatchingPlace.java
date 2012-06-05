@@ -78,9 +78,9 @@ public abstract class AbstractProjectTaskBatchingPlace extends AbstractBatchFetc
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetProjectAction(projectId));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetProjectAction(projectId));
 	}
 
 	@Override

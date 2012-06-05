@@ -215,16 +215,20 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace implement
 		if (requiresUserInfo) {
 			actions.add(new GetUserInfoAction());
 		}
-		addActions(actions);
+		addActions();
 		return new BatchAction(OnException.CONTINUE, actions.toArray(new Action<?>[actions.size()]));
 	}
 
 	/** Override to add more actions. Don't forget to call super. */
-	protected void addActions(List<Action<?>> actions) {
+	protected void addActions() {
 
 	}
 
-	protected final void addActionAndIgnoreFailure(List<Action<?>> actions, Action<?> action) {
+	protected final void addAction(Action<?> action) {
+		actions.add(action);
+	}
+
+	protected final void addActionAndIgnoreFailure(Action<?> action) {
 		resultIndexToIgnoreExceptions.add(actions.size());
 		actions.add(action);
 	}

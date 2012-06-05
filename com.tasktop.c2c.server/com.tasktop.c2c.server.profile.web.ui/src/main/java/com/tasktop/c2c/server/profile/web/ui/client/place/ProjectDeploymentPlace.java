@@ -107,11 +107,11 @@ public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implement
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetProjectAction(projectId));
-		actions.add(new GetProjectDeploymentsAction(projectId));
-		actions.add(new GetProjectBuildsAction(projectId, null));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetProjectAction(projectId));
+		addAction(new GetProjectDeploymentsAction(projectId));
+		addAction(new GetProjectBuildsAction(projectId, null));
 	}
 
 	@Override

@@ -148,15 +148,15 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetSignupTokenRequiredAction());
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetSignupTokenRequiredAction());
 		if (signUpToken != null) {
-			actions.add(new GetSignupTokenAction(signUpToken));
-			actions.add(new GetProjectInvitationTokenAction(signUpToken));
-			actions.add(new GetProjectForInvitationTokenAction(signUpToken));
+			addAction(new GetSignupTokenAction(signUpToken));
+			addAction(new GetProjectInvitationTokenAction(signUpToken));
+			addAction(new GetProjectForInvitationTokenAction(signUpToken));
 		}
-		actions.add(new GetProfileDataFromGitubConnectionAction());
+		addAction(new GetProfileDataFromGitubConnectionAction());
 	}
 
 	protected boolean handleExceptionInResults(Action<?> action, DispatchException dispatchException) {

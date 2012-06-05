@@ -42,9 +42,9 @@ public abstract class ProjectAdminPlace extends LoggedInPlace implements Heading
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetProjectAction(projectIdentifer));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetProjectAction(projectIdentifer));
 	}
 
 	@Override

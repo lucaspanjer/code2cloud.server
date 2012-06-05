@@ -103,10 +103,10 @@ public class ProjectTaskHistoryPlace extends AbstractProjectTaskBatchingPlace {
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetTaskAction(projectId, taskId));
-		actions.add(new GetTaskHistoryAction(projectId, taskId));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetTaskAction(projectId, taskId));
+		addAction(new GetTaskHistoryAction(projectId, taskId));
 	}
 
 	@Override

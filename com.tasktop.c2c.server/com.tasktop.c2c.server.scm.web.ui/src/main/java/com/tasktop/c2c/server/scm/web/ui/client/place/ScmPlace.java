@@ -100,10 +100,10 @@ public class ScmPlace extends AbstractBatchFetchingPlace implements HeadingPlace
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetProjectAction(projectId));
-		actions.add(new GetProjectScmRepositoriesAction(projectId));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetProjectAction(projectId));
+		addAction(new GetProjectScmRepositoriesAction(projectId));
 	}
 
 	@Override

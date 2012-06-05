@@ -105,9 +105,9 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetOrganizationAction(organizationIdentifier));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetOrganizationAction(organizationIdentifier));
 	}
 
 	@Override

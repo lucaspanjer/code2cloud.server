@@ -83,9 +83,9 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetPasswordResetTokenAction(resetToken));
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetPasswordResetTokenAction(resetToken));
 	}
 
 	protected boolean handleExceptionInResults(Action<?> action, DispatchException dispatchException) {

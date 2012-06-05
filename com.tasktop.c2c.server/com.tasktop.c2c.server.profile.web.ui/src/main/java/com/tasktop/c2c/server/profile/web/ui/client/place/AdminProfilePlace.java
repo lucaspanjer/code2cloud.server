@@ -71,8 +71,8 @@ public class AdminProfilePlace extends LoggedInPlace implements HeadingPlace, Wi
 	}
 
 	/** Override to add more actions. Don't forget to call super. */
-	protected void addActions(List<Action<?>> actions) {
-		actions.add(new ListProfilesAction());
+	protected void addActions() {
+		addAction(new ListProfilesAction());
 	}
 
 	@Override

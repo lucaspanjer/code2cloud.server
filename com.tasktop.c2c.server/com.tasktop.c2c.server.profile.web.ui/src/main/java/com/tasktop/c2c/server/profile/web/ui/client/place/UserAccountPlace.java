@@ -77,9 +77,9 @@ public class UserAccountPlace extends LoggedInPlace implements HeadingPlace, Win
 	}
 
 	@Override
-	protected void addActions(List<Action<?>> actions) {
-		super.addActions(actions);
-		actions.add(new GetSshPublicKeysAction());
+	protected void addActions() {
+		super.addActions();
+		addAction(new GetSshPublicKeysAction());
 	}
 
 	@Override
