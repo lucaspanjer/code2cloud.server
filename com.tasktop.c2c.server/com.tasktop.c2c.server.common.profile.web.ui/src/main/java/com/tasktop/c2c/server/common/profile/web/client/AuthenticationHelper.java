@@ -51,6 +51,10 @@ public class AuthenticationHelper {
 		return AuthenticationHelper.hasRoleForProject(Role.User, projectId);
 	}
 
+	public static boolean isOrgAdmin(String organizationIdentifier) {
+		return AuthenticationHelper.hasRoleForOrganization(Role.Admin, organizationIdentifier);
+	}
+
 	/**
 	 * indicate if the user has the specified role for a specific project
 	 * 
@@ -63,6 +67,13 @@ public class AuthenticationHelper {
 	public static boolean hasRoleForProject(String role, String projectIdentifier) {
 
 		String projectRole = role + "/" + projectIdentifier;
+
+		return hasRole(projectRole);
+	}
+
+	public static boolean hasRoleForOrganization(String role, String organizationIdentifier) {
+
+		String projectRole = role + "/ORG_" + organizationIdentifier;
 
 		return hasRole(projectRole);
 	}

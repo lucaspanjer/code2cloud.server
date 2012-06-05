@@ -13,18 +13,14 @@
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
 import java.util.LinkedHashMap;
-import java.util.List;
-
-import net.customware.gwt.dispatch.shared.Action;
 
 import com.google.gwt.place.shared.PlaceTokenizer;
-import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.LoggedInPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
-import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetOrganizationAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetOrganizationResult;
 import com.tasktop.c2c.server.common.service.domain.Role;
@@ -113,14 +109,6 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 
 	@Override
 	protected boolean isNotAuthorized() {
-		Credentials creds = ProfileGinjector.get.instance().getAppState().getCredentials();
-
-		List<String> roles = creds.getRoles();
-		for (String role : roles) {
-			if (role.equals(orgAdminRole + organizationId)) {
-				return false;
-			}
-		}
-		return true;
+		return !AuthenticationHelper.isOrgAdmin(organizationId);
 	}
 }

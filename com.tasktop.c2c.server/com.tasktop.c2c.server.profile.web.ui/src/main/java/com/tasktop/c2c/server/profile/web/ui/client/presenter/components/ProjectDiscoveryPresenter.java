@@ -15,12 +15,12 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
+import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.place.OrganizationProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
-import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
@@ -41,11 +41,12 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 	private String currentQueryString = null;
 	private ProjectRelationship currentRelationship;
 	private Organization currentOrganization = null;
-	private final String orgAdminRole = Role.Admin + "/ORG_";
 	private AsyncDataProvider<Project> viewAdapter;
+	private ProjectDiscoveryView view;
 
 	public ProjectDiscoveryPresenter(ProjectDiscoveryView view) {
 		super(view);
+		this.view = view;
 		initializeViewAdapter();
 	}
 
@@ -62,29 +63,27 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 		}
 		if (p instanceof OrganizationProjectsPlace) {
 			this.currentOrganization = ((OrganizationProjectsPlace) p).getOrganization();
-			ProjectDiscoveryView.getInstance().createAnchorElement.setHref(OrganizationNewProjectPlace.createPlace(
+			view.createAnchorElement.setHref(OrganizationNewProjectPlace.createPlace(
 					currentOrganization.getIdentifier()).getHref());
-			ProjectDiscoveryView.getInstance().orgAdminElement.setHref(OrganizationAdminPlace.createPlace(
-					currentOrganization.getIdentifier()).getHref());
+			view.orgAdminElement.setHref(OrganizationAdminPlace.createPlace(currentOrganization.getIdentifier())
+					.getHref());
 			setOrganizationLayout(true);
 		} else {
 			this.currentOrganization = null;
-			ProjectDiscoveryView.getInstance().createAnchorElement.setHref(NewProjectPlace.createPlace().getHref());
+			view.createAnchorElement.setHref(NewProjectPlace.createPlace().getHref());
 			setOrganizationLayout(false);
 		}
-		ProjectDiscoveryView.getInstance().pager.setPageSize(currentQueryRequest.getPageInfo().getSize());
-		ProjectDiscoveryView.getInstance().setPresenter(ProjectDiscoveryPresenter.this);
+		view.pager.setPageSize(currentQueryRequest.getPageInfo().getSize());
+		view.setPresenter(ProjectDiscoveryPresenter.this);
 		update();
 	}
 
 	private void setOrganizationLayout(boolean isOrganization) {
-		ProjectDiscoveryView.getInstance().setOrganizationFilterVisible(isOrganization);
-		ProjectDiscoveryView.getInstance().setPublicFilterVisible(!isOrganization);
-		ProjectDiscoveryView.getInstance().setWatcherFilterVisible(!isOrganization);
-		ProjectDiscoveryView.getInstance().setOrgAdminButtonVisible(
-				isOrganization
-						&& getAppState().getCredentials().getRoles()
-								.contains(orgAdminRole + currentOrganization.getIdentifier()));
+		view.setOrganizationFilterVisible(isOrganization);
+		view.setPublicFilterVisible(!isOrganization);
+		view.setWatcherFilterVisible(!isOrganization);
+		view.setOrgAdminButtonVisible(isOrganization
+				&& AuthenticationHelper.isOrgAdmin(currentOrganization.getIdentifier()));
 	}
 
 	@Override
@@ -129,7 +128,7 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 		this.currentQueryString = null;
 		this.currentRelationship = projectRelationship;
 		currentQueryRequest.getPageInfo().setOffset(0);
-		ProjectDiscoveryView.getInstance().pager.setPageStart(0);
+		view.pager.setPageStart(0);
 		update();
 	}
 
@@ -158,7 +157,7 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 				update();
 			}
 		};
-		viewAdapter.addDataDisplay(ProjectDiscoveryView.getInstance().getProjectsDisplay());
+		viewAdapter.addDataDisplay(view.getProjectsDisplay());
 
 	}
 
