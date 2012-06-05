@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.profile.web.ui.server.action;
 import java.util.ArrayList;
 
 import net.customware.gwt.dispatch.server.ExecutionContext;
+import net.customware.gwt.dispatch.shared.ActionException;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,7 @@ public class GetProjectScmRepositoriesActionHandler extends
 			return new GetProjectScmRepositoriesResult(new ArrayList<ScmRepository>(scmService.getScmRepositories()),
 					profileServiceConfiguration.getHostedScmUrlPrefix(action.getProjectId()));
 		} catch (EntityNotFoundException e) {
-			handle(e);
+			throw new ActionException(e);
 		}
-		throw new IllegalStateException();
 	}
 }

@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.profile.web.ui.server.action;
 
 import net.customware.gwt.dispatch.server.ExecutionContext;
+import net.customware.gwt.dispatch.shared.ActionException;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.stereotype.Component;
@@ -35,9 +36,8 @@ public class DeleteProjectActionHandler extends AbstractProfileActionHandler<Del
 			profileService.deleteProject(action.getProjectId());
 			return new DeleteProjectResult(true);
 		} catch (EntityNotFoundException e) {
-			handle(e);
+			throw new ActionException(e);
 		}
-		throw new IllegalStateException();
 	}
 
 }

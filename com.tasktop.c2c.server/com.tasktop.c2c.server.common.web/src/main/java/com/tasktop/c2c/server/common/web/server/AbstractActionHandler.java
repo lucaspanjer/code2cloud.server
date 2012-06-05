@@ -31,9 +31,7 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.validation.ObjectError;
 
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
-import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
-import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
 import com.tasktop.c2c.server.common.web.shared.ValidationFailedException;
 
 /**
@@ -102,10 +100,6 @@ public abstract class AbstractActionHandler<A extends Action<R>, R extends Resul
 	protected void handle(ConcurrentUpdateException exception) throws DispatchException {
 		throw new ActionException(new ValidationFailedException(
 				Arrays.asList("The object has been modified since it was loaded")));
-	}
-
-	protected void handle(EntityNotFoundException e) throws DispatchException {
-		throw new ActionException(new NoSuchEntityException());
 	}
 
 	private Locale getLocale() {

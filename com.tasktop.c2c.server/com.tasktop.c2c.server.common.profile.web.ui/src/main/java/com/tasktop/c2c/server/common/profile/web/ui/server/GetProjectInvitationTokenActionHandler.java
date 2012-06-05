@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.common.profile.web.ui.server;
 
 import net.customware.gwt.dispatch.server.ExecutionContext;
+import net.customware.gwt.dispatch.shared.ActionException;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.stereotype.Component;
@@ -39,9 +40,8 @@ public class GetProjectInvitationTokenActionHandler extends
 		try {
 			return new GetProjectInvitationTokenResult(profileWebService.getProjectInvitationToken(action.getToken()));
 		} catch (EntityNotFoundException e) {
-			handle(e);
+			throw new ActionException(e);
 		}
-		throw new IllegalStateException();
 	}
 
 }

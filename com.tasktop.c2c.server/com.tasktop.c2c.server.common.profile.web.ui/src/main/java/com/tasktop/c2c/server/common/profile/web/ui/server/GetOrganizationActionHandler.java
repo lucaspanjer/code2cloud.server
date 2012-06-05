@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.common.profile.web.ui.server;
 
 import net.customware.gwt.dispatch.server.ExecutionContext;
+import net.customware.gwt.dispatch.shared.ActionException;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.stereotype.Component;
@@ -36,9 +37,8 @@ public class GetOrganizationActionHandler extends
 			setTenancyContext(action.getOrganizationId());
 			return new GetOrganizationResult(profileWebService.getOrganizationByIdentfier(action.getOrganizationId()));
 		} catch (EntityNotFoundException e) {
-			handle(e);
+			throw new ActionException(e);
 		}
-		throw new IllegalStateException();
 	}
 
 }

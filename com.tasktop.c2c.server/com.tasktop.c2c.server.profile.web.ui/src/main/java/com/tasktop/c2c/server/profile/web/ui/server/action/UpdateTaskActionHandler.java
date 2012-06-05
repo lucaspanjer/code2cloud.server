@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.profile.web.ui.server.action;
 
 import net.customware.gwt.dispatch.server.ExecutionContext;
+import net.customware.gwt.dispatch.shared.ActionException;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.stereotype.Component;
@@ -38,7 +39,7 @@ public class UpdateTaskActionHandler extends AbstractTaskActionHandler<UpdateTas
 		} catch (ValidationException e) {
 			handle(e);
 		} catch (EntityNotFoundException e) {
-			handle(e);
+			throw new ActionException(e);
 		} catch (ConcurrentUpdateException e) {
 			try {
 				Task newest = getService(action.getProjectId()).retrieveTask(action.getTask().getId());
@@ -46,7 +47,7 @@ public class UpdateTaskActionHandler extends AbstractTaskActionHandler<UpdateTas
 				result.setUpdatedAlready(true);
 				return result;
 			} catch (EntityNotFoundException enf) {
-				handle(enf); // Should not happen
+				throw new ActionException(e); // should never happen
 			}
 		}
 		throw new IllegalStateException();

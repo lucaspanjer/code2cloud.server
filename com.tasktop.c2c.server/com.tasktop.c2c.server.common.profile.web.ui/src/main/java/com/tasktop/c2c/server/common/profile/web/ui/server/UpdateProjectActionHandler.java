@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.common.profile.web.ui.server;
 
 import net.customware.gwt.dispatch.server.ExecutionContext;
+import net.customware.gwt.dispatch.shared.ActionException;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.stereotype.Component;
@@ -35,7 +36,7 @@ public class UpdateProjectActionHandler extends AbstractProfileActionHandler<Upd
 			setTenancyContext(action.getProject().getIdentifier());
 			return new UpdateProjectResult(profileWebService.updateProject(action.getProject()));
 		} catch (EntityNotFoundException e) {
-			handle(e);
+			throw new ActionException(e);
 		} catch (ValidationException e) {
 			handle(e);
 		}
