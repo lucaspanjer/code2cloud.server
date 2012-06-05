@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
-
+import net.customware.gwt.dispatch.shared.DispatchException;
 
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
@@ -87,10 +87,9 @@ public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implement
 		actions.add(new GetProjectForInvitationTokenAction(invitationToken));
 	}
 
-	protected boolean handleExceptionInResults() {
+	protected boolean handleExceptionInResults(Action<?> action, DispatchException dispatchException) {
 		// Assume its a token not found
-		ProjectsPlace.createPlace()
-				.displayOnArrival(Message.createErrorMessage("Invitation token is not valid.")).go();
+		ProjectsPlace.createPlace().displayOnArrival(Message.createErrorMessage("Invitation token is not valid.")).go();
 		return false;
 	}
 

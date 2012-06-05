@@ -13,14 +13,17 @@
 package com.tasktop.c2c.server.tasks.shared.action;
 
 import net.customware.gwt.dispatch.shared.Action;
+import net.customware.gwt.dispatch.shared.DispatchException;
 
+import com.tasktop.c2c.server.common.web.client.util.ExceptionsUtil;
 import com.tasktop.c2c.server.common.web.shared.CachableReadAction;
+import com.tasktop.c2c.server.common.web.shared.KnowsErrorMessageAction;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class GetTaskAction implements Action<GetTaskResult>, CachableReadAction {
+public class GetTaskAction implements Action<GetTaskResult>, CachableReadAction, KnowsErrorMessageAction {
 
 	private String projectId;
 	private Integer taskId;
@@ -46,6 +49,14 @@ public class GetTaskAction implements Action<GetTaskResult>, CachableReadAction 
 	 */
 	public Integer getTaskId() {
 		return taskId;
+	}
+
+	@Override
+	public String getErrorMessage(DispatchException e) {
+		if (ExceptionsUtil.isEntityNotFound(e)) {
+			return "Task with id \"" + taskId + "\" not found.";
+		}
+		return null;
 	}
 
 	/*

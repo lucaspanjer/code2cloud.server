@@ -23,8 +23,6 @@ import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
-import com.tasktop.c2c.server.common.web.client.notification.Message;
-import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.Task;
@@ -135,15 +133,6 @@ public class ProjectTaskPlace extends AbstractProjectTaskBatchingPlace {
 		}
 		createBreadcrumbs(project, task);
 		onPlaceDataFetched();
-	}
-
-	@Override
-	protected boolean handleExceptionInResults() {
-		if (hasException(NoSuchEntityException.class.getName())) {
-			notifier.displayMessage(Message.createErrorMessage("Task " + taskId + " does not exist"));
-			return false;
-		}
-		return super.handleExceptionInResults();
 	}
 
 	private void createBreadcrumbs(Project project, Task task) {

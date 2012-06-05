@@ -14,8 +14,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.DispatchException;
-
 import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
@@ -23,7 +21,7 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectActivi
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectActivityResult;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
-import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
+import com.tasktop.c2c.server.common.web.client.util.ExceptionsUtil;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
@@ -68,11 +66,9 @@ public class ProjectPresenter extends AbstractProfilePresenter implements Splitt
 
 								@Override
 								public void onFailure(Throwable exception) {
-									// NoSuchEntity is expected if the homepage doesn't exist - if it was anything else,
+									// ENFE is expected if the homepage doesn't exist - if it was anything else,
 									// go to the generic error handler
-									if (exception instanceof DispatchException
-											&& ((DispatchException) exception).getCauseClassname().equals(
-													NoSuchEntityException.class.getName())) {
+									if (ExceptionsUtil.isEntityNotFound(exception)) {
 										view.setProjectWikiPage(null);
 									} else {
 										super.onFailure(exception);

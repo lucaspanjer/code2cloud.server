@@ -124,11 +124,6 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 		actions.add(new RetrieveConfigurationPropertyAction(projectId, WikiService.MARKUP_LANGUAGE_DB_KEY));
 	}
 
-	protected boolean handleExceptionInResults() {
-		// Assume its a page not found
-		return true;
-	}
-
 	@Override
 	protected void handleBatchResults() {
 		super.handleBatchResults();

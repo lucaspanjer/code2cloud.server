@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.common.profile.web.client.place;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
@@ -31,7 +32,9 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetUserInfoActio
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetUserInfoResult;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
+import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
+import com.tasktop.c2c.server.common.web.shared.KnowsErrorMessageAction;
 
 /**
  * Base classes for places that first make rpcs to authorize, then make the rest rpcs.
@@ -43,6 +46,7 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace implement
 
 	protected boolean requiresUserInfo = true;
 	protected boolean readyToGo = false;
+	private List<Action<?>> actions;
 	private BatchResult results;
 	private List<Integer> resultIndexToIgnoreExceptions = new ArrayList<Integer>();
 
@@ -105,7 +109,7 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace implement
 
 	}
 
-	protected void onResultsRecieved() {
+	private void onResultsRecieved() {
 		if (requiresUserInfo) {
 			setUserInfo(getResult(GetUserInfoResult.class).get());
 		}
@@ -123,12 +127,20 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace implement
 			return;
 		}
 
-		if (hasException(null)) {
-			boolean shouldContinue = handleExceptionInResults();
-
-			if (!shouldContinue) {
-				return;
+		int i = 0;
+		for (Throwable t : results.getExceptions()) {
+			if (resultIndexToIgnoreExceptions.contains(i)) {
+				continue;
 			}
+			DispatchException dispatchException = (DispatchException) t;
+			if (dispatchException != null) {
+				boolean shouldContinue = handleExceptionInResults(actions.get(i), dispatchException);
+
+				if (!shouldContinue) {
+					return;
+				}
+			}
+			i++;
 		}
 
 		handleBatchResults();
@@ -141,21 +153,46 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace implement
 	 * @return
 	 */
 	protected boolean isNotAuthorized() {
-		return hasException("InsufficientPermissionsException") || hasException("AccessDeniedException")
+		return getException("InsufficientPermissionsException") != null
+				|| getException("AccessDeniedException") != null
 				|| (requiresUserInfo && AuthenticationHelper.isAccountDisabled());
 	}
 
 	/**
 	 * Called if there is an exception in the results.
 	 * 
+	 * @param dispatchException
+	 * @param action
+	 * 
 	 * @return true to continue with place. false if we should abort
 	 */
-	protected boolean handleExceptionInResults() {
-		notifier.displayMessage(Message.createErrorMessage("A server-side error has occured"));
+	protected boolean handleExceptionInResults(Action<?> action, DispatchException dispatchException) {
+		List<String> messages = null;
+
+		if (action instanceof KnowsErrorMessageAction) {
+			String aMessage = ((KnowsErrorMessageAction) action).getErrorMessage(dispatchException);
+			if (aMessage != null) {
+				messages = Collections.singletonList(aMessage);
+			}
+		}
+
+		if (messages == null && AsyncCallbackSupport.getErrorHandler() != null) {
+			messages = AsyncCallbackSupport.getErrorHandler().getErrors(dispatchException);
+		}
+
+		if (messages == null) {
+			messages = Collections.singletonList("A server side error occured");
+		}
+		notifier.displayMessage(Message.createErrorMessage(StringUtils.concatenate(messages)));
 		return false;
 	}
 
-	protected boolean hasException(String exceptionClassName) {
+	protected final boolean handleExceptionInResults() {
+		return false;
+	}
+
+	/** Get an exception with the given name. */
+	protected final Throwable getException(String exceptionClassName) {
 		int i = 0;
 		for (Throwable t : results.getExceptions()) {
 			if (resultIndexToIgnoreExceptions.contains(i++)) {
@@ -166,15 +203,15 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace implement
 				if (exceptionClassName == null
 						|| (dispatchException.getCauseClassname() != null && dispatchException.getCauseClassname()
 								.contains(exceptionClassName))) {
-					return true;
+					return dispatchException;
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 
 	private BatchAction createFetchAction() {
-		List<Action<?>> actions = new ArrayList<Action<?>>();
+		actions = new ArrayList<Action<?>>();
 		if (requiresUserInfo) {
 			actions.add(new GetUserInfoAction());
 		}
@@ -203,6 +240,7 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace implement
 				results = result;
 				onResultsRecieved();
 			}
+
 		};
 		CommonGinjector.get.instance().getDispatchService().execute(fetchAction, fetchCallback);
 	}

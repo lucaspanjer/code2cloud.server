@@ -33,6 +33,7 @@ public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 
 	public static void setErrorHandler(ErrorHandler handler) {
 		errorHandler = handler;
+
 	}
 
 	private OperationMessage operationMessage;
@@ -111,5 +112,12 @@ public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 
 	protected List<String> getErrors(Throwable exception) {
 		return errorHandler.getErrors(exception);
+	}
+
+	/**
+	 * @return the errorHandler
+	 */
+	public static ErrorHandler getErrorHandler() {
+		return errorHandler;
 	}
 }

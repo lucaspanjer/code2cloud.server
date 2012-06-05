@@ -20,7 +20,6 @@ import net.customware.gwt.dispatch.shared.Action;
 
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
-import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
@@ -31,7 +30,6 @@ import com.tasktop.c2c.server.common.profile.web.client.place.SectionPlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
-import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.wiki.domain.Page;
@@ -126,13 +124,6 @@ public class ProjectWikiViewPagePlace extends AbstractProjectWikiPlace implement
 	protected void addActions(List<Action<?>> actions) {
 		super.addActions(actions);
 		actions.add(new RetrievePageAction(projectId, pagePath, true));
-	}
-
-	protected boolean handleExceptionInResults() {
-		// Assume its a page not found
-		ProfileGinjector.get.instance().getNotifier()
-				.displayMessage(Message.createErrorMessage("Page \"" + pagePath + "\" not found."));
-		return true;
 	}
 
 	@Override

@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
-
+import net.customware.gwt.dispatch.shared.DispatchException;
 
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
@@ -159,7 +159,7 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 		actions.add(new GetProfileDataFromGitubConnectionAction());
 	}
 
-	protected boolean handleExceptionInResults() {
+	protected boolean handleExceptionInResults(Action<?> action, DispatchException dispatchException) {
 		return true;
 	}
 
@@ -187,12 +187,12 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 		}
 
 		if (tokenRequired && !StringUtils.hasText(signUpToken)) {
-			ProjectsPlace.createPlace()
-					.displayOnArrival(Message.createErrorMessage("Token required for sign up.")).go();
+			ProjectsPlace.createPlace().displayOnArrival(Message.createErrorMessage("Token required for sign up."))
+					.go();
 			return;
 		} else if (tokenRequired && projectInvitationTokenData == null && signUpTokenData == null) {
-			ProjectsPlace.createPlace()
-					.displayOnArrival(Message.createErrorMessage("Invitation token is not valid.")).go();
+			ProjectsPlace.createPlace().displayOnArrival(Message.createErrorMessage("Invitation token is not valid."))
+					.go();
 			return;
 		}
 

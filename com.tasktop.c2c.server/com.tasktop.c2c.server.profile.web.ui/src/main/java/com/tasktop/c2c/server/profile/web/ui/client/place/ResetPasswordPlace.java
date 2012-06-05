@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
+import net.customware.gwt.dispatch.shared.DispatchException;
 
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
@@ -25,6 +26,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetPasswordResetTokenAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetPasswordResetTokenResult;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
+import com.tasktop.c2c.server.common.web.client.util.ExceptionsUtil;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
@@ -86,15 +88,12 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 		actions.add(new GetPasswordResetTokenAction(resetToken));
 	}
 
-	@Override
-	protected void onResultsRecieved() {
-
-		if (hasException("NoSuchEntityException")) {
+	protected boolean handleExceptionInResults(Action<?> action, DispatchException dispatchException) {
+		if (ExceptionsUtil.isEntityNotFound(dispatchException)) {
 			SignInPlace.createPlace().setMessage(getMessage()).go();
-			return;
+			return false;
 		}
-
-		handleBatchResults();
+		return super.handleExceptionInResults(action, dispatchException);
 	}
 
 	@Override

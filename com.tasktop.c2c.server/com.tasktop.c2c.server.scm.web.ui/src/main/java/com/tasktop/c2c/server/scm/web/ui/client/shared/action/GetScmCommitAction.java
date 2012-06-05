@@ -12,14 +12,17 @@
 package com.tasktop.c2c.server.scm.web.ui.client.shared.action;
 
 import net.customware.gwt.dispatch.shared.Action;
+import net.customware.gwt.dispatch.shared.DispatchException;
 
+import com.tasktop.c2c.server.common.web.client.util.ExceptionsUtil;
 import com.tasktop.c2c.server.common.web.shared.CachableReadAction;
+import com.tasktop.c2c.server.common.web.shared.KnowsErrorMessageAction;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class GetScmCommitAction implements Action<GetScmCommitResult>, CachableReadAction {
+public class GetScmCommitAction implements Action<GetScmCommitResult>, CachableReadAction, KnowsErrorMessageAction {
 	private String repoName;
 	private String commitId;
 	private String projectId;
@@ -32,6 +35,14 @@ public class GetScmCommitAction implements Action<GetScmCommitResult>, CachableR
 
 	protected GetScmCommitAction() {
 
+	}
+
+	@Override
+	public String getErrorMessage(DispatchException e) {
+		if (ExceptionsUtil.isEntityNotFound(e)) {
+			return "Commit \"" + commitId + "\" not found.";
+		}
+		return null;
 	}
 
 	@Override
