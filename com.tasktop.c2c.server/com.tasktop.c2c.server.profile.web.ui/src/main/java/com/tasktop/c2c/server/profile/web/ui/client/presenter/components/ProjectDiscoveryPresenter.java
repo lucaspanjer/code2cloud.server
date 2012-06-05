@@ -20,6 +20,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
+import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
@@ -40,7 +41,7 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 	private String currentQueryString = null;
 	private ProjectRelationship currentRelationship;
 	private Organization currentOrganization = null;
-
+	private final String orgAdminRole = Role.Admin + "/ORG_";
 	private AsyncDataProvider<Project> viewAdapter;
 
 	public ProjectDiscoveryPresenter(ProjectDiscoveryView view) {
@@ -80,7 +81,10 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 		ProjectDiscoveryView.getInstance().setOrganizationFilterVisible(isOrganization);
 		ProjectDiscoveryView.getInstance().setPublicFilterVisible(!isOrganization);
 		ProjectDiscoveryView.getInstance().setWatcherFilterVisible(!isOrganization);
-		ProjectDiscoveryView.getInstance().setOrgAdminButtonVisible(isOrganization);
+		ProjectDiscoveryView.getInstance().setOrgAdminButtonVisible(
+				isOrganization
+						&& getAppState().getCredentials().getRoles()
+								.contains(orgAdminRole + currentOrganization.getIdentifier()));
 	}
 
 	@Override
