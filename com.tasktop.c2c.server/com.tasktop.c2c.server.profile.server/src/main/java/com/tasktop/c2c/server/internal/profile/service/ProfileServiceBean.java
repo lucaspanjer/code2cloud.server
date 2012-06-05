@@ -680,8 +680,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 			List<Project> projects = (List<Project>) entityManager
 					.createQuery(
-							"SELECT DISTINCT project FROM " + Project.class.getSimpleName()
-									+ " project, IN(project.projectProfiles) pp WHERE pp.profile.id = :id "
+							"SELECT DISTINCT project FROM "
+									+ Project.class.getSimpleName()
+									+ " project, IN(project.projectProfiles) pp WHERE pp.profile.id = :id and project.deleted = false "
 									+ createSortClause("project", Project.class, new SortInfo("name")))
 					.setParameter("id", profile.getId()).getResultList();
 

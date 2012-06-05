@@ -1758,17 +1758,29 @@ public abstract class BaseProfileServiceTest {
 		return project;
 	}
 
-	@Test(expected = EntityNotFoundException.class)
+	@Test()
 	public void testGetDeletedProfileProjects() throws EntityNotFoundException {
 
 		Profile profile = createMockProfile(entityManager);
-		Project project = MockProjectFactory.create(entityManager);
-		entityManager.persist(project);
-		Project deletedProject = MockProjectFactory.create(entityManager);
-		deletedProject.setIsDeleted(true);
-		entityManager.persist(deletedProject.addProfile(profile));
 
-		profileService.getProfileProjects(profile.getId());
+		Project project = MockProjectFactory.create(entityManager);
+		entityManager.persist(project.addProfile(profile));
+
+		profileService.getProjectByIdentifier(project.getIdentifier());
+		int numProjects = profileService.getProfileProjects(profile.getId()).size();
+
+		Assert.assertEquals(1, numProjects);
+
+		project.setIsDeleted(true);
+
+		try {
+			profileService.getProjectByIdentifier(project.getIdentifier());
+			Assert.fail();
+		} catch (EntityNotFoundException e) {
+			// expected
+		}
+		numProjects = profileService.getProfileProjects(profile.getId()).size();
+		Assert.assertEquals(0, numProjects); // Should still work task 4429
 	}
 
 	@Test
