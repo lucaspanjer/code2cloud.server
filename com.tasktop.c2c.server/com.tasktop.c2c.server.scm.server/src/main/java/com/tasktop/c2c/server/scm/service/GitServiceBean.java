@@ -242,7 +242,11 @@ public class GitServiceBean implements GitService, InitializingBean {
 
 			@Override
 			public int compare(RevCommit o1, RevCommit o2) {
-				return o2.getCommitTime() - o1.getCommitTime();
+				int ctDiff = o2.getCommitTime() - o1.getCommitTime();
+				if (ctDiff != 0) {
+					return ctDiff;
+				}
+				return o1.getId().compareTo(o2.getId());
 			}
 		});
 		Set<ObjectId> visited = new java.util.HashSet<ObjectId>();
@@ -278,7 +282,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 						}
 					}
 					index++;
-					if (region != null && index >= region.getOffset() + region.getSize()) {
+					if (region != null && (index >= region.getOffset() + region.getSize())) {
 						break;
 					}
 
