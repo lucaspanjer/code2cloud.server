@@ -25,6 +25,7 @@
 	    <liquibase.version>2.0.3</liquibase.version>
 		<hsqldb.version>2.2.8</hsqldb.version>
 		<mysql.version>5.1.12</mysql.version>
+		<wikitext.version>1.6.1</wikitext.version>
 	</properties>
 	
 	<licenses>
@@ -762,32 +763,32 @@
 			<dependency>
 				<groupId>org.eclipse.mylyn.docs</groupId>
 				<artifactId>org.eclipse.mylyn.wikitext.core</artifactId>
-				<version>1.6.0-SNAPSHOT</version>
+				<version>${wikitext.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.mylyn.docs</groupId>
 				<artifactId>org.eclipse.mylyn.wikitext.textile.core</artifactId>
-				<version>1.6.0-SNAPSHOT</version>
+				<version>${wikitext.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.mylyn.docs</groupId>
 				<artifactId>org.eclipse.mylyn.wikitext.confluence.core</artifactId>
-				<version>1.6.0-SNAPSHOT</version>
+				<version>${wikitext.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.mylyn.docs</groupId>
 				<artifactId>org.eclipse.mylyn.wikitext.mediawiki.core</artifactId>
-				<version>1.6.0-SNAPSHOT</version>
+				<version>${wikitext.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.mylyn.docs</groupId>
 				<artifactId>org.eclipse.mylyn.wikitext.tracwiki.core</artifactId>
-				<version>1.6.0-SNAPSHOT</version>
+				<version>${wikitext.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.mylyn.docs</groupId>
 				<artifactId>org.eclipse.mylyn.wikitext.twiki.core</artifactId>
-				<version>1.6.0-SNAPSHOT</version>
+				<version>${wikitext.version}</version>
 			</dependency>			
 			<dependency>
 				<groupId>org.liquibase</groupId>
