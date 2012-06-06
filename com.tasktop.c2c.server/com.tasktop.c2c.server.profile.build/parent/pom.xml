@@ -25,7 +25,7 @@
 	    <liquibase.version>2.0.3</liquibase.version>
 		<hsqldb.version>2.2.8</hsqldb.version>
 		<mysql.version>5.1.12</mysql.version>
-		<wikitext.version>1.6.1</wikitext.version>
+		<wikitext.version>1.6.1-SNAPSHOT</wikitext.version>
 	</properties>
 	
 	<licenses>
