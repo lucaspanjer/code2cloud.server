@@ -223,17 +223,6 @@ public class TaskServiceController extends AbstractRestService implements TaskSe
 		return service.findTasksWithCriteria(criteria, query);
 	}
 
-	@Exclude
-	@RequestMapping(value = "/findTaskSummariesWithCriteria", method = RequestMethod.POST)
-	public QueryResult<Task> findTaskSummariesWithCriteria(@RequestBody CriteriaQueryArguments args) {
-		return this.findTaskSummariesWithCriteria(args.getCriteria(), args.getQuerySpec());
-	}
-
-	@Override
-	public QueryResult<Task> findTaskSummariesWithCriteria(Criteria criteria, QuerySpec query) {
-		return service.findTaskSummariesWithCriteria(criteria, query);
-	}
-
 	@Title("Create Task")
 	@Documentation("Create a new task")
 	@Section(value = "Tasks", order = 1)

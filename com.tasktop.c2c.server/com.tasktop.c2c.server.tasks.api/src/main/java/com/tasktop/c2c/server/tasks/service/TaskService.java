@@ -124,19 +124,6 @@ public interface TaskService {
 	QueryResult<Task> findTasksWithCriteria(Criteria criteria, QuerySpec query);
 
 	/**
-	 * Find tasks by a user defined criteria. This method call returns thin Tasks, which only contain enough data to
-	 * display in a summary list.
-	 * 
-	 * @param criteria
-	 * @param pageInfo
-	 *            can be null, defaults
-	 * @param sortInfo
-	 *            can be null, defaults
-	 * @return
-	 */
-	QueryResult<Task> findTaskSummariesWithCriteria(Criteria criteria, QuerySpec query);
-
-	/**
 	 * Get the configuration of the task repository.
 	 * 
 	 * @return

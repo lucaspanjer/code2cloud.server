@@ -37,6 +37,6 @@ public class GetTaskSummaryActionHandler extends AbstractTaskActionHandler<GetTa
 		Criteria criteria = CriteriaParser.parse(action.getCriteria());
 		QuerySpec querySpec = new QuerySpec(action.getQueryRequest().getPageInfo(), action.getQueryRequest()
 				.getSortInfo(), true);
-		return new GetTaskSummaryResult(taskService.findTaskSummariesWithCriteria(criteria, querySpec).getResultPage());
+		return new GetTaskSummaryResult(taskService.findTasksWithCriteria(criteria, querySpec).getResultPage());
 	}
 }

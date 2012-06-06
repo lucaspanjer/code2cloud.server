@@ -440,58 +440,6 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return new QueryResult<Task>(impliedQuerySpec.getRegion(), resultPage, totalResultsCount);
 	}
 
-	@Override
-	@Secured({ Role.Observer, Role.User })
-	public QueryResult<Task> findTaskSummariesWithCriteria(Criteria criteria, QuerySpec querySpec) {
-		QueryResult<Task> thickResult = this.findTasksWithCriteria(criteria, querySpec);
-
-		// Now, go through and construct objects with the bare minimum that we need for our search results - throw out
-		// anything that's not explicitly needed to cut down on serialized size.
-
-		QueryResult<Task> thinResult = new QueryResult<Task>();
-		thinResult.setOffset(thickResult.getOffset());
-		thinResult.setPageSize(thickResult.getPageSize());
-		thinResult.setTotalResultSize(thickResult.getTotalResultSize());
-
-		List<Task> thinTaskList = new ArrayList<Task>(thickResult.getResultPage().size());
-		for (Task thickTask : thickResult.getResultPage()) {
-			Task thinTask = new Task();
-
-			// Add our minimal fields now.
-			thinTask.setId(thickTask.getId());
-			thinTask.setShortDescription(thickTask.getShortDescription());
-			thinTask.setStatus(thickTask.getStatus());
-			thinTask.setMilestone(thickTask.getMilestone());
-			thinTask.setComponent(thickTask.getComponent());
-			thinTask.setTaskType(thickTask.getTaskType());
-			thinTask.setIteration(thickTask.getIteration());
-
-			// We only want our product's name.
-			Product thinProdoct = new Product();
-			thinProdoct.setName(thickTask.getProduct().getName());
-			thinTask.setProduct(thinProdoct);
-
-			// Blank out irrelevant fields in the copied objects
-			if (thinTask.getComponent() != null) {
-				thinTask.getComponent().setInitialOwner(null);
-				thinTask.getComponent().setProduct(null);
-			}
-
-			if (thinTask.getMilestone() != null) {
-				thinTask.getMilestone().setProduct(null);
-			}
-
-			if (thinTask.getProduct() != null) {
-				thinTask.getProduct().setComponents(null);
-			}
-
-			thinTaskList.add(thinTask);
-		}
-
-		thinResult.setResultPage(thinTaskList);
-		return thinResult;
-	}
-
 	private com.tasktop.c2c.server.internal.tasks.domain.Task prepareTaskForSave(Task task) throws ValidationException,
 			EntityNotFoundException {
 
