@@ -18,8 +18,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeUri;
-import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellList;
@@ -64,9 +62,9 @@ public class ScmRepoListView extends Composite {
 		public void render(com.google.gwt.cell.client.Cell.Context context, ScmRepository value, SafeHtmlBuilder sb) {
 			String repoUrl = ScmRepoPlace.createPlace(projectId, value.getName()).getHref();
 			String altUrl = value.getAlternateUrl() == null ? "" : value.getAlternateUrl();
-			sb.append(template.repoAnchor(UriUtils.fromString(repoUrl), value.getName(), value.getUrl(), altUrl,
-					ScmResources.get.style().repoCellName()));
-			sb.append(template.viewCommits(UriUtils.fromString(repoUrl)));
+			sb.append(template.repoAnchor(repoUrl, value.getName(), value.getUrl(), altUrl, ScmResources.get.style()
+					.repoCellName()));
+			sb.append(template.viewCommits(repoUrl));
 			sb.append(template.spacerClear(ScmResources.get.style().spacer()));
 		}
 	}
@@ -75,10 +73,10 @@ public class ScmRepoListView extends Composite {
 
 	static interface HtmlTemplates extends SafeHtmlTemplates {
 		@Template("<div class=\"left\"><div class=\"{4}\"><a href=\"{0}\">{1}</a></div><div>{2}</div><div>{3}</div></div>")
-		SafeHtml repoAnchor(SafeUri url, String name, String url1Div, String url2Div, String nameClass);
+		SafeHtml repoAnchor(String url, String name, String url1Div, String url2Div, String nameClass);
 
 		@Template("<div class=\"right\"><a href=\"{0}\">View Commits</a></div>")
-		SafeHtml viewCommits(SafeUri url);
+		SafeHtml viewCommits(String url);
 
 		@Template("<div class=\"{0} clear\"/>")
 		SafeHtml spacerClear(String spacerClass);

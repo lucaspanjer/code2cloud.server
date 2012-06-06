@@ -21,8 +21,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeUri;
-import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.text.shared.testing.PassthroughRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -81,12 +79,12 @@ public class ScmRepoView extends Composite implements Editor<ScmRepository>, ISc
 			String message = trimMessage(value.getComment());
 			String commitUrl = ScmCommitPlace.createPlace(projectId, repository.getName(), value.getCommitId())
 					.getHref();
-			SafeHtml anchorDiv = template.commitAnchor(UriUtils.fromString(commitUrl), value.getMinimizedCommitId());
+			SafeHtml anchorDiv = template.commitAnchor(commitUrl, value.getMinimizedCommitId());
 			SafeHtml messageDiv = template.message(message, commitUrl, ScmResources.get.style().commitCellMessage());
-			SafeHtml commitInfo = template.commitInfo(messageDiv, UriUtils.fromString(value.getAuthor().getEmail()),
-					dateString, ScmResources.get.style().commitCellAuthor());
-			sb.append(template.profileCell(template.avatar(UriUtils.fromString(avatarUrl)), commitInfo, anchorDiv,
-					ScmResources.get.style().commitCell()));
+			SafeHtml commitInfo = template.commitInfo(messageDiv, value.getAuthor().getEmail(), dateString,
+					ScmResources.get.style().commitCellAuthor());
+			sb.append(template.profileCell(template.avatar(avatarUrl), commitInfo, anchorDiv, ScmResources.get.style()
+					.commitCell()));
 			sb.append(template.spacerClear(ScmResources.get.style().spacer()));
 		}
 
@@ -108,16 +106,16 @@ public class ScmRepoView extends Composite implements Editor<ScmRepository>, ISc
 	static interface HtmlTemplates extends SafeHtmlTemplates {
 
 		@Template("<div><img src=\"{0}\"></img></div>")
-		SafeHtml avatar(SafeUri avatarUrl);
+		SafeHtml avatar(String avatarUrl);
 
 		@Template("<div class=\"{2}\"><a href=\"{1}\">{0}</a></div>")
 		SafeHtml message(String message, String url, String messageClass);
 
 		@Template("<div>{0}<div class=\"{3}\">{1} authored on {2}</div></div>")
-		SafeHtml commitInfo(SafeHtml messageDiv, SafeUri author, String date, String authorClass);
+		SafeHtml commitInfo(SafeHtml messageDiv, String author, String date, String authorClass);
 
 		@Template("<div class=\"right\"><a href=\"{0}\">{1}</a></div>")
-		SafeHtml commitAnchor(SafeUri url, String commitHash);
+		SafeHtml commitAnchor(String url, String commitHash);
 
 		@Template("<div class=\"{0} clear\"/>")
 		SafeHtml spacerClear(String spacerClass);
