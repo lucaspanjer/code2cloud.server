@@ -7,6 +7,6 @@
 		HUDSONVARS['anon-user'] = ${it.anon};
 
 		/* Emit Script tag - break it up, because some browsers do funny things if they see an intact script tag */
-		document.write('<sc' + 'ri' + 'pt type="text/javas' + 'cr' + 'ipt" src="' + applicationRoot + '/scripts/hudson-cfcode.js"></' + 'sc' + 'ri' + 'pt>');
+		document.write('<sc' + 'ri' + 'pt type="text/javas' + 'cr' + 'ipt" src="' + applicationRoot + '/scripts/hudson-cfcode-3.0.0-M2.js"></' + 'sc' + 'ri' + 'pt>');
 	</script> ]]>
 </j:jelly>

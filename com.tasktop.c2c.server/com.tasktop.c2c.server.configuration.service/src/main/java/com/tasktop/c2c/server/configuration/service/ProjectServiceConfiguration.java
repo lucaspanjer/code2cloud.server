@@ -39,15 +39,15 @@ public class ProjectServiceConfiguration {
 			ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL, ProjectServiceConfiguration.PROFILE_BASE_URL };
 	public static final String MARKUP_LANGUAGE = "markup.language";
 
-	private String projectId;
+	private String projectIdentifier;
 	private Map<String, String> properties;
 
 	public String getProjectIdentifier() {
-		return projectId;
+		return projectIdentifier;
 	}
 
-	public void setProjectIdentifier(String applicationId) {
-		this.projectId = applicationId;
+	public void setProjectIdentifier(String projectIdentifier) {
+		this.projectIdentifier = projectIdentifier;
 	}
 
 	public Map<String, String> getProperties() {

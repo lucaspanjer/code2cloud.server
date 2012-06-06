@@ -29,7 +29,6 @@ import org.springframework.security.crypto.codec.Base64;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.web.HeaderConstants;
 
-
 public class AuthenticationTokenSerializer {
 
 	private final Charset charset;

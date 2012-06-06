@@ -12,8 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.hudson.plugin.cloud;
 
-import hudson.model.Descriptor;
 import hudson.model.TaskListener;
+import hudson.model.Descriptor;
 import hudson.remoting.Channel;
 import hudson.remoting.Channel.Listener;
 import hudson.slaves.ComputerLauncher;
@@ -23,9 +23,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import com.trilead.ssh2.Connection;
-import com.trilead.ssh2.ServerHostKeyVerifier;
-import com.trilead.ssh2.Session;
+import ch.ethz.ssh2.Connection;
+import ch.ethz.ssh2.ServerHostKeyVerifier;
+import ch.ethz.ssh2.Session;
 
 /**
  * Parts of this taken from EC2UnixLauncher.
@@ -59,6 +59,7 @@ public class C2CComputerLauncher extends ComputerLauncher {
 		String address = computer.getNode().getAddress();
 		logger.println("Connecting to " + address);
 		final Connection conn;
+
 		Connection cleanupConn = null; // java's code path analysis for final doesn't work that well.
 		boolean successful = false;
 

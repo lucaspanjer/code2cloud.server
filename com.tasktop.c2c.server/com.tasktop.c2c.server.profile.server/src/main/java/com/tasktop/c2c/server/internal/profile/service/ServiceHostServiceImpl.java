@@ -192,7 +192,7 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 		if (results.size() == 1) {
 			return convertToPublic(results.get(0));
 		}
-		throw new IllegalStateException("Multiple pool nodes with ip: " + ip);
+		throw new IllegalStateException("Multiple pool nodes with IP address: " + ip);
 	}
 
 	@Override

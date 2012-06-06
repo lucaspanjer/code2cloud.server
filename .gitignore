@@ -2,8 +2,9 @@
 *.war
 *.class
 *.refactorings
-*/bin/
-*/.gwt-log
+*bin/
+*target/
+*.gwt-log
 *.ipr
 *.iml
 *.iws

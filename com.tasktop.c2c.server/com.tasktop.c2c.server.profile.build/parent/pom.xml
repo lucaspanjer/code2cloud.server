@@ -39,13 +39,13 @@
 		<repository>
 			<id>code2cloud-internal</id>
 			<name>Code2Cloud internal repo</name>
-			<url>https://q.tasktop.com/alm/s/c2c/maven/</url>
+			<url>https://q.tasktop.com/alm/s/c2c/maven</url>
 		</repository>
 		
 		<repository>
 			<id>spring-tenancy</id>
 			<name>Spring Tenancy</name>
-			<url>https://r.tasktop.com/s/spring-tenancy/maven/</url>
+			<url>https://r.tasktop.com/s/spring-tenancy/maven</url>
 		</repository>
 		
 		<repository>
@@ -53,6 +53,7 @@
             <name>guice maven</name>
             <url>http://guice-maven.googlecode.com/svn/trunk</url>
 		</repository>
+
 		<repository> 
 		    <id>EclipseLink Repo</id> 
 			<name>EclipseLink Repository</name> 
@@ -548,7 +549,7 @@
 			    <version>${bouncycastle.version}</version>
 			</dependency>
 
-			<!-- Tasktop projects -->
+			<!-- Code2Cloud projects -->
 			<dependency>
 				<groupId>com.tasktop.c2c.server</groupId>
 				<artifactId>common.api</artifactId>
@@ -579,6 +580,11 @@
 			<dependency>
 				<groupId>com.tasktop.c2c.server</groupId>
 				<artifactId>auth.service</artifactId>
+				<version>${com.tasktop.c2c.server.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.tasktop.c2c.server</groupId>
+				<artifactId>auth.service.spring2</artifactId>
 				<version>${com.tasktop.c2c.server.version}</version>
 			</dependency>
 			<dependency>

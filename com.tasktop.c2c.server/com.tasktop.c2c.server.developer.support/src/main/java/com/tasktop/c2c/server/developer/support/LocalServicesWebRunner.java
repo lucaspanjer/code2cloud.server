@@ -41,7 +41,7 @@ public class LocalServicesWebRunner {
 		wikiContext.setParentLoaderPriority(true);
 
 		WebAppContext hudsonConfigContext = new WebAppContext();
-		hudsonConfigContext.setResourceBase("../com.tasktop.c2c.server.hudson.configuration.web/src/main/webapp/");
+		hudsonConfigContext.setResourceBase("../com.tasktop.c2c.server.hudson.configuration.web/src/main/webapp");
 		hudsonConfigContext.setContextPath("/hudson-config");
 		hudsonConfigContext.setParentLoaderPriority(true);
 

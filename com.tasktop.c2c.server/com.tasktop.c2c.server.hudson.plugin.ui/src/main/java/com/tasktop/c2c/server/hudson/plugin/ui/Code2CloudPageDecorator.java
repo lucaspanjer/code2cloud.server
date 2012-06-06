@@ -15,9 +15,9 @@ package com.tasktop.c2c.server.hudson.plugin.ui;
 import hudson.Extension;
 import hudson.model.PageDecorator;
 
-import org.acegisecurity.GrantedAuthority;
-import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken;
+import org.springframework.security.GrantedAuthority;
+import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
 
 /**
  * @author Lucas Panjer (Tasktop Technologies Inc.)

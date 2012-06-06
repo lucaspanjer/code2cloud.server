@@ -21,17 +21,15 @@ import hudson.security.SecurityRealm;
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 
-import org.acegisecurity.Authentication;
-import org.acegisecurity.AuthenticationException;
-import org.acegisecurity.AuthenticationManager;
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UserDetailsService;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.springframework.beans.factory.xml.DefaultNamespaceHandlerResolver;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.Authentication;
+import org.springframework.security.AuthenticationException;
+import org.springframework.security.AuthenticationManager;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 
 public class AlmPreauthenticationSecurityRealm extends SecurityRealm implements UserDetailsService,
 		AuthenticationManager {
@@ -42,7 +40,9 @@ public class AlmPreauthenticationSecurityRealm extends SecurityRealm implements 
 
 	@Override
 	public SecurityComponents createSecurityComponents() {
-		return new SecurityComponents(this, this);
+		AuthenticationManager manager = (AuthenticationManager) this;
+		UserDetailsService userDetails = (UserDetailsService) this;
+		return new SecurityComponents(manager, userDetails);
 	}
 
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
@@ -72,12 +72,6 @@ public class AlmPreauthenticationSecurityRealm extends SecurityRealm implements 
 	public Filter createFilter(FilterConfig filterConfig) {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 				new String[] { "classpath:applicationContext-security.xml" }, false) {
-			@Override
-			protected void initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
-				super.initBeanDefinitionReader(reader);
-				reader.setNamespaceHandlerResolver(new DefaultNamespaceHandlerResolver(new FilterClassLoader(
-						AlmPreauthenticationSecurityRealm.class.getClassLoader())));
-			}
 		};
 		context.setClassLoader(AlmPreauthenticationSecurityRealm.class.getClassLoader());
 

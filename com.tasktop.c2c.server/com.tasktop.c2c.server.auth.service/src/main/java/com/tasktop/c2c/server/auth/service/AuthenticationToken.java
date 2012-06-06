@@ -22,6 +22,7 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
+
 public class AuthenticationToken implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 

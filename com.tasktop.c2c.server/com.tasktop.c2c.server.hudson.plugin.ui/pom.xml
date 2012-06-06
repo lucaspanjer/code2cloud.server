@@ -7,36 +7,36 @@
 <!--		<version>0.1.0-SNAPSHOT</version>-->
 <!-- 	</parent>-->
   <parent>
-    <groupId>org.jvnet.hudson.plugins</groupId>
-    <artifactId>plugin</artifactId>
-    <version>1.384</version>
+    <groupId>org.eclipse.hudson.plugins</groupId>
+    <artifactId>hudson-plugin-parent</artifactId>
+    <version>3.0.0-M2</version>
   </parent>
 
   <groupId>com.tasktop.c2c.server</groupId>
   <artifactId>hudson.plugin.ui</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>hpi</packaging>
-  <name>Code2Cloud UI Plugin</name>
+  <name>Code2Cloud Hudson UI Plugin</name>
 
   <dependencies>
 
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
+      <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-war</artifactId>
       <type>war</type>
-      <version>1.384</version>
+      <version>3.0.0-M2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
+      <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-core</artifactId>
-      <version>1.384</version>
+      <version>3.0.0-M2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
-      <artifactId>hudson-test-harness</artifactId>
-      <version>1.384</version>
+      <groupId>org.eclipse.hudson.main</groupId>
+      <artifactId>hudson-test-framework</artifactId>
+      <version>3.0.0-M2</version>
       <scope>test</scope>
     </dependency>
     
@@ -60,7 +60,7 @@
       <plugin>
         <groupId>org.jvnet.hudson.tools</groupId>
         <artifactId>maven-hpi-plugin</artifactId>
-        <version>1.54</version>
+        <version>3.0.1</version>
         <extensions>true</extensions>
         <configuration>
           <showDeprecation>true</showDeprecation>

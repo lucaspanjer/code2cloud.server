@@ -12,9 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.hudson.plugin.cloud;
 
-import hudson.model.Descriptor.FormException;
 import hudson.model.TaskListener;
 import hudson.model.Computer;
+import hudson.model.Descriptor.FormException;
 import hudson.model.Hudson;
 import hudson.model.Label;
 import hudson.model.Node;
@@ -52,11 +52,12 @@ public class C2CSlaveCloud extends Cloud {
 	private transient static HudsonSlavePoolServiceClient hudsonSlavePoolService = null;
 	private static int nextSlaveNum = 1;
 
-	private String slavePoolServiceBaseUrl = "http://localhost:8088/slavePool";
+	private String slavePoolServiceBaseUrl = "http://localhost:8888/hudson";
 	private String sshUser;
 	private String sshKeyFilePath;
 	private String projectIdentifier;
 	private String remoteFS = "/home/c2c/hudson";
+
 	private static final int SLAVE_LEASE_EXPIRY_RENEW_TIME = 5 * 60 * 1000;
 	private static final Timer timer = new Timer();
 
@@ -177,7 +178,7 @@ public class C2CSlaveCloud extends Cloud {
 	}
 
 	/**
-	 * Gets the first {@link C2SSlaveCloud} instance configured in the current Hudson, or null if no such thing exists.
+	 * Gets the first {@link C2CSlaveCloud} instance configured in the current Hudson, or null if no such thing exists.
 	 */
 	public static C2CSlaveCloud get() {
 		return Hudson.getInstance().clouds.get(C2CSlaveCloud.class);

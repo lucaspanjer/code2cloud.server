@@ -28,7 +28,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.auth.service.proxy.AuthenticationTokenSerializer;
-import com.tasktop.c2c.server.auth.service.proxy.ProxyHttpServletRequest;
 
 @RunWith(BlockJUnit4ClassRunner.class)
 public class AuthenticationTokenSerializerTest {

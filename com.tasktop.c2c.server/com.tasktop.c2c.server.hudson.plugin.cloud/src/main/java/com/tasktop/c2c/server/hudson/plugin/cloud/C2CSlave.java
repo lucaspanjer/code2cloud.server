@@ -12,8 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.hudson.plugin.cloud;
 
-import hudson.model.Descriptor.FormException;
 import hudson.model.TaskListener;
+import hudson.model.Descriptor.FormException;
 import hudson.slaves.AbstractCloudSlave;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class C2CSlave extends AbstractCloudSlave {
 	private static final int NUMEXECUTORS = 1;
 	private static final Mode MODE = Mode.NORMAL;
 	private static final String LABEL = "Code2Cloud";
-	private static final String NODE_DESC = "Code2Cloud builder";
+	private static final String NODE_DESC = "Code2Cloud Builder";
 
 	private String address;
 	private C2CSlaveCloud cloud;

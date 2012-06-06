@@ -71,7 +71,7 @@ public class GitSmartHttpServlet extends GitServlet implements InitializingBean,
 		if (!validRequest(request)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST,
 					"The given Git request was not considered a valid Git command which is recognized by this service.");
-			LOG.info("done. bad request");
+			LOG.info("Done. Bad Request");
 			// We're done here, so bail out.
 			return;
 		}
@@ -93,12 +93,12 @@ public class GitSmartHttpServlet extends GitServlet implements InitializingBean,
 						"Insufficient permissions to perform this Git request");
 			}
 
-			LOG.info("done. insuffecient auth");
+			LOG.info("Done. Insufficient Auth");
 			return;
 		}
 
 		super.service(request, response);
-		LOG.info("done.");
+		LOG.info("Done.");
 	}
 
 	private boolean validRequest(HttpServletRequest request) {

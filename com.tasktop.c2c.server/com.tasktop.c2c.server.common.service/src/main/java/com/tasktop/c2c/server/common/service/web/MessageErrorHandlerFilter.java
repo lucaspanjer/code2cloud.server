@@ -101,7 +101,7 @@ public class MessageErrorHandlerFilter implements Filter {
 			if (queryString != null) {
 				reqUrl += "?" + queryString;
 			}
-			logger.error(String.format("Error while prossessing [%s] tenant=[%s] user=[%s]", reqUrl, currentTenant,
+			logger.error(String.format("Error while processing [%s] tenant=[%s] user=[%s]", reqUrl, currentTenant,
 					currentUser), t);
 			messageResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
