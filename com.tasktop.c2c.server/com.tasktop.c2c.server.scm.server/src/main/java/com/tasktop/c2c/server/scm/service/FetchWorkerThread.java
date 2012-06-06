@@ -23,9 +23,16 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.RefSpec;
+import org.eclipse.jgit.util.FS;
 
 class FetchWorkerThread extends Thread {
+
+	private static final class FetchStatus {
+		long lastUpdateTime = -1;
+		boolean isFetching = false;
+	}
 
 	private final GitServiceBean gitServiceBean;
 
@@ -42,7 +49,7 @@ class FetchWorkerThread extends Thread {
 	private AtomicBoolean stopRequest = new AtomicBoolean(false);
 
 	private ExecutorService threadPool = Executors.newCachedThreadPool();
-	private Map<String, Long> lastUpdateTimeByRepoPath = new HashMap<String, Long>();
+	private Map<String, FetchStatus> fetchStatusByRepoPath = new HashMap<String, FetchStatus>();
 
 	@Override
 	public void run() {
@@ -59,20 +66,31 @@ class FetchWorkerThread extends Thread {
 	private void triggerMirroredFetches() {
 		Long reFetchTime = System.currentTimeMillis() - milisecondsBetweenUpdates;
 		for (File projectRoot : new File(this.gitServiceBean.basePath).listFiles()) {
+			final String projectId = projectRoot.getName();
 			File mirroredRepos = new File(projectRoot, GitConstants.MIRRORED_GIT_DIR);
 			if (!mirroredRepos.exists()) {
 				continue;
 			}
 			for (final File mirroredRepo : mirroredRepos.listFiles()) {
 				String repoPath = mirroredRepo.getAbsolutePath();
-				Long lastFetch = lastUpdateTimeByRepoPath.get(repoPath);
-				if (lastFetch == null || lastFetch < reFetchTime) {
-					lastUpdateTimeByRepoPath.put(repoPath, System.currentTimeMillis());
+				FetchStatus status = fetchStatusByRepoPath.get(repoPath);
+				if (status == null) {
+					status = new FetchStatus();
+					fetchStatusByRepoPath.put(repoPath, status);
+				}
+				if (!status.isFetching && status.lastUpdateTime < reFetchTime) {
+					status.isFetching = true;
+					final FetchStatus fStatus = status;
 					threadPool.execute(new Runnable() {
 
 						@Override
 						public void run() {
-							doMirrorFetch(mirroredRepo);
+							try {
+								doMirrorFetch(projectId, mirroredRepo);
+							} finally {
+								fStatus.lastUpdateTime = System.currentTimeMillis();
+								fStatus.isFetching = false;
+							}
 
 						}
 					});
