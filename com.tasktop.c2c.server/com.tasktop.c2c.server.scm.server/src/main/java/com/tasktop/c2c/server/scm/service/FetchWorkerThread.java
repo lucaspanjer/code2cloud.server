@@ -82,9 +82,13 @@ class FetchWorkerThread extends Thread {
 	}
 
 	// TODO make these from cache
-	private void doMirrorFetch(File mirroredRepo) {
+	private void doMirrorFetch(String projectId, File mirroredRepo) {
 		try {
-			Git git = new Git(new FileRepository(mirroredRepo));
+			// Set the home directory. This is used for configuration and ssh keys
+			FS fs = FS.detect();
+			fs.setUserHome(new File(gitServiceBean.basePath, projectId));
+			FileRepositoryBuilder builder = new FileRepositoryBuilder().setGitDir(mirroredRepo).setFS(fs).setup();
+			Git git = new Git(new FileRepository(builder));
 			git.fetch().setRefSpecs(new RefSpec("refs/heads/*:refs/heads/*")).setThin(true).call();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

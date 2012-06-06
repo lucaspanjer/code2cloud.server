@@ -25,14 +25,16 @@ import com.tasktop.c2c.server.scm.domain.ScmRepository;
 public class GetProjectScmRepositoriesResult extends AbstractSimpleResult<List<ScmRepository>> {
 
 	private String gitRepositoryBaseUrl;
+	private String publicSshKey;
 
 	protected GetProjectScmRepositoriesResult() {
 		super();
 	}
 
-	public GetProjectScmRepositoriesResult(List<ScmRepository> value, String gitRespositoryBaseUrl) {
+	public GetProjectScmRepositoriesResult(List<ScmRepository> value, String gitRespositoryBaseUrl, String publicSshKey) {
 		super(value);
 		this.gitRepositoryBaseUrl = gitRespositoryBaseUrl;
+		this.publicSshKey = publicSshKey;
 	}
 
 	/**
@@ -40,6 +42,13 @@ public class GetProjectScmRepositoriesResult extends AbstractSimpleResult<List<S
 	 */
 	public String getGitRepositoryBaseUrl() {
 		return gitRepositoryBaseUrl;
+	}
+
+	/**
+	 * @return the publicSshKey
+	 */
+	public String getPublicSshKey() {
+		return publicSshKey;
 	}
 
 }

@@ -22,6 +22,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
@@ -59,6 +60,9 @@ public class ProjectScmAdminView extends AbstractComposite implements
 	Anchor addExternalRepositoryLink;
 	NewExternalRepoDialog newExternalRepoDialog;
 
+	@UiField
+	protected Label publicSshKey;
+
 	private Presenter presenter;
 
 	private ProjectScmAdminView() {
@@ -87,6 +91,11 @@ public class ProjectScmAdminView extends AbstractComposite implements
 
 		setRepositories(presenter.getRepositories());
 		setRepoBaseUrl(presenter.getRepoBaseUrl());
+		setSshKey(presenter.getSshKey());
+	}
+
+	public void setSshKey(String key) {
+		publicSshKey.setText(key);
 	}
 
 	private HandlerRegistration lastDeleteClickHandler = null;

@@ -40,6 +40,7 @@ public class ProjectAdminSourceActivity extends AbstractActivity implements IPro
 
 	private String projectIdentifier;
 	private String repoBaseUrl;
+	private String sshKey;
 	private List<ScmRepository> repositories;
 	private Project project;
 	private ProjectScmAdminView view = ProjectScmAdminView.getInstance();
@@ -53,6 +54,7 @@ public class ProjectAdminSourceActivity extends AbstractActivity implements IPro
 		this.project = place.getProject();
 		this.repositories = place.getRepositories();
 		this.repoBaseUrl = place.getGitBaseUrl();
+		this.sshKey = place.getPublicSshKey();
 		updateView();
 	}
 
@@ -128,5 +130,10 @@ public class ProjectAdminSourceActivity extends AbstractActivity implements IPro
 							}
 
 						});
+	}
+
+	@Override
+	public String getSshKey() {
+		return sshKey;
 	}
 }

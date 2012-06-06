@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.scm.web;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -160,5 +161,16 @@ public class ScmServiceController extends AbstractRestService implements ScmServ
 	public List<Commit> getLogForBranch(String repoName, String branchName, Region region)
 			throws EntityNotFoundException {
 		return scmService.getLogForBranch(repoName, branchName, region);
+	}
+
+	@RequestMapping(value = ScmServiceClient.PUBILC_SSH_KEY_URL, method = RequestMethod.GET)
+	public Map<String, String> getPublicSshKeyReq() {
+		return Collections.singletonMap("string", scmService.getPublicSshKey());
+	}
+
+	@Override
+	public String getPublicSshKey() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

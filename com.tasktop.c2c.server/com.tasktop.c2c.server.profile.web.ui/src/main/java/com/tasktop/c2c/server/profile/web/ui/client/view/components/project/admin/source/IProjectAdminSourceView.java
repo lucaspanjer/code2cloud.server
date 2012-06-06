@@ -32,5 +32,7 @@ public interface IProjectAdminSourceView<P extends IProjectAdminSourceView.Prese
 		List<ScmRepository> getRepositories();
 
 		Project getProject();
+
+		String getSshKey();
 	}
 }

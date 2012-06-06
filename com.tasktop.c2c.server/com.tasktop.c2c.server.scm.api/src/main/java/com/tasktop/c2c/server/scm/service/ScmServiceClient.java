@@ -68,6 +68,7 @@ public class ScmServiceClient extends AbstractRestServiceClient implements ScmSe
 		private List<ScmRepository> scmRepositoryList;
 		private List<ScmSummary> scmSummaryList;
 		private Commit commit;
+		private String string;
 
 		public List<Commit> getCommitList() {
 			return commitList;
@@ -115,6 +116,21 @@ public class ScmServiceClient extends AbstractRestServiceClient implements ScmSe
 
 		public void setCommit(Commit commit) {
 			this.commit = commit;
+		}
+
+		/**
+		 * @return the string
+		 */
+		public String getString() {
+			return string;
+		}
+
+		/**
+		 * @param string
+		 *            the string to set
+		 */
+		public void setString(String string) {
+			this.string = string;
 		}
 	}
 
@@ -312,6 +328,16 @@ public class ScmServiceClient extends AbstractRestServiceClient implements ScmSe
 				return result.getCommitList();
 			}
 		}.doCall(url, repoName);
+	}
+
+	public static final String PUBILC_SSH_KEY_URL = "sshkey";
+
+	public String getPublicSshKey() {
+		return new GetCall<String>() {
+			public String getValue(ServiceCallResult result) {
+				return result.getString();
+			}
+		}.doCall(PUBILC_SSH_KEY_URL);
 	}
 
 }

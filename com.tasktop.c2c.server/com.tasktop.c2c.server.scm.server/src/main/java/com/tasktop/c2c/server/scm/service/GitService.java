@@ -96,4 +96,9 @@ public interface GitService {
 	 */
 	List<Commit> getLogForBranch(String repoName, String branchName, Region region) throws EntityNotFoundException;
 
+	/**
+	 * @return
+	 */
+	String getPublicSshKey();
+
 }

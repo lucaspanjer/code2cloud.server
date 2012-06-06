@@ -173,4 +173,9 @@ public class ScmServiceBean extends AbstactServiceBean implements ScmService {
 		return gitService.getLogForBranch(repoName, branchName, region);
 	}
 
+	@Override
+	public String getPublicSshKey() {
+		return gitService.getPublicSshKey();
+	}
+
 }

@@ -91,4 +91,6 @@ public interface ScmService {
 	 * @throws EntityNotFoundException
 	 */
 	List<Commit> getLogForBranch(String repoName, String branchName, Region region) throws EntityNotFoundException;
+
+	String getPublicSshKey();
 }

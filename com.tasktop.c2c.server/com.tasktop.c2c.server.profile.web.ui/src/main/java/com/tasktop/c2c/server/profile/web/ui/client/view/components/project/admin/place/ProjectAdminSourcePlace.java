@@ -16,9 +16,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -59,6 +56,8 @@ public class ProjectAdminSourcePlace extends ProjectAdminPlace implements Breadc
 
 	private List<ScmRepository> repositories;
 	private String gitBaseUrl;
+	private String publicSshKey;
+
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
 
 	private ProjectAdminSourcePlace(String projectId) {
@@ -118,6 +117,8 @@ public class ProjectAdminSourcePlace extends ProjectAdminPlace implements Breadc
 		super.handleBatchResults();
 		repositories = getResult(GetProjectScmRepositoriesResult.class).get();
 		gitBaseUrl = getResult(GetProjectScmRepositoriesResult.class).getGitRepositoryBaseUrl();
+		publicSshKey = getResult(GetProjectScmRepositoriesResult.class).getPublicSshKey();
+
 		createBreadcrumbs(project);
 		onPlaceDataFetched();
 	}
@@ -127,6 +128,13 @@ public class ProjectAdminSourcePlace extends ProjectAdminPlace implements Breadc
 		breadcrumbs.add(new Breadcrumb(
 				ProjectAdminSettingsPlace.createPlace(project.getIdentifier()).getHistoryToken(), "Settings"));
 		breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Source"));
+	}
+
+	/**
+	 * @return the publicSshKey
+	 */
+	public String getPublicSshKey() {
+		return publicSshKey;
 	}
 
 }

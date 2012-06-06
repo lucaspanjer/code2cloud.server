@@ -2,6 +2,14 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 			 xmlns:g="urn:import:com.google.gwt.user.client.ui">
+<ui:style>
+div.key {
+	border: 1px solid #EDEEED;
+	font-family: mono-space;
+	word-wrap: break-word;
+}
+
+</ui:style>
 	<g:HTMLPanel>
 		<div class="deployment">
 			<div class="hosted-repos">
@@ -24,7 +32,15 @@
 					<g:FlowPanel ui:field="externalRepositoriesPanel"/>
 				</fieldset>
 			</div>
-			<div class="clear"></div>
+
+			<div>
+				<h3>Public key (used when fetching external source repositories)</h3>
+				<div class="{style.key}">
+					<g:Label ui:field="publicSshKey"/>
+				</div> 
+			<div class="clear"/>
+		</div>
+		<div class="clear"/>
 			<!--  NEEDED?? -->
 		</div>
 	</g:HTMLPanel>

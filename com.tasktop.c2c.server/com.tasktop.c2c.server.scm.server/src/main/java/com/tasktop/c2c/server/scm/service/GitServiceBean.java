@@ -814,4 +814,19 @@ public class GitServiceBean implements GitService, InitializingBean {
 		result.setOldPath(target.getOldPath());
 		return result;
 	}
+
+	@Override
+	public String getPublicSshKey() {
+		File file = new File(getTenantBaseDir(), ".ssh/id_rsa.pub");
+		if (!file.exists()) {
+			return "";
+		}
+
+		try {
+			return org.apache.commons.io.FileUtils.readFileToString(file);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
 }

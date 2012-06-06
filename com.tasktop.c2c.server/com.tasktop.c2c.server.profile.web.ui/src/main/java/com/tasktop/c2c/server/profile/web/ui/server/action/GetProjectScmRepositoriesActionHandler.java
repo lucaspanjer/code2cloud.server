@@ -51,7 +51,8 @@ public class GetProjectScmRepositoriesActionHandler extends
 			setTenancyContext(action.getProjectId());
 			ScmService scmService = scmServiceProvider.getService(action.getProjectId());
 			return new GetProjectScmRepositoriesResult(new ArrayList<ScmRepository>(scmService.getScmRepositories()),
-					profileServiceConfiguration.getHostedScmUrlPrefix(action.getProjectId()));
+					profileServiceConfiguration.getHostedScmUrlPrefix(action.getProjectId()),
+					scmService.getPublicSshKey());
 		} catch (EntityNotFoundException e) {
 			throw new ActionException(e);
 		}
