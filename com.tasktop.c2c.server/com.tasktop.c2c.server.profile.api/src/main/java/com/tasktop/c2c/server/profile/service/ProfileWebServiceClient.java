@@ -325,32 +325,15 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 		}
 	}
 
-	public static final String PROFILE_ID_URLPARAM = "profileId";
+	public static final String CREATE_PROJECT_URL = "profile/project";
 
-	public static final String GET_PROJECTS_URL = "profile/{" + PROFILE_ID_URLPARAM + "}/projects";
-
-	public List<Project> getProjects(Long profileId) throws EntityNotFoundException {
-		try {
-			return new GetCall<List<Project>>() {
-				public List<Project> getValue(ServiceCallResult result) {
-					return result.getProjectList();
-				}
-			}.doCall(GET_PROJECTS_URL, String.valueOf(profileId));
-		} catch (WrappedCheckedException e) {
-			convertEntityNotFoundException(e);
-			throw e;
-		}
-	}
-
-	public static final String CREATE_PROJECT_URL = "profile/{" + PROFILE_ID_URLPARAM + "}/project";
-
-	public Project createProject(Long profileId, Project project) throws EntityNotFoundException, ValidationException {
+	public Project createProject(Project project) throws EntityNotFoundException, ValidationException {
 		try {
 			return new PostCall<Project>() {
 				public Project getValue(ServiceCallResult result) {
 					return result.getProject();
 				}
-			}.doCall(CREATE_PROJECT_URL, project, String.valueOf(profileId));
+			}.doCall(CREATE_PROJECT_URL, project);
 		} catch (WrappedCheckedException e) {
 			convertEntityNotFoundException(e);
 			convertValidationException(e);

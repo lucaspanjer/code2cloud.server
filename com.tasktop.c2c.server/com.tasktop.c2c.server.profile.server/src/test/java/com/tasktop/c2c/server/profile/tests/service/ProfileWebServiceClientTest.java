@@ -77,7 +77,7 @@ public class ProfileWebServiceClientTest extends ProfileWebServiceTest {
 				"text/x-javascript", "text/x-json", "text/json" }) {
 			HttpClient client = new HttpClient();
 			HttpMethod get = new GetMethod(baseUrl + "/"
-					+ ProfileWebServiceClient.GET_PROJECTS_URL.replaceAll("\\{.*?\\}", "123"));
+					+ ProfileWebServiceClient.GET_PROJECT_BY_IDENTIFIER_URL.replaceAll("\\{.*?\\}", "123"));
 			get.addRequestHeader("Accept", mediaType);
 			int rc = client.executeMethod(get);
 			String responseBody = get.getResponseBodyAsString();

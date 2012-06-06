@@ -26,7 +26,6 @@ import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.FIN
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_APPROVED_AGREEMENTS_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PENDING_AGREEMENTS_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PROFILE_URL;
-import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PROJECTS_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PROJECT_BY_IDENTIFIER_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PROJECT_FOR_INVITATION_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_PROJECT_INVITATION_TOKEN_URL;
@@ -34,7 +33,6 @@ import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.GET_UNUSED_SIGNUP_TOKENS_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.INVITE_USER_TO_PROJECT_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.LIST_SSH_PUBLIC_KEYS_URL;
-import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PROFILE_ID_URLPARAM;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PROJECT_IDENTIFIER_URLPARAM;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PROJECT_UNWATCH_URL;
 import static com.tasktop.c2c.server.profile.service.ProfileWebServiceClient.PROJECT_WATCH_URL;
@@ -109,22 +107,12 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 	}
 
 	@Section("Projects")
-	@Title("Retrieve Projects")
-	@Documentation("Retrieve a list of projects associated with the given profileId.")
-	@Override
-	@RequestMapping(value = GET_PROJECTS_URL, method = RequestMethod.GET)
-	public List<Project> getProjects(@PathVariable(PROFILE_ID_URLPARAM) Long profileId) throws EntityNotFoundException {
-		return profileWebService.getProjects(profileId);
-	}
-
-	@Section("Projects")
 	@Title("Create Project")
 	@Documentation("Create a new project.")
 	@RequestMapping(value = CREATE_PROJECT_URL, method = RequestMethod.POST)
 	@Override
-	public Project createProject(@PathVariable(PROFILE_ID_URLPARAM) Long profileId, @RequestBody Project project)
-			throws EntityNotFoundException, ValidationException {
-		return profileWebService.createProject(profileId, project);
+	public Project createProject(@RequestBody Project project) throws EntityNotFoundException, ValidationException {
+		return profileWebService.createProject(project);
 	}
 
 	@Section("Projects")

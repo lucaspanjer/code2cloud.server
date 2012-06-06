@@ -60,9 +60,7 @@ import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.service.ActivityService;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
-import com.tasktop.c2c.server.profile.service.provider.HudsonServiceProvider;
 import com.tasktop.c2c.server.profile.service.provider.ScmServiceProvider;
-import com.tasktop.c2c.server.profile.service.provider.TaskServiceProvider;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.service.ScmService;
 
@@ -83,12 +81,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 
 	@Autowired
 	private ScmServiceProvider scmServiceProvider;
-
-	@Autowired
-	private TaskServiceProvider taskServiceProvider;
-
-	@Autowired
-	private HudsonServiceProvider hudsonServiceProvider;
 
 	@Autowired
 	private RememberMeServices rememberMeServices;
@@ -193,10 +185,9 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	}
 
 	@Override
-	public String createProject(Credentials credentials, Project project) throws ValidationFailedException,
-			NoSuchEntityException {
+	public String createProject(Project project) throws ValidationFailedException, NoSuchEntityException {
 		try {
-			return profileWebService.createProject(credentials.getProfile().getId(), project).getIdentifier();
+			return profileWebService.createProject(project).getIdentifier();
 		} catch (ValidationException e) {
 			handle(e);
 			throw new IllegalStateException();

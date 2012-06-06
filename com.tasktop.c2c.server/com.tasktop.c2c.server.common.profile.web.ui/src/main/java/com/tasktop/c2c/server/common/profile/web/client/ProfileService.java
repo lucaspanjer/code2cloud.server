@@ -56,8 +56,8 @@ public interface ProfileService extends RemoteService {
 	public Credentials updateProfile(com.tasktop.c2c.server.profile.domain.project.Profile profile)
 			throws ValidationFailedException, NoSuchEntityException, AuthenticationRequiredException;
 
-	String createProject(Credentials credentials, Project project) throws ValidationFailedException,
-			AuthenticationRequiredException, NoSuchEntityException;
+	String createProject(Project project) throws ValidationFailedException, AuthenticationRequiredException,
+			NoSuchEntityException;
 
 	public QueryResult<Project> findProjects(ProjectsQuery query);
 

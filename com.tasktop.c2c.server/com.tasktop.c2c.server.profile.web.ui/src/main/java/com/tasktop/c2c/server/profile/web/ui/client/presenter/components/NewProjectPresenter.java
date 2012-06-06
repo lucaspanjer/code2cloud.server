@@ -61,7 +61,6 @@ public class NewProjectPresenter extends AbstractProfilePresenter implements Pre
 	@Override
 	public void createProject(Project project) {
 		getProfileService().createProject(
-				getAppState().getCredentials(),
 				project,
 				new AsyncCallbackSupport<String>(new OperationMessage("Creating project..."), null, view
 						.getCreateButton()) {

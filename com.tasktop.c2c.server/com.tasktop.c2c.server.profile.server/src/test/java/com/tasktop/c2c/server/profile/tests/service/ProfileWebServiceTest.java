@@ -59,6 +59,8 @@ import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
+import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.domain.project.WikiMarkupLanguage;
@@ -134,7 +136,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 	}
 
 	@Test
-	public void testGetProjects() throws ValidationException, EntityNotFoundException, AuthenticationException {
+	public void testFindProjects() throws ValidationException, EntityNotFoundException, AuthenticationException {
 		Long profileId = setupProfile().getId();
 
 		com.tasktop.c2c.server.profile.domain.internal.Project internalProject = new com.tasktop.c2c.server.profile.domain.internal.Project();
@@ -148,7 +150,8 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		internalProject.setProjectPreferences(prefs);
 		profileService.createProject(profileId, internalProject);
 
-		List<Project> projects = profileWebService.getProjects(profileId);
+		List<Project> projects = profileWebService.findProjects(new ProjectsQuery(ProjectRelationship.ALL, null))
+				.getResultPage();
 		assertEquals(1, projects.size());
 	}
 
@@ -163,7 +166,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		project.setAccessibility(ProjectAccessibility.PRIVATE);
 		setProjectPrefs(project);
 
-		Project created = profileWebService.createProject(profileId, project);
+		Project created = profileWebService.createProject(project);
 		assertNotNull(created);
 
 		assertEquals(project.getName(), created.getName());
@@ -413,7 +416,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		project.setDescription("Application description; blah blah blah.");
 		project.setAccessibility(ProjectAccessibility.PRIVATE);
 		setProjectPrefs(project);
-		profileWebService.createProject(owner.getId(), project);
+		profileWebService.createProject(project);
 		Profile newMember = setupProfile();
 		SecurityContextHolder.getContext().setAuthentication(
 				new UsernamePasswordAuthenticationToken(owner.getUsername(), PASSWORD));
@@ -421,7 +424,8 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		SecurityContextHolder.getContext().setAuthentication(
 				new UsernamePasswordAuthenticationToken(newMember.getUsername(), PASSWORD));
 		profileWebService.acceptInvitation(token);
-		List<Project> projects = profileWebService.getProjects(newMember.getId());
+		List<Project> projects = profileWebService.findProjects(new ProjectsQuery(ProjectRelationship.ALL, null))
+				.getResultPage();
 		assertEquals(1, projects.size());
 	}
 
@@ -631,7 +635,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		project.setAccessibility(ProjectAccessibility.PRIVATE);
 		project.setOrganization(org);
 		setProjectPrefs(project);
-		Project createdProject = profileWebService.createProject(profileId, project);
+		Project createdProject = profileWebService.createProject(project);
 		assertNotNull(createdProject);
 		assertEquals(org, createdProject.getOrganization());
 

@@ -41,8 +41,6 @@ import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
  */
 public interface ProfileWebService {
 
-	public List<Project> getProjects(Long profileId) throws EntityNotFoundException;
-
 	public Project getProjectForInvitationToken(String token) throws EntityNotFoundException;
 
 	public Project getProjectByIdentifier(String projectIdentifier) throws EntityNotFoundException;
@@ -51,7 +49,7 @@ public interface ProfileWebService {
 
 	public void updateProfile(Profile profile) throws ValidationException, EntityNotFoundException;
 
-	public Project createProject(Long profileId, Project project) throws EntityNotFoundException, ValidationException;
+	public Project createProject(Project project) throws EntityNotFoundException, ValidationException;
 
 	public Project updateProject(Project project) throws EntityNotFoundException, ValidationException;
 

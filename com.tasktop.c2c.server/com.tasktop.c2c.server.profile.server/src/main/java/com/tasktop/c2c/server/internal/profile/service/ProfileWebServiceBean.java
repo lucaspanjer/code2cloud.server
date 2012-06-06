@@ -148,19 +148,6 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 	}
 
 	@Override
-	public List<Project> getProjects(Long profileId) throws EntityNotFoundException {
-		List<com.tasktop.c2c.server.profile.domain.internal.Project> profileProjects;
-		profileProjects = profileService.getProfileProjects(profileId);
-
-		List<Project> projects = new ArrayList<Project>(profileProjects.size());
-		for (com.tasktop.c2c.server.profile.domain.internal.Project project : profileProjects) {
-			projects.add(webServiceDomain.copy(project, configuration));
-		}
-
-		return projects;
-	}
-
-	@Override
 	public Project getProjectForInvitationToken(String token) throws EntityNotFoundException {
 		return webServiceDomain.copy(profileService.getProjectForInvitationToken(token), configuration);
 	}
@@ -176,9 +163,13 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 	}
 
 	@Override
-	public Project createProject(Long profileId, Project project) throws EntityNotFoundException, ValidationException {
+	public Project createProject(Project project) throws EntityNotFoundException, ValidationException {
 		com.tasktop.c2c.server.profile.domain.internal.Project a = webServiceDomain.copy(project);
-		return webServiceDomain.copy(profileService.createProject(profileId, a));
+		com.tasktop.c2c.server.profile.domain.internal.Profile p = profileService.getCurrentUserProfile();
+		if (p == null) {
+			throw new EntityNotFoundException();
+		}
+		return webServiceDomain.copy(profileService.createProject(p.getId(), a));
 	}
 
 	public void setConfiguration(ProfileServiceConfiguration configuration) {

@@ -40,7 +40,7 @@ public interface ProfileServiceAsync {
 	void updateProfile(com.tasktop.c2c.server.profile.domain.project.Profile profile,
 			AsyncCallback<Credentials> callback);
 
-	void createProject(Credentials credentials, Project project, AsyncCallback<String> callback);
+	void createProject(Project project, AsyncCallback<String> callback);
 
 	void requestPasswordReset(String email, AsyncCallback<Boolean> callback);
 
