@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.profile.domain.project;
 import java.io.Serializable;
 
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
+import com.tasktop.c2c.server.common.service.domain.ToStringCreator;
 
 /**
  * @author clint.morgan@tasktop.com (Tasktop Technologies Inc.)
@@ -70,5 +71,20 @@ public class ProjectsQuery implements Serializable {
 
 	public void setOrganizationIdentifier(String organizationIdentifier) {
 		this.organizationIdentifier = organizationIdentifier;
+	}
+
+	@Override
+	public String toString() {
+		ToStringCreator result = new ToStringCreator(this);
+
+		if (projectRelationship != null) {
+			result.append("rel", projectRelationship.toString());
+		}
+		if (queryString != null) {
+			result.append("query", queryString);
+		}
+		result.append("queryRequest", queryRequest);
+
+		return result.toString();
 	}
 }

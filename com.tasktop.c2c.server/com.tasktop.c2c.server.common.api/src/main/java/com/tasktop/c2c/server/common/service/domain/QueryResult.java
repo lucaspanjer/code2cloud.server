@@ -83,7 +83,11 @@ public class QueryResult<T> implements Serializable {
 
 	@Override
 	public String toString() {
-		return "QueryResult [offset=" + offset + ", totalResultSize=" + totalResultSize + ", pageSize=" + pageSize
-				+ ", resultPage.size=" + resultPage.size() + "]";
+		ToStringCreator result = new ToStringCreator(this);
+		result.append("offset", offset);
+		result.append("totalResultSize", totalResultSize);
+		result.append("pageSize", pageSize);
+		result.append("resultPage.size", resultPage == null ? 0 : resultPage.size());
+		return result.toString();
 	}
 }

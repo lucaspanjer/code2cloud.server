@@ -90,4 +90,11 @@ public class QueryRequest implements Serializable {
 		return true;
 	}
 
+	public String toString() {
+		ToStringCreator result = new ToStringCreator(this);
+		result.append("region", pageInfo);
+		result.append("sort", sortInfo);
+		return result.toString();
+	}
+
 }
