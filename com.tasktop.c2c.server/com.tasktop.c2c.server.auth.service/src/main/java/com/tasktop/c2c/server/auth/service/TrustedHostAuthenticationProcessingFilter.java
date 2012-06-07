@@ -23,15 +23,15 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 
 public class TrustedHostAuthenticationProcessingFilter extends AbstractPreAuthenticatedProcessingFilter {
 
-	public static final String SYSTEM_USERNAME = "System";
+	private static final String USERNAME = "Potential_Trusted_Host";
 
 	@Override
 	protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			return null;
 		}
-		AuthenticationServiceUser principle = new AuthenticationServiceUser(SYSTEM_USERNAME, request.getRemoteAddr(),
-				null, Collections.EMPTY_LIST);
+		AuthenticationServiceUser principle = new AuthenticationServiceUser(USERNAME, request.getRemoteAddr(), null,
+				Collections.EMPTY_LIST);
 		return principle;
 	}
 

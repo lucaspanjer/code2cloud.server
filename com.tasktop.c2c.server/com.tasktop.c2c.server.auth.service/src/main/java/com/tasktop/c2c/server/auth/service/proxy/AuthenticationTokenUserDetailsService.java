@@ -21,7 +21,7 @@ import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.domain.Role;
 
-
+/** Used for to load the user details from a pre-authorized call to an internal service. */
 public class AuthenticationTokenUserDetailsService implements AuthenticationUserDetailsService {
 
 	public AuthenticationTokenUserDetailsService() {
