@@ -165,6 +165,8 @@
 	                <exclude>WEB-INF/plugins/subversion.hpi</exclude>
 	                <exclude>WEB-INF/plugins/ssh-slaves.hpi</exclude>
 	                <exclude>WEB-INF/plugins/windows-slaves-plugin.hpi</exclude>
+	                <exclude>WEB-INF/plugins/birt-charts.hpi</exclude>
+	                <exclude>WEB-INF/plugins/legacy-maven-plugin.hpi</exclude>
 	              </excludes>
 	      </overlay>
           </overlays>
