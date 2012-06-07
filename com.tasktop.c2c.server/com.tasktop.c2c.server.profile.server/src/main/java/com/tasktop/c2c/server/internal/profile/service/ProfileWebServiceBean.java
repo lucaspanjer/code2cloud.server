@@ -335,7 +335,7 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#isProjectCreateAvailble()
 	 */
 	@Override
-	public Boolean isProjectCreateAvailble() {
+	public Boolean isProjectCreateAvailable() {
 		return profileService.isProjectCreateAvailable();
 	}
 

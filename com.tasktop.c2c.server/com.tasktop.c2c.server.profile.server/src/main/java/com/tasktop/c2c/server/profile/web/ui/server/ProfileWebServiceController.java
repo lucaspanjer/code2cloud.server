@@ -353,7 +353,7 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#isProjectCreateAvailble()
 	 */
 	@Override
-	public Boolean isProjectCreateAvailble() {
+	public Boolean isProjectCreateAvailable() {
 		// TODO Auto-generated method stub
 		return null;
 	}

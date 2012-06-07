@@ -149,7 +149,7 @@ public interface ProfileWebService {
 
 	public void removeSshPublicKey(Long publicKeyId) throws EntityNotFoundException;
 
-	public Boolean isProjectCreateAvailble();
+	public Boolean isProjectCreateAvailable();
 
 	List<ProjectServiceStatus> computeProjectServicesStatus(String projectId) throws EntityNotFoundException;
 

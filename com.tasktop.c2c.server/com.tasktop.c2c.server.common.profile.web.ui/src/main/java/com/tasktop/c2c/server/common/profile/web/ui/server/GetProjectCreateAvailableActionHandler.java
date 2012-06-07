@@ -31,7 +31,7 @@ public class GetProjectCreateAvailableActionHandler extends
 	@Override
 	public GetProjectCreateAvailableResult execute(GetProjectCreateAvailableAction action, ExecutionContext context)
 			throws DispatchException {
-		return new GetProjectCreateAvailableResult(profileWebService.isProjectCreateAvailble());
+		return new GetProjectCreateAvailableResult(profileWebService.isProjectCreateAvailable());
 	}
 
 }

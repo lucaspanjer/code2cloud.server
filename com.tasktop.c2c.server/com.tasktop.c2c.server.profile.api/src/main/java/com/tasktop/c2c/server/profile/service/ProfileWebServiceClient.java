@@ -680,7 +680,7 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 		}
 	}
 
-	public Boolean isProjectCreateAvailble() {
+	public Boolean isProjectCreateAvailable() {
 		throw new UnsupportedOperationException();
 	}
 
