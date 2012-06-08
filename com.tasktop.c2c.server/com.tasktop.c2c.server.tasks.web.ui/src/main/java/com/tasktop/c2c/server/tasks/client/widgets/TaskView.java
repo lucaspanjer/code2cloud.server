@@ -50,4 +50,6 @@ public interface TaskView extends IsWidget {
 
 	FocusWidget getCommentButton();
 
+	String getCommentText();
+
 }

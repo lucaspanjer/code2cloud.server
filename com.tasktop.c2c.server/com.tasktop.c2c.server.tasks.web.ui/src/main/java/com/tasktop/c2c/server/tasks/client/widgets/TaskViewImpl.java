@@ -1421,6 +1421,11 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	}
 
 	@Override
+	public String getCommentText() {
+		return commentsPanel.getText();
+	}
+
+	@Override
 	public boolean isDirty() {
 		return commentsPanel.isDirty() || driver.isDirty() || customFieldDriver.isDirty();
 	}
