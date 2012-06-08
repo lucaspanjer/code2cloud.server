@@ -5,29 +5,34 @@
 	xmlns:p="urn:import:com.tasktop.c2c.server.common.web.client.widgets.chooser.person" 
 	xmlns:h="urn:import:com.tasktop.c2c.server.common.web.client.widgets.hyperlink">
 <ui:style>
-	.operation {
-	font-style:italic;
-}
 	.fileName {
 	font-family: monospace; 
 	font-size: 13px;
 }
 	.line div {
-	display: inline
+	display: inline;
 }
 	.added {
-	color: green
+	color: green;
+	border: 1px solid #EDEEED;
+	padding-left: 4px;
+	padding-right: 4px;
 }
 	.removed {
-	color: red
+	color: red;
+	border: 1px solid #EDEEED;
+	padding-left: 4px;
+	padding-right: 4px;
 }
 </ui:style>
 
 		<g:HTMLPanel>
 			<div class="{style.line}">
-				<g:Label ui:field="operationName" styleName="{style.operation}"/>
+				<g:Image ui:field="operationImage" />
+				
 				<g:Anchor ui:field="fileName" styleName="{style.fileName}"/>
-				<div class="{style.line}">
+				
+				<div class="{style.line} right">
 					<div class="{style.added}">
 						<g:Label ui:field="numAdded"/>
 					</div>
