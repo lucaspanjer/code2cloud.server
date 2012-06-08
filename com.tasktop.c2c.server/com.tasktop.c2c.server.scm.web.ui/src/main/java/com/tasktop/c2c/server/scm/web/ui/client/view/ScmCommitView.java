@@ -11,29 +11,43 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.scm.web.ui.client.view;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.editor.ui.client.adapters.HasTextEditor;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DateLabel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.web.client.navigation.Navigation;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
 import com.tasktop.c2c.server.common.web.client.widgets.Format;
 import com.tasktop.c2c.server.common.web.client.widgets.hyperlink.HyperlinkingLabel;
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.domain.DiffEntry;
+import com.tasktop.c2c.server.scm.domain.DiffEntry.Content;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmCommitPlace;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmRepoPlace;
+import com.tasktop.c2c.server.scm.web.ui.client.resources.ScmResources;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskHyperlinkDetector;
 
 /**
@@ -68,6 +82,10 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 		patchPanel.getHeader().getElement().getParentElement().setClassName(""); // prevent style collision
 		changesPanel.getHeader().getElement().getParentElement().setClassName(""); // prevent style collision
 		commentLabel.addHyperlinkDetector(taskHyperlinkDetector);
+		ScmResources.get.style().ensureInjected();
+
+		patchPanel.getContent().removeStyleName("content");
+		changesPanel.getContent().removeStyleName("content");
 
 	}
 
@@ -91,7 +109,8 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 	@UiField
 	protected DisclosurePanel changesPanel;
 	@UiField
-	protected Label diffText;
+	@Editor.Ignore
+	protected HTML diffHtml;
 	@UiField
 	protected Anchor repository;
 	@UiField
@@ -131,21 +150,98 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 		}
 
 		filesPanel.clear();
+
 		if (commit.getChanges() != null) {
+			int i = 0;
 			for (DiffEntry diffEntry : commit.getChanges()) {
-				filesPanel.add(new DiffEntryView(diffEntry));
+				DiffEntryView overviewFileDiff = new DiffEntryView(diffEntry);
+				filesPanel.add(overviewFileDiff);
+
+				final int index = i++;
+				overviewFileDiff.getFileNameAnchor().addClickHandler(new ClickHandler() {
+
+					@Override
+					public void onClick(ClickEvent event) {
+
+						if (!patchPanel.isOpen()) {
+							patchPanel.setOpen(true);
+						}
+						Element toScrollTo = Navigation.findElementById(diffHtml.getElement(), computeElementId(index));
+						if (toScrollTo != null) {
+							Window.scrollTo(0, toScrollTo.getAbsoluteTop());
+						}
+
+					}
+				});
 			}
 			patchPanel.setVisible(true);
 			changesPanel.setVisible(true);
+			diffHtml.setHTML(buildHtml(commit.getChanges()));
 		} else {
 			patchPanel.setVisible(false);
 			changesPanel.setVisible(false);
+			diffHtml.setHTML("");
 		}
 
 		authorImage.setUrl(Avatar.computeAvatarUrl(commit.getAuthor().getGravatarHash(), Avatar.Size.MEDIUM));
 
 		UIObject.setVisible(committerInfoDiv, commit.getCommitter() != null);
 
+	}
+
+	private String computeElementId(int index) {
+		return "diff-file-" + index;
+	}
+
+	static interface Template extends SafeHtmlTemplates {
+		@Template("<div class=\"{0}\" id=\"{1}\">{2}</div>")
+		SafeHtml addFileChange(String style, String id, String filename);
+
+		@Template("<pre class=\"pretty-print {0}\">{1}</pre>")
+		SafeHtml content(String style, String content);
+
+	}
+
+	private static Template template = GWT.create(Template.class);
+
+	private SafeHtml buildHtml(List<DiffEntry> changes) {
+		SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
+		String fileName;
+		int i = 0;
+		for (DiffEntry diff : changes) {
+			String elId = computeElementId(i++);
+			switch (diff.getChangeType()) {
+			case ADD:
+				fileName = diff.getNewPath();
+				break;
+			case DELETE:
+				fileName = diff.getOldPath();
+				break;
+			case COPY:
+			case RENAME:
+			case MODIFY:
+			default:
+				fileName = diff.getNewPath();
+				break;
+			}
+
+			htmlBuilder.append(template.addFileChange(ScmResources.get.style().contentFileHeader(), elId, fileName));
+
+			for (Content content : diff.getContent()) {
+				String style = "";
+				switch (content.getType()) {
+				case ADDED:
+					style = ScmResources.get.style().contentAdded();
+					break;
+				case REMOVED:
+					style = ScmResources.get.style().contentRemoved();
+					break;
+				}
+				htmlBuilder.append(template.content(style, content.getContent()));
+			}
+
+		}
+		return htmlBuilder.toSafeHtml();
 	}
 
 	public void setProjectId(String projectId) {

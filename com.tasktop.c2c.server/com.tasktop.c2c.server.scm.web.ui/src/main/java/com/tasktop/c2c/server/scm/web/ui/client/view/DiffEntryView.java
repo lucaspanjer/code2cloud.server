@@ -15,6 +15,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -35,7 +36,7 @@ public class DiffEntryView extends Composite implements Editor<Commit> {
 	@UiField
 	protected Label operationName;
 	@UiField
-	protected Label fileName;
+	protected Anchor fileName;
 
 	@UiField
 	protected Label numAdded;
@@ -87,5 +88,9 @@ public class DiffEntryView extends Composite implements Editor<Commit> {
 			numRemoved.setText("-" + diff.getLinesRemoved());
 		}
 
+	}
+
+	public Anchor getFileNameAnchor() {
+		return fileName;
 	}
 }

@@ -25,6 +25,9 @@
 .image {
 	padding-right: 10px
 }
+.code {
+	overflow-x: auto;
+}
 
 </ui:style>
 	
@@ -88,12 +91,8 @@
 			
 			<div class="spacer clear small"/>
 			<g:DisclosurePanel ui:field="patchPanel" title="Patch Text" open="false" width="100%">
-				<g:header>Full Patch Text</g:header>
-				<g:HTMLPanel>
-					<pre>
-						<g:Label ui:field="diffText"/>
-					</pre>
-				</g:HTMLPanel>
+				<g:header>Changes</g:header>
+				<g:HTML ui:field="diffHtml" styleName="{style.code}"/>
 			</g:DisclosurePanel>
 			
 	</g:HTMLPanel>

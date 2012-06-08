@@ -100,7 +100,7 @@ public class Navigation {
 	 * 
 	 * @return the element, or null if it could not be found
 	 */
-	private static Element findElementById(Element element, String elementId) {
+	public static Element findElementById(Element element, String elementId) {
 		String id = element.getAttribute("id");
 		if (id != null && elementId.equals(id)) {
 			return element;

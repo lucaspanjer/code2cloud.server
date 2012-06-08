@@ -44,8 +44,6 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.lib.RepositoryCache.FileKey;
 import org.eclipse.jgit.lib.StoredConfig;
-import org.eclipse.jgit.patch.FileHeader;
-import org.eclipse.jgit.patch.HunkHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
@@ -69,7 +67,6 @@ import com.tasktop.c2c.server.common.service.identity.Gravatar;
 import com.tasktop.c2c.server.common.service.query.QueryUtil;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.scm.domain.Commit;
-import com.tasktop.c2c.server.scm.domain.DiffEntry.ChangeType;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmLocation;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
@@ -748,7 +745,6 @@ public class GitServiceBean implements GitService, InitializingBean {
 		result.setRepository(repositoryName);
 
 		// FIXME how to handle merges? there can be real diffs there
-		// FIXME line count not working
 		if (theCommit.getParentCount() == 1) {
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -770,48 +766,12 @@ public class GitServiceBean implements GitService, InitializingBean {
 			diffFormatter.flush();
 
 			result.setChanges(new ArrayList<com.tasktop.c2c.server.scm.domain.DiffEntry>());
-			for (DiffEntry de : diffEntries) {
-				com.tasktop.c2c.server.scm.domain.DiffEntry publicDiffEntry = copy(de);
-				result.getChanges().add(publicDiffEntry);
-				FileHeader header = diffFormatter.toFileHeader(de);
-				int linesAdded = 0;
-				int linesRemoved = 0;
-				for (HunkHeader edit : header.getHunks()) {
-					linesAdded += edit.getOldImage().getLinesAdded();
-					linesRemoved += edit.getOldImage().getLinesDeleted();
-				}
-				publicDiffEntry.setLinesAdded(linesAdded);
-				publicDiffEntry.setLinesRemoved(linesRemoved);
-			}
 
 			String theDiff = new String(output.toByteArray());
 			result.setDiffText(theDiff);
+			result.setChanges(new PatchParser().parsePatch(theDiff));
 		}
 
-		return result;
-	}
-
-	private com.tasktop.c2c.server.scm.domain.DiffEntry copy(DiffEntry target) {
-		com.tasktop.c2c.server.scm.domain.DiffEntry result = new com.tasktop.c2c.server.scm.domain.DiffEntry();
-		switch (target.getChangeType()) {
-		case ADD:
-			result.setChangeType(ChangeType.ADD);
-			break;
-		case COPY:
-			result.setChangeType(ChangeType.COPY);
-			break;
-		case DELETE:
-			result.setChangeType(ChangeType.DELETE);
-			break;
-		case MODIFY:
-			result.setChangeType(ChangeType.MODIFY);
-			break;
-		case RENAME:
-			result.setChangeType(ChangeType.RENAME);
-			break;
-		}
-		result.setNewPath(target.getNewPath());
-		result.setOldPath(target.getOldPath());
 		return result;
 	}
 

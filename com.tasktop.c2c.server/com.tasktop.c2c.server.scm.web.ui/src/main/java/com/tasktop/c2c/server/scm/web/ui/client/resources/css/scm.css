@@ -33,3 +33,17 @@
 	border-top: 2px solid #EDEEED;
 }
 
+.contentFileHeader {
+	font-size: 14px;
+	font-family: monospace;
+	border-bottom: 2px solid #EDEEED;
+}
+
+.contentAdded {
+	background-color: #DFD;
+}
+
+.contentRemoved {
+	background-color: #FDD;
+}
+

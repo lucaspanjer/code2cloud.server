@@ -10,6 +10,7 @@
 }
 	.fileName {
 	font-family: monospace; 
+	font-size: 13px;
 }
 	.line div {
 	display: inline
@@ -25,7 +26,7 @@
 		<g:HTMLPanel>
 			<div class="{style.line}">
 				<g:Label ui:field="operationName" styleName="{style.operation}"/>
-				<g:Label ui:field="fileName" styleName="{style.fileName}"/>
+				<g:Anchor ui:field="fileName" styleName="{style.fileName}"/>
 				<div class="{style.line}">
 					<div class="{style.added}">
 						<g:Label ui:field="numAdded"/>

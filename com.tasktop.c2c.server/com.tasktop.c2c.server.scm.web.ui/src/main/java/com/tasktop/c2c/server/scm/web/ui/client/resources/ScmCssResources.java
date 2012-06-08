@@ -29,4 +29,11 @@ public interface ScmCssResources extends CssResource {
 	String commitCellAuthor();
 
 	String repoCellName();
+
+	String contentAdded();
+
+	String contentRemoved();
+
+	String contentFileHeader();
+
 }

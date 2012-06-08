@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.scm.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -38,11 +39,61 @@ public class DiffEntry implements Serializable {
 		COPY;
 	}
 
+	public static class Content implements Serializable {
+		public static enum Type {
+			CONTEXT, ADDED, REMOVED;
+		}
+
+		public Content() {
+
+		}
+
+		public Content(Type type, String content) {
+			this.type = type;
+			this.content = content;
+		}
+
+		private Type type;
+		private String content;
+
+		/**
+		 * @return the type
+		 */
+		public Type getType() {
+			return type;
+		}
+
+		/**
+		 * @param type
+		 *            the type to set
+		 */
+		public void setType(Type type) {
+			this.type = type;
+		}
+
+		/**
+		 * @return the content
+		 */
+		public String getContent() {
+			return content;
+		}
+
+		/**
+		 * @param content
+		 *            the content to set
+		 */
+		public void setContent(String content) {
+			this.content = content;
+		}
+
+	}
+
 	private String oldPath;
 	private String newPath;
 	private ChangeType changeType;
-	private int linesAdded;
-	private int linesRemoved;
+	private int linesAdded = 0;
+	private int linesRemoved = 0;
+	private List<Content> content;
 
 	public String getOldPath() {
 		return oldPath;
@@ -82,6 +133,21 @@ public class DiffEntry implements Serializable {
 
 	public void setLinesRemoved(int linesRemoved) {
 		this.linesRemoved = linesRemoved;
+	}
+
+	/**
+	 * @return the content
+	 */
+	public List<Content> getContent() {
+		return content;
+	}
+
+	/**
+	 * @param content
+	 *            the content to set
+	 */
+	public void setContent(List<Content> content) {
+		this.content = content;
 	}
 
 }

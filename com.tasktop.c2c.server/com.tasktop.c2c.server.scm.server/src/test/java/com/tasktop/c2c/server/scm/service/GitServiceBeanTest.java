@@ -9,7 +9,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.profile.service.provider;
+package com.tasktop.c2c.server.scm.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
