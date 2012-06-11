@@ -347,14 +347,9 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 		profileWebService.removeSshPublicKey(publicKeyId);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.profile.service.ProfileWebService#isProjectCreateAvailble()
-	 */
 	@Override
 	public Boolean isProjectCreateAvailable() {
-		// TODO Auto-generated method stub
+		// TODO UnsupportedOperationException in ProfileWebServiceClient
 		return null;
 	}
 
@@ -370,7 +365,7 @@ public class ProfileWebServiceController extends AbstractRestService implements 
 
 	@Override
 	public PasswordResetToken getPasswordResetToken(String token) {
-		// TODO Auto-generated method stub
+		// TODO UnsupportedOperationException in ProfileWebServiceClient
 		return null;
 	}
 
