@@ -1204,6 +1204,10 @@ table.tasks {
  * Task Comments
  *
  ************/
+.description-heading {
+	border-bottom: 1px solid #E5E5E5;
+	font-weight: bold;
+}
 
 .comments-heading {
 	border-bottom: 1px solid #E5E5E5;

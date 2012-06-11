@@ -275,6 +275,7 @@
 			<div class="content right">
 				<div class="profile-div view-task-container left">
 					<div class="credentials advance-search task-section">
+						<div class="description-heading">Description</div>
 						<div>
 							<w:WikiHTMLPanel ui:field="readOnlyDescription" addStyleNames="wikiContent"/>
 							<w:EditWikiPanel ui:field="description" visibleLines="7"/>
