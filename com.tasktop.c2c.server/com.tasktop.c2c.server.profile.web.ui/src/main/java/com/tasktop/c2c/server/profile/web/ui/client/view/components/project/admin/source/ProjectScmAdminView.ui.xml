@@ -34,14 +34,13 @@ div.key {
 			</div>
 
 			<div>
-				<h3>Public key (used when fetching external source repositories)</h3>
+				<h3>Public key (for external source repositories)</h3>
 				<div class="{style.key}">
 					<g:Label ui:field="publicSshKey"/>
 				</div> 
 			<div class="clear"/>
 		</div>
 		<div class="clear"/>
-			<!--  NEEDED?? -->
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>
