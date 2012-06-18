@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.configuration.service;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -67,7 +68,8 @@ public class ProjectServiceDatabaseConfigurator implements Configurator, Resourc
 			if (dbType.toUpperCase().startsWith("HSQL")) {
 				createStmt = "create schema " + dbName;
 			} else if (dbType.toUpperCase().startsWith("ORACLE")) {
-				createStmt = "create user " + dbName + " identified by " + dbName;
+				createStmt = "create user " + dbName + " identified by " + UUID.randomUUID().toString().substring(0, 7)
+						+ " account lock";
 				s.execute(createStmt);
 				createStmt = "grant unlimited tablespace to " + dbName;
 			}
