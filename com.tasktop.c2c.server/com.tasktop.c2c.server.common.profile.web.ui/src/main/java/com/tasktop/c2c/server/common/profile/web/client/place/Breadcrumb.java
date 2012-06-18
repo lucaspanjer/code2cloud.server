@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.common.profile.web.client.place;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 
 public class Breadcrumb {
@@ -29,6 +30,13 @@ public class Breadcrumb {
 		List<Breadcrumb> result = getBaseBreadcrumbs();
 		result.add(new Breadcrumb(ProjectHomePlace.createPlace(project.getIdentifier()).getHistoryToken(), project
 				.getName()));
+		return result;
+	}
+
+	public static List<Breadcrumb> getOrganizationSpecificBreadcrumbs(Organization organization) {
+		List<Breadcrumb> result = new ArrayList<Breadcrumb>();
+		result.add(new Breadcrumb(OrganizationProjectsPlace.createPlaceForOrg(organization.getIdentifier())
+				.getHistoryToken(), organization.getName()));
 		return result;
 	}
 

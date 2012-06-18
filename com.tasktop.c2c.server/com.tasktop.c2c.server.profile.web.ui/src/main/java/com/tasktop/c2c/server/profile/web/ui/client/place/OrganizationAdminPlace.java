@@ -12,11 +12,15 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
+import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
+import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.LoggedInPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
@@ -33,13 +37,14 @@ import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
  * @author Myles Feichtinger (Tasktop Technologies Inc.)
  * 
  */
-public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlace, WindowTitlePlace {
+public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlace, WindowTitlePlace, BreadcrumbPlace {
 
 	private Organization organization;
 
 	private String organizationId;
 
 	private final String orgAdminRole = Role.Admin + "/ORG_";
+	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
 
 	public static class Tokenizer implements PlaceTokenizer<OrganizationAdminPlace> {
 
@@ -104,11 +109,22 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 	protected void handleBatchResults() {
 		super.handleBatchResults();
 		organization = getResult(GetOrganizationResult.class).get();
+		createBreadcrumbs(organization);
 		onPlaceDataFetched();
 	}
 
 	@Override
 	protected boolean isNotAuthorized() {
 		return !AuthenticationHelper.isOrgAdmin(organizationId);
+	}
+
+	private void createBreadcrumbs(Organization organization) {
+		breadcrumbs = Breadcrumb.getOrganizationSpecificBreadcrumbs(organization);
+		breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Edit"));
+	}
+
+	@Override
+	public List<Breadcrumb> getBreadcrumbs() {
+		return breadcrumbs;
 	}
 }
