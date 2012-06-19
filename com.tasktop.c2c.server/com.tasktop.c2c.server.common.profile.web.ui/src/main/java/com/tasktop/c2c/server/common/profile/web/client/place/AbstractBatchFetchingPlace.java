@@ -42,7 +42,7 @@ import com.tasktop.c2c.server.common.web.shared.KnowsErrorMessageAction;
  * @author Clint Morgan (Tasktop Technologies Inc.)
  * 
  */
-public abstract class AbstractBatchFetchingPlace extends AbstractPlace implements DefaultPlace {
+public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 
 	protected boolean requiresUserInfo = true;
 	protected boolean readyToGo = false;

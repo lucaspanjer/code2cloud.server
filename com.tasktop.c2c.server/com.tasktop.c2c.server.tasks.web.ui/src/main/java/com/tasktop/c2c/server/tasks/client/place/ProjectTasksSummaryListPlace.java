@@ -54,26 +54,27 @@ public class ProjectTasksSummaryListPlace extends AbstractProjectTaskBatchingPla
 
 		if (product == null) {
 			// If there's no product, the rest don't matter
-			targetHistoryToken = ProjectTasksSummaryListPlace.createDefaultListPlace(projectIdentifier).getPrefix();
+			targetHistoryToken = ProjectTasksSummaryListPlace.createDefaultListPlace(projectIdentifier)
+					.getHistoryToken();
 		} else if (component == null) {
 			// If we're at this point, milestone may still be specified - check for it now.
 			if (milestone == null) {
 				// There's only a product
 				targetHistoryToken = ProjectTasksSummaryListPlace.createProductListPlace(projectIdentifier,
-						product.getId()).getPrefix();
+						product.getId()).getHistoryToken();
 			} else {
 				// There's both a product and a milestone
 				targetHistoryToken = ProjectTasksSummaryPlace.createPlaceForRelease(projectIdentifier, product.getId(),
-						milestone.getValue()).getPrefix();
+						milestone.getValue()).getHistoryToken();
 			}
 		} else if (milestone == null) {
 			// If we're at this point, component and product are specified
 			targetHistoryToken = ProjectTasksSummaryPlace.createPlaceForComponent(projectIdentifier, product.getId(),
-					component.getId()).getPrefix();
+					component.getId()).getHistoryToken();
 		} else {
 			// If we're at this point, all 3 are specified
 			targetHistoryToken = ProjectTasksSummaryPlace.createPlaceForComponentAndRelease(projectIdentifier,
-					product.getId(), component.getId(), milestone.getValue()).getPrefix();
+					product.getId(), component.getId(), milestone.getValue()).getHistoryToken();
 		}
 		return new Hyperlink(linkLabel, targetHistoryToken);
 	}

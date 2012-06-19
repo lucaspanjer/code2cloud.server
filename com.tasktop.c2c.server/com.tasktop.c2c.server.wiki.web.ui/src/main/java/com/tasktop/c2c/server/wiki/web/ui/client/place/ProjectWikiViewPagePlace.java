@@ -153,13 +153,14 @@ public class ProjectWikiViewPagePlace extends AbstractProjectWikiPlace implement
 
 		String fullPagePath = pagePath;
 
-		if (StringUtils.hasText(anchor)) {
-			fullPagePath += Path.HASHTAG_DELIMITER + anchor;
-		}
-
 		tokenMap.put(ProjectWikiViewPagePlace.PAGE, fullPagePath);
 
 		return ProjectWikiViewPage.getUrlForNamedArgs(tokenMap);
+	}
+
+	@Override
+	public String getToken() {
+		return anchor;
 	}
 
 	@Override

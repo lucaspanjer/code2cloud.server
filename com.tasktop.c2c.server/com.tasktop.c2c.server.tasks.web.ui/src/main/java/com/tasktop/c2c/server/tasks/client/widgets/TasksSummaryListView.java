@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.tasks.client.widgets;
 
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -95,7 +94,7 @@ public class TasksSummaryListView extends AbstractComposite {
 		for (Component curComponent : componentList) {
 			renderRow(sb, curComponent.getName(),
 					ProjectTasksSummaryPlace.createPlaceForComponent(appId, productId, curComponent.getId())
-							.getPrefix());
+							.getHistoryToken());
 		}
 
 		taskSummaryPanel.add(new HTML(sb.toSafeHtml()));
@@ -111,7 +110,7 @@ public class TasksSummaryListView extends AbstractComposite {
 		for (Milestone curMilestone : milestoneList) {
 			renderRow(sb, curMilestone.getValue(),
 					ProjectTasksSummaryPlace.createPlaceForRelease(appId, productId, curMilestone.getValue())
-							.getPrefix());
+							.getHistoryToken());
 		}
 
 		taskSummaryPanel.add(new HTML(sb.toSafeHtml()));

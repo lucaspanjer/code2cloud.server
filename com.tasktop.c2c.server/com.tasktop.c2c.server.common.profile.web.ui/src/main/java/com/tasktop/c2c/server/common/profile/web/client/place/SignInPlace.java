@@ -62,7 +62,7 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 
 	public String getPrefix() {
 		if (afterSuccessfulSignIn != null && !(afterSuccessfulSignIn instanceof ProjectsPlace)) {
-			return SignIn.getUrl() + AFTER_TOKEN + afterSuccessfulSignIn.getPrefix();
+			return SignIn.getUrl() + AFTER_TOKEN + afterSuccessfulSignIn.getHistoryToken();
 		}
 		return SignIn.getUrl();
 	}

@@ -40,13 +40,15 @@ public abstract class AbstractPlace extends Place implements DefaultPlace {
 		return "";
 	}
 
+	@Override
 	public abstract String getPrefix();
 
 	public String getHref() {
 		return Window.Location.createUrlBuilder().setHash(getHistoryToken()).buildString();
 	}
 
-	public String getHistoryToken() {
+	@Override
+	public final String getHistoryToken() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(getPrefix());
 		String token = getToken();
