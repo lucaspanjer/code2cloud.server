@@ -17,7 +17,7 @@ import hudson.slaves.CloudRetentionStrategy;
 public class C2CRetentionStrategy extends CloudRetentionStrategy {
 
 	public C2CRetentionStrategy() {
-		super(0);
+		super(1);
 	}
 
 }
