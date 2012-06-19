@@ -114,10 +114,6 @@ public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implement
 		onPlaceDataFetched();
 	}
 
-	public String getToken() {
-		return "";
-	}
-
 	public static ProjectDeploymentPlace createPlace(String projectId) {
 		return new ProjectDeploymentPlace(projectId);
 	}

@@ -79,11 +79,6 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 	private Project projectForInvitationToken;
 	private Profile githubProfile;
 
-	@Override
-	public String getToken() {
-		return null;
-	}
-
 	public String getPrefix() {
 		if (StringUtils.hasText(signUpToken)) {
 			LinkedHashMap<String, String> tokenMap = new LinkedHashMap<String, String>();

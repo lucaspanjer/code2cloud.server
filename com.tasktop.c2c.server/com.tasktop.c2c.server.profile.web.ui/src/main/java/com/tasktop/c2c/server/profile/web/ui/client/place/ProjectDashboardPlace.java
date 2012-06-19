@@ -98,10 +98,6 @@ public class ProjectDashboardPlace extends AbstractBatchFetchingPlace implements
 		return ProjectDashboard.getUrlForNamedArgs(tokenMap);
 	}
 
-	public String getToken() {
-		return "";
-	}
-
 	public static ProjectDashboardPlace createPlace(String projectId) {
 		if (projectId == null || projectId.length() == 0 || projectId.equals("")) {
 			projectId = NO_ID;
