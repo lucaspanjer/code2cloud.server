@@ -43,7 +43,7 @@ public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implement
 	public static PageMapping ProjectDeployment = new PageMapping(new ProjectDeploymentPlace.Tokenizer(),
 			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/deployments");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectDeploymentPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectDeploymentPlace> {
 
 		@Override
 		public ProjectDeploymentPlace getPlace(String token) {

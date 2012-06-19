@@ -41,7 +41,7 @@ public class ProjectTeamPlace extends AbstractBatchFetchingPlace implements Head
 	public static PageMapping ProjectTeam = new PageMapping(new ProjectTeamPlace.Tokenizer(), Path.PROJECT_BASE + "/{"
 			+ Path.PROJECT_ID + "}/team");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectTeamPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectTeamPlace> {
 
 		@Override
 		public ProjectTeamPlace getPlace(String token) {

@@ -32,7 +32,7 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 	public static PageMapping ResetPassword = new PageMapping(new ResetPasswordPlace.Tokenizer(), "resetPassword/{"
 			+ SignUpPlace.TOKEN + "}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ResetPasswordPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ResetPasswordPlace> {
 
 		@Override
 		public ResetPasswordPlace getPlace(String token) {

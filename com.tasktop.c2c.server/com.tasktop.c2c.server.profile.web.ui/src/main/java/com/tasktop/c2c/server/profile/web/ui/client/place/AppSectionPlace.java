@@ -72,7 +72,7 @@ public class AppSectionPlace extends AbstractBatchFetchingPlace implements Headi
 
 	public static final String SECTION = "displaySection";
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<AppSectionPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<AppSectionPlace> {
 
 		@Override
 		public AppSectionPlace getPlace(String token) {

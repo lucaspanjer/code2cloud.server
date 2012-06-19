@@ -48,7 +48,7 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 	public static PageMapping OrgAdminPlace = new PageMapping(new OrganizationAdminPlace.Tokenizer(), "o/{"
 			+ Path.ORGANIZATION_ID + "}/admin");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<OrganizationAdminPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<OrganizationAdminPlace> {
 
 		@Override
 		public OrganizationAdminPlace getPlace(String token) {

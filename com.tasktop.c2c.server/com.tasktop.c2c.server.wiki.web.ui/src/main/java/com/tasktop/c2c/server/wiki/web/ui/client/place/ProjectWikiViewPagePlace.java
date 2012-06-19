@@ -42,7 +42,7 @@ public class ProjectWikiViewPagePlace extends AbstractProjectWikiPlace implement
 	public static PageMapping ProjectWikiViewPage = new PageMapping(new ProjectWikiViewPagePlace.Tokenizer(),
 			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/wiki/p/{" + ProjectWikiViewPagePlace.PAGE + ":*}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectWikiViewPagePlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectWikiViewPagePlace> {
 
 		@Override
 		public ProjectWikiViewPagePlace getPlace(String token) {

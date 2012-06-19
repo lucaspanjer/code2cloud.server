@@ -43,7 +43,7 @@ public class ProjectEditTaskPlace extends AbstractProjectTaskBatchingPlace imple
 	public static PageMapping ProjectEditTask = new PageMapping(new ProjectEditTaskPlace.Tokenizer(), Path.PROJECT_BASE
 			+ "/{" + Path.PROJECT_ID + "}/task/{" + TASK + ":Integer}/edit");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectEditTaskPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectEditTaskPlace> {
 
 		@Override
 		public ProjectEditTaskPlace getPlace(String token) {

@@ -44,7 +44,7 @@ public class ScmPlace extends AbstractBatchFetchingPlace implements HeadingPlace
 	public static PageMapping SCM_PLACE = new PageMapping(new Tokenizer(), Path.PROJECT_BASE + "/{" + Path.PROJECT_ID
 			+ "}/scm/");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ScmPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ScmPlace> {
 
 		@Override
 		public ScmPlace getPlace(String token) {

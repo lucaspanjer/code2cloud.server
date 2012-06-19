@@ -31,7 +31,7 @@ public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	public static PageMapping NewProject = new PageMapping(new NewProjectPlace.Tokenizer(), "newProject");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<NewProjectPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<NewProjectPlace> {
 
 		@Override
 		public NewProjectPlace getPlace(String token) {

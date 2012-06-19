@@ -53,7 +53,7 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 	public static PageMapping SignUp = new PageMapping(new SignUpPlace.Tokenizer(), "signup", "signup/{"
 			+ SignUpPlace.TOKEN + "}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<SignUpPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<SignUpPlace> {
 
 		@Override
 		public SignUpPlace getPlace(String token) {

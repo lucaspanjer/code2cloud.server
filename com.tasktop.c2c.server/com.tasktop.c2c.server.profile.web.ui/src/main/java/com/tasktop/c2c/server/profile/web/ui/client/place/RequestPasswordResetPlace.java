@@ -28,7 +28,7 @@ public class RequestPasswordResetPlace extends AnonymousPlace implements Heading
 	public static PageMapping RequestPasswordReset = new PageMapping(new RequestPasswordResetPlace.Tokenizer(),
 			"requestPasswordReset");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<RequestPasswordResetPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<RequestPasswordResetPlace> {
 
 		@Override
 		public RequestPasswordResetPlace getPlace(String token) {

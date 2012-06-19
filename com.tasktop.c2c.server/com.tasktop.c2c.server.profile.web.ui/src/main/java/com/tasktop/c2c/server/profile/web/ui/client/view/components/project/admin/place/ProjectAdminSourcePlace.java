@@ -35,7 +35,7 @@ public class ProjectAdminSourcePlace extends ProjectAdminPlace implements Breadc
 	public static PageMapping ProjectAdminSCM = new PageMapping(new ProjectAdminSourcePlace.Tokenizer(),
 			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/admin/scm");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectAdminSourcePlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectAdminSourcePlace> {
 
 		@Override
 		public ProjectAdminSourcePlace getPlace(String token) {

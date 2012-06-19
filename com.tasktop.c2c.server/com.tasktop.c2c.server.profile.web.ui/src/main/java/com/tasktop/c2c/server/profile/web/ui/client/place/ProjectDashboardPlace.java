@@ -40,7 +40,7 @@ public class ProjectDashboardPlace extends AbstractBatchFetchingPlace implements
 	public static PageMapping ProjectDashboard = new PageMapping(new ProjectDashboardPlace.Tokenizer(),
 			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/dashboard");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectDashboardPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectDashboardPlace> {
 
 		@Override
 		public ProjectDashboardPlace getPlace(String token) {

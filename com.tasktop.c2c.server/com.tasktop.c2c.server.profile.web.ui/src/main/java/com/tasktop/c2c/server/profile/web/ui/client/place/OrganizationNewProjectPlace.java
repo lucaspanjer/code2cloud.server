@@ -32,7 +32,7 @@ public class OrganizationNewProjectPlace extends NewProjectPlace {
 	public static PageMapping OrganizationNewProject = new PageMapping(new OrganizationNewProjectPlace.Tokenizer(),
 			"o/{" + ORG + "}/newProject");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<OrganizationNewProjectPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<OrganizationNewProjectPlace> {
 
 		@Override
 		public OrganizationNewProjectPlace getPlace(String token) {

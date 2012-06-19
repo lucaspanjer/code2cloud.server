@@ -42,7 +42,7 @@ public class ProjectWikiHomePlace extends AbstractProjectWikiPlace implements He
 			+ "/{" + Path.PROJECT_ID + "}/wiki/", Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/wiki/q/{"
 			+ ProjectWikiHomePlace.QUERY_P + "}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectWikiHomePlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectWikiHomePlace> {
 
 		@Override
 		public ProjectWikiHomePlace getPlace(String token) {

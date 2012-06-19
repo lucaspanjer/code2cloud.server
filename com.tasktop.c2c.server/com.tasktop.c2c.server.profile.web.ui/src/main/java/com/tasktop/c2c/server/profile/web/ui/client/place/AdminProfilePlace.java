@@ -40,7 +40,7 @@ public class AdminProfilePlace extends LoggedInPlace implements HeadingPlace, Wi
 
 	public static PageMapping AdminProfiles = new PageMapping(new AdminProfilePlace.Tokenizer(), "admin/profile");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<AdminProfilePlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<AdminProfilePlace> {
 
 		@Override
 		public AdminProfilePlace getPlace(String token) {

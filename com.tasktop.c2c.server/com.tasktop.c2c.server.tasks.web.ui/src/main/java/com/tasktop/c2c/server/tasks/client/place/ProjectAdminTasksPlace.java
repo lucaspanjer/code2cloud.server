@@ -25,7 +25,7 @@ public class ProjectAdminTasksPlace extends AbstractProjectAdminTasksPlace {
 	public static PageMapping ProjectTaskAdmin = new PageMapping(new Tokenizer(), Path.PROJECT_BASE + "/{"
 			+ Path.PROJECT_ID + "}/admin/tasks");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectAdminTasksPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectAdminTasksPlace> {
 
 		@Override
 		public ProjectAdminTasksPlace getPlace(String token) {

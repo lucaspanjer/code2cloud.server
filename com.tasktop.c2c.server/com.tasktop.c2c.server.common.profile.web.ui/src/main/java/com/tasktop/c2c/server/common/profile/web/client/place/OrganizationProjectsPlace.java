@@ -35,7 +35,7 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 	public static PageMapping Discover = new PageMapping(new OrganizationProjectsPlace.Tokenizer(), "o/{" + ORG + "}",
 			"o/{" + ORG + "}/search/{" + QUERY + "}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<OrganizationProjectsPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<OrganizationProjectsPlace> {
 
 		@Override
 		public OrganizationProjectsPlace getPlace(String token) {

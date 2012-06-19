@@ -32,7 +32,7 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 	public static PageMapping Discover = new PageMapping(new ProjectsPlace.Tokenizer(), "projects", "search/{" + QUERY
 			+ "}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectsPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectsPlace> {
 
 		@Override
 		public ProjectsPlace getPlace(String token) {

@@ -46,7 +46,7 @@ public class ScmCommitPlace extends AbstractBatchFetchingPlace implements Headin
 	public static PageMapping SCM_COMMIT = new PageMapping(new Tokenizer(), Path.PROJECT_BASE + "/{" + Path.PROJECT_ID
 			+ "}/scm/{" + REPO_ARG + "}/{" + COMMIT_ARG + "}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ScmCommitPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ScmCommitPlace> {
 
 		@Override
 		public ScmCommitPlace getPlace(String token) {

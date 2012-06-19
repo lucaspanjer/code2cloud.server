@@ -28,7 +28,7 @@ public class EmailVerificationPlace extends LoggedInPlace {
 	public static PageMapping VerifyEmail = new PageMapping(new EmailVerificationPlace.Tokenizer(), "verifyEmail/{"
 			+ SignUpPlace.TOKEN + "}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<EmailVerificationPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<EmailVerificationPlace> {
 
 		@Override
 		public EmailVerificationPlace getPlace(String token) {

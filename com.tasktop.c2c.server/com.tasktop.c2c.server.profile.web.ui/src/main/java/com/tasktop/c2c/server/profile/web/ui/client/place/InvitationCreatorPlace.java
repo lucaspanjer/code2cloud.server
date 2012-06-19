@@ -27,7 +27,7 @@ public class InvitationCreatorPlace extends LoggedInPlace implements HeadingPlac
 	public static PageMapping InvitationCreator = new PageMapping(new InvitationCreatorPlace.Tokenizer(),
 			"admin/invitationCreator");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<InvitationCreatorPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<InvitationCreatorPlace> {
 
 		@Override
 		public InvitationCreatorPlace getPlace(String token) {

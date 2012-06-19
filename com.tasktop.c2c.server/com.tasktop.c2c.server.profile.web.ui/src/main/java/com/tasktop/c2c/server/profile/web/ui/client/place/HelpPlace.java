@@ -21,7 +21,7 @@ public class HelpPlace extends AbstractBatchFetchingPlace implements HeadingPlac
 
 	public static PageMapping Help = new PageMapping(new HelpPlace.Tokenizer(), "help");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<HelpPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<HelpPlace> {
 
 		@Override
 		public HelpPlace getPlace(String token) {

@@ -45,7 +45,7 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/wiki/edit/{" + ProjectWikiViewPagePlace.PAGE + ":*}",
 			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/wiki/new");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectWikiEditPagePlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectWikiEditPagePlace> {
 
 		@Override
 		public ProjectWikiEditPagePlace getPlace(String token) {

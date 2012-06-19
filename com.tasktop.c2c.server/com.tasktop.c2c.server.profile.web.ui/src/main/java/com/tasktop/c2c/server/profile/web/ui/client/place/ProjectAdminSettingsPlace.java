@@ -32,7 +32,7 @@ public class ProjectAdminSettingsPlace extends ProjectAdminPlace implements Brea
 	public static PageMapping ProjectAdminSettings = new PageMapping(new ProjectAdminSettingsPlace.Tokenizer(),
 			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/admin");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectAdminSettingsPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectAdminSettingsPlace> {
 
 		@Override
 		public ProjectAdminSettingsPlace getPlace(String token) {

@@ -88,7 +88,7 @@ public class ProjectTasksSummaryListPlace extends AbstractProjectTaskBatchingPla
 					+ "}/tasks/summary/product/{" + ProjectTasksSummaryListPlace.PRODUCT + ":Integer}"
 					+ ProjectTasksSummaryListPlace.RELEASE_SUFFIX);
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectTasksSummaryListPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectTasksSummaryListPlace> {
 
 		@Override
 		public ProjectTasksSummaryListPlace getPlace(String token) {

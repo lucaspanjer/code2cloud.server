@@ -55,7 +55,7 @@ public class ProjectTasksSummaryPlace extends AbstractProjectTaskBatchingPlace {
 					+ ProjectTasksSummaryPlace.COMPONENT + ":Integer}/release/{" + ProjectTasksSummaryPlace.RELEASE
 					+ "}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectTasksSummaryPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectTasksSummaryPlace> {
 
 		@Override
 		public ProjectTasksSummaryPlace getPlace(String token) {

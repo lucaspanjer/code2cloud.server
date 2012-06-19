@@ -35,7 +35,7 @@ public class UserAccountPlace extends LoggedInPlace implements HeadingPlace, Win
 		return "Account Settings";
 	}
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<UserAccountPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<UserAccountPlace> {
 
 		@Override
 		public UserAccountPlace getPlace(String token) {

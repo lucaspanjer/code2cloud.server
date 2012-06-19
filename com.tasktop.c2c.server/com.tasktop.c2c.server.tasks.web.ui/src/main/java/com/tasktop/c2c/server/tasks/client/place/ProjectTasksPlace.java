@@ -71,7 +71,7 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 			+ ProjectTasksPlace.TEXT_Q + ":*}", Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/tasks/s/{"
 			+ ProjectTasksPlace.CRIT_Q + ":*}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectTasksPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectTasksPlace> {
 
 		@Override
 		public ProjectTasksPlace getPlace(String token) {

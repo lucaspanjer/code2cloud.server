@@ -41,7 +41,7 @@ public class ProjectTaskHistoryPlace extends AbstractProjectTaskBatchingPlace {
 	public static PageMapping ProjectTaskHistory = new PageMapping(new ProjectTaskHistoryPlace.Tokenizer(),
 			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/task/{" + TASK + ":Integer}/history");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectTaskHistoryPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectTaskHistoryPlace> {
 
 		@Override
 		public ProjectTaskHistoryPlace getPlace(String token) {

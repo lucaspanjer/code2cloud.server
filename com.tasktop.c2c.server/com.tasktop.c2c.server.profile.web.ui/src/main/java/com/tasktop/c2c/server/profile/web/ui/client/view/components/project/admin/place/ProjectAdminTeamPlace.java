@@ -33,7 +33,7 @@ public class ProjectAdminTeamPlace extends ProjectAdminPlace {
 	public static PageMapping ProjectAdminTeam = new PageMapping(new ProjectAdminTeamPlace.Tokenizer(),
 			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/admin/team");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectAdminTeamPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectAdminTeamPlace> {
 
 		@Override
 		public ProjectAdminTeamPlace getPlace(String token) {

@@ -42,7 +42,7 @@ public class ProjectNewTaskPlace extends AbstractProjectTaskBatchingPlace implem
 			+ "/{" + Path.PROJECT_ID + "}/task/new", Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/task/{"
 			+ ProjectNewTaskPlace.PARENT_TASK_ID + ":Integer}/newSubtask");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectNewTaskPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectNewTaskPlace> {
 
 		@Override
 		public ProjectNewTaskPlace getPlace(String token) {

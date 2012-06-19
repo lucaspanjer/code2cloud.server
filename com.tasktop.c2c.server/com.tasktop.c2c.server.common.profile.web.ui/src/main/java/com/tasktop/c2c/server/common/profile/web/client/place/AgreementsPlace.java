@@ -29,7 +29,7 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	public static PageMapping Agreements = new PageMapping(new AgreementsPlace.Tokenizer(), "agreements");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<AgreementsPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<AgreementsPlace> {
 
 		@Override
 		public AgreementsPlace getPlace(String token) {

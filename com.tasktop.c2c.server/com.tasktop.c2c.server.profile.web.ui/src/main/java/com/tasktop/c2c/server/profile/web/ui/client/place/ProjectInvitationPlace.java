@@ -35,7 +35,7 @@ public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implement
 	public static PageMapping ProjectInvitation = new PageMapping(new ProjectInvitationPlace.Tokenizer(),
 			"invitation/{" + SignUpPlace.TOKEN + "}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectInvitationPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectInvitationPlace> {
 
 		@Override
 		public ProjectInvitationPlace getPlace(String token) {

@@ -29,7 +29,7 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 	public static PageMapping SignIn = new PageMapping(new SignInPlace.Tokenizer(), "signin", "signin" + AFTER_TOKEN
 			+ "{after}");
 
-	public static class Tokenizer extends AbstractPlaceTokenizer<SignInPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<SignInPlace> {
 
 		@Override
 		public SignInPlace getPlace(String token) {
