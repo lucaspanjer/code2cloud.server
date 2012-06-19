@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
@@ -27,27 +27,25 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectScmRep
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectAdminSettingsPlace;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 public class ProjectAdminSourcePlace extends ProjectAdminPlace implements BreadcrumbPlace {
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectAdminSourcePlace> {
+	public static PageMapping ProjectAdminSCM = new PageMapping(new ProjectAdminSourcePlace.Tokenizer(),
+			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/admin/scm");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectAdminSourcePlace> {
 
 		@Override
 		public ProjectAdminSourcePlace getPlace(String token) {
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			String projId = pathArgs.getString(Path.PROJECT_ID);
 
 			return createPlace(projId);
 		}
 
-		@Override
-		public String getToken(ProjectAdminSourcePlace place) {
-			return place.getToken();
-		}
 	}
 
 	public static ProjectAdminSourcePlace createPlace(String projectId) {
@@ -65,17 +63,12 @@ public class ProjectAdminSourcePlace extends ProjectAdminPlace implements Breadc
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
 		LinkedHashMap<String, String> tokenMap = new LinkedHashMap<String, String>();
 
 		tokenMap.put(Path.PROJECT_ID, projectIdentifer);
 
-		return PageMappings.ProjectAdminSCM.getUrlForNamedArgs(tokenMap);
+		return ProjectAdminSCM.getUrlForNamedArgs(tokenMap);
 	}
 
 	@Override

@@ -15,7 +15,7 @@ package com.tasktop.c2c.server.common.profile.web.client.place;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
@@ -41,19 +41,14 @@ public class ProjectHomePlace extends AbstractBatchFetchingPlace implements Head
 	public static PageMapping ProjectHome = new PageMapping(new ProjectHomePlace.Tokenizer(), Path.PROJECT_BASE + "/{"
 			+ Path.PROJECT_ID + "}");
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectHomePlace> {
+	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectHomePlace> {
 
 		@Override
 		public ProjectHomePlace getPlace(String token) {
 			// Tokenize our URL now.
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			return createPlace(pathArgs.getString(Path.PROJECT_ID));
-		}
-
-		@Override
-		public String getToken(ProjectHomePlace place) {
-			return place.getToken();
 		}
 	}
 
@@ -75,11 +70,6 @@ public class ProjectHomePlace extends AbstractBatchFetchingPlace implements Head
 
 	private ProjectHomePlace(String projectId) {
 		this.projectId = projectId;
-	}
-
-	@Override
-	public String getToken() {
-		return "";
 	}
 
 	@Override

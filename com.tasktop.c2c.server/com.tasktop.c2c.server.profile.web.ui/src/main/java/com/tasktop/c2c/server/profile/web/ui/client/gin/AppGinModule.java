@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.tasktop.c2c.server.common.profile.web.client.AppState;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMappingRegistry;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.notification.NotificationPanel;
 import com.tasktop.c2c.server.common.web.client.notification.Notifier;
@@ -54,6 +55,7 @@ public class AppGinModule extends AbstractGinModule {
 		bind(Notifier.class).to(NotificationPanel.class).in(Singleton.class);
 		bind(Scheduler.class).toProvider(SchedulerProvider.class).in(Singleton.class);
 		bind(DispatchAsync.class).to(DispatchServiceAsync.class).in(Singleton.class);
+		bind(PageMappingRegistry.class).in(Singleton.class);
 
 	}
 

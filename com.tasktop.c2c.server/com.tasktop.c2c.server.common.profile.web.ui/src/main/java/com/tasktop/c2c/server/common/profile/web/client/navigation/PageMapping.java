@@ -12,16 +12,11 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.profile.web.client.navigation;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
-import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.navigation.PathMapping;
 import com.tasktop.c2c.server.common.web.client.navigation.PathMapping.PathInfo;
@@ -31,16 +26,6 @@ import com.tasktop.c2c.server.common.web.client.navigation.PathMapping.PathInfo;
  * 
  */
 public class PageMapping {
-
-	private static List<PageMapping> registeredMappings = new ArrayList<PageMapping>();
-
-	public static List<PageMapping> getRegisteredMappings() {
-		return registeredMappings;
-	}
-
-	public static void register(PageMapping mapping) {
-		registeredMappings.add(mapping);
-	}
 
 	private final PlaceTokenizer<?> tokenizer;
 	private final PathMapping[] pathMappings;
@@ -58,14 +43,13 @@ public class PageMapping {
 		}
 
 		this.pathMappings = mapping;
-		register(this);
 	}
 
 	public PlaceTokenizer<?> getTokenizer() {
 		return tokenizer;
 	}
 
-	private Path getPath(PathInfo info) {
+	Path getPath(PathInfo info) {
 		for (PathMapping curMapping : pathMappings) {
 			if (curMapping.getPath().matches(info.parts)) {
 				return curMapping.getPath();
@@ -113,32 +97,4 @@ public class PageMapping {
 		return this.pathMappings;
 	}
 
-	public static Place getPlaceForUrl(String url) {
-		PageMapping pageMappings = getPageMappingsForUrl(url);
-		if (pageMappings == null) {
-			return null;
-		} else {
-			return pageMappings.tokenizer.getPlace(url);
-		}
-	}
-
-	public static Args getPathArgsForUrl(String url) {
-		PageMapping pageMappings = getPageMappingsForUrl(url);
-		if (pageMappings == null) {
-			return null;
-		} else {
-			PathInfo info = PathMapping.computePathInfo(url);
-			return pageMappings.getPath(info).configureArgs(url);
-		}
-	}
-
-	private static PageMapping getPageMappingsForUrl(String url) {
-		PathInfo info = PathMapping.computePathInfo(url);
-		for (PageMapping curMapping : PageMapping.getRegisteredMappings()) {
-			if (curMapping.matches(info)) {
-				return curMapping;
-			}
-		}
-		return null;
-	}
 }

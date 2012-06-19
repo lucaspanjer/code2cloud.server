@@ -12,9 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.profile.web.client.place;
 
-
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 
@@ -29,7 +29,7 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 	public static PageMapping SignIn = new PageMapping(new SignInPlace.Tokenizer(), "signin", "signin" + AFTER_TOKEN
 			+ "{after}");
 
-	public static class Tokenizer implements PlaceTokenizer<SignInPlace> {
+	public static class Tokenizer extends AbstractPlaceTokenizer<SignInPlace> {
 
 		@Override
 		public SignInPlace getPlace(String token) {
@@ -37,7 +37,8 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 			if (token.contains(AFTER_TOKEN)) {
 				String afterUrl = token.substring(token.lastIndexOf(AFTER_TOKEN) + AFTER_TOKEN.length());
 				if (afterUrl != null) {
-					Place afterPlace = PageMapping.getPlaceForUrl(afterUrl);
+					Place afterPlace = ProfileGinjector.get.instance().getPageMappingRegistry()
+							.getPlaceForUrl(afterUrl);
 					if (afterPlace != null) {
 						return SignInPlace.createPlace((DefaultPlace) afterPlace);
 					}
@@ -45,11 +46,6 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 			}
 
 			return SignInPlace.createPlace();
-		}
-
-		@Override
-		public String getToken(SignInPlace place) {
-			return place.getToken();
 		}
 	}
 

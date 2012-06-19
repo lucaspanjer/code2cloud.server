@@ -72,10 +72,6 @@ public abstract class AbstractProjectWikiPlace extends AbstractBatchFetchingPlac
 		return Section.WIKI;
 	}
 
-	@Override
-	public String getToken() {
-		return "";
-	}
 
 	@Override
 	protected void addActions() {

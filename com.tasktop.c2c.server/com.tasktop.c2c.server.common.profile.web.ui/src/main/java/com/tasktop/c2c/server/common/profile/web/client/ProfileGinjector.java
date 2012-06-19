@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.common.profile.web.client;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.place.shared.PlaceController;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMappingRegistry;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 
 public interface ProfileGinjector extends CommonGinjector {
@@ -29,6 +30,8 @@ public interface ProfileGinjector extends CommonGinjector {
 	PlaceController getPlaceController();
 
 	Scheduler getScheduler();
+
+	PageMappingRegistry getPageMappingRegistry();
 
 	public static class get {
 		private static ProfileGinjector instance;

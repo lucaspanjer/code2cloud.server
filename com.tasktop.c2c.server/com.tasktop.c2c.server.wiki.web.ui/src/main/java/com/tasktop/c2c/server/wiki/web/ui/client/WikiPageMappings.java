@@ -12,9 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.wiki.web.ui.client;
 
-
-import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
-import com.tasktop.c2c.server.common.web.client.navigation.Path;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMappings;
 import com.tasktop.c2c.server.wiki.web.ui.client.place.ProjectWikiEditPagePlace;
 import com.tasktop.c2c.server.wiki.web.ui.client.place.ProjectWikiHomePlace;
 import com.tasktop.c2c.server.wiki.web.ui.client.place.ProjectWikiViewPagePlace;
@@ -23,15 +21,11 @@ import com.tasktop.c2c.server.wiki.web.ui.client.place.ProjectWikiViewPagePlace;
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class WikiPageMappings {
+public class WikiPageMappings extends PageMappings {
 
-	public static PageMapping ProjectWikiEditPage = new PageMapping(new ProjectWikiEditPagePlace.Tokenizer(),
-			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/wiki/edit/{" + ProjectWikiViewPagePlace.PAGE + ":*}",
-			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/wiki/new");
-	public static PageMapping ProjectWikiViewPage = new PageMapping(new ProjectWikiViewPagePlace.Tokenizer(),
-			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/wiki/p/{" + ProjectWikiViewPagePlace.PAGE + ":*}");
-	public static PageMapping ProjectWiki = new PageMapping(new ProjectWikiHomePlace.Tokenizer(), Path.PROJECT_BASE
-			+ "/{" + Path.PROJECT_ID + "}/wiki/", Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/wiki/q/{"
-			+ ProjectWikiHomePlace.QUERY_P + "}");
+	public WikiPageMappings() {
+		super(ProjectWikiEditPagePlace.ProjectWikiEditPage, ProjectWikiViewPagePlace.ProjectWikiViewPage,
+				ProjectWikiHomePlace.ProjectWiki);
+	}
 
 }

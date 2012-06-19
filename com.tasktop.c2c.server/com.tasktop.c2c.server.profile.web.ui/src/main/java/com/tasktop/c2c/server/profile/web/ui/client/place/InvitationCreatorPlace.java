@@ -12,11 +12,10 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.LoggedInPlace;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 public class InvitationCreatorPlace extends LoggedInPlace implements HeadingPlace {
 
@@ -25,17 +24,16 @@ public class InvitationCreatorPlace extends LoggedInPlace implements HeadingPlac
 		return "Invitation Creator";
 	}
 
-	public static class Tokenizer implements PlaceTokenizer<InvitationCreatorPlace> {
+	public static PageMapping InvitationCreator = new PageMapping(new InvitationCreatorPlace.Tokenizer(),
+			"admin/invitationCreator");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<InvitationCreatorPlace> {
 
 		@Override
 		public InvitationCreatorPlace getPlace(String token) {
 			return InvitationCreatorPlace.createPlace();
 		}
 
-		@Override
-		public String getToken(InvitationCreatorPlace place) {
-			return place.getToken();
-		}
 	}
 
 	public static InvitationCreatorPlace createPlace() {
@@ -47,13 +45,8 @@ public class InvitationCreatorPlace extends LoggedInPlace implements HeadingPlac
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
-		return PageMappings.InvitationCreator.getUrl();
+		return InvitationCreator.getUrl();
 	}
 
 	@Override

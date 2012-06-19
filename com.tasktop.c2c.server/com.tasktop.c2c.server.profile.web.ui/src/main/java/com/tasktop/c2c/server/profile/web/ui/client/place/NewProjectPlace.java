@@ -12,18 +12,14 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
-import java.util.List;
-
-import net.customware.gwt.dispatch.shared.Action;
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.LoggedInPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectCreateAvailableAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectCreateAvailableResult;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -33,17 +29,15 @@ public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	private boolean createAvailable = false;
 
-	public static class Tokenizer implements PlaceTokenizer<NewProjectPlace> {
+	public static PageMapping NewProject = new PageMapping(new NewProjectPlace.Tokenizer(), "newProject");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<NewProjectPlace> {
 
 		@Override
 		public NewProjectPlace getPlace(String token) {
 			return NewProjectPlace.createPlace();
 		}
 
-		@Override
-		public String getToken(NewProjectPlace place) {
-			return place.getToken();
-		}
 	}
 
 	@Override
@@ -59,13 +53,8 @@ public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, Wind
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
-		return PageMappings.NewProject.getUrl();
+		return NewProject.getUrl();
 	}
 
 	public boolean isCreateAvailable() {

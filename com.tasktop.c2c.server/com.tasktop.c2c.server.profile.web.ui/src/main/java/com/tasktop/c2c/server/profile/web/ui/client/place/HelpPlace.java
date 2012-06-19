@@ -12,25 +12,22 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 public class HelpPlace extends AbstractBatchFetchingPlace implements HeadingPlace {
 
-	public static class Tokenizer implements PlaceTokenizer<HelpPlace> {
+	public static PageMapping Help = new PageMapping(new HelpPlace.Tokenizer(), "help");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<HelpPlace> {
 
 		@Override
 		public HelpPlace getPlace(String token) {
 			return HelpPlace.createPlace();
 		}
 
-		@Override
-		public String getToken(HelpPlace place) {
-			return place.getToken();
-		}
 	}
 
 	private HelpPlace() {
@@ -42,13 +39,8 @@ public class HelpPlace extends AbstractBatchFetchingPlace implements HeadingPlac
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
-		return PageMappings.Help.getUrl();
+		return Help.getUrl();
 	}
 
 	@Override

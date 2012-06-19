@@ -14,8 +14,8 @@ package com.tasktop.c2c.server.common.profile.web.client.place;
 
 import java.util.LinkedHashMap;
 
-import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
@@ -32,11 +32,11 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 	public static PageMapping Discover = new PageMapping(new ProjectsPlace.Tokenizer(), "projects", "search/{" + QUERY
 			+ "}");
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectsPlace> {
+	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectsPlace> {
 
 		@Override
 		public ProjectsPlace getPlace(String token) {
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			// Only one of the following three can be defined at a time, so use this to determine which place to create.
 			String query = pathArgs.getString(QUERY);
@@ -49,10 +49,6 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 			}
 		}
 
-		@Override
-		public String getToken(ProjectsPlace place) {
-			return place.getToken();
-		}
 	}
 
 	private final String query;
@@ -71,11 +67,6 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 	@Override
 	public String getHeading() {
 		return "Discover Projects";
-	}
-
-	@Override
-	public String getToken() {
-		return "";
 	}
 
 	public static ProjectsPlace createPlace() {

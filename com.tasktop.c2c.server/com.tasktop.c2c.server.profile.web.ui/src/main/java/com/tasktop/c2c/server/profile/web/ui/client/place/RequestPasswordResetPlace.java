@@ -12,13 +12,12 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AnonymousPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -26,17 +25,16 @@ import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
  */
 public class RequestPasswordResetPlace extends AnonymousPlace implements HeadingPlace, WindowTitlePlace {
 
-	public static class Tokenizer implements PlaceTokenizer<RequestPasswordResetPlace> {
+	public static PageMapping RequestPasswordReset = new PageMapping(new RequestPasswordResetPlace.Tokenizer(),
+			"requestPasswordReset");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<RequestPasswordResetPlace> {
 
 		@Override
 		public RequestPasswordResetPlace getPlace(String token) {
 			return RequestPasswordResetPlace.createPlace();
 		}
 
-		@Override
-		public String getToken(RequestPasswordResetPlace place) {
-			return place.getToken();
-		}
 	}
 
 	public static RequestPasswordResetPlace createPlace() {
@@ -49,13 +47,8 @@ public class RequestPasswordResetPlace extends AnonymousPlace implements Heading
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
-		return PageMappings.RequestPasswordReset.getUrl();
+		return RequestPasswordReset.getUrl();
 	}
 
 	@Override

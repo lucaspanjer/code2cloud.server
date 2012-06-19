@@ -22,13 +22,13 @@ import junit.framework.Assert;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.google.gwt.junit.GWTMockUtilities;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMappingRegistry;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.navigation.PathMapping;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
@@ -46,6 +46,7 @@ public class NavigationTest {
 	private PlaceHistoryMapper historyMapper;
 	private AppGinjector appGinjector;
 	private Notifier notifier;
+	private PageMappingRegistry registry;
 
 	@Before
 	public void setUp() throws Exception {
@@ -57,10 +58,10 @@ public class NavigationTest {
 
 		notifier = appGinjector.getNotifier();
 		when(appGinjector.getNotifier()).thenReturn(notifier);
-	}
 
-	@BeforeClass
-	public static void setupClass() {
+		registry = new PageMappingRegistry();
+		when(appGinjector.getPageMappingRegistry()).thenReturn(registry);
+
 		new ProfileEntryPoint(); // Registers page mappings
 	}
 
@@ -91,7 +92,7 @@ public class NavigationTest {
 
 	@Test
 	public void testAllPageMappingsParse() {
-		for (PageMapping pageMapping : PageMapping.getRegisteredMappings()) {
+		for (PageMapping pageMapping : registry.getRegisteredMappings()) {
 			Place lastPlace = null;
 			for (PathMapping pathMapping : pageMapping.getPathMappings()) {
 				String[] args = new String[pathMapping.getPath().getArgumentCount()];

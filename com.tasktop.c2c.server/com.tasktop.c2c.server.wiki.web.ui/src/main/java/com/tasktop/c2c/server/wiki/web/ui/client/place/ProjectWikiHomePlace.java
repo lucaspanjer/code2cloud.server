@@ -16,10 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
@@ -33,7 +30,6 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.wiki.domain.Page;
-import com.tasktop.c2c.server.wiki.web.ui.client.WikiPageMappings;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.FindPagesAction;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.FindPagesResult;
 
@@ -42,12 +38,16 @@ public class ProjectWikiHomePlace extends AbstractProjectWikiPlace implements He
 
 	public static String QUERY_P = "query";
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectWikiHomePlace> {
+	public static PageMapping ProjectWiki = new PageMapping(new ProjectWikiHomePlace.Tokenizer(), Path.PROJECT_BASE
+			+ "/{" + Path.PROJECT_ID + "}/wiki/", Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/wiki/q/{"
+			+ ProjectWikiHomePlace.QUERY_P + "}");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectWikiHomePlace> {
 
 		@Override
 		public ProjectWikiHomePlace getPlace(String token) {
 			// Tokenize our URL now.
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 			String projectId = pathArgs.getString(Path.PROJECT_ID);
 			String query = pathArgs.getString(QUERY_P);
 
@@ -58,10 +58,6 @@ public class ProjectWikiHomePlace extends AbstractProjectWikiPlace implements He
 			}
 		}
 
-		@Override
-		public String getToken(ProjectWikiHomePlace place) {
-			return place.getToken();
-		}
 	}
 
 	private String query;
@@ -90,11 +86,6 @@ public class ProjectWikiHomePlace extends AbstractProjectWikiPlace implements He
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
 		LinkedHashMap<String, String> tokenMap = new LinkedHashMap<String, String>();
 
@@ -103,7 +94,7 @@ public class ProjectWikiHomePlace extends AbstractProjectWikiPlace implements He
 			tokenMap.put(QUERY_P, query);
 		}
 
-		String base = WikiPageMappings.ProjectWiki.getUrlForNamedArgs(tokenMap);
+		String base = ProjectWiki.getUrlForNamedArgs(tokenMap);
 
 		return base;
 	}

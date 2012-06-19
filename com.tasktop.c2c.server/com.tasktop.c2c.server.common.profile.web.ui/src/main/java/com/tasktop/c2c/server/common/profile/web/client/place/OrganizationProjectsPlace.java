@@ -13,11 +13,8 @@
 package com.tasktop.c2c.server.common.profile.web.client.place;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetOrganizationAction;
@@ -38,11 +35,11 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 	public static PageMapping Discover = new PageMapping(new OrganizationProjectsPlace.Tokenizer(), "o/{" + ORG + "}",
 			"o/{" + ORG + "}/search/{" + QUERY + "}");
 
-	public static class Tokenizer implements PlaceTokenizer<OrganizationProjectsPlace> {
+	public static class Tokenizer extends AbstractPlaceTokenizer<OrganizationProjectsPlace> {
 
 		@Override
 		public OrganizationProjectsPlace getPlace(String token) {
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			String orgId = pathArgs.getString(ORG);
 			String query = pathArgs.getString(QUERY);
@@ -53,11 +50,6 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 			} else {
 				return createPlaceForOrg(orgId);
 			}
-		}
-
-		@Override
-		public String getToken(OrganizationProjectsPlace place) {
-			return place.getToken();
 		}
 	}
 
@@ -72,11 +64,6 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 	@Override
 	public String getHeading() {
 		return "Discover Projects";
-	}
-
-	@Override
-	public String getToken() {
-		return "";
 	}
 
 	public static OrganizationProjectsPlace createPlaceForOrg(String orgId) {

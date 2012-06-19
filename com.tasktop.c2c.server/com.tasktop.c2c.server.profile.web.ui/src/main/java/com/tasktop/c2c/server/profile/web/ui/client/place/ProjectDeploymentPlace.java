@@ -12,15 +12,10 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -33,12 +28,10 @@ import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult;
-import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsResult;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectDeploymentsAction;
@@ -47,22 +40,19 @@ import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectDepl
 public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace,
 		BreadcrumbPlace, SectionPlace, WindowTitlePlace {
 
-	private static final Set<String> roles = new HashSet<String>(Arrays.asList(Role.User));
+	public static PageMapping ProjectDeployment = new PageMapping(new ProjectDeploymentPlace.Tokenizer(),
+			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/deployments");
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectDeploymentPlace> {
+	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectDeploymentPlace> {
 
 		@Override
 		public ProjectDeploymentPlace getPlace(String token) {
 			// Tokenize our URL now.
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			return createPlace(pathArgs.getString(Path.PROJECT_ID));
 		}
 
-		@Override
-		public String getToken(ProjectDeploymentPlace place) {
-			return place.getToken();
-		}
 	}
 
 	private String projectId;
@@ -103,7 +93,7 @@ public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implement
 
 		tokenMap.put(Path.PROJECT_ID, projectId);
 
-		return PageMappings.ProjectDeployment.getUrlForNamedArgs(tokenMap);
+		return ProjectDeployment.getUrlForNamedArgs(tokenMap);
 	}
 
 	@Override

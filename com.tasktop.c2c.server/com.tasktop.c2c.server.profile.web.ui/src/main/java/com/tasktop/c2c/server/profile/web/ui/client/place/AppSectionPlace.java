@@ -16,9 +16,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -35,7 +33,6 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 /**
  * This is used by hudson to hook into the GWT header and footer.
@@ -48,6 +45,9 @@ public class AppSectionPlace extends AbstractBatchFetchingPlace implements Headi
 	static {
 		AppGinjector.get.instance().getAppResources().appCss().ensureInjected();
 	}
+
+	public static PageMapping AppSectionMapping = new PageMapping(new AppSectionPlace.Tokenizer(), Path.PROJECT_BASE
+			+ "/{" + Path.PROJECT_ID + "}/section/{" + AppSectionPlace.SECTION + "}");
 
 	public enum AppSection {
 		HEADER("header-wrapper", AppGinjector.get.instance().getAppResources().appCss().headerWrapper()), //
@@ -72,19 +72,14 @@ public class AppSectionPlace extends AbstractBatchFetchingPlace implements Headi
 
 	public static final String SECTION = "displaySection";
 
-	public static class Tokenizer implements PlaceTokenizer<AppSectionPlace> {
+	public static class Tokenizer extends AbstractPlaceTokenizer<AppSectionPlace> {
 
 		@Override
 		public AppSectionPlace getPlace(String token) {
 			// Tokenize our URL now.
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			return createPlace(pathArgs.getString(Path.PROJECT_ID), pathArgs.getString(SECTION));
-		}
-
-		@Override
-		public String getToken(AppSectionPlace place) {
-			return place.getToken();
 		}
 	}
 
@@ -114,18 +109,13 @@ public class AppSectionPlace extends AbstractBatchFetchingPlace implements Headi
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
 		LinkedHashMap<String, String> tokenMap = new LinkedHashMap<String, String>();
 
 		tokenMap.put(Path.PROJECT_ID, projectId);
 		tokenMap.put(SECTION, appSection.getPathName());
 
-		return PageMappings.AppSection.getUrlForNamedArgs(tokenMap);
+		return AppSectionMapping.getUrlForNamedArgs(tokenMap);
 	}
 
 	@Override

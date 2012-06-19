@@ -15,9 +15,7 @@ package com.tasktop.c2c.server.tasks.client.place;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
@@ -43,20 +41,16 @@ public class ProjectTaskPlace extends AbstractProjectTaskBatchingPlace {
 	public static PageMapping ProjectTask = new PageMapping(new ProjectTaskPlace.Tokenizer(), Path.PROJECT_BASE + "/{"
 			+ Path.PROJECT_ID + "}/task/{" + TASK + ":Integer}");
 
-	private static class Tokenizer implements PlaceTokenizer<ProjectTaskPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectTaskPlace> {
 
 		@Override
 		public ProjectTaskPlace getPlace(String token) {
 			// Tokenize our URL now.
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			return createPlace(pathArgs.getString(Path.PROJECT_ID), pathArgs.getInteger(TASK));
 		}
 
-		@Override
-		public String getToken(ProjectTaskPlace place) {
-			return place.getToken();
-		}
 	}
 
 	private Integer taskId;

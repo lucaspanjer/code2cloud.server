@@ -16,10 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
@@ -33,7 +30,6 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.tasks.client.TaskPageMappings;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
 import com.tasktop.c2c.server.tasks.shared.action.GetTaskSummaryAction;
@@ -49,11 +45,21 @@ public class ProjectTasksSummaryPlace extends AbstractProjectTaskBatchingPlace {
 	public static final String COMPONENT = "componentId";
 	public static final String RELEASE = "release";
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectTasksSummaryPlace> {
+	public static PageMapping ProjectTaskSummary = new PageMapping(new ProjectTasksSummaryPlace.Tokenizer(),
+			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/tasks/summary/product/{"
+					+ ProjectTasksSummaryListPlace.PRODUCT + ":Integer}/release/{" + ProjectTasksSummaryPlace.RELEASE
+					+ "}", Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/tasks/summary/product/{"
+					+ ProjectTasksSummaryListPlace.PRODUCT + ":Integer}/component/{"
+					+ ProjectTasksSummaryPlace.COMPONENT + ":Integer}", Path.PROJECT_BASE + "/{" + Path.PROJECT_ID
+					+ "}/tasks/summary/product/{" + ProjectTasksSummaryListPlace.PRODUCT + ":Integer}/component/{"
+					+ ProjectTasksSummaryPlace.COMPONENT + ":Integer}/release/{" + ProjectTasksSummaryPlace.RELEASE
+					+ "}");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectTasksSummaryPlace> {
 
 		@Override
 		public ProjectTasksSummaryPlace getPlace(String token) {
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			String projectId = pathArgs.getString(Path.PROJECT_ID);
 			Integer productId = pathArgs.getInteger(ProjectTasksSummaryListPlace.PRODUCT);
@@ -77,10 +83,6 @@ public class ProjectTasksSummaryPlace extends AbstractProjectTaskBatchingPlace {
 			}
 		}
 
-		@Override
-		public String getToken(ProjectTasksSummaryPlace place) {
-			return place.getToken();
-		}
 	}
 
 	public static ProjectTasksSummaryPlace createPlaceForComponent(String projectId, Integer productId,
@@ -127,11 +129,6 @@ public class ProjectTasksSummaryPlace extends AbstractProjectTaskBatchingPlace {
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
 		LinkedHashMap<String, String> tokenMap = new LinkedHashMap<String, String>();
 
@@ -146,7 +143,7 @@ public class ProjectTasksSummaryPlace extends AbstractProjectTaskBatchingPlace {
 			tokenMap.put(RELEASE, release);
 		}
 
-		return TaskPageMappings.ProjectTaskSummary.getUrlForNamedArgs(tokenMap);
+		return ProjectTaskSummary.getUrlForNamedArgs(tokenMap);
 	}
 
 	@Override

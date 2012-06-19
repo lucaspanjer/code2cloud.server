@@ -14,9 +14,8 @@ package com.tasktop.c2c.server.profile.web.ui.client.place;
 
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.LoggedInPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
@@ -24,7 +23,6 @@ import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.ListProfilesAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.ListProfilesResult;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 public class AdminProfilePlace extends LoggedInPlace implements HeadingPlace, WindowTitlePlace {
 
@@ -40,16 +38,13 @@ public class AdminProfilePlace extends LoggedInPlace implements HeadingPlace, Wi
 		return WindowTitleBuilder.createWindowTitle("Administer Users");
 	}
 
-	public static class Tokenizer implements PlaceTokenizer<AdminProfilePlace> {
+	public static PageMapping AdminProfiles = new PageMapping(new AdminProfilePlace.Tokenizer(), "admin/profile");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<AdminProfilePlace> {
 
 		@Override
 		public AdminProfilePlace getPlace(String token) {
 			return AdminProfilePlace.createPlace();
-		}
-
-		@Override
-		public String getToken(AdminProfilePlace place) {
-			return place.getToken();
 		}
 	}
 
@@ -61,13 +56,8 @@ public class AdminProfilePlace extends LoggedInPlace implements HeadingPlace, Wi
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
-		return PageMappings.AdminProfiles.getUrl();
+		return AdminProfiles.getUrl();
 	}
 
 	/** Override to add more actions. Don't forget to call super. */

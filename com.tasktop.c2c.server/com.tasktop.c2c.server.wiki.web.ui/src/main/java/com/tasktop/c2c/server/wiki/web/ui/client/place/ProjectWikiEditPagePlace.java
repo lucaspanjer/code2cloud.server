@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
@@ -31,7 +31,6 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.Page;
 import com.tasktop.c2c.server.wiki.service.WikiService;
-import com.tasktop.c2c.server.wiki.web.ui.client.WikiPageMappings;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.ListAttachmentsAction;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.ListAttachmentsResult;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.RetrieveConfigurationPropertyAction;
@@ -42,11 +41,15 @@ import com.tasktop.c2c.server.wiki.web.ui.shared.action.RetrievePageResult;
 public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implements HeadingPlace, HasProjectPlace,
 		BreadcrumbPlace, SectionPlace {
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectWikiEditPagePlace> {
+	public static PageMapping ProjectWikiEditPage = new PageMapping(new ProjectWikiEditPagePlace.Tokenizer(),
+			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/wiki/edit/{" + ProjectWikiViewPagePlace.PAGE + ":*}",
+			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/wiki/new");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectWikiEditPagePlace> {
 
 		@Override
 		public ProjectWikiEditPagePlace getPlace(String token) {
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			String projId = pathArgs.getString(Path.PROJECT_ID);
 			String pageName = pathArgs.getString(ProjectWikiViewPagePlace.PAGE);
@@ -55,11 +58,6 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 			} else {
 				return createPlaceForNewPage(projId);
 			}
-		}
-
-		@Override
-		public String getToken(ProjectWikiEditPagePlace place) {
-			return place.getProjectId();
 		}
 	}
 
@@ -92,11 +90,6 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
 		LinkedHashMap<String, String> tokenMap = new LinkedHashMap<String, String>();
 
@@ -106,7 +99,7 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 			tokenMap.put(ProjectWikiViewPagePlace.PAGE, pagePath);
 		}
 
-		return WikiPageMappings.ProjectWikiEditPage.getUrlForNamedArgs(tokenMap);
+		return ProjectWikiEditPage.getUrlForNamedArgs(tokenMap);
 	}
 
 	@Override

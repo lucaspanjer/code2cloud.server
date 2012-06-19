@@ -14,8 +14,7 @@ package com.tasktop.c2c.server.tasks.client.place;
 
 import java.util.LinkedHashMap;
 
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
@@ -25,20 +24,16 @@ public class ProjectAdminKeywordsPlace extends AbstractProjectAdminTasksPlace {
 	public static PageMapping ProjectTaskAdminKeywords = new PageMapping(new Tokenizer(), Path.PROJECT_BASE + "/{"
 			+ Path.PROJECT_ID + "}/admin/tasks/keywords");
 
-	private static class Tokenizer implements PlaceTokenizer<ProjectAdminKeywordsPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectAdminKeywordsPlace> {
 
 		@Override
 		public ProjectAdminKeywordsPlace getPlace(String token) {
 			// Tokenize our URL now.
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			return createPlace(pathArgs.getString(Path.PROJECT_ID));
 		}
 
-		@Override
-		public String getToken(ProjectAdminKeywordsPlace place) {
-			return place.getToken();
-		}
 	}
 
 	public ProjectAdminKeywordsPlace(String projectIdentifier) {

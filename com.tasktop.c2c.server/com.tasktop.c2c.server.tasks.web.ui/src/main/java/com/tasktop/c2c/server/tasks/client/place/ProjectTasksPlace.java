@@ -19,11 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.customware.gwt.dispatch.shared.Action;
-
 import com.google.gwt.http.client.URL;
-import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
@@ -41,7 +39,6 @@ import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.tasks.client.TaskPageMappings;
 import com.tasktop.c2c.server.tasks.domain.PredefinedTaskQuery;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.SavedTaskQuery;
@@ -68,13 +65,19 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 	public static final String NUMRESULTS_URLPARAM = "num";
 	public static final int DEFAULT_PAGESIZE = 25;
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectTasksPlace> {
+	public static PageMapping ProjectTasks = new PageMapping(new ProjectTasksPlace.Tokenizer(), Path.PROJECT_BASE
+			+ "/{" + Path.PROJECT_ID + "}/tasks", Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/tasks/{"
+			+ ProjectTasksPlace.NAMED_Q + "}", Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/tasks/q/{"
+			+ ProjectTasksPlace.TEXT_Q + ":*}", Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/tasks/s/{"
+			+ ProjectTasksPlace.CRIT_Q + ":*}");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectTasksPlace> {
 
 		@Override
 		public ProjectTasksPlace getPlace(String token) {
 			// First, strip off any query params so they don't clutter our URL generation
 			String cleanedToken = stripQueryString(token);
-			Args pathArgs = PageMapping.getPathArgsForUrl(cleanedToken);
+			Args pathArgs = getPathArgsForUrl(cleanedToken);
 
 			String projId = pathArgs.getString(Path.PROJECT_ID);
 
@@ -126,11 +129,6 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 			}
 			place.getQueryState().setQueryRequest(queryRequest);
 			return place;
-		}
-
-		@Override
-		public String getToken(ProjectTasksPlace place) {
-			return place.getToken();
 		}
 
 		private String stripQueryString(String queryText) {
@@ -243,7 +241,7 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 			break;
 
 		}
-		String url = TaskPageMappings.ProjectTasks.getUrlForNamedArgs(tokenMap);
+		String url = ProjectTasks.getUrlForNamedArgs(tokenMap);
 		Map<String, String> queryParams = new LinkedHashMap<String, String>();
 		if (this.queryState.getQueryRequest() != null) {
 			Region r = this.queryState.getQueryRequest().getPageInfo();

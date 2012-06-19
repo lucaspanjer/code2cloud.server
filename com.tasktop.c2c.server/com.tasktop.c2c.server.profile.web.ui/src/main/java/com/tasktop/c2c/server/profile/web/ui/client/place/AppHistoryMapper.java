@@ -15,7 +15,7 @@ package com.tasktop.c2c.server.profile.web.ui.client.place;
 import com.google.gwt.place.impl.AbstractPlaceHistoryMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
-import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
@@ -58,12 +58,9 @@ public class AppHistoryMapper extends AbstractPlaceHistoryMapper<Place> {
 	}
 
 	public Place getPlace(String token) {
-
-		// First, try to get our tokenizer from the new handler
-		Place retPlace = PageMapping.getPlaceForUrl(token);
+		Place retPlace = ProfileGinjector.get.instance().getPageMappingRegistry().getPlaceForUrl(token);
 
 		if (retPlace != null) {
-
 			return retPlace;
 		}
 

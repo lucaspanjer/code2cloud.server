@@ -3,9 +3,7 @@ package com.tasktop.c2c.server.scm.web.ui.client.place;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -46,19 +44,15 @@ public class ScmPlace extends AbstractBatchFetchingPlace implements HeadingPlace
 	public static PageMapping SCM_PLACE = new PageMapping(new Tokenizer(), Path.PROJECT_BASE + "/{" + Path.PROJECT_ID
 			+ "}/scm/");
 
-	public static class Tokenizer implements PlaceTokenizer<ScmPlace> {
+	public static class Tokenizer extends AbstractPlaceTokenizer<ScmPlace> {
 
 		@Override
 		public ScmPlace getPlace(String token) {
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			return createPlace(pathArgs.getString(Path.PROJECT_ID));
 		}
 
-		@Override
-		public String getToken(ScmPlace place) {
-			return place.getToken();
-		}
 	}
 
 	public static ScmPlace createPlace(String projectId) {
@@ -92,11 +86,6 @@ public class ScmPlace extends AbstractBatchFetchingPlace implements HeadingPlace
 	@Override
 	public Section getSection() {
 		return Section.SCM;
-	}
-
-	@Override
-	public String getToken() {
-		return "";
 	}
 
 	@Override

@@ -12,9 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
-
-import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.event.LogoutEvent;
@@ -27,17 +26,13 @@ public class SignOutPlace extends AbstractPlace {
 
 	public static PageMapping SignOut = new PageMapping(new Tokenizer(), "signout");
 
-	private static class Tokenizer implements PlaceTokenizer<SignOutPlace> {
+	private static class Tokenizer extends AbstractPlaceTokenizer<SignOutPlace> {
 
 		@Override
 		public SignOutPlace getPlace(String token) {
 			return SignOutPlace.createPlace();
 		}
 
-		@Override
-		public String getToken(SignOutPlace place) {
-			return place.getToken();
-		}
 	}
 
 	@Override

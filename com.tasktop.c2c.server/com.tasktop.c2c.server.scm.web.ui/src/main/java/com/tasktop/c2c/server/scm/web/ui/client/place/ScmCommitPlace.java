@@ -3,9 +3,7 @@ package com.tasktop.c2c.server.scm.web.ui.client.place;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -48,20 +46,16 @@ public class ScmCommitPlace extends AbstractBatchFetchingPlace implements Headin
 	public static PageMapping SCM_COMMIT = new PageMapping(new Tokenizer(), Path.PROJECT_BASE + "/{" + Path.PROJECT_ID
 			+ "}/scm/{" + REPO_ARG + "}/{" + COMMIT_ARG + "}");
 
-	public static class Tokenizer implements PlaceTokenizer<ScmCommitPlace> {
+	public static class Tokenizer extends AbstractPlaceTokenizer<ScmCommitPlace> {
 
 		@Override
 		public ScmCommitPlace getPlace(String token) {
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			return createPlace(pathArgs.getString(Path.PROJECT_ID), pathArgs.getString(REPO_ARG),
 					pathArgs.getString(COMMIT_ARG));
 		}
 
-		@Override
-		public String getToken(ScmCommitPlace place) {
-			return place.getToken();
-		}
 	}
 
 	public static ScmCommitPlace createPlace(String projectId, String repoName, String commitId) {
@@ -99,11 +93,6 @@ public class ScmCommitPlace extends AbstractBatchFetchingPlace implements Headin
 	@Override
 	public Section getSection() {
 		return Section.SCM;
-	}
-
-	@Override
-	public String getToken() {
-		return "";
 	}
 
 	@Override

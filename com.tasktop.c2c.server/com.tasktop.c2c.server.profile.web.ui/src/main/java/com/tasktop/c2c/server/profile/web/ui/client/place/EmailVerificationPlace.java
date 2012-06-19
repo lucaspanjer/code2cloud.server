@@ -14,7 +14,7 @@ package com.tasktop.c2c.server.profile.web.ui.client.place;
 
 import java.util.LinkedHashMap;
 
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.LoggedInPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
@@ -22,22 +22,19 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 public class EmailVerificationPlace extends LoggedInPlace {
 
-	public static class Tokenizer implements PlaceTokenizer<EmailVerificationPlace> {
+	public static PageMapping VerifyEmail = new PageMapping(new EmailVerificationPlace.Tokenizer(), "verifyEmail/{"
+			+ SignUpPlace.TOKEN + "}");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<EmailVerificationPlace> {
 
 		@Override
 		public EmailVerificationPlace getPlace(String token) {
 			// Tokenize our URL now.
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 			return createPlace(pathArgs.getString(SignUpPlace.TOKEN));
-		}
-
-		@Override
-		public String getToken(EmailVerificationPlace place) {
-			return place.getToken();
 		}
 	}
 
@@ -52,15 +49,10 @@ public class EmailVerificationPlace extends LoggedInPlace {
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
 		LinkedHashMap<String, String> tokenMap = new LinkedHashMap<String, String>();
 		tokenMap.put(SignUpPlace.TOKEN, verificationToken);
-		return PageMappings.VerifyEmail.getUrlForNamedArgs(tokenMap);
+		return VerifyEmail.getUrlForNamedArgs(tokenMap);
 	}
 
 	// TODO convert to batch fetching

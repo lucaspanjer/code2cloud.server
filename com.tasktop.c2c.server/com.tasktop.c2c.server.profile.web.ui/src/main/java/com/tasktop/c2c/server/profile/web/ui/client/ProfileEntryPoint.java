@@ -12,18 +12,17 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client;
 
-
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.tasktop.c2c.server.common.profile.web.client.AppState;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileServiceAsync;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMappingRegistry;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
+import com.tasktop.c2c.server.profile.web.ui.client.navigation.ProfilePageMappings;
 import com.tasktop.c2c.server.tasks.client.TaskPageMappings;
 import com.tasktop.c2c.server.wiki.web.ui.client.WikiPageMappings;
 
@@ -38,12 +37,15 @@ public class ProfileEntryPoint implements EntryPoint {
 		// FIXME this could be in a better place
 		AsyncCallbackSupport.setErrorHandler(new ExceptionMessageProvider());
 
-		// FIXME HACK to register page mappings
-		TaskPageMappings.ProjectTask.hashCode();
-		WikiPageMappings.ProjectWiki.hashCode();
-		PageMappings.Discover.hashCode();
-
 		initializeInjector();
+		registerPageMappings();
+	}
+
+	protected void registerPageMappings() {
+		PageMappingRegistry pageRegistry = ProfileGinjector.get.instance().getPageMappingRegistry();
+		pageRegistry.register(new ProfilePageMappings());
+		pageRegistry.register(new TaskPageMappings());
+		pageRegistry.register(new WikiPageMappings());
 	}
 
 	public static ProfileEntryPoint getInstance() {

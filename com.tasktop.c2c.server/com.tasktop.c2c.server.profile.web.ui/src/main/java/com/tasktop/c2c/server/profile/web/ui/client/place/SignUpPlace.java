@@ -13,12 +13,11 @@
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AnonymousPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
@@ -43,7 +42,6 @@ import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -52,12 +50,15 @@ import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowTitlePlace {
 	public static final String TOKEN = "token";
 
-	public static class Tokenizer implements PlaceTokenizer<SignUpPlace> {
+	public static PageMapping SignUp = new PageMapping(new SignUpPlace.Tokenizer(), "signup", "signup/{"
+			+ SignUpPlace.TOKEN + "}");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<SignUpPlace> {
 
 		@Override
 		public SignUpPlace getPlace(String token) {
 			// Tokenize our URL now.
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			String signupToken = pathArgs.getString(TOKEN);
 
@@ -68,10 +69,6 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 			}
 		}
 
-		@Override
-		public String getToken(SignUpPlace place) {
-			return place.getToken();
-		}
 	}
 
 	private boolean tokenRequired;
@@ -91,9 +88,9 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 		if (StringUtils.hasText(signUpToken)) {
 			LinkedHashMap<String, String> tokenMap = new LinkedHashMap<String, String>();
 			tokenMap.put(TOKEN, signUpToken);
-			return PageMappings.SignUp.getUrlForNamedArgs(tokenMap);
+			return SignUp.getUrlForNamedArgs(tokenMap);
 		} else {
-			return PageMappings.SignUp.getUrl();
+			return SignUp.getUrl();
 		}
 	}
 

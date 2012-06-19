@@ -16,10 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -35,26 +32,24 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 public class ProjectDashboardPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace,
 		BreadcrumbPlace, SectionPlace, WindowTitlePlace {
 	private static final String NO_ID = "create";
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectDashboardPlace> {
+	public static PageMapping ProjectDashboard = new PageMapping(new ProjectDashboardPlace.Tokenizer(),
+			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/dashboard");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectDashboardPlace> {
 
 		@Override
 		public ProjectDashboardPlace getPlace(String token) {
 			// Tokenize our URL now.
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			return createPlace(pathArgs.getString(Path.PROJECT_ID));
 		}
 
-		@Override
-		public String getToken(ProjectDashboardPlace place) {
-			return place.getToken();
-		}
 	}
 
 	private String projectId;
@@ -100,7 +95,7 @@ public class ProjectDashboardPlace extends AbstractBatchFetchingPlace implements
 
 		tokenMap.put(Path.PROJECT_ID, projectId);
 
-		return PageMappings.ProjectDashboard.getUrlForNamedArgs(tokenMap);
+		return ProjectDashboard.getUrlForNamedArgs(tokenMap);
 	}
 
 	public String getToken() {

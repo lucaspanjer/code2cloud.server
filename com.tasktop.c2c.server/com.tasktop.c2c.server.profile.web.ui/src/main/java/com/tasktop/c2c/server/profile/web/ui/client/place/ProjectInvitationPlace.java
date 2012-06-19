@@ -13,13 +13,12 @@
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
-import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
@@ -30,23 +29,21 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace {
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectInvitationPlace> {
+	public static PageMapping ProjectInvitation = new PageMapping(new ProjectInvitationPlace.Tokenizer(),
+			"invitation/{" + SignUpPlace.TOKEN + "}");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectInvitationPlace> {
 
 		@Override
 		public ProjectInvitationPlace getPlace(String token) {
 			// Tokenize our URL now.
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 			return createPlace(pathArgs.getString(SignUpPlace.TOKEN));
 		}
 
-		@Override
-		public String getToken(ProjectInvitationPlace place) {
-			return place.getToken();
-		}
 	}
 
 	private final String invitationToken;
@@ -78,7 +75,7 @@ public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implement
 	public String getPrefix() {
 		LinkedHashMap<String, String> tokenMap = new LinkedHashMap<String, String>();
 		tokenMap.put(SignUpPlace.TOKEN, invitationToken);
-		return PageMappings.ProjectInvitation.getUrlForNamedArgs(tokenMap);
+		return ProjectInvitation.getUrlForNamedArgs(tokenMap);
 	}
 
 	@Override

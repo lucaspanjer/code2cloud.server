@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
@@ -31,7 +31,6 @@ import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
-import com.tasktop.c2c.server.profile.web.ui.client.navigation.PageMappings;
 
 /**
  * @author Myles Feichtinger (Tasktop Technologies Inc.)
@@ -46,21 +45,20 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 	private final String orgAdminRole = Role.Admin + "/ORG_";
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
 
-	public static class Tokenizer implements PlaceTokenizer<OrganizationAdminPlace> {
+	public static PageMapping OrgAdminPlace = new PageMapping(new OrganizationAdminPlace.Tokenizer(), "o/{"
+			+ Path.ORGANIZATION_ID + "}/admin");
+
+	public static class Tokenizer extends AbstractPlaceTokenizer<OrganizationAdminPlace> {
 
 		@Override
 		public OrganizationAdminPlace getPlace(String token) {
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			String orgId = pathArgs.getString(Path.ORGANIZATION_ID);
 
 			return OrganizationAdminPlace.createPlace(orgId);
 		}
 
-		@Override
-		public String getToken(OrganizationAdminPlace place) {
-			return place.getToken();
-		}
 	}
 
 	@Override
@@ -77,17 +75,12 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 	}
 
 	@Override
-	public String getToken() {
-		return "";
-	}
-
-	@Override
 	public String getPrefix() {
 		LinkedHashMap<String, String> tokenMap = new LinkedHashMap<String, String>();
 
 		tokenMap.put(Path.ORGANIZATION_ID, organizationId);
 
-		return PageMappings.OrgAdminPlace.getUrlForNamedArgs(tokenMap);
+		return OrgAdminPlace.getUrlForNamedArgs(tokenMap);
 	}
 
 	public Organization getOrganization() {

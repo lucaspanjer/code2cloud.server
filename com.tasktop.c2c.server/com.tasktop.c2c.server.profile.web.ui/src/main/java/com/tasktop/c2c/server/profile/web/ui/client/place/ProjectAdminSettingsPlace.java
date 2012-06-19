@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
@@ -33,21 +32,17 @@ public class ProjectAdminSettingsPlace extends ProjectAdminPlace implements Brea
 	public static PageMapping ProjectAdminSettings = new PageMapping(new ProjectAdminSettingsPlace.Tokenizer(),
 			Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/admin");
 
-	public static class Tokenizer implements PlaceTokenizer<ProjectAdminSettingsPlace> {
+	public static class Tokenizer extends AbstractPlaceTokenizer<ProjectAdminSettingsPlace> {
 
 		@Override
 		public ProjectAdminSettingsPlace getPlace(String token) {
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			String projId = pathArgs.getString(Path.PROJECT_ID);
 
 			return createPlace(projId);
 		}
 
-		@Override
-		public String getToken(ProjectAdminSettingsPlace place) {
-			return place.getToken();
-		}
 	}
 
 	public static ProjectAdminSettingsPlace createPlace(String projectId) {

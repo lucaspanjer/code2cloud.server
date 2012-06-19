@@ -14,9 +14,7 @@ package com.tasktop.c2c.server.common.profile.web.client.place;
 
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetPendingAgreementsAction;
@@ -31,17 +29,13 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	public static PageMapping Agreements = new PageMapping(new AgreementsPlace.Tokenizer(), "agreements");
 
-	public static class Tokenizer implements PlaceTokenizer<AgreementsPlace> {
+	public static class Tokenizer extends AbstractPlaceTokenizer<AgreementsPlace> {
 
 		@Override
 		public AgreementsPlace getPlace(String token) {
 			return AgreementsPlace.createPlace(ProjectsPlace.createPlace());
 		}
 
-		@Override
-		public String getToken(AgreementsPlace place) {
-			return place.getToken();
-		}
 	}
 
 	public static AgreementsPlace createPlace(DefaultPlace postAgreementsPlace) {
@@ -70,11 +64,6 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	public List<Agreement> getAgreements() {
 		return agreements;
-	}
-
-	@Override
-	public String getToken() {
-		return "";
 	}
 
 	@Override

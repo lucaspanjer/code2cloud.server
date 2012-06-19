@@ -72,10 +72,6 @@ public abstract class AbstractProjectTaskBatchingPlace extends AbstractBatchFetc
 		return Section.TASKS;
 	}
 
-	@Override
-	public String getToken() {
-		return "";
-	}
 
 	@Override
 	protected void addActions() {

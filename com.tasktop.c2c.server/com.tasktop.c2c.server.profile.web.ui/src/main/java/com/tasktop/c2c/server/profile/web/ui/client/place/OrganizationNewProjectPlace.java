@@ -13,11 +13,8 @@
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetOrganizationAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetOrganizationResult;
@@ -35,20 +32,16 @@ public class OrganizationNewProjectPlace extends NewProjectPlace {
 	public static PageMapping OrganizationNewProject = new PageMapping(new OrganizationNewProjectPlace.Tokenizer(),
 			"o/{" + ORG + "}/newProject");
 
-	public static class Tokenizer implements PlaceTokenizer<OrganizationNewProjectPlace> {
+	public static class Tokenizer extends AbstractPlaceTokenizer<OrganizationNewProjectPlace> {
 
 		@Override
 		public OrganizationNewProjectPlace getPlace(String token) {
-			Args pathArgs = PageMapping.getPathArgsForUrl(token);
+			Args pathArgs = getPathArgsForUrl(token);
 
 			String orgId = pathArgs.getString(ORG);
 			return createPlace(orgId);
 		}
 
-		@Override
-		public String getToken(OrganizationNewProjectPlace place) {
-			return place.getToken();
-		}
 	}
 
 	private String organizationIdentifier;
