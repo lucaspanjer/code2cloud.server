@@ -25,4 +25,11 @@
 		p:authenticationManager-ref="preAuthAuthenticationManager">
 		<security:custom-filter before="PRE_AUTH_FILTER"/>
 	</bean>
+
+ 	<bean
+		class="com.tasktop.c2c.server.auth.service.proxy.BasicAuthAccessDeniedExceptionHandlingFilter"
+		id="basicAuthAccessDeniedExceptionHandlingFilter">
+		<security:custom-filter after="EXCEPTION_TRANSLATION_FILTER"/>
+	</bean>
+
 </beans>

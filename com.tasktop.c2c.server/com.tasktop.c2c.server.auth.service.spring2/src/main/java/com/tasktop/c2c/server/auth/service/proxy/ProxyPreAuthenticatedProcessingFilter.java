@@ -36,10 +36,11 @@ public class ProxyPreAuthenticatedProcessingFilter extends AbstractPreAuthentica
 		return request.getRemoteAddr();
 	}
 
+	// This is not used if the after, before, or position elements are specified in the applicationContext.xml
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.springframework.core.Ordered#getOrder()
+	 * @see org.springframework.security.ui.SpringSecurityFilter#getOrder()
 	 */
 	@Override
 	public int getOrder() {

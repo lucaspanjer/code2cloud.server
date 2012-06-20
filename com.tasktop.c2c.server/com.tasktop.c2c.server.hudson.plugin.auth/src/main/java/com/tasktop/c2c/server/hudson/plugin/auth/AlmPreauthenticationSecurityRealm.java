@@ -51,6 +51,11 @@ public class AlmPreauthenticationSecurityRealm extends SecurityRealm implements 
 	}
 
 	@Override
+	public boolean canLogOut() {
+		return false;
+	}
+
+	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
 		// does not check the underlying user datastore.
 		throw new UserMayOrMayNotExistException(username);
