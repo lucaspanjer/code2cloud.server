@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.profile.web.ui.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.tasktop.c2c.server.common.profile.web.client.AppState;
@@ -22,6 +23,7 @@ import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMappingRe
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjectorBinding;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.ProfilePageMappings;
 import com.tasktop.c2c.server.tasks.client.TaskPageMappings;
 import com.tasktop.c2c.server.wiki.web.ui.client.WikiPageMappings;
@@ -53,8 +55,8 @@ public class ProfileEntryPoint implements EntryPoint {
 	}
 
 	protected void initializeInjector() {
-		injector = AppGinjector.get.instance();
-		// FIXME better way?
+		injector = GWT.create(AppGinjectorBinding.class);
+		AppGinjector.get.override(injector);
 		CommonGinjector.get.override(injector);
 		ProfileGinjector.get.override(injector);
 	}

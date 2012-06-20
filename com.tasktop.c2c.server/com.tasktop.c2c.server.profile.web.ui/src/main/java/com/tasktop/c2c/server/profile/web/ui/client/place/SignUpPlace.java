@@ -17,12 +17,12 @@ import java.util.LinkedHashMap;
 import net.customware.gwt.dispatch.shared.Action;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AnonymousPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProfileDataFromGitubConnectionAction;
@@ -42,6 +42,7 @@ import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -116,7 +117,7 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 
 	private SignUpPlace(String signUpToken, DefaultPlace postSignUpPlace) {
 		if (postSignUpPlace == null) {
-			postSignUpPlace = ProjectsPlace.createPlace();
+			postSignUpPlace = AppGinjector.get.instance().getPlaceProvider().getDefaultPlace();
 		}
 
 		this.signUpToken = signUpToken;
@@ -179,12 +180,12 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 		}
 
 		if (tokenRequired && !StringUtils.hasText(signUpToken)) {
-			ProjectsPlace.createPlace().displayOnArrival(Message.createErrorMessage("Token required for sign up."))
-					.go();
+			ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace()
+					.displayOnArrival(Message.createErrorMessage("Token required for sign up.")).go();
 			return;
 		} else if (tokenRequired && projectInvitationTokenData == null && signUpTokenData == null) {
-			ProjectsPlace.createPlace().displayOnArrival(Message.createErrorMessage("Invitation token is not valid."))
-					.go();
+			ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace()
+					.displayOnArrival(Message.createErrorMessage("Invitation token is not valid.")).go();
 			return;
 		}
 

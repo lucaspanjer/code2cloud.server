@@ -27,7 +27,6 @@ import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetOrganizationAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetOrganizationResult;
-import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
@@ -42,7 +41,6 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 
 	private String organizationId;
 
-	private final String orgAdminRole = Role.Admin + "/ORG_";
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
 
 	public static PageMapping OrgAdminPlace = new PageMapping(new OrganizationAdminPlace.Tokenizer(), "o/{"

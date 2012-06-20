@@ -25,6 +25,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.place.HelpPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.InvitationCreatorPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationAdminPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationNewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectAdminSettingsPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDashboardPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDeploymentPlace;
@@ -42,23 +43,24 @@ import com.tasktop.c2c.server.scm.web.ui.client.place.ScmPlace;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmRepoPlace;
 
 /**
- * @author straxus (Tasktop Technologies Inc.)
+ * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
 public class ProfilePageMappings extends PageMappings {
 
 	public ProfilePageMappings() {
-		super(ProjectsPlace.Discover, ProjectsPlace.Discover, OrganizationProjectsPlace.Discover,
-				ProjectHomePlace.ProjectHome, SignOutPlace.SignOut, SignUpPlace.SignUp, SignInPlace.SignIn,
-				ProjectDashboardPlace.ProjectDashboard, ProjectDeploymentPlace.ProjectDeployment,
-				NewProjectPlace.NewProject, HelpPlace.Help, RequestPasswordResetPlace.RequestPasswordReset,
-				UserAccountPlace.Account, ProjectTeamPlace.ProjectTeam, AgreementsPlace.Agreements,
-				ProjectAdminSourcePlace.ProjectAdminSCM, ProjectAdminTeamPlace.ProjectAdminTeam,
-				EmailVerificationPlace.VerifyEmail, ResetPasswordPlace.ResetPassword,
-				ProjectInvitationPlace.ProjectInvitation, AppSectionPlace.AppSectionMapping,
-				InvitationCreatorPlace.InvitationCreator, AdminProfilePlace.AdminProfiles,
-				ProjectAdminSettingsPlace.ProjectAdminSettings, OrganizationAdminPlace.OrgAdminPlace,
-				ScmCommitPlace.SCM_COMMIT, ScmRepoPlace.SCM_LOG, ScmPlace.SCM_PLACE);
+		super(ProjectsPlace.Projects, OrganizationProjectsPlace.ProjectsForOrg, ProjectHomePlace.ProjectHome,
+				SignOutPlace.SignOut, SignUpPlace.SignUp, SignInPlace.SignIn, ProjectDashboardPlace.ProjectDashboard,
+				ProjectDeploymentPlace.ProjectDeployment, NewProjectPlace.NewProject,
+				OrganizationNewProjectPlace.OrganizationNewProject, HelpPlace.Help,
+				RequestPasswordResetPlace.RequestPasswordReset, UserAccountPlace.Account, ProjectTeamPlace.ProjectTeam,
+				AgreementsPlace.Agreements, ProjectAdminSourcePlace.ProjectAdminSCM,
+				ProjectAdminTeamPlace.ProjectAdminTeam, EmailVerificationPlace.VerifyEmail,
+				ResetPasswordPlace.ResetPassword, ProjectInvitationPlace.ProjectInvitation,
+				AppSectionPlace.AppSectionMapping, InvitationCreatorPlace.InvitationCreator,
+				AdminProfilePlace.AdminProfiles, ProjectAdminSettingsPlace.ProjectAdminSettings,
+				OrganizationAdminPlace.OrgAdminPlace, ScmCommitPlace.SCM_COMMIT, ScmRepoPlace.SCM_LOG,
+				ScmPlace.SCM_PLACE);
 	}
 
 }

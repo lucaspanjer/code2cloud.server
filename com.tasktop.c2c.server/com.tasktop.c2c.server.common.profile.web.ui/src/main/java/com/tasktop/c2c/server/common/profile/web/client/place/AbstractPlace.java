@@ -98,7 +98,7 @@ public abstract class AbstractPlace extends Place implements DefaultPlace {
 			if (AuthenticationHelper.isAccountDisabled()) {
 				ProfileGinjector.get.instance().getNotificationPanel().displayMessage(message);
 			} else {
-				AbstractPlace place = ProjectsPlace.createPlace();
+				DefaultPlace place = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
 				place.displayOnArrival(message);
 				place.go();
 			}

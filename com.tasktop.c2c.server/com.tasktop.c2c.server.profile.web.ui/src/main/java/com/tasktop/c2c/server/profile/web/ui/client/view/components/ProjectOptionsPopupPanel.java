@@ -15,7 +15,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.LIElement;
 import com.google.gwt.dom.client.UListElement;
@@ -33,7 +32,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
@@ -129,7 +127,7 @@ public class ProjectOptionsPopupPanel extends PopupPanel {
 			@Override
 			protected void onLeaveSuccess(Project project) {
 				// Navigate to the "My Projects" page.
-				ProjectsPlace.createPlace()
+				ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace()
 						.displayOnArrival(Message.createSuccessMessage("Left project " + project.getName())).go();
 			}
 		}));

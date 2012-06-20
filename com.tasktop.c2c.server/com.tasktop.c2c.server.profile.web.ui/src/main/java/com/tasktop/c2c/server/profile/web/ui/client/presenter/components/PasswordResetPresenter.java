@@ -16,7 +16,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -66,8 +65,10 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 			@Override
 			public void success(Credentials result) {
 				getEventBus().fireEvent(new LogonEvent(result));
-				ProjectsPlace
-						.createPlace()
+				ProfileGinjector.get
+						.instance()
+						.getPlaceProvider()
+						.getDefaultPlace()
 						.displayOnArrival(
 								Message.createSuccessMessage("Your password has been updated. You are now signed in."))
 						.go();

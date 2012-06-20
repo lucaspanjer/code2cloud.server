@@ -70,4 +70,11 @@ public class PageMappingRegistry {
 
 	}
 
+	public void removeMapping(PageMapping mapping) {
+		boolean removed = registeredMappings.remove(mapping);
+		if (!removed) {
+			throw new IllegalArgumentException();
+		}
+	}
+
 }

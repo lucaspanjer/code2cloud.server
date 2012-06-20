@@ -17,7 +17,6 @@ import java.util.LinkedHashMap;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.LoggedInPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -66,8 +65,10 @@ public class EmailVerificationPlace extends LoggedInPlace {
 
 					@Override
 					public void success(Void result) {
-						ProjectsPlace
-								.createPlace()
+						AppGinjector.get
+								.instance()
+								.getPlaceProvider()
+								.getDefaultPlace()
 								.displayOnArrival(
 										Message.createSuccessMessage("Your email address has been verified. ")).go();
 					}

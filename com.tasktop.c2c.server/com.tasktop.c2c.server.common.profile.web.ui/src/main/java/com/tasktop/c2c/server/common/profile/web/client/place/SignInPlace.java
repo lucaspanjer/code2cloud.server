@@ -69,19 +69,17 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 
 	private SignInPlace(DefaultPlace afterSuccessfulSignIn) {
 		if (afterSuccessfulSignIn == null) {
-			afterSuccessfulSignIn = ProjectsPlace.createPlace();
+			this.afterSuccessfulSignIn = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
+		} else {
+			this.afterSuccessfulSignIn = afterSuccessfulSignIn;
 		}
-		this.afterSuccessfulSignIn = afterSuccessfulSignIn;
 	}
 
 	public static SignInPlace createPlace() {
-		return new SignInPlace(ProjectsPlace.createPlace());
+		return new SignInPlace(null);
 	}
 
 	public static SignInPlace createPlace(DefaultPlace afterSuccessfulSignIn) {
-		if (afterSuccessfulSignIn == null) {
-			afterSuccessfulSignIn = ProjectsPlace.createPlace();
-		}
 		return new SignInPlace(afterSuccessfulSignIn);
 	}
 

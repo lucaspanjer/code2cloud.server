@@ -68,7 +68,6 @@ import com.tasktop.c2c.server.profile.web.ui.client.view.components.PasswordRese
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.ProjectInvitationView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.SignInView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.presenter.AccountActivity;
-import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmCommitPlace;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmPlace;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmRepoPlace;
@@ -312,13 +311,13 @@ public class MainActivityMapper implements ActivityMapper {
 		}
 	}
 
-	public static class OrganizationsActivity extends ActivityProxy<OrganizationProjectsPlace> {
+	public static class OrganizationsProjectsActivity extends ActivityProxy<OrganizationProjectsPlace> {
 
 		@com.google.gwt.user.client.AsyncProxy.ConcreteType(ProjectDiscoveryPresenter.class)
 		public interface Proxy extends AsyncProxy<SplittableActivity>, SplittableActivity, ProxyReturn {
 		};
 
-		public OrganizationsActivity() {
+		public OrganizationsProjectsActivity() {
 			super(OrganizationProjectsPlace.class);
 		}
 
@@ -488,13 +487,46 @@ public class MainActivityMapper implements ActivityMapper {
 		}
 	}
 
+	public static class NewProjectActivty extends ActivityProxy<NewProjectPlace> {
+
+		@com.google.gwt.user.client.AsyncProxy.ConcreteType(NewProjectPresenter.class)
+		public interface Proxy extends AsyncProxy<SplittableActivity>, SplittableActivity, ProxyReturn {
+		};
+
+		public NewProjectActivty() {
+			super(NewProjectPlace.class);
+		}
+
+		@Override
+		protected ProxyReturn instantiate() {
+			return GWT.create(Proxy.class);
+		}
+	}
+
+	public static class OrganizationAdminActivity extends ActivityProxy<OrganizationAdminPlace> {
+
+		@com.google.gwt.user.client.AsyncProxy.ConcreteType(OrganizationAdminPresenter.class)
+		public interface Proxy extends AsyncProxy<SplittableActivity>, SplittableActivity, ProxyReturn {
+		};
+
+		public OrganizationAdminActivity() {
+			super(OrganizationAdminPlace.class);
+		}
+
+		@Override
+		protected ProxyReturn instantiate() {
+			return GWT.create(Proxy.class);
+		}
+	}
+
 	public static final ActivityProxy<?>[] proxies = new ActivityProxy<?>[] { new TaskMappedActivity(),
 			new EditTaskMappedActivity(), new NewTaskMappedActivity(), new TasksMappedActivity(),
 			new TasksSummaryActivity(), new TasksSummaryListActivity(), new SignupMappedActivity(),
 			new DeploymentMappedActivity(), new WikiHomeMappedActivity(), new WikiViewMappedActivity(),
 			new WikiEditMappedActivity(), new DashboardActivity(), new ProjectDiscoveryActivity(),
-			new OrganizationsActivity(), new ProjectActivity(), new HelpActivity(), new UserAccountActivity(),
-			new ProjectTeamActivity(), new ProjectTaskHistoryActivity(), new ScmRepoActivity() };
+			new OrganizationsProjectsActivity(), new ProjectActivity(), new HelpActivity(), new UserAccountActivity(),
+			new ProjectTeamActivity(), new ProjectTaskHistoryActivity(), new ScmRepoActivity(),
+			new NewProjectActivty(), new OrganizationAdminActivity() };
 
 	public void registerActivity(ActivityProxy<?> activity) {
 		mappedActivities.put(activity.getPlaceClass().getName(), activity);
@@ -521,8 +553,6 @@ public class MainActivityMapper implements ActivityMapper {
 			return new ProjectInvitationPresenter(new ProjectInvitationView(),
 					((ProjectInvitationPlace) place).getInvitationToken(),
 					((ProjectInvitationPlace) place).getProject());
-		} else if (place instanceof NewProjectPlace) {
-			return new NewProjectPresenter(NewProjectView.getInstance(), (NewProjectPlace) place);
 		} else if (place instanceof RequestPasswordResetPlace) {
 			return new PasswordResetRequestPresenter(PasswordResetRequestView.getInstance(),
 					(RequestPasswordResetPlace) place);
@@ -543,10 +573,6 @@ public class MainActivityMapper implements ActivityMapper {
 			return activity;
 		} else if (place instanceof ProjectAdminPlace) {
 			ProjectAdminActivity activity = new ProjectAdminActivity();
-			activity.setPlace(place);
-			return activity;
-		} else if (place instanceof OrganizationAdminPlace) {
-			OrganizationAdminPresenter activity = new OrganizationAdminPresenter();
 			activity.setPlace(place);
 			return activity;
 		} else if (place instanceof ScmCommitPlace) {

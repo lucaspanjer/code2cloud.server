@@ -12,9 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-
 import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -52,11 +50,7 @@ public class SignInPresenter extends AbstractProfilePresenter {
 					public void success(Credentials result) {
 						getEventBus().fireEvent(new LogonEvent(result));
 						AppGinjector.get.instance().getAppState().setCredentials(result);
-						if (postActionPlace != null) {
-							postActionPlace.go();
-						} else {
-							ProjectsPlace.createPlace().go();
-						}
+						postActionPlace.go();
 					}
 
 					@Override

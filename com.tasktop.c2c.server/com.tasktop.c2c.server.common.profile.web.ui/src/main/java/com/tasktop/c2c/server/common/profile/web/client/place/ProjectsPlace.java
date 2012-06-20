@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.common.profile.web.client.place;
 
 import java.util.LinkedHashMap;
 
-import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
@@ -29,7 +28,7 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 
 	public static final String QUERY = "query";
 
-	public static PageMapping Discover = new PageMapping(new ProjectsPlace.Tokenizer(), "projects", "search/{" + QUERY
+	public static PageMapping Projects = new PageMapping(new ProjectsPlace.Tokenizer(), "projects", "search/{" + QUERY
 			+ "}");
 
 	private static class Tokenizer extends AbstractPlaceTokenizer<ProjectsPlace> {
@@ -52,16 +51,9 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 	}
 
 	private final String query;
-	private final boolean assumeUserIsAnonymous;
-
-	protected ProjectsPlace(boolean assumeUserIsAnon) {
-		this.assumeUserIsAnonymous = assumeUserIsAnon;
-		query = null;
-	}
 
 	protected ProjectsPlace(String query) {
 		this.query = query;
-		assumeUserIsAnonymous = false;
 	}
 
 	@Override
@@ -70,15 +62,11 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 	}
 
 	public static ProjectsPlace createPlace() {
-		return new ProjectsPlace(false);
+		return new ProjectsPlace(null);
 	}
 
 	public static ProjectsPlace createPlaceForQuery(String query) {
 		return new ProjectsPlace(query);
-	}
-
-	public static ProjectsPlace createPlaceForAfterLogout() {
-		return new ProjectsPlace(true);
 	}
 
 	@Override
@@ -89,7 +77,7 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 			tokenMap.put(QUERY, query);
 		}
 
-		return Discover.getUrlForNamedArgs(tokenMap);
+		return Projects.getUrlForNamedArgs(tokenMap);
 	}
 
 	@Override
@@ -100,9 +88,7 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 	@Override
 	protected void handleBatchResults() {
 		super.handleBatchResults();
-		if (assumeUserIsAnonymous) {
-			ProfileGinjector.get.instance().getAppState().setCredentials(null);
-		}
+
 		onPlaceDataFetched();
 	}
 

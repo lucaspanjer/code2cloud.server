@@ -12,13 +12,12 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.web.client.presenter;
 
-
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.AsyncProxy;
 
 public abstract class ActivityProxy<T extends Place> {
-	private Class<T> clazz;
+	private Class<? extends T> clazz;
 	private SplitActivity activity;
 
 	public interface ProxyReturn extends AsyncProxy<SplittableActivity>, SplittableActivity {
@@ -41,7 +40,7 @@ public abstract class ActivityProxy<T extends Place> {
 	/**
 	 * @return the clazz
 	 */
-	public Class<T> getPlaceClass() {
+	public Class<? extends T> getPlaceClass() {
 		return clazz;
 	}
 }

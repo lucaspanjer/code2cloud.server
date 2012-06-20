@@ -27,9 +27,8 @@ import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
-import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationAdminPlace;
-import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationNewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.ProjectDiscoveryView;
 
@@ -63,10 +62,10 @@ public class ProjectDiscoveryPresenter extends AbstractProfilePresenter implemen
 		}
 		if (p instanceof OrganizationProjectsPlace) {
 			this.currentOrganization = ((OrganizationProjectsPlace) p).getOrganization();
-			view.createAnchorElement.setHref(OrganizationNewProjectPlace.createPlace(
-					currentOrganization.getIdentifier()).getHref());
-			view.orgAdminElement.setHref(OrganizationAdminPlace.createPlace(currentOrganization.getIdentifier())
-					.getHref());
+			view.createAnchorElement.setHref(AppGinjector.get.instance().getPlaceProvider()
+					.getOrganizationNewProjectPlace(currentOrganization.getIdentifier()).getHref());
+			view.orgAdminElement.setHref(AppGinjector.get.instance().getPlaceProvider()
+					.getOrganizationAdminPlace(currentOrganization.getIdentifier()).getHref());
 			setOrganizationLayout(true);
 		} else {
 			this.currentOrganization = null;

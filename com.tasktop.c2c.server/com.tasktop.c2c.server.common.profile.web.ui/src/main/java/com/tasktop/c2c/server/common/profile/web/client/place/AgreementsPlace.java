@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.common.profile.web.client.place;
 
 import java.util.List;
 
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
@@ -33,7 +34,7 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 		@Override
 		public AgreementsPlace getPlace(String token) {
-			return AgreementsPlace.createPlace(ProjectsPlace.createPlace());
+			return AgreementsPlace.createPlace(null);
 		}
 
 	}
@@ -47,7 +48,7 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	private AgreementsPlace(DefaultPlace postAgreementsPlace) {
 		if (postAgreementsPlace == null) {
-			this.postAgreementsPlace = ProjectsPlace.createPlace();
+			this.postAgreementsPlace = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
 		} else {
 			this.postAgreementsPlace = postAgreementsPlace;
 		}

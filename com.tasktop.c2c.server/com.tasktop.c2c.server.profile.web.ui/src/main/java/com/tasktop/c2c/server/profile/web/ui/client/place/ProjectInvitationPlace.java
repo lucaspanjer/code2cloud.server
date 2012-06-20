@@ -23,12 +23,12 @@ import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectForInvitationTokenAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 
 public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace {
 
@@ -86,7 +86,8 @@ public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implement
 
 	protected boolean handleExceptionInResults(Action<?> action, DispatchException dispatchException) {
 		// Assume its a token not found
-		ProjectsPlace.createPlace().displayOnArrival(Message.createErrorMessage("Invitation token is not valid.")).go();
+		AppGinjector.get.instance().getPlaceProvider().getDefaultPlace()
+				.displayOnArrival(Message.createErrorMessage("Invitation token is not valid.")).go();
 		return false;
 	}
 

@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.gin;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
@@ -32,9 +30,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.resources.AppConstants;
  * @author straxus (Tasktop Technologies Inc.)
  * 
  */
-@GinModules({ AppGinModule.class })
 public interface AppGinjector extends ProfileGinjector {
-
 	PlaceHistoryHandler getPlaceHistoryHandler();
 
 	PlaceHistoryMapper getPlaceHistoryMapper();
@@ -58,7 +54,7 @@ public interface AppGinjector extends ProfileGinjector {
 	AppConfiguration getConfiguration();
 
 	public static class get {
-		private static AppGinjector instance = GWT.isClient() ? (AppGinjector) GWT.create(AppGinjector.class) : null;
+		private static AppGinjector instance = null;
 
 		public static synchronized AppGinjector instance() {
 			return instance;
@@ -71,4 +67,5 @@ public interface AppGinjector extends ProfileGinjector {
 			return appGinjector;
 		}
 	}
+
 }

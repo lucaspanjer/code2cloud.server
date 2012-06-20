@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.profile.web.client.place;
 
+import com.tasktop.c2c.server.common.web.client.notification.Message;
+
 /**
  * @author straxus (Tasktop Technologies Inc.)
  * 
@@ -34,13 +36,23 @@ public interface DefaultPlace {
 	String getPrefix();
 
 	/**
-	 * Get the full history token cositing of the prefix optionally followed by the token.
+	 * Get the full history token consisting of the prefix optionally followed by the token. Note that this does *not*
+	 * contain the initial hash ("#")
 	 * 
 	 * @return history token
 	 */
 	String getHistoryToken();
 
+	DefaultPlace displayOnArrival(Message displayOnArrival);
+
 	void go();
 
 	boolean isReadyToGo();
+
+	/**
+	 * Get the full href for use in a url.
+	 * 
+	 * @return
+	 */
+	String getHref();
 }

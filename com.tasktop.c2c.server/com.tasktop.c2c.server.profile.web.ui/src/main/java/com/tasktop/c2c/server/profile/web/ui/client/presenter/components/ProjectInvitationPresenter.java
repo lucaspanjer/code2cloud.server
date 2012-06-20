@@ -12,10 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.domain.project.Project;
@@ -55,8 +54,7 @@ public class ProjectInvitationPresenter extends AbstractProfilePresenter {
 
 			@Override
 			protected void success(Void result) {
-				// FIXME redirect to project home
-				ProjectsPlace.createPlace()
+				ProjectHomePlace.createPlace(project.getIdentifier())
 						.displayOnArrival(Message.createSuccessMessage("Invitation accepted")).go();
 			}
 		});

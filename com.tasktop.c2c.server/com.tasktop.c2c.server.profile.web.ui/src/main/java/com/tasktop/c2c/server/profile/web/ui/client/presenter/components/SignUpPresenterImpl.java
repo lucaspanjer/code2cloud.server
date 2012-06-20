@@ -12,10 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-
 import com.google.gwt.place.shared.Place;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
@@ -55,7 +54,7 @@ public class SignUpPresenterImpl extends AbstractProfilePresenter implements Sig
 		this.token = place.getSignUpToken();
 		boolean tokenRequired = place.isTokenRequired();
 
-		afterSignupPlace = ProjectsPlace.createPlace();
+		afterSignupPlace = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
 
 		if (place.getSignUpTokenData() != null) {
 			view.setSignUpToken(place.getSignUpTokenData());

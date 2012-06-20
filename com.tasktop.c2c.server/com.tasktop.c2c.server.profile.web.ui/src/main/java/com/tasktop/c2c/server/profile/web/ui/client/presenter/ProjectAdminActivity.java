@@ -18,8 +18,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectAdminPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.DeleteProjectAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.DeleteProjectResult;
 import com.tasktop.c2c.server.common.web.client.event.ClearCacheEvent;
@@ -79,8 +80,8 @@ public class ProjectAdminActivity extends AbstractActivity implements Splittable
 								Message message = Message
 										.createSuccessMessage("Project deletion is started. This may take some time");
 
-								ProjectsPlace p = ProjectsPlace.createPlace();
-								p.setMessage(message);
+								DefaultPlace p = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
+								p.displayOnArrival(message);
 								p.go();
 							}
 						});

@@ -32,8 +32,8 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 	public static final String QUERY = "query";
 	public static final String ORG = "org";
 
-	public static PageMapping Discover = new PageMapping(new OrganizationProjectsPlace.Tokenizer(), "o/{" + ORG + "}",
-			"o/{" + ORG + "}/search/{" + QUERY + "}");
+	public static PageMapping ProjectsForOrg = new PageMapping(new OrganizationProjectsPlace.Tokenizer(), "o/{" + ORG
+			+ "}", "o/{" + ORG + "}/search/{" + QUERY + "}");
 
 	private static class Tokenizer extends AbstractPlaceTokenizer<OrganizationProjectsPlace> {
 
@@ -56,7 +56,7 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 	private final String organizationIdentifier;
 	private Organization organization;
 
-	private OrganizationProjectsPlace(String orgId, String query) {
+	protected OrganizationProjectsPlace(String orgId, String query) {
 		super(query);
 		this.organizationIdentifier = orgId;
 	}
@@ -83,7 +83,7 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 		}
 		tokenMap.put(ORG, organizationIdentifier);
 
-		return Discover.getUrlForNamedArgs(tokenMap);
+		return ProjectsForOrg.getUrlForNamedArgs(tokenMap);
 	}
 
 	@Override

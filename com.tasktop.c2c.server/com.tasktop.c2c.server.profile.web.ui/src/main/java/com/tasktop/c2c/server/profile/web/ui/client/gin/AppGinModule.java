@@ -18,6 +18,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
@@ -26,7 +27,8 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.tasktop.c2c.server.common.profile.web.client.AppState;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMappingRegistry;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.PlaceProvider;
 import com.tasktop.c2c.server.common.web.client.notification.NotificationPanel;
 import com.tasktop.c2c.server.common.web.client.notification.Notifier;
 import com.tasktop.c2c.server.profile.web.ui.client.AppShell;
@@ -34,6 +36,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.action.DispatchServiceAsync;
 import com.tasktop.c2c.server.profile.web.ui.client.activity.MainActivityMapper;
 import com.tasktop.c2c.server.profile.web.ui.client.place.AppHistoryMapper;
 import com.tasktop.c2c.server.profile.web.ui.client.place.AppPlaceController;
+import com.tasktop.c2c.server.profile.web.ui.client.place.PlaceProviderImpl;
 import com.tasktop.c2c.server.profile.web.ui.client.view.StandardApplicationView;
 
 /**
@@ -57,6 +60,11 @@ public class AppGinModule extends AbstractGinModule {
 		bind(DispatchAsync.class).to(DispatchServiceAsync.class).in(Singleton.class);
 		bind(PageMappingRegistry.class).in(Singleton.class);
 
+		configurePlaces();
+	}
+
+	protected void configurePlaces() {
+		bind(PlaceProvider.class).to(PlaceProviderImpl.class).in(Singleton.class);
 	}
 
 	public static class SchedulerProvider implements Provider<Scheduler> {
@@ -80,18 +88,20 @@ public class AppGinModule extends AbstractGinModule {
 		private final PlaceHistoryMapper placeHistoryMapper;
 		private final PlaceController placeController;
 		private final EventBus eventBus;
+		private final DefaultPlace defaultPlace;
 
 		@Inject
 		PlaceHistoryHandlerProvider(PlaceHistoryMapper placeHistoryMapper, PlaceController placeController,
-				EventBus eventBus) {
+				EventBus eventBus, PlaceProvider placeProvider) {
 			this.placeHistoryMapper = placeHistoryMapper;
 			this.placeController = placeController;
 			this.eventBus = eventBus;
+			this.defaultPlace = placeProvider.getDefaultPlace();
 		}
 
 		public PlaceHistoryHandler get() {
 			PlaceHistoryHandler placeHistoryHandler = new PlaceHistoryHandler(placeHistoryMapper);
-			placeHistoryHandler.register(placeController, eventBus, ProjectsPlace.createPlace());
+			placeHistoryHandler.register(placeController, eventBus, (Place) defaultPlace);
 			return placeHistoryHandler;
 		}
 	}

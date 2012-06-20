@@ -12,11 +12,13 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
+import com.google.gwt.place.shared.Place;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
+import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
@@ -28,28 +30,17 @@ import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePre
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView.Presenter;
 
-public class NewProjectPresenter extends AbstractProfilePresenter implements Presenter {
+public class NewProjectPresenter extends AbstractProfilePresenter implements Presenter, SplittableActivity {
 
 	private final NewProjectView view;
 
-	public NewProjectPresenter(NewProjectView projectsView, NewProjectPlace place) {
+	public NewProjectPresenter() {
+		this(NewProjectView.getInstance());
+	}
+
+	public NewProjectPresenter(NewProjectView projectsView) {
 		super(projectsView);
 		this.view = projectsView;
-		Project newProject = new Project();
-		newProject.setAccessibility(ProjectAccessibility.PRIVATE);
-		ProjectPreferences prefs = new ProjectPreferences();
-		prefs.setWikiLanguage(WikiMarkupLanguage.TEXTILE);
-		if (place instanceof OrganizationNewProjectPlace) {
-			Organization organization = ((OrganizationNewProjectPlace) place).getOrganization();
-			newProject.setOrganization(organization);
-			prefs.setWikiLanguage(organization.getProjectPreferences().getWikiLanguage());
-		}
-		newProject.setProjectPreferences(prefs);
-
-		view.setPresenter(this);
-		view.setProject(newProject);
-		// Set the createAvailable flag on our view
-		view.displayMaxProjectsMessage(!(place.isCreateAvailable()));
 
 	}
 
@@ -79,7 +70,28 @@ public class NewProjectPresenter extends AbstractProfilePresenter implements Pre
 
 	@Override
 	public void doCancel() {
-		ProjectsPlace.createPlace().go();
+		ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace().go();
+	}
+
+	@Override
+	public void setPlace(Place aPlace) {
+		NewProjectPlace place = (NewProjectPlace) aPlace;
+		Project newProject = new Project();
+		newProject.setAccessibility(ProjectAccessibility.PRIVATE);
+		ProjectPreferences prefs = new ProjectPreferences();
+		prefs.setWikiLanguage(WikiMarkupLanguage.TEXTILE);
+		if (place instanceof OrganizationNewProjectPlace) {
+			Organization organization = ((OrganizationNewProjectPlace) place).getOrganization();
+			newProject.setOrganization(organization);
+			prefs.setWikiLanguage(organization.getProjectPreferences().getWikiLanguage());
+		}
+		newProject.setProjectPreferences(prefs);
+
+		view.setPresenter(this);
+		view.setProject(newProject);
+		// Set the createAvailable flag on our view
+		view.displayMaxProjectsMessage(!(place.isCreateAvailable()));
+
 	}
 
 }
