@@ -14,7 +14,7 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
 import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
-import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
@@ -30,7 +30,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.view.components.SignUpViewIm
 public class SignUpPresenterImpl extends AbstractProfilePresenter implements SignUpPresenter, SplittableActivity {
 
 	private final SignUpView view;
-	private DefaultPlace afterSignupPlace;
+	private IPlace afterSignupPlace;
 	private String token;
 
 	public SignUpPresenterImpl(SignUpView view) {

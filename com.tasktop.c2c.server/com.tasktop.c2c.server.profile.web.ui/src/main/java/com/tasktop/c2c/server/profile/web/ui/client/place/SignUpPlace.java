@@ -21,7 +21,7 @@ import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AnonymousPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
@@ -74,7 +74,7 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 
 	private boolean tokenRequired;
 	private final String signUpToken;
-	private DefaultPlace postSignUpPlace;
+	private IPlace postSignUpPlace;
 	private SignUpToken signUpTokenData;
 	private ProjectInvitationToken projectInvitationTokenData;
 	private Project projectForInvitationToken;
@@ -90,7 +90,7 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 		}
 	}
 
-	public DefaultPlace getPostSignUpPlace() {
+	public IPlace getPostSignUpPlace() {
 		return postSignUpPlace;
 	}
 
@@ -115,7 +115,7 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 		return "Sign Up";
 	}
 
-	private SignUpPlace(String signUpToken, DefaultPlace postSignUpPlace) {
+	private SignUpPlace(String signUpToken, IPlace postSignUpPlace) {
 		if (postSignUpPlace == null) {
 			postSignUpPlace = AppGinjector.get.instance().getPlaceProvider().getDefaultPlace();
 		}
@@ -132,7 +132,7 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 		return new SignUpPlace(signUpToken, null);
 	}
 
-	public static SignUpPlace createPlace(String signUpToken, DefaultPlace postSignUpPlace) {
+	public static SignUpPlace createPlace(String signUpToken, IPlace postSignUpPlace) {
 		return new SignUpPlace(signUpToken, postSignUpPlace);
 	}
 

@@ -12,7 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -25,7 +25,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.view.components.SignInView;
 public class SignInPresenter extends AbstractProfilePresenter {
 
 	private final SignInView signinView;
-	private DefaultPlace postActionPlace;
+	private IPlace postActionPlace;
 
 	public SignInPresenter(SignInView logonView, SignInPlace place) {
 		super(logonView);

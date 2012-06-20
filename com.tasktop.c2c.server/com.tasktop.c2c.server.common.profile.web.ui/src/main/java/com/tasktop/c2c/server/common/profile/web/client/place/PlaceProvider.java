@@ -17,11 +17,11 @@ package com.tasktop.c2c.server.common.profile.web.client.place;
  */
 public interface PlaceProvider {
 
-	DefaultPlace getDefaultPlace();
+	IPlace getDefaultPlace();
 
-	DefaultPlace getOrganizationPlace(String orgId);
+	IPlace getOrganizationPlace(String orgId);
 
-	DefaultPlace getOrganizationNewProjectPlace(String orgId);
+	IPlace getOrganizationNewProjectPlace(String orgId);
 
-	DefaultPlace getOrganizationAdminPlace(String orgId);
+	IPlace getOrganizationAdminPlace(String orgId);
 }

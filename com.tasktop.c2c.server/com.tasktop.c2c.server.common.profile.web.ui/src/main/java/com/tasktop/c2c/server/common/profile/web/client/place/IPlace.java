@@ -15,10 +15,12 @@ package com.tasktop.c2c.server.common.profile.web.client.place;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 
 /**
- * @author straxus (Tasktop Technologies Inc.)
+ * Interface for place objects. This is intetended to work with the gwt Place abstract class.
+ * 
+ * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public interface DefaultPlace {
+public interface IPlace {
 
 	/**
 	 * Get the token part of the url. This is the part that is used to specify the location on a physical page, similar
@@ -43,7 +45,7 @@ public interface DefaultPlace {
 	 */
 	String getHistoryToken();
 
-	DefaultPlace displayOnArrival(Message displayOnArrival);
+	IPlace displayOnArrival(Message displayOnArrival);
 
 	void go();
 

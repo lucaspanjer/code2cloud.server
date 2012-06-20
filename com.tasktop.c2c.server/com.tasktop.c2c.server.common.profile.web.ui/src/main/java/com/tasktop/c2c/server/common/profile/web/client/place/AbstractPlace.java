@@ -25,7 +25,7 @@ import com.tasktop.c2c.server.common.web.client.util.StringUtils;
  * 
  * @param <T>
  */
-public abstract class AbstractPlace extends Place implements DefaultPlace {
+public abstract class AbstractPlace extends Place implements IPlace {
 
 	protected Message displayOnArrival;
 	protected Notifier notifier = ProfileGinjector.get.instance().getNotifier();
@@ -98,7 +98,7 @@ public abstract class AbstractPlace extends Place implements DefaultPlace {
 			if (AuthenticationHelper.isAccountDisabled()) {
 				ProfileGinjector.get.instance().getNotificationPanel().displayMessage(message);
 			} else {
-				DefaultPlace place = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
+				IPlace place = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
 				place.displayOnArrival(message);
 				place.go();
 			}

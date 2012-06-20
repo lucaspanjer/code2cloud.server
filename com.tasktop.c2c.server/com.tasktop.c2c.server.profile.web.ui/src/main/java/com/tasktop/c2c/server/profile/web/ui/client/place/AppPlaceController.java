@@ -21,7 +21,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.History;
 import com.google.inject.Inject;
-import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 
 /**
@@ -75,8 +75,8 @@ public class AppPlaceController extends PlaceController {
 	}
 
 	private void continueGo(Place newPlace) {
-		if (newPlace instanceof DefaultPlace) {
-			DefaultPlace place = (DefaultPlace) newPlace;
+		if (newPlace instanceof IPlace) {
+			IPlace place = (IPlace) newPlace;
 
 			if (place.isReadyToGo()) {
 				finishGo(newPlace);

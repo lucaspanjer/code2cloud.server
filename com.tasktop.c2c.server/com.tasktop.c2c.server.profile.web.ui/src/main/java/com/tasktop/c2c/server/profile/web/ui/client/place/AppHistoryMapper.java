@@ -16,7 +16,7 @@ import com.google.gwt.place.impl.AbstractPlaceHistoryMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
-import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
@@ -30,8 +30,8 @@ public class AppHistoryMapper extends AbstractPlaceHistoryMapper<Place> {
 
 	@Override
 	protected PrefixAndToken getPrefixAndToken(Place newPlace) {
-		if (newPlace instanceof DefaultPlace) {
-			return new CustomPrefixAndToken(((DefaultPlace) newPlace).getPrefix(), ((DefaultPlace) newPlace).getToken());
+		if (newPlace instanceof IPlace) {
+			return new CustomPrefixAndToken(((IPlace) newPlace).getPrefix(), ((IPlace) newPlace).getToken());
 		}
 		return null;
 	}

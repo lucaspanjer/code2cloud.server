@@ -40,7 +40,7 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 					Place afterPlace = ProfileGinjector.get.instance().getPageMappingRegistry()
 							.getPlaceForUrl(afterUrl);
 					if (afterPlace != null) {
-						return SignInPlace.createPlace((DefaultPlace) afterPlace);
+						return SignInPlace.createPlace((IPlace) afterPlace);
 					}
 				}
 			}
@@ -49,9 +49,9 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 		}
 	}
 
-	private final DefaultPlace afterSuccessfulSignIn;
+	private final IPlace afterSuccessfulSignIn;
 
-	public DefaultPlace getAfterSuccessfulSignIn() {
+	public IPlace getAfterSuccessfulSignIn() {
 		return afterSuccessfulSignIn;
 	}
 
@@ -67,7 +67,7 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 		return SignIn.getUrl();
 	}
 
-	private SignInPlace(DefaultPlace afterSuccessfulSignIn) {
+	private SignInPlace(IPlace afterSuccessfulSignIn) {
 		if (afterSuccessfulSignIn == null) {
 			this.afterSuccessfulSignIn = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
 		} else {
@@ -79,7 +79,7 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 		return new SignInPlace(null);
 	}
 
-	public static SignInPlace createPlace(DefaultPlace afterSuccessfulSignIn) {
+	public static SignInPlace createPlace(IPlace afterSuccessfulSignIn) {
 		return new SignInPlace(afterSuccessfulSignIn);
 	}
 

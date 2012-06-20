@@ -39,14 +39,14 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	}
 
-	public static AgreementsPlace createPlace(DefaultPlace postAgreementsPlace) {
+	public static AgreementsPlace createPlace(IPlace postAgreementsPlace) {
 		return new AgreementsPlace(postAgreementsPlace);
 	}
 
 	private List<Agreement> agreements;
-	private DefaultPlace postAgreementsPlace;
+	private IPlace postAgreementsPlace;
 
-	private AgreementsPlace(DefaultPlace postAgreementsPlace) {
+	private AgreementsPlace(IPlace postAgreementsPlace) {
 		if (postAgreementsPlace == null) {
 			this.postAgreementsPlace = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
 		} else {
@@ -54,7 +54,7 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 		}
 	}
 
-	public DefaultPlace getPostAgreementsPlace() {
+	public IPlace getPostAgreementsPlace() {
 		return postAgreementsPlace;
 	}
 

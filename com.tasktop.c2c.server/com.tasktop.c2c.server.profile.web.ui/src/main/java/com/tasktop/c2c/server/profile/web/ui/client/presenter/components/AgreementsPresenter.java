@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.AgreementsPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.ApproveAgreementAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.ApproveAgreementResult;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -29,7 +29,7 @@ public class AgreementsPresenter extends AbstractProfilePresenter {
 
 	private AgreementsView agreementsView;
 	private List<Agreement> agreements;
-	private DefaultPlace postAgreementsPlace;
+	private IPlace postAgreementsPlace;
 
 	public AgreementsPresenter(AgreementsView agreementsView, AgreementsPlace place) {
 		super(agreementsView);

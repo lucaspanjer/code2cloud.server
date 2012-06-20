@@ -11,7 +11,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
-import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.OrganizationProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.PlaceProvider;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
@@ -23,22 +23,22 @@ import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 public class PlaceProviderImpl implements PlaceProvider {
 
 	@Override
-	public DefaultPlace getDefaultPlace() {
+	public IPlace getDefaultPlace() {
 		return ProjectsPlace.createPlace();
 	}
 
 	@Override
-	public DefaultPlace getOrganizationPlace(String orgId) {
+	public IPlace getOrganizationPlace(String orgId) {
 		return OrganizationProjectsPlace.createPlaceForOrg(orgId);
 	}
 
 	@Override
-	public DefaultPlace getOrganizationNewProjectPlace(String orgId) {
+	public IPlace getOrganizationNewProjectPlace(String orgId) {
 		return OrganizationNewProjectPlace.createPlace(orgId);
 	}
 
 	@Override
-	public DefaultPlace getOrganizationAdminPlace(String orgId) {
+	public IPlace getOrganizationAdminPlace(String orgId) {
 		return OrganizationAdminPlace.createPlace(orgId);
 	}
 

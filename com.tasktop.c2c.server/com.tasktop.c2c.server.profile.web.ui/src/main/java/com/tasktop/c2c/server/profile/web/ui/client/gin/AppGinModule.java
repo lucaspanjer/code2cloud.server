@@ -27,7 +27,7 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.tasktop.c2c.server.common.profile.web.client.AppState;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMappingRegistry;
-import com.tasktop.c2c.server.common.profile.web.client.place.DefaultPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.PlaceProvider;
 import com.tasktop.c2c.server.common.web.client.notification.NotificationPanel;
 import com.tasktop.c2c.server.common.web.client.notification.Notifier;
@@ -88,7 +88,7 @@ public class AppGinModule extends AbstractGinModule {
 		private final PlaceHistoryMapper placeHistoryMapper;
 		private final PlaceController placeController;
 		private final EventBus eventBus;
-		private final DefaultPlace defaultPlace;
+		private final IPlace defaultPlace;
 
 		@Inject
 		PlaceHistoryHandlerProvider(PlaceHistoryMapper placeHistoryMapper, PlaceController placeController,
