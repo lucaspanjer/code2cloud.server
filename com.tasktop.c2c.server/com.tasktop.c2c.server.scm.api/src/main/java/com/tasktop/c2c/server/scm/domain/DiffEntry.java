@@ -41,7 +41,7 @@ public class DiffEntry implements Serializable {
 
 	public static class Content implements Serializable {
 		public static enum Type {
-			CONTEXT, ADDED, REMOVED;
+			CONTEXT, ADDED, REMOVED, BINARY;
 		}
 
 		public Content() {

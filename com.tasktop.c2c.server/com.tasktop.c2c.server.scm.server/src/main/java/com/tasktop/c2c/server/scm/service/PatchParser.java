@@ -36,6 +36,7 @@ public class PatchParser {
 	private String addLinePrefix = "+";
 	private String removeLinePrefix = "-";
 	private String lineCtxPrefix = "@@";
+	private String binaryPrefix = "Binary files differ";
 
 	public List<DiffEntry> parsePatch(String patchText) {
 		List<DiffEntry> result = new ArrayList<DiffEntry>();
@@ -96,6 +97,8 @@ public class PatchParser {
 			} else if (line.startsWith(removeLinePrefix)) {
 				thisLineType = Type.REMOVED;
 				diffEntry.setLinesRemoved(diffEntry.getLinesRemoved() + 1);
+			} else if (line.startsWith(binaryPrefix)) {
+				thisLineType = Type.BINARY; // Should be the only type/content in the file
 			}
 			if (thisLineType == null) {
 				continue; // ??
