@@ -745,7 +745,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 		result.setRepository(repositoryName);
 
 		// FIXME how to handle merges? there can be real diffs there
-		if (theCommit.getParentCount() == 1) {
+		if (theCommit.getParentCount() <= 1) {
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 
 			DiffFormatter diffFormatter = new DiffFormatter(output);
@@ -756,10 +756,13 @@ public class GitServiceBean implements GitService, InitializingBean {
 			CanonicalTreeParser thisTreeParser = new CanonicalTreeParser();
 			thisTreeParser.reset(repo.newObjectReader(), tree);
 
-			ObjectId parentC = theCommit.getParent(0);
-			RevTree parentTree = walk.parseTree(parentC);
 			CanonicalTreeParser parentTreeParser = new CanonicalTreeParser();
-			parentTreeParser.reset(repo.newObjectReader(), parentTree);
+
+			if (theCommit.getParentCount() == 1) {
+				ObjectId parentC = theCommit.getParent(0);
+				RevTree parentTree = walk.parseTree(parentC);
+				parentTreeParser.reset(repo.newObjectReader(), parentTree);
+			}
 
 			List<DiffEntry> diffEntries = diffFormatter.scan(parentTreeParser, thisTreeParser);
 			diffFormatter.format(diffEntries);

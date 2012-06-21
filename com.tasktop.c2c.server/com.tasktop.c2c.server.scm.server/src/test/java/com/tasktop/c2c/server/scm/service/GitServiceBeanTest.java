@@ -34,8 +34,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.scm.domain.Commit;
-import com.tasktop.c2c.server.scm.service.GitConstants;
-import com.tasktop.c2c.server.scm.service.GitService;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -129,6 +127,20 @@ public class GitServiceBeanTest {
 		Assert.assertEquals(2, log.size());
 		log = gitService.getLogForBranch(name, "master", null);
 		Assert.assertEquals(2, log.size());
+
+	}
+
+	@Test
+	public void testDiffOnInitialCommit() throws Exception {
+
+		String name = newName();
+		Git git = createAndCloneRepo(name);
+		dummyCommitAndPush(git);
+		List<Commit> log = gitService.getLog(name, null);
+		Assert.assertEquals(1, log.size());
+		Commit c = log.get(0);
+		c = gitService.getCommitWithDiff(name, c.getCommitId());
+		Assert.assertNotNull(c.getDiffText());
 
 	}
 
