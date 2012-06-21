@@ -39,6 +39,8 @@ public class DiffEntryView extends Composite implements Editor<Commit> {
 	@UiField
 	protected Image operationImage;
 	@UiField
+	protected Label renameFrom;
+	@UiField
 	protected Anchor fileName;
 
 	@UiField
@@ -59,8 +61,11 @@ public class DiffEntryView extends Composite implements Editor<Commit> {
 	private void renderDiff(DiffEntry diff) {
 		ImageResource opRes;
 		String filename = null;
+		renameFrom.setVisible(false);
 		switch (diff.getChangeType()) {
 		case MODIFY:
+		case ADD:
+		default:
 			opRes = ScmResources.get.changeIcon();
 			filename = diff.getNewPath();
 			break;
@@ -68,13 +73,17 @@ public class DiffEntryView extends Composite implements Editor<Commit> {
 			opRes = ScmResources.get.deleteIcon();
 			filename = diff.getOldPath();
 			break;
-		case ADD:
-		case COPY:
 		case RENAME:
-		default:
-			opRes = ScmResources.get.addIcon();
+			renameFrom.setVisible(true);
+			renameFrom.setText(trimFilename(diff.getOldPath()) + " renamed to ");
+			opRes = ScmResources.get.changeIcon();
 			filename = diff.getNewPath();
 			break;
+		case COPY:
+			renameFrom.setVisible(true);
+			renameFrom.setText(trimFilename(diff.getOldPath()) + " copied to ");
+			opRes = ScmResources.get.changeIcon();
+			filename = diff.getNewPath();
 		}
 		operationImage.setResource(opRes);
 		fileName.setText(trimFilename(filename));

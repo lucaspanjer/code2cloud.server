@@ -37,6 +37,7 @@ public class PatchParser {
 	private String removeLinePrefix = "-";
 	private String lineCtxPrefix = "@@";
 	private String binaryPrefix = "Binary files differ";
+	private String similarityPrefix = "similarity";
 
 	public List<DiffEntry> parsePatch(String patchText) {
 		List<DiffEntry> result = new ArrayList<DiffEntry>();
@@ -64,18 +65,37 @@ public class PatchParser {
 			line = scanner.nextLine();
 		} while (scanner.hasNext() && shouldIgnore(line));
 
-		diffEntry.setOldPath(getOldPath(line));
-		line = scanner.nextLine();
-		diffEntry.setNewPath(getNewPath(line));
+		if (line.startsWith(similarityPrefix)) {
+			line = scanner.nextLine();
 
-		if (diffEntry.getOldPath() != null && diffEntry.getOldPath().equals(diffEntry.getNewPath())) {
-			diffEntry.setChangeType(ChangeType.MODIFY);
-		} else if (diffEntry.getOldPath() == null && diffEntry.getNewPath() != null) {
-			diffEntry.setChangeType(ChangeType.ADD);
-		} else if (diffEntry.getNewPath() == null && diffEntry.getOldPath() != null) {
-			diffEntry.setChangeType(ChangeType.DELETE);
+			if (line.startsWith(renameFrom)) {
+
+				diffEntry.setChangeType(ChangeType.RENAME);
+				diffEntry.setOldPath(getRenameFrom(line));
+				line = scanner.nextLine();
+				diffEntry.setNewPath(getRenameTo(line));
+			} else if (line.startsWith(copyFrom)) {
+				diffEntry.setChangeType(ChangeType.COPY);
+				diffEntry.setOldPath(getCopyFrom(line));
+				line = scanner.nextLine();
+				diffEntry.setNewPath(getCopyTo(line));
+			} else {
+				throw new IllegalStateException();
+			}
 		} else {
-			diffEntry.setChangeType(ChangeType.RENAME); // Or copy??
+			diffEntry.setOldPath(getOldPath(line));
+			line = scanner.nextLine();
+			diffEntry.setNewPath(getNewPath(line));
+
+			if (diffEntry.getOldPath() != null && diffEntry.getOldPath().equals(diffEntry.getNewPath())) {
+				diffEntry.setChangeType(ChangeType.MODIFY);
+			} else if (diffEntry.getOldPath() == null && diffEntry.getNewPath() != null) {
+				diffEntry.setChangeType(ChangeType.ADD);
+			} else if (diffEntry.getNewPath() == null && diffEntry.getOldPath() != null) {
+				diffEntry.setChangeType(ChangeType.DELETE);
+			} else {
+				diffEntry.setChangeType(ChangeType.RENAME); // Or copy??
+			}
 		}
 
 		diffEntry.setContent(new ArrayList<DiffEntry.Content>());
@@ -150,5 +170,41 @@ public class PatchParser {
 			}
 		}
 		return false;
+	}
+
+	private String renameFrom = "rename from ";
+
+	private String getRenameFrom(String line) {
+		if (!line.startsWith(renameFrom)) {
+			throw new IllegalStateException();
+		}
+		return line.substring(renameFrom.length());
+	}
+
+	private String renameTo = "rename to ";
+
+	private String getRenameTo(String line) {
+		if (!line.startsWith(renameTo)) {
+			throw new IllegalStateException();
+		}
+		return line.substring(renameTo.length());
+	}
+
+	private String copyFrom = "copy from ";
+
+	private String getCopyFrom(String line) {
+		if (!line.startsWith(copyFrom)) {
+			throw new IllegalStateException();
+		}
+		return line.substring(copyFrom.length());
+	}
+
+	private String copyTo = "copy to ";
+
+	private String getCopyTo(String line) {
+		if (!line.startsWith(copyTo)) {
+			throw new IllegalStateException();
+		}
+		return line.substring(copyTo.length());
 	}
 }

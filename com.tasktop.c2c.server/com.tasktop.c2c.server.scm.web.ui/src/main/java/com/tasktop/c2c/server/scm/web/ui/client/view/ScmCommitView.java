@@ -212,14 +212,18 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 			String elId = computeElementId(i++);
 			switch (diff.getChangeType()) {
 			case ADD:
+			case MODIFY:
 				fileName = diff.getNewPath();
 				break;
 			case DELETE:
 				fileName = diff.getOldPath();
 				break;
-			case COPY:
 			case RENAME:
-			case MODIFY:
+				fileName = diff.getOldPath() + " renamed to " + diff.getNewPath(); // FIXME use diff template
+				break;
+			case COPY:
+				fileName = diff.getOldPath() + " copied to " + diff.getNewPath(); // FIXME use diff template
+				break;
 			default:
 				fileName = diff.getNewPath();
 				break;

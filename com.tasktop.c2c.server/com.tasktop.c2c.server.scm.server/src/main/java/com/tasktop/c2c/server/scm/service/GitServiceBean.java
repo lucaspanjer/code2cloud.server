@@ -764,6 +764,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 				parentTreeParser.reset(repo.newObjectReader(), parentTree);
 			}
 
+			diffFormatter.setDetectRenames(true);
 			List<DiffEntry> diffEntries = diffFormatter.scan(parentTreeParser, thisTreeParser);
 			diffFormatter.format(diffEntries);
 			diffFormatter.flush();

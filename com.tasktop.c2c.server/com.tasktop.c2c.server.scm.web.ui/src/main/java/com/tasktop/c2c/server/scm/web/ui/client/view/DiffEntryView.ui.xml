@@ -29,7 +29,7 @@
 		<g:HTMLPanel>
 			<div class="{style.line}">
 				<g:Image ui:field="operationImage" />
-				
+				<g:Label ui:field="renameFrom" styleName="{style.fileName}"/>
 				<g:Anchor ui:field="fileName" styleName="{style.fileName}"/>
 				
 				<div class="{style.line} right">
