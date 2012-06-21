@@ -12,13 +12,14 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
-import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.PlaceProvider;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetUserInfoResult;
 
@@ -41,12 +42,17 @@ public class SignInPlaceTest extends AbstractPlaceTest {
 
 	@Test
 	public void testSigninWhenAlreadySignedin() {
+		PlaceProvider placeProvider = appGinjector.getPlaceProvider();
+		when(appGinjector.getPlaceProvider()).thenReturn(placeProvider);
+		IPlace defaultPlace = placeProvider.getDefaultPlace();
+		when(placeProvider.getDefaultPlace()).thenReturn(defaultPlace);
+
 		mockDispatchResult(new GetUserInfoResult(getRegularUserInfo()));
 
 		SignInPlace signInPlace = SignInPlace.createPlace();
 		signInPlace.go();
 
 		Assert.assertFalse(appGinjector.getAppState().hasPendingAgreements());
-		verify(placeController).goTo(isA(ProjectsPlace.class));
+		verify(defaultPlace).go();
 	}
 }

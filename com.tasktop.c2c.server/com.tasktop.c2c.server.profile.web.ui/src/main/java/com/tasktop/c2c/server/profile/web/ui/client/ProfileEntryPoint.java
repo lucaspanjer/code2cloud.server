@@ -44,7 +44,7 @@ public class ProfileEntryPoint implements EntryPoint {
 	}
 
 	protected void registerPageMappings() {
-		PageMappingRegistry pageRegistry = ProfileGinjector.get.instance().getPageMappingRegistry();
+		PageMappingRegistry pageRegistry = AppGinjector.get.instance().getPageMappingRegistry();
 		pageRegistry.register(new ProfilePageMappings());
 		pageRegistry.register(new TaskPageMappings());
 		pageRegistry.register(new WikiPageMappings());
@@ -55,7 +55,11 @@ public class ProfileEntryPoint implements EntryPoint {
 	}
 
 	protected void initializeInjector() {
-		injector = GWT.create(AppGinjectorBinding.class);
+		if (GWT.isClient()) {
+			injector = GWT.create(AppGinjectorBinding.class);
+		} else {
+			injector = AppGinjector.get.instance(); // For testing
+		}
 		AppGinjector.get.override(injector);
 		CommonGinjector.get.override(injector);
 		ProfileGinjector.get.override(injector);

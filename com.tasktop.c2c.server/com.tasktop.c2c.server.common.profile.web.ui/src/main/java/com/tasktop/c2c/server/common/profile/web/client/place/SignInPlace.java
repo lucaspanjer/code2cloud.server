@@ -50,6 +50,7 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 	}
 
 	private final IPlace afterSuccessfulSignIn;
+	private final boolean afterInUrl;
 
 	public IPlace getAfterSuccessfulSignIn() {
 		return afterSuccessfulSignIn;
@@ -61,7 +62,7 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 	}
 
 	public String getPrefix() {
-		if (afterSuccessfulSignIn != null && !(afterSuccessfulSignIn instanceof ProjectsPlace)) {
+		if (afterSuccessfulSignIn != null && afterInUrl) {
 			return SignIn.getUrl() + AFTER_TOKEN + afterSuccessfulSignIn.getHistoryToken();
 		}
 		return SignIn.getUrl();
@@ -70,8 +71,10 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 	private SignInPlace(IPlace afterSuccessfulSignIn) {
 		if (afterSuccessfulSignIn == null) {
 			this.afterSuccessfulSignIn = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
+			afterInUrl = false;
 		} else {
 			this.afterSuccessfulSignIn = afterSuccessfulSignIn;
+			afterInUrl = true;
 		}
 	}
 
