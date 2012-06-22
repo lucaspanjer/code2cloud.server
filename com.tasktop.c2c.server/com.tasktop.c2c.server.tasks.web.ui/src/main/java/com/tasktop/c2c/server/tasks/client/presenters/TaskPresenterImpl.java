@@ -233,8 +233,8 @@ public class TaskPresenterImpl extends AbstractTaskPresenter implements TaskPres
 						taskView.updateTask(result);
 						String currentComment = taskView.getCommentText();
 						taskView.updateCommentView(result);
+						taskView.setCommentText(currentComment);
 						if (actionResult.isUpdatedAlready()) {
-							taskView.setCommentText(currentComment);
 							getNotifier().displayMessage(
 									Message.createErrorMessage("Task has been updated. Review changes and try again."));
 
