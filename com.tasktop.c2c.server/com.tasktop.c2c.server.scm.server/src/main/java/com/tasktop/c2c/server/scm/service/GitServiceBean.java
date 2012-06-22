@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -85,10 +86,10 @@ public class GitServiceBean implements GitService, InitializingBean {
 	@Value("${git.startThreads}")
 	private boolean startThreads = true;
 
-	private List<Commit> getLog(Repository repository, Region region) {
+	private List<Commit> getLog(Repository repository, Region region, Set<ObjectId> visited) {
 		List<Commit> result = new ArrayList<Commit>();
 
-		for (RevCommit revCommit : getAllCommits(repository, region)) {
+		for (RevCommit revCommit : getAllCommits(repository, region, visited)) {
 			Commit commit = createCommit(revCommit);
 			commit.setRepository(repository.getDirectory().getName());
 			result.add(commit);
@@ -153,33 +154,6 @@ public class GitServiceBean implements GitService, InitializingBean {
 		return result;
 	}
 
-	private void addCommitsToSummary(Repository repo, final List<ScmSummary> summary) {
-		final Date firstDate = summary.get(0).getDate();
-
-		CommitVisitor visitor = new CommitVisitor() {
-
-			@Override
-			public void visit(RevCommit revCommit) {
-				Date commitDate = revCommit.getAuthorIdent().getWhen();
-				if (commitDate.before(firstDate)) {
-					return;
-				}
-				for (int i = 0; i < summary.size(); i++) {
-					if (i == summary.size() - 1) {
-						summary.get(i).setAmount(summary.get(i).getAmount() + 1);
-					} else if (summary.get(i).getDate().before(commitDate)
-							&& commitDate.before(summary.get(i + 1).getDate())) {
-						summary.get(i).setAmount(summary.get(i).getAmount() + 1);
-						break;
-					}
-				}
-
-			}
-		};
-
-		visitAllCommitsAfter(repo, firstDate, visitor);
-	}
-
 	private File getTenantBaseDir() {
 		return new File(basePath, TenancyUtil.getCurrentTenantProjectIdentifer());
 	}
@@ -196,9 +170,16 @@ public class GitServiceBean implements GitService, InitializingBean {
 		void visit(RevCommit commit);
 	}
 
-	private void visitAllCommitsAfter(Repository repository, Date maxDate, CommitVisitor visitor) {
+	private void visitAllCommitsAfter(Date maxDate, CommitVisitor visitor) {
 		Set<ObjectId> visited = new java.util.HashSet<ObjectId>();
 
+		for (Repository repo : getAllRepositories()) {
+			visitAllCommitsAfter(repo, maxDate, visitor, visited);
+			repo.close();
+		}
+	}
+
+	private void visitAllCommitsAfter(Repository repository, Date maxDate, CommitVisitor visitor, Set<ObjectId> visited) {
 		try {
 
 			for (Entry<String, Ref> entry : repository.getAllRefs().entrySet()) {
@@ -234,7 +215,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 
 	}
 
-	private List<RevCommit> getAllCommits(Repository repository, Region region) {
+	private List<RevCommit> getAllCommits(Repository repository, Region region, Set<ObjectId> visited) {
 		TreeSet<RevCommit> result = new TreeSet<RevCommit>(new Comparator<RevCommit>() {
 
 			@Override
@@ -246,7 +227,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 				return o1.getId().compareTo(o2.getId());
 			}
 		});
-		Set<ObjectId> visited = new java.util.HashSet<ObjectId>();
+
 		int maxResultsToConsider = -1;
 		if (region != null) {
 			maxResultsToConsider = region.getOffset() + region.getSize();
@@ -357,9 +338,10 @@ public class GitServiceBean implements GitService, InitializingBean {
 	@Override
 	public List<Commit> getLog(Region region) {
 		List<Commit> result = new ArrayList<Commit>();
+		Set<ObjectId> visited = new HashSet<ObjectId>();
 
 		for (Repository repo : getAllRepositories()) {
-			result.addAll(getLog(repo, region));
+			result.addAll(getLog(repo, region, visited));
 			repo.close();
 		}
 
@@ -382,7 +364,9 @@ public class GitServiceBean implements GitService, InitializingBean {
 		try {
 			Repository repo;
 			repo = findRepositoryByName(repoName);
-			List<Commit> result = getLog(repo, region);
+			Set<ObjectId> visited = new HashSet<ObjectId>();
+
+			List<Commit> result = getLog(repo, region, visited);
 			repo.close();
 
 			Collections.sort(result, new Comparator<Commit>() {
@@ -468,13 +452,33 @@ public class GitServiceBean implements GitService, InitializingBean {
 	@Secured({ Role.Observer, Role.User })
 	@Override
 	public List<ScmSummary> getScmSummary(int numDays) {
-		List<ScmSummary> result = createEmptySummaries(numDays);
+		final List<ScmSummary> summary = createEmptySummaries(numDays);
 
-		for (Repository repo : getAllRepositories()) {
-			addCommitsToSummary(repo, result);
-			repo.close();
-		}
-		return result;
+		final Date firstDate = summary.get(0).getDate();
+
+		CommitVisitor visitor = new CommitVisitor() {
+
+			@Override
+			public void visit(RevCommit revCommit) {
+				Date commitDate = revCommit.getAuthorIdent().getWhen();
+				if (commitDate.before(firstDate)) {
+					return;
+				}
+				for (int i = 0; i < summary.size(); i++) {
+					if (i == summary.size() - 1) {
+						summary.get(i).setAmount(summary.get(i).getAmount() + 1);
+					} else if (summary.get(i).getDate().before(commitDate)
+							&& commitDate.before(summary.get(i + 1).getDate())) {
+						summary.get(i).setAmount(summary.get(i).getAmount() + 1);
+						break;
+					}
+				}
+
+			}
+		};
+
+		visitAllCommitsAfter(firstDate, visitor);
+		return summary;
 	}
 
 	@Secured({ Role.Admin })
@@ -609,18 +613,8 @@ public class GitServiceBean implements GitService, InitializingBean {
 	@Secured({ Role.Observer, Role.User })
 	@Override
 	public Map<Profile, Integer> getNumCommitsByAuthor(int numDays) {
-		Map<Profile, Integer> result = new HashMap<Profile, Integer>();
-		Map<String, Profile> profilesByName = new HashMap<String, Profile>();
-		for (Repository repo : getAllRepositories()) {
-			addCommitsToCommitsByAuthor(result, profilesByName, repo, numDays);
-			repo.close();
-		}
-
-		return result;
-	}
-
-	private void addCommitsToCommitsByAuthor(final Map<Profile, Integer> commitsByAuthor,
-			final Map<String, Profile> profilesByName, Repository repository, int numDays) {
+		final Map<Profile, Integer> result = new HashMap<Profile, Integer>();
+		final Map<String, Profile> profilesByName = new HashMap<String, Profile>();
 
 		Date firstDay = new Date(System.currentTimeMillis() - MILLISECONDS_PER_DAY * numDays);
 
@@ -635,17 +629,19 @@ public class GitServiceBean implements GitService, InitializingBean {
 					profilesByName.put(c.getAuthorIdent().getName(), p);
 				}
 
-				Integer count = commitsByAuthor.get(p);
+				Integer count = result.get(p);
 				if (count == null) {
 					count = 0;
 				}
 				count++;
-				commitsByAuthor.put(p, count);
+				result.put(p, count);
 
 			}
 		};
 
-		visitAllCommitsAfter(repository, firstDay, visitor);
+		visitAllCommitsAfter(firstDay, visitor);
+
+		return result;
 	}
 
 	static String getRepoDirNameFromExternalUrl(String url) {
