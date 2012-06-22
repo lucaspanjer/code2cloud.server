@@ -23,7 +23,7 @@ import com.google.gwt.visualization.client.visualizations.PieChart;
 import com.tasktop.c2c.server.scm.domain.Profile;
 
 /**
- * A summary pie chart of open tasks by severity.
+ * A summary pie chart of commits by author.
  */
 public class CommitsByAuthorPieChart extends PieChart {
 
