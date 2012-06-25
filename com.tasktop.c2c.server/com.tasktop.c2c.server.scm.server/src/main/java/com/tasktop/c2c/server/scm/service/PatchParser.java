@@ -30,7 +30,7 @@ import com.tasktop.c2c.server.scm.domain.DiffEntry.Content.Type;
 public class PatchParser {
 
 	private String mainDiffLinePrefix = "diff";
-	private List<String> linePrefixesToIgnore = Arrays.asList("index", "new", "deleted");
+	private List<String> linePrefixesToIgnore = Arrays.asList("index", "new", "deleted", "old mode", "new mode");
 	private String devNull = "/dev/null";
 	private String contextPrefix = " ";
 	private String addLinePrefix = "+";
