@@ -34,11 +34,8 @@ public class BasicAuthAccessDeniedExceptionHandlingFilter extends SpringSecurity
 			throws IOException, ServletException {
 
 		try {
-			// Authentication springAuth =
+
 			SecurityContextHolder.getContext().getAuthentication();
-			// if (springAuth != null) {
-			// SecurityContextHolder.getContext().setAuthentication(bridge(springAuth));
-			// }
 			chain.doFilter(request, response);
 		} catch (AccessDeniedException e) {
 			HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -57,7 +54,7 @@ public class BasicAuthAccessDeniedExceptionHandlingFilter extends SpringSecurity
 	 */
 	@Override
 	public int getOrder() {
-		return FilterChainOrder.PRE_AUTH_FILTER;
+		return FilterChainOrder.EXCEPTION_TRANSLATION_FILTER;
 	}
 
 }
