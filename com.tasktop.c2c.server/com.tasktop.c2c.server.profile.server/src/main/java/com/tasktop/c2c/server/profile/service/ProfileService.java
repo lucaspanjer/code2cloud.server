@@ -48,7 +48,7 @@ import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
  */
 public interface ProfileService {
 
-	String CREATE_PROJECT_QUOTA_NAME = "CREATE_PROJECT";
+	String MAX_PROJECTS_QUOTA_NAME = "MAX_PROJECTS";
 
 	public Long createProfile(Profile profile) throws ValidationException;
 

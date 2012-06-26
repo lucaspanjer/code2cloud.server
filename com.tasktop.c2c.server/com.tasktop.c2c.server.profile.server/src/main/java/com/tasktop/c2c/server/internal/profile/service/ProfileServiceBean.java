@@ -503,7 +503,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		securityPolicy.create(project);
 		setDefaultValuesBeforeCreate(project);
 		validate(project, validator, new ProjectConstraintsValidator());
-		quotaService.enforceQuota(CREATE_PROJECT_QUOTA_NAME, project);
+		quotaService.enforceQuota(MAX_PROJECTS_QUOTA_NAME, project);
 
 		Profile profile = getProfileInternal(profileId);
 		securityPolicy.modify(profile);

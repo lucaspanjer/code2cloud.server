@@ -39,7 +39,7 @@ public class MaxProjectsQuotaEnforcer implements QuotaEnforcer<Project> {
 
 	@Override
 	public String getQuotaName() {
-		return ProfileService.CREATE_PROJECT_QUOTA_NAME;
+		return ProfileService.MAX_PROJECTS_QUOTA_NAME;
 	}
 
 	@Override
