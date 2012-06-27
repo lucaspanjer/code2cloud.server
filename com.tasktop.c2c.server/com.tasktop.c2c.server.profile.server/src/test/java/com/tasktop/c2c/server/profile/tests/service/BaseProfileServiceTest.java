@@ -112,7 +112,7 @@ import com.tasktop.c2c.server.tasks.service.TaskService;
 @Transactional
 public abstract class BaseProfileServiceTest {
 
-	public static final String NOTFOUND_SUFFIX = "NOTFOUND";
+	public static final String NOTFOUND_SUFFIX = "notfound";
 
 	@Autowired
 	protected ProfileService profileService;
