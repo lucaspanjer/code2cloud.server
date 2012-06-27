@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.domain.Quota;
 import com.tasktop.c2c.server.profile.domain.internal.QuotaSetting;
 import com.tasktop.c2c.server.profile.service.QuotaEnforcer;
 
@@ -36,7 +37,7 @@ public class HudsonMaxConcurrentExecutorsQuotaEnforcer implements QuotaEnforcer<
 
 	@Override
 	public String getQuotaName() {
-		return HudsonSlavePoolService.CONCURRENT_BUILD_QUOTA;
+		return Quota.MAX_CONCURRENT_EXECUTORS_QUOTA_NAME;
 	}
 
 	@Override

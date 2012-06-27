@@ -35,4 +35,6 @@ public interface QuotaService {
 	List<QuotaSetting> findQuotaSettings(String name, String projectIdentifier, String organizationIdentifier);
 
 	void enforceQuota(String quotaName, Object quotaObject) throws ValidationException;
+
+	QuotaSetting findMostRelevantQuotaSetting(String name, String projectIdentifier, String organizationIdentifier);
 }

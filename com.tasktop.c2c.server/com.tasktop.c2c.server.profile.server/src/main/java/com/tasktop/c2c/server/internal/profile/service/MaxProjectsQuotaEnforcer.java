@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.domain.Quota;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -39,7 +40,7 @@ public class MaxProjectsQuotaEnforcer implements QuotaEnforcer<Project> {
 
 	@Override
 	public String getQuotaName() {
-		return ProfileService.MAX_PROJECTS_QUOTA_NAME;
+		return Quota.MAX_PROJECTS_QUOTA_NAME;
 	}
 
 	@Override

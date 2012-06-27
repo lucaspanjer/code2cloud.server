@@ -51,6 +51,7 @@ import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
+import com.tasktop.c2c.server.common.service.domain.Quota;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.domain.SortInfo;
@@ -503,7 +504,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		securityPolicy.create(project);
 		setDefaultValuesBeforeCreate(project);
 		validate(project, validator, new ProjectConstraintsValidator());
-		quotaService.enforceQuota(MAX_PROJECTS_QUOTA_NAME, project);
+		quotaService.enforceQuota(Quota.MAX_PROJECTS_QUOTA_NAME, project);
 
 		Profile profile = getProfileInternal(profileId);
 		securityPolicy.modify(profile);

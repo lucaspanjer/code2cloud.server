@@ -32,6 +32,7 @@ import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.domain.Quota;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.ConfigurationPropertyService;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
@@ -112,7 +113,7 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 	public RequestBuildSlaveResult acquireSlave(String projectIdentifier, String promiseTokenOrNull)
 			throws ValidationException {
 		this.securityPolicy.authorize(projectIdentifier);
-		quotaService.enforceQuota(CONCURRENT_BUILD_QUOTA, projectIdentifier);
+		quotaService.enforceQuota(Quota.MAX_CONCURRENT_EXECUTORS_QUOTA_NAME, projectIdentifier);
 
 		if (promiseTokenOrNull != null) {
 			String promiseToken = promiseTokenOrNull;

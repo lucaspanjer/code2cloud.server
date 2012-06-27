@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.domain.Quota;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -124,18 +125,18 @@ public class QuotaServiceTest {
 
 		// Add global quota
 		QuotaSetting quota = new QuotaSetting();
-		quota.setName(ProfileService.MAX_PROJECTS_QUOTA_NAME);
+		quota.setName(Quota.MAX_PROJECTS_QUOTA_NAME);
 		quota.setValue(Integer.toString(1));
 		quota = quotaService.createQuota(quota);
 
 		Project p1 = creatOrgProject(org);
-		quotaService.enforceQuota(ProfileService.MAX_PROJECTS_QUOTA_NAME, p1);
+		quotaService.enforceQuota(Quota.MAX_PROJECTS_QUOTA_NAME, p1);
 		org.getProjects().add(p1);
 		entityManager.persist(p1);
 
 		Project p2 = creatOrgProject(org);
 		try {
-			quotaService.enforceQuota(ProfileService.MAX_PROJECTS_QUOTA_NAME, p2);
+			quotaService.enforceQuota(Quota.MAX_PROJECTS_QUOTA_NAME, p2);
 			Assert.fail("expected validation exception");
 		} catch (ValidationException e) {
 			// expected
@@ -143,12 +144,12 @@ public class QuotaServiceTest {
 
 		// Now add org-specific quota to override global
 		quota = new QuotaSetting();
-		quota.setName(ProfileService.MAX_PROJECTS_QUOTA_NAME);
+		quota.setName(Quota.MAX_PROJECTS_QUOTA_NAME);
 		quota.setValue(Integer.toString(10));
 		quota.setOrganization(org);
 		quota = quotaService.createQuota(quota);
 
-		quotaService.enforceQuota(ProfileService.MAX_PROJECTS_QUOTA_NAME, p2);
+		quotaService.enforceQuota(Quota.MAX_PROJECTS_QUOTA_NAME, p2);
 
 	}
 

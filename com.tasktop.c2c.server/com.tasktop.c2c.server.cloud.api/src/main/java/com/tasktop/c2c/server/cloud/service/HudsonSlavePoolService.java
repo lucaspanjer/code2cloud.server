@@ -24,8 +24,6 @@ import com.tasktop.c2c.server.common.service.ValidationException;
  */
 public interface HudsonSlavePoolService {
 
-	String CONCURRENT_BUILD_QUOTA = "HUDSON.MAXCONCURRENTBUILDS";
-
 	static final class PoolStatus {
 		private int totalNodes;
 		private int freeNodes;

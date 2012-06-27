@@ -66,6 +66,7 @@ import com.tasktop.c2c.server.cloud.service.PromiseService;
 import com.tasktop.c2c.server.cloud.service.RequestBuildSlaveResult;
 import com.tasktop.c2c.server.cloud.service.ServiceHostService;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.domain.Quota;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -353,7 +354,7 @@ public class HudsonSlavePoolServiceTest {
 		hudsonSlavePoolServiceImpl.initialize(); // Kick off threads;
 
 		QuotaSetting quotaSetting = new QuotaSetting();
-		quotaSetting.setName(HudsonSlavePoolService.CONCURRENT_BUILD_QUOTA);
+		quotaSetting.setName(Quota.MAX_CONCURRENT_EXECUTORS_QUOTA_NAME);
 		quotaSetting.setValue(Integer.toString(1));
 		quotaService.createQuota(quotaSetting);
 

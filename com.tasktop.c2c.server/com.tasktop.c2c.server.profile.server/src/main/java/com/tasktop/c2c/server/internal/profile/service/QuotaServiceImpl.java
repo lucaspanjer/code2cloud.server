@@ -93,6 +93,12 @@ public class QuotaServiceImpl extends AbstractJpaServiceBean implements QuotaSer
 		return result;
 	}
 
+	@Override
+	public QuotaSetting findMostRelevantQuotaSetting(String name, String projectIdentifier,
+			String organizationIdentifier) {
+		return getMostRelvantSetting(findQuotaSettings(name, projectIdentifier, organizationIdentifier));
+	}
+
 	private List<QuotaSetting> findGeneralSettings(String name) {
 		String queryString = "SELECT q FROM " + QuotaSetting.class.getSimpleName()
 				+ " q WHERE q.name = :name AND q.project IS NULL AND q.organization IS NULL";
