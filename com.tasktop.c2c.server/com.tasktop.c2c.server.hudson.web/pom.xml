@@ -208,6 +208,7 @@
                 <resolveArtifact type="hpi" groupId="org.eclipse.hudson.main" artifactId="maven3-plugin" version="3.0.1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-plugin.hpi" />
                 <resolveArtifact type="hpi" groupId="org.eclipse.hudson.plugins" artifactId="git" version="3.0.1-code2cloud-SNAPSHOT" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/git.hpi" />
                 <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="build-timeout" version="1.6" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/build-timeout.hpi" />
+                <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="disk-usage" version="0.12" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/disk-usage.hpi" />
 <!-- ADD BACK?               <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="grails" version="1.4" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/grails-plugin.hpi" /> -->
                 <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.auth" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-auth.hpi" />
                 <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.cloud" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-cloud.hpi" />
