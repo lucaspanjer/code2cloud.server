@@ -52,10 +52,17 @@
 		p:rememberMeServices-ref="rememberMeServices"
 	/>
 	
-	<!--  This section never needs any filters to be run -->
-	<s:http pattern="/profile/deferredjs/**,/index.html,/styles/**,/content/**,/images/**,/scripts/**" security="none"/>
+<!--  This section never needs any filters to be run -->
+	<s:http pattern="/**/*.html" security="none"/>
+	<s:http pattern="/**/*.js" security="none"/>
+	<s:http pattern="/**/*.css" security="none"/>
+	<s:http pattern="/**/*.jpg" security="none"/>
+	<s:http pattern="/**/*.png" security="none"/>
+	<s:http pattern="/**/*.gif" security="none"/>
+	<s:http pattern="/styles/**" security="none"/> 
+	<s:http pattern="/images/**" security="none"/>
 	
-
+	<!--  This section provides the security for everything else not matched by above -->
 	<s:http use-expressions="true" realm="Code2Cloud" create-session="always">
 		<s:http-basic />
 		<s:anonymous />
