@@ -22,7 +22,7 @@
     <import resource="classpath:applicationContext-eventService.xml"/>
 
 	<!-- centralized properties paths for: app, dev selfhost, os x dev environments, vcloud self host -->
-	<context:property-placeholder location="classpath*:/config/*.properties, /WEB-INF/spring/*.properties, file:///opt/cloudalm/etc/*.properties, file:///opt/code2cloud/etc/*.properties"  
+	<context:property-placeholder location="classpath*:/config/*.properties, /WEB-INF/spring/*.properties, file:///opt/code2cloud/etc/*.properties"  
 		ignore-resource-not-found="true"/>
 
 	<security:global-method-security secured-annotations="enabled" />

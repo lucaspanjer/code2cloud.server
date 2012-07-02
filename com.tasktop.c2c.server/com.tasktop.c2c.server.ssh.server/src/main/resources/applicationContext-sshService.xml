@@ -20,8 +20,8 @@
 	<bean id="sshKeyPairProvider" class="org.apache.sshd.common.keyprovider.FileKeyPairProvider">
 		<property name="files">
 			<array>
-				<value>/opt/cloudalm/etc/ssh-key.pem</value>
-				<value>/home/cloudalm/etc/ssh-key.pem</value>
+				<value>/opt/code2cloud/etc/ssh-key.pem</value>
+				<value>/home/code2cloud/etc/ssh-key.pem</value>
 			</array>
 		</property>
 	</bean>

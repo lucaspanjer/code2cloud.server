@@ -12,8 +12,7 @@
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-	<!-- centralized properties paths for: app, os x dev environments, vcloud self host -->
-	<context:property-placeholder location="classpath*:/config/*.properties, /WEB-INF/spring/*.properties, file:///opt/cloudalm/etc/*.properties, file:///opt/code2cloud/etc/*.properties"  
+	<context:property-placeholder location="classpath*:/config/*.properties, /WEB-INF/spring/*.properties, file:///opt/code2cloud/etc/*.properties"  
 		ignore-resource-not-found="true"/>
 
 	<import resource="classpath:META-INF/spring/applicationContext-restServer.xml"/>
