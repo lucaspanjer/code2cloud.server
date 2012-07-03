@@ -71,7 +71,7 @@ public class ProjectServiceDatabaseConfigurator implements Configurator, Resourc
 				createStmt = "create user \"" + dbName + "\" identified by "
 						+ UUID.randomUUID().toString().substring(0, 7) + " account lock";
 				s.execute(createStmt);
-				createStmt = "grant unlimited tablespace to " + dbName;
+				createStmt = "grant unlimited tablespace to \"" + dbName + "\"";
 			}
 			s.execute(createStmt);
 
