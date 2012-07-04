@@ -63,7 +63,7 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 
 	@Override
 	public String getHeading() {
-		return "Discover Projects";
+		return "Projects for " + organization.getName();
 	}
 
 	public static OrganizationProjectsPlace createPlaceForOrg(String orgId) {
