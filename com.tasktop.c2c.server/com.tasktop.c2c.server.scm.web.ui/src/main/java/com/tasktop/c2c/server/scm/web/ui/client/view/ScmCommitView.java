@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
+import com.googlecode.google_code_prettify.GoogleCodePrettifyUtil;
 import com.tasktop.c2c.server.common.web.client.navigation.Navigation;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
 import com.tasktop.c2c.server.common.web.client.widgets.Format;
@@ -186,7 +187,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 		authorImage.setUrl(Avatar.computeAvatarUrl(commit.getAuthor().getGravatarHash(), Avatar.Size.MEDIUM));
 
 		UIObject.setVisible(committerInfoDiv, commit.getCommitter() != null);
-
+		GoogleCodePrettifyUtil.run();
 	}
 
 	private String computeElementId(int index) {
@@ -197,7 +198,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 		@Template("<div class=\"{0}\" id=\"{1}\">{2}</div>")
 		SafeHtml addFileChange(String style, String id, String filename);
 
-		@Template("<pre class=\"pretty-print {0}\">{1}</pre>")
+		@Template("<pre class=\"prettyprint {0}\">{1}</pre>")
 		SafeHtml content(String style, String content);
 
 	}
