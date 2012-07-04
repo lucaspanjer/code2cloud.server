@@ -44,6 +44,7 @@ import com.tasktop.c2c.server.common.web.shared.KnowsErrorMessageAction;
  */
 public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 
+	public final Message LOADING_MESSSAGE = new Message(0, "Loading...", Message.MessageType.PROGRESS);
 	protected boolean requiresUserInfo = true;
 	protected boolean readyToGo = false;
 	private List<Action<?>> actions;
@@ -55,11 +56,8 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 		ProfileGinjector.get.instance().getAppState().setHasPendingAgreements(ui.getHasPendingAgreements());
 	}
 
-	public void go() {
-		if (message == null) {
-			message = new Message(0, "Loading...", Message.MessageType.PROGRESS);
-		}
-		notifier.displayMessage(message);
+	public final void go() {
+		notifier.displayMessage(LOADING_MESSSAGE);
 
 		if (!readyToGo) {
 			fetchPlaceData();
@@ -70,7 +68,6 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 		ProfileGinjector.get.instance().getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			@Override
 			public void execute() {
-				notifier.removeMessage(message);
 				if (displayOnArrival != null) {
 					notifier.displayMessage(displayOnArrival);
 				}
@@ -110,6 +107,13 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 	}
 
 	private void onResultsRecieved() {
+		ProfileGinjector.get.instance().getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			@Override
+			public void execute() {
+				notifier.removeMessage(LOADING_MESSSAGE);
+			}
+		});
+
 		if (requiresUserInfo) {
 			setUserInfo(getResult(GetUserInfoResult.class).get());
 		}

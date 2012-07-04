@@ -82,7 +82,7 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 
 	protected boolean handleExceptionInResults(Action<?> action, DispatchException dispatchException) {
 		if (ExceptionsUtil.isEntityNotFound(dispatchException)) {
-			SignInPlace.createPlace().setMessage(getMessage()).go();
+			SignInPlace.createPlace().go();
 			return false;
 		}
 		return super.handleExceptionInResults(action, dispatchException);
@@ -99,7 +99,7 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 			username = result.get().getProfile().getUsername();
 			onPlaceDataFetched();
 		} else {
-			SignInPlace.createPlace().setMessage(getMessage()).go();
+			SignInPlace.createPlace().go();
 		}
 
 	}

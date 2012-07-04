@@ -58,25 +58,8 @@ public abstract class AbstractPlace extends Place implements IPlace {
 		return sb.toString();
 	}
 
-	protected Message message = null;
-
-	/**
-	 * 
-	 */
 	public AbstractPlace() {
 		super();
-	}
-
-	public AbstractPlace setMessage(Message message) {
-		this.message = message;
-		return this;
-	}
-
-	protected Message getMessage() {
-		if (message == null) {
-			message = new Message(0, "Loading...", Message.MessageType.PROGRESS);
-		}
-		return message;
 	}
 
 	protected void reset() {
