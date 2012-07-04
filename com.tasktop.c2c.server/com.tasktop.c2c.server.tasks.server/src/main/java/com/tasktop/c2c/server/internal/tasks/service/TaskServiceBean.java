@@ -45,6 +45,7 @@ import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
+import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
@@ -792,6 +793,9 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	 * @param activities
 	 */
 	private void sendActivityEvent(List<TaskActivity> activities) {
+		if (Security.hasRole(Role.System)) {
+			return;
+		}
 		TaskActivityEvent event = new TaskActivityEvent();
 		event.setProjectId(TenancyUtil.getCurrentTenantProjectIdentifer());
 		event.setTaskActivities(activities);

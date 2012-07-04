@@ -18,6 +18,7 @@ import java.util.List;
 
 @SuppressWarnings("serial")
 public class Commit implements Serializable {
+	private String url;
 	private String repository;
 	private String commitId;
 	private Profile author;
@@ -135,5 +136,13 @@ public class Commit implements Serializable {
 			return null;
 		}
 		return commitId.length() > 6 ? commitId.substring(0, 7) : commitId;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

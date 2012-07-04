@@ -21,6 +21,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jgit.http.server.GitServlet;
+import org.eclipse.jgit.http.server.resolver.DefaultReceivePackFactory;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.transport.PostReceiveHook;
+import org.eclipse.jgit.transport.ReceivePack;
+import org.eclipse.jgit.transport.resolver.ReceivePackFactory;
+import org.eclipse.jgit.transport.resolver.ServiceNotAuthorizedException;
+import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -162,6 +169,23 @@ public class GitSmartHttpServlet extends GitServlet implements InitializingBean,
 				return (userRoles.contains(Role.User));
 			}
 		}
+	}
+
+	public void setPostRecieveHook(final PostReceiveHook hook) {
+		ReceivePackFactory<HttpServletRequest> rpf = new DefaultReceivePackFactory() {
+			public ReceivePack create(final HttpServletRequest req, final Repository db)
+					throws ServiceNotEnabledException, ServiceNotAuthorizedException {
+				ReceivePack result = super.create(req, db);
+				if (!result.getPostReceiveHook().equals(PostReceiveHook.NULL)) {
+					throw new IllegalStateException();
+				}
+
+				result.setPostReceiveHook(hook);
+				return result;
+			}
+
+		};
+		setReceivePackFactory(rpf);
 	}
 
 }

@@ -74,6 +74,7 @@ import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonSuggestOracle;
 import com.tasktop.c2c.server.common.web.client.widgets.time.TimePeriodBox;
 import com.tasktop.c2c.server.common.web.client.widgets.time.TimePeriodRenderer;
+import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.tasks.client.TaskResources;
 import com.tasktop.c2c.server.tasks.client.place.ProjectEditTaskPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectNewTaskPlace;
@@ -535,6 +536,10 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	FieldSetElement externalDepsElement;
 	@UiField
 	Panel externalTaskRelations;
+	@UiField
+	FieldSetElement commitsElement;
+	@UiField
+	Panel commits;
 	@UiField
 	CommentsPanel commentsPanel;
 	@UiField
@@ -1138,6 +1143,29 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			if (i < (externalList.size() - 1)) {
 				externalTaskRelations.add(new Label(", "));
 			}
+		}
+
+		commits.clear();
+		UIObject.setVisible(commitsElement, !task.getCommits().isEmpty());
+		for (int i = 0; i < task.getCommits().size(); i++) {
+			String url = task.getCommits().get(i);
+
+			if (i > 0) {
+				commits.add(new Label(", "));
+			}
+			if (url.startsWith("http")) {
+				String id = url;
+				int lastSlash = url.lastIndexOf("/");
+				if (lastSlash > 0) {
+					id = url.substring(lastSlash + 1);
+				}
+				id = Commit.minimizeCommitId(id);
+				// TODO make relative or new
+				commits.add(new Anchor(id, url));
+			} else {
+				commits.add(new Label(url));
+			}
+
 		}
 
 		// attachments

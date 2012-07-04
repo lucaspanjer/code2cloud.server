@@ -4540,4 +4540,15 @@ public class TaskServiceTest {
 		String property = taskService.retrieveConfigurationProperty(TEST_CONFIGURATION_PROPERTY);
 		assertTrue(property.equals("test value"));
 	}
+
+	@Test
+	public void testCommitsProperty() throws ValidationException, EntityNotFoundException, ConcurrentUpdateException {
+		com.tasktop.c2c.server.tasks.domain.Task mock = getMockTask();
+		com.tasktop.c2c.server.tasks.domain.Task task = taskService.createTask(mock);
+		Assert.assertEquals(0, task.getCommits().size());
+		task.getCommits().add("XXX");
+		task = taskService.updateTask(task);
+		Assert.assertEquals(1, task.getCommits().size());
+
+	}
 }

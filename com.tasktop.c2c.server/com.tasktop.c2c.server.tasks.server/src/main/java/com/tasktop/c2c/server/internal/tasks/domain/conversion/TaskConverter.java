@@ -90,6 +90,14 @@ public class TaskConverter implements ObjectConverter<Task> {
 		}
 		target.setExternalTaskRelations(externalTaskRelations);
 
+		List<String> commits = new ArrayList<String>();
+		if (source.getCommits() != null) {
+			for (String commit : StringUtils.split(source.getCommits(), ",")) {
+				commits.add(commit);
+			}
+		}
+		target.setCommits(commits);
+
 		// These must be set from query join results
 		target.setSeverity(context.getTaskSeverity(source.getSeverity()));
 		target.setStatus(context.getTaskStatus(source.getStatus()));

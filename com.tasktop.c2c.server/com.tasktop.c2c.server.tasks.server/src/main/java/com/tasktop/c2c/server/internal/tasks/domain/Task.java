@@ -100,6 +100,7 @@ public class Task extends AbstractIdentified<Integer> implements Serializable {
 	private String taskType;
 	private String iteration;
 	private String externalTaskRelations;
+	private String commits;
 
 	public Task() {
 	}
@@ -142,6 +143,15 @@ public class Task extends AbstractIdentified<Integer> implements Serializable {
 
 	public void setExternalTaskRelations(String externalTaskRelations) {
 		this.externalTaskRelations = externalTaskRelations;
+	}
+
+	@Column(name = "cf_commits", nullable = true)
+	public String getCommits() {
+		return commits;
+	}
+
+	public void setCommits(String commits) {
+		this.commits = commits;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -9,35 +9,24 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.scm.service;
+package com.tasktop.c2c.server.event.domain;
 
-import com.tasktop.c2c.server.common.service.BaseProfileConfiguration;
+import java.util.List;
+
 import com.tasktop.c2c.server.scm.domain.Commit;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class ScmServiceConfiguration extends BaseProfileConfiguration {
+public class CommitEvent extends Event {
+	private List<Commit> commits;
 
-	private int sshPort = 22;
-
-	public int getPublicSshPort() {
-		return sshPort;
+	public List<Commit> getCommits() {
+		return commits;
 	}
 
-	public void setPublicSshPort(int sshPort) {
-		this.sshPort = sshPort;
+	public void setCommits(List<Commit> commits) {
+		this.commits = commits;
 	}
-
-	/**
-	 * @param currentTenantProjectIdentifer
-	 * @param result
-	 * @return
-	 */
-	public String getWebUrlForCommit(String projectIdentifer, Commit result) {
-		return String.format("%s/#projects/%s/scm/%s/%s", getProfileBaseUrl(), projectIdentifer,
-				result.getRepository(), result.getCommitId());
-	}
-
 }

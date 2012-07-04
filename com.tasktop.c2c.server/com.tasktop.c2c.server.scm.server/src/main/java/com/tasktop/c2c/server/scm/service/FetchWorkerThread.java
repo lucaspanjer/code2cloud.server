@@ -34,10 +34,10 @@ class FetchWorkerThread extends Thread {
 		boolean isFetching = false;
 	}
 
-	private final GitServiceBean gitServiceBean;
+	private final JgitRepositoryProvider repositoryProvider;
 
-	FetchWorkerThread(GitServiceBean gitServiceBean) {
-		this.gitServiceBean = gitServiceBean;
+	FetchWorkerThread(JgitRepositoryProvider repositoryProvider) {
+		this.repositoryProvider = repositoryProvider;
 	}
 
 	/** Time between fetches for a repo. */
@@ -65,7 +65,7 @@ class FetchWorkerThread extends Thread {
 
 	private void triggerMirroredFetches() {
 		Long reFetchTime = System.currentTimeMillis() - milisecondsBetweenUpdates;
-		for (File projectRoot : new File(this.gitServiceBean.basePath).listFiles()) {
+		for (File projectRoot : this.repositoryProvider.getBaseDir().listFiles()) {
 			final String projectId = projectRoot.getName();
 			File mirroredRepos = new File(projectRoot, GitConstants.MIRRORED_GIT_DIR);
 			if (!mirroredRepos.exists()) {
@@ -104,7 +104,7 @@ class FetchWorkerThread extends Thread {
 		try {
 			// Set the home directory. This is used for configuration and ssh keys
 			FS fs = FS.detect();
-			fs.setUserHome(new File(gitServiceBean.basePath, projectId));
+			fs.setUserHome(new File(repositoryProvider.getBaseDir(), projectId));
 			FileRepositoryBuilder builder = new FileRepositoryBuilder().setGitDir(mirroredRepo).setFS(fs).setup();
 			Git git = new Git(new FileRepository(builder));
 			git.fetch().setRefSpecs(new RefSpec("refs/heads/*:refs/heads/*")).setThin(true).call();

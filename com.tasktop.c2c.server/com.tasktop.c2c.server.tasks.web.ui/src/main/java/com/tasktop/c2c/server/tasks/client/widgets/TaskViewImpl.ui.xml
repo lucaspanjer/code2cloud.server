@@ -241,6 +241,12 @@
 							<g:FlowPanel ui:field="duplicates" />
 						</fieldset>
 					</li>
+					<li>
+						<fieldset ui:field='commitsElement'>
+							<label>Commits</label>
+							<g:FlowPanel ui:field="commits" />
+						</fieldset>
+					</li>
  					<li>
 						<fieldset ui:field='externalDepsElement'>
 							<label>External</label>

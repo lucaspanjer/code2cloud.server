@@ -45,7 +45,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.domain.Region;
+import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.internal.tasks.domain.ActivityIgnored;
 import com.tasktop.c2c.server.internal.tasks.domain.Cc;
 import com.tasktop.c2c.server.internal.tasks.domain.Dependency;
@@ -115,6 +117,10 @@ public class TaskActivityService {
 	public List<com.tasktop.c2c.server.tasks.domain.TaskActivity> recordActivity(Task originalTask,
 			Map<String, String> originalCustomFieldValues, Task newTask, Map<String, String> newCustomFieldValues,
 			Profile user, Date updateTime) throws EntityNotFoundException {
+
+		if (Security.hasRole(Role.System)) {
+			return Collections.emptyList();
+		}
 
 		List<TaskActivity> activities = new ArrayList<TaskActivity>(5);
 

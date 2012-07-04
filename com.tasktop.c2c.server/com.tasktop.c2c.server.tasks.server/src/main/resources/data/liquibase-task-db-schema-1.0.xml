@@ -2605,4 +2605,10 @@
 			<column name="VALUE"  value="Textile" />
 		</insert>
 	</changeSet>
+	<changeSet author="cmorgan" id="task_4739_addCommitsField" >
+		<addColumn tableName="BUGS">
+			<column name="cf_commits" type="MEDIUMTEXT" />
+		</addColumn>
+	</changeSet>
+	
 </databaseChangeLog>

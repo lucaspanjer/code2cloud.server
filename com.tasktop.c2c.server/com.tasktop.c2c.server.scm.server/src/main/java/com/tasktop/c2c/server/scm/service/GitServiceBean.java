@@ -39,11 +39,8 @@ import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.RepositoryCache;
-import org.eclipse.jgit.lib.RepositoryCache.FileKey;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
@@ -53,7 +50,6 @@ import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
-import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.FileUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +60,6 @@ import org.springframework.stereotype.Component;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
-import com.tasktop.c2c.server.common.service.identity.Gravatar;
 import com.tasktop.c2c.server.common.service.query.QueryUtil;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.scm.domain.Commit;
@@ -77,11 +72,11 @@ import com.tasktop.c2c.server.scm.domain.ScmType;
 @Component
 public class GitServiceBean implements GitService, InitializingBean {
 
-	@Value("${git.root}")
-	String basePath;
-
 	@Autowired
 	private ScmServiceConfiguration profileServiceConfiguration;
+
+	@Autowired
+	private JgitRepositoryProvider repositoryProvider;
 
 	@Value("${git.startThreads}")
 	private boolean startThreads = true;
@@ -90,43 +85,10 @@ public class GitServiceBean implements GitService, InitializingBean {
 		List<Commit> result = new ArrayList<Commit>();
 
 		for (RevCommit revCommit : getAllCommits(repository, region, visited)) {
-			Commit commit = createCommit(revCommit);
+			Commit commit = GitDomain.createCommit(revCommit);
 			commit.setRepository(repository.getDirectory().getName());
 			result.add(commit);
 		}
-
-		return result;
-	}
-
-	/**
-	 * @param revCommit
-	 * @return
-	 */
-	private Commit createCommit(RevCommit revCommit) {
-		Commit commit = new Commit(revCommit.getName(), fromPersonIdent(revCommit.getAuthorIdent()), revCommit
-				.getAuthorIdent().getWhen(), revCommit.getFullMessage());
-		commit.setParents(new ArrayList<String>(revCommit.getParentCount()));
-		for (ObjectId parentId : revCommit.getParents()) {
-			commit.getParents().add(parentId.getName());
-		}
-		if (revCommit.getCommitterIdent() != null && !revCommit.getAuthorIdent().equals(revCommit.getCommitterIdent())) {
-			commit.setCommitter(fromPersonIdent(revCommit.getCommitterIdent()));
-			commit.setCommitDate(revCommit.getCommitterIdent().getWhen());
-		}
-
-		return commit;
-	}
-
-	private Profile fromPersonIdent(PersonIdent person) {
-		Profile result = new Profile();
-		result.setEmail(person.getEmailAddress());
-		result.setUsername(person.getEmailAddress());
-		result.setGravatarHash(Gravatar.computeHash(person.getEmailAddress()));
-		int firstSpace = person.getName().indexOf(" ");
-		String firstName = firstSpace == -1 ? "" : person.getName().substring(0, firstSpace);
-		String lastName = firstSpace == -1 ? person.getName() : person.getName().substring(firstSpace + 1);
-		result.setFirstName(firstName);
-		result.setLastName(lastName);
 
 		return result;
 	}
@@ -154,18 +116,6 @@ public class GitServiceBean implements GitService, InitializingBean {
 		return result;
 	}
 
-	private File getTenantBaseDir() {
-		return new File(basePath, TenancyUtil.getCurrentTenantProjectIdentifer());
-	}
-
-	private File getTenantHostedBaseDir() {
-		return new File(getTenantBaseDir(), GitConstants.HOSTED_GIT_DIR);
-	}
-
-	private File getTenantMirroredBaseDir() {
-		return new File(getTenantBaseDir(), GitConstants.MIRRORED_GIT_DIR);
-	}
-
 	public interface CommitVisitor {
 		void visit(RevCommit commit);
 	}
@@ -173,7 +123,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 	private void visitAllCommitsAfter(Date maxDate, CommitVisitor visitor) {
 		Set<ObjectId> visited = new java.util.HashSet<ObjectId>();
 
-		for (Repository repo : getAllRepositories()) {
+		for (Repository repo : repositoryProvider.getAllRepositories()) {
 			visitAllCommitsAfter(repo, maxDate, visitor, visited);
 			repo.close();
 		}
@@ -291,56 +241,13 @@ public class GitServiceBean implements GitService, InitializingBean {
 		return result;
 	}
 
-	private List<Repository> getAllRepositories() {
-		List<Repository> result = new ArrayList<Repository>();
-
-		File hostedDir = getTenantHostedBaseDir();
-		if (hostedDir.exists()) {
-			for (File repoDir : hostedDir.listFiles()) {
-				try {
-					result.add(getHostedRepository(repoDir.getName()));
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-			}
-		}
-
-		File mirroredDir = getTenantMirroredBaseDir();
-		if (mirroredDir.exists()) {
-			for (File repoDir : mirroredDir.listFiles()) {
-				try {
-					result.add(getMirroredRepository(repoDir.getName()));
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-			}
-		}
-
-		return result;
-	}
-
-	private Repository getHostedRepository(String name) throws IOException {
-		File repoDir = new File(getTenantHostedBaseDir(), name);
-		FileKey key = FileKey.exact(repoDir, FS.DETECTED);
-		Repository repo = RepositoryCache.open(key, true);
-		return repo;
-	}
-
-	private Repository getMirroredRepository(String name) throws IOException {
-		return new FileRepository(new File(getTenantMirroredBaseDir(), name));
-	}
-
-	public void setBasePath(String basePath) {
-		this.basePath = basePath;
-	}
-
 	@Secured({ Role.Observer, Role.User })
 	@Override
 	public List<Commit> getLog(Region region) {
 		List<Commit> result = new ArrayList<Commit>();
 		Set<ObjectId> visited = new HashSet<ObjectId>();
 
-		for (Repository repo : getAllRepositories()) {
+		for (Repository repo : repositoryProvider.getAllRepositories()) {
 			result.addAll(getLog(repo, region, visited));
 			repo.close();
 		}
@@ -420,7 +327,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 			List<Commit> result = new ArrayList<Commit>();
 			while (iterator.hasNext() && page < region.getSize()) {
 				RevCommit commit = iterator.next();
-				result.add(createCommit(commit));
+				result.add(GitDomain.createCommit(commit));
 				page++;
 			}
 
@@ -437,13 +344,13 @@ public class GitServiceBean implements GitService, InitializingBean {
 			EntityNotFoundException {
 		for (ScmRepository repo : getHostedRepositories()) {
 			if (repo.getName().equals(repositoryName)) {
-				return getHostedRepository(repositoryName);
+				return repositoryProvider.getHostedRepository(repositoryName);
 			}
 		}
 		// FIXME potential that an external repo is shadowned by the internal one
 		for (ScmRepository repo : getExternalRepositories()) {
 			if (repo.getName().equals(repositoryName)) {
-				return getMirroredRepository(repositoryName);
+				return repositoryProvider.getMirroredRepository(repositoryName);
 			}
 		}
 		throw new EntityNotFoundException();
@@ -484,7 +391,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 	@Secured({ Role.Admin })
 	@Override
 	public void createEmptyRepository(String name) {
-		File hostedDir = getTenantHostedBaseDir();
+		File hostedDir = repositoryProvider.getTenantHostedBaseDir();
 		File gitDir = new File(hostedDir, name);
 		gitDir.mkdirs();
 		try {
@@ -517,7 +424,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 	private List<ScmRepository> getHostedRepositories() throws IOException {
 		List<ScmRepository> result = new ArrayList<ScmRepository>();
 
-		File hostedDir = getTenantHostedBaseDir();
+		File hostedDir = repositoryProvider.getTenantHostedBaseDir();
 		if (hostedDir != null && hostedDir.exists()) {
 
 			for (String repoName : hostedDir.list()) {
@@ -589,7 +496,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 	private List<ScmRepository> getExternalRepositories() throws IOException, URISyntaxException {
 		List<ScmRepository> result = new ArrayList<ScmRepository>();
 
-		File hostedDir = getTenantMirroredBaseDir();
+		File hostedDir = repositoryProvider.getTenantMirroredBaseDir();
 		if (hostedDir != null && hostedDir.exists()) {
 			for (String repoName : hostedDir.list()) {
 				ScmRepository repo = new ScmRepository();
@@ -624,7 +531,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 			public void visit(RevCommit c) {
 				Profile p = profilesByName.get(c.getAuthorIdent().getName());
 				if (p == null) {
-					p = fromPersonIdent(c.getAuthorIdent());
+					p = GitDomain.fromPersonIdent(c.getAuthorIdent());
 					p.setId((long) profilesByName.size()); // wrong id but need for eq/hash
 					profilesByName.put(c.getAuthorIdent().getName(), p);
 				}
@@ -664,7 +571,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 	public void addExternalRepository(String url) {
 		try {
 			String repoName = getRepoDirNameFromExternalUrl(url);
-			File dir = new File(getTenantMirroredBaseDir(), repoName);
+			File dir = new File(repositoryProvider.getTenantMirroredBaseDir(), repoName);
 			Git git = Git.init().setBare(true).setDirectory(dir).call();
 			RemoteConfig config = new RemoteConfig(git.getRepository().getConfig(), Constants.DEFAULT_REMOTE_NAME);
 			config.addURI(new URIish(url));
@@ -684,7 +591,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 	@Override
 	public void removeExternalRepository(String url) {
 		String repoName = getRepoDirNameFromExternalUrl(url);
-		File dir = new File(getTenantMirroredBaseDir(), repoName);
+		File dir = new File(repositoryProvider.getTenantMirroredBaseDir(), repoName);
 		try {
 			FileUtils.delete(dir, FileUtils.RECURSIVE);
 		} catch (IOException e) {
@@ -695,14 +602,14 @@ public class GitServiceBean implements GitService, InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (startThreads) {
-			new FetchWorkerThread(this).start();
+			new FetchWorkerThread(this.repositoryProvider).start();
 		}
 	}
 
 	@Secured({ Role.Admin })
 	@Override
 	public void removeInternalRepository(String name) {
-		File hostedDir = getTenantHostedBaseDir();
+		File hostedDir = repositoryProvider.getTenantHostedBaseDir();
 		File dir = new File(hostedDir, name);
 		try {
 			FileUtils.delete(dir, FileUtils.RECURSIVE);
@@ -737,7 +644,9 @@ public class GitServiceBean implements GitService, InitializingBean {
 		RevWalk walk = new RevWalk(repo);
 		RevCommit theCommit = walk.parseCommit(thisC);
 
-		Commit result = createCommit(theCommit);
+		Commit result = GitDomain.createCommit(theCommit);
+		result.setUrl(profileServiceConfiguration.getWebUrlForCommit(TenancyUtil.getCurrentTenantProjectIdentifer(),
+				result));
 		result.setRepository(repositoryName);
 
 		// FIXME how to handle merges? there can be real diffs there
@@ -777,7 +686,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 
 	@Override
 	public String getPublicSshKey() {
-		File file = new File(getTenantBaseDir(), ".ssh/id_rsa.pub");
+		File file = new File(repositoryProvider.getTenantBaseDir(), ".ssh/id_rsa.pub");
 		if (!file.exists()) {
 			return "";
 		}

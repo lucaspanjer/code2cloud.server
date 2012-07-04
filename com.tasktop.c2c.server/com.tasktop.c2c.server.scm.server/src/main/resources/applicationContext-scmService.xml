@@ -11,6 +11,8 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
+  	<import resource="classpath:applicationContext-eventServiceClient.xml"/>
+
 
 	<context:component-scan base-package="com.tasktop.c2c.server.scm.service"/>
 

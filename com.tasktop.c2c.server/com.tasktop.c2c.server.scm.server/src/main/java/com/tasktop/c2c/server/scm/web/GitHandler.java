@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.ChunkedInputStream;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.transport.PostReceiveHook;
 import org.eclipse.jgit.transport.ReceivePack;
 import org.eclipse.jgit.transport.UploadPack;
 import org.eclipse.jgit.transport.resolver.RepositoryResolver;
@@ -90,6 +91,8 @@ public class GitHandler implements HttpRequestHandler {
 
 	private RepositoryResolver<HttpServletRequest> repositoryResolver;
 
+	private PostReceiveHook postReceiveHook = PostReceiveHook.NULL;
+
 	@SuppressWarnings("serial")
 	private static class ErrorResponseException extends Exception {
 		private ErrorResponseException(String message) {
@@ -150,6 +153,7 @@ public class GitHandler implements HttpRequestHandler {
 				switch (command) {
 				case RECEIVE_PACK:
 					ReceivePack rp = new ReceivePack(repository);
+					rp.setPostReceiveHook(postReceiveHook);
 					rp.receive(requestInput, mox.stream(PacketType.STDOUT), mox.stream(PacketType.STDERR));
 					break;
 				case UPLOAD_PACK:
@@ -280,6 +284,10 @@ public class GitHandler implements HttpRequestHandler {
 	 */
 	public void setRepositoryResolver(RepositoryResolver<HttpServletRequest> repositoryResolver) {
 		this.repositoryResolver = repositoryResolver;
+	}
+
+	public void setPostRecieveHook(final PostReceiveHook hook) {
+		postReceiveHook = hook;
 	}
 
 }

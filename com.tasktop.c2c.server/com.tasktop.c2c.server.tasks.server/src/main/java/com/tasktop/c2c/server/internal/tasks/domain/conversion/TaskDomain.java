@@ -126,6 +126,7 @@ public class TaskDomain {
 		target.setDeadline(source.getDeadline());
 
 		target.setExternalTaskRelations(generateExternalTaskRelationsString(source.getExternalTaskRelations()));
+		target.setCommits(generateCommitsString(source.getCommits()));
 		target.setEstimatedTime(source.getEstimatedTime());
 
 		// Non-nullable
@@ -190,6 +191,10 @@ public class TaskDomain {
 			relString = StringUtils.join(rels, "\n");
 		}
 		return relString;
+	}
+
+	private static String generateCommitsString(List<String> commits) {
+		return StringUtils.join(commits, ",");
 	}
 
 	private static String generateKeywordString(List<Keyword> keywords) {
@@ -461,6 +466,7 @@ public class TaskDomain {
 		// Mandatory custom fields
 		managedTarget.setTaskType(source.getTaskType());
 		managedTarget.setExternalTaskRelations(source.getExternalTaskRelations());
+		managedTarget.setCommits(source.getCommits());
 
 		if (StringUtils.isNotEmpty(managedTarget.getStatusWhiteboard())) {
 			// A non-empty statusWhiteboard means we store description there for backward compatibility. (See discussion

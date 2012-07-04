@@ -63,6 +63,7 @@ public class Task extends TaskHandle implements Comparable<Task> {
 	private List<Task> duplicates;
 
 	private Map<String, String> customFields;
+	private List<String> commits;
 
 	@JsonIgnore
 	public TaskHandle getTaskHandle() {
@@ -408,6 +409,14 @@ public class Task extends TaskHandle implements Comparable<Task> {
 	 */
 	public void setSumOfSubtasksTimeSpent(BigDecimal sumOfSubtasksTimeSpent) {
 		this.sumOfSubtasksTimeSpent = sumOfSubtasksTimeSpent;
+	}
+
+	public List<String> getCommits() {
+		return commits;
+	}
+
+	public void setCommits(List<String> commits) {
+		this.commits = commits;
 	}
 
 }

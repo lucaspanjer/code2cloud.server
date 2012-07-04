@@ -14,7 +14,7 @@
 	
 	<bean id="standardGitHttpRequestHandler"
 		class="com.tasktop.c2c.server.scm.web.GitSmartHttpServlet"
-		p:repositoryResolver-ref="repositoryResolver">
+		p:repositoryResolver-ref="repositoryResolver" p:postRecieveHook-ref="eventGeneratingPostRecieveHook">
 	</bean>
 	
 	<bean id="repositoryResolver" class="com.tasktop.c2c.server.scm.service.MultiTenantRepositoryResolver"
@@ -22,7 +22,8 @@
 	</bean>
 	
 	<bean id="gitRequestHandler" class="com.tasktop.c2c.server.scm.web.GitHandler"
-	    p:repositoryResolver-ref="repositoryResolver">
+	    p:repositoryResolver-ref="repositoryResolver"
+	    p:postRecieveHook-ref="eventGeneratingPostRecieveHook">
 	</bean>
 	
 	<bean class="org.springframework.web.servlet.handler.SimpleServletHandlerAdapter" />
