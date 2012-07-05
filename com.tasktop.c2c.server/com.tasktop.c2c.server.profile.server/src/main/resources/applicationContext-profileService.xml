@@ -98,10 +98,12 @@
 			<property name="internalPort" value="8080"/>
 			<property name="ajpPort" value="8009"/>
 		</bean>
+		<!-- Removed until deployment is fixed (task 4521) 
 		<bean class="com.tasktop.c2c.server.profile.domain.internal.ProjectService">
 			<property name="type" value="DEPLOYMENT"/>
 			<property name="externalUrl" value="http://api.cloudfoundry.com"/>
 		</bean>
+		 -->
 	</util:list>
 
 </beans>
