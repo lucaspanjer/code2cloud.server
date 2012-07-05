@@ -12,12 +12,23 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.hudson.plugin.cloud;
 
+import hudson.slaves.AbstractCloudComputer;
 import hudson.slaves.CloudRetentionStrategy;
 
 public class C2CRetentionStrategy extends CloudRetentionStrategy {
 
+	private final long initTime = System.currentTimeMillis();
+
 	public C2CRetentionStrategy() {
 		super(1);
+	}
+
+	/** Workaround for task 4457. Sometimes we immediately release. */
+	public synchronized long check(AbstractCloudComputer c) {
+		if (System.currentTimeMillis() - initTime < 60000) {
+			return 1;
+		}
+		return super.check(c);
 	}
 
 }
