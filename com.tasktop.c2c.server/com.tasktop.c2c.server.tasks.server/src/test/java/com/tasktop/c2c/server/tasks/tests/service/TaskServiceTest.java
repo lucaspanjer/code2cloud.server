@@ -4550,5 +4550,10 @@ public class TaskServiceTest {
 		task = taskService.updateTask(task);
 		Assert.assertEquals(1, task.getCommits().size());
 
+		// Test for task 4520
+		task.setCommits(null);
+		task = taskService.updateTask(task);
+		Assert.assertEquals(1, task.getCommits().size());
+
 	}
 }

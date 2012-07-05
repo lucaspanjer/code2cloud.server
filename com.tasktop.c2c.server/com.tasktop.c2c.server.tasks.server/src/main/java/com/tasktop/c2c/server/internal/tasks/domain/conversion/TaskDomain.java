@@ -466,7 +466,9 @@ public class TaskDomain {
 		// Mandatory custom fields
 		managedTarget.setTaskType(source.getTaskType());
 		managedTarget.setExternalTaskRelations(source.getExternalTaskRelations());
-		managedTarget.setCommits(source.getCommits());
+		if (source.getCommits() != null) {
+			managedTarget.setCommits(source.getCommits());
+		}
 
 		if (StringUtils.isNotEmpty(managedTarget.getStatusWhiteboard())) {
 			// A non-empty statusWhiteboard means we store description there for backward compatibility. (See discussion
