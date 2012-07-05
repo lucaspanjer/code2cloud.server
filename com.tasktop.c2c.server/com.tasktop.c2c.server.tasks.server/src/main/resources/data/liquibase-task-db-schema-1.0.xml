@@ -2606,7 +2606,7 @@
 		</insert>
 	</changeSet>
 	<changeSet author="cmorgan" id="task_4739_addCommitsField" >
-		<addColumn tableName="BUGS">
+		<addColumn tableName="bugs">
 			<column name="cf_commits" type="MEDIUMTEXT" />
 		</addColumn>
 	</changeSet>
