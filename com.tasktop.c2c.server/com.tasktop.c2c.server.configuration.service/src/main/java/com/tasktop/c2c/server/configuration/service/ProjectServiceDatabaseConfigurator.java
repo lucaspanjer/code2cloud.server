@@ -68,8 +68,9 @@ public class ProjectServiceDatabaseConfigurator implements Configurator, Resourc
 			if (dbType.toUpperCase().startsWith("HSQL")) {
 				createStmt = "create schema " + dbName;
 			} else if (dbType.toUpperCase().startsWith("ORACLE")) {
-				createStmt = "create user \"" + dbName + "\" identified by "
-						+ UUID.randomUUID().toString().substring(0, 7) + " account lock";
+				dbName = dbName.toUpperCase();
+				createStmt = "create user \"" + dbName + "\" identified by \""
+						+ UUID.randomUUID().toString().substring(0, 7) + "\" account lock";
 				s.execute(createStmt);
 				createStmt = "grant unlimited tablespace to \"" + dbName + "\"";
 			}
@@ -94,7 +95,7 @@ public class ProjectServiceDatabaseConfigurator implements Configurator, Resourc
 			schemaInstaller.setChangeLog(changelog);
 			schemaInstaller.setContexts(changelogContexts);
 			String dbName = projectIdentifier + suffix;
-			if (dbType.toUpperCase().startsWith("HSQL")) {
+			if (dbType.toUpperCase().startsWith("HSQL") || dbType.toUpperCase().startsWith("ORACLE")) {
 				// HSQLDB will create the DB in upper case even if we specify lower case in the escaped create schema
 				// statement
 				schemaInstaller.setDefaultSchema(dbName.toUpperCase());
