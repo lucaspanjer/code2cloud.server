@@ -2609,6 +2609,9 @@
 		<addColumn tableName="bugs">
 			<column name="cf_commits" type="MEDIUMTEXT" />
 		</addColumn>
+    	 <modifySql dbms="hsqldb, oracle">
+         	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
+    	</modifySql>
 	</changeSet>
 	
 </databaseChangeLog>
