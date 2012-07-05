@@ -14,12 +14,11 @@ package com.tasktop.c2c.server.common.web.client.notification;
 
 public class OperationMessage {
 
-	private String inProgressText;
-	private String errorText;
-	private String successText;
+	private Message progress;
+	private Message success;
 
 	public OperationMessage(String inProgressText) {
-		this.inProgressText = inProgressText;
+		setInProgressText(inProgressText);
 	}
 
 	public static OperationMessage create(String inProgressText) {
@@ -27,35 +26,20 @@ public class OperationMessage {
 	}
 
 	public OperationMessage setInProgressText(String inProgressText) {
-		this.inProgressText = inProgressText;
-		return this;
-	}
-
-	public OperationMessage setErrorText(String errorText) {
-		this.errorText = errorText;
+		this.progress = new Message(0, inProgressText, Message.MessageType.PROGRESS);
 		return this;
 	}
 
 	public OperationMessage setSuccessText(String successText) {
-		this.successText = successText;
+		this.success = new Message(10, successText, Message.MessageType.SUCCESS);
 		return this;
 	}
 
-	public Message getErrorMessage() {
-		if (errorText == null) {
-			return null;
-		}
-		return new Message(0, errorText, Message.MessageType.ERROR);
-	}
-
 	public Message getSuccessMessage() {
-		if (successText == null) {
-			return null;
-		}
-		return new Message(10, successText, Message.MessageType.SUCCESS);
+		return success;
 	}
 
 	public Message getProgressMessage() {
-		return new Message(0, inProgressText, Message.MessageType.PROGRESS);
+		return progress;
 	}
 }

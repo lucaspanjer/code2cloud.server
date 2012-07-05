@@ -70,7 +70,7 @@ public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 
 	private void operationStart() {
 		setButtonToEnableState(false);
-		if (operationMessage != null) {
+		if (operationMessage != null && operationMessage.getProgressMessage() != null) {
 			notifier.displayMessage(operationMessage.getProgressMessage());
 		}
 	}
@@ -84,14 +84,22 @@ public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 	}
 
 	private void operationEnd() {
-		if (operationMessage != null) {
+		if (operationMessage != null && operationMessage.getProgressMessage() != null) {
+			notifier.removeMessage(operationMessage.getProgressMessage());
+		}
+	}
+
+	private void operationEndSuccess() {
+		operationEnd();
+		if (operationMessage != null && operationMessage.getSuccessMessage() != null) {
 			notifier.displayMessage(operationMessage.getSuccessMessage());
 		}
+
 	}
 
 	@Override
 	public final void onSuccess(T result) {
-		operationEnd();
+		operationEndSuccess();
 		success(result);
 		setButtonToEnableState(true);
 	}
@@ -100,6 +108,7 @@ public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 
 	@Override
 	public void onFailure(Throwable exception) {
+		operationEnd();
 		if (overrideErrorView != null) {
 			overrideErrorView.displayErrors(getErrors(exception));
 		} else {

@@ -18,11 +18,9 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectScmRepositoriesAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectScmRepositoriesResult;
 import com.tasktop.c2c.server.common.web.client.event.ClearCacheEvent;
-import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
@@ -125,8 +123,6 @@ public class ProjectAdminSourceActivity extends AbstractActivity implements IPro
 														updateView();
 													}
 												});
-								ProfileGinjector.get.instance().getNotifier()
-										.displayMessage(Message.createSuccessMessage("Repository added"));
 							}
 
 						});
