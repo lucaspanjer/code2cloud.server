@@ -22,6 +22,8 @@ import com.tasktop.c2c.server.common.web.client.notification.Message;
  */
 public interface IPlace {
 
+	String TOKEN_SEPERATOR = "-";
+
 	/**
 	 * Get the token part of the url. This is the part that is used to specify the location on a physical page, similar
 	 * to the anchor

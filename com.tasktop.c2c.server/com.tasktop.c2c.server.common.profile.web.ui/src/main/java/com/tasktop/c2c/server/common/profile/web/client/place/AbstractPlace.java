@@ -53,7 +53,7 @@ public abstract class AbstractPlace extends Place implements IPlace {
 		sb.append(getPrefix());
 		String token = getToken();
 		if (StringUtils.hasText(token)) {
-			sb.append(":").append(token);
+			sb.append(IPlace.TOKEN_SEPERATOR).append(token);
 		}
 		return sb.toString();
 	}

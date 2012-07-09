@@ -45,7 +45,7 @@ public class AppHistoryMapper extends AbstractPlaceHistoryMapper<Place> {
 		@Override
 		public String toString() {
 			if (StringUtils.hasText(token)) {
-				return ((prefix.length() == 0) ? token : prefix + ":" + token);
+				return ((prefix.length() == 0) ? token : prefix + IPlace.TOKEN_SEPERATOR + token);
 			} else {
 				return prefix;
 			}
