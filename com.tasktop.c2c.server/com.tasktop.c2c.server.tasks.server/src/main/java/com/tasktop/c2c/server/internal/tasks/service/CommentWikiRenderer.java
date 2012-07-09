@@ -48,6 +48,9 @@ public class CommentWikiRenderer {
 	}
 
 	public String render(String markupText, String markupLanguageName) {
+		if (markupText == null || markupText.isEmpty()) {
+			return "";
+		}
 		StringWriter writer = new StringWriter();
 
 		MarkupLanguage markupLanguage = markupLanguageByName.get(markupLanguageName);
