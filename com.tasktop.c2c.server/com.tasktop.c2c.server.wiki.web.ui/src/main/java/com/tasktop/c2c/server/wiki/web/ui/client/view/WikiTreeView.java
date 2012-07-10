@@ -15,7 +15,6 @@ package com.tasktop.c2c.server.wiki.web.ui.client.view;
 import java.util.LinkedList;
 import java.util.Queue;
 
-
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.event.logical.shared.OpenEvent;
@@ -56,6 +55,7 @@ public class WikiTreeView extends FocusPanel {
 			}
 
 		});
+		cellTree.setDefaultNodeSize(200);
 		setWidget(cellTree);
 	}
 
