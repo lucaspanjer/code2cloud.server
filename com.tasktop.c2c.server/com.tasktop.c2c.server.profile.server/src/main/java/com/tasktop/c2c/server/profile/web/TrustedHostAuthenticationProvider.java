@@ -151,10 +151,13 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 				}
 			}
 
-			if (host.getServiceHostConfiguration().getSupportedServices().contains(ServiceType.TASKS)) {
+			// Used when events are pushed to the hub
+			if (host.getServiceHostConfiguration().getSupportedServices().contains(ServiceType.TASKS)
+					|| host.getServiceHostConfiguration().getSupportedServices().contains(ServiceType.SCM)) {
 				String appId = request.getHeader(HeaderConstants.TRUSTED_HOST_PROJECT_ID_HEADER);
 				if (appId != null) {
-					authorities.add(new SimpleGrantedAuthority(Role.System));
+					authorities.add(new SimpleGrantedAuthority(Role.System)); // REVIEW, should scope this to just the
+																				// relevant project?
 				}
 			}
 		}
