@@ -64,8 +64,6 @@ public class DiffEntryView extends Composite implements Editor<Commit> {
 		renameFrom.setVisible(false);
 		switch (diff.getChangeType()) {
 		case MODIFY:
-		case ADD:
-		default:
 			opRes = ScmResources.get.changeIcon();
 			filename = diff.getNewPath();
 			break;
@@ -84,6 +82,12 @@ public class DiffEntryView extends Composite implements Editor<Commit> {
 			renameFrom.setText(trimFilename(diff.getOldPath()) + " copied to ");
 			opRes = ScmResources.get.changeIcon();
 			filename = diff.getNewPath();
+			break;
+		default:
+		case ADD:
+			opRes = ScmResources.get.addIcon();
+			filename = diff.getNewPath();
+			break;
 		}
 		operationImage.setResource(opRes);
 		fileName.setText(trimFilename(filename));
