@@ -63,7 +63,7 @@ import com.tasktop.c2c.server.common.service.doc.Documentation;
 import com.tasktop.c2c.server.common.service.doc.Section;
 import com.tasktop.c2c.server.common.service.doc.Title;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
-import com.tasktop.c2c.server.common.service.web.AbstractRestService;
+import com.tasktop.c2c.server.common.service.web.AbstractBuildInfoRestService;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
@@ -82,7 +82,7 @@ import com.tasktop.c2c.server.profile.service.ProfileWebService;
 		+ "The profile service methods are available by appending the URI to the base URL\n"
 		+ "https://{hostname}/{prefix}/api + URI, for example: https://example.com/api/profile")
 @Controller
-public class ProfileWebServiceController extends AbstractRestService implements ProfileWebService {
+public class ProfileWebServiceController extends AbstractBuildInfoRestService implements ProfileWebService {
 
 	@Autowired
 	@Qualifier("main")

@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
-import com.tasktop.c2c.server.common.service.web.AbstractRestService;
+import com.tasktop.c2c.server.common.service.web.AbstractBuildInfoRestService;
 
 @Controller
-public class ProjectServiceManagementServiceController extends AbstractRestService {
+public class ProjectServiceManagementServiceController extends AbstractBuildInfoRestService {
 
 	private ProjectServiceManagementService projectServiceManagementService;
 

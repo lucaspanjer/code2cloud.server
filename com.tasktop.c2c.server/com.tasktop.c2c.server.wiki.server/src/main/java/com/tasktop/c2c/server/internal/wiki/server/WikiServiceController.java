@@ -51,7 +51,7 @@ import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
-import com.tasktop.c2c.server.common.service.web.AbstractRestService;
+import com.tasktop.c2c.server.common.service.web.AbstractBuildInfoRestService;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.AttachmentHandle;
 import com.tasktop.c2c.server.wiki.domain.Page;
@@ -67,7 +67,7 @@ import com.tasktop.c2c.server.wiki.service.WikiService;
 		+ "https://{hostname}/s/{projectIdentifier}/wiki + URI, for example: https://example.com/s/projectabc/wiki/page/Home")
 @Controller
 @Qualifier("webservice")
-public class WikiServiceController extends AbstractRestService implements WikiService {
+public class WikiServiceController extends AbstractBuildInfoRestService implements WikiService {
 
 	@Qualifier("main")
 	@Autowired

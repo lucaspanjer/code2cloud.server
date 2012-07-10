@@ -5,11 +5,11 @@
 	<artifactId>profile.web</artifactId>
 	<packaging>war</packaging>
 	<name>profile web</name>
-		<parent>
+	<parent>
 		<groupId>com.tasktop.c2c.server</groupId>
-		<artifactId>lib</artifactId>
+		<artifactId>web-parent</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
-		<relativePath>../com.tasktop.c2c.server.profile.build/parent/pom.xml</relativePath>
+		<relativePath>../com.tasktop.c2c.server.profile.build/web-parent/pom.xml</relativePath>
 	</parent>
 
 	<dependencies>

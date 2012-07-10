@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>web-parent</artifactId>
+	<packaging>pom</packaging>
+	<name>web parent</name>
+		<parent>
+		<groupId>com.tasktop.c2c.server</groupId>
+		<artifactId>lib</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>../com.tasktop.c2c.server.profile.build/parent/pom.xml</relativePath>
+	</parent>
+
+	
+
+	<build>
+	<plugins>
+	
+       <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.0.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>revision</goal>
+                         </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <prefix>git</prefix>
+                    <dateFormat>dd.MM.yyyy '@' HH:mm:ss z</dateFormat>
+                    <verbose>true</verbose>
+                    <skipPoms>true</skipPoms>
+					<dotGitDirectory>${project.basedir}/../../.git</dotGitDirectory>
+                    <!-- this is false by default, forces the plugin to generate the git.properties file -->
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>src/main/resources/config/git.properties</generateGitPropertiesFilename>
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                </configuration>
+
+            </plugin>
+	</plugins>
+</build>
+
+</project>

@@ -46,7 +46,7 @@ import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.SortInfo;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.CriteriaParser;
-import com.tasktop.c2c.server.common.service.web.AbstractRestService;
+import com.tasktop.c2c.server.common.service.web.AbstractBuildInfoRestService;
 import com.tasktop.c2c.server.tasks.domain.AbstractDomainObject;
 import com.tasktop.c2c.server.tasks.domain.Attachment;
 import com.tasktop.c2c.server.tasks.domain.AttachmentHandle;
@@ -79,7 +79,7 @@ import com.tasktop.c2c.server.tasks.service.TaskService;
 		+ "https://{hostname}/s/{projectIdentifier}/tasks + URI, for example: https://example.com/s/projectabc/tasks/task/1")
 @Controller
 @Qualifier("webservice")
-public class TaskServiceController extends AbstractRestService implements TaskService {
+public class TaskServiceController extends AbstractBuildInfoRestService implements TaskService {
 
 	@Autowired
 	private ObjectMapper jsonMapper;

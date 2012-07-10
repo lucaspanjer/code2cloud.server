@@ -32,7 +32,7 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.doc.Documentation;
 import com.tasktop.c2c.server.common.service.doc.Title;
 import com.tasktop.c2c.server.common.service.domain.Region;
-import com.tasktop.c2c.server.common.service.web.AbstractRestService;
+import com.tasktop.c2c.server.common.service.web.AbstractBuildInfoRestService;
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
@@ -46,7 +46,7 @@ import com.tasktop.c2c.server.scm.service.ScmServiceClient.CommitsForAuthor;
 		+ "The SCM service methods are available by appending the URI to the base URL\n"
 		+ "https://{hostname}/s/{projectIdentifier}/scm + URI, for example: https://example.com/s/code2cloud/scm/summary")
 @Controller
-public class ScmServiceController extends AbstractRestService implements ScmService {
+public class ScmServiceController extends AbstractBuildInfoRestService implements ScmService {
 
 	@Resource(name = "scmService")
 	private ScmService scmService;
