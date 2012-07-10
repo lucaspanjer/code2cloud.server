@@ -37,7 +37,7 @@
 					<dotGitDirectory>${project.basedir}/../../.git</dotGitDirectory>
                     <!-- this is false by default, forces the plugin to generate the git.properties file -->
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                    <generateGitPropertiesFilename>src/main/resources/config/git.properties</generateGitPropertiesFilename>
+                    <generateGitPropertiesFilename>target/classes/config/git.properties</generateGitPropertiesFilename>
                     <failOnNoGitDirectory>false</failOnNoGitDirectory>
                 </configuration>
 
