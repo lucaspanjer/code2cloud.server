@@ -19,6 +19,8 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
@@ -32,16 +34,23 @@ import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServ
  */
 public class DatabaseMetricCollector implements MetricCollector {
 
+	private static final Logger LOG = LoggerFactory.getLogger(DatabaseMetricCollector.class);
+
 	public static final String PROJECT_ID_VAR = "{projectIdentifier}";
 
 	private String metricName;
 	private DataSource dataSource;
 	private String sqlSizeQuery;
+	private boolean uppercaseProjectIdentifier = false;
 
 	@Override
 	public void collect(ProjectServiceStatus status) {
-		String query = sqlSizeQuery.replace(PROJECT_ID_VAR, status.getProjectIdentifier());
-
+		String projectId = status.getProjectIdentifier();
+		if (uppercaseProjectIdentifier) {
+			projectId = projectId.toUpperCase();
+		}
+		String query = sqlSizeQuery.replace(PROJECT_ID_VAR, projectId);
+		LOG.debug(String.format("Collecting database metrics with query: [%s]", query));
 		Connection c = null;
 		try {
 			c = dataSource.getConnection();
@@ -77,6 +86,14 @@ public class DatabaseMetricCollector implements MetricCollector {
 
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
+	}
+
+	/**
+	 * @param uppercaseProjectIdentifier
+	 *            the uppercaseProjectIdentifier to set
+	 */
+	public void setUppercaseProjectIdentifier(boolean uppercaseProjectIdentifier) {
+		this.uppercaseProjectIdentifier = uppercaseProjectIdentifier;
 	}
 
 }
