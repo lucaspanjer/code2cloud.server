@@ -12,7 +12,9 @@
 		<relativePath>../com.tasktop.c2c.server.profile.build/parent/pom.xml</relativePath>
 	</parent>
 
-	
+	<properties>
+	    <settingsBaseDir>${project.parent.parent.basedir}</settingsBaseDir>
+	</properties>
 
 	<build>
 	<plugins>
