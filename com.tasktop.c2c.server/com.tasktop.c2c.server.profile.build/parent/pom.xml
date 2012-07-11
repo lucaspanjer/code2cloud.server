@@ -11,8 +11,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<com.tasktop.c2c.server.version>0.1.0-SNAPSHOT</com.tasktop.c2c.server.version>
-		<spring.core.version>3.0.5.RELEASE</spring.core.version>
-		<spring.security.version>3.1.0.RC2</spring.security.version>
+		<spring.core.version>3.1.1.RELEASE</spring.core.version>
+		<spring.security.version>3.1.1.RELEASE</spring.security.version>
 		<spring.social.version>1.0.0.RC2</spring.social.version>
 		<com.tasktop.c2c.eclipselink.version>2.3.2</com.tasktop.c2c.eclipselink.version>
 		<gwt.version>2.4.0</gwt.version>
@@ -336,6 +336,16 @@
 				<groupId>org.springframework.tenancy</groupId>
 				<artifactId>spring-tenancy</artifactId>
 				<version>1.0.0.BUILD-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>1.6.10</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjweaver</artifactId>
+				<version>1.6.10</version>
 			</dependency>
 			<dependency>
 				<groupId>cglib</groupId>
