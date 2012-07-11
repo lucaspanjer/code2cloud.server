@@ -141,5 +141,5 @@
   <classpathentry kind="var" path="M2_REPO/xom/xom/1.0/xom-1.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/xpp3/xpp3/1.1.4c/xpp3-1.1.4c.jar" sourcepath="M2_REPO/xpp3/xpp3/1.1.4c/xpp3-1.1.4c-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hudsonci/tools/xstream/1.4.1-hudson-2/xstream-1.4.1-hudson-2.jar" sourcepath="M2_REPO/org/hudsonci/tools/xstream/1.4.1-hudson-2/xstream-1.4.1-hudson-2-sources.jar"/>
-  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 </classpath>
