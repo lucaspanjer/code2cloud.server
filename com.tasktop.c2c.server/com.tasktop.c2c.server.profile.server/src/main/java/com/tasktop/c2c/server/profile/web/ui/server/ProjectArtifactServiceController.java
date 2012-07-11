@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 import com.tasktop.c2c.server.common.service.web.AbstractRestService;
 import com.tasktop.c2c.server.profile.domain.project.ProjectArtifacts;
 import com.tasktop.c2c.server.profile.service.ProjectArtifactService;
@@ -41,6 +40,10 @@ public class ProjectArtifactServiceController extends AbstractRestService {
 	@Autowired
 	@Qualifier("main")
 	private ProjectArtifactService projectArtifactService;
+
+	public void setProjectArtifactService(ProjectArtifactService projectArtifactService) {
+		this.projectArtifactService = projectArtifactService;
+	}
 
 	public ProjectArtifactServiceController() {
 		lastInstance = this;

@@ -19,8 +19,7 @@
 		autowire="byType"/>
 		
 	<bean id="projectArtifactServiceController"
-		class="com.tasktop.c2c.server.profile.web.ui.server.ProjectArtifactServiceController"
-		autowire="byType"/>
+		class="com.tasktop.c2c.server.profile.web.ui.server.ProjectArtifactServiceController" p:projectArtifactService-ref="projectArtifactService" />
 
 	<bean id="externalConnectController"
 		class="org.springframework.social.connect.web.ConnectController" p:applicationUrl="#{psConfig.profileApplicationProtocol + '://' + psConfig.webHost + psConfig.baseContextPath}">

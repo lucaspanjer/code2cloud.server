@@ -289,6 +289,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
+				<artifactId>spring-expression</artifactId>
+				<version>${spring.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
 				<artifactId>spring-web</artifactId>
 				<version>${spring.core.version}</version>
 			</dependency>
@@ -484,7 +489,7 @@
 				<groupId>org.jclouds.provider</groupId>
 				<artifactId>trmk-vcloudexpress</artifactId>
 				<version>1.3.1</version>
-			</dependency>
+			</dependency>		
 			<dependency>
 				<groupId>org.jclouds.driver</groupId>
 				<artifactId>jclouds-jsch</artifactId>
