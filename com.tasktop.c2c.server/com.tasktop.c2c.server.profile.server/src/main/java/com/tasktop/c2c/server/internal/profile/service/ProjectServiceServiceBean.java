@@ -49,7 +49,6 @@ import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectServiceProfile;
 import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
-import com.tasktop.c2c.server.profile.service.ProfileWebService;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 
 @Service("projectServiceService")
@@ -64,9 +63,6 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 	@Autowired
 	private JobService jobService;
-
-	@Resource(name = "profileWebServiceBean")
-	private ProfileWebService profileWebService;
 
 	@Resource
 	private Map<ServiceType, NodeProvisioningService> nodeProvisioningServiceByType;
