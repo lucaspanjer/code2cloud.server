@@ -12,7 +12,12 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.auth.service;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.authentication.RememberMeAuthenticationToken;
@@ -21,11 +26,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+import org.springframework.web.filter.GenericFilterBean;
 
-// REVIEW : I don't think we should be extending APAPF here. That is not really what we are doing, we 
-// are handling everything ourself and not using the base class as its designed.
-public class AuthenticationRoleProcessingFilter extends AbstractPreAuthenticatedProcessingFilter {
+public class AuthenticationRoleProcessingFilter extends GenericFilterBean {
 
 	private UserDetailsService userDetailsService;
 	private String rememberMeKey;
@@ -40,16 +43,21 @@ public class AuthenticationRoleProcessingFilter extends AbstractPreAuthenticated
 		this.rememberMeKey = rememberMeKey;
 	}
 
-	@Override
-	protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+			ServletException {
 
 		// Pull out our credentials and recalculate the associated roles for it.
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		if (auth == null) {
-			return null;
+		if (auth != null) {
+			updateAuth(auth);
 		}
 
+		chain.doFilter(request, response);
+
+	}
+
+	private void updateAuth(Authentication auth) {
 		// Push in the user's updated roles now.
 		if (auth instanceof UsernamePasswordAuthenticationToken) {
 
@@ -75,15 +83,6 @@ public class AuthenticationRoleProcessingFilter extends AbstractPreAuthenticated
 			// Push this into the Spring Security context.
 			SecurityContextHolder.getContext().setAuthentication(newToken);
 		}
-
-		// No matter what, always return our original principal - that indicates no change to the authentication itself
-		// (which is what we want - the user is still the same, it's only their roles which have been updated).
-		return auth.getPrincipal();
 	}
 
-	@Override
-	protected Object getPreAuthenticatedCredentials(HttpServletRequest request) {
-		// Dummy return value - this method needs non-null returns.
-		return request;
-	}
 }

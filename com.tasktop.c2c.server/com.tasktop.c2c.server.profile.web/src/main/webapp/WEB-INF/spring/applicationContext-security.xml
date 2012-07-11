@@ -37,7 +37,6 @@
 	/>
 	
 	<bean id="authRoleSecurityFilter" class="com.tasktop.c2c.server.auth.service.AuthenticationRoleProcessingFilter"
-		p:authenticationManager-ref="authenticationManager"
 		p:userDetailsService-ref="authenticationService"
 		p:rememberMeKey="#{rememberMeServices.key}"
 	/>
