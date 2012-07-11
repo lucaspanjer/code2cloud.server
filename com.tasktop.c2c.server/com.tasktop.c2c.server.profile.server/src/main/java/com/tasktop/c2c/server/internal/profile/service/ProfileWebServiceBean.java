@@ -29,6 +29,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
@@ -378,5 +379,10 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 	public Organization updateOrganization(Organization organization) throws EntityNotFoundException,
 			ValidationException {
 		return webServiceDomain.copy(profileService.updateOrganization(webServiceDomain.copy(organization)));
+	}
+
+	@Override
+	public List<PoolStatus> computeNodePoolStatus() {
+		return projectServiceService.computePoolStatus();
 	}
 }

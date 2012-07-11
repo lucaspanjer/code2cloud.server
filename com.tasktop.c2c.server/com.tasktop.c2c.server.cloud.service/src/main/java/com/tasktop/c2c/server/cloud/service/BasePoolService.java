@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.cloud.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,9 +31,9 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
-import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolService.PoolStatus;
 import com.tasktop.c2c.server.cloud.service.PoolSizeStrategy.PoolLoad;
 import com.tasktop.c2c.server.cloud.service.PoolSizeStrategy.PoolSize;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
@@ -262,9 +263,20 @@ public class BasePoolService implements InitializingBean, ApplicationListener<Co
 
 	public PoolStatus getStatus() {
 		PoolStatus result = new PoolStatus();
+		result.setSupportedServices(new ArrayList<ServiceType>(nodeType));
+		result.setMaxServicesPerHost(maxCapacity);
 		result.setTotalNodes(getNumTotalNodesInPool());
 		result.setFreeNodes(getNumNodesBelowCapacity());
-		result.setNodesOnLoan(getNumNodesAtCapacity());
+		result.setFullNodes(getNumNodesAtCapacity());
+		result.setNodes(serviceHostService.findHostsByType(nodeType));
+
+		int totalUsage = 0;
+		int totalSpace = 0;
+		for (ServiceHost host : result.getNodes()) {
+			totalUsage += host.getNumServices();
+			totalSpace += maxCapacity;
+		}
+		result.setCapacity((double) totalUsage / (double) totalSpace);
 
 		return result;
 	}

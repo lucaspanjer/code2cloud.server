@@ -12,9 +12,12 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.cloud.service;
 
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 
 public interface NodeProvisioningService {
 
 	ServiceHost provisionNode();
+
+	PoolStatus getStatus();
 }

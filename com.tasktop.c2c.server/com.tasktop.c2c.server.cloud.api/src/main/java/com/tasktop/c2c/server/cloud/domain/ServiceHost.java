@@ -22,6 +22,7 @@ public class ServiceHost {
 	private String internalNetworkAddress;
 	private boolean available;
 	private Set<ServiceType> supportedServices;
+	private int numServices;
 
 	/**
 	 * the cloud-private network address, used for accessing this host within the cloud.
@@ -73,6 +74,14 @@ public class ServiceHost {
 	 */
 	public void setSupportedServices(Set<ServiceType> supportedServices) {
 		this.supportedServices = supportedServices;
+	}
+
+	public int getNumServices() {
+		return numServices;
+	}
+
+	public void setNumServices(int numServices) {
+		this.numServices = numServices;
 	}
 
 }

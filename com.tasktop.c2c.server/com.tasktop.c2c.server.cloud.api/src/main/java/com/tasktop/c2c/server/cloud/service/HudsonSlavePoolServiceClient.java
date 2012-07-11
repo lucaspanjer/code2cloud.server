@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.cloud.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 import com.tasktop.c2c.server.common.service.web.AbstractTrustedHostRestServiceClient;

@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.cloud.service;
 
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.common.service.ValidationException;
 
 /**
@@ -23,45 +24,6 @@ import com.tasktop.c2c.server.common.service.ValidationException;
  * 
  */
 public interface HudsonSlavePoolService {
-
-	static final class PoolStatus {
-		private int totalNodes;
-		private int freeNodes;
-		private int nodesOnLoan;
-		private int outstandingPromises;
-
-		public int getTotalNodes() {
-			return totalNodes;
-		}
-
-		public void setTotalNodes(int totalNodes) {
-			this.totalNodes = totalNodes;
-		}
-
-		public int getFreeNodes() {
-			return freeNodes;
-		}
-
-		public void setFreeNodes(int freeNodes) {
-			this.freeNodes = freeNodes;
-		}
-
-		public int getNodesOnLoan() {
-			return nodesOnLoan;
-		}
-
-		public void setNodesOnLoan(int nodesOnLoan) {
-			this.nodesOnLoan = nodesOnLoan;
-		}
-
-		public int getOutstandingPromises() {
-			return outstandingPromises;
-		}
-
-		public void setOutstandingPromises(int outstandingPromises) {
-			this.outstandingPromises = outstandingPromises;
-		}
-	}
 
 	RequestBuildSlaveResult acquireSlave(String projectIdentifier, String promiseTokenOrNull)
 			throws ValidationException;

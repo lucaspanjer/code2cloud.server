@@ -204,13 +204,6 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 		this.configurationPropertyService = configurationPropertyService;
 	}
 
-	@Override
-	public PoolStatus getStatus() {
-		PoolStatus result = super.getStatus();
-		result.setOutstandingPromises(promiseService.getNumberOfOutstandingPromises());
-		return result;
-	}
-
 	/**
 	 * @param promiseService
 	 *            the promiseService to set

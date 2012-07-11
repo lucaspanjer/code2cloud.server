@@ -238,7 +238,7 @@ public class HudsonSlavePoolServiceTest {
 		waitForAllocations();
 		Assert.assertEquals(POOL_SIZE, hudsonSlavePoolService.getStatus().getTotalNodes());
 		Assert.assertEquals(POOL_SIZE, hudsonSlavePoolService.getStatus().getFreeNodes());
-		Assert.assertEquals(0, hudsonSlavePoolService.getStatus().getNodesOnLoan());
+		Assert.assertEquals(0, hudsonSlavePoolService.getStatus().getFullNodes());
 
 		// Exhaust the pool
 		RequestBuildSlaveResult result = null;
@@ -255,11 +255,11 @@ public class HudsonSlavePoolServiceTest {
 		result = hudsonSlavePoolService.acquireSlave(APPID, null);
 		Assert.assertEquals(RequestBuildSlaveResult.Type.PROMISE, result.getType());
 		Assert.assertNotNull(result.getPromiseToken());
-		Assert.assertEquals(1, hudsonSlavePoolService.getStatus().getOutstandingPromises());
+		Assert.assertEquals(1, promiseService.getNumberOfOutstandingPromises());
 
 		Assert.assertEquals(POOL_SIZE, hudsonSlavePoolService.getStatus().getTotalNodes());
 		Assert.assertEquals(0, hudsonSlavePoolService.getStatus().getFreeNodes());
-		Assert.assertEquals(POOL_SIZE, hudsonSlavePoolService.getStatus().getNodesOnLoan());
+		Assert.assertEquals(POOL_SIZE, hudsonSlavePoolService.getStatus().getFullNodes());
 
 		// Fill it back up
 		for (String ip : provisionedIps) {
@@ -268,7 +268,7 @@ public class HudsonSlavePoolServiceTest {
 		Thread.sleep(1000); // jobs run
 		Assert.assertEquals(POOL_SIZE, hudsonSlavePoolService.getStatus().getTotalNodes());
 		Assert.assertEquals(POOL_SIZE, hudsonSlavePoolService.getStatus().getFreeNodes());
-		Assert.assertEquals(0, hudsonSlavePoolService.getStatus().getNodesOnLoan());
+		Assert.assertEquals(0, hudsonSlavePoolService.getStatus().getFullNodes());
 
 		// hudsonSlavePoolService.setPoolSizeStrategy(new FixedPoolSizeStrategy(POOL_SIZE - 1, POOL_SIZE - 1));
 
@@ -298,7 +298,7 @@ public class HudsonSlavePoolServiceTest {
 
 		Assert.assertEquals(MIN_TOTAL_NODES, hudsonSlavePoolService.getStatus().getTotalNodes());
 		Assert.assertEquals(MIN_TOTAL_NODES, hudsonSlavePoolService.getStatus().getFreeNodes());
-		Assert.assertEquals(0, hudsonSlavePoolService.getStatus().getNodesOnLoan());
+		Assert.assertEquals(0, hudsonSlavePoolService.getStatus().getFullNodes());
 
 		List<String> provisionedIps = new ArrayList<String>();
 		// Exhaust the pool
@@ -312,7 +312,7 @@ public class HudsonSlavePoolServiceTest {
 		waitForAllocations();
 		Assert.assertEquals(MIN_TOTAL_NODES + MIN_FREE, hudsonSlavePoolService.getStatus().getTotalNodes());
 		Assert.assertEquals(MIN_FREE, hudsonSlavePoolService.getStatus().getFreeNodes());
-		Assert.assertEquals(provisionedIps.size(), hudsonSlavePoolService.getStatus().getNodesOnLoan());
+		Assert.assertEquals(provisionedIps.size(), hudsonSlavePoolService.getStatus().getFullNodes());
 
 		// Exhaust the pool
 		for (int i = 0; i < MIN_FREE; i++) {
@@ -323,7 +323,7 @@ public class HudsonSlavePoolServiceTest {
 		waitForAllocations();
 		Assert.assertEquals(MIN_TOTAL_NODES + MIN_FREE * 2, hudsonSlavePoolService.getStatus().getTotalNodes());
 		Assert.assertEquals(MIN_FREE, hudsonSlavePoolService.getStatus().getFreeNodes());
-		Assert.assertEquals(provisionedIps.size(), hudsonSlavePoolService.getStatus().getNodesOnLoan());
+		Assert.assertEquals(provisionedIps.size(), hudsonSlavePoolService.getStatus().getFullNodes());
 
 		// At this point we have 5
 		int currentTotalSize = MIN_TOTAL_NODES + MIN_FREE * 2;
@@ -342,7 +342,7 @@ public class HudsonSlavePoolServiceTest {
 
 			Assert.assertEquals(currentTotalSize, hudsonSlavePoolService.getStatus().getTotalNodes());
 			Assert.assertEquals(freeNodes, hudsonSlavePoolService.getStatus().getFreeNodes());
-			Assert.assertEquals(provisionedIps.size() - i - 1, hudsonSlavePoolService.getStatus().getNodesOnLoan());
+			Assert.assertEquals(provisionedIps.size() - i - 1, hudsonSlavePoolService.getStatus().getFullNodes());
 		}
 
 		context.assertIsSatisfied();

@@ -29,6 +29,7 @@ import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
@@ -741,6 +742,10 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 			convertEntityNotFoundException(e);
 			throw e;
 		}
+	}
+
+	public List<PoolStatus> computeNodePoolStatus() {
+		throw new UnsupportedOperationException();
 	}
 
 }

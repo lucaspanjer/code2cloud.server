@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolService;
 import com.tasktop.c2c.server.cloud.service.RequestBuildSlaveResult;
 import com.tasktop.c2c.server.common.service.ValidationException;

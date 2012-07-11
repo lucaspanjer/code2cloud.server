@@ -27,11 +27,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolService;
 import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolServiceClient;
 import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolServiceController;
 import com.tasktop.c2c.server.cloud.service.RequestBuildSlaveResult;
-import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolService.PoolStatus;
 import com.tasktop.c2c.server.cloud.service.RequestBuildSlaveResult.Type;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.tests.util.TestResourceUtil;
@@ -70,7 +70,7 @@ public class HudsonSlavePoolServiceClientTest {
 
 		final PoolStatus status = new PoolStatus();
 		status.setFreeNodes(10);
-		status.setNodesOnLoan(2);
+		status.setFullNodes(2);
 		status.setTotalNodes(13);
 
 		context.checking(new Expectations() {

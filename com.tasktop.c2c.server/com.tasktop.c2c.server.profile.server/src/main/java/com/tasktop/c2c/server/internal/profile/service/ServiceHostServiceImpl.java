@@ -75,6 +75,7 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 		}
 		result.setAvailable(node.isAvailable());
 
+		result.setNumServices(node.getProjectServices().size());
 		return result;
 	}
 
@@ -88,13 +89,14 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 	public List<com.tasktop.c2c.server.cloud.domain.ServiceHost> findHostsByType(Set<ServiceType> type) {
 		ServiceHostConfiguration config = findSupportedConfiguration(type);
 		if (config == null) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
+		@SuppressWarnings("unchecked")
 		List<ServiceHost> managedResults = entityManager
 				.createQuery(
 						"SELECT host FROM "
 								+ ServiceHost.class.getSimpleName()
-								+ " host WHERE  host.serviceHostConfiguration = :serviceHostConfiguration ORDER BY SIZE(host.projectServices) ASC")
+								+ " host WHERE host.serviceHostConfiguration = :serviceHostConfiguration ORDER BY SIZE(host.projectServices) ASC")
 				.setParameter("serviceHostConfiguration", config).getResultList();
 		List<com.tasktop.c2c.server.cloud.domain.ServiceHost> publicNodes = new ArrayList<com.tasktop.c2c.server.cloud.domain.ServiceHost>(
 				managedResults.size());
@@ -133,9 +135,10 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 			int capacity) {
 		ServiceHostConfiguration config = findSupportedConfiguration(type);
 		if (config == null) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 
+		@SuppressWarnings("unchecked")
 		List<ServiceHost> managedResults = entityManager
 				.createQuery(
 						"SELECT host FROM "
@@ -156,8 +159,9 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 		ServiceHostConfiguration config = findSupportedConfiguration(type);
 
 		if (config == null) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
+		@SuppressWarnings("unchecked")
 		List<ServiceHost> managedResults = entityManager
 				.createQuery(
 						"SELECT host FROM "
@@ -180,6 +184,7 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 			return null;
 		}
 
+		@SuppressWarnings("unchecked")
 		List<ServiceHost> results = entityManager
 				.createQuery(
 						"SELECT node FROM "

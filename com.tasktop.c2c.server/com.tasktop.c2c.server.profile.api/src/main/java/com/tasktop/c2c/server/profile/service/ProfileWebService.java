@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.profile.service;
 
 import java.util.List;
 
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
@@ -167,5 +168,7 @@ public interface ProfileWebService {
 	 */
 	public Organization updateOrganization(Organization organization) throws EntityNotFoundException,
 			ValidationException;
+
+	List<PoolStatus> computeNodePoolStatus(); // REVIEW mount elsewhere
 
 }

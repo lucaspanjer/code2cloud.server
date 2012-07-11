@@ -56,6 +56,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
@@ -394,5 +395,11 @@ public class ProfileWebServiceController extends AbstractBuildInfoRestService im
 	public Organization updateOrganization(@RequestBody Organization organization) throws EntityNotFoundException,
 			ValidationException {
 		return profileWebService.updateOrganization(organization);
+	}
+
+	@RequestMapping(value = "poolStatus", method = RequestMethod.GET)
+	@Override
+	public List<PoolStatus> computeNodePoolStatus() {
+		return profileWebService.computeNodePoolStatus();
 	}
 }

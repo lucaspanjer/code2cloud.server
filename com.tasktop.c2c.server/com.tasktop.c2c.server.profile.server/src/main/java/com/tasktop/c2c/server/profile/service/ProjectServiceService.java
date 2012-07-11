@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.profile.service;
 import java.util.Date;
 import java.util.List;
 
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
@@ -85,5 +86,7 @@ public interface ProjectServiceService {
 	public List<ProjectService> findProjectServicesOlderThan(ServiceType type, Date date);
 
 	List<ProjectServiceStatus> computeProjectServicesStatus(Project managedProject);
+
+	List<PoolStatus> computePoolStatus();
 
 }

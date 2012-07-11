@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.internal.profile.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +28,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
+import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
@@ -39,6 +42,7 @@ import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolServiceInternal;
 import com.tasktop.c2c.server.cloud.service.NodeProvisioningService;
 import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementService;
@@ -404,5 +408,15 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 			projectService.getServiceHost().getProjectServices().remove(projectService);
 		}
 		entityManager.remove(projectService);
+	}
+
+	@Secured(Role.Admin)
+	@Override
+	public List<PoolStatus> computePoolStatus() {
+		List<PoolStatus> result = new ArrayList<PoolStatus>(nodeProvisioningServiceByType.size());
+		for (NodeProvisioningService nps : new HashSet<NodeProvisioningService>(nodeProvisioningServiceByType.values())) {
+			result.add(nps.getStatus());
+		}
+		return result;
 	}
 }
