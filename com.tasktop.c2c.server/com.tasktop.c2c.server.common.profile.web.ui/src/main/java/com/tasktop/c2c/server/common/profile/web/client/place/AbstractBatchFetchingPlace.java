@@ -44,7 +44,6 @@ import com.tasktop.c2c.server.common.web.shared.KnowsErrorMessageAction;
  */
 public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 
-	public final Message LOADING_MESSSAGE = new Message(0, "Loading...", Message.MessageType.PROGRESS);
 	protected boolean requiresUserInfo = true;
 	protected boolean readyToGo = false;
 	private List<Action<?>> actions;
@@ -57,8 +56,6 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 	}
 
 	public final void go() {
-		notifier.displayMessage(LOADING_MESSSAGE);
-
 		if (!readyToGo) {
 			fetchPlaceData();
 			return;
@@ -107,12 +104,6 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 	}
 
 	private void onResultsRecieved() {
-		ProfileGinjector.get.instance().getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
-			@Override
-			public void execute() {
-				notifier.removeMessage(LOADING_MESSSAGE);
-			}
-		});
 
 		if (requiresUserInfo) {
 			setUserInfo(getResult(GetUserInfoResult.class).get());
@@ -241,7 +232,8 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 
 		BatchAction fetchAction = createFetchAction();
 
-		AsyncCallback<BatchResult> fetchCallback = new AsyncCallbackSupport<BatchResult>() {
+		AsyncCallback<BatchResult> fetchCallback = new AsyncCallbackSupport<BatchResult>(
+				AsyncCallbackSupport.LOADING_MESSSAGE) {
 
 			@Override
 			protected void success(BatchResult result) {

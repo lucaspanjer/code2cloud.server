@@ -12,8 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.web.client.notification;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -23,6 +23,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 
 public class NotificationPanel extends Composite implements Notifier {
@@ -30,21 +31,19 @@ public class NotificationPanel extends Composite implements Notifier {
 	interface NotificationPanelUiBinder extends UiBinder<HTMLPanel, NotificationPanel> {
 	}
 
+	private static class MessageInfo {
+		int numInstances = 1; // number of instances for this particular message;
+		Widget panelWidget;
+	}
+
 	private static NotificationPanelUiBinder ourUiBinder = GWT.create(NotificationPanelUiBinder.class);
 	@UiField
 	protected FlowPanel messagesPanel;
 
-	private List<Message> messages = new ArrayList<Message>();
+	private Map<Message, MessageInfo> messages = new HashMap<Message, MessageInfo>();
 
 	public NotificationPanel() {
 		initWidget(ourUiBinder.createAndBindUi(this));
-
-		// CommonGinjector.get.instance().getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler()
-		// {
-		// public void onPlaceChange(PlaceChangeEvent event) {
-		// hide();
-		// }
-		// });
 
 		CommonGinjector.get.instance().getEventBus()
 				.addHandler(PlaceChangeRequestEvent.TYPE, new PlaceChangeRequestEvent.Handler() {
@@ -72,12 +71,16 @@ public class NotificationPanel extends Composite implements Notifier {
 		}
 		show();
 
-		if (messages.contains(messageToDisplay)) {
+		if (messages.containsKey(messageToDisplay)) {
+			MessageInfo info = messages.get(messageToDisplay);
+			info.numInstances = info.numInstances + 1;
 			return;
 		}
 
 		NotificationMessage messageWidget = new NotificationMessage(messageToDisplay, this);
-		messages.add(messageToDisplay);
+		MessageInfo info = new MessageInfo();
+		info.panelWidget = messageWidget;
+		messages.put(messageToDisplay, info);
 		messagesPanel.add(messageWidget);
 
 		if (messageToDisplay.getDisplayFor() > 0 && !messageToDisplay.isScheduledForRemoval()) {
@@ -94,12 +97,16 @@ public class NotificationPanel extends Composite implements Notifier {
 
 	@Override
 	public void removeMessage(Message message) {
-		int index = messages.indexOf(message);
-		if (index == -1) {
+		MessageInfo info = messages.get(message);
+		if (info == null) {
 			return;
 		}
-		messages.remove(index);
-		messagesPanel.remove(index);
+		info.numInstances = info.numInstances - 1;
+
+		if (info.numInstances == 0) {
+			messages.remove(message);
+			messagesPanel.remove(info.panelWidget);
+		}
 	}
 
 	/*

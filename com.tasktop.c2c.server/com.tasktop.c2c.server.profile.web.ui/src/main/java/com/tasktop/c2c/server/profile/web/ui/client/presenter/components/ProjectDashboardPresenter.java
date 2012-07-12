@@ -14,10 +14,8 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
 import java.util.List;
 
-
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Timer;
-import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
@@ -56,7 +54,7 @@ public class ProjectDashboardPresenter extends AbstractProfilePresenter implemen
 				.instance()
 				.getProfileService()
 				.getDashboard(fetchingProjectId,
-						new AsyncCallbackSupport<ProjectDashboard>(OperationMessage.create("Loading Dashboard")) {
+						new AsyncCallbackSupport<ProjectDashboard>(AsyncCallbackSupport.LOADING_MESSSAGE) {
 
 							@Override
 							protected void success(final ProjectDashboard result) {
@@ -95,7 +93,7 @@ public class ProjectDashboardPresenter extends AbstractProfilePresenter implemen
 				.instance()
 				.getProfileService()
 				.getRecentActivity(fetchingProjectId,
-						new AsyncCallbackSupport<List<ProjectActivity>>(OperationMessage.create("Loading Activity")) {
+						new AsyncCallbackSupport<List<ProjectActivity>>(AsyncCallbackSupport.LOADING_MESSSAGE) {
 
 							@Override
 							protected void success(List<ProjectActivity> result) {

@@ -25,6 +25,8 @@ import com.tasktop.c2c.server.common.web.client.view.ErrorCapableView;
 
 public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 
+	public static final Message LOADING_MESSSAGE = new Message(0, "Loading...", Message.MessageType.PROGRESS);
+
 	public interface ErrorHandler {
 		List<String> getErrors(Throwable exception);
 	}
@@ -42,6 +44,10 @@ public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 
 	public AsyncCallbackSupport() {
 		setup(null, null, null);
+	}
+
+	public AsyncCallbackSupport(Message loadingMessage) {
+		setup(new OperationMessage(loadingMessage), null, null);
 	}
 
 	public AsyncCallbackSupport(OperationMessage operationMessage) {

@@ -21,6 +21,10 @@ public class OperationMessage {
 		setInProgressText(inProgressText);
 	}
 
+	public OperationMessage(Message inProgressMessage) {
+		progress = inProgressMessage;
+	}
+
 	public static OperationMessage create(String inProgressText) {
 		return new OperationMessage(inProgressText);
 	}
