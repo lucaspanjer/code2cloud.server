@@ -418,6 +418,13 @@ public class GitServiceBean implements GitService, InitializingBean {
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
+		Collections.sort(result, new Comparator<ScmRepository>() {
+
+			@Override
+			public int compare(ScmRepository repo1, ScmRepository repo2) {
+				return repo1.getName().compareToIgnoreCase(repo2.getName());
+			}
+		});
 		return result;
 	}
 
