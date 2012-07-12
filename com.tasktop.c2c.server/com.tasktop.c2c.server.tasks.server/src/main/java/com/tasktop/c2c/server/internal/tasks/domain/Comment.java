@@ -106,6 +106,9 @@ public class Comment extends AbstractIdentified<Integer> implements java.io.Seri
 
 	@Column(name = "thetext", nullable = true, length = 16777215)
 	public String getThetext() {
+		if (this.thetext == null) {
+			return ""; // Workaround for oracle DB null == empty string
+		}
 		return this.thetext;
 	}
 
