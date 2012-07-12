@@ -48,7 +48,8 @@ public class DiffEntryView extends Composite implements Editor<Commit> {
 	@UiField
 	protected Label numRemoved;
 
-	private int maxFileNameSize = 100;
+	private int maxFileNameSize = 115;
+	private int fileNamePartSize = (maxFileNameSize / 2) - 2;
 
 	public DiffEntryView(DiffEntry diff) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -108,8 +109,8 @@ public class DiffEntryView extends Composite implements Editor<Commit> {
 
 	private String trimFilename(String theFilename) {
 		if (theFilename.length() > maxFileNameSize) {
-			int start = theFilename.length() - maxFileNameSize;
-			return "..." + theFilename.substring(start);
+			int start = theFilename.length() - fileNamePartSize;
+			return theFilename.substring(0, fileNamePartSize) + "..." + theFilename.substring(start);
 		}
 		return theFilename;
 	}
