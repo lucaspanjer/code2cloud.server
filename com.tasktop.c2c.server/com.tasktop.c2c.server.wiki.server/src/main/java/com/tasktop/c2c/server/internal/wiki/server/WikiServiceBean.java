@@ -622,7 +622,6 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		property.setName(name);
 		property.setValue(value);
 		entityManager.persist(property);
-		entityManager.flush();
 
 		return property.getValue();
 	}
