@@ -20,7 +20,7 @@ public class WikiTenantAwareDataSource extends TenantAwareDataSource {
 
 	@Override
 	protected String getDatabaseName() {
-		if (language == Language.HSQL) {
+		if (language == Language.HSQL || language == Language.ORACLE) {
 			return super.getDatabaseName().toUpperCase() + "_WIKI";
 		}
 		return super.getDatabaseName() + "_wiki";
