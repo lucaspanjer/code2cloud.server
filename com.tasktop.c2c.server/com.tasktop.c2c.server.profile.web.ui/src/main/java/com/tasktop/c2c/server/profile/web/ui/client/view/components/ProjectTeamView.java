@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
@@ -35,6 +34,7 @@ import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
+import com.tasktop.c2c.server.common.web.client.view.NoCellListStyle;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRole;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 
@@ -56,7 +56,7 @@ public class ProjectTeamView extends AbstractComposite {
 
 	public ProjectTeamView() {
 		initWidget(uiBinder.createAndBindUi(this));
-		teamMemberList = new CellList<ProjectTeamMember>(new TeamMemberCell());
+		teamMemberList = new CellList<ProjectTeamMember>(new TeamMemberCell(), new NoCellListStyle());
 		// TODO figure out how to get rid of the cursor pointer GWT is using
 		teamMemberList.setSelectionModel(new NoSelectionModel<ProjectTeamMember>());
 		teamMemberList.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.DISABLED);
