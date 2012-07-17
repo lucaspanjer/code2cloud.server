@@ -87,7 +87,7 @@ public class TaskPresenterImpl extends AbstractTaskPresenter implements TaskPres
 
 	@Override
 	public void postComment(final String comment) {
-		if (comment != null && comment.length() > 0) {
+		if (comment != null && comment.trim().length() > 0) {
 			task.addComment(comment);
 			UpdateTaskAction action = new UpdateTaskAction(projectIdentifier, task);
 			getDispatchService().execute(
@@ -112,6 +112,8 @@ public class TaskPresenterImpl extends AbstractTaskPresenter implements TaskPres
 						}
 
 					});
+		} else {
+			getNotifier().displayMessage(Message.createErrorMessage("Comment text is required."));
 		}
 
 	}
