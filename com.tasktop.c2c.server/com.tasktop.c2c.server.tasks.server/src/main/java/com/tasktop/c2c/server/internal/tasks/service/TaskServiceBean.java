@@ -2154,6 +2154,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		ConfigurationProperty property;
 		try {
 			property = findConfigurationProperty(name);
+			entityManager.refresh(property);
 		} catch (EntityNotFoundException e) {
 			property = new ConfigurationProperty();
 		}
