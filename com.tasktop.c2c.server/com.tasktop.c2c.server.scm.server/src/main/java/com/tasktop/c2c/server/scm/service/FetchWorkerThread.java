@@ -12,7 +12,6 @@
 package com.tasktop.c2c.server.scm.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -20,14 +19,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.util.FS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class FetchWorkerThread extends Thread {
+
+	private static final Logger logger = LoggerFactory.getLogger(FetchWorkerThread.class);
 
 	private static final class FetchStatus {
 		long lastUpdateTime = -1;
@@ -58,7 +59,7 @@ class FetchWorkerThread extends Thread {
 				Thread.sleep(milisecondsBetweenScans);
 				triggerMirroredFetches();
 			} catch (Throwable e) {
-				e.printStackTrace();
+				logger.warn("Caught while trying to trigger fetches", e);
 			}
 		}
 	}
@@ -108,15 +109,8 @@ class FetchWorkerThread extends Thread {
 			FileRepositoryBuilder builder = new FileRepositoryBuilder().setGitDir(mirroredRepo).setFS(fs).setup();
 			Git git = new Git(new FileRepository(builder));
 			git.fetch().setRefSpecs(new RefSpec("refs/heads/*:refs/heads/*")).setThin(true).call();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JGitInternalException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidRemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.warn("Caught exception durring fetch", e);
 		}
 	}
 }

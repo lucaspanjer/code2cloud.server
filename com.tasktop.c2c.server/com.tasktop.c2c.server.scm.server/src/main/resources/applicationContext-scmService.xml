@@ -33,6 +33,10 @@
 		p:serviceProxyPath="${profile.serviceProxy.path}"
 		p:publicSshPort="${ssh.server.publicPort}"
 	/>
+	
+	<bean id="proxySetup" class="com.tasktop.c2c.server.common.service.HttpProxySetup"
+		p:dontProxyToProfile="true" p:profileConfiguration-ref="psConfig"
+	/>
 
 
 </beans>
