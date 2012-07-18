@@ -17,7 +17,6 @@
   </description>
   
   <properties>
-  	<hudson.version>3.0.0-M2</hudson.version>
   	<c2c.hudson.version>3.0.0-M2-code2cloud-SNAPSHOT</c2c.hudson.version>
   	<hudson.shared.libs>hudson-shared-libs</hudson.shared.libs>
   	<spring.version>3.1.1.RELEASE</spring.version>
@@ -36,7 +35,7 @@
     <dependency>
     	<groupId>org.eclipse.hudson.main</groupId>
     	<artifactId>hudson-war</artifactId>
-        <version>${hudson.version}</version>
+        <version>${c2c.hudson.version}</version>
         <type>war</type>
         <scope>runtime</scope>
     </dependency>
