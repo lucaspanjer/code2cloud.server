@@ -54,7 +54,8 @@ public abstract class BaseEntity {
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
+		// Check that classes are assignable rather than equals to support polymorphic types
+		if (!(getClass().isAssignableFrom(obj.getClass()) || obj.getClass().isAssignableFrom(getClass()))) {
 			return false;
 		}
 		BaseEntity other = (BaseEntity) obj;
