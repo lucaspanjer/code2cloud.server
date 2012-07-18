@@ -213,7 +213,7 @@
  <!-- ADD BACK?               <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="grails" version="1.4" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/grails-plugin.hpi" /> -->
                 <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.auth" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-auth.hpi" />
                 <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.cloud" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-cloud.hpi" />
-                <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.buildlistener" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-buildlistener.hpi" />
+<!--                 <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.buildlistener" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-buildlistener.hpi" /> -->
                 <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.ui" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-ui.hpi" />
 <!--                <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.configuration" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-configuration.hpi" />-->
               </tasks>
