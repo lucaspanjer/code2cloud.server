@@ -18,16 +18,16 @@
 				<label>Privacy:</label>
 				<div>
 					<p>
-						<g:RadioButton ui:field="privacyPublicOption" name="privacy" enabled="false"/>
-						Public
-					</p>
-					<p>
 						<g:RadioButton ui:field="privacyPrivateOption" name="privacy" enabled="false"/>
 						Private
 					</p>
 					<p ui:field="orgPrivatePElement">
 						<g:RadioButton ui:field="privacyOrgPrivateOption" name="privacy" enabled="false"/>
 						Organization Private
+					</p>
+					<p>
+						<g:RadioButton ui:field="privacyPublicOption" name="privacy" enabled="false"/>
+						Public
 					</p>
 				</div>
 			</fieldset>

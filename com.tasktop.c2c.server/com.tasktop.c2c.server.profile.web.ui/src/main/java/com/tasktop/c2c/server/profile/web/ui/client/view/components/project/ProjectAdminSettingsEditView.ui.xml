@@ -26,10 +26,6 @@
 				<label>Privacy:</label>
 				<div>
 					<p>
-						<g:RadioButton name="privacy" ui:field="privacyPublicOption"/>
-						Public
-					</p>
-					<p>
 						<g:RadioButton name="privacy" ui:field="privacyPrivateOption"/>
 						Private
 					</p>
@@ -37,11 +33,15 @@
 						<g:RadioButton name="privacy" ui:field="privacyOrgPrivateOption"/>
 						Organization Private
 					</p>
+					<p>
+						<g:RadioButton name="privacy" ui:field="privacyPublicOption"/>
+						Public
+					</p>
 				</div>
 			</fieldset>
 			<fieldset>
 				<label>Wiki Markup:</label>
-	 		<div>
+	 			<div>
 					<g:ValueListBox ui:field="wikiLanguageListBox"/>
 				</div>
 			</fieldset>
