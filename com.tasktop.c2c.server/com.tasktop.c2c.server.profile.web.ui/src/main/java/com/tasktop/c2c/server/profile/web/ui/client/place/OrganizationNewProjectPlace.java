@@ -77,10 +77,6 @@ public class OrganizationNewProjectPlace extends NewProjectPlace {
 		super.handleBatchResults();
 	}
 
-	public String getOrganizationIdentifer() {
-		return organizationIdentifier;
-	}
-
 	public Organization getOrganization() {
 		return organization;
 	}

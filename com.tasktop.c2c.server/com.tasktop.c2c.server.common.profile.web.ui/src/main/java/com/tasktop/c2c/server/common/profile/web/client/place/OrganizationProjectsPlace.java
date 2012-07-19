@@ -103,13 +103,6 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 		super.handleBatchResults();
 	}
 
-	/**
-	 * @return the query
-	 */
-	public String getOrganizationIdentifer() {
-		return organizationIdentifier;
-	}
-
 	public Organization getOrganization() {
 		return organization;
 	}
