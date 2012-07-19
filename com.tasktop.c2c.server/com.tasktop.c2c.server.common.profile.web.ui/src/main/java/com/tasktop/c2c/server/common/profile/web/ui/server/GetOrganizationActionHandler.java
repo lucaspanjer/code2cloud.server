@@ -34,7 +34,6 @@ public class GetOrganizationActionHandler extends
 	public GetOrganizationResult execute(GetOrganizationAction action, ExecutionContext context)
 			throws DispatchException {
 		try {
-			setTenancyContext(action.getOrganizationId());
 			return new GetOrganizationResult(profileWebService.getOrganizationByIdentfier(action.getOrganizationId()));
 		} catch (EntityNotFoundException e) {
 			throw new ActionException(e);
