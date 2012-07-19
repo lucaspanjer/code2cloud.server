@@ -33,7 +33,7 @@ public final class ExceptionsUtil {
 	}
 
 	public static boolean isEntityNotFound(DispatchException e) {
-		return e.getCauseClassname().equals(ENITITY_NOT_FOUND_EXCEPTION_CLASSNAME);
+		return e.getCauseClassname() != null && e.getCauseClassname().equals(ENITITY_NOT_FOUND_EXCEPTION_CLASSNAME);
 	}
 
 	private ExceptionsUtil() {
