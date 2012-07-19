@@ -146,7 +146,7 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean, 
 			switch (operation) {
 			case RETRIEVE:
 				if (ProjectAccessibility.ORGANIZATION_PRIVATE.equals(targetProject.getAccessibility())) {
-					assertOrgMember(targetProject);
+					assertOrgMemberOrMember(targetProject);
 				} else if (!ProjectAccessibility.PUBLIC.equals(targetProject.getAccessibility())) {
 					assertMember(targetProject);
 				}
@@ -260,15 +260,15 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean, 
 		return null;
 	}
 
-	private void assertOrgMember(Project target) {
+	private void assertOrgMemberOrMember(Project target) {
 		String userRole = AuthUtils.toCompoundOrganizationRole(Role.User, target.getOrganization().getIdentifier());
 
 		if (Security.hasRole(userRole)) {
-			// is a user
+			// is a member of org
 			return;
 		}
 
-		throw new InsufficientPermissionsException();
+		assertMember(target);
 	}
 
 	private void assertMember(Project target) throws InsufficientPermissionsException {
