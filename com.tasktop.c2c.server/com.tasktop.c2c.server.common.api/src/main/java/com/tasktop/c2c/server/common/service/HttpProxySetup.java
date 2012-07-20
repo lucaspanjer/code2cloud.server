@@ -71,9 +71,20 @@ public class HttpProxySetup implements InitializingBean {
 
 		}
 
+		String no_proxy = System.getenv().get("no_proxy");
+
 		if (dontProxyToProfile) {
-			System.setProperty("http.nonProxyHosts", "*." + profileConfiguration.getWebHost());
-			System.setProperty("https.nonProxyHosts", "*." + profileConfiguration.getWebHost());
+			if (no_proxy == null) {
+				no_proxy = "";
+			} else {
+				no_proxy = no_proxy + ",";
+			}
+			no_proxy = no_proxy + "*." + profileConfiguration.getWebHost();
+		}
+
+		if (no_proxy != null && !no_proxy.isEmpty()) {
+			System.setProperty("http.nonProxyHosts", no_proxy);
+			System.setProperty("https.nonProxyHosts", no_proxy);
 		}
 
 	}
