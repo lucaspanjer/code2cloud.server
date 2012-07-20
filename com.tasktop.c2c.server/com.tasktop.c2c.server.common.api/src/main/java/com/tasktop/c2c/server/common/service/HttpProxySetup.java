@@ -73,6 +73,10 @@ public class HttpProxySetup implements InitializingBean {
 
 		String no_proxy = System.getenv().get("no_proxy");
 
+		if (no_proxy != null) {
+			no_proxy = no_proxy.replace(",", "|");
+		}
+
 		if (dontProxyToProfile) {
 			if (no_proxy == null) {
 				no_proxy = "";
