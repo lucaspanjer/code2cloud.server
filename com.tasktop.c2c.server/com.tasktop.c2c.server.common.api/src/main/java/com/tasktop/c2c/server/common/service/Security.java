@@ -12,9 +12,15 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+
+import org.springframework.security.access.intercept.RunAsUserToken;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -86,5 +92,34 @@ public class Security {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Allow to run code with additional roles for the duration of the call.
+	 * 
+	 * @param callable
+	 * @param roles
+	 * @return callable result
+	 * @throws Exception
+	 */
+	public static <T> T callWithRoles(Callable<T> callable, String... roles) throws Exception {
+		SecurityContext securityCtxBefore = SecurityContextHolder.getContext();
+
+		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(roles.length);
+		for (String role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role));
+
+		}
+		RunAsUserToken runAsAuth = new RunAsUserToken("unused", securityCtxBefore.getAuthentication().getPrincipal(),
+				securityCtxBefore.getAuthentication().getCredentials(), authorities, securityCtxBefore
+						.getAuthentication().getClass());
+
+		SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
+		SecurityContextHolder.getContext().setAuthentication(runAsAuth);
+		try {
+			return callable.call();
+		} finally {
+			SecurityContextHolder.setContext(securityCtxBefore);
+		}
 	}
 }
