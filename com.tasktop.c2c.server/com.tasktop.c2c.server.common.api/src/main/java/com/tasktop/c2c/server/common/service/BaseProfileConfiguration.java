@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.service;
 
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+
 /**
  * Simple container class for the profile configuration. Mainly about where services are publicly exposed.
  * 
@@ -24,6 +26,7 @@ public class BaseProfileConfiguration {
 	private String webHost;
 	private String serviceProxyPath;
 	private String baseContextPath;
+	private boolean prefixHostnameWithOrgId = false;
 
 	public String getProfileApplicationProtocol() {
 		return profileApplicationProtocol;
@@ -64,6 +67,10 @@ public class BaseProfileConfiguration {
 	}
 
 	public String getProfileBaseUrl() {
+		if (prefixHostnameWithOrgId && TenancyUtil.getCurrentTenantOrganizationIdentifer() != null) {
+			return profileApplicationProtocol + "://" + TenancyUtil.getCurrentTenantOrganizationIdentifer() + "."
+					+ webHost + baseContextPath;
+		}
 		return profileApplicationProtocol + "://" + webHost + baseContextPath;
 	}
 
@@ -77,6 +84,14 @@ public class BaseProfileConfiguration {
 
 	public String getHostedScmUrlPrefix(String projectId) {
 		return getServiceUrlPrefix(projectId) + "scm/";
+	}
+
+	public boolean isPrefixHostnameWithOrgId() {
+		return prefixHostnameWithOrgId;
+	}
+
+	public void setPrefixHostnameWithOrgId(boolean prefixHostnameWithOrgId) {
+		this.prefixHostnameWithOrgId = prefixHostnameWithOrgId;
 	}
 
 }
