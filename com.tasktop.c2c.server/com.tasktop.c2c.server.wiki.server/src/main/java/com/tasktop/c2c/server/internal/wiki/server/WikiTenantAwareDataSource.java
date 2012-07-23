@@ -14,16 +14,20 @@ package com.tasktop.c2c.server.internal.wiki.server;
 
 import org.springframework.tenancy.datasource.TenantAwareDataSource;
 
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+
 public class WikiTenantAwareDataSource extends TenantAwareDataSource {
 
 	private Language language;
 
 	@Override
 	protected String getDatabaseName() {
+		String projectId = TenancyUtil.getCurrentTenantProjectIdentifer();
+		String dbName = projectId + "_wiki";
 		if (language == Language.HSQL || language == Language.ORACLE) {
-			return super.getDatabaseName().toUpperCase() + "_WIKI";
+			dbName = dbName.toUpperCase();
 		}
-		return super.getDatabaseName() + "_wiki";
+		return dbName;
 	}
 
 	/*

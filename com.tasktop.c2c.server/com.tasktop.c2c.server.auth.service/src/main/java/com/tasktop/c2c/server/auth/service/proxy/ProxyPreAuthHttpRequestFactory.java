@@ -12,16 +12,19 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.auth.service.proxy;
 
+import java.util.Map.Entry;
+
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.springframework.http.client.CommonsClientHttpRequestFactory;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
-import com.tasktop.c2c.server.common.service.web.HeaderConstants;
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+import com.tasktop.c2c.server.common.internal.tenancy.InternalTenancyContextHttpHeaderProvider;
 
 public class ProxyPreAuthHttpRequestFactory extends CommonsClientHttpRequestFactory {
 
 	private AuthenticationTokenSerializer tokenSerializer = new AuthenticationTokenSerializer();
+
+	private InternalTenancyContextHttpHeaderProvider tenancySerializer = new InternalTenancyContextHttpHeaderProvider();
 
 	@Override
 	protected void postProcessCommonsHttpMethod(final HttpMethodBase httpMethod) {
@@ -35,9 +38,9 @@ public class ProxyPreAuthHttpRequestFactory extends CommonsClientHttpRequestFact
 			}, authenticationToken);
 		}
 
-		// Also setup the tenancy context header
-		if (TenancyUtil.getCurrentTenantProjectIdentifer() != null) {
-			httpMethod.addRequestHeader(HeaderConstants.PROJECT_ID_HEADER, TenancyUtil.getCurrentTenantProjectIdentifer());
+		// Also setup the tenancy context headers
+		for (Entry<String, String> header : tenancySerializer.computeHeaders().entrySet()) {
+			httpMethod.addRequestHeader(header.getKey(), header.getValue());
 		}
 	}
 }

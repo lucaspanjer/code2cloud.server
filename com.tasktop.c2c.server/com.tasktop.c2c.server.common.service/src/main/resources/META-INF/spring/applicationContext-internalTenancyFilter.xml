@@ -9,12 +9,11 @@
 	<bean id="tenancyContextIntegrationFilter" class="org.springframework.tenancy.web.TenancyContextIntegrationFilter">
 		<property name="tenantIdentificationStrategyChain">
 			<list>
-				<bean class="org.springframework.tenancy.web.HeaderTenantIdentificationStrategy">
-					<property name="headerName">
-					<util:constant static-field="com.tasktop.c2c.server.common.service.web.HeaderConstants.PROJECT_ID_HEADER"/>
-					</property>
-				</bean>
+				<bean class="com.tasktop.c2c.server.common.internal.tenancy.InternalTenantIdentificationStrategy"/>
 			</list>
+		</property>
+		<property name="tenantProvider">
+			<bean class="com.tasktop.c2c.server.common.internal.tenancy.InternalTenantProvider" />
 		</property>
 	</bean>
 

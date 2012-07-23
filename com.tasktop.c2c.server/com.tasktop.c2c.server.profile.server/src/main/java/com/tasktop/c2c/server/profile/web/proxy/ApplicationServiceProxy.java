@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.profile.web.proxy;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,9 +32,8 @@ import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.auth.service.proxy.AuthenticationTokenSerializer;
 import com.tasktop.c2c.server.auth.service.proxy.ProxyHttpServletRequest;
+import com.tasktop.c2c.server.common.internal.tenancy.InternalTenancyContextHttpHeaderProvider;
 import com.tasktop.c2c.server.common.service.domain.Role;
-import com.tasktop.c2c.server.common.service.web.HeaderConstants;
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
@@ -57,6 +57,8 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 	private InternalAuthenticationService internalAuthenticationService;
 
 	private AuthenticationTokenSerializer tokenSerializer = new AuthenticationTokenSerializer();
+
+	private InternalTenancyContextHttpHeaderProvider tenancySerializer = new InternalTenancyContextHttpHeaderProvider();
 
 	@Value("${alm.proxy.disableAjp}")
 	private boolean disableAjp = false;
@@ -99,8 +101,10 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 		authenticationToken = internalAuthenticationService.specializeAuthenticationToken(authenticationToken, project);
 
 		tokenSerializer.serialize(proxyRequest, authenticationToken);
-		String tenantId = TenancyUtil.getCurrentTenantProjectIdentifer();
-		proxyRequest.addHeader(HeaderConstants.PROJECT_ID_HEADER, tenantId);
+
+		for (Entry<String, String> header : tenancySerializer.computeHeaders().entrySet()) {
+			proxyRequest.addHeader(header.getKey(), header.getValue());
+		}
 
 		LOG.info("Proxying service [" + service.getType() + "] to url [" + targetUrl + "]");
 

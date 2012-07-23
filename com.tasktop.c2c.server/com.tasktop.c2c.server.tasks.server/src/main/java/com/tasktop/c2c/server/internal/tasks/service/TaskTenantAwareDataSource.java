@@ -14,16 +14,20 @@ package com.tasktop.c2c.server.internal.tasks.service;
 
 import org.springframework.tenancy.datasource.TenantAwareDataSource;
 
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+
 public class TaskTenantAwareDataSource extends TenantAwareDataSource {
 
 	private Language language;
 
 	@Override
 	protected String getDatabaseName() {
+		String projectId = TenancyUtil.getCurrentTenantProjectIdentifer();
+		String dbName = projectId + "_tasks";
 		if (language == Language.HSQL || language == Language.ORACLE) {
-			return super.getDatabaseName().toUpperCase() + "_TASKS";
+			dbName = dbName.toUpperCase();
 		}
-		return super.getDatabaseName() + "_tasks";
+		return dbName;
 	}
 
 	/*

@@ -49,13 +49,13 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.auth.service.proxy.AuthenticationTokenSerializer;
+import com.tasktop.c2c.server.common.internal.tenancy.InternalTenancyContextHttpHeaderProvider;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.io.FlushingChunkedOutputStream;
 import com.tasktop.c2c.server.common.service.io.InputPipe;
 import com.tasktop.c2c.server.common.service.io.MultiplexingInputStream;
 import com.tasktop.c2c.server.common.service.io.PacketType;
-import com.tasktop.c2c.server.common.service.web.HeaderConstants;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
@@ -90,6 +90,8 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 	private ProxySocketFactory socketFactory;
 
 	private AuthenticationTokenSerializer tokenSerializer = new AuthenticationTokenSerializer();
+
+	private InternalTenancyContextHttpHeaderProvider tenancySerializer = new InternalTenancyContextHttpHeaderProvider();
 
 	private int bufferSize = 1024 * 16;
 
@@ -183,7 +185,7 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 								new PreAuthenticatedAuthenticationToken(user, projectSpecializedToken, user
 										.getAuthorities()));
 						try {
-							// setup the tenancy context
+							// setup the tenancy context. REVIEW org not setup
 							TenancyUtil.setProjectTenancyContext(projectId);
 							try {
 								if (!hasRequiredRoles()) {
@@ -195,8 +197,10 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 
 								// propagate the tenant and authentication via request headers
 								RequestHeadersSupport headers = new RequestHeadersSupport();
-								headers.addHeader(HeaderConstants.PROJECT_ID_HEADER, projectId);
 								tokenSerializer.serialize(headers, projectSpecializedToken);
+								for (Entry<String, String> header : tenancySerializer.computeHeaders().entrySet()) {
+									headers.addHeader(header.getKey(), header.getValue());
+								}
 
 								performCommand(env, service, projectId, path, requestPath, headers);
 								callback.onExit(0);
