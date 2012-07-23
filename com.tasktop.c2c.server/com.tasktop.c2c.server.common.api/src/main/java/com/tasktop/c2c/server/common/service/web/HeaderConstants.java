@@ -21,14 +21,16 @@ public class HeaderConstants {
 	 * Header for a trusted host's applicationId. This is used to authorize a request from a trusted host (hudson
 	 * master) for a particular application.
 	 */
-	public static final String TRUSTED_HOST_PROJECT_ID_HEADER = ALM_PUBLIC_HEADER_PREFIX
-			+ "TrustedHostApplicationId";
+	public static final String TRUSTED_HOST_PROJECT_ID_HEADER = ALM_PUBLIC_HEADER_PREFIX + "TrustedHostApplicationId";
 
 	/** Prefix for headers that can only be used with internal requests. */
 	public static final String ALM_PRIVATE_HEADER_PREFIX = "C2C-Internal";
 
-	/** Header for the tenant identifier of the request. Used in the HeaderTenantIdentificationStrategy. */
-	public static final String TENANT_HEADER = ALM_PRIVATE_HEADER_PREFIX + "ApplicationId";
+	/** Header for the project identifier of the request. Used in the HeaderTenantIdentificationStrategy. */
+	public static final String PROJECT_ID_HEADER = ALM_PRIVATE_HEADER_PREFIX + "ProjectId";
+
+	/** Header for the organization identifier of the request. Used in the HeaderTenantIdentificationStrategy. */
+	public static final String ORGANIZATION_ID_HEADER = ALM_PRIVATE_HEADER_PREFIX + "OrganizationId";
 
 	/** Pre-Auth header. */
 	public static final String PREAUTH_AUTHORIZATION_HEADER = "Authorization";

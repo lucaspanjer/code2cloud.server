@@ -37,7 +37,7 @@ public class ProxyPreAuthHttpRequestFactory extends CommonsClientHttpRequestFact
 
 		// Also setup the tenancy context header
 		if (TenancyUtil.getCurrentTenantProjectIdentifer() != null) {
-			httpMethod.addRequestHeader(HeaderConstants.TENANT_HEADER, TenancyUtil.getCurrentTenantProjectIdentifer());
+			httpMethod.addRequestHeader(HeaderConstants.PROJECT_ID_HEADER, TenancyUtil.getCurrentTenantProjectIdentifer());
 		}
 	}
 }

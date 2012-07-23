@@ -100,7 +100,7 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 
 		tokenSerializer.serialize(proxyRequest, authenticationToken);
 		String tenantId = TenancyUtil.getCurrentTenantProjectIdentifer();
-		proxyRequest.addHeader(HeaderConstants.TENANT_HEADER, tenantId);
+		proxyRequest.addHeader(HeaderConstants.PROJECT_ID_HEADER, tenantId);
 
 		LOG.info("Proxying service [" + service.getType() + "] to url [" + targetUrl + "]");
 

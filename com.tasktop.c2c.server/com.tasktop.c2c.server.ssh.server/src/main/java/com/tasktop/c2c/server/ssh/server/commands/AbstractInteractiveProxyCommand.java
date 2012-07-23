@@ -195,7 +195,7 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 
 								// propagate the tenant and authentication via request headers
 								RequestHeadersSupport headers = new RequestHeadersSupport();
-								headers.addHeader(HeaderConstants.TENANT_HEADER, projectId);
+								headers.addHeader(HeaderConstants.PROJECT_ID_HEADER, projectId);
 								tokenSerializer.serialize(headers, projectSpecializedToken);
 
 								performCommand(env, service, projectId, path, requestPath, headers);

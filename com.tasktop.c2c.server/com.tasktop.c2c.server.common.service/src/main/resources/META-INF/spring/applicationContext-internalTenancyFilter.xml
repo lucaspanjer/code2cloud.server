@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+	<bean id="tenancyContextIntegrationFilter" class="org.springframework.tenancy.web.TenancyContextIntegrationFilter">
+		<property name="tenantIdentificationStrategyChain">
+			<list>
+				<bean class="org.springframework.tenancy.web.HeaderTenantIdentificationStrategy">
+					<property name="headerName">
+					<util:constant static-field="com.tasktop.c2c.server.common.service.web.HeaderConstants.PROJECT_ID_HEADER"/>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+</beans>

@@ -14,6 +14,8 @@
 	<!--  FIXME really need the client? -->
 	<import resource="classpath:META-INF/spring/applicationContext-multiUserRestClient.xml"/>
 	<import resource="classpath:META-INF/spring/applicationContext-restServer.xml"/>
+	<import resource="classpath:META-INF/spring/applicationContext-internalTenancyFilter.xml"/>
+
 
 	<context:property-placeholder location="classpath*:/config/*.properties, /WEB-INF/spring/*.properties, file:///opt/code2cloud/etc/*.properties"  
 		ignore-resource-not-found="true"/>
@@ -25,18 +27,6 @@
 		p:dataSource-ref="dataSource"
 		p:persistenceXmlLocation="classpath*:META-INF/${tasks.persistenceXmlFilename}"
 	/>
-	
-	<bean id="tenancyContextIntegrationFilter" class="org.springframework.tenancy.web.TenancyContextIntegrationFilter">
-		<property name="tenantIdentificationStrategyChain">
-			<list>
-				<bean class="org.springframework.tenancy.web.HeaderTenantIdentificationStrategy">
-					<property name="headerName">
-					<util:constant static-field="com.tasktop.c2c.server.common.service.web.HeaderConstants.TENANT_HEADER"/>
-					</property>
-				</bean>
-			</list>
-		</property>
-	</bean>
 	
 	<security:global-method-security secured-annotations="enabled" />
 	

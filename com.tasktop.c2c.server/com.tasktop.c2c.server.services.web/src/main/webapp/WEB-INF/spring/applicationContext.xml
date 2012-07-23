@@ -16,6 +16,7 @@
 		ignore-resource-not-found="true"/>
 
 	<import resource="classpath:META-INF/spring/applicationContext-restServer.xml"/>
+	<import resource="classpath:META-INF/spring/applicationContext-internalTenancyFilter.xml"/>
 	<import resource="classpath:/applicationContext-scmService.xml"/>
 	
 	<security:global-method-security secured-annotations="enabled" />	
@@ -23,18 +24,6 @@
 	
 	<bean id="scmApi" class="com.tasktop.c2c.server.scm.web.ScmServiceController" />
 	
-	
-	<bean id="tenancyContextIntegrationFilter" class="org.springframework.tenancy.web.TenancyContextIntegrationFilter">
-		<property name="tenantIdentificationStrategyChain">
-			<list>
-				<bean class="org.springframework.tenancy.web.HeaderTenantIdentificationStrategy">
-					<property name="headerName">
-					<util:constant static-field="com.tasktop.c2c.server.common.service.web.HeaderConstants.TENANT_HEADER"/>
-					</property>
-				</bean>
-			</list>
-		</property>
-	</bean>
 	
 	<bean id="mvnConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
 		<property name="configurators">

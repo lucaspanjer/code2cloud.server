@@ -52,17 +52,17 @@ public class ProxyHttpServletRequestTest {
 	@Test
 	public void testBlocksTenantHeader() {
 
-		mockRequest.addHeader(HeaderConstants.TENANT_HEADER, "SpoofedTenant");
+		mockRequest.addHeader(HeaderConstants.PROJECT_ID_HEADER, "SpoofedTenant");
 
 		for (Enumeration<String> e = proxyRequest.getHeaderNames(); e.hasMoreElements();) {
 			String headerName = e.nextElement();
-			Assert.assertFalse(headerName.equals(HeaderConstants.TENANT_HEADER));
+			Assert.assertFalse(headerName.equals(HeaderConstants.PROJECT_ID_HEADER));
 		}
 
-		String value = proxyRequest.getHeader(HeaderConstants.TENANT_HEADER);
+		String value = proxyRequest.getHeader(HeaderConstants.PROJECT_ID_HEADER);
 		Assert.assertNull(value);
 
-		Enumeration<String> values = proxyRequest.getHeaders(HeaderConstants.TENANT_HEADER);
+		Enumeration<String> values = proxyRequest.getHeaders(HeaderConstants.PROJECT_ID_HEADER);
 		Assert.assertFalse(values.hasMoreElements());
 	}
 
