@@ -18,58 +18,11 @@
 	<import resource="classpath:META-INF/spring/applicationContext-restServer.xml"/>
 	<import resource="classpath:META-INF/spring/applicationContext-internalTenancyFilter.xml"/>
 	<import resource="classpath:/applicationContext-scmService.xml"/>
+	<import resource="classpath:/applicationContext-mavenService.xml"/>
 	
 	<security:global-method-security secured-annotations="enabled" />	
 	
-	
 	<bean id="scmApi" class="com.tasktop.c2c.server.scm.web.ScmServiceController" />
-	
-	
-	<bean id="mvnConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
-		<property name="configurators">
-			<list> 
-				<bean id="mavenRepoConfigurator" class="com.tasktop.c2c.server.webdav.server.MavenRepositoryConfigurator"
-					p:mavenRoot="${maven.repo.base}"
-				/>
-			</list>
-		</property>
-		
-		<property name="metricCollectors">
-			<list>
-				<bean class="com.tasktop.c2c.server.configuration.service.FileSystemMetricCollector" 
-					p:metricName="diskUsage" p:path="${maven.repo.base}/{projectIdentifier}"/>
-			</list>
-		</property>
-		
-		<property name="deprovisioners">
-			<list>
-				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisoiner"
-					p:fromBaseDir="${maven.repo.base}" p:toBaseDir="${alm.dataDir}/deleted/" p:toDirName="maven-repo"/>
-			</list>
-		</property>
-	</bean>
-	
-	<bean id="gitConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
-		<property name="configurators">
-			<list> 
-				<ref bean="gitRepositoryConfigurator"/>
-			</list>
-		</property>
-		
-		<property name="metricCollectors">
-			<list>
-				<bean class="com.tasktop.c2c.server.configuration.service.FileSystemMetricCollector" 
-					p:metricName="diskUsage" p:path="${git.root}/{projectIdentifier}"/>
-			</list>
-		</property>
-		
-		<property name="deprovisioners">
-			<list>
-				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisoiner"
-					p:fromBaseDir="${git.root}" p:toBaseDir="${alm.dataDir}/deleted/" p:toDirName="git-repo"/>
-			</list>
-		</property>
-	</bean>
 	
 	<bean id="aopLogger" class="com.tasktop.c2c.server.common.service.ServiceLoggingAdvice"/>
 		
