@@ -60,7 +60,7 @@ public class NewProjectPresenter extends AbstractProfilePresenter implements Pre
 						ProjectHomePlace
 								.createPlace(projectIdentifier)
 								.displayOnArrival(
-										Message.createSuccessMessage("Project created! Provisioning project services..."))
+										Message.createSuccessMessage("Project created! Provisioning project services. This will take a minute."))
 								.go();
 
 					}
