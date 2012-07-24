@@ -174,6 +174,9 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	private ProjectServiceConfiguration createProjectServiceConfiguration(Project project) {
 		ProjectServiceConfiguration config = new ProjectServiceConfiguration();
 		config.setProjectIdentifier(project.getIdentifier());
+		if (project.getOrganization() != null) {
+			config.setOrganizationIdentifier(project.getOrganization().getIdentifier());
+		}
 		config.setProperty(ProjectServiceConfiguration.PROFILE_HOSTNAME, configuration.getWebHost());
 		config.setProperty(ProjectServiceConfiguration.PROFILE_PROTOCOL, configuration.getProfileApplicationProtocol());
 		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_URL, configuration.getProfileBaseUrl());

@@ -61,6 +61,7 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 		config.getProperties().put(ProjectServiceConfiguration.APPLICATION_GIT_PROPERTY,
 				config.getProjectIdentifier() + ".git");
 		config.getProperties().put(ProjectServiceConfiguration.PROJECT_ID, config.getProjectIdentifier());
+		config.getProperties().put(ProjectServiceConfiguration.ORGANIZATION_ID, config.getOrganizationIdentifier());
 		String servicePath = config.getProperties().get(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL);
 		config.getProperties().put(ProjectServiceConfiguration.APPLICATION_GIT_URL,
 				servicePath + "scm/" + config.getProjectIdentifier() + ".git");

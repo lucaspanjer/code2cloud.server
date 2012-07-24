@@ -19,6 +19,8 @@ public class ProjectServiceConfiguration {
 
 	/** Property name for the project identifier. */
 	public static final String PROJECT_ID = "profile.application.identifier";
+	/** Property name for the organization identifier, if present. */
+	public static final String ORGANIZATION_ID = "profile.organization.identifier";
 	/** Property name for an identifer that will always be unique (even after deletion). */
 	public static final String UNIQUE_IDENTIFER = "profile.project.identifier.unique";
 	/** Property name for the profile protocol. */
@@ -40,6 +42,7 @@ public class ProjectServiceConfiguration {
 	public static final String MARKUP_LANGUAGE = "markup.language";
 
 	private String projectIdentifier;
+	private String organizationIdentifier;
 	private Map<String, String> properties;
 
 	public String getProjectIdentifier() {
@@ -63,6 +66,14 @@ public class ProjectServiceConfiguration {
 			this.properties = new HashMap<String, String>();
 		}
 		this.properties.put(key, value);
+	}
+
+	public String getOrganizationIdentifier() {
+		return organizationIdentifier;
+	}
+
+	public void setOrganizationIdentifier(String organizationIdentifier) {
+		this.organizationIdentifier = organizationIdentifier;
 	}
 
 }
