@@ -63,9 +63,6 @@ public class ProjectAdminActivity extends AbstractActivity implements Splittable
 		panel.setWidget(view);
 	}
 
-	/**
-	 * 
-	 */
 	public void deleteProject() {
 		AppGinjector.get
 				.instance()
@@ -78,7 +75,7 @@ public class ProjectAdminActivity extends AbstractActivity implements Splittable
 								AppGinjector.get.instance().getEventBus().fireEvent(new ClearCacheEvent());
 
 								Message message = Message
-										.createSuccessMessage("Project deletion is started. This may take some time");
+										.createSuccessMessage("Project deletion has started. This may take a minute.");
 
 								IPlace p = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
 								p.displayOnArrival(message);
