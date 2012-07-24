@@ -66,7 +66,7 @@ public class ProjectScmRepositoryRow extends Composite {
 			return url;
 		}
 		// Encoded protocols
-		for (String protocol : Arrays.asList("http://", "https://")) {
+		for (String protocol : Arrays.asList("http://", "https://", "ssh://")) {
 			if (url.startsWith(protocol)) {
 				String encodedUserName = com.google.gwt.http.client.URL.encodePathSegment(ProfileGinjector.get
 						.instance().getAppState().getCredentials().getProfile().getUsername());
@@ -74,15 +74,7 @@ public class ProjectScmRepositoryRow extends Composite {
 				return protocol + encodedUserName + "@" + url.substring(protocol.length());
 			}
 		}
-		// Unencoded protocols
-		for (String protocol : Arrays.asList("ssh://", "git://")) {
-			if (url.startsWith(protocol)) {
-				String userName = ProfileGinjector.get.instance().getAppState().getCredentials().getProfile()
-						.getUsername();
 
-				return protocol + userName + "@" + url.substring(protocol.length());
-			}
-		}
 		return url;
 	}
 }
