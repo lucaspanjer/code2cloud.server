@@ -10,7 +10,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.services.web;
+package com.tasktop.c2c.server.webdav.server;
 
 import static org.junit.Assert.assertEquals;
 

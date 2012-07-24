@@ -10,7 +10,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.services.web;
+package com.tasktop.c2c.server.webdav.server;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,8 +20,6 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.DispatcherServlet;
-
-import com.tasktop.c2c.server.services.web.WebdavCompatibleDispatcherServlet;
 
 public class WebdavCompatibleDispatcherServletTest {
 

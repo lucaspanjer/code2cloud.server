@@ -51,7 +51,7 @@
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>maven</servlet-name>
-		<servlet-class>com.tasktop.c2c.server.services.web.WebdavCompatibleDispatcherServlet</servlet-class>
+		<servlet-class>com.tasktop.c2c.server.webdav.server.WebdavCompatibleDispatcherServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>

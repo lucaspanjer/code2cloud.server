@@ -28,7 +28,7 @@
 	<bean id="mvnConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
 		<property name="configurators">
 			<list> 
-				<bean id="mavenRepoConfigurator" class="com.tasktop.c2c.server.services.web.MavenRepositoryConfigurator"
+				<bean id="mavenRepoConfigurator" class="com.tasktop.c2c.server.webdav.server.MavenRepositoryConfigurator"
 					p:mavenRoot="${maven.repo.base}"
 				/>
 			</list>

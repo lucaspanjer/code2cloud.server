@@ -17,11 +17,11 @@
 	<!-- This is needed for us to be able to map our servlet directly to a URL -->
  	<bean class="org.springframework.web.servlet.handler.SimpleServletHandlerAdapter"/>
 
-	<bean id="webdavStore" class="com.tasktop.c2c.server.services.web.TenantAwareWebDavStore">
+	<bean id="webdavStore" class="com.tasktop.c2c.server.webdav.server.TenantAwareWebDavStore">
 		<constructor-arg value="${maven.repo.base}"/>
 	</bean>
 
-	<bean id="springAwareWebdavServlet" class="com.tasktop.c2c.server.services.web.SpringAwareWebdavServlet"
+	<bean id="springAwareWebdavServlet" class="com.tasktop.c2c.server.webdav.server.SpringAwareWebdavServlet"
 		init-method="init"
 		p:webdavStore-ref="webdavStore"
 	/>
