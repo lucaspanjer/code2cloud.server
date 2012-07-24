@@ -27,7 +27,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
-import com.tasktop.c2c.server.auth.service.proxy.AuthenticationTokenSerializer;
+import com.tasktop.c2c.server.common.service.web.HeaderConstants;
 
 @RunWith(BlockJUnit4ClassRunner.class)
 public class AuthenticationTokenSerializerTest {
@@ -60,7 +60,7 @@ public class AuthenticationTokenSerializerTest {
 		serializer.serialize(proxyRequest, token);
 		String authorization = proxyRequest.getHeader(HTTP_HEADER_NAME_AUTHORIZATION);
 		assertNotNull(authorization);
-		assertTrue(authorization.startsWith("almtoken "));
+		assertTrue(authorization.startsWith(HeaderConstants.PRE_AUTH_AUTHORIZATION_HEADER_VALUE_PREFIX));
 		System.out.println("token length: " + authorization.length());
 	}
 
