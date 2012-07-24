@@ -32,10 +32,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.tenancy.context.DefaultTenancyContext;
 import org.springframework.tenancy.context.TenancyContext;
 import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.core.Tenant;
 
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.query.QueryUtil;
+import com.tasktop.c2c.server.common.service.web.ProfileHubTenant;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.activity.BuildActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
@@ -256,16 +256,12 @@ public class ActivityServiceBean implements ActivityService {
 
 	private static abstract class TenancyCallable<T> implements Callable<T> {
 
-		private Tenant tenant;
+		private ProfileHubTenant tenant;
 		private SecurityContext secContect;
 
 		private TenancyCallable(String projectIdentifier) {
 			tenant = TenancyUtil.createProjectTenant(projectIdentifier);
-			secContect = SecurityContextHolder.getContext();
-		}
-
-		private TenancyCallable() {
-			tenant = TenancyContextHolder.getContext().getTenant();
+			tenant.setOrganizationIdentifier(TenancyUtil.getCurrentTenantOrganizationIdentifer());
 			secContect = SecurityContextHolder.getContext();
 		}
 
