@@ -26,7 +26,7 @@
     	</property>
 	</bean>
 		
-	<bean id="psConfig" class="com.tasktop.c2c.server.scm.service.ScmServiceConfiguration"
+	<bean id="scmServiceConfiguration" class="com.tasktop.c2c.server.scm.service.ScmServiceConfiguration"
 		p:profileApplicationProtocol="${profile.application.protocol}"
 		p:webHost="${profile.application.host}"
 		p:baseContextPath="${profile.prefix.path}"
@@ -35,7 +35,7 @@
 	/>
 	
 	<bean id="proxySetup" class="com.tasktop.c2c.server.common.service.HttpProxySetup"
-		p:dontProxyToProfile="true" p:profileConfiguration-ref="psConfig"
+		p:dontProxyToProfile="true" p:profileConfiguration-ref="scmServiceConfiguration"
 	/>
 
 	<bean id="gitConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
