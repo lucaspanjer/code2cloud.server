@@ -67,19 +67,20 @@ public class BaseProfileConfiguration {
 	}
 
 	public String getProfileBaseUrl() {
+		String baseUrl = profileApplicationProtocol + "://";
 		if (prefixHostnameWithOrgId && TenancyUtil.getCurrentTenantOrganizationIdentifer() != null) {
-			return profileApplicationProtocol + "://" + TenancyUtil.getCurrentTenantOrganizationIdentifer() + "."
-					+ webHost + baseContextPath;
+			baseUrl += TenancyUtil.getCurrentTenantOrganizationIdentifer() + ".";
 		}
-		return profileApplicationProtocol + "://" + webHost + baseContextPath;
+		baseUrl += webHost + baseContextPath;
+		return baseUrl;
 	}
 
 	public String getUpdateSiteUrl() {
 		return profileApplicationProtocol + "://" + webHost + "/updateSite";
 	}
 
-	public String getServiceUrlPrefix(String projectId) {
-		return getProfileBaseUrl() + getServiceProxyPath() + "/" + projectId + "/";
+	public String getServiceUrlPrefix(String projectIdentifier) {
+		return getProfileBaseUrl() + getServiceProxyPath() + "/" + projectIdentifier + "/";
 	}
 
 	public String getHostedScmUrlPrefix(String projectId) {

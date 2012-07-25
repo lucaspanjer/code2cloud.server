@@ -45,9 +45,14 @@ public class ProjectServiceConfiguration {
 	public static final String APPLICATION_GIT_URL = "application.git.url";
 
 	/** Required properties to be sent when configuring a node. */
-	public static final String[] REQUIRED_PROPERTIES = new String[] { ProjectServiceConfiguration.PROJECT_ID,
-			ProjectServiceConfiguration.PROFILE_PROTOCOL, ProjectServiceConfiguration.PROFILE_HOSTNAME,
-			ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL, ProjectServiceConfiguration.PROFILE_BASE_URL };
+	public static final String[] REQUIRED_PROPERTIES = new String[] {
+			//
+			ProjectServiceConfiguration.PROJECT_ID,//
+			ProjectServiceConfiguration.PROFILE_PROTOCOL, //
+			ProjectServiceConfiguration.PROFILE_HOSTNAME, //
+			ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL,//
+			ProjectServiceConfiguration.PROFILE_BASE_URL //
+	};
 
 	public static final String MARKUP_LANGUAGE = "markup.language";
 
