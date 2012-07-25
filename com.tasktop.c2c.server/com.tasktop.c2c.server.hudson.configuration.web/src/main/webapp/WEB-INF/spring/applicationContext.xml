@@ -10,5 +10,17 @@
 		ignore-resource-not-found="true"/>
 
 	<import resource="classpath:META-INF/spring/applicationContext-restServer.xml"/>
+	<import resource="classpath*:/WEB-INF/spring/applicationContext-hudsonConfigurationService.xml"/>
+	
+
+	<!--  AOP Logging -->
+	<bean id="aopLogger" class="com.tasktop.c2c.server.common.service.ServiceLoggingAdvice"/>
+
+	<aop:config>
+		<aop:aspect ref="aopLogger">
+			<aop:pointcut id="serviceCall" expression="bean(nodeConfigurationService)"/>
+			<aop:around pointcut-ref="serviceCall" method="doLogging"/>
+		</aop:aspect>
+	</aop:config>
 
 </beans>

@@ -11,9 +11,7 @@
 
 	<context:property-placeholder location="/WEB-INF/spring/*.properties, file:///home/calm/.cloudalm/etc/*.properties, file:///opt/cloudalm/etc/*.properties, file:///home/cloudalm/etc/*.properties"  
 		ignore-resource-not-found="true"/>
-		
-	<import resource="classpath*:/WEB-INF/spring/applicationContext-hudsonConfigurationService.xml"/>
-		
+				
 	<context:annotation-config/>
 
 	<bean id="configServiceController" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceController">
