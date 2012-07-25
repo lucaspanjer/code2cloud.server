@@ -5,7 +5,7 @@
 <ui:style>
 div.key {
 	border: 1px solid #EDEEED;
-	font-family: mono-space;
+	font-family: monospace;
 	word-wrap: break-word;
 }
 
@@ -34,7 +34,7 @@ div.key {
 			</div>
 
 			<div>
-				<h3>Public key (for external source repositories)</h3>
+				<h3>SSH Public Key (for external source repositories)</h3>
 				<div class="{style.key}">
 					<g:Label ui:field="publicSshKey"/>
 				</div> 
