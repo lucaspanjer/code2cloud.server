@@ -56,6 +56,7 @@ import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.domain.SortInfo;
 import com.tasktop.c2c.server.common.service.job.JobService;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.internal.profile.crypto.PublicKeyReader;
 import com.tasktop.c2c.server.profile.domain.Email;
 import com.tasktop.c2c.server.profile.domain.internal.Agreement;
@@ -513,13 +514,19 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		entityManager.persist(project);
 		entityManager.flush();
 
+		Organization associatedOrg = null;
 		if (project.getOrganization() != null) {
-			Organization org = entityManager.find(Organization.class, project.getOrganization().getId());
-			if (org == null) {
+			associatedOrg = entityManager.find(Organization.class, project.getOrganization().getId());
+			if (associatedOrg == null) {
 				throw new EntityNotFoundException();
 			}
-			project.setOrganization(org);
-			org.getProjects().add(project);
+		} else if (TenancyUtil.getCurrentTenantOrganizationIdentifer() != null) {
+			associatedOrg = getOrganizationByIdentfier(TenancyUtil.getCurrentTenantOrganizationIdentifer());
+		}
+
+		if (associatedOrg != null) {
+			project.setOrganization(associatedOrg);
+			associatedOrg.getProjects().add(project);
 		}
 
 		ProjectProfile projectProfile = project.addProfile(profile);
