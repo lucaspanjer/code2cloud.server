@@ -20,11 +20,10 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.commons.io.FileUtils;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Goes through the template files and replaces entries of the form ${foo.bar} with the corresponding key from the
@@ -74,12 +73,16 @@ public class TemplateProcessingConfigurator implements ProjectServiceManagementS
 	}
 
 	// FIXME this is not efficient
-	private void applyTemplateFileToTarget(Map<String, String> props, File templateFile, ProjectServiceConfiguration configuration)
-			throws IOException {
+	private void applyTemplateFileToTarget(Map<String, String> props, File templateFile,
+			ProjectServiceConfiguration configuration) throws IOException {
 
 		String targetContents = FileUtils.readFileToString(templateFile);
 		for (Entry<String, String> entry : props.entrySet()) {
-			targetContents = targetContents.replace("${" + entry.getKey() + "}", entry.getValue());
+			String value = entry.getValue();
+			if (value == null) {
+				value = "";
+			}
+			targetContents = targetContents.replace("${" + entry.getKey() + "}", value);
 		}
 
 		File targetFile = mapToTargetFile(templateFile, configuration);
