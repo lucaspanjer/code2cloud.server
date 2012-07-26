@@ -204,7 +204,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 
 		try {
 			com.tasktop.c2c.server.profile.domain.internal.Project project = profileService
-					.getActiveProjectByIdentifier(projectIdentifier);
+					.getProjectByIdentifier(projectIdentifier);
 
 			ProjectProfile projectProfile = profileService.getProjectProfile(project.getId(), member.getProfile()
 					.getId());
@@ -260,7 +260,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	public List<Profile> getProfiles(String projectIdentifier, String query, int limit) throws NoSuchEntityException {
 		com.tasktop.c2c.server.profile.domain.internal.Project project;
 		try {
-			project = profileService.getActiveProjectByIdentifier(projectIdentifier);
+			project = profileService.getProjectByIdentifier(projectIdentifier);
 		} catch (EntityNotFoundException e) {
 			handle(e);
 			throw new IllegalStateException();
@@ -309,7 +309,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 
 		com.tasktop.c2c.server.profile.domain.internal.Project project;
 		try {
-			project = profileService.getActiveProjectByIdentifier(projectIdentifier);
+			project = profileService.getProjectByIdentifier(projectIdentifier);
 		} catch (EntityNotFoundException e) {
 			handle(e);
 			throw new IllegalStateException();

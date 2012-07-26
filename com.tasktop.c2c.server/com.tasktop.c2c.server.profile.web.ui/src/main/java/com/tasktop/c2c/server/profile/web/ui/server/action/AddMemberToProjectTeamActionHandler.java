@@ -40,7 +40,7 @@ public class AddMemberToProjectTeamActionHandler extends
 
 			profileService.createProjectProfile(action.getProjectId(), action.getProfile().getUsername());
 
-			Project project = profileService.getActiveProjectByIdentifier(action.getProjectId());
+			Project project = profileService.getProjectByIdentifier(action.getProjectId());
 			ProjectTeamSummary summary = webServiceDomain.copyTeamSummary(project);
 			return new GetProjectTeamResult(summary);
 

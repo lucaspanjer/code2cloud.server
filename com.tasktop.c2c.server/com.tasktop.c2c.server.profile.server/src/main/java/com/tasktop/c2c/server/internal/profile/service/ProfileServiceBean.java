@@ -372,7 +372,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Override
 	public void createProjectProfile(String projectId, String username) throws EntityNotFoundException {
 		Profile profile = identityManagmentService.getProfileByUsername(username);
-		Project project = getActiveProjectByIdentifier(projectId);
+		Project project = getProjectByIdentifier(projectId);
 		ProjectProfile pp = addProjectProfileInternal(project, profile);
 		securityPolicy.create(pp);
 
@@ -655,14 +655,14 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	@Override
-	public Project getActiveProjectByIdentifier(String identity) throws EntityNotFoundException {
+	public Project getProjectByIdentifier(String identity) throws EntityNotFoundException {
 		Project p = getProjectByIdentifierInternal(identity);
 		verifyProjectDeletion(p);
 		return p;
 	}
 
 	@Override
-	public Project getProjectByIdentifier(String identity) throws EntityNotFoundException {
+	public Project getProjectByIdentifierEvenIfDeleted(String identity) throws EntityNotFoundException {
 		return getProjectByIdentifierInternal(identity);
 	}
 
@@ -785,7 +785,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	public String inviteUserForProject(String email, String appIdentifier) throws EntityNotFoundException {
 
 		// Pull in our domain objects now.
-		Project project = getActiveProjectByIdentifier(appIdentifier);
+		Project project = getProjectByIdentifier(appIdentifier);
 		Profile profile = getCurrentUserProfile();
 
 		// Pre-populate a new Invitation token.
@@ -1038,7 +1038,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Secured(Role.User)
 	@Override
 	public void watchProject(String projectIdentifier) throws EntityNotFoundException {
-		Project project = getActiveProjectByIdentifier(projectIdentifier);
+		Project project = getProjectByIdentifier(projectIdentifier);
 
 		// Only allow watching of a public project - if a private project is given, then pretend it doesn't exist to
 		// prevent information leakage.
@@ -1075,7 +1075,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Secured(Role.User)
 	@Override
 	public void unwatchProject(String projectIdentifier) throws EntityNotFoundException {
-		Project project = getActiveProjectByIdentifier(projectIdentifier);
+		Project project = getProjectByIdentifier(projectIdentifier);
 
 		Profile currentUser = getCurrentUserProfile();
 
@@ -1290,7 +1290,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Override
 	public Boolean isWatchingProject(String projectIdentifier) throws EntityNotFoundException {
 		Profile profile = getCurrentUserProfile();
-		Project project = getActiveProjectByIdentifier(projectIdentifier);
+		Project project = getProjectByIdentifier(projectIdentifier);
 
 		Query q = entityManager.createQuery("select count(pp) from " + ProjectProfile.class.getSimpleName()
 				+ " pp where pp.profile = :profile AND pp.project = :project AND pp.community = true");
@@ -1772,7 +1772,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 	@Override
 	public void deleteProject(String projectIdentifier) throws EntityNotFoundException {
-		Project project = getActiveProjectByIdentifier(projectIdentifier);
+		Project project = getProjectByIdentifier(projectIdentifier);
 		project.setIsDeleted(true);
 		securityPolicy.delete(project);
 

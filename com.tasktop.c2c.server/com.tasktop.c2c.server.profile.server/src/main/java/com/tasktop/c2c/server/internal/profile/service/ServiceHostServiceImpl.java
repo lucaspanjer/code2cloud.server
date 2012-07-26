@@ -254,7 +254,7 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 			throw new IllegalStateException();
 		}
 		entityManager.lock(managed, LockModeType.PESSIMISTIC_WRITE);
-		Project project = profileService.getActiveProjectByIdentifier(projectIdentifier);
+		Project project = profileService.getProjectByIdentifier(projectIdentifier);
 		ProjectService service = new ProjectService();
 		service.setProjectServiceProfile(project.getProjectServiceProfile());
 		service.setType(type);

@@ -155,7 +155,7 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 
 	@Override
 	public Project getProjectByIdentifier(String projectIdentifier) throws EntityNotFoundException {
-		return webServiceDomain.copy(profileService.getActiveProjectByIdentifier(projectIdentifier), configuration);
+		return webServiceDomain.copy(profileService.getProjectByIdentifier(projectIdentifier), configuration);
 	}
 
 	@Override
@@ -343,7 +343,7 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 	@Override
 	public List<ProjectServiceStatus> computeProjectServicesStatus(String projectId) throws EntityNotFoundException {
 		com.tasktop.c2c.server.profile.domain.internal.Project project = profileService
-				.getProjectByIdentifier(projectId);
+				.getProjectByIdentifierEvenIfDeleted(projectId);
 		return projectServiceService.computeProjectServicesStatus(project);
 	}
 
