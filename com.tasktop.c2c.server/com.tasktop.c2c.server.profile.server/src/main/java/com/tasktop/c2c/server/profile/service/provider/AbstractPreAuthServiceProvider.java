@@ -75,7 +75,7 @@ public abstract class AbstractPreAuthServiceProvider<T> extends AbstractServiceP
 			}
 		}
 		try {
-			Project project = profileService.getProjectByIdentifier(projectIdentifier);
+			Project project = profileService.getActiveProjectByIdentifier(projectIdentifier);
 
 			return internalAuthenticationService.specializeAuthenticationToken(authenticationToken, project);
 

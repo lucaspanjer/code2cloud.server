@@ -36,7 +36,7 @@ public class GetProjectTeamActionHandler extends
 	public GetProjectTeamResult execute(GetProjectTeamAction action, ExecutionContext context) throws DispatchException {
 		try {
 			setTenancyContext(action.getProjectId());
-			Project project = profileService.getProjectByIdentifier(action.getProjectId());
+			Project project = profileService.getActiveProjectByIdentifier(action.getProjectId());
 
 			ProjectTeamSummary summary = webServiceDomain.copyTeamSummary(project);
 			return new GetProjectTeamResult(summary);

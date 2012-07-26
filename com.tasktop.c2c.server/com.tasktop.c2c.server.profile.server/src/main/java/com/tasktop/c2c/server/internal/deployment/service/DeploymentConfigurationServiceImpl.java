@@ -93,7 +93,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 	private Project getProject() {
 		try {
-			return profileService.getProjectByIdentifier(getProjectIdentifier());
+			return profileService.getActiveProjectByIdentifier(getProjectIdentifier());
 		} catch (EntityNotFoundException e) {
 			throw new RuntimeException(e);
 		}

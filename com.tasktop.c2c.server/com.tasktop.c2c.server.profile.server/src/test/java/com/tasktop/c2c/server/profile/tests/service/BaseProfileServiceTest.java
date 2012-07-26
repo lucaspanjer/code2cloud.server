@@ -377,7 +377,7 @@ public abstract class BaseProfileServiceTest {
 
 		Long id = project.getId();
 
-		Project project2 = profileService.getProjectByIdentifier(project.getIdentifier());
+		Project project2 = profileService.getActiveProjectByIdentifier(project.getIdentifier());
 		assertNotNull(project2);
 		assertNotSame(project, project2);
 		assertEquals(id, project2.getId());
@@ -387,7 +387,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = EntityNotFoundException.class)
 	public void testGetProjectByIdentityNotFound() throws Exception {
-		profileService.getProjectByIdentifier("123");
+		profileService.getActiveProjectByIdentifier("123");
 	}
 
 	@Test
@@ -1652,7 +1652,7 @@ public abstract class BaseProfileServiceTest {
 
 		Long id = profileService.createProject(profile.getId(), project).getId();
 		Project created = entityManager.find(Project.class, id);
-		profileService.getProjectByIdentifier(created.getIdentifier());
+		profileService.getActiveProjectByIdentifier(created.getIdentifier());
 
 		// Add some referencing objects
 		DeploymentConfiguration dep = new DeploymentConfiguration();
@@ -1673,7 +1673,7 @@ public abstract class BaseProfileServiceTest {
 		internalProfileService.doDeleteProject(created.getIdentifier());
 		entityManager.flush();
 		try {
-			Project deleted = profileService.getProjectByIdentifier(created.getIdentifier());
+			Project deleted = profileService.getActiveProjectByIdentifier(created.getIdentifier());
 			Assert.fail();
 		} catch (EntityNotFoundException e) {
 			// expected
@@ -1736,7 +1736,7 @@ public abstract class BaseProfileServiceTest {
 	@Test(expected = EntityNotFoundException.class)
 	public void testGetPartiallyDeletedProjectByIdentifier() throws EntityNotFoundException, ValidationException {
 		Project project = changeDeletedProject();
-		profileService.getProjectByIdentifier(project.getIdentifier());
+		profileService.getActiveProjectByIdentifier(project.getIdentifier());
 	}
 
 	@Test(expected = EntityNotFoundException.class)
@@ -1766,7 +1766,7 @@ public abstract class BaseProfileServiceTest {
 		Project project = MockProjectFactory.create(entityManager);
 		entityManager.persist(project.addProfile(profile));
 
-		profileService.getProjectByIdentifier(project.getIdentifier());
+		profileService.getActiveProjectByIdentifier(project.getIdentifier());
 		int numProjects = profileService.getProfileProjects(profile.getId()).size();
 
 		Assert.assertEquals(1, numProjects);
@@ -1774,7 +1774,7 @@ public abstract class BaseProfileServiceTest {
 		project.setIsDeleted(true);
 
 		try {
-			profileService.getProjectByIdentifier(project.getIdentifier());
+			profileService.getActiveProjectByIdentifier(project.getIdentifier());
 			Assert.fail();
 		} catch (EntityNotFoundException e) {
 			// expected

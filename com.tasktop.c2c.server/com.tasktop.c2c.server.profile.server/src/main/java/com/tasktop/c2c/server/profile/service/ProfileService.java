@@ -66,7 +66,7 @@ public interface ProfileService {
 
 	public Project getProject(Long projectId) throws EntityNotFoundException;
 
-	public Project getProjectByIdentifier(String projectIdentifier) throws EntityNotFoundException;
+	public Project getActiveProjectByIdentifier(String projectIdentifier) throws EntityNotFoundException;
 
 	public List<Project> getProfileProjects(Long profileId) throws EntityNotFoundException;
 
@@ -221,4 +221,11 @@ public interface ProfileService {
 	 * @throws EntityNotFoundException
 	 */
 	void createProjectProfile(String projectId, String username) throws EntityNotFoundException;
+
+	/**
+	 * @param identity
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	Project getProjectByIdentifier(String identity) throws EntityNotFoundException;
 }

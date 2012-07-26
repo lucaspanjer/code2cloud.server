@@ -155,7 +155,7 @@ public class ProfileWebServiceBean implements ProfileWebService, ProfileWebServi
 
 	@Override
 	public Project getProjectByIdentifier(String projectIdentifier) throws EntityNotFoundException {
-		return webServiceDomain.copy(profileService.getProjectByIdentifier(projectIdentifier), configuration);
+		return webServiceDomain.copy(profileService.getActiveProjectByIdentifier(projectIdentifier), configuration);
 	}
 
 	@Override

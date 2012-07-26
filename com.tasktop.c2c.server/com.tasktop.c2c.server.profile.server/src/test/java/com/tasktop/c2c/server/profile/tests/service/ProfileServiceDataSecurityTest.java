@@ -163,7 +163,7 @@ public class ProfileServiceDataSecurityTest {
 		MockProjectProfileFactory.create(application, profile2, entityManager);
 		logon(profile2);
 		profileService.getProject(application.getId());
-		profileService.getProjectByIdentifier(application.getIdentifier());
+		profileService.getActiveProjectByIdentifier(application.getIdentifier());
 	}
 
 	@Test
@@ -171,7 +171,7 @@ public class ProfileServiceDataSecurityTest {
 		Project application = logonCreateAndRetrieveApplication();
 
 		profileService.getProject(application.getId());
-		profileService.getProjectByIdentifier(application.getIdentifier());
+		profileService.getActiveProjectByIdentifier(application.getIdentifier());
 	}
 
 	@Test(expected = InsufficientPermissionsException.class)
@@ -179,7 +179,7 @@ public class ProfileServiceDataSecurityTest {
 		Project application = logonCreateAndRetrieveApplication();
 		logon(profile2);
 
-		profileService.getProjectByIdentifier(application.getIdentifier());
+		profileService.getActiveProjectByIdentifier(application.getIdentifier());
 	}
 
 	@Test(expected = InsufficientPermissionsException.class)
@@ -332,6 +332,6 @@ public class ProfileServiceDataSecurityTest {
 		project.setAccessibility(ProjectAccessibility.ORGANIZATION_PRIVATE);
 		project = profileService.createProject(profile.getId(), project);
 
-		profileService.getProjectByIdentifier(project.getIdentifier());
+		profileService.getActiveProjectByIdentifier(project.getIdentifier());
 	}
 }
