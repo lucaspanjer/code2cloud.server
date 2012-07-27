@@ -26,11 +26,14 @@ public class HeaderConstants {
 	/** Prefix for headers that can only be used with internal requests. */
 	public static final String ALM_PRIVATE_HEADER_PREFIX = "C2C-Internal";
 
-	/** Header for the project identifier of the request. Used in the HeaderTenantIdentificationStrategy. */
+	/** Header for the project identifier of the request. */
 	public static final String PROJECT_ID_HEADER = ALM_PRIVATE_HEADER_PREFIX + "ProjectId";
 
-	/** Header for the organization identifier of the request. Used in the HeaderTenantIdentificationStrategy. */
+	/** Header for the organization identifier of the request. */
 	public static final String ORGANIZATION_ID_HEADER = ALM_PRIVATE_HEADER_PREFIX + "OrganizationId";
+
+	/** Header for the short project identifier of the request. */
+	public static final String SHORT_PROJECT_ID_HEADER = ALM_PRIVATE_HEADER_PREFIX + "ShortProjectId";
 
 	/** Pre-Auth header. */
 	public static final String PREAUTH_AUTHORIZATION_HEADER = "Authorization";

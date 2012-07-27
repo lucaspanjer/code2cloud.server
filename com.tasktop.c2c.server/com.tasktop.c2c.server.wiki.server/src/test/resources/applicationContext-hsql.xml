@@ -28,8 +28,8 @@
 		</property>
 	</bean>
 
-	<bean class="com.tasktop.c2c.server.internal.wiki.server.WikiTenantAwareDataSource" id="wikiCreateTestDataSource"
-		p:wrappedDataSource-ref="rawDataSource" p:language="HSQL">
+	<bean class="com.tasktop.c2c.server.common.internal.tenancy.ProjectTenantAwareDataSource" id="wikiCreateTestDataSource"
+		p:wrappedDataSource-ref="rawDataSource" p:language="HSQL" p:databaseNamingStrategy-ref="databaseNamingStrategy">
 		<qualifier value="switching"/>
 	</bean>
 	

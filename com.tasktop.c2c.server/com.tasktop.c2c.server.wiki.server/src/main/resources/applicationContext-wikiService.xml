@@ -15,12 +15,15 @@
 	<context:annotation-config/>	
 	<context:component-scan base-package="com.tasktop.c2c.server.internal.wiki.domain,com.tasktop.c2c.server.internal.wiki.server,com.tasktop.c2c.server.wiki.service"/> 
 
+	<bean id="databaseNamingStrategy" class="com.tasktop.c2c.server.common.internal.tenancy.DatabaseNamingStrategy" p:suffix="_wiki" 
+		p:useShortProjectIdentifier="false"/>
+
 	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="rawDataSource"
 		p:driverClassName="${wiki.database.driverClassName}" p:url="${wiki.database.url}"
 		p:username="${wiki.database.username}" p:password="${wiki.database.password}" />
 
- 	<bean class="com.tasktop.c2c.server.internal.wiki.server.WikiTenantAwareDataSource" id="dataSource"
-		p:wrappedDataSource-ref="rawDataSource" p:language="${wiki.database.dialect}">
+ 	<bean class="com.tasktop.c2c.server.common.internal.tenancy.ProjectTenantAwareDataSource" id="dataSource"
+		p:wrappedDataSource-ref="rawDataSource" p:language="${wiki.database.dialect}" p:databaseNamingStrategy-ref="databaseNamingStrategy">
 		<qualifier value="switching"/>
 	</bean>
 
@@ -64,15 +67,16 @@
 		<property name="deprovisioners">
 			<list>
 				<bean class="com.tasktop.c2c.server.configuration.service.DatabaseDumpingDeprovisoiner"
-				 p:dbSuffix="wiki" p:host="${database.host}" p:mysqldumpCommand="${mysqldumpCommand}" p:password="${wiki.database.password}"
-				 p:user="${wiki.database.username}" p:toBaseDir="${alm.dataDir}/deleted" p:rawDataSource-ref="rawDataSource"/>
+				 p:host="${database.host}" p:mysqldumpCommand="${mysqldumpCommand}" p:password="${wiki.database.password}"
+				 p:user="${wiki.database.username}" p:toBaseDir="${alm.dataDir}/deleted" p:rawDataSource-ref="rawDataSource"
+				 p:databaseNamingStrategy-ref="databaseNamingStrategy"/>
 			</list>
 		</property>
 	</bean>
 	
 	<bean id="wikiDatabaseConfigurator" class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 
-					p:suffix="_wiki" p:rawDatasource-ref="rawDataSource" p:tenantAwareDataSource-ref="dataSource" 
-					p:changelog="classpath:/data/liquibase-wiki-db-master.xml"/>
+				 	p:rawDatasource-ref="rawDataSource" p:tenantAwareDataSource-ref="dataSource" 
+					p:changelog="classpath:/data/liquibase-wiki-db-master.xml" p:databaseNamingStrategy-ref="databaseNamingStrategy"/>
 	<bean id="wikiPreferencesConfigurator" class="com.tasktop.c2c.server.internal.wiki.server.ProjectServicePreferencesConfigurator" />
 	
 	<bean id="jobService" class="com.tasktop.c2c.server.common.service.job.ExecutorJobService" autowire="byType">

@@ -15,7 +15,6 @@ package com.tasktop.c2c.server.internal.tasks.service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
 import com.tasktop.c2c.server.tasks.service.TaskService;
@@ -36,7 +35,6 @@ public class ProjectServicePreferencesConfigurator implements Configurator {
 	public void configure(ProjectServiceConfiguration configuration) {
 		String markupLanguage = configuration.getProperties().get(ProjectServiceConfiguration.MARKUP_LANGUAGE);
 
-		TenancyUtil.setProjectTenancyContext(configuration.getProjectIdentifier());
 		AuthUtils.assumeSystemIdentity(null);
 
 		taskService.setConfigurationProperty(WikiService.MARKUP_LANGUAGE_DB_KEY, markupLanguage);

@@ -18,13 +18,17 @@
 	<context:annotation-config/>	
 	<context:component-scan base-package="com.tasktop.c2c.server.internal.tasks,com.tasktop.c2c.server.tasks"/> 
 	
+	<bean id="databaseNamingStrategy" class="com.tasktop.c2c.server.common.internal.tenancy.DatabaseNamingStrategy" p:suffix="_tasks" 
+		p:useShortProjectIdentifier="false"/> 
+	
 	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="rawDataSource"
 		p:driverClassName="${task.database.driverClassName}" p:url="${task.database.url}"
 		p:username="${task.database.username}" p:password="${task.database.password}" />
 	
-	<bean class="com.tasktop.c2c.server.internal.tasks.service.TaskTenantAwareDataSource" id="dataSource"
+	<bean class="com.tasktop.c2c.server.common.internal.tenancy.ProjectTenantAwareDataSource" id="dataSource"
 		p:wrappedDataSource-ref="rawDataSource"
 		p:language="${task.database.dialect}"
+		p:databaseNamingStrategy-ref="databaseNamingStrategy"
 	>
 		<qualifier value="switching"/>
 	</bean>
@@ -59,8 +63,8 @@
 		<property name="configurators">
 			<list> 
 				<bean class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 
-					p:suffix="_tasks" p:rawDatasource-ref="rawDataSource" p:tenantAwareDataSource-ref="dataSource" 
-					p:changelog="classpath:/data/liquibase-task-db-master.xml"/>
+					p:rawDatasource-ref="rawDataSource" p:tenantAwareDataSource-ref="dataSource" 
+					p:changelog="classpath:/data/liquibase-task-db-master.xml" p:databaseNamingStrategy-ref="databaseNamingStrategy"/>
 				<bean id="taskPreferencesConfigurator" class="com.tasktop.c2c.server.internal.tasks.service.ProjectServicePreferencesConfigurator" />
 			</list>
 		</property>
@@ -74,8 +78,9 @@
 		<property name="deprovisioners">
 			<list>
 				<bean class="com.tasktop.c2c.server.configuration.service.DatabaseDumpingDeprovisoiner"
-				 p:dbSuffix="tasks" p:host="${database.host}" p:mysqldumpCommand="${mysqldumpCommand}" p:password="${task.database.password}"
-				 p:user="${task.database.username}" p:toBaseDir="${alm.dataDir}/deleted" p:rawDataSource-ref="rawDataSource"/>
+				 p:host="${database.host}" p:mysqldumpCommand="${mysqldumpCommand}" p:password="${task.database.password}"
+				 p:user="${task.database.username}" p:toBaseDir="${alm.dataDir}/deleted" p:rawDataSource-ref="rawDataSource"
+				 p:databaseNamingStrategy-ref="databaseNamingStrategy"/>
 			</list>
 		</property>
 	</bean>

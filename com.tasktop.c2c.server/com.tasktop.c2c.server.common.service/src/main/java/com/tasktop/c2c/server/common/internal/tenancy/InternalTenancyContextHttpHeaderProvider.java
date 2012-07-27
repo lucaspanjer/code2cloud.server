@@ -34,6 +34,10 @@ public class InternalTenancyContextHttpHeaderProvider {
 			result.put(HeaderConstants.ORGANIZATION_ID_HEADER, TenancyUtil.getCurrentTenantOrganizationIdentifer());
 		}
 
+		if (TenancyUtil.getCurrentTenantShortProjectIdentifer() != null) {
+			result.put(HeaderConstants.SHORT_PROJECT_ID_HEADER, TenancyUtil.getCurrentTenantShortProjectIdentifer());
+		}
+
 		return result;
 	}
 }

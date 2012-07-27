@@ -10,36 +10,26 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.internal.tasks.service;
+package com.tasktop.c2c.server.common.internal.tenancy;
 
 import org.springframework.tenancy.datasource.TenantAwareDataSource;
 
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+public class ProjectTenantAwareDataSource extends TenantAwareDataSource {
 
-public class TaskTenantAwareDataSource extends TenantAwareDataSource {
-
-	private Language language;
+	private DatabaseNamingStrategy databaseNamingStrategy;
 
 	@Override
 	protected String getDatabaseName() {
-		String projectId = TenancyUtil.getCurrentTenantProjectIdentifer();
-		String dbName = projectId + "_tasks";
+
+		String dbName = databaseNamingStrategy.getCurrentTenantDatabaseName();
 		if (language == Language.HSQL || language == Language.ORACLE) {
 			dbName = dbName.toUpperCase();
 		}
 		return dbName;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.tenancy.datasource.AbstractDatabaseSwitchingDataSource#setLanguage(org.springframework.tenancy
-	 * .datasource.AbstractDatabaseSwitchingDataSource.Language)
-	 */
-	@Override
-	public void setLanguage(Language l) {
-		super.setLanguage(l);
-		this.language = l;
+	public void setDatabaseNamingStrategy(DatabaseNamingStrategy databaseNamingStrategy) {
+		this.databaseNamingStrategy = databaseNamingStrategy;
 	}
+
 }

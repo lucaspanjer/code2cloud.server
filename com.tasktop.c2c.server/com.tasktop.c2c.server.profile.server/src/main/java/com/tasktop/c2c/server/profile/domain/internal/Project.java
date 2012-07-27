@@ -237,4 +237,8 @@ public class Project extends BaseEntity {
 	public void setIsDeleted(Boolean isDeleted) {
 		this.deleted = isDeleted;
 	}
+
+	public String getShortIdentifier() {
+		return Long.toString(getId(), Character.MAX_RADIX);
+	}
 }

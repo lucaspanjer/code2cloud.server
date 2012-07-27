@@ -15,10 +15,14 @@ package com.tasktop.c2c.server.profile.service.provider;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.web.client.RestTemplate;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
+import com.tasktop.c2c.server.common.service.web.ProfileHubTenant;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 
@@ -55,11 +59,21 @@ public abstract class AbstractServiceProvider<T> implements ServiceProvider<T> {
 			}
 
 			service.setBaseUrl(computeBaseUrl(baseUri));
+			establishTenancyContext(appService.getProjectServiceProfile().getProject());
 			return (T) service;
 
 		} catch (EntityNotFoundException e) {
 			throw new IllegalStateException();
 		}
+	}
+
+	private void establishTenancyContext(Project project) {
+		TenancyUtil.setProjectTenancyContext(project.getIdentifier());
+		ProfileHubTenant tenant = (ProfileHubTenant) TenancyContextHolder.getContext().getTenant();
+		if (project.getOrganization() != null) {
+			tenant.setOrganizationIdentifier(project.getOrganization().getIdentifier());
+		}
+		tenant.setShortProjectIdentifier(project.getShortIdentifier());
 	}
 
 	protected String computeBaseUrl(String internalBaseUri) {

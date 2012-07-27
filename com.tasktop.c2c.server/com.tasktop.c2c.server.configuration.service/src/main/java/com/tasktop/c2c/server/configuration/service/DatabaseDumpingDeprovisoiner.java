@@ -28,6 +28,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tasktop.c2c.server.common.internal.tenancy.DatabaseNamingStrategy;
 import com.tasktop.c2c.server.common.service.io.InputPipe;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Deprovisioner;
 
@@ -39,7 +40,8 @@ public class DatabaseDumpingDeprovisoiner implements Deprovisioner {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DatabaseDumpingDeprovisoiner.class);
 
-	private String dbSuffix;
+	private DatabaseNamingStrategy databaseNamingStrategy;
+
 	private String toBaseDir;
 	private String mysqldumpCommand;
 	private String host;
@@ -59,7 +61,7 @@ public class DatabaseDumpingDeprovisoiner implements Deprovisioner {
 			toBaseDirFile.mkdirs();
 		}
 
-		String dbName = configuration.getProjectIdentifier() + "_" + dbSuffix;
+		String dbName = databaseNamingStrategy.getCurrentTenantDatabaseName();
 
 		File dumpFile = new File(toBaseDirFile, dbName + ".sql");
 		boolean dumped = dumpDatabase(dbName, dumpFile);
@@ -143,10 +145,6 @@ public class DatabaseDumpingDeprovisoiner implements Deprovisioner {
 		this.toBaseDir = toBaseDir;
 	}
 
-	public void setDbSuffix(String dbSuffix) {
-		this.dbSuffix = dbSuffix;
-	}
-
 	public void setMysqldumpCommand(String mysqldumpCommand) {
 		this.mysqldumpCommand = mysqldumpCommand;
 	}
@@ -169,6 +167,10 @@ public class DatabaseDumpingDeprovisoiner implements Deprovisioner {
 
 	public void setRawDataSource(DataSource rawDataSource) {
 		this.rawDataSource = rawDataSource;
+	}
+
+	public void setDatabaseNamingStrategy(DatabaseNamingStrategy databaseNamingStrategy) {
+		this.databaseNamingStrategy = databaseNamingStrategy;
 	}
 
 }

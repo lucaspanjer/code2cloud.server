@@ -60,6 +60,7 @@ public class EventServiceImpl implements EventService {
 		@Override
 		public Object call() throws Exception {
 
+			// REVIEW : no orgId short tenant ID, ...
 			TenancyUtil.setProjectTenancyContext(event.getProjectId());
 
 			AuthUtils.assumeSystemIdentity(event.getProjectId());

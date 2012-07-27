@@ -58,6 +58,7 @@ public class ProjectServiceConfiguration {
 
 	private String projectIdentifier;
 	private String organizationIdentifier;
+	private String shortProjectIdentifer;
 	private Map<String, String> properties;
 
 	public String getProjectIdentifier() {
@@ -89,6 +90,14 @@ public class ProjectServiceConfiguration {
 
 	public void setOrganizationIdentifier(String organizationIdentifier) {
 		this.organizationIdentifier = organizationIdentifier;
+	}
+
+	public String getShortProjectIdentifer() {
+		return shortProjectIdentifer;
+	}
+
+	public void setShortProjectIdentifer(String shortProjectIdentifer) {
+		this.shortProjectIdentifer = shortProjectIdentifer;
 	}
 
 }

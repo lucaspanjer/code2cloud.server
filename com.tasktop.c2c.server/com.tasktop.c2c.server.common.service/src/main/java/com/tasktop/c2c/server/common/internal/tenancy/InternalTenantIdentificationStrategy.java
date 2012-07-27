@@ -33,6 +33,9 @@ public class InternalTenantIdentificationStrategy implements TenantIdentificatio
 		if (request.getHeader(HeaderConstants.ORGANIZATION_ID_HEADER) != null) {
 			tenant.setOrganizationIdentifier(request.getHeader(HeaderConstants.ORGANIZATION_ID_HEADER));
 		}
+		if (request.getHeader(HeaderConstants.SHORT_PROJECT_ID_HEADER) != null) {
+			tenant.setShortProjectIdentifier(request.getHeader(HeaderConstants.SHORT_PROJECT_ID_HEADER));
+		}
 
 		return tenant;
 	}

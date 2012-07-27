@@ -25,6 +25,7 @@ public class ProfileHubTenant extends DefaultTenant implements Tenant {
 
 	private String projectIdentifier;
 	private String organizationIdentifier;
+	private String shortProjectIdentifier;
 
 	public String getOrganizationIdentifier() {
 		return organizationIdentifier;
@@ -40,5 +41,13 @@ public class ProfileHubTenant extends DefaultTenant implements Tenant {
 
 	public void setProjectIdentifier(String projectIdentifier) {
 		this.projectIdentifier = projectIdentifier;
+	}
+
+	public String getShortProjectIdentifier() {
+		return shortProjectIdentifier;
+	}
+
+	public void setShortProjectIdentifier(String shrotProjectIdentifier) {
+		this.shortProjectIdentifier = shrotProjectIdentifier;
 	}
 }

@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.profile.service.provider;
 
 import org.springframework.stereotype.Service;
 
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.tasks.service.TaskService;
 import com.tasktop.c2c.server.tasks.service.TaskServiceClient;
 
@@ -34,7 +33,6 @@ public class TaskServiceProvider extends AbstractPreAuthServiceProvider<TaskServ
 	}
 
 	public TaskService getTaskService(String projectIdentifier) {
-		TenancyUtil.setProjectTenancyContext(projectIdentifier);
 		return getService(projectIdentifier);
 	}
 

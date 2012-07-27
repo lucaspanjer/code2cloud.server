@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.profile.service.provider;
 
 import org.springframework.stereotype.Service;
 
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.wiki.service.WikiService;
 import com.tasktop.c2c.server.wiki.service.WikiServiceClient;
 
@@ -34,7 +33,6 @@ public class WikiServiceProvider extends AbstractPreAuthServiceProvider<WikiServ
 	}
 
 	public WikiService getWikiService(String projectIdentifier) {
-		TenancyUtil.setProjectTenancyContext(projectIdentifier);
 		return getService(projectIdentifier);
 	}
 

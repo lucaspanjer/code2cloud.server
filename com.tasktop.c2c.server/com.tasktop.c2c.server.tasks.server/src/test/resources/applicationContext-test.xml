@@ -63,14 +63,16 @@
 	installing a new project schema into an HSQL DB -->
 	<jdbc:embedded-database id="testDataSource" type="HSQL" />
 	
-  	<bean class="com.tasktop.c2c.server.internal.tasks.service.TaskTenantAwareDataSource" id="taskCreateTestDataSource"
-		p:wrappedDataSource-ref="testDataSource" p:language="HSQL">
+	
+	
+  	<bean class="com.tasktop.c2c.server.common.internal.tenancy.ProjectTenantAwareDataSource" id="taskCreateTestDataSource"
+		p:wrappedDataSource-ref="testDataSource" p:language="HSQL" p:databaseNamingStrategy-ref="databaseNamingStrategy">
 		<qualifier value="switchingTest"/>
 	</bean>
 	
 	<bean id="taskTestDatabaseConfigurer" class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 
-					p:suffix="_tasks" p:rawDatasource-ref="testDataSource" p:tenantAwareDataSource-ref="taskCreateTestDataSource" 
-					p:changelog="classpath:/data/liquibase-task-db-master.xml"/>
+					p:rawDatasource-ref="testDataSource" p:tenantAwareDataSource-ref="taskCreateTestDataSource" 
+					p:changelog="classpath:/data/liquibase-task-db-master.xml" p:databaseNamingStrategy-ref="databaseNamingStrategy"/>
 	<bean id="taskTestPreferencesConfigurator" class="com.tasktop.c2c.server.internal.tasks.service.ProjectServicePreferencesConfigurator"/>
 					
 

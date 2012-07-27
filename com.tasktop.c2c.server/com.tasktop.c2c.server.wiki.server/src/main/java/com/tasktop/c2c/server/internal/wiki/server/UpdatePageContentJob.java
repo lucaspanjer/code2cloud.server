@@ -17,7 +17,6 @@ import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.tenancy.core.Tenant;
 
 import com.tasktop.c2c.server.common.service.job.Job;
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 /**
  * a job for updating PageContent
@@ -28,19 +27,20 @@ public class UpdatePageContentJob extends Job {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Object tenantIdentity;
+	private final Tenant tenant;
 
 	public UpdatePageContentJob() {
 		this(TenancyContextHolder.getContext().getTenant());
 	}
 
 	public UpdatePageContentJob(Tenant tenant) {
-		this.tenantIdentity = tenant == null ? null : tenant.getIdentity();
+		this.tenant = tenant;
 	}
 
 	@Override
 	public void execute(ApplicationContext applicationContext) {
-		TenancyUtil.setProjectTenancyContext(tenantIdentity.toString());
+		TenancyContextHolder.createEmptyContext();
+		TenancyContextHolder.getContext().setTenant(tenant);
 
 		try {
 			InternalWikiService service = applicationContext.getBean(InternalWikiService.class);

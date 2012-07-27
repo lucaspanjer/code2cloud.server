@@ -105,6 +105,22 @@ public final class TenancyUtil {
 		}
 	}
 
+	public static String getCurrentTenantShortProjectIdentifer() {
+		TenancyContext tc = TenancyContextHolder.getContext();
+		if (tc == null) {
+			return null;
+		}
+		Tenant tenant = tc.getTenant();
+		if (tenant == null) {
+			return null;
+		}
+		if (tenant instanceof ProfileHubTenant) {
+			return ((ProfileHubTenant) tenant).getShortProjectIdentifier();
+		} else {
+			return null;
+		}
+	}
+
 	private TenancyUtil() {
 
 	}

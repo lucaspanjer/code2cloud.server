@@ -22,13 +22,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.tenancy.context.TenancyContextHolder;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
 import com.tasktop.c2c.server.auth.service.AuthUtils;
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
 
@@ -87,14 +85,9 @@ public class GitRepositoryConfigurator implements Configurator {
 		if (gitRepositoryName == null) {
 			return;
 		}
-		try {
-			TenancyUtil.setProjectTenancyContext(configuration.getProjectIdentifier());
-			AuthUtils.assumeSystemIdentity(null);
+		AuthUtils.assumeSystemIdentity(null);
 
-			gitService.createEmptyRepository(gitRepositoryName);
-		} finally {
-			TenancyContextHolder.clearContext();
-		}
+		gitService.createEmptyRepository(gitRepositoryName);
 	}
 
 }
