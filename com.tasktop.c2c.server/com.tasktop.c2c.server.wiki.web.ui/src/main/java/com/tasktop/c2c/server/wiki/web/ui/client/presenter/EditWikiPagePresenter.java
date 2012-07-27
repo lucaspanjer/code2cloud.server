@@ -318,7 +318,7 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 	public String mayStop() {
 		if (view.isDirty()) {
 			return "There are unsaved changes. Are you sure you want to navigate away? "
-					+ "Press ok to navigate away and loose unsaved changes, or cancel to stay on the current page.";
+					+ "Press OK to navigate away and lose unsaved changes, or Cancel to stay on the current page.";
 		}
 		return null;
 	}

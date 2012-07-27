@@ -19,6 +19,6 @@ public interface TaskMessages extends Messages {
 	@DefaultMessage("Attachments ({0})")
 	String attachmentsHeader(int attachmentCount);
 
-	@DefaultMessage("There are unsaved changes. Are you sure you want to navigate away? Press ok to navigate away and loose unsaved changes, or cancel to stay on the current page.")
+	@DefaultMessage("There are unsaved changes. Are you sure you want to navigate away? Press OK to navigate away and lose unsaved changes, or Cancel to stay on the current page.")
 	String dirtyNavigateWarning();
 }
