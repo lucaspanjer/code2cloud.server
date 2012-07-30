@@ -64,11 +64,11 @@ public class NotificationServiceImpl extends AbstractJpaServiceBean implements N
 	@Autowired
 	private VelocityEngine velocityEngine;
 
-	private String taskCreateHeaderTemplate = "com/tasktop/c2c/server/internal/profile/service/template/taskCreateActivityHeader.vm";
-	private String taskUpdateHeaderTemplate = "com/tasktop/c2c/server/internal/profile/service/template/taskUpdateActivityHeader.vm";
-	private String taskAttachActivityTemplate = "com/tasktop/c2c/server/internal/profile/service/template/taskAttachActivity.vm";
-	private String taskUpdateActivityTemplate = "com/tasktop/c2c/server/internal/profile/service/template/taskUpdateActivity.vm";
-	private String taskCommentActivityTemplate = "com/tasktop/c2c/server/internal/profile/service/template/taskCommentActivity.vm";
+	private String taskCreateHeaderTemplate = "email_templates/taskCreateActivityHeader.vm";
+	private String taskUpdateHeaderTemplate = "email_templates/taskUpdateActivityHeader.vm";
+	private String taskAttachActivityTemplate = "email_templates/taskAttachActivity.vm";
+	private String taskUpdateActivityTemplate = "email_templates/taskUpdateActivity.vm";
+	private String taskCommentActivityTemplate = "email_templates/taskCommentActivity.vm";
 
 	/*
 	 * (non-Javadoc)

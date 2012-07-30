@@ -154,11 +154,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Autowired
 	private QuotaService quotaService;
 
-	private String profileCreatedTemplate = "com/tasktop/c2c/server/internal/profile/service/template/profileCreated.vm";
-	private String passwordResetTemplate = "com/tasktop/c2c/server/internal/profile/service/template/passwordResetRequest.vm";
-	private String projectInvitationTemplate = "com/tasktop/c2c/server/internal/profile/service/template/projectInvitation.vm";
-	private String signUpInvitationTemplate = "com/tasktop/c2c/server/internal/profile/service/template/signUpInvitation.vm";
-	private String emailVerificationTemplate = "com/tasktop/c2c/server/internal/profile/service/template/emailVerification.vm";
+	private String profileCreatedTemplate = "email_templates/profileCreated.vm";
+	private String passwordResetTemplate = "email_templates/passwordResetRequest.vm";
+	private String projectInvitationTemplate = "email_templates/projectInvitation.vm";
+	private String signUpInvitationTemplate = "email_templates/signUpInvitation.vm";
+	private String emailVerificationTemplate = "email_templates/emailVerification.vm";
 
 	public void setTaskServiceProvider(TaskServiceProvider taskServiceProvider) {
 		this.taskServiceProvider = taskServiceProvider;

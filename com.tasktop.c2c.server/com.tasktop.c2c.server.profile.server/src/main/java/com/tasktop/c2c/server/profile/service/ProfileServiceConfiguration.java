@@ -24,6 +24,7 @@ public class ProfileServiceConfiguration extends BaseProfileConfiguration {
 
 	private Boolean invitationOnlySignUp;
 	private String signupNotificationEmail;
+	private String appName;
 
 	public ProfileServiceConfiguration() {
 	}
@@ -61,6 +62,10 @@ public class ProfileServiceConfiguration extends BaseProfileConfiguration {
 	}
 
 	public String getAppName() {
-		return "Code2Cloud";
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
 	}
 }
