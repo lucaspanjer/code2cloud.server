@@ -19,6 +19,7 @@ import com.tasktop.c2c.server.common.service.web.TenancyUtil;
  */
 public class DatabaseNamingStrategy {
 	private String suffix;
+	private String prefix = null;
 	private boolean useShortProjectIdentifier = false;
 
 	public String getCurrentTenantDatabaseName() {
@@ -29,7 +30,12 @@ public class DatabaseNamingStrategy {
 			result = TenancyUtil.getCurrentTenantProjectIdentifer();
 		}
 
-		return result + suffix;
+		result = result + suffix;
+
+		if (prefix != null) {
+			result = prefix + result;
+		}
+		return result;
 
 	}
 
@@ -39,5 +45,9 @@ public class DatabaseNamingStrategy {
 
 	public void setUseShortProjectIdentifier(boolean useShortProjectIdentifier) {
 		this.useShortProjectIdentifier = useShortProjectIdentifier;
+	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
 	}
 }

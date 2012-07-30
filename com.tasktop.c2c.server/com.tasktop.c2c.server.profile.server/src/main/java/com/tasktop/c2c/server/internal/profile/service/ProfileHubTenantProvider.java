@@ -17,7 +17,6 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.tenancy.core.Tenant;
 import org.springframework.tenancy.provider.TenantProvider;
 
@@ -32,7 +31,6 @@ import com.tasktop.c2c.server.profile.service.ProfileService;
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-@Component
 public class ProfileHubTenantProvider implements TenantProvider {
 
 	private final Logger LOG = LoggerFactory.getLogger(ProfileHubTenantProvider.class.getName());
