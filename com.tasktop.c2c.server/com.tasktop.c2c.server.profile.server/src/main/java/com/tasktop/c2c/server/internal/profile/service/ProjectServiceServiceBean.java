@@ -30,6 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.tenancy.context.TenancyContextHolder;
+import org.springframework.tenancy.provider.TenantProvider;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -335,8 +337,14 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		this.updateServiceTemplateOnStart = updateServiceTemplateOnStart;
 	}
 
+	@Autowired
+	private TenantProvider tenantProvider;
+
 	@Override
 	public List<ProjectServiceStatus> computeProjectServicesStatus(Project managedProject) {
+		TenancyContextHolder.createEmptyContext();
+		TenancyContextHolder.getContext().setTenant(tenantProvider.findTenant(managedProject.getIdentifier()));
+
 		List<ProjectServiceStatus> result = new ArrayList<ProjectServiceStatus>();
 
 		for (ProjectService service : managedProject.getProjectServiceProfile().getProjectServices()) {

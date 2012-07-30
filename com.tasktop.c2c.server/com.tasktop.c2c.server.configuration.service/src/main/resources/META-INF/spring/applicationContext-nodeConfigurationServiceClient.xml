@@ -11,9 +11,9 @@
                            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd   
                            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
-	<import resource="classpath:META-INF/spring/applicationContext-restClient.xml"/>
+	<import resource="classpath:META-INF/spring/applicationContext-preAuthenticatedRestClient.xml"/>
 
 	<bean id="nodeConfigurationServiceProvider" class="com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceProvider">
-		<property name="restTemplate" ref="restTemplate"/>
+		<property name="restTemplate" ref="preAuthenticatedRestTemplate"/>
 	</bean>
 </beans>

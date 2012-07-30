@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
+import com.tasktop.c2c.server.common.internal.tenancy.DatabaseNamingStrategy;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.MetricCollector;
 
 /**
@@ -36,20 +37,21 @@ public class DatabaseMetricCollector implements MetricCollector {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DatabaseMetricCollector.class);
 
-	public static final String PROJECT_ID_VAR = "{projectIdentifier}";
+	public static final String DATABSE_NAME_VAR = "{databaseName}";
 
 	private String metricName;
 	private DataSource dataSource;
 	private String sqlSizeQuery;
-	private boolean uppercaseProjectIdentifier = false;
+	private DatabaseNamingStrategy databaseNamingStrategy;
+	private boolean uppercaseDatbaseName = false;
 
 	@Override
 	public void collect(ProjectServiceStatus status) {
-		String projectId = status.getProjectIdentifier();
-		if (uppercaseProjectIdentifier) {
-			projectId = projectId.toUpperCase();
+		String databaseName = databaseNamingStrategy.getCurrentTenantDatabaseName();
+		if (uppercaseDatbaseName) {
+			databaseName = databaseName.toUpperCase();
 		}
-		String query = sqlSizeQuery.replace(PROJECT_ID_VAR, projectId);
+		String query = sqlSizeQuery.replace(DATABSE_NAME_VAR, databaseName);
 		LOG.debug(String.format("Collecting database metrics with query: [%s]", query));
 		Connection c = null;
 		try {
@@ -88,12 +90,12 @@ public class DatabaseMetricCollector implements MetricCollector {
 		this.dataSource = dataSource;
 	}
 
-	/**
-	 * @param uppercaseProjectIdentifier
-	 *            the uppercaseProjectIdentifier to set
-	 */
-	public void setUppercaseProjectIdentifier(boolean uppercaseProjectIdentifier) {
-		this.uppercaseProjectIdentifier = uppercaseProjectIdentifier;
+	public void setUppercaseDatbaseName(boolean uppercaseProjectIdentifier) {
+		this.uppercaseDatbaseName = uppercaseProjectIdentifier;
+	}
+
+	public void setDatabaseNamingStrategy(DatabaseNamingStrategy databaseNamingStrategy) {
+		this.databaseNamingStrategy = databaseNamingStrategy;
 	}
 
 }

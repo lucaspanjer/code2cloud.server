@@ -32,7 +32,8 @@ public interface ProjectServiceManagementService {
 	void provisionService(ProjectServiceConfiguration configuration);
 
 	/**
-	 * Get the status of a service.
+	 * Get the status of a service. WARNING. This method assumes a correct tenancy context. (provision, deprovision do
+	 * not). FIXME
 	 * 
 	 * @param projectIdentifer
 	 * @param serviceType

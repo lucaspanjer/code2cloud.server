@@ -30,6 +30,10 @@ public class DatabaseNamingStrategy {
 			result = TenancyUtil.getCurrentTenantProjectIdentifer();
 		}
 
+		if (result == null) {
+			throw new IllegalStateException("Could not get database name from tenancy context");
+		}
+
 		result = result + suffix;
 
 		if (prefix != null) {
