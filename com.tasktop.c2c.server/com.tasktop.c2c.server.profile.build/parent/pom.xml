@@ -198,6 +198,10 @@
 				       <name>.settings/org.eclipse.jdt.ui.prefs</name>
 				       <location>${settingsBaseDir}/eclipse-settings/org.eclipse.jdt.ui.prefs</location>
 				     </file>
+				     <file>
+				       <name>.settings/org.eclipse.mylyn.team.ui.prefs</name>
+				       <location>${settingsBaseDir}/eclipse-settings/org.eclipse.mylyn.team.ui.prefs</location>
+				     </file>
 				   </additionalConfig>
 				</configuration>
 		    </plugin>

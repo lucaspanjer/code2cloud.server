@@ -1,0 +1,3 @@
+#Tue Jul 31 11:32:58 PDT 2012
+commit.comment.template=${task.key}\: ${task.description} \n\nTask-URL\: ${task.url}
+eclipse.preferences.version=1
