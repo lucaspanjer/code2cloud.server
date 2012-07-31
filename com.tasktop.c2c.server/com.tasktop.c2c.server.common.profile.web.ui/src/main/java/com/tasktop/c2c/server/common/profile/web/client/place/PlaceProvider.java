@@ -19,6 +19,8 @@ public interface PlaceProvider {
 
 	IPlace getDefaultPlace();
 
+	IPlace getAfterSignoutPlace();
+
 	IPlace getOrganizationPlace(String orgId);
 
 	IPlace getOrganizationNewProjectPlace(String orgId);

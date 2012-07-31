@@ -42,4 +42,9 @@ public class PlaceProviderImpl implements PlaceProvider {
 		return OrganizationAdminPlace.createPlace(orgId);
 	}
 
+	@Override
+	public IPlace getAfterSignoutPlace() {
+		return ProjectsPlace.createPlace();
+	}
+
 }

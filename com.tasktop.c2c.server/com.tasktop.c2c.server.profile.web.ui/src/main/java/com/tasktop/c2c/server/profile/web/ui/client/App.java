@@ -99,7 +99,7 @@ public class App {
 					@Override
 					public void success(Boolean result) {
 						injector.getAppState().setCredentials(null);
-						IPlace place = injector.getPlaceProvider().getDefaultPlace();
+						IPlace place = injector.getPlaceProvider().getAfterSignoutPlace();
 						place.displayOnArrival(Message.createSuccessMessage("Signed out"));
 						place.go();
 					}
