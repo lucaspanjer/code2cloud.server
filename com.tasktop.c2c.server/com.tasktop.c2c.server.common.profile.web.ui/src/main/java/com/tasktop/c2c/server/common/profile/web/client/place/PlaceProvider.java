@@ -26,4 +26,6 @@ public interface PlaceProvider {
 	IPlace getOrganizationNewProjectPlace(String orgId);
 
 	IPlace getOrganizationAdminPlace(String orgId);
+
+	String getHelpHref();
 }

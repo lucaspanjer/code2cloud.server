@@ -47,4 +47,9 @@ public class PlaceProviderImpl implements PlaceProvider {
 		return ProjectsPlace.createPlace();
 	}
 
+	@Override
+	public String getHelpHref() {
+		return HelpPlace.createPlace().getHref();
+	}
+
 }

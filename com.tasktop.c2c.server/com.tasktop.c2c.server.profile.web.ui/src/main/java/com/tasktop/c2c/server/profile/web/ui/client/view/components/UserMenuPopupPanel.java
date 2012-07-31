@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -27,7 +26,6 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
-import com.tasktop.c2c.server.profile.web.ui.client.place.HelpPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.SignOutPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.UserAccountPlace;
 
@@ -52,7 +50,7 @@ public class UserMenuPopupPanel extends PopupPanel {
 		setAutoHideOnHistoryEventsEnabled(true);
 
 		account.setHref(UserAccountPlace.createPlace().getHref());
-		help.setHref(HelpPlace.createPlace().getHref());
+		help.setHref(AppGinjector.get.instance().getPlaceProvider().getHelpHref());
 		signOut.setHref(SignOutPlace.createPlace().getHref());
 		signOut.addClickHandler(new ClickHandler() {
 
