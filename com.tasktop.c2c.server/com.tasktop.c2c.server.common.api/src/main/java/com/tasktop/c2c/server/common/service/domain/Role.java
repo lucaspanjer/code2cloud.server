@@ -19,7 +19,7 @@ public final class Role {
 	}
 
 	/**
-	 * A user who is not authenticated.
+	 * A user who is un-authenticated.
 	 */
 	public static final String Anonymous = "ROLE_ANONYMOUS";
 
@@ -39,7 +39,7 @@ public final class Role {
 	public static final String Community = "ROLE_COMMUNITY";
 
 	/**
-	 * An authenticated user that has read-only access to a project.
+	 * An un-authenticated user that has read-only access to a project.
 	 */
 	public static final String Observer = "ROLE_OBSERVER";
 
