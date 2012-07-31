@@ -110,9 +110,7 @@ public class Security {
 			authorities.add(new SimpleGrantedAuthority(role));
 
 		}
-		RunAsUserToken runAsAuth = new RunAsUserToken("unused", securityCtxBefore.getAuthentication().getPrincipal(),
-				securityCtxBefore.getAuthentication().getCredentials(), authorities, securityCtxBefore
-						.getAuthentication().getClass());
+		RunAsUserToken runAsAuth = new RunAsUserToken("unused", "Run as user", null, authorities, null);
 
 		SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
 		SecurityContextHolder.getContext().setAuthentication(runAsAuth);

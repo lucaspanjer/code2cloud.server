@@ -33,18 +33,28 @@ import com.tasktop.c2c.server.profile.service.ProfileService;
  */
 public class ProfileHubTenantProvider implements TenantProvider {
 
-	private final Logger LOG = LoggerFactory.getLogger(ProfileHubTenantProvider.class.getName());
+	protected final Logger LOG = LoggerFactory.getLogger(ProfileHubTenantProvider.class.getName());
 
 	@Autowired
-	ProfileService profileService;
+	protected ProfileService profileService;
 
 	@Override
-	public Tenant findTenant(Object identityObj) {
-		String projectId = identityObj.toString().toLowerCase();
+	public final Tenant findTenant(Object identityObj) {
+		ProfileHubTenant tenant;
 
-		ProfileHubTenant tenant = createNewTenant();
-		tenant.setIdentity(projectId);
-		tenant.setProjectIdentifier(projectId);
+		if (identityObj instanceof String) {
+			// A project identifier from the service proxy
+			String projectId = identityObj.toString().toLowerCase();
+
+			tenant = createNewTenant();
+			tenant.setIdentity(projectId);
+			tenant.setProjectIdentifier(projectId);
+		} else if (identityObj instanceof ProfileHubTenant) {
+			// A tenant is provided based on the org id
+			tenant = (ProfileHubTenant) identityObj;
+		} else {
+			throw new IllegalStateException();
+		}
 
 		fillTenant(tenant);
 
@@ -54,27 +64,31 @@ public class ProfileHubTenantProvider implements TenantProvider {
 	private void fillTenant(final ProfileHubTenant tenant) {
 
 		try {
-			if (tenant.getProjectIdentifier() != null) {
-				Security.callWithRoles(new Callable<Object>() {
 
-					@Override
-					public Object call() throws Exception {
-						Project proj = profileService.getProjectByIdentifier(tenant.getProjectIdentifier());
-						if (proj.getOrganization() != null) {
-							tenant.setOrganizationIdentifier(proj.getOrganization().getIdentifier());
-						}
-						tenant.setShortProjectIdentifier(proj.getShortIdentifier());
-						return null;
+			Security.callWithRoles(new Callable<Object>() {
 
-					}
+				@Override
+				public Object call() throws Exception {
+					fillTenantInternal(tenant);
+					return null;
+				}
 
-				}, AuthUtils.toCompoundProjectRole(Role.User, tenant.getProjectIdentifier()));
-
-			}
+			}, Role.System, AuthUtils.toCompoundProjectRole(Role.User, tenant.getProjectIdentifier()));
 
 		} catch (Exception e) {
 			// ignore, tenancy context will not be setup properly, but this is to be expected
-			LOG.debug("Error computing tenancycontext", e);
+			LOG.debug("Error computing tenancy context", e);
+		}
+	}
+
+	protected void fillTenantInternal(final ProfileHubTenant tenant) throws Exception {
+
+		if (tenant.getProjectIdentifier() != null) {
+			Project proj = profileService.getProjectByIdentifier(tenant.getProjectIdentifier());
+			if (proj.getOrganization() != null) {
+				tenant.setOrganizationIdentifier(proj.getOrganization().getIdentifier());
+			}
+			tenant.setShortProjectIdentifier(proj.getShortIdentifier());
 		}
 	}
 

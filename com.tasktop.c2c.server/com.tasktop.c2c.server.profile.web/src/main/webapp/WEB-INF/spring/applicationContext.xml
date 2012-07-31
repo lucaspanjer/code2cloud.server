@@ -95,6 +95,7 @@
 		<property name="tenantIdentificationStrategyChain">
 			<list>
 				<ref bean="serviceProxyUrlTenantIdStrategy"/>
+				<bean class="com.tasktop.c2c.server.internal.profile.service.DefaultProfileHubTenantIdentificationStrategy"/>
 			</list>
 		</property>
 		<property name="tenantProvider" ref="profileHubTenantProvider"/>

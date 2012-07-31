@@ -20,6 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator;
 import com.tasktop.c2c.server.internal.wiki.server.ProjectServicePreferencesConfigurator;
@@ -50,6 +51,7 @@ public class WikiProjectServiceDatabaseConfiguratorTest {
 		ProjectServiceConfiguration configuration = new ProjectServiceConfiguration();
 		configuration.setProjectIdentifier(TEST_PROJ_ID);
 		configuration.setProperty(WikiService.MARKUP_LANGUAGE_DB_KEY, "Textile");
+		TenancyUtil.setProjectTenancyContext(TEST_PROJ_ID);
 		databaseConfigurator.configure(configuration);
 		preferencesConfigurator.configure(configuration);
 	}

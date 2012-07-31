@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.tests.service;
 
+import javax.annotation.Resource;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -34,7 +36,7 @@ public class ProjectArtifactServiceClientTest extends ProjectArtifactServiceTest
 	@Autowired
 	private ProjectArtifactServiceClient serviceClient;
 
-	@Autowired
+	@Resource(name = "basicAuthRestTemplate")
 	private RestTemplate restTemplate;
 
 	@Autowired

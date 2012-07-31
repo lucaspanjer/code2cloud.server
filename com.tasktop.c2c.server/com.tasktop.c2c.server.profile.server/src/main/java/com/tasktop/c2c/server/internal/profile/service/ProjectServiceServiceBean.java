@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.tenancy.provider.TenantProvider;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +45,7 @@ import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
+import com.tasktop.c2c.server.common.service.web.ProfileHubTenant;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementService;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceClient;
@@ -338,12 +338,17 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	}
 
 	@Autowired
-	private TenantProvider tenantProvider;
+	private ProfileHubTenantProvider tenantProvider;
 
 	@Override
 	public List<ProjectServiceStatus> computeProjectServicesStatus(Project managedProject) {
-		TenancyContextHolder.createEmptyContext();
-		TenancyContextHolder.getContext().setTenant(tenantProvider.findTenant(managedProject.getIdentifier()));
+
+		// Need to establish the project tenancy context so that it gets propagated to internal services (used to
+		// compute database names and file locations).
+		// FIXME feels like a hack
+		ProfileHubTenant currentTenant = (ProfileHubTenant) TenancyContextHolder.getContext().getTenant();
+		currentTenant.setProjectIdentifier(managedProject.getIdentifier());
+		tenantProvider.findTenant(currentTenant); // Will fill it, keep as current tenancy ctx
 
 		List<ProjectServiceStatus> result = new ArrayList<ProjectServiceStatus>();
 
