@@ -141,6 +141,9 @@ public class WebServiceDomain {
 			case WIKI:
 				restOfUrl = "wiki/";
 				break;
+			case REVIEW:
+				restOfUrl = "gerrit/";
+				break;
 			}
 
 			result.setUrl(configuration.getServiceUrlPrefix(internalService.getProjectServiceProfile().getProject()

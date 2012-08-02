@@ -24,6 +24,9 @@
 						<g:Anchor ui:field="builds" styleName="button project-nav-item">Builds</g:Anchor>
 					</div>
 					<div class="left">
+						<g:Anchor ui:field="reviews" styleName="button project-nav-item">Reviews</g:Anchor>
+					</div>
+					<div class="left">
 						<g:Anchor ui:field="deployments" styleName="button project-nav-item">Deployments</g:Anchor>
 					</div>
 					<div class="left">

@@ -26,6 +26,8 @@ public class HeaderConstants {
 	/** Prefix for headers that can only be used with internal requests. */
 	public static final String ALM_PRIVATE_HEADER_PREFIX = "C2C-Internal";
 
+	public static final String USERNAME_HEADER = ALM_PRIVATE_HEADER_PREFIX + "Username";
+
 	/** Header for the project identifier of the request. */
 	public static final String PROJECT_ID_HEADER = ALM_PRIVATE_HEADER_PREFIX + "ProjectId";
 

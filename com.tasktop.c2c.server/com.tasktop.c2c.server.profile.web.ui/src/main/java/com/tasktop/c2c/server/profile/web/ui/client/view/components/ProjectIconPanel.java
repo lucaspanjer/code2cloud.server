@@ -58,6 +58,8 @@ public class ProjectIconPanel extends Composite {
 	@UiField
 	Anchor builds;
 	@UiField
+	Anchor reviews;
+	@UiField
 	Anchor deployments;
 	@UiField
 	Anchor team;
@@ -195,6 +197,10 @@ public class ProjectIconPanel extends Composite {
 					break;
 				case SCM:
 					setServiceLinkEnabled(isAvailable, source, ScmPlace.createPlace(project.getIdentifier()).getHref());
+					break;
+
+				case REVIEW:
+					setServiceLinkEnabled(isAvailable, reviews, projectService.getUrl());
 					break;
 
 				default:
