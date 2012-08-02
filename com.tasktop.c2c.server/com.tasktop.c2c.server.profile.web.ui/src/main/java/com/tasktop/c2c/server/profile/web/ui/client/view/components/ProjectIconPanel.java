@@ -96,6 +96,7 @@ public class ProjectIconPanel extends Composite {
 		activateIfNotDisabled(team);
 		activateIfNotDisabled(wiki);
 		activateIfNotDisabled(source);
+		activateIfNotDisabled(reviews);
 	}
 
 	private void activateIfNotDisabled(Anchor anchor) {
@@ -114,6 +115,7 @@ public class ProjectIconPanel extends Composite {
 		team.removeStyleName(ACTIVE_STYLE);
 		wiki.removeStyleName(ACTIVE_STYLE);
 		source.removeStyleName(ACTIVE_STYLE);
+		reviews.removeStyleName(ACTIVE_STYLE);
 
 		// No active icon? Bail out now that all are deactivated.
 		if (activeIcon == null) {
@@ -146,6 +148,8 @@ public class ProjectIconPanel extends Composite {
 		case SCM:
 			source.addStyleName(ACTIVE_STYLE);
 			break;
+		case REVIEW:
+			reviews.addStyleName(ACTIVE_STYLE);
 		}
 	}
 
@@ -260,6 +264,7 @@ public class ProjectIconPanel extends Composite {
 		deployments.setVisible(false);
 		builds.setVisible(false);
 		source.setVisible(false);
+		reviews.setVisible(false);
 	}
 
 	private void setServiceLinkEnabled(boolean isEnabled, Anchor link, String href) {
