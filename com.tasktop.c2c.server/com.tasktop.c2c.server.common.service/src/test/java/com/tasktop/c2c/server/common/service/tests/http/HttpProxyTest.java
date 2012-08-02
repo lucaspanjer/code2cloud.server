@@ -133,10 +133,10 @@ public class HttpProxyTest {
 
 				});
 
-				allowing(httpMethod).getStatusLine();
-
 				allowing(httpMethod).getResponseBodyAsStream();
 				will(returnValue(proxyResponseInputStream));
+
+				allowing(httpMethod);
 
 			}
 		});
