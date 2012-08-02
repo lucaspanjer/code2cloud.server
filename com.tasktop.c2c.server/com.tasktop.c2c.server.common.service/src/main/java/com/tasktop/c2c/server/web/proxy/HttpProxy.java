@@ -125,6 +125,8 @@ public class HttpProxy extends WebProxy {
 
 		HttpMethod commonsHttpMethod = httpMethodProvider.getMethod(request.getMethod(), targetUri.toString());
 
+		commonsHttpMethod.setFollowRedirects(false);
+
 		Enumeration<String> headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
 			String headerName = headerNames.nextElement();
@@ -143,9 +145,9 @@ public class HttpProxy extends WebProxy {
 	}
 
 	void copyProxyReponse(HttpMethod proxyResponse, HttpServletResponse response) throws IOException {
-		copy(proxyResponse.getResponseBodyAsStream(), response.getOutputStream());
 		copyProxyHeaders(proxyResponse.getResponseHeaders(), response);
 		response.setContentLength(getResponseContentLength(proxyResponse));
+		copy(proxyResponse.getResponseBodyAsStream(), response.getOutputStream());
 		if (proxyResponse.getStatusLine() != null) {
 			int statCode = proxyResponse.getStatusCode();
 			response.setStatus(statCode);
