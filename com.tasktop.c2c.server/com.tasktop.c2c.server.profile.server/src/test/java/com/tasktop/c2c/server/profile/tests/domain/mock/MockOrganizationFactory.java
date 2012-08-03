@@ -44,7 +44,7 @@ public class MockOrganizationFactory {
 
 	private synchronized static Organization populate(Organization mock, EntityManager entityManager) {
 		int index = ++created;
-		mock.setName("project" + index);
+		mock.setName("organization" + index);
 		mock.setDescription("A description about org " + index);
 		mock.setProjectPreferences(MockProjectPreferencesFactory.create(entityManager));
 		return mock;

@@ -31,9 +31,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.cloud.service.ServiceHostService;
+import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectServiceProfile;
+import com.tasktop.c2c.server.profile.tests.domain.mock.MockOrganizationFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectServiceProfileFactory;
 
@@ -137,10 +139,7 @@ public class ServiceHostServiceTest {
 		projectServiceProfile.setProject(project);
 		project.setProjectServiceProfile(projectServiceProfile);
 
-		recordNodeAllocation("10.0.0.1", type1);
-		recordNodeAllocation("10.0.0.2", type1);
-		recordNodeAllocation("10.0.0.3", type1);
-		recordNodeAllocation("10.0.0.4", type2);
+		recordTestNodeAllocations();
 
 		List<ServiceHost> result = serviceHostService.findHostsByTypeAndProject(type1, project.getIdentifier());
 		Assert.assertEquals(0, result.size());
@@ -151,6 +150,42 @@ public class ServiceHostServiceTest {
 
 		result = serviceHostService.findHostsByTypeAndProject(type1, project.getIdentifier());
 		Assert.assertEquals(1, result.size());
+	}
 
+	@Test
+	public void testFindHostsByTypeAndOrganization() {
+		Organization org = MockOrganizationFactory.create(entityManager);
+
+		Project project = MockProjectFactory.create(entityManager);
+		ProjectServiceProfile projectServiceProfile = MockProjectServiceProfileFactory.create(entityManager);
+		projectServiceProfile.setProject(project);
+		project.setProjectServiceProfile(projectServiceProfile);
+		project.setOrganization(org);
+
+		Project project2 = MockProjectFactory.create(entityManager);
+		ProjectServiceProfile projectServiceProfile2 = MockProjectServiceProfileFactory.create(entityManager);
+		projectServiceProfile2.setProject(project2);
+		project2.setProjectServiceProfile(projectServiceProfile2);
+
+		recordTestNodeAllocations();
+
+		List<ServiceHost> result = serviceHostService.findHostsByTypeAndOrganization(type1, org.getIdentifier());
+		Assert.assertEquals(0, result.size());
+
+		ProjectService service = recordNodeProvision("10.0.0.1");
+		projectServiceProfile.add(service);
+		ProjectService service2 = recordNodeProvision("10.0.0.2");
+		projectServiceProfile2.add(service2);
+		entityManager.flush();
+
+		result = serviceHostService.findHostsByTypeAndOrganization(type1, org.getIdentifier());
+		Assert.assertEquals(1, result.size());
+	}
+
+	private void recordTestNodeAllocations() {
+		recordNodeAllocation("10.0.0.1", type1);
+		recordNodeAllocation("10.0.0.2", type1);
+		recordNodeAllocation("10.0.0.3", type1);
+		recordNodeAllocation("10.0.0.4", type2);
 	}
 }

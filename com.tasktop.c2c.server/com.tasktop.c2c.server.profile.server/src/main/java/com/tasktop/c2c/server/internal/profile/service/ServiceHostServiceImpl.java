@@ -63,7 +63,7 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 		return result;
 	}
 
-	static com.tasktop.c2c.server.cloud.domain.ServiceHost convertToPublic(ServiceHost node) {
+	public static com.tasktop.c2c.server.cloud.domain.ServiceHost convertToPublic(ServiceHost node) {
 		if (node == null) {
 			return null;
 		}
@@ -369,27 +369,52 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 		shp.setPendingAllocations(shp.getPendingAllocations() - 1);
 	}
 
+	@Override
+	public List<com.tasktop.c2c.server.cloud.domain.ServiceHost> findHostsByTypeAndOrganization(Set<ServiceType> type,
+			String orgIdentifier) {
+		return findHosts(type, null, orgIdentifier);
+	}
+
 	// REVIEW this query could be simplified by just querying on the ProjectSerivce table
 	@Override
 	public List<com.tasktop.c2c.server.cloud.domain.ServiceHost> findHostsByTypeAndProject(Set<ServiceType> type,
 			String projectIdentifier) {
+		return findHosts(type, projectIdentifier, null);
+	}
+
+	private List<com.tasktop.c2c.server.cloud.domain.ServiceHost> findHosts(Set<ServiceType> type,
+			String projectIdentifier, String orgIdentifier) {
 		ServiceHostConfiguration config = findSupportedConfiguration(type);
 		if (config == null) {
 			return Collections.EMPTY_LIST;
 		}
 
-		List<ServiceHost> managedResults = entityManager
-				.createQuery(
-						"SELECT host FROM "
-								+ ServiceHost.class.getSimpleName()
-								+ " host, "
-								+ ProjectServiceProfile.class.getSimpleName()
-								+ " projectServiceProfile, "
-								+ ProjectService.class.getSimpleName()
-								+ " projectService WHERE host.serviceHostConfiguration = :config AND projectServiceProfile.project.identifier = :projectId "
-								+ "AND projectService MEMBER projectServiceProfile.projectServices AND projectService.serviceHost = host")
-				.setParameter("config", config).setParameter("projectId", projectIdentifier).getResultList();
+		String queryString = "SELECT host FROM "
+				+ ServiceHost.class.getSimpleName()
+				+ " host, "
+				+ ProjectServiceProfile.class.getSimpleName()
+				+ " projectServiceProfile, "
+				+ ProjectService.class.getSimpleName()
+				+ " projectService WHERE host.serviceHostConfiguration = :config "
+				+ "AND projectService MEMBER projectServiceProfile.projectServices AND projectService.serviceHost = host ";
 
+		if (projectIdentifier != null && !projectIdentifier.trim().equals("")) {
+			queryString = queryString + "AND projectServiceProfile.project.identifier = :projectId ";
+		}
+		if (orgIdentifier != null && !orgIdentifier.trim().equals("")) {
+			queryString = queryString + "AND projectServiceProfile.project.organization.identifier = :orgId ";
+		}
+
+		Query query = entityManager.createQuery(queryString).setParameter("config", config);
+		if (projectIdentifier != null && !projectIdentifier.trim().equals("")) {
+			query.setParameter("projectId", projectIdentifier);
+		}
+
+		if (orgIdentifier != null && !orgIdentifier.trim().equals("")) {
+			query.setParameter("orgId", orgIdentifier);
+		}
+
+		List<ServiceHost> managedResults = query.getResultList();
 		List<com.tasktop.c2c.server.cloud.domain.ServiceHost> publicNodes = new ArrayList<com.tasktop.c2c.server.cloud.domain.ServiceHost>(
 				managedResults.size());
 		for (ServiceHost node : managedResults) {

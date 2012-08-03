@@ -100,4 +100,11 @@ public interface ServiceHostService {
 	 * @throws EntityNotFoundException
 	 */
 	boolean isHostAllocatedToProject(ServiceHost host, String projectIdentifier) throws EntityNotFoundException;
+
+	/**
+	 * @param type
+	 * @param orgIdentifier
+	 * @return
+	 */
+	List<ServiceHost> findHostsByTypeAndOrganization(Set<ServiceType> type, String orgIdentifier);
 }
