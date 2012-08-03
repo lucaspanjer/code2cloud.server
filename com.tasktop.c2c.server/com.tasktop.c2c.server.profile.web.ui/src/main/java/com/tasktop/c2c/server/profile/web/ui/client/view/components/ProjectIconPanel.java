@@ -148,8 +148,6 @@ public class ProjectIconPanel extends Composite {
 		case SCM:
 			source.addStyleName(ACTIVE_STYLE);
 			break;
-		case REVIEW:
-			reviews.addStyleName(ACTIVE_STYLE);
 		}
 	}
 
