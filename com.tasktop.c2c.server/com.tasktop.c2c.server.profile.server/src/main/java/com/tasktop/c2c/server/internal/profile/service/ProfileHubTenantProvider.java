@@ -84,7 +84,7 @@ public class ProfileHubTenantProvider implements TenantProvider {
 	protected void fillTenantInternal(final ProfileHubTenant tenant) throws Exception {
 
 		if (tenant.getProjectIdentifier() != null) {
-			Project proj = profileService.getProjectByIdentifier(tenant.getProjectIdentifier());
+			Project proj = profileService.getProjectByIdentifierEvenIfDeleted(tenant.getProjectIdentifier());
 			if (proj.getOrganization() != null) {
 				tenant.setOrganizationIdentifier(proj.getOrganization().getIdentifier());
 			}
