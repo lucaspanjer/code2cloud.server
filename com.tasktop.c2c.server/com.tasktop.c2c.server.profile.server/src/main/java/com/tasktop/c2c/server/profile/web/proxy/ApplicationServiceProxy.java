@@ -33,7 +33,10 @@ import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.auth.service.proxy.AuthenticationTokenSerializer;
 import com.tasktop.c2c.server.auth.service.proxy.ProxyHttpServletRequest;
 import com.tasktop.c2c.server.common.internal.tenancy.InternalTenancyContextHttpHeaderProvider;
+import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.common.service.domain.Role;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+import com.tasktop.c2c.server.internal.profile.service.SecurityPolicy;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
@@ -55,6 +58,9 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 
 	@Autowired
 	private InternalAuthenticationService internalAuthenticationService;
+
+	@Autowired
+	private SecurityPolicy securityPolicy;
 
 	private AuthenticationTokenSerializer tokenSerializer = new AuthenticationTokenSerializer();
 
@@ -95,6 +101,19 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 				response.sendError(HttpServletResponse.SC_FORBIDDEN, "You must accept licence agreements first.");
 				return;
 			}
+		}
+
+		try {
+			securityPolicy.retrieve(project);
+		} catch (InsufficientPermissionsException e) {
+			if (user == null) {
+				response.addHeader("WWW-Authenticate",
+						String.format("Basic realm=\"%s\"", TenancyUtil.getCurrentTenantProjectIdentifer()));
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please login to continue");
+			} else {
+				response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
+			}
+			return;
 		}
 
 		// Get our token from the authentication context, and rewrite it to be in specialized form.
