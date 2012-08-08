@@ -143,7 +143,7 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 				.createQuery(
 						"SELECT host FROM "
 								+ ServiceHost.class.getSimpleName()
-								+ " host WHERE  host.serviceHostConfiguration = :config AND SIZE(host.projectServices) < :maxCapacity ORDER BY SIZE(host.projectServices) ASC")
+								+ " host WHERE  host.serviceHostConfiguration = :config AND host.available = true AND SIZE(host.projectServices) < :maxCapacity ORDER BY SIZE(host.projectServices) ASC")
 				.setParameter("config", config).setParameter("maxCapacity", capacity).getResultList();
 
 		List<com.tasktop.c2c.server.cloud.domain.ServiceHost> publicNodes = new ArrayList<com.tasktop.c2c.server.cloud.domain.ServiceHost>(

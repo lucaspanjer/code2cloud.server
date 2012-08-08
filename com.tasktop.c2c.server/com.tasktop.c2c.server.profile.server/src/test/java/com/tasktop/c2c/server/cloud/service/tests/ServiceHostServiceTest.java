@@ -97,6 +97,7 @@ public class ServiceHostServiceTest {
 		ServiceHost node = new ServiceHost();
 		node.setSupportedServices(type);
 		node.setInternalNetworkAddress(ip);
+		node.setAvailable(true);
 		serviceHostService.createServiceHost(node);
 		entityManager.flush();
 	}

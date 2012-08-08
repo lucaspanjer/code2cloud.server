@@ -15,7 +15,6 @@ package com.tasktop.c2c.server.cloud.service;
 import java.util.List;
 import java.util.Set;
 
-
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
@@ -30,7 +29,8 @@ public interface ServiceHostService {
 	List<ServiceHost> findHostsByType(Set<ServiceType> type);
 
 	/**
-	 * Return nodes below a maximum capacity threshold, ordered by load (smallest-largest)
+	 * Return nodes below a maximum capacity threshold, ordered by load (smallest-largest). Services hosts marked as
+	 * unavailable are ignored.
 	 * 
 	 * @param type
 	 * @param maxCapacity
