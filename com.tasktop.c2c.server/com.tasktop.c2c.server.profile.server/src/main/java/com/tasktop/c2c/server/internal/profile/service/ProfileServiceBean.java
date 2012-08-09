@@ -500,6 +500,16 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			throw new ValidationException(errors);
 		}
 
+		Organization associatedOrg = null;
+		if (project.getOrganization() != null) {
+			associatedOrg = entityManager.find(Organization.class, project.getOrganization().getId());
+			if (associatedOrg == null) {
+				throw new EntityNotFoundException();
+			}
+		} else if (TenancyUtil.getCurrentTenantOrganizationIdentifer() != null) {
+			associatedOrg = getOrganizationByIdentfier(TenancyUtil.getCurrentTenantOrganizationIdentifer());
+		}
+
 		project.computeIdentifier();
 
 		securityPolicy.create(project);
@@ -513,16 +523,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		project.setId(null);
 		entityManager.persist(project);
 		entityManager.flush();
-
-		Organization associatedOrg = null;
-		if (project.getOrganization() != null) {
-			associatedOrg = entityManager.find(Organization.class, project.getOrganization().getId());
-			if (associatedOrg == null) {
-				throw new EntityNotFoundException();
-			}
-		} else if (TenancyUtil.getCurrentTenantOrganizationIdentifer() != null) {
-			associatedOrg = getOrganizationByIdentfier(TenancyUtil.getCurrentTenantOrganizationIdentifer());
-		}
 
 		if (associatedOrg != null) {
 			project.setOrganization(associatedOrg);
