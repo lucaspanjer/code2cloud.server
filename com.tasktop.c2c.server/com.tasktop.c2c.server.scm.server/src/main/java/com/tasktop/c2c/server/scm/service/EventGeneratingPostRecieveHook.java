@@ -44,7 +44,7 @@ import com.tasktop.c2c.server.scm.domain.Commit;
 public class EventGeneratingPostRecieveHook implements PostReceiveHook, InitializingBean {
 
 	@Autowired
-	EventService eventService;
+	private EventService eventService;
 
 	@Autowired
 	private ScmServiceConfiguration configuration;
@@ -55,9 +55,11 @@ public class EventGeneratingPostRecieveHook implements PostReceiveHook, Initiali
 			switch (command.getType()) {
 			case CREATE:
 			case UPDATE:
+			case UPDATE_NONFASTFORWARD:
 				sendCommits(rp.getRepository(), command.getRefName(), command.getOldId(), command.getNewId());
 				break;
-			// TODO handle other cases
+			case DELETE:
+				// TODO
 			}
 		}
 
@@ -75,27 +77,7 @@ public class EventGeneratingPostRecieveHook implements PostReceiveHook, Initiali
 	private void sendCommitsInternal(Repository repo, String refName, ObjectId oldId, ObjectId newId)
 			throws IOException {
 
-		Ref ref = repo.getRef(refName);
-
-		if (!newId.equals(ref.getObjectId())) {
-			throw new IllegalStateException();
-		}
-
-		RevWalk revWal = new RevWalk(repo);
-		revWal.markStart(revWal.parseCommit(ref.getObjectId()));
-		if (!oldId.equals(ObjectId.zeroId())) {
-			revWal.markUninteresting(revWal.parseCommit(oldId));
-		}
-
-		List<Commit> eventCommits = new ArrayList<Commit>();
-
-		for (RevCommit revCommit : revWal) {
-			Commit commit = GitDomain.createCommit(revCommit);
-			commit.setRepository(repo.getDirectory().getName());
-			commit.setUrl(configuration.getWebUrlForCommit(TenancyUtil.getCurrentTenantProjectIdentifer(), commit));
-
-			eventCommits.add(commit);
-		}
+		List<Commit> eventCommits = getUniqueCommits(repo, refName, oldId, newId);
 
 		CommitEvent event = new CommitEvent();
 		event.setUserId(Security.getCurrentUser());
@@ -103,7 +85,46 @@ public class EventGeneratingPostRecieveHook implements PostReceiveHook, Initiali
 		event.setProjectId(TenancyUtil.getCurrentTenantProjectIdentifer());
 		event.setTimestamp(new Date());
 		eventService.publishEvent(event);
+	}
 
+	private List<Commit> getUniqueCommits(Repository repo, String refName, ObjectId oldId, ObjectId newId)
+			throws IOException {
+		Ref ref = repo.getRef(refName);
+
+		if (!newId.equals(ref.getObjectId())) {
+			throw new IllegalStateException();
+		}
+
+		RevWalk revWal = new RevWalk(repo);
+		RevWalk mergedWalk = new RevWalk(repo);
+		revWal.markStart(revWal.parseCommit(newId));
+		if (!oldId.equals(ObjectId.zeroId())) {
+			revWal.markUninteresting(revWal.parseCommit(oldId));
+		}
+
+		List<Commit> eventCommits = new ArrayList<Commit>();
+
+		revCommits: for (RevCommit revCommit : revWal) {
+
+			// Verify the commit is not in other branches. If so, we do not need to include it.
+			for (Ref otherRef : repo.getAllRefs().values()) {
+				if (otherRef.getName().equals(refName)) {
+					continue;
+				}
+				if (revCommit.getId().equals(otherRef.getObjectId())
+						|| mergedWalk.isMergedInto(revCommit, mergedWalk.parseCommit(otherRef.getObjectId()))) {
+					break revCommits;
+				}
+			}
+
+			Commit commit = GitDomain.createCommit(revCommit);
+			commit.setRepository(repo.getDirectory().getName());
+			commit.setUrl(configuration.getWebUrlForCommit(TenancyUtil.getCurrentTenantProjectIdentifer(), commit));
+
+			eventCommits.add(commit);
+		}
+
+		return eventCommits;
 	}
 
 	// Review better pattern?
