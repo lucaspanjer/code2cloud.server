@@ -206,28 +206,40 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			}
 		}
 
-		List<Object[]> taskAndStatus = entityManager.createQuery(
-				"select t, s from " + com.tasktop.c2c.server.internal.tasks.domain.Task.class.getSimpleName() + " t, "
-						+ com.tasktop.c2c.server.internal.tasks.domain.TaskStatus.class.getSimpleName() + " s "
-						+ "where t.status=s.value").getResultList();
+		List<Object[]> closedTasksAndLastResolvedDate = entityManager
+				.createQuery(
+						"select distinct t, a.id.bugWhen from "
+								+ com.tasktop.c2c.server.internal.tasks.domain.Task.class.getSimpleName() + " t, "
+								+ com.tasktop.c2c.server.internal.tasks.domain.TaskStatus.class.getSimpleName()
+								+ " s, "
+								+ com.tasktop.c2c.server.internal.tasks.domain.TaskActivity.class.getSimpleName()
+								+ " a where t.status=s.value AND s.isOpen = false AND a.bugs = t AND "
+								+ "a.id.bugWhen = (select max(a1.id.bugWhen) from "
+								+ com.tasktop.c2c.server.internal.tasks.domain.TaskActivity.class.getSimpleName()
+								+ " a1 "
+								+ "where a1.bugs = t AND a1.fielddefs.name = :statusField AND a1.added = :resolved)")
+				.setParameter("statusField", "bug_status").setParameter("resolved", "RESOLVED").getResultList();
 
-		for (Object[] objects : taskAndStatus) {
-			add((com.tasktop.c2c.server.internal.tasks.domain.Task) objects[0],
-					(com.tasktop.c2c.server.internal.tasks.domain.TaskStatus) objects[1], summaries);
+		for (Object[] objects : closedTasksAndLastResolvedDate) {
+			add((com.tasktop.c2c.server.internal.tasks.domain.Task) objects[0], (Date) objects[1], summaries);
+		}
+
+		List<com.tasktop.c2c.server.internal.tasks.domain.Task> openTasks = entityManager.createQuery(
+				"select t from " + com.tasktop.c2c.server.internal.tasks.domain.Task.class.getSimpleName() + " t, "
+						+ com.tasktop.c2c.server.internal.tasks.domain.TaskStatus.class.getSimpleName() + " s"
+						+ " where t.status=s.value AND s.isOpen = true ").getResultList();
+
+		for (com.tasktop.c2c.server.internal.tasks.domain.Task task : openTasks) {
+			add(task, null, summaries);
 		}
 
 		return summaries;
 	}
 
-	private void add(com.tasktop.c2c.server.internal.tasks.domain.Task task,
-			com.tasktop.c2c.server.internal.tasks.domain.TaskStatus status, List<TaskSummary> summaries) {
+	private void add(com.tasktop.c2c.server.internal.tasks.domain.Task task, Date closedDate,
+			List<TaskSummary> summaries) {
 		Iterator<TaskSummary> it = summaries.iterator();
 		TaskSummary current;
-
-		Date closedDate = null;
-		if (!status.getIsOpen()) {
-			closedDate = task.getDeltaTs();
-		}
 
 		while (it.hasNext()) {
 			current = it.next();
