@@ -20,7 +20,6 @@ import java.util.List;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.social.InsufficientPermissionException;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +29,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.Quota;
@@ -191,7 +191,7 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 		this.securityPolicy.authorize(projectIdentifier, ip);
 		ServiceHost node = serviceHostService.findHostForIpAndType(ip, nodeType);
 		if (node == null) {
-			throw new InsufficientPermissionException();
+			throw new InsufficientPermissionsException();
 		}
 		jobService.schedule(new FinishReleaseHudsonSlaveJob(projectIdentifier, node.getId()));
 	}
@@ -220,7 +220,7 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 
 		ServiceHost node = serviceHostService.findHostForIpAndType(ip, nodeType);
 		if (node == null) {
-			throw new InsufficientPermissionException();
+			throw new InsufficientPermissionsException();
 		}
 
 		try {
