@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:property-placeholder location="/WEB-INF/spring/*.properties, file:///home/calm/.cloudalm/etc/*.properties, file:///opt/cloudalm/etc/*.properties, file:///home/cloudalm/etc/*.properties"  
+	<context:property-placeholder location="/WEB-INF/spring/*.properties, file:///opt/code2cloud/etc/*.properties"  
 		ignore-resource-not-found="true"/>
 				
 	<context:annotation-config/>

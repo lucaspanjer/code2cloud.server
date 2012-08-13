@@ -14,7 +14,7 @@
 
 	<import resource="classpath:META-INF/spring/applicationContext-restClient.xml"/>
 	
-	<context:property-placeholder location="classpath*:/*-test.properties, file:///opt/cloudalm-test/etc/*.properties"  
+	<context:property-placeholder location="classpath*:/*-test.properties, file:///opt/code2cloud-test/etc/*.properties"  
 		ignore-resource-not-found="true"/>
 	
 	

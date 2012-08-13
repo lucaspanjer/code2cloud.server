@@ -8,7 +8,7 @@
 	<import resource="classpath*:META-INF/spring/applicationContext-multiUserRestClient.xml"/>
 
 		<!-- centralized properties paths for: app, os x dev environments, vcloud self host -->
-	<context:property-placeholder location="/META-INF/*.properties, file:///opt/cloudalm/etc/*.properties, file:///home/cloudalm/etc/*.properties"  
+	<context:property-placeholder location="/META-INF/*.properties, file:///opt/code2cloud/etc/*.properties"  
 		ignore-resource-not-found="true"/>
 		
  

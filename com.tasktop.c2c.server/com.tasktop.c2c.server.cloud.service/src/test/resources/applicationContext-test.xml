@@ -17,7 +17,7 @@
 	<import resource="classpath:META-INF/spring/applicationContext-hudsonSlavePoolServiceClient.xml"/>
 	<import resource="classpath:META-INF/spring/applicationContext-restServer.xml"/>
 	
-	<context:property-placeholder location="classpath*:/config/*.properties, classpath*:/META-INF/spring/*.properties, classpath*:/*-test.properties, file:///opt/cloudalm-test/etc/*.properties"  
+	<context:property-placeholder location="classpath*:/config/*.properties, classpath*:/META-INF/spring/*.properties, classpath*:/*-test.properties, file:///opt/code2cloud-test/etc/*.properties"  
 		ignore-resource-not-found="true"/>
 	
 	<bean class="com.tasktop.c2c.server.common.tests.jpa.SingletonTestEntityManagerFactory" 
