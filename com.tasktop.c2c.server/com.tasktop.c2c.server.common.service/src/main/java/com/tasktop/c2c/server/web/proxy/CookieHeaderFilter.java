@@ -21,7 +21,7 @@ public class CookieHeaderFilter extends HeaderFilter {
 
 	private static final Pattern COOKIE_VALUE_PATTERN = Pattern.compile("([^=]+)(=.+)");
 
-	private static final String COOKIE_NAME_PREFIX = "ALMP.".toLowerCase();
+	private static final String COOKIE_NAME_PREFIX = "almp.";
 
 	public String processRequestHeader(String headerName, String headerValue) {
 		final boolean isCookie = headerName.equalsIgnoreCase("cookie");
@@ -46,11 +46,19 @@ public class CookieHeaderFilter extends HeaderFilter {
 		if (matcher.matches()) {
 			String name = matcher.group(1);
 			String suffix = matcher.group(2);
-			return COOKIE_NAME_PREFIX + name + suffix;
+			if (shouldPrefix(name)) {
+				return COOKIE_NAME_PREFIX + name + suffix;
+			} else {
+				return name + suffix;
+			}
 		} else {
 			// drop the set-cookie if the value is malformed
 			return null;
 		}
+	}
+
+	protected boolean shouldPrefix(String name) {
+		return name.equalsIgnoreCase("JSESSIONID") || name.equalsIgnoreCase("SPRING_SECURITY_REMEMBER_ME_COOKIE");
 	}
 
 	String filterCookie(String headerName, String headerValue) {
