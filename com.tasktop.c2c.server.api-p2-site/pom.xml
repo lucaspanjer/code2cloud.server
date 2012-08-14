@@ -30,7 +30,7 @@
     <repository>
         <id>code2cloud-internal</id>
         <name>Code2Cloud internal repo</name>
-        <url>https://q.tasktop.com/alm/s/code2cloud/maven</url>
+        <url>https://q.tasktop.com/alm/s/c2c/maven</url>
     </repository>
 
   <repository>
