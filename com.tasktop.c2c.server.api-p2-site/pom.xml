@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.tasktop.c2c.server</groupId>
+    <artifactId>lib</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <relativePath>../com.tasktop.c2c.server.profile.build/parent/pom.xml</relativePath>
+    </parent>
+
+  <name>Code2Cloud Server API Eclipse Packaging Parent</name>
+  <artifactId>com.tasktop.c2c.server.api.parent</artifactId>
+  <packaging>pom</packaging>
+  
+  <properties>
+    <tycho-version>0.13.0</tycho-version>
+    <com.tasktop.c2c.server.version>0.1.0-SNAPSHOT</com.tasktop.c2c.server.version>
+  </properties>
+
+  <modules>
+    <module>com.tasktop.c2c.server.api-feature</module>
+    <module>com.tasktop.c2c.server.api-site</module> 
+  </modules>
+  
+   <repositories>
+
+    <repository>
+        <id>code2cloud-internal</id>
+        <name>Code2Cloud internal repo</name>
+        <url>https://q.tasktop.com/alm/s/code2cloud/maven</url>
+    </repository>
+
+  <repository>
+      <id>springsource_3_7</id>
+      <layout>p2</layout>
+      <url>http://dist.springsource.com/release/TOOLS/update/e3.7/</url>
+    </repository>
+
+
+  </repositories>
+  
+  
+   <!--  These are for dependencies in our maven repo -->
+   <dependencies>
+     <dependency>
+       <groupId>com.tasktop.c2c.server</groupId>
+       <artifactId>common.api</artifactId>
+       <version>${com.tasktop.c2c.server.version}</version>
+       </dependency>
+     <dependency>
+       <groupId>com.tasktop.c2c.server</groupId>
+       <artifactId>profile.api</artifactId>
+       <version>${com.tasktop.c2c.server.version}</version>
+       </dependency>
+     <dependency>
+       <groupId>com.tasktop.c2c.server</groupId>
+       <artifactId>tasks.api</artifactId>
+       <version>${com.tasktop.c2c.server.version}</version>
+       </dependency>
+     <dependency>
+       <groupId>com.tasktop.c2c.server</groupId>
+       <artifactId>cloud.api</artifactId>
+       <version>${com.tasktop.c2c.server.version}</version>
+       </dependency>
+     <dependency>
+       <groupId>com.tasktop.c2c.server</groupId>
+       <artifactId>scm.api</artifactId>
+       <version>${com.tasktop.c2c.server.version}</version>
+     </dependency>
+     <!-- repackaged bundles to fix the MANIFEST bundle name -->
+   <dependency>
+     <groupId>org.codehaus.jackson</groupId>
+     <artifactId>jackson-core-asl</artifactId>
+     <version>1.7.4-c2c</version>
+   </dependency>
+   <dependency>
+     <groupId>org.codehaus.jackson</groupId>
+     <artifactId>jackson-mapper-asl</artifactId>
+     <version>1.7.4-c2c</version>
+   </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <extensions>true</extensions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <resolver>p2</resolver>
+        </configuration>
+      </plugin>
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.tycho</groupId>
+          <artifactId>maven-osgi-compiler-plugin</artifactId>
+          <version>${tycho-version}</version>
+          <configuration>
+            <encoding>UTF-8</encoding>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.4.1</version>
+          <configuration>
+            <encoding>ISO-8859-1</encoding>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.eclipse.tycho</groupId>
+          <artifactId>target-platform-configuration</artifactId>
+          <version>${tycho-version}</version>
+          <configuration>
+            <resolver>p2</resolver>
+            <pomDependencies>consider</pomDependencies>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  
+
+</project>
