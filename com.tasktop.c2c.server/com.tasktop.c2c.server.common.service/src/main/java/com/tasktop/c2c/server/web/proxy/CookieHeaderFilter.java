@@ -13,15 +13,31 @@
 package com.tasktop.c2c.server.web.proxy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Filter out hub cookies from the requests to internal services. This will prefix internal cookie names if needed to
+ * avoid a name clash.
+ * 
+ * @author david.green (Tasktop Technologies Inc.)
+ * @author clint.morgan (Tasktop Technologies Inc.)
+ * 
+ */
 public class CookieHeaderFilter extends HeaderFilter {
 
 	private static final Pattern COOKIE_VALUE_PATTERN = Pattern.compile("([^=]+)(=.+)");
 
-	private static final String COOKIE_NAME_PREFIX = "ALMP.".toLowerCase();
+	/**
+	 * Prefix added to cookies provided by internal services which clash (have the same name) as those cookeis used by
+	 * the hub.
+	 */
+	public static final String INTERNAL_COOKIE_NAME_PREFIX = "almp.";
+
+	public static final List<String> HUB_COOKIE_NAMES = Arrays.asList("JSESSIONID",
+			"SPRING_SECURITY_REMEMBER_ME_COOKIE");
 
 	public String processRequestHeader(String headerName, String headerValue) {
 		final boolean isCookie = headerName.equalsIgnoreCase("cookie");
@@ -46,14 +62,22 @@ public class CookieHeaderFilter extends HeaderFilter {
 		if (matcher.matches()) {
 			String name = matcher.group(1);
 			String suffix = matcher.group(2);
-			return COOKIE_NAME_PREFIX + name + suffix;
+			if (shouldPrefix(name)) {
+				return INTERNAL_COOKIE_NAME_PREFIX + name + suffix;
+			} else {
+				return name + suffix;
+			}
 		} else {
 			// drop the set-cookie if the value is malformed
 			return null;
 		}
 	}
 
-	String filterCookie(String headerName, String headerValue) {
+	protected boolean shouldPrefix(String cookieName) {
+		return HUB_COOKIE_NAMES.contains(cookieName.toUpperCase());
+	}
+
+	private String filterCookie(String headerName, String headerValue) {
 		Matcher matcher = Pattern.compile("(\\$?[^\\s=\"]+)=((\"?).*?\\3)(?:;|,|(?:\\s*$))").matcher(headerValue);
 
 		int cookieCount = 0;
@@ -63,16 +87,21 @@ public class CookieHeaderFilter extends HeaderFilter {
 			String name = matcher.group(1);
 			String value = matcher.group(2);
 			boolean capture = false;
-			if (name.toLowerCase().startsWith(COOKIE_NAME_PREFIX)) {
+			if (name.startsWith("$")) {
+				if (capturingTokens) {
+					capture = true;
+				}
+			} else if (name.toLowerCase().startsWith(INTERNAL_COOKIE_NAME_PREFIX) || !shouldPrefix(name)) {
 				capturingTokens = true;
 				capture = true;
 				++cookieCount;
-				name = name.substring(COOKIE_NAME_PREFIX.length());
-			} else if (name.startsWith("$") && capturingTokens) {
-				capture = true;
+				if (name.toLowerCase().startsWith(INTERNAL_COOKIE_NAME_PREFIX)) {
+					name = name.substring(INTERNAL_COOKIE_NAME_PREFIX.length());
+				}
 			} else {
 				capturingTokens = false;
 			}
+
 			if (capture) {
 				if (cookieTokens == null) {
 					cookieTokens = new ArrayList<String>(6);
@@ -93,5 +122,4 @@ public class CookieHeaderFilter extends HeaderFilter {
 		}
 		return null;
 	}
-
 }

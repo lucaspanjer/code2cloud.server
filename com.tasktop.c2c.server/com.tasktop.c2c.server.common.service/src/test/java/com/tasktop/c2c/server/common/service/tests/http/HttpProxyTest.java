@@ -253,30 +253,32 @@ public class HttpProxyTest {
 	}
 
 	@Test
-	public void testCookieRequestNonPrefixedCookiesFiltered() throws IOException {
+	public void testCookieRequestNonPrefixedCookiesNotFiltered() throws IOException {
 		setupMock(HttpStatus.OK);
 
 		MockHttpServletRequest request = new MockHttpServletRequest("GET", "unused");
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		final String cookieHeaderValue = "$Version=\"1\"; Customer=\"WILE_E_COYOTE\"; $Path=\"/acme\";Part_Number=\"Rocket_Launcher_0001\"; $Path=\"/acme\"; Shipping=\"FedEx\"; $Path=\"/acme\"";
+		final String cookieHeaderValue = "$Version=\"1\"; Customer=\"WILE_E_COYOTE\"; $Path=\"/acme\"; Part_Number=\"Rocket_Launcher_0001\"; $Path=\"/acme\"; Shipping=\"FedEx\"; $Path=\"/acme\";";
 		request.addHeader("Cookie", cookieHeaderValue);
 
 		proxy.proxyRequest("foo", request, response);
 
 		List<String> proxyCookie = getProxyRequestHeaderValues("Cookie");
-		Assert.assertNull(proxyCookie);
+		Assert.assertNotNull(proxyCookie);
+		Assert.assertEquals(1, proxyCookie.size());
+		Assert.assertEquals(cookieHeaderValue, proxyCookie.get(0));
 		context.assertIsSatisfied();
 	}
 
 	@Test
-	public void testCookieRequestNonPrefixedCookiesFiltered2() throws IOException {
+	public void testCookieRequestNonPrefixedHubCookiesFiltered() throws IOException {
 		setupMock(HttpStatus.OK);
 
 		MockHttpServletRequest request = new MockHttpServletRequest("GET", "unused");
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		final String cookieHeaderValue = "$Version=\"1\"; almp.Customer=\"WILE_E_COYOTE\"; $Path=\"/acme1\";Part_Number=\"Rocket_Launcher_0001\"; $Path=\"/acme2\"; Shipping=\"FedEx\"; $Path=\"/acme\"";
+		final String cookieHeaderValue = "$Version=\"1\"; Customer=\"WILE_E_COYOTE\"; $Path=\"/acme1\"; JSESSIONID=\"Rocket_Launcher_0001\"; $Path=\"/acme2\"; SPRING_SECURITY_REMEMBER_ME_COOKIE=\"FedEx\"; $Path=\"/acme\";";
 		request.addHeader("Cookie", cookieHeaderValue);
 
 		proxy.proxyRequest("foo", request, response);
@@ -295,7 +297,7 @@ public class HttpProxyTest {
 		MockHttpServletRequest request = new MockHttpServletRequest("GET", "unused");
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		final String cookieHeaderValue = "$Version=\"1\"; Customer=\"WILE_E_COYOTE\"; $Path=\"/acme1\"; almp.Part_Number=\"Rocket_Launcher_0001\"; $Path=\"/acme2\"; Shipping=\"FedEx\"; $Path=\"/acme\"";
+		final String cookieHeaderValue = "$Version=\"1\"; JSESSIONID=\"WILE_E_COYOTE\"; $Path=\"/acme1\"; Part_Number=\"Rocket_Launcher_0001\"; $Path=\"/acme2\"; SPRING_SECURITY_REMEMBER_ME_COOKIE=\"FedEx\"; $Path=\"/acme\"";
 		request.addHeader("Cookie", cookieHeaderValue);
 
 		proxy.proxyRequest("foo", request, response);
