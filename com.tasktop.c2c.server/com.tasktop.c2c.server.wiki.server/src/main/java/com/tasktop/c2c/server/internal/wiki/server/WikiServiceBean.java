@@ -626,7 +626,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		return property.getValue();
 	}
 
-	@Secured({ Role.User })
+	@Secured({ Role.Community, Role.User })
 	@Override
 	public String retrieveConfigurationProperty(String propertyName) throws EntityNotFoundException {
 		com.tasktop.c2c.server.internal.wiki.server.domain.ConfigurationProperty property = findConfigurationProperty(propertyName);
