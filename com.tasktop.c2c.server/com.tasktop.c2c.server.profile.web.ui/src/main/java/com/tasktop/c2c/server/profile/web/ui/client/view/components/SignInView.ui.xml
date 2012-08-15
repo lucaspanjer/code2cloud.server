@@ -31,7 +31,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="git-hub-details right">
+			<div class="git-hub-details right" ui:field="gitHubDiv">
 				<div class="headingMedium">GitHub Credentials</div>
 				<div class="git-hub-details-content">
 					<p>
