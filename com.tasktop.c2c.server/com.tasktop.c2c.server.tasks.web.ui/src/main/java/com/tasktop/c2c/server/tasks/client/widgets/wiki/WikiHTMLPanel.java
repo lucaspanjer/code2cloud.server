@@ -40,6 +40,7 @@ public class WikiHTMLPanel extends HTMLPanel {
 	}
 
 	public void setWikiHTML(String wikiHtml) {
+
 		// First, clear out previous contents.
 		super.clear();
 
@@ -55,6 +56,7 @@ public class WikiHTMLPanel extends HTMLPanel {
 			String href = curElem.getAttribute("href");
 
 			if (isTaskAnchor(href)) {
+				String internalUrl = href.substring(href.indexOf("#"));
 
 				// We need to do some fancy footwork here in order to inject a TaskAnchor into the body of this page -
 				// hold on tight, it's going to get a bit bumpy.
@@ -82,7 +84,7 @@ public class WikiHTMLPanel extends HTMLPanel {
 
 				// Next, wrap that span in an HTML widget - this is done so that we can then inject our TaskAnchor as a
 				// widget.
-				panel.add(createTaskAnchor(label, href));
+				panel.add(createTaskAnchor(label, internalUrl));
 			}
 		}
 	}
