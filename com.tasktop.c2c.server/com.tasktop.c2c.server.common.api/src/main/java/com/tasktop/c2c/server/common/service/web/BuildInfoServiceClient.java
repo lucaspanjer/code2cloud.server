@@ -11,17 +11,12 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.service.web;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 
 /**
  * @author Myles (Tasktop Technologies Inc.)
  * 
  */
-@Service
-@Qualifier("buildInfoServiceClient")
 public class BuildInfoServiceClient extends AbstractRestServiceClient {
 
 	@SuppressWarnings("unused")
