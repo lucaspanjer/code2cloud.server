@@ -2203,19 +2203,6 @@ textarea.document {
 	padding: 20px 0;
 }
 
-.logo {
-	display: block;
-	width: 140px;
-	height: 25px;
-	float: left;
-	padding: 2px;
-	background: url("i/cfcode-logo-white.png") no-repeat;
-	text-indent: -9999px;
-	cursor: pointer;
-}
-
-
-
 .border-right {
 	border-right: 1px solid #000;
 	padding-right: 5px;

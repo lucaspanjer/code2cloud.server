@@ -36,4 +36,6 @@ public interface AppCssResource extends CssResource {
 
 	String footer();
 
+	String logo();
+
 }

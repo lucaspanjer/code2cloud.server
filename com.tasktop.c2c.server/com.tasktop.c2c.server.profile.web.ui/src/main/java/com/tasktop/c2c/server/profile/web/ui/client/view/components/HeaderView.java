@@ -91,6 +91,9 @@ public class HeaderView extends AbstractComposite {
 	@UiField
 	Panel breadcrumbNavigation;
 
+	@UiField(provided = true)
+	protected Image logoImage = new Image(ProfileGinjector.get.instance().getAppResources().logo());
+
 	private HeaderView() {
 		initWidget(uiBinder.createAndBindUi(this));
 

@@ -27,4 +27,7 @@ public interface AppResources extends ClientBundle {
 	@Source("resources/app.css")
 	AppCssResource appCss();
 
+	@Source("resources/c2c-logo-white.png")
+	ImageResource logo();
+
 }

@@ -117,3 +117,14 @@
 	margin: 0 auto;	
 }
 
+.logo {
+	display: block;
+	width: 140px;
+	height: 25px;
+	float: left;
+	padding: 2px;
+	text-indent: -9999px;
+	cursor: pointer;
+}
+
+
