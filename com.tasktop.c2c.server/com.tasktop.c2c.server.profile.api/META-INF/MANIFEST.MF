@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Profile API
 Bundle-SymbolicName: com.tasktop.c2c.server.profile.api
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 1.1.0.qualifier
 Bundle-Vendor: Tasktop Technologies
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: com.tasktop.c2c.server.profile.domain,
