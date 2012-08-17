@@ -31,8 +31,10 @@ import com.tasktop.c2c.server.profile.domain.build.JobDetails;
 
 public class HudsonServiceClient extends AbstractRestServiceClient implements HudsonService {
 
+	private static final String statusTreeFilter = "?tree=jobs[name,url,color,lastBuild[url,duration,timestamp,result,number,actions[causes[shortDescription]]]]";
+
 	public HudsonStatus getStatus() {
-		return template.getForObject(computeUrl("/api/json"), HudsonStatus.class);
+		return template.getForObject(computeUrl("/api/json" + statusTreeFilter), HudsonStatus.class);
 	}
 
 	public JobDetails getJobDetails(String jobName) {

@@ -12,29 +12,26 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.profile.domain.build.HudsonStatus;
 import com.tasktop.c2c.server.profile.domain.build.JobSummary;
-import com.tasktop.c2c.server.profile.web.ui.client.widgets.build.BuildResources;
 
 public class HudsonStatusView extends Composite {
 	interface Binder extends UiBinder<Widget, HudsonStatusView> {
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
-	public static BuildResources buildResources = GWT.create(BuildResources.class);
+
+	private int maxJobs = 15;
 
 	public HudsonStatusView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -48,44 +45,41 @@ public class HudsonStatusView extends Composite {
 		if (status == null) {
 			return;
 		}
-		setJobs(status.getJobs());
+		List<JobSummary> jobs = status.getJobs();
+		if (jobs.size() > maxJobs) {
+			Collections.sort(jobs, new Comparator<JobSummary>() {
+
+				@Override
+				public int compare(JobSummary j1, JobSummary j2) {
+					if (hasLastBuildTs(j1)) {
+						if (hasLastBuildTs(j2)) {
+							return j2.getLastBuild().getTimestamp().compareTo(j1.getLastBuild().getTimestamp());
+						} else {
+							return -1;
+						}
+					} else {
+						if (hasLastBuildTs(j2)) {
+							return 1;
+						} else {
+							return 0;
+						}
+					}
+				}
+
+				private boolean hasLastBuildTs(JobSummary js) {
+					return js.getLastBuild() != null && js.getLastBuild().getTimestamp() != null;
+				}
+			});
+			jobs = jobs.subList(0, maxJobs);
+		}
+		setJobs(jobs);
 	}
 
 	private void setJobs(List<JobSummary> jobs) {
-		Grid table = new Grid(jobs.size(), 2);
-		for (int i = 0; i < jobs.size(); i++) {
-			JobSummary job = jobs.get(i);
-			table.setWidget(i, 0, getWidgetFromColour(job.getColor()));
-			table.setWidget(i, 1, new Anchor(job.getName(), job.getUrl()));
+		for (JobSummary job : jobs) {
+			jobSummaryPanel.add(new HudsonJobRow(job));
 		}
-		jobSummaryPanel.add(table);
+
 	}
 
-	private Widget getWidgetFromColour(String color) {
-		if (color.equals("blue")) {
-			return new Image(buildResources.stableBuild());
-		} else if (color.equals("red")) {
-			return new Image(buildResources.failedBuild());
-		} else if (color.equals("yellow")) {
-			return new Image(buildResources.unstableBuild());
-		} else if (color.equals("grey")) {
-			return new Image(buildResources.canceledBuild());
-		} else if (color.equals("aborted")) {
-			return new Image(buildResources.canceledBuild());
-		} else if (color.equals("disabled")) {
-			return new Image(buildResources.disabledBuild());
-		} else if (color.equals("blue_anime")) {
-			return new Image(buildResources.stableBuilding());
-		} else if (color.equals("red_anime")) {
-			return new Image(buildResources.failedBuilding());
-		} else if (color.equals("yellow_anime")) {
-			return new Image(buildResources.unstableBuilding());
-		} else if (color.equals("grey_anime")) {
-			return new Image(buildResources.canceledBuilding());
-		} else if (color.equals("aborted_anime")) {
-			return new Image(buildResources.canceledBuilding());
-		} else {
-			return new Label(color);
-		}
-	}
 }

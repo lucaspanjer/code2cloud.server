@@ -52,10 +52,6 @@ public class ProjectDashboard implements Serializable {
 		return buildStatus;
 	}
 
-	public TaskSummary getLatestTaskSummary() {
-		return taskSummaries.get(taskSummaries.size() - 1);
-	}
-
 	public void setCommitsByAuthor(Map<com.tasktop.c2c.server.scm.domain.Profile, Integer> commitsByAuthor) {
 		this.commitsByAuthor = commitsByAuthor;
 	}

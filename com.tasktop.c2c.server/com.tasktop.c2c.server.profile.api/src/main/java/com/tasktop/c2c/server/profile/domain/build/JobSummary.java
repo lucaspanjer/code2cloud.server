@@ -27,6 +27,8 @@ public class JobSummary implements Serializable {
 
 	private List<BuildDetails> builds;
 
+	private BuildDetails lastBuild;
+
 	public String getName() {
 		return name;
 	}
@@ -57,6 +59,21 @@ public class JobSummary implements Serializable {
 
 	public void setBuilds(List<BuildDetails> builds) {
 		this.builds = builds;
+	}
+
+	/**
+	 * @return the lastBuild
+	 */
+	public BuildDetails getLastBuild() {
+		return lastBuild;
+	}
+
+	/**
+	 * @param lastBuild
+	 *            the lastBuild to set
+	 */
+	public void setLastBuild(BuildDetails lastBuild) {
+		this.lastBuild = lastBuild;
 	}
 
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+<ui:style>
+.icon {
+	display: inline;
+	float: left;
+	padding-top: 2px;
+	padding-right: 5px;
+}
+div.mainLine {
+	display: inline;
+}
+.lastBuild {
+	font-size: 11px;
+	color: #888;
+}
+.lastBuild, .lastBuild label, .lastBuild a {
+	display: inlinline;
+}
+</ui:style>
+  	<g:HTMLPanel>
+	<g:SimplePanel ui:field="colorPanel" styleName="{style.icon}"/>
+  	<div>
+  		<div class="{style.mainLine}">
+  			<g:Anchor ui:field="jobAnchor" />
+  		<div ui:field="lastBuildDiv" class="{style.lastBuild} right">
+  			<g:Anchor ui:field="lastBuildAnchor"/>
+  		</div>
+	</div>
+  		
+  	</div>
+  	<div class="clear"/>
+  	</g:HTMLPanel>
+</ui:UiBinder>
