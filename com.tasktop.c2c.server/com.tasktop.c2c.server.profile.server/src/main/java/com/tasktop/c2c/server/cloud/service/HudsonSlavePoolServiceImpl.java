@@ -239,19 +239,25 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 
 	@Override
 	public void doReleaseSlave(String projectId, Long serviceHostId) {
+		ServiceHost node;
 		try {
-
 			// DO the node-deallocation first so it functions as an auth check that the projected did own it, and thus
 			// it can be freed.
-			final ServiceHost node = serviceHostService.retrieve(serviceHostId);
+			node = serviceHostService.retrieve(serviceHostId);
 			serviceHostService.deallocateHostFromProject(node, projectId);
 
-			nodeCleaningService.cleanNode(node);
-
 		} catch (EntityNotFoundException e) {
-			LOGGER.warn("", e);
+			LOGGER.warn("Could not find slave to release", e);
+			return;
+		}
+
+		try {
+			nodeCleaningService.cleanNode(node);
 		} catch (IOException e) {
-			LOGGER.warn("", e);
+			LOGGER.warn(String.format(
+					"Caught exception trying to clean node [%s]. This nodes will be removed from the pool.",
+					node.getInternalNetworkAddress()), e);
+			node.setAvailable(false);
 		}
 
 	}
