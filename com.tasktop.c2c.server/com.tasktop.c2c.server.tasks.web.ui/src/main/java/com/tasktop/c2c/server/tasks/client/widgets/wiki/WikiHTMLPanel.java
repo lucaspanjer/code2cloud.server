@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.tasks.client.widgets.wiki;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
@@ -45,7 +46,8 @@ public class WikiHTMLPanel extends HTMLPanel {
 		super.clear();
 
 		// Add all of our HTML to our element so that it gets converted to DOM format.
-		this.getElement().setInnerHTML(wikiHtml);
+		HTML html = new HTML(wikiHtml);
+		super.add(html);
 
 		// Then, find all of our anchors and see if they are task links
 		NodeList<Element> anchors = this.getElement().getElementsByTagName("a");
