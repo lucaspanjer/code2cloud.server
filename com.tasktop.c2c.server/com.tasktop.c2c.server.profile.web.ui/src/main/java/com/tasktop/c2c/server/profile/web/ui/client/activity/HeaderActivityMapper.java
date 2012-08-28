@@ -12,12 +12,12 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.activity;
 
-
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.HeaderPresenter;
-import com.tasktop.c2c.server.profile.web.ui.client.view.components.HeaderView;
+import com.tasktop.c2c.server.profile.web.ui.client.view.components.Header;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -25,7 +25,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.view.components.HeaderView;
  */
 public class HeaderActivityMapper implements ActivityMapper {
 
-	private HeaderPresenter headerPresenter = new HeaderPresenter(HeaderView.getInstance());
+	private HeaderPresenter headerPresenter = new HeaderPresenter((Header) GWT.create(Header.class));
 
 	@Override
 	public Activity getActivity(Place place) {

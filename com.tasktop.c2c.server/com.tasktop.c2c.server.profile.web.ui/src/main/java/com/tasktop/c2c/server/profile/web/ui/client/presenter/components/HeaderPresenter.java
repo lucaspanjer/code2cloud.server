@@ -15,8 +15,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
@@ -37,22 +35,18 @@ import com.tasktop.c2c.server.profile.web.ui.client.event.LogoutEvent;
 import com.tasktop.c2c.server.profile.web.ui.client.event.LogoutEventHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
-import com.tasktop.c2c.server.profile.web.ui.client.view.components.HeaderView;
+import com.tasktop.c2c.server.profile.web.ui.client.view.components.Header;
 
-public class HeaderPresenter extends AbstractProfilePresenter {
+public class HeaderPresenter extends AbstractProfilePresenter implements Header.Presenter {
 
-	private final HeaderView view;
+	private final Header view;
 
-	public HeaderPresenter(final HeaderView view) {
+	public HeaderPresenter(final Header view) {
 		super(view);
 		this.view = view;
 
-		view.searchButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				doSearch(view.search.getText());
-			}
-		});
+		view.setPresenter(this);
+
 		addAuthListeners();
 	}
 
@@ -63,14 +57,14 @@ public class HeaderPresenter extends AbstractProfilePresenter {
 		eventBus.addHandler(LogoutEvent.TYPE, new LogoutEventHandler() {
 			@Override
 			public void onLogout() {
-				view.setAuthenticated(false);
+				view.setCredentials(null);
 			}
 		});
 		eventBus.addHandler(LogonEvent.TYPE, new LogonEventHandler() {
 			@Override
 			public void onLogon(Credentials credentials) {
 				injector.getAppState().setCredentials(credentials);
-				view.setAuthenticated(true);
+				view.setCredentials(credentials);
 			}
 		});
 	}
@@ -101,7 +95,7 @@ public class HeaderPresenter extends AbstractProfilePresenter {
 		if (place instanceof ProjectsPlace) {
 			currentQuery = ((ProjectsPlace) place).getQuery();
 		}
-		view.search.setText(currentQuery);
+		view.setSearchText(currentQuery);
 
 		view.setProject(project);
 		view.setPageTitle(heading);
@@ -111,11 +105,7 @@ public class HeaderPresenter extends AbstractProfilePresenter {
 			Window.setTitle(windowTitle);
 		}
 
-		if (getAppState().isUserAnonymous()) {
-			view.setAuthenticated(false);
-		} else {
-			view.setAuthenticated(true);
-		}
+		view.setCredentials(getAppState().getCredentials());
 		view.setGravatarHash(getAppState().getCredentials() == null ? null : getAppState().getCredentials()
 				.getProfile().getGravatarHash());
 

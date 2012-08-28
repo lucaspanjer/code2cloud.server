@@ -45,6 +45,9 @@
 	<replace-with class="com.tasktop.c2c.server.profile.web.ui.client.view.FooterView"> 
 		<when-type-is class="com.tasktop.c2c.server.profile.web.ui.client.view.Footer"/> 
 	</replace-with> 
+	<replace-with class="com.tasktop.c2c.server.profile.web.ui.client.view.components.HeaderView"> 
+		<when-type-is class="com.tasktop.c2c.server.profile.web.ui.client.view.components.Header"/> 
+	</replace-with> 
 	<replace-with class="com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.team.MemberInviteWidget">
 		<when-type-is class="com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.team.IMemberAddWidget"/> 
 	</replace-with>

@@ -11,7 +11,7 @@
   			<div class="{res.appCss.headerNav}">
 				<a class="{res.appCss.logo}" href="#">
 					<g:Image ui:field="logoImage"/>
-				</a> <!-- Text not displayed -->
+				</a>
 				<a:FormSectionPanel styleName="{res.appCss.search}">
 					<g:HTMLPanel>
 						<g:TextBox ui:field="search" addStyleNames="{res.appCss.search}"/>
@@ -44,20 +44,6 @@
 					</div>
 					<div class="owner-badge left">
 						<g:Label ui:field="ownerBadge" />
-					</div>
-				</div>
-				<div class="project-info-section" >
-					<div class="right" style="display: none">
-						<div class="properties">
-							<a href="#" class="watchers"><span></span>111 W</a> 
-							<a href="#" class="owners"><span></span>222 O</a> 
-						</div>
-					</div>
-					<div class="right" style="display: none">
-						<a href="#" class="options icon small"><span></span>Project Options</a> 
-					</div>
-					<div class="right" style="display: none">
-						<button class="button watch"><span></span>Watch</button> 
 					</div>
 				</div>
 			</div>
