@@ -23,7 +23,5 @@ public interface AppShell extends IsWidget {
 
 	AcceptsOneWidget getMainContentRegion();
 
-	AcceptsOneWidget getMenuRegion();
-
 	AcceptsOneWidget getHeaderRegion();
 }

@@ -37,8 +37,6 @@ public class StandardApplicationView extends Composite implements AppShell {
 	@UiField
 	AcceptsOneWidget headerContainer;
 	@UiField
-	AcceptsOneWidget menuContainer;
-	@UiField
 	AcceptsOneWidget contentContainer;
 	@UiField
 	protected SimplePanel footerContainer;
@@ -85,11 +83,6 @@ public class StandardApplicationView extends Composite implements AppShell {
 	@Override
 	public AcceptsOneWidget getHeaderRegion() {
 		return headerContainer;
-	}
-
-	@Override
-	public AcceptsOneWidget getMenuRegion() {
-		return menuContainer;
 	}
 
 	@Override
