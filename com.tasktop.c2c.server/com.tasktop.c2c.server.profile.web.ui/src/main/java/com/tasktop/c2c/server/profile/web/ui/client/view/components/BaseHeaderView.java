@@ -20,9 +20,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineHTML;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.Section;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
@@ -38,17 +36,14 @@ import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 public abstract class BaseHeaderView extends AbstractComposite implements Header {
 
 	@UiField
-	public ProjectIconPanel iconPanel;
+	public IProjectIconPanel iconPanel;
 	@UiField
 	public Anchor signIn;
 	@UiField
 	public Panel userMenu;
 	@UiField(provided = true)
 	public Image avatarImage = AvatarHolder.avatarImage;
-	@UiField
-	public Label title;
-	@UiField
-	public Label ownerBadge;
+
 	@UiField
 	public DivElement projectSpecificDiv;
 	@UiField
@@ -100,15 +95,10 @@ public abstract class BaseHeaderView extends AbstractComposite implements Header
 	public void setProject(Project project) {
 		if (project == null) {
 			projectSpecificDiv.setClassName("hide-project-nav");
-			this.ownerBadge.setText("");
 		} else {
 			projectSpecificDiv.removeClassName("hide-project-nav");
-			iconPanel.setProject(project);
-
-			if (AuthenticationHelper.isAdmin(project.getIdentifier())) {
-				this.ownerBadge.setText("owner");
-			}
 		}
+		iconPanel.setProject(project);
 	}
 
 	public List<Breadcrumb> getBreadcrumbs() {
@@ -137,10 +127,6 @@ public abstract class BaseHeaderView extends AbstractComposite implements Header
 
 	public void setSection(Section section) {
 		iconPanel.setActiveIcon(section);
-	}
-
-	public void setPageTitle(String title) {
-		this.title.setText(title);
 	}
 
 	public void setGravatarHash(String hash) {

@@ -22,11 +22,14 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
+import com.tasktop.c2c.server.profile.domain.project.Project;
 
 public class HeaderView extends BaseHeaderView implements Header {
 
@@ -39,6 +42,10 @@ public class HeaderView extends BaseHeaderView implements Header {
 	protected Button searchButton;
 	@UiField
 	protected TextBox search;
+	@UiField
+	public Label title;
+	@UiField
+	public Label ownerBadge;
 
 	protected UserMenuPopupPanel userMenuPopupPanel = null;
 
@@ -112,6 +119,22 @@ public class HeaderView extends BaseHeaderView implements Header {
 		userMenuPopup.removeStyleName("gwt-PopupPanel");
 		userMenuPopup.setStyleName("account-options");
 		return userMenuPopup;
+	}
+
+	public void setProject(Project project) {
+		super.setProject(project);
+
+		if (project == null) {
+			this.ownerBadge.setText("");
+		} else {
+			if (AuthenticationHelper.isAdmin(project.getIdentifier())) {
+				this.ownerBadge.setText("owner");
+			}
+		}
+	}
+
+	public void setPageTitle(String title) {
+		this.title.setText(title);
 	}
 
 }
