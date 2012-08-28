@@ -2,9 +2,13 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+   	<ui:with field='res' type='com.tasktop.c2c.server.common.profile.web.client.AppResources'/>
+	
 	   
 		<g:HTMLPanel>
-			        <div class="social-media-logos left">
+		 <div class="{res.appCss.footerStretch}">
+		      <div class="{res.appCss.footer}">
+			      <div class="social-media-logos left">
 		          <a class="twitter" href="" target="_blank">Twitter</a>
 		          <a class="facebook" href="" target="_blank">Facebook</a>
 		          <a class="youtube" href="" target="_blank">You Tube</a>
@@ -28,5 +32,8 @@
 		        </div>
 		        </div>
 		        <div class="clear"></div>
+		        		      </div>
+		    </div>		
+		        
 	</g:HTMLPanel>
 </ui:UiBinder>
