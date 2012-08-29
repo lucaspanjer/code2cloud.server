@@ -49,8 +49,8 @@
 					<fieldset>
 						<label>&#160;</label>
 						<div class="button-wrap">
-							<g:Button styleName="button" ui:field="cancelButton">Cancel</g:Button>
 							<g:Button styleName="button special" ui:field="createButton">Create Project</g:Button>
+							<g:Button styleName="button" ui:field="cancelButton">Cancel</g:Button>
 						</div>
 					</fieldset>
 					<div class="clear"/>

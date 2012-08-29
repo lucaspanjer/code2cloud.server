@@ -11,12 +11,9 @@
 			any longer and will require being invited to join the project.
 		</div>
 		<br/>
-		
 		<div class="center">
-			  <g:Button ui:field="cancelButton" styleName="button">Cancel</g:Button>
 			  <g:Button ui:field="leaveButton" styleName="button special">Leave this Project</g:Button>
+			  <g:Button ui:field="cancelButton" styleName="button">Cancel</g:Button>
 		  </div>	
-		
 	</g:HTMLPanel>
-	
 </ui:UiBinder>

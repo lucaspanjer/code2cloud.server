@@ -53,8 +53,8 @@
 						</fieldset>
 						</div>
 						 <div class="save right top-margin bottom-margin">
-							<g:Button ui:field="cancelButton" addStyleNames="button " text="Cancel"/>
 							<g:Button ui:field="saveButton" addStyleNames="button special" text="Save"/>
+							<g:Button ui:field="cancelButton" addStyleNames="button " text="Cancel"/>
  	    					<div class="clear"></div>
 						</div>
 						<div class="clear"/>

@@ -37,8 +37,8 @@
 							<div class="clear"/>
 						</fieldset>
 						<div class="button-wrap right">
-							<g:Button ui:field="cancelChangePasswordButton" addStyleNames="button" text="Cancel"/>
 							<g:Button ui:field="saveChangePasswordButton" addStyleNames="button special" text="Save"/>
+							<g:Button ui:field="cancelChangePasswordButton" addStyleNames="button" text="Cancel"/>
 						</div>
 						<div class="clear"/>
 					</g:HTMLPanel>

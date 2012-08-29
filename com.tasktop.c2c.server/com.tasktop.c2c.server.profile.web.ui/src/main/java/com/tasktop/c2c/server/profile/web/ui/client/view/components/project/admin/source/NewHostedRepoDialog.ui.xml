@@ -50,8 +50,8 @@
 		<g:FlowPanel ui:field="errorPanel"/>
 		<div class="clear"></div>
 		<div class="center">
-			<g:Button ui:field="cancelButton" styleName="button ">Cancel</g:Button>
 			<g:Button ui:field="addButton" styleName="button special">Save</g:Button>
+			<g:Button ui:field="cancelButton" styleName="button">Cancel</g:Button>
 		</div>
 	</g:HTMLPanel>
 

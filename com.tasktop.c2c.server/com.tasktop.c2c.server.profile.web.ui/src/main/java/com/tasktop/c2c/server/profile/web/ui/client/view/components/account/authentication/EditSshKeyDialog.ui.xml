@@ -45,8 +45,8 @@
 				</div>
 			</fieldset>
 			<div class="right">
-				<g:Button ui:field="cancelButton" addStyleNames="button cancel" text="Cancel"/>
 				<g:Button ui:field="saveButton" addStyleNames="button special" text="Save"/>
+				<g:Button ui:field="cancelButton" addStyleNames="button cancel" text="Cancel"/>
 			</div>
 			<div class="clear"/>
 		</div>

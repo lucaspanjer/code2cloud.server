@@ -25,6 +25,5 @@
 			<g:Button ui:field="deleteButton" styleName="button special">Delete</g:Button>
 			<g:Button ui:field="cancelButton" styleName="button">Cancel</g:Button>
 		</div>
-
 	</g:HTMLPanel>
 </ui:UiBinder>

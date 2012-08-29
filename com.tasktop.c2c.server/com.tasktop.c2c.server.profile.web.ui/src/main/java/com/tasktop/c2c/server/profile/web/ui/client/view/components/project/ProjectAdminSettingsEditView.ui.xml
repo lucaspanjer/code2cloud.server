@@ -49,10 +49,10 @@
 			<fieldset>
 				<label>&#160;</label>
 				<div class="save">
-					<g:Button ui:field="cancelEditButton" addStyleNames="button {local.gwt-Button-Local}"
-							  text="Cancel"/>
 					<g:Button ui:field="saveButton" addStyleNames="button special {local.gwt-Button-Local}"
 							  text="Save Changes"/>
+					<g:Button ui:field="cancelEditButton" addStyleNames="button {local.gwt-Button-Local}"
+							  text="Cancel"/>
 				</div>
 			</fieldset>
 			<div class="clear"/>

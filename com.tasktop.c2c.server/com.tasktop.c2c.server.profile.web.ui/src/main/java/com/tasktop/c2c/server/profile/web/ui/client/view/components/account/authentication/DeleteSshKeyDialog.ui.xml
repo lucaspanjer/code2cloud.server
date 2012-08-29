@@ -7,13 +7,12 @@
 			width: 400px;
 		}
 	</ui:style>
-
 	<g:HTMLPanel styleName="{style.popup}">
 		<p>Are you sure you want to remove this SSH key?</p>
 		<p><g:Label ui:field="keyLabel"/></p>
 		<div class="center">
-			<g:Button ui:field="cancelButton" addStyleNames="button cancel" text="Cancel"/>
 			<g:Button ui:field="okButton" addStyleNames="button special">OK</g:Button>
+			<g:Button ui:field="cancelButton" addStyleNames="button cancel" text="Cancel"/>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

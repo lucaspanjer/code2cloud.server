@@ -1,8 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-
-
 	<g:HTMLPanel>
 		<fieldset>
 			<div class="item">
@@ -13,9 +11,8 @@
 		<g:FlowPanel ui:field="errorPanel"/>
 		<div class="clear"></div>
 		<div class="button-bar center">
-			<g:Button ui:field="cancelButton" styleName="button">Cancel</g:Button>
 			<g:Button ui:field="saveButton" styleName="button special">Save</g:Button>
+			<g:Button ui:field="cancelButton" styleName="button">Cancel</g:Button>
 		</div>
 	</g:HTMLPanel>
-
 </ui:UiBinder>
