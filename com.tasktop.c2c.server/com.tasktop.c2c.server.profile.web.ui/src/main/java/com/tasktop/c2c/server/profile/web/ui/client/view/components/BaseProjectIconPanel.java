@@ -11,7 +11,10 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
+import java.util.Arrays;
+
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -83,16 +86,13 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 
 	@Override
 	public void setActiveIcon(Section activeIcon) {
+		String activeStyle = getActiveStyle();
+
 		// first, deactivate all of our existing icons.
-		projectHome.removeStyleName(ACTIVE_STYLE);
-		dashboard.removeStyleName(ACTIVE_STYLE);
-		tasks.removeStyleName(ACTIVE_STYLE);
-		builds.removeStyleName(ACTIVE_STYLE);
-		deployments.removeStyleName(ACTIVE_STYLE);
-		team.removeStyleName(ACTIVE_STYLE);
-		wiki.removeStyleName(ACTIVE_STYLE);
-		source.removeStyleName(ACTIVE_STYLE);
-		reviews.removeStyleName(ACTIVE_STYLE);
+		for (Anchor a : Arrays.asList(projectHome, dashboard, tasks, builds, deployments, team, wiki, source, reviews)) {
+			Element e = getSelectStyleElement(a);
+			e.removeClassName(activeStyle);
+		}
 
 		// No active icon? Bail out now that all are deactivated.
 		if (activeIcon == null) {
@@ -100,32 +100,44 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 		}
 
 		// Then, activate the appropriate icon
+		Anchor toActivate = null;
 		switch (activeIcon) {
 		case BUILDS:
-			builds.addStyleName(ACTIVE_STYLE);
+			toActivate = builds;
 			break;
 		case DASHBOARD:
-			dashboard.addStyleName(ACTIVE_STYLE);
+			toActivate = dashboard;
 			break;
 		case DEPLOYMENTS:
-			deployments.addStyleName(ACTIVE_STYLE);
+			toActivate = deployments;
 			break;
 		case HOME:
-			projectHome.addStyleName(ACTIVE_STYLE);
+			toActivate = projectHome;
 			break;
 		case TASKS:
-			tasks.addStyleName(ACTIVE_STYLE);
+			toActivate = tasks;
 			break;
 		case TEAM:
-			team.addStyleName(ACTIVE_STYLE);
+			toActivate = team;
 			break;
 		case WIKI:
-			wiki.addStyleName(ACTIVE_STYLE);
+			toActivate = wiki;
 			break;
 		case SCM:
-			source.addStyleName(ACTIVE_STYLE);
+			toActivate = source;
 			break;
 		}
+		if (toActivate != null) {
+			getSelectStyleElement(toActivate).addClassName(activeStyle);
+		}
+	}
+
+	protected Element getSelectStyleElement(Anchor a) {
+		return a.getElement();
+	}
+
+	protected String getActiveStyle() {
+		return ACTIVE_STYLE;
 	}
 
 	@Override
