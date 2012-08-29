@@ -13,16 +13,11 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
 import java.util.Arrays;
 
-import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.UIObject;
-import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Section;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
@@ -63,11 +58,6 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 	public Anchor team;
 	@UiField
 	public Anchor wiki;
-	@UiField
-	public Anchor options;
-	@UiField
-	public DivElement optionsWrapper;
-	protected ProjectOptionsPopupPanel popupPanel = null;
 	private Project project;
 	private static final String ACTIVE_STYLE = "active";
 
@@ -75,24 +65,14 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 		super();
 	}
 
-	protected void initSuper() {
-		popupPanel = new ProjectOptionsPopupPanel();
-		popupPanel.addAutoHidePartner(options.getElement());
-		popupPanel.setStyleName("");
-	}
-
 	private static final String DISABLED_STYLE = "disabled working";
 	private static int SERVICE_PROVISION_POLL_DELAY = 15000;
 
 	@Override
 	public void setActiveIcon(Section activeIcon) {
-		String activeStyle = getActiveStyle();
 
 		// first, deactivate all of our existing icons.
-		for (Anchor a : Arrays.asList(projectHome, dashboard, tasks, builds, deployments, team, wiki, source, reviews)) {
-			Element e = getSelectStyleElement(a);
-			e.removeClassName(activeStyle);
-		}
+		deactivateAllIcons();
 
 		// No active icon? Bail out now that all are deactivated.
 		if (activeIcon == null) {
@@ -128,7 +108,14 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 			break;
 		}
 		if (toActivate != null) {
-			getSelectStyleElement(toActivate).addClassName(activeStyle);
+			getSelectStyleElement(toActivate).addClassName(getActiveStyle());
+		}
+	}
+
+	protected void deactivateAllIcons() {
+		for (Anchor a : Arrays.asList(projectHome, dashboard, tasks, builds, deployments, team, wiki, source, reviews)) {
+			Element e = getSelectStyleElement(a);
+			e.removeClassName(getActiveStyle());
 		}
 	}
 
@@ -141,11 +128,6 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 	}
 
 	@Override
-	public void setOptionsVisible(boolean visible) {
-		UIObject.setVisible(optionsWrapper, visible);
-	}
-
-	@Override
 	public void setProject(Project project) {
 		this.project = project;
 		if (project == null) {
@@ -153,8 +135,6 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 			return;
 		}
 		this.setVisible(true);
-
-		setOptionsVisible(!AuthenticationHelper.isAnonymous());
 
 		projectHome.setHref(ProjectHomePlace.createPlace(project.getIdentifier()).getHref());
 		team.setHref(ProjectTeamPlace.createPlace(project.getIdentifier()).getHref());
@@ -208,7 +188,6 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 			setupProjectServiceCallback(project.getIdentifier());
 		}
 
-		popupPanel.setProject(project);
 	}
 
 	private void setupProjectServiceCallback(final String projectIdentifier) {
@@ -240,7 +219,7 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 	}
 
 	private boolean stillOnPage(String projectId) {
-		return projectId.equals(project.getIdentifier()) && isAttached() && isVisible();
+		return project != null && projectId.equals(project.getIdentifier()) && isAttached() && isVisible();
 	}
 
 	private void hideAllServiceLinks() {
@@ -261,15 +240,6 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 			// Wipe out our href attribute - setting it to null or blank causes it to redirect to the homepage.
 			link.getElement().removeAttribute("href");
 			link.addStyleName(DISABLED_STYLE);
-		}
-	}
-
-	@UiHandler("options")
-	public void showMenu(ClickEvent e) {
-		if (popupPanel.isShowing()) {
-			popupPanel.hide();
-		} else {
-			popupPanel.showRelativeTo(options);
 		}
 	}
 

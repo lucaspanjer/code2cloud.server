@@ -23,8 +23,6 @@ public interface IProjectIconPanel extends IsWidget {
 
 	void setActiveIcon(Section activeIcon);
 
-	void setOptionsVisible(boolean visible);
-
 	void setProject(Project project);
 
 }
