@@ -22,7 +22,7 @@ import com.google.gwt.core.client.GWT;
 public class Avatar {
 	public enum Size {
 		// NOTE: changes to these sizes need a corresponding file images/default_avatarNN.png where NN is the size
-		LARGE(80), MEDIUM(50), SMALL(25), MICRO(15);
+		LARGE(80), MEDIUM(50), SMALL_PLUS(33), SMALL(25), MICRO(15);
 
 		private final int size;
 
