@@ -16,9 +16,8 @@
 				<div class="deployment-heading">
 					<h2>
 						<g:Label ui:field="editHeader" />
-						<g:Button ui:field="saveTaskButton2" addStyleNames="button special right">Save
-							Changes</g:Button>
-						<g:Button ui:field="cancelButton2" addStyleNames="button right">Cancel</g:Button>
+						<g:Button ui:field="cancelButton2" addStyleNames="button right marginleft">Cancel</g:Button>
+						<g:Button ui:field="saveTaskButton2" addStyleNames="button special right">Save Changes</g:Button>
 					</h2>
 					<div class="clear"></div>
 				</div>
@@ -157,9 +156,8 @@
 					</fieldset>
 				</div>
 				<div class="save right top-margin">
-					<g:Button addStyleNames="button special right" ui:field="saveTaskButton">Save
-						Changes</g:Button>
-					<g:Button addStyleNames="button" ui:field="cancelButton">Cancel</g:Button>
+					<g:Button addStyleNames="button right marginleft" ui:field="cancelButton">Cancel</g:Button>
+					<g:Button addStyleNames="button special right" ui:field="saveTaskButton">Save Changes</g:Button>
 				</div>
 				<div class="clear"></div>
 			</div>

@@ -3822,6 +3822,12 @@ textarea {
 	margin-left: 5px;
 }
 
+.deployment-heading .marginleft,
+.heading .marginleft,
+.attachments .marginleft {
+	margin-left: 5px;
+}
+
 .settings p input {
 	margin-bottom: 10px !important;
 }

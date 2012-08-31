@@ -85,8 +85,8 @@
 							</div>
 							<!--  This Div will float around based on the field being edited  -->
 							<div ui:field="editControlsDiv" class="{res.style.editControls}">
-								<g:Button ui:field="saveButton" addStyleNames="button special right">Save</g:Button>
 								<g:Button ui:field="cancelButton" addStyleNames="button right">Cancel</g:Button>
+								<g:Button ui:field="saveButton" addStyleNames="button special right">Save</g:Button>
 							</div>
 						</fieldset>
 						<fieldset>
