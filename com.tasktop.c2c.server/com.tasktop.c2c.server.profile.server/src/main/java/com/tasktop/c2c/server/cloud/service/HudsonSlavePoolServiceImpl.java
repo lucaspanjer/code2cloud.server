@@ -155,7 +155,7 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 		try {
 			this.serviceHostService.allocateHostToProject(ServiceType.BUILD_SLAVE, nodeToLoan, projectIdentifier);
 		} catch (EntityNotFoundException e) {
-			throw new IllegalStateException();
+			throw new IllegalStateException(e);
 		}
 
 		return RequestBuildSlaveResult.forSlave(nodeToLoan.getInternalNetworkAddress(), getSlaveDueDate());
