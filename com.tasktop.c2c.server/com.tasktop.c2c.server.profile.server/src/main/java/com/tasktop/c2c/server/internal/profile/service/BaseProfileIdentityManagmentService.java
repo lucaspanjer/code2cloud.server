@@ -194,9 +194,8 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 
 			if (organizationProfile.getOwner()) {
 				roles.add(AuthUtils.toCompoundOrganizationRole(Role.Admin, identifier));
-			}
-
-			if (organizationProfile.getUser()) {
+				roles.add(AuthUtils.toCompoundOrganizationRole(Role.User, identifier));
+			} else if (organizationProfile.getUser()) {
 				roles.add(AuthUtils.toCompoundOrganizationRole(Role.User, identifier));
 			}
 
