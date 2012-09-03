@@ -12,10 +12,13 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
+import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
+import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.LoggedInPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
@@ -26,7 +29,7 @@ import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 
-public class UserAccountPlace extends LoggedInPlace implements HeadingPlace, WindowTitlePlace {
+public class UserAccountPlace extends LoggedInPlace implements HeadingPlace, WindowTitlePlace, BreadcrumbPlace {
 
 	public static PageMapping Account = new PageMapping(new UserAccountPlace.Tokenizer(), "account");
 
@@ -84,5 +87,10 @@ public class UserAccountPlace extends LoggedInPlace implements HeadingPlace, Win
 	@Override
 	public String getWindowTitle() {
 		return WindowTitleBuilder.createWindowTitle("Account Settings");
+	}
+
+	@Override
+	public List<Breadcrumb> getBreadcrumbs() {
+		return Arrays.asList(new Breadcrumb("", "Projects"), new Breadcrumb(getHistoryToken(), "Account"));
 	}
 }
