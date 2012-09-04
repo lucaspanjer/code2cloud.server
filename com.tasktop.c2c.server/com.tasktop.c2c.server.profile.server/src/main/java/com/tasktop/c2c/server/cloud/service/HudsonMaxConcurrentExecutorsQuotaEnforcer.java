@@ -51,7 +51,6 @@ public class HudsonMaxConcurrentExecutorsQuotaEnforcer implements QuotaEnforcer<
 		Integer maxSlaves = Integer.parseInt(maxSlavesString);
 		List<ServiceHost> currentSlaves = serviceHostService.findHostsByTypeAndProject(
 				EnumSet.of(ServiceType.BUILD_SLAVE), projectIdentifier);
-		System.out.println(String.format("*****Currently have [%s] slaves", currentSlaves.size()));
 		if (currentSlaves.size() >= maxSlaves) {
 			throw new ValidationException("Already at concurrent build quota", null);
 		}
