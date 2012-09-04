@@ -61,6 +61,8 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 	private Project project;
 	private static final String ACTIVE_STYLE = "active";
 
+	protected Section activeSection;
+
 	public BaseProjectIconPanel() {
 		super();
 	}
@@ -70,7 +72,7 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 
 	@Override
 	public void setActiveIcon(Section activeIcon) {
-
+		this.activeSection = activeIcon;
 		// first, deactivate all of our existing icons.
 		deactivateAllIcons();
 
