@@ -38,4 +38,10 @@ public interface AppCssResource extends CssResource {
 
 	String logo();
 
+	String button();
+
+	String disabled();
+
+	String special();
+
 }
