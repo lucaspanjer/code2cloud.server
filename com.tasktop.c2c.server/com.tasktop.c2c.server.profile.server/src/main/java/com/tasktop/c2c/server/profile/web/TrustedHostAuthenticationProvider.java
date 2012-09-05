@@ -55,6 +55,10 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 
 		PreAuthenticatedAuthenticationToken token = (PreAuthenticatedAuthenticationToken) authentication;
 
+		if (!(token.getCredentials() instanceof HttpServletRequest)) {
+			throw new AuthenticationCredentialsNotFoundException("Could not locate trusted host");
+		}
+
 		HttpServletRequest request = (HttpServletRequest) token.getCredentials();
 		WebAuthenticationDetails details = (WebAuthenticationDetails) token.getDetails();
 		String remoteAddr = computeTrustedOrigin(details.getRemoteAddress(), request);
