@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.account;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.place.shared.Place;
@@ -24,6 +23,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.authentication.AuthenticationView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.place.AccountAuthenticationPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.place.AccountNotificationsPlace;
@@ -46,7 +46,7 @@ public class AccountView extends Composite {
 	}
 
 	private static AccountViewUiBinder ourUiBinder = GWT.create(AccountViewUiBinder.class);
-	private static String SELECTED = "selected";
+	private static String SELECTED = ProfileGinjector.get.instance().getAppResources().appCss().selected();
 
 	@UiField
 	SimplePanel contentPanel;

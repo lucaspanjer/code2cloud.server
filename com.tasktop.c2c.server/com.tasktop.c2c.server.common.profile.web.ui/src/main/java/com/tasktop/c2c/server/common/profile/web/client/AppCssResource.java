@@ -44,4 +44,6 @@ public interface AppCssResource extends CssResource {
 
 	String special();
 
+	String selected();
+
 }

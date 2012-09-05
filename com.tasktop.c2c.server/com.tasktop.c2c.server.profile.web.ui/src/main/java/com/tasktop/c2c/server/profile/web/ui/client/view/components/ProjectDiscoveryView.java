@@ -39,6 +39,7 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -419,9 +420,9 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 	private void updateFilterStyle(Anchor selectedFilterAnchor) {
 		for (Anchor a : filterAnchors) {
 			if (a.equals(selectedFilterAnchor)) {
-				a.getElement().addClassName("selected");
+				a.getElement().addClassName(ProfileGinjector.get.instance().getAppResources().appCss().selected());
 			} else {
-				a.getElement().removeClassName("selected");
+				a.getElement().removeClassName(ProfileGinjector.get.instance().getAppResources().appCss().selected());
 			}
 		}
 	}

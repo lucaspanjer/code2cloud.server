@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets.admin;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -21,6 +20,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.tasks.client.place.ProjectAdminCustomFieldsPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectAdminIterationsPlace;
@@ -42,7 +42,7 @@ public class TaskAdminMenu extends Composite {
 	}
 
 	private static Binder ourUiBinder = GWT.create(Binder.class);
-	private static String SELECTED = "selected";
+	private static String SELECTED = ProfileGinjector.get.instance().getAppResources().appCss().selected();
 
 	@UiField
 	protected Anchor keywordsAdminAnchor;

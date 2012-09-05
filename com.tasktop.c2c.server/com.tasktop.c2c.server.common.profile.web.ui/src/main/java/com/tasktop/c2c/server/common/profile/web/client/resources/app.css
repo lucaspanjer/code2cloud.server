@@ -1,5 +1,22 @@
-@external .external-nav, .internal-nav, .prefix, .header, .footer, .search, .search-button, .headerNav, .button; 
+@external .external-nav, .internal-nav, .prefix, .header, .footer, .search, .search-button, .headerNav, .button, .selected, .disabled; 
 
+a, a:link {
+  color: #062A55;
+  text-decoration: none;
+}
+a:visited {
+	
+}
+a:hover, a.selected {
+  color: #1282CC;
+}
+a:active {
+  color: #081B3C;
+  text-decoration: none;
+}
+a.disabled{
+	
+}
 
 .headerWrapper {
   background: #EFF5F9;

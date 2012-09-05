@@ -64,17 +64,6 @@ body {
 .clear{
 	clear:both;
 }
-a, a:link, a:visited {
-  color: #062A55;
-  text-decoration: none;
-}
-a:hover, a.selected {
-  color: #1282CC;
-}
-a:active {
-  color: #081B3C;
-  text-decoration: none;
-}
 
 .disabled {
   opacity: .3;

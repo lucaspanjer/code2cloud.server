@@ -12,13 +12,13 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.deployment;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 
 /**
@@ -27,7 +27,7 @@ import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
  */
 public class DeploymentRowView extends Composite {
 
-	private static final String SELECTED_SYTLE = "selected";
+	private static String SELECTED_STYLE = ProfileGinjector.get.instance().getAppResources().appCss().selected();
 
 	interface Binder extends UiBinder<Widget, DeploymentRowView> {
 	}
@@ -60,9 +60,9 @@ public class DeploymentRowView extends Composite {
 
 	public void setSelected(boolean selected) {
 		if (selected) {
-			anchor.addStyleName(SELECTED_SYTLE);
+			anchor.addStyleName(SELECTED_STYLE);
 		} else {
-			anchor.removeStyleName(SELECTED_SYTLE);
+			anchor.removeStyleName(SELECTED_STYLE);
 		}
 	}
 

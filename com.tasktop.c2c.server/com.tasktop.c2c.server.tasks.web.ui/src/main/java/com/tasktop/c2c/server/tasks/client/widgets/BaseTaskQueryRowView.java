@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.tasks.client.widgets;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -22,7 +23,7 @@ import com.google.gwt.user.client.ui.Composite;
  */
 public abstract class BaseTaskQueryRowView extends Composite {
 
-	private static final String SELECTED_SYTLE = "selected";
+	private static String SELECTED_STYLE = ProfileGinjector.get.instance().getAppResources().appCss().selected();
 	@UiField
 	protected Anchor queryAnchor;
 
@@ -40,9 +41,9 @@ public abstract class BaseTaskQueryRowView extends Composite {
 	public void setSelected(boolean selected) {
 		com.google.gwt.dom.client.Element e = getSelectionElement();
 		if (selected) {
-			e.addClassName(SELECTED_SYTLE);
+			e.addClassName(SELECTED_STYLE);
 		} else {
-			e.removeClassName(SELECTED_SYTLE);
+			e.removeClassName(SELECTED_STYLE);
 		}
 	}
 

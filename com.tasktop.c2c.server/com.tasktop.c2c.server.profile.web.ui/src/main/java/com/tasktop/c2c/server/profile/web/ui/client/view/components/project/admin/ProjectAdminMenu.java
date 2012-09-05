@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
+import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectAdminSettingsPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.ProjectAdminActivity;
@@ -45,7 +46,7 @@ public class ProjectAdminMenu extends Composite {
 	}
 
 	private static ProjectAdminMenuUiBinder ourUiBinder = GWT.create(ProjectAdminMenuUiBinder.class);
-	private static String SELECTED = "selected";
+	private static String SELECTED = ProfileGinjector.get.instance().getAppResources().appCss().selected();
 
 	@UiField
 	Anchor adminSettings;
