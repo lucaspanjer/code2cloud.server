@@ -1363,7 +1363,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			InlineEditableField<?> field = fieldOrNull;
 			field.getEditableElement().getParentElement().appendChild(editControlsDiv);
 
-			// Seem we loose the clickhandlers with dom remove so must re-add each time.
+			// Seems we lose the clickhandlers with DOM remove so must re-add them each time.
 			saveButton.addClickHandler(new ClickHandler() {
 
 				@Override
@@ -1386,15 +1386,15 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	private void saveInlineEdit(InlineEditableField<?> field) {
 		field.saveEdit();
 		lastEditedField = field;
-		complteInlineEdit(field);
+		completeInlineEdit(field);
 	}
 
 	private void cancelInlineEdit(InlineEditableField<?> field) {
 		field.cancelEdit();
-		complteInlineEdit(field);
+		completeInlineEdit(field);
 	}
 
-	private void complteInlineEdit(InlineEditableField<?> field) {
+	private void completeInlineEdit(InlineEditableField<?> field) {
 		editingFields.remove(field);
 
 		adjustEditControls(null);
