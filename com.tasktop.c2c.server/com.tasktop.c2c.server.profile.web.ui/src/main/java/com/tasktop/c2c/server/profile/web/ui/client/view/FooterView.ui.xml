@@ -6,7 +6,6 @@
 	
 	   
 		<g:HTMLPanel>
-		 <div class="{res.appCss.footerStretch}">
 		      <div class="{res.appCss.footer}">
 			      <div class="social-media-logos left">
 		          <a class="twitter" href="" target="_blank">Twitter</a>
@@ -33,7 +32,6 @@
 		        </div>
 		        <div class="clear"></div>
 		        		      </div>
-		    </div>		
 		        
 	</g:HTMLPanel>
 </ui:UiBinder>
