@@ -19,7 +19,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.Section;
@@ -46,8 +45,6 @@ public abstract class BaseHeaderView extends AbstractComposite implements Header
 
 	@UiField
 	public DivElement projectSpecificDiv;
-	@UiField
-	public Panel breadcrumbNavigation;
 	protected Presenter presenter;
 
 	public BaseHeaderView() {
@@ -101,27 +98,7 @@ public abstract class BaseHeaderView extends AbstractComposite implements Header
 		iconPanel.setProject(project);
 	}
 
-	public List<Breadcrumb> getBreadcrumbs() {
-		return breadcrumbs;
-	}
-
 	public void setBreadcrumbs(List<Breadcrumb> breadcrumbs) {
-		this.breadcrumbs = breadcrumbs;
-		breadcrumbNavigation.clear();
-		boolean first = true;
-		for (Breadcrumb breadcrumb : breadcrumbs) {
-			if (first == false) {
-				InlineHTML span = new InlineHTML();
-				span.setStyleName("arrow");
-				span.setText("/");
-				breadcrumbNavigation.add(span);
-			}
-			Anchor link = new Anchor(breadcrumb.getLabel(), "#" + breadcrumb.getUri());
-			link.setStyleName("crumb");
-			breadcrumbNavigation.add(link);
-
-			first = false;
-		}
 
 	}
 

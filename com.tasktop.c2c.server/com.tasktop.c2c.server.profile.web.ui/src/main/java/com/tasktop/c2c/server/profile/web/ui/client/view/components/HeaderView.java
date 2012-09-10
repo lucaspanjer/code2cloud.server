@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -20,14 +22,18 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 
@@ -46,6 +52,8 @@ public class HeaderView extends BaseHeaderView implements Header {
 	public Label title;
 	@UiField
 	public Label ownerBadge;
+	@UiField
+	public Panel breadcrumbNavigation;
 
 	protected UserMenuPopupPanel userMenuPopupPanel = null;
 
@@ -137,4 +145,22 @@ public class HeaderView extends BaseHeaderView implements Header {
 		this.title.setText(title);
 	}
 
+	public void setBreadcrumbs(List<Breadcrumb> breadcrumbs) {
+		breadcrumbNavigation.clear();
+		boolean first = true;
+		for (Breadcrumb breadcrumb : breadcrumbs) {
+			if (first == false) {
+				InlineHTML span = new InlineHTML();
+				span.setStyleName("arrow");
+				span.setText("/");
+				breadcrumbNavigation.add(span);
+			}
+			Anchor link = new Anchor(breadcrumb.getLabel(), "#" + breadcrumb.getUri());
+			link.setStyleName("crumb");
+			breadcrumbNavigation.add(link);
+
+			first = false;
+		}
+
+	}
 }
