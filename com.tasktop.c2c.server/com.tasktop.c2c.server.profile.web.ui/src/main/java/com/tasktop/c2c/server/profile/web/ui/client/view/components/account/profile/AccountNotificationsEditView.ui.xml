@@ -29,8 +29,8 @@
 			      <div class="clear"></div>
 	            </div>
           	    <div class="save">
+				  <g:Button ui:field="cancelButton" styleName="right button marginleft" text="Cancel"/>
 				  <g:Button ui:field="saveButton" styleName="right button special" text="Save"/>
-				  <g:Button ui:field="cancelButton" styleName="right button " text="Cancel"/>
 				  <div class="clear"></div>
 			    </div>
 			  </div>

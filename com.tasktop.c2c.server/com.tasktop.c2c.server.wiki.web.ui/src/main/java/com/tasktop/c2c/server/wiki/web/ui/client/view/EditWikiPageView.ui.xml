@@ -8,8 +8,8 @@
 		<div class="deployment-heading">
 			<h2>
 				<g:Label ui:field="pageTitle" styleName="left"></g:Label>
+				<g:Button ui:field="cancelButton2" addStyleNames="button right marginleft">Cancel</g:Button>
 				<g:Button ui:field="saveButton2" addStyleNames="button special right">Save</g:Button>
-				<g:Button ui:field="cancelButton2" addStyleNames="button right">Cancel</g:Button>
 			</h2>
 			<div class="clear"></div>
 		</div>
@@ -70,8 +70,8 @@
 	<div class="clear"></div>
    	  </div>
 		<div class="save top-margin">
+			<g:Button ui:field="cancelButton" addStyleNames="button right marginleft">Cancel</g:Button>
 			<g:Button ui:field="saveButton" addStyleNames="button special right">Save</g:Button>
-			<g:Button ui:field="cancelButton" addStyleNames="button right">Cancel</g:Button>
 			<div class="clear"></div>
 		</div>
 	</g:HTMLPanel>

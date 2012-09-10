@@ -7,8 +7,8 @@
 				<h2 class="left">Field Details</h2>
 				<div class="save">
 					<g:Anchor addStyleNames="left remove" ui:field="deleteButton">Remove</g:Anchor>
+					<g:Button addStyleNames="right button marginleft" ui:field="cancelButton">Cancel</g:Button>
 					<g:Button addStyleNames="right button special" ui:field="saveButton">Save</g:Button>
-					<g:Button addStyleNames="right button" ui:field="cancelButton">Cancel</g:Button>
 				</div>
 				<div class="clear"/>
 			</div>

@@ -6,8 +6,8 @@
 			<div class="deployment-heading">
 				<h2 class="left">New Custom Field</h2>
 				<div class="save">
+					<g:Button addStyleNames="right button marginleft" ui:field="cancelButton">Cancel</g:Button>
 					<g:Button addStyleNames="right button special" ui:field="saveButton">Save</g:Button>
-					<g:Button addStyleNames="right button" ui:field="cancelButton">Cancel</g:Button>
 				</div>
 				<div class="clear"/>
 			</div>

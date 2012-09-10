@@ -15,11 +15,8 @@
 			<div class="deployment-heading">
 				<h2 class="left">Product Details</h2>
 				<div class="save">
-					<g:Button addStyleNames="right button special {local.gwt-Button-Local}" ui:field="upperSaveButton">
-						Save
-					</g:Button>
-					<g:Button addStyleNames="right button {local.gwt-Button-Local}" ui:field="upperCancelButton">Cancel
-					</g:Button>
+					<g:Button addStyleNames="right button marginleft {local.gwt-Button-Local}" ui:field="upperCancelButton">Cancel</g:Button>
+					<g:Button addStyleNames="right button special {local.gwt-Button-Local}" ui:field="upperSaveButton">Save</g:Button>
 				</div>
 				<div class="clear"/>
 			</div>
@@ -68,10 +65,8 @@
 				<div class="clear"/>
 			</g:HTMLPanel>
 			<div class="save">
-				<g:Button addStyleNames="right button special {local.gwt-Button-Local}" ui:field="lowerSaveButton">Save
-				</g:Button>
-				<g:Button addStyleNames="right button {local.gwt-Button-Local}" ui:field="lowerCancelButton">Cancel
-				</g:Button>
+				<g:Button addStyleNames="right button marginleft {local.gwt-Button-Local}" ui:field="lowerCancelButton">Cancel</g:Button>
+				<g:Button addStyleNames="right button special {local.gwt-Button-Local}" ui:field="lowerSaveButton">Save</g:Button>
 				<div class="clear"/>
 			</div>
 		</div>

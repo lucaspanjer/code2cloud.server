@@ -7,8 +7,8 @@
 			<div class="deployment-heading">
 				<h2 class="left">Tag Details</h2>
 				<div class="save">
+					<g:Button addStyleNames="right button marginleft" ui:field="upperCancelButton">Cancel</g:Button>
 					<g:Button addStyleNames="right button special" ui:field="upperSaveButton">Save</g:Button>
-					<g:Button addStyleNames="right button" ui:field="upperCancelButton">Cancel</g:Button>
 				</div>
 				<div class="clear"/>
 			</div>
@@ -31,8 +31,8 @@
 				<div class="clear"/>
 			</div>
 			<div class="save">
+				<g:Button addStyleNames="right button marginleft" ui:field="lowerCancelButton">Cancel</g:Button>
 				<g:Button addStyleNames="right button special" ui:field="lowerSaveButton">Save</g:Button>
-				<g:Button addStyleNames="right button" ui:field="lowerCancelButton">Cancel</g:Button>
 				<div class="clear"/>
 			</div>
 		</div>
