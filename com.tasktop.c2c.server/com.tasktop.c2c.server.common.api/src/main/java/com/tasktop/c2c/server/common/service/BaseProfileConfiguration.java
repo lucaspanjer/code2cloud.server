@@ -36,8 +36,12 @@ public class BaseProfileConfiguration {
 		this.profileApplicationProtocol = profileApplicationProtocol;
 	}
 
-	public String getWebHost() {
+	public String getBaseWebHost() {
 		return webHost;
+	}
+
+	public String getWebHost() {
+		return getOrganizationHostPrefix() + webHost;
 	}
 
 	public void setWebHost(String webHost) {
@@ -68,11 +72,16 @@ public class BaseProfileConfiguration {
 
 	public String getProfileBaseUrl() {
 		String baseUrl = profileApplicationProtocol + "://";
-		if (prefixHostnameWithOrgId && TenancyUtil.getCurrentTenantOrganizationIdentifer() != null) {
-			baseUrl += TenancyUtil.getCurrentTenantOrganizationIdentifer() + ".";
-		}
-		baseUrl += webHost + baseContextPath;
+		baseUrl += getWebHost() + baseContextPath;
 		return baseUrl;
+	}
+
+	private String getOrganizationHostPrefix() {
+		String orgHostPrefix = "";
+		if (prefixHostnameWithOrgId && TenancyUtil.getCurrentTenantOrganizationIdentifer() != null) {
+			orgHostPrefix += TenancyUtil.getCurrentTenantOrganizationIdentifer() + ".";
+		}
+		return orgHostPrefix;
 	}
 
 	public String getUpdateSiteUrl() {

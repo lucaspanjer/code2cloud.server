@@ -19,6 +19,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
+ * <ul>
+ * <li>Propagates system environment proxy values to Java system properties.</li>
+ * <li>Configures no_proxy configuration for requests to profile/hub addresses.</li>
+ * </ul>
+ * 
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
@@ -83,7 +88,7 @@ public class HttpProxySetup implements InitializingBean {
 			} else {
 				no_proxy = no_proxy + ",";
 			}
-			no_proxy = no_proxy + profileConfiguration.getWebHost() + "|*." + profileConfiguration.getWebHost();
+			no_proxy = no_proxy + profileConfiguration.getBaseWebHost() + "|*." + profileConfiguration.getBaseWebHost();
 		}
 
 		if (no_proxy != null && !no_proxy.isEmpty()) {
