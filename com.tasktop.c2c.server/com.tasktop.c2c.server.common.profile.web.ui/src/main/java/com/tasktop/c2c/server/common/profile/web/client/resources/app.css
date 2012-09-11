@@ -1,11 +1,11 @@
-@external .external-nav, .internal-nav, .prefix, .header, .footer, .search, .search-button, .headerNav, .button, .special, .selected, .disabled; 
+@external .external-nav, .internal-nav, .prefix, .header, .footer, .search, .search-button, .headerNav, .button, .special, .selected, .disabled, .discover-project; 
 
-a, a:link {
+a {
   color: #062A55;
   text-decoration: none;
 }
 a:visited {
-	
+  color: #062A55;
 }
 
 a:hover, a.selected {
@@ -212,3 +212,14 @@ a.disabled{
 .button.special a:hover {
   color: #fff;
 }
+
+.discover-project {
+  padding: 20px 0;
+  border-bottom: 2px solid #EDEEED;
+  width: 526px;
+}
+
+.discover-project h2 a {
+  font-size: 16px;
+}
+
