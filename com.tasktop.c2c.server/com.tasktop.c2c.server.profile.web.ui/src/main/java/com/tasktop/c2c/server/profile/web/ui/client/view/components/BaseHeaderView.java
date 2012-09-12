@@ -57,7 +57,6 @@ public abstract class BaseHeaderView extends AbstractComposite implements Header
 		} else {
 			setAuthenticated(true);
 		}
-
 	}
 
 	protected void setAuthenticated(boolean isAuthenticated) {
@@ -66,12 +65,9 @@ public abstract class BaseHeaderView extends AbstractComposite implements Header
 		signIn.setVisible(!isAuthenticated);
 
 		if (isAuthenticated) {
-
 			String username = ProfileEntryPoint.getInstance().getAppState().getCredentials().getProfile().getUsername();
-
-			// Set the user's name as the title and alt text of the Gravatar image
+			// Set the user's name as the title of the Gravatar image
 			avatarImage.setTitle(username);
-			avatarImage.setAltText(username);
 		} else {
 			// Blank out any existing text
 			avatarImage.setTitle("");
