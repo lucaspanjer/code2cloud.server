@@ -20,9 +20,11 @@ import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
+import com.tasktop.c2c.server.common.profile.web.shared.Credentials.AuthType;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetUserInfoAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetUserInfoResult;
@@ -67,8 +69,10 @@ public class GetUserInfoActionHandler extends AbstractProfileActionHandler<GetUs
 				roles.add(authority.getAuthority());
 			}
 		}
-
-		return new Credentials(profile, roles);
+		Credentials c = new Credentials(profile, roles);
+		c.setAuthType(SecurityContextHolder.getContext().getAuthentication() instanceof PreAuthenticatedAuthenticationToken ? AuthType.SSO
+				: AuthType.LOCAL);
+		return c;
 	}
 
 }

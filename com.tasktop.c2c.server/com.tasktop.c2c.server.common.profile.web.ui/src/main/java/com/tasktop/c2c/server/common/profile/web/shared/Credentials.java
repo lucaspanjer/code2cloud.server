@@ -19,8 +19,13 @@ import com.tasktop.c2c.server.profile.domain.project.Profile;
 
 @SuppressWarnings("serial")
 public class Credentials implements Serializable {
+	public enum AuthType {
+		LOCAL, SSO
+	}
+
 	private Profile profile;
 	private List<String> roles;
+	private AuthType authType;
 
 	public Credentials() {
 	}
@@ -51,6 +56,14 @@ public class Credentials implements Serializable {
 	 */
 	public void setProfile(Profile profile) {
 		this.profile = profile;
+	}
+
+	public AuthType getAuthType() {
+		return authType;
+	}
+
+	public void setAuthType(AuthType authType) {
+		this.authType = authType;
 	}
 
 }

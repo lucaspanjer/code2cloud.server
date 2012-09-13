@@ -52,4 +52,9 @@ public class PlaceProviderImpl implements PlaceProvider {
 		return HelpPlace.createPlace().getHref();
 	}
 
+	@Override
+	public String getSSOLogoutHref() {
+		return null;
+	}
+
 }

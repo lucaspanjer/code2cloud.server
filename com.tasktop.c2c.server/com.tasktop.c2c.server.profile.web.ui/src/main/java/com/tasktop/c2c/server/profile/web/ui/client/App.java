@@ -20,8 +20,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
+import com.tasktop.c2c.server.common.profile.web.shared.Credentials.AuthType;
 import com.tasktop.c2c.server.common.web.client.event.EmbeddedNavigationEvent;
 import com.tasktop.c2c.server.common.web.client.event.EmbeddedNavigationEventHandler;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
@@ -93,22 +95,39 @@ public class App {
 		});
 
 		eventBus.addHandler(LogoutEvent.TYPE, new LogoutEventHandler() {
+
 			@Override
 			public void onLogout() {
-				injector.getProfileService().logout(new AsyncCallbackSupport<Boolean>() {
-					@Override
-					public void success(Boolean result) {
-						injector.getAppState().setCredentials(null);
-						IPlace place = injector.getPlaceProvider().getAfterSignoutPlace();
-						place.displayOnArrival(Message.createSuccessMessage("Signed out"));
-						place.go();
-					}
-				});
+				if (injector.getAppState().getCredentials() == null) {
+					return;
+				}
+				AuthType authType = injector.getAppState().getCredentials().getAuthType();
+				if (authType == null || AuthType.LOCAL.equals(authType)) {
+					logoutFromLocalAuth();
+				} else if (AuthType.SSO.equals(authType)) {
+					logougFromSsoAuth();
+				}
 
 				// Now that we've made our call, wipe out our local credentials.
 				injector.getAppState().setCredentials(null);
 			}
 		});
 
+	}
+
+	protected void logoutFromLocalAuth() {
+		injector.getProfileService().logout(new AsyncCallbackSupport<Boolean>() {
+			@Override
+			public void success(Boolean result) {
+				injector.getAppState().setCredentials(null);
+				IPlace place = injector.getPlaceProvider().getAfterSignoutPlace();
+				place.displayOnArrival(Message.createSuccessMessage("Signed out"));
+				place.go();
+			}
+		});
+	}
+
+	protected void logougFromSsoAuth() {
+		Window.Location.assign(injector.getPlaceProvider().getSSOLogoutHref());
 	}
 }

@@ -28,4 +28,6 @@ public interface PlaceProvider {
 	IPlace getOrganizationAdminPlace(String orgId);
 
 	String getHelpHref();
+
+	String getSSOLogoutHref();
 }
