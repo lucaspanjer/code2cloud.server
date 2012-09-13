@@ -144,8 +144,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 		return new Credentials(profile, roles);
 	}
 
-	@Override
-	public UserInfo getCurrentUserInfo() {
+	private UserInfo getCurrentUserInfo() {
 		UserInfo ui = new UserInfo();
 		ui.setCredentials(getCurrentUser());
 		if (ui.getCredentials() != null) {

@@ -43,8 +43,6 @@ public interface ProfileService extends RemoteService {
 
 	public Boolean logout();
 
-	public UserInfo getCurrentUserInfo();
-
 	public Boolean requestPasswordReset(String email) throws NoSuchEntityException;
 
 	public Credentials resetPassword(String token, String newPassword) throws NoSuchEntityException,

@@ -35,8 +35,6 @@ public interface ProfileServiceAsync {
 
 	void logout(AsyncCallback<Boolean> callback);
 
-	void getCurrentUserInfo(AsyncCallback<UserInfo> callback);
-
 	void updateProfile(com.tasktop.c2c.server.profile.domain.project.Profile profile,
 			AsyncCallback<Credentials> callback);
 
