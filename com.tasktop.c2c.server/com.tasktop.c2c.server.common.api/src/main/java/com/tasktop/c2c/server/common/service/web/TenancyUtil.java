@@ -48,20 +48,22 @@ public final class TenancyUtil {
 	 * modified.
 	 * 
 	 * @param projectIdentifier
+	 * @return the current tenant
 	 */
-	public static void setProjectTenancyContext(String projectIdentifier) {
+	public static ProfileHubTenant setProjectTenancyContext(String projectIdentifier) {
 		projectIdentifier = projectIdentifier.toLowerCase();
 		if (TenancyContextHolder.getContext() != null && TenancyContextHolder.getContext().getTenant() != null) {
 			Tenant tenant = TenancyContextHolder.getContext().getTenant();
 			if (tenant instanceof ProfileHubTenant) {
 				ProfileHubTenant phTenant = (ProfileHubTenant) tenant;
 				phTenant.setProjectIdentifier(projectIdentifier);
-				return;
+				return phTenant;
 			}
 		}
 		ProfileHubTenant tenant = createProjectTenant(projectIdentifier);
 		TenancyContextHolder.createEmptyContext();
 		TenancyContextHolder.getContext().setTenant(tenant);
+		return tenant;
 	}
 
 	public static ProfileHubTenant createProjectTenant(String projectIdentifier) {

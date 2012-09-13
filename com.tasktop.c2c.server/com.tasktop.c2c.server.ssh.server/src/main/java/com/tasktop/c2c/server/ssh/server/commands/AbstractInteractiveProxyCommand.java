@@ -56,7 +56,9 @@ import com.tasktop.c2c.server.common.service.io.FlushingChunkedOutputStream;
 import com.tasktop.c2c.server.common.service.io.InputPipe;
 import com.tasktop.c2c.server.common.service.io.MultiplexingInputStream;
 import com.tasktop.c2c.server.common.service.io.PacketType;
+import com.tasktop.c2c.server.common.service.web.ProfileHubTenant;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+import com.tasktop.c2c.server.internal.profile.service.ProfileHubTenantProvider;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
@@ -92,6 +94,9 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 	private AuthenticationTokenSerializer tokenSerializer = new AuthenticationTokenSerializer();
 
 	private InternalTenancyContextHttpHeaderProvider tenancySerializer = new InternalTenancyContextHttpHeaderProvider();
+
+	@Autowired
+	private ProfileHubTenantProvider tenantProvider;
 
 	private int bufferSize = 1024 * 16;
 
@@ -185,8 +190,7 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 								new PreAuthenticatedAuthenticationToken(user, projectSpecializedToken, user
 										.getAuthorities()));
 						try {
-							// setup the tenancy context. REVIEW org not setup
-							TenancyUtil.setProjectTenancyContext(projectId);
+							establishTenancyContext(projectId);
 							try {
 								if (!hasRequiredRoles()) {
 									getLogger().info(
@@ -225,6 +229,11 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 			getLogger().info("CommandException: " + e.getMessage(), e);
 			callback.onExit(e.getReturnCode(), e.getMessage());
 		}
+	}
+
+	protected void establishTenancyContext(String projectId) {
+		ProfileHubTenant tenant = TenancyUtil.setProjectTenancyContext(projectId);
+		tenantProvider.findTenant(tenant); // Will fill it, keep as current tenancy ctx
 	}
 
 	private void pathNotFound(String path) throws CommandException {
