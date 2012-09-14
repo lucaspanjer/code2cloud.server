@@ -17,6 +17,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.UpdateOrganizationAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.UpdateOrganizationResult;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
@@ -25,14 +26,13 @@ import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationAdminPlace;
-import com.tasktop.c2c.server.profile.web.ui.client.view.components.organization.OrganizationAdminView;
+import com.tasktop.c2c.server.profile.web.ui.client.view.components.organization.OrganizationAdminEditView;
 
-public class OrganizationAdminPresenter extends AbstractActivity implements OrganizationAdminView.Presenter,
+public class OrganizationAdminPresenter extends AbstractActivity implements OrganizationAdminEditView.Presenter,
 		SplittableActivity {
 
-	private boolean editing = false;
 	private Organization organization;
-	private OrganizationAdminView view = OrganizationAdminView.getInstance();
+	private OrganizationAdminEditView view = OrganizationAdminEditView.getInstance();
 
 	public OrganizationAdminPresenter() {
 	}
@@ -53,43 +53,30 @@ public class OrganizationAdminPresenter extends AbstractActivity implements Orga
 	}
 
 	@Override
-	public void onEdit() {
-		editing = true;
-		updateView();
-	}
-
-	@Override
 	public void onSaveOrganization() {
 		AppGinjector.get
 				.instance()
 				.getDispatchService()
 				.execute(new UpdateOrganizationAction(organization),
-						new AsyncCallbackSupport<UpdateOrganizationResult>() {
+						new AsyncCallbackSupport<UpdateOrganizationResult>(Message.createProgressMessage("Saving")) {
 							@Override
 							protected void success(UpdateOrganizationResult result) {
-								editing = false;
 								organization = result.get();
-								updateView();
-								ProfileGinjector.get.instance().getNotifier()
-										.displayMessage(Message.createSuccessMessage("Organization updated"));
+								IPlace after = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
+								after.displayOnArrival(Message.createSuccessMessage("Organization updated"));
+								after.go();
 							}
 						});
 	}
 
 	@Override
 	public void onCancelProjectEdit() {
-		editing = false;
-		updateView();
+		ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace().go();
 	}
 
 	@Override
 	public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 		panel.setWidget(view);
-	}
-
-	@Override
-	public boolean isEditing() {
-		return editing;
 	}
 
 }
