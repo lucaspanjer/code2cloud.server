@@ -37,7 +37,7 @@ import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 import com.tasktop.c2c.server.common.web.shared.KnowsErrorMessageAction;
 
 /**
- * Base classes for places that first make rpcs to authorize, then make the rest rpcs.
+ * Base classes for places that first make RPCs to authorize, then make the rest of the RPCs.
  * 
  * @author Clint Morgan (Tasktop Technologies Inc.)
  * 
