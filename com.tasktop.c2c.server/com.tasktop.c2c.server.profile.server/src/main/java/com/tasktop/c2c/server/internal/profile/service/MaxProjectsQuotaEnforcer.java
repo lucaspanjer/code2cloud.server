@@ -68,8 +68,8 @@ public class MaxProjectsQuotaEnforcer implements QuotaEnforcer<Project> {
 		Integer maxProjects = Integer.parseInt(quota.getValue());
 
 		if (org.getProjects().size() >= maxProjects) {
-			throw new ValidationException("Quota Violation", null);
+			throw new ValidationException("Maximum number of Projects (" + quota.getValue() + ") already reached.",
+					null);
 		}
-
 	}
 }
