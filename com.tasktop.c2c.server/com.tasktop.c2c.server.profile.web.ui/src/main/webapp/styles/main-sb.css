@@ -927,17 +927,6 @@ a.project-nav-item {
   width: 780px;
 }
 
-.spacer {
-  height: 0;
-  margin: 10px 0;
-  border-top: 2px solid #EDEEED;
-}
-
-.spacer.small {
-  border-color: #f1f1f1;
-  margin: 10px 0;
-}
-
 /**********
  *
  * 4.1 TASKS
