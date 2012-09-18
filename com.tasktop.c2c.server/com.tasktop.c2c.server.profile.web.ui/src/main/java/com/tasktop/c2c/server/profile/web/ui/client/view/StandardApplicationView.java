@@ -21,7 +21,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.event.AppScrollEvent;
 import com.tasktop.c2c.server.profile.web.ui.client.AppShell;
@@ -38,8 +37,6 @@ public class StandardApplicationView extends Composite implements AppShell {
 	AcceptsOneWidget headerContainer;
 	@UiField
 	AcceptsOneWidget contentContainer;
-	@UiField
-	protected SimplePanel footerContainer;
 
 	private boolean scrollNotificationScheduled = false;
 
@@ -58,8 +55,6 @@ public class StandardApplicationView extends Composite implements AppShell {
 			return;
 		}
 		initWidget(uiBinder.createAndBindUi(this));
-		Footer footer = GWT.create(Footer.class);
-		footerContainer.setWidget(footer);
 		// It would be nice for this not to be here, but for now it is.
 		addDomHandler(new ScrollHandler() {
 			@Override

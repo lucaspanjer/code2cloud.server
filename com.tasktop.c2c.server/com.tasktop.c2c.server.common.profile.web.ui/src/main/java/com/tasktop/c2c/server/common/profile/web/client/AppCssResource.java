@@ -23,6 +23,8 @@ public interface AppCssResource extends CssResource {
 
 	String headerWrapper();
 
+	String wrapper();
+
 	String headerNav();
 
 	String search();
@@ -49,5 +51,7 @@ public interface AppCssResource extends CssResource {
 	String spacer();
 
 	String small();
+
+	String push();
 
 }

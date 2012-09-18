@@ -21,6 +21,9 @@ a.disabled{
 	
 }
 
+.wrapper, .push {
+}
+
 .headerWrapper {
   background: #EFF5F9;
   border-bottom: 1px solid #BCC8D1;

@@ -31,6 +31,7 @@ import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.web.ui.client.event.LogoutEvent;
 import com.tasktop.c2c.server.profile.web.ui.client.event.LogoutEventHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.view.Footer;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -44,6 +45,9 @@ public class App {
 		addHandlers();
 
 		root.add(injector.getAppShell());
+
+		Footer footer = GWT.create(Footer.class);
+		root.add(footer);
 
 		ActivityManager headerActivityManager = new ActivityManager(injector.getHeaderActivityMapper(),
 				injector.getEventBus());

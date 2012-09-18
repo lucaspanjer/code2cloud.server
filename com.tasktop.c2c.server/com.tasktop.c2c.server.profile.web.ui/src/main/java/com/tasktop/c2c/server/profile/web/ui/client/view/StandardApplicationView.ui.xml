@@ -4,16 +4,13 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
    	<ui:with field='res' type='com.tasktop.c2c.server.common.profile.web.client.AppResources'/>
 	   
-		<g:HTMLPanel>
+		<g:HTMLPanel styleName="{res.appCss.wrapper}">
 			<div class="{res.appCss.headerWrapper}">
 				<g:SimplePanel ui:field="headerContainer"/>
 			</div>
 			<div class="{res.appCss.container}" id="main-content-container-div">
 				<g:SimplePanel ui:field="contentContainer" />
 			</div>
-			<div class="{res.appCss.footerStretch}">
-		      	<g:SimplePanel ui:field="footerContainer"/> 
-		    </div>
-
+			<div class="{res.appCss.push}"></div>
 		</g:HTMLPanel>
 </ui:UiBinder>
