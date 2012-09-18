@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
 import com.tasktop.c2c.server.common.web.shared.URLEncoding;
 
 public class Path {
@@ -78,6 +79,13 @@ public class Path {
 
 		this.argumentCount = argumentCount;
 		this.pathElements = pathElements.toArray(new PathElement[pathElements.size()]);
+	}
+
+	public static String getBasePath() {
+		String moduleBaseURL = GWT.getModuleBaseURL().substring(0, GWT.getModuleBaseURL().lastIndexOf('/'));
+		String baseUrl = moduleBaseURL.replace(GWT.getModuleName(), "");
+		baseUrl = baseUrl.substring(baseUrl.indexOf("//") + 2, baseUrl.length());
+		return baseUrl.substring(baseUrl.indexOf('/') + 1, baseUrl.length());
 	}
 
 	private String computeHashtag(String stringPath) {

@@ -12,10 +12,12 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.profile.web.client.place;
 
+import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
+import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.Notifier;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
@@ -44,7 +46,9 @@ public abstract class AbstractPlace extends Place implements IPlace {
 	public abstract String getPrefix();
 
 	public String getHref() {
-		return Window.Location.createUrlBuilder().setHash(getHistoryToken()).buildString();
+		UrlBuilder urlBuilder = Window.Location.createUrlBuilder();
+		urlBuilder.setPath(Path.getBasePath());
+		return urlBuilder.setHash(getHistoryToken()).buildString();
 	}
 
 	@Override

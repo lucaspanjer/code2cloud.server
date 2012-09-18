@@ -2,6 +2,8 @@
  * GLOBAL
  */
 
+ document.write('<link rel="stylesheet" type="text/css" href="' + applicationRoot + '/styles/main-new.css">');
+
  var url = decodeURIComponent(window.location.toString());
  var appRoot = url.split('/s/')[0];
  var projectIdentifier = url.split('/s/')[1].split('/')[0];
@@ -31,10 +33,19 @@ _.close=_.CL=function(e){e.style.display='none';}
 var tmp = _.d.createElement('div');
 
 var pageHTML = ' '+
-' <iframe src="' + headerUrl + '" style="top:0px;left:0px;width:100%;height:151px;border:0px"></iframe>'+
+' <div id="headerDiv"></div>'+
 ' <div class="container" id="container"> '+
-' 	<div class="auto-refresh right"><a href="?auto_refresh=true">ENABLE AUTO REFRESH</a></div></div>' +
-' <iframe src="' + footerUrl +'" style="top:0px;left:0px;width:100%;height:74px;border:0px"></iframe>';
+' <div class="auto-refresh right"><a href="?auto_refresh=true">ENABLE AUTO REFRESH</a></div></div>'+
+' <div id="footerDiv"></div>';
+
+document.write('<scr'+'ipt type="text/javascript" src="'+appRoot+'/hudsonApi/hudsonApi.nocache.js">' +
+		'</scr'+'ipt>');
+
+document.write('<scr'+'ipt type="text/javascript">' + 
+		'window.onHudsonApiReady = function(){'+
+		'attachHeader("headerDiv","'+ projectIdentifier + '");'+
+		'attachFooter("footerDiv");};'+
+		'</scr'+'ipt>');
 
 var newHeader = _.d.createElement('div');
 newHeader.className = "site";

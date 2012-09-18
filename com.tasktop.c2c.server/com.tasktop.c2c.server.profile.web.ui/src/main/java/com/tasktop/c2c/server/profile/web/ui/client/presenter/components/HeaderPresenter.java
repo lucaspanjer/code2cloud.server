@@ -50,6 +50,10 @@ public class HeaderPresenter extends AbstractProfilePresenter implements Header.
 		addAuthListeners();
 	}
 
+	public Header getView() {
+		return view;
+	}
+
 	private void addAuthListeners() {
 		final AppGinjector injector = AppGinjector.get.instance();
 

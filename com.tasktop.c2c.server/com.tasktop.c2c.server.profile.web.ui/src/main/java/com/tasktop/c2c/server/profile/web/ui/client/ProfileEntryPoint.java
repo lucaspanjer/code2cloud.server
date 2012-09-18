@@ -15,11 +15,13 @@ package com.tasktop.c2c.server.profile.web.ui.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.tasktop.c2c.server.common.profile.web.client.AppState;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileServiceAsync;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMappingRegistry;
+import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
@@ -89,5 +91,17 @@ public class ProfileEntryPoint implements EntryPoint {
 	public void onModuleLoad() {
 		RootPanel.get().add(injector.getNotificationPanel());
 		injector.getApp().run(RootPanel.get());
+	}
+
+	protected void updateServiceTarget(ServiceDefTarget target, String servletMappingBase, String servletMappingSuffix) {
+		String ep = target.getServiceEntryPoint();
+
+		String expectedPath = Path.getBasePath() + "/" + servletMappingBase + "/" + servletMappingSuffix;
+		int i = ep.lastIndexOf(expectedPath);
+
+		if (i != -1) {
+			ep = ep.substring(0, i) + Path.getBasePath() + "/profile" + "/" + servletMappingSuffix;
+		}
+		target.setServiceEntryPoint(ep);
 	}
 }

@@ -19,7 +19,6 @@ import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.AdminProfilePlace;
-import com.tasktop.c2c.server.profile.web.ui.client.place.AppSectionPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.EmailVerificationPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.HelpPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.InvitationCreatorPlace;
@@ -57,10 +56,9 @@ public class ProfilePageMappings extends PageMappings {
 				AgreementsPlace.Agreements, ProjectAdminSourcePlace.ProjectAdminSCM,
 				ProjectAdminTeamPlace.ProjectAdminTeam, EmailVerificationPlace.VerifyEmail,
 				ResetPasswordPlace.ResetPassword, ProjectInvitationPlace.ProjectInvitation,
-				AppSectionPlace.AppSectionMapping, InvitationCreatorPlace.InvitationCreator,
-				AdminProfilePlace.AdminProfiles, ProjectAdminSettingsPlace.ProjectAdminSettings,
-				OrganizationAdminPlace.OrgAdminPlace, ScmCommitPlace.SCM_COMMIT, ScmRepoPlace.SCM_LOG,
-				ScmPlace.SCM_PLACE);
+				InvitationCreatorPlace.InvitationCreator, AdminProfilePlace.AdminProfiles,
+				ProjectAdminSettingsPlace.ProjectAdminSettings, OrganizationAdminPlace.OrgAdminPlace,
+				ScmCommitPlace.SCM_COMMIT, ScmRepoPlace.SCM_LOG, ScmPlace.SCM_PLACE);
 	}
 
 }

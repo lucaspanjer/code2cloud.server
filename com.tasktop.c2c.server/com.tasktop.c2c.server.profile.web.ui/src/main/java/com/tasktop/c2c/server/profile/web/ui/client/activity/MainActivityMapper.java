@@ -29,7 +29,6 @@ import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.web.client.presenter.ActivityProxy;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.profile.web.ui.client.place.AdminProfilePlace;
-import com.tasktop.c2c.server.profile.web.ui.client.place.AppSectionPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.HelpPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.InvitationCreatorPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
@@ -46,7 +45,6 @@ import com.tasktop.c2c.server.profile.web.ui.client.place.UserAccountPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.ProjectAdminActivity;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.AdminProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.AgreementsPresenter;
-import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.AppSectionPresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.CreateInvitationPresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.DeploymentsPresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.HelpPresenter;
@@ -62,7 +60,6 @@ import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.Project
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.SignInPresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.SignUpPresenterImpl;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.AgreementsView;
-import com.tasktop.c2c.server.profile.web.ui.client.view.components.AppSectionView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.CreateInvitationView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.PasswordResetRequestView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.PasswordResetView;
@@ -564,8 +561,6 @@ public class MainActivityMapper implements ActivityMapper {
 			return activity;
 		} else if (place instanceof AgreementsPlace) {
 			return new AgreementsPresenter(AgreementsView.getInstance(), (AgreementsPlace) place);
-		} else if (place instanceof AppSectionPlace) {
-			return new AppSectionPresenter(AppSectionView.getInstance(), (AppSectionPlace) place);
 		} else if (place instanceof InvitationCreatorPlace) {
 			return new CreateInvitationPresenter(new CreateInvitationView());
 		} else if (place instanceof AdminProfilePlace) {

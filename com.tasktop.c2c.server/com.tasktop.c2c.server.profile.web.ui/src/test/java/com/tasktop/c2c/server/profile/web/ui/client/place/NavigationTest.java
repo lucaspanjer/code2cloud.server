@@ -114,7 +114,7 @@ public class NavigationTest {
 					Assert.assertEquals(lastPlace.getClass(), place.getClass());
 				}
 
-				if (place instanceof AppSectionPlace) {
+				if (place instanceof HudsonHeaderPlace) {
 					continue; // FIXME
 				}
 

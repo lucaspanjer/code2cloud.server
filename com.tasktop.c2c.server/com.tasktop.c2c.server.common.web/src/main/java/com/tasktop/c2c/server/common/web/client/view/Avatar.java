@@ -12,7 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.web.client.view;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.UrlBuilder;
+import com.google.gwt.user.client.Window;
+import com.tasktop.c2c.server.common.web.client.navigation.Path;
 
 /**
  * Utility for working with avatars.
@@ -38,12 +40,11 @@ public class Avatar {
 	private static final String[] alternateAvatarUrls;
 	static {
 		String[] alternates = new String[Size.values().length];
-		String moduleBaseURL = GWT.getHostPageBaseURL();
-		if (!moduleBaseURL.endsWith("/")) {
-			moduleBaseURL = moduleBaseURL + '/';
-		}
+		UrlBuilder urlBuilder = new UrlBuilder().setProtocol(Window.Location.getProtocol())
+				.setHost(Window.Location.getHost()).setPath(Path.getBasePath());
+
 		for (Size size : Size.values()) {
-			alternates[size.ordinal()] = moduleBaseURL + "images/default_avatar" + size.getSize() + ".png";
+			alternates[size.ordinal()] = urlBuilder.buildString() + "/images/default_avatar" + size.getSize() + ".png";
 		}
 		alternateAvatarUrls = alternates;
 	}

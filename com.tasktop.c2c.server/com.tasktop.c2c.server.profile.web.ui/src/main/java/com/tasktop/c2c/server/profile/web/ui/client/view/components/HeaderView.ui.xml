@@ -9,9 +9,8 @@
 	<g:HTMLPanel styleName="{res.appCss.headerWrapper}">
 		<div class="{res.appCss.header}">
   			<div class="{res.appCss.headerNav}">
-				<a class="{res.appCss.logo}" href="#">
-					<g:Image ui:field="logoImage"/>
-				</a>
+				<g:Anchor  styleName="{res.appCss.logo}" ui:field="logoAnchor">
+				</g:Anchor>
 				<a:FormSectionPanel styleName="{res.appCss.search}">
 					<g:HTMLPanel>
 						<g:TextBox ui:field="search" addStyleNames="{res.appCss.search}"/>

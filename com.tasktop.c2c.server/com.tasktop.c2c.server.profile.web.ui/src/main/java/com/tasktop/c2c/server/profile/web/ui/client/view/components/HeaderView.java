@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
+import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 
@@ -44,6 +45,8 @@ public class HeaderView extends BaseHeaderView implements Header {
 
 	private static HeaderViewUiBinder uiBinder = GWT.create(HeaderViewUiBinder.class);
 
+	@UiField
+	protected Anchor logoAnchor;
 	@UiField
 	protected Button searchButton;
 	@UiField
@@ -57,13 +60,14 @@ public class HeaderView extends BaseHeaderView implements Header {
 
 	protected UserMenuPopupPanel userMenuPopupPanel = null;
 
-	@UiField(provided = true)
-	public Image logoImage = new Image(ProfileGinjector.get.instance().getAppResources().logo());
-
 	private HeaderView() {
 		ProfileGinjector.get.instance().getAppResources().appCss().ensureInjected();
 
 		initWidget(uiBinder.createAndBindUi(this));
+
+		Image logoImage = new Image(ProfileGinjector.get.instance().getAppResources().logo());
+		logoAnchor.getElement().appendChild(logoImage.getElement());
+		logoAnchor.setHref(ProjectsPlace.createPlace().getHref());
 
 		signIn.setHref(SignInPlace.createPlace().getHref());
 
