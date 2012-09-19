@@ -32,15 +32,19 @@ import com.tasktop.c2c.server.internal.tasks.domain.Profile;
 @Ignore
 public class TestSecurity {
 
-	public static void login(Profile profile) {
-		AuthenticationToken token = createToken(profile);
+	public static void login(Profile profile, String... roles) {
+		AuthenticationToken token = createToken(profile, roles);
 		login(token);
 	}
 
-	public static AuthenticationToken createToken(Profile profile) {
+	public static AuthenticationToken createToken(Profile profile, String... roleNames) {
 		List<String> roles = new ArrayList<String>();
 		// add the default role
 		roles.add(Role.User);
+		// add other roles as specified
+		for (String role : roleNames) {
+			roles.add(role);
+		}
 		AuthenticationToken token = new AuthenticationToken();
 		token.setAuthorities(roles);
 		token.setExpiry(new Date(System.currentTimeMillis() + 100000L));

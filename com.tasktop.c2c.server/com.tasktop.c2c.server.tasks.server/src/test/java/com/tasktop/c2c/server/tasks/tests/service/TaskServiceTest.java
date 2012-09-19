@@ -64,10 +64,12 @@ import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
+import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.domain.SortInfo;
 import com.tasktop.c2c.server.common.service.domain.SortInfo.Order;
 import com.tasktop.c2c.server.common.service.domain.criteria.ColumnCriteria;
@@ -113,6 +115,7 @@ import com.tasktop.c2c.server.tasks.domain.TaskActivity;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity.FieldUpdate;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity.Type;
 import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
+import com.tasktop.c2c.server.tasks.domain.TaskHandle;
 import com.tasktop.c2c.server.tasks.domain.TaskResolution;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
@@ -4389,24 +4392,6 @@ public class TaskServiceTest {
 	}
 
 	@Test
-	public void updateTask_workLogsAuthoredByCurrentUserOnly() throws Exception {
-		com.tasktop.c2c.server.tasks.domain.Task mockTask = getMockTask();
-		WorkLog worklog = new WorkLog();
-
-		// Not the current user. This should not validate.
-		worklog.setProfile(getCreatedMockTaskUserProfile());
-		worklog.setDateWorked(new Date());
-		worklog.setHoursWorked(BigDecimal.valueOf(3.4));
-		mockTask.getWorkLogs().add(worklog);
-
-		Assert.assertFalse(currentUser.getLoginName().equals(mockTask.getWorkLogs().get(0).getProfile().getLoginName()));
-
-		com.tasktop.c2c.server.tasks.domain.Task createdTask = taskService.createTask(mockTask);
-		Assert.assertEquals(1, createdTask.getWorkLogs().size());
-		Assert.assertEquals(currentUser.getLoginName(), createdTask.getWorkLogs().get(0).getProfile().getLoginName());
-	}
-
-	@Test
 	public void createUpdateIteration() throws ValidationException, EntityNotFoundException {
 		RepositoryConfiguration originalConfig = taskService.getRepositoryContext();
 
@@ -4555,5 +4540,236 @@ public class TaskServiceTest {
 		task = taskService.updateTask(task);
 		Assert.assertEquals(1, task.getCommits().size());
 
+	}
+
+	@Test
+	// for task 4413: testing prior behaviours of setting logged in user
+	// for Reporter, Comment Author, Work Logs
+	public void testCreateTaskSetsPropertiesAsUser() throws Exception {
+		// build our sample Task
+		com.tasktop.c2c.server.tasks.domain.Task mock = getMockTask();
+		String commentText = "Hi, I'm so excited to add a comment!!!!";
+		mock.addComment(commentText);
+		WorkLog origWorkLog = new WorkLog();
+		String workLogComment = "I did this!!!";
+		origWorkLog.setComment(workLogComment);
+		origWorkLog.setHoursWorked(new BigDecimal(1.0));
+		List<WorkLog> origWorkLogs = new ArrayList<WorkLog>();
+		origWorkLogs.add(origWorkLog);
+		mock.setWorkLogs(origWorkLogs);
+
+		// save our Task
+		com.tasktop.c2c.server.tasks.domain.Task task = taskService.createTask(mock);
+
+		// assert that specific properties are set to logged in user ...
+		// Reporter
+		TaskUserProfile reporter = task.getReporter();
+		assertNotNull(reporter);
+		assertEquals(currentUser.getId(), reporter.getId());
+
+		// Comments
+		List<Comment> comments = task.getComments();
+		assertNotNull(comments);
+		assertEquals(1, comments.size());
+		assertEquals(commentText, comments.get(0).getCommentText());
+		assertEquals(currentUser.getId(), comments.get(0).getAuthor().getId());
+
+		// Work Logs
+		List<WorkLog> workLogs = task.getWorkLogs();
+		assertNotNull(workLogs);
+		assertEquals(1, workLogs.size());
+		assertEquals(workLogComment, workLogs.get(0).getComment());
+		assertEquals(currentUser.getId(), workLogs.get(0).getProfile().getId());
+
+		// Save an Attachment
+		TaskHandle taskHandle = new TaskHandle();
+		taskHandle.setId(task.getId());
+		taskHandle.setVersion(task.getVersion());
+		com.tasktop.c2c.server.tasks.domain.Attachment newAttachment = new com.tasktop.c2c.server.tasks.domain.Attachment();
+		newAttachment.setAttachmentData(new byte[10]);
+		newAttachment.setDescription("Not much to describe.");
+		newAttachment.setMimeType("text/plain");
+		newAttachment.setFilename("/dev/null");
+		Comment newComment = new Comment();
+		newComment.setCommentText("Yo");
+
+		taskService.saveAttachment(taskHandle, newAttachment, newComment);
+		task = taskService.retrieveTask(task.getId());
+
+		// Verify the Attachment submitter has been set
+		List<com.tasktop.c2c.server.tasks.domain.Attachment> attachments = task.getAttachments();
+		assertNotNull(attachments);
+		assertEquals(1, attachments.size());
+		for (com.tasktop.c2c.server.tasks.domain.Attachment attachment : attachments) {
+			assertEquals(currentUser.getId(), attachment.getSubmitter().getId());
+		}
+
+		// Verify the Comment author has been set
+		comments = task.getComments();
+		assertEquals(2, comments.size());
+		for (Comment comment : comments) {
+			assertEquals(currentUser.getId(), comment.getAuthor().getId());
+		}
+	}
+
+	@Test
+	// for task 4413
+	public void testCreateTaskAsAdminAllowsImpersonation() throws Exception {
+		// log in again, with the Admin role
+		TestSecurity.login(currentUser, Role.Admin);
+
+		// create a Profile that we'll be impersonating
+		Profile impersonatedGuy = getCreatedMockProfile();
+
+		// create a Task and impersonate our guy
+		com.tasktop.c2c.server.tasks.domain.Task mock = getMockTask();
+		TaskUserProfile tuImpersonatedGuy = ProfileConverter.copy(impersonatedGuy);
+
+		// set Reporter
+		mock.setReporter(tuImpersonatedGuy);
+
+		// add a Comment
+		Comment origComment = new Comment();
+		origComment.setCommentText("Yo");
+		origComment.setAuthor(tuImpersonatedGuy);
+		List<Comment> origComments = new ArrayList<Comment>();
+		origComments.add(origComment);
+		mock.setComments(origComments);
+
+		// add a Work Log
+		WorkLog origWorkLog = new WorkLog();
+		origWorkLog.setComment("I said, 'Yo'!");
+		origWorkLog.setHoursWorked(new BigDecimal(1.0));
+		origWorkLog.setProfile(tuImpersonatedGuy);
+		List<WorkLog> origWorkLogs = new ArrayList<WorkLog>();
+		origWorkLogs.add(origWorkLog);
+		mock.setWorkLogs(origWorkLogs);
+
+		// save the Task and ensure our impersonatedGuy remains set for specified properties
+		// (i.e., is not overwritten as the logged in user due to default behaviours)
+		com.tasktop.c2c.server.tasks.domain.Task task = taskService.createTask(mock);
+
+		// Reporter
+		TaskUserProfile reporter = task.getReporter();
+		assertNotNull(reporter);
+		assertEquals(impersonatedGuy.getRealname(), reporter.getRealname());
+
+		// Comments
+		List<Comment> comments = task.getComments();
+		assertNotNull(comments);
+		assertEquals(1, comments.size());
+		assertEquals(origComment.getCommentText(), comments.get(0).getCommentText());
+		assertEquals(impersonatedGuy.getId(), comments.get(0).getAuthor().getId());
+
+		// Work Logs
+		List<WorkLog> workLogs = task.getWorkLogs();
+		assertNotNull(workLogs);
+		assertEquals(1, workLogs.size());
+		assertEquals(origWorkLog.getComment(), workLogs.get(0).getComment());
+		assertEquals(impersonatedGuy.getId(), workLogs.get(0).getProfile().getId());
+
+		// Save an Attachment
+		TaskHandle taskHandle = new TaskHandle();
+		taskHandle.setId(task.getId());
+		taskHandle.setVersion(task.getVersion());
+		com.tasktop.c2c.server.tasks.domain.Attachment newAttachment = new com.tasktop.c2c.server.tasks.domain.Attachment();
+		newAttachment.setAttachmentData(new byte[10]);
+		newAttachment.setDescription("Not much to describe.");
+		newAttachment.setMimeType("text/plain");
+		newAttachment.setFilename("/dev/null");
+		newAttachment.setSubmitter(tuImpersonatedGuy);
+		Comment newComment = new Comment();
+		newComment.setCommentText("Yo");
+		newComment.setAuthor(tuImpersonatedGuy);
+
+		taskService.saveAttachment(taskHandle, newAttachment, newComment);
+		task = taskService.retrieveTask(task.getId());
+
+		// Verify the Attachment submitter is the same as before
+		List<com.tasktop.c2c.server.tasks.domain.Attachment> attachments = task.getAttachments();
+		assertNotNull(attachments);
+		assertEquals(1, attachments.size());
+		for (com.tasktop.c2c.server.tasks.domain.Attachment attachment : attachments) {
+			assertEquals(impersonatedGuy.getId(), attachment.getSubmitter().getId());
+		}
+
+		// Verify the Comment author is the same as before
+		comments = task.getComments();
+		assertEquals(2, comments.size());
+		for (Comment comment : comments) {
+			assertEquals(impersonatedGuy.getId(), comment.getAuthor().getId());
+		}
+	}
+
+	@Test(expected = InsufficientPermissionsException.class)
+	public void testNonAdminUserCannotSetDifferentTaskReporter() throws Exception {
+		// create a Task and set the Reporter to somebody else
+		com.tasktop.c2c.server.tasks.domain.Task mock = getMockTask();
+		mock.setReporter(ProfileConverter.copy(getCreatedMockProfile()));
+
+		// save the Task ... we should get an Exception here
+		taskService.createTask(mock);
+	}
+
+	@Test(expected = InsufficientPermissionsException.class)
+	public void testNonAdminUserCannotSetDifferentCommentAuthor() throws Exception {
+		com.tasktop.c2c.server.tasks.domain.Task mock = getMockTask();
+
+		// add a Comment
+		Comment origComment = new Comment();
+		origComment.setCommentText("Yo");
+		// set the Author to somebody else
+		origComment.setAuthor(ProfileConverter.copy(getCreatedMockProfile()));
+		List<Comment> origComments = new ArrayList<Comment>();
+		origComments.add(origComment);
+		mock.setComments(origComments);
+
+		// save the Task ... we should get an Exception here
+		taskService.createTask(mock);
+	}
+
+	@Test(expected = InsufficientPermissionsException.class)
+	public void testNonAdminUserCannotSetDifferentWorkLogProfile() throws Exception {
+		com.tasktop.c2c.server.tasks.domain.Task mock = getMockTask();
+
+		// add a Work Log
+		WorkLog origWorkLog = new WorkLog();
+		origWorkLog.setComment("I said, 'Yo'!");
+		origWorkLog.setHoursWorked(new BigDecimal(1.0));
+		// set the Profile to somebody else
+		origWorkLog.setProfile(ProfileConverter.copy(getCreatedMockProfile()));
+		List<WorkLog> origWorkLogs = new ArrayList<WorkLog>();
+		origWorkLogs.add(origWorkLog);
+		mock.setWorkLogs(origWorkLogs);
+
+		// save the Task ... we should get an Exception here
+		taskService.createTask(mock);
+	}
+
+	@Test(expected = InsufficientPermissionsException.class)
+	public void testNonAdminUserCannotSetDifferentAttachmentCommentAuthor() throws Exception {
+		// create a Task
+		com.tasktop.c2c.server.tasks.domain.Task mock = getMockTask();
+		com.tasktop.c2c.server.tasks.domain.Task task = taskService.createTask(mock);
+
+		// get another profile
+		TaskUserProfile anotherProfile = ProfileConverter.copy(getCreatedMockProfile());
+
+		// create an Attachment for the Task
+		TaskHandle taskHandle = new TaskHandle();
+		taskHandle.setId(task.getId());
+		taskHandle.setVersion(task.getVersion());
+		com.tasktop.c2c.server.tasks.domain.Attachment newAttachment = new com.tasktop.c2c.server.tasks.domain.Attachment();
+		newAttachment.setAttachmentData(new byte[10]);
+		newAttachment.setDescription("Not much to describe.");
+		newAttachment.setMimeType("text/plain");
+		newAttachment.setFilename("/dev/null");
+		newAttachment.setSubmitter(anotherProfile);
+		Comment newComment = new Comment();
+		newComment.setCommentText("Yo");
+		newComment.setAuthor(anotherProfile);
+
+		// save the Attachment ... this should give an Exception
+		taskService.saveAttachment(taskHandle, newAttachment, newComment);
 	}
 }

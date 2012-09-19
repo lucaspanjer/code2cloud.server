@@ -573,8 +573,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			throw new IllegalArgumentException("Cannot create a task with an ID specified - ID must be null");
 		}
 
-		// Since this is being created, set our user as the creator.
-		task.setReporter(getLoggedInTaskUserProfile());
+		task.setReporter(getAppropriateProfile(task.getReporter(), getLoggedInTaskUserProfile(), "Task Reporter"));
 
 		// Do a bunch of our initial validation and copying.
 		com.tasktop.c2c.server.internal.tasks.domain.Task internalTask = prepareTaskForSave(task);
@@ -737,14 +736,14 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		if (task.getComments() != null) {
 			for (com.tasktop.c2c.server.tasks.domain.Comment c : task.getComments()) {
 				if (c.getId() == null) {
-					c.setAuthor(loggedInUser);
+					c.setAuthor(getAppropriateProfile(c.getAuthor(), loggedInUser, "Comment Author"));
 				}
 			}
 		}
 		if (task.getWorkLogs() != null) {
 			for (com.tasktop.c2c.server.tasks.domain.WorkLog w : task.getWorkLogs()) {
 				if (w.getId() == null) {
-					w.setProfile(loggedInUser);
+					w.setProfile(getAppropriateProfile(w.getProfile(), loggedInUser, "Work Log Profile"));
 				}
 			}
 		}
@@ -1437,16 +1436,16 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			ConcurrentUpdateException {
 		com.tasktop.c2c.server.internal.tasks.domain.Task managedTask = find(
 				com.tasktop.c2c.server.internal.tasks.domain.Task.class, taskHandle.getId());
-		TaskUserProfile user = getLoggedInTaskUserProfile();
+		TaskUserProfile loggedInUser = getLoggedInTaskUserProfile();
 
 		entityManager.refresh(managedTask); // So that we get the latest/rounded value
 		checkForUpdateCollision(managedTask.getDeltaTs().getTime(), taskHandle.getVersion());
 
 		com.tasktop.c2c.server.internal.tasks.domain.Attachment internalAttachment = saveAttachment(attachment,
-				managedTask, user);
+				managedTask, loggedInUser);
 
 		if (comment != null) {
-			comment.setAuthor(getLoggedInTaskUserProfile());
+			comment.setAuthor(getAppropriateProfile(comment.getAuthor(), loggedInUser, "Comment Author"));
 			validate(comment);
 			Comment internalComment = TaskDomain.createManagedComment(comment);
 			internalComment.setTask(managedTask);
@@ -1468,11 +1467,11 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	}
 
 	private com.tasktop.c2c.server.internal.tasks.domain.Attachment saveAttachment(Attachment attachment,
-			com.tasktop.c2c.server.internal.tasks.domain.Task managedTask, TaskUserProfile user)
+			com.tasktop.c2c.server.internal.tasks.domain.Task managedTask, TaskUserProfile loggedInUser)
 			throws ValidationException {
 
 		validate(attachment);
-		attachment.setSubmitter(user);
+		attachment.setSubmitter(getAppropriateProfile(attachment.getSubmitter(), loggedInUser, "Attachment Submitter"));
 		com.tasktop.c2c.server.internal.tasks.domain.Attachment internalAttachment = TaskDomain
 				.createManaged(attachment);
 		internalAttachment.setBugs(managedTask);
@@ -2201,5 +2200,36 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		} catch (NoResultException e) {
 			throw new EntityNotFoundException(String.format("Property with name %s not found", name));
 		}
+	}
+
+	/**
+	 * This holds reusable logic for picking a Profile to be used based on the current value of the property we want to
+	 * set as well as the Roles of the logged-in user. This is where impersonation of another user Profile is enabled.
+	 * 
+	 * @param existingProfile
+	 *            the value that is currently set
+	 * @param loggedInUser
+	 *            the Profile of the user who is currently logged in
+	 * @param property
+	 *            the property we intend to set
+	 * @return a TaskUserProfile picked via other criteria
+	 */
+	private TaskUserProfile getAppropriateProfile(TaskUserProfile existingProfile, TaskUserProfile loggedInUser,
+			String property) {
+		TaskUserProfile retVal = existingProfile;
+		// If not set, use the logged in user Profile
+		if (existingProfile == null) {
+			retVal = loggedInUser;
+		} else {
+			// If the user has the Admin role, we allow it to impersonate the original reporter,
+			// but non-Admin users cannot
+			if (Security.hasRole(Role.Admin)) {
+				retVal = existingProfile;
+			} else if (!existingProfile.getLoginName().equals(loggedInUser.getLoginName())) {
+				throw new InsufficientPermissionsException(String.format(
+						"The %s cannot be set to a Profile other than the logged in Profile.", property));
+			}
+		}
+		return retVal;
 	}
 }
