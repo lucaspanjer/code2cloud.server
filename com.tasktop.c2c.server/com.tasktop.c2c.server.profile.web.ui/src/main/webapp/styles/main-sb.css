@@ -2006,6 +2006,7 @@ textarea.document {
   line-height: 38px;
   padding-right: 24px;
   padding-left: 10px;
+  cursor: pointer;
 }
 
 .discover-project:hover .info-graphic {
