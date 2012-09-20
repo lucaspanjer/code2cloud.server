@@ -468,7 +468,9 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			managedTask = find(com.tasktop.c2c.server.internal.tasks.domain.Task.class, task.getId());
 		}
 
-		verifyWorkflow(managedTask, task);
+		if (!Security.hasRole(Role.Admin)) {
+			verifyWorkflow(managedTask, task);
+		}
 
 		com.tasktop.c2c.server.internal.tasks.domain.Task internalTask = TaskDomain.createManaged(task);
 
@@ -1714,6 +1716,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return retProduct;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void handleMilestoneValueChanged(Short productId, String newValue, String oldValue) {
 		List<com.tasktop.c2c.server.internal.tasks.domain.Task> toUpdate = entityManager
 				.createQuery(
@@ -2027,6 +2030,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return (SavedTaskQuery) domainConverter.convert(managedQuery, createSimpleConversionContext());
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<SavedTaskQuery> listSavedQueries() {
 		List<SavedTaskQuery> result = new ArrayList<SavedTaskQuery>();
 

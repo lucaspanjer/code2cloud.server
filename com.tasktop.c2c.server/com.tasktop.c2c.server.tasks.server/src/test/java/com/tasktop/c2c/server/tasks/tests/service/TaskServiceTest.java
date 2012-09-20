@@ -1760,6 +1760,28 @@ public class TaskServiceTest {
 		assertTrue(updateTestCount > 0);
 	}
 
+	@Test
+	public void testAdminCanBypassStatusWorkflow() throws Exception {
+		// log in again, with the Admin role
+		TestSecurity.login(currentUser, Role.Admin);
+
+		// create a Task
+		com.tasktop.c2c.server.tasks.domain.Task mock = getMockTask();
+		com.tasktop.c2c.server.tasks.domain.Task task = taskService.createTask(mock);
+		assertEquals("UNCONFIRMED", task.getStatus().getValue());
+
+		List<com.tasktop.c2c.server.tasks.domain.TaskStatus> taskStatuses = taskService.getRepositoryContext()
+				.getStatuses();
+		for (com.tasktop.c2c.server.tasks.domain.TaskStatus ts : taskStatuses) {
+			// invalid statuses from unconfirmed: reopened, verified, closed
+			if ("REOPENED".equals(ts.getValue())) {
+				task.setStatus(ts);
+				task = taskService.updateTask(task);
+				assertEquals("REOPENED", task.getStatus().getValue());
+			}
+		}
+	}
+
 	private void ensureValidResolutionForStatus(com.tasktop.c2c.server.tasks.domain.Task task) {
 		if (task.getStatus().getValue().equals("RESOLVED")) {
 			task.setResolution(new TaskResolution());
