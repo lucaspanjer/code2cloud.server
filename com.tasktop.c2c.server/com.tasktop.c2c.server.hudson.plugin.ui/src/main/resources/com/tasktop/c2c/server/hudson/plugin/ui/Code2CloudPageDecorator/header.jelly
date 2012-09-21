@@ -17,7 +17,7 @@
 			if(theLink.rel == 'icon' || theLink.rel == 'shortcut icon')
 				headTag.removeChild(theLink);
 		}
-		document.write('<link rel="shortcut icon" type="image/x-icon" href="' + applicationRoot + '/content/favicon_png.png">');
+		document.write('<link rel="shortcut icon" type="image/x-icon" href="' + applicationRoot + '/content/favicon.ico">');
 
 		/* Set page CSS */
 		document.write('<link rel="stylesheet" type="text/css" href="' + applicationRoot + '/styles/reset.css">');
