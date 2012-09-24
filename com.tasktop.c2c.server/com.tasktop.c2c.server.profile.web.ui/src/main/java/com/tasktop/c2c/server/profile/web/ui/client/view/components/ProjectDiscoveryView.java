@@ -12,46 +12,43 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-import java.util.List;
-
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.ParagraphElement;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.EventTarget;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SelectionChangeEvent.Handler;
-import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.view.client.NoSelectionModel;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
-import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
+import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
+import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.view.NoCellListStyle;
 import com.tasktop.c2c.server.common.web.client.widgets.Pager;
-import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
-import com.tasktop.c2c.server.profile.web.ui.client.event.WatchProjectClickHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDashboardPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.IProjectDiscoryView;
 
@@ -85,6 +82,8 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 	Anchor ownerFilterAnchor;
 	@UiField
 	Anchor allFilterAnchor;
+
+	Anchor watchLink;
 	private Anchor[] filterAnchors;
 
 	@UiField
@@ -94,42 +93,23 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 	@UiField
 	Panel projectsPanel;
-	@UiField
-	Panel projectPopup;
-	@UiField
-	Panel projectPopupWrapper;
-	@UiField
-	SimpleActivityView activityView;
-	@UiField
-	Anchor projectTitle;
-	@UiField
-	Anchor watchLink;
-	@UiField
-	ParagraphElement projectDesc;
-
-	@UiField
-	Anchor closeLink;
 
 	@UiField
 	public Pager pager;
 
 	private CellList<Project> projectList;
-	private SingleSelectionModel<Project> model;
+	private NoSelectionModel<Project> model;
 	private Presenter presenter;
 
 	private ProjectDiscoveryView() {
 		initWidget(uiBinder.createAndBindUi(this));
 
 		projectList = new CellList<Project>(new ProjectCell(), new NoCellListStyle());
-		model = new SingleSelectionModel<Project>();
+		model = new NoSelectionModel<Project>();
 
-		model.addSelectionChangeHandler(new Handler() {
-
-			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
-				updateSelectedProject(model.getSelectedObject());
-			}
-		});
+		watchLink = new Anchor();
+		watchLink.setStyleName("button watch right");
+		DOM.setElementProperty(watchLink.getElement(), "id", "watchButton");
 
 		projectList.setSelectionModel(model);
 		projectsPanel.add(projectList);
@@ -138,9 +118,6 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 		setupFilterAnchors();
 	}
 
-	/**
-	 * 
-	 */
 	private void setupFilterAnchors() {
 		filterAnchors = new Anchor[] { publicFilterAnchor, watcherFilterAnchor, organizationFilterAnchor,
 				memberFilterAnchor, ownerFilterAnchor, allFilterAnchor };
@@ -194,71 +171,13 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 		});
 	}
 
-	private void updateSelectedProject(final Project newProject) {
-
-		// Clear out any previous activity data now that we've selected a new project.
-		activityView.clear();
-
-		if (newProject == null) {
-			return;
-		}
-
-		// REVIEW This should be in the presenter
-		// First, start our server-side async call for activities so that it gets going.
-		ProfileEntryPoint
-				.getInstance()
-				.getProfileService()
-				.getShortActivityList(newProject.getIdentifier(),
-						new AsyncCallbackSupport<List<ProjectActivity>>(new OperationMessage("Loading Activity")) {
-							@Override
-							protected void success(List<ProjectActivity> result) {
-								// Only render this activity stream if it's associated with the current project - the
-								// user could have changed their selection while waiting for results to come back
-								String curProjId = model.getSelectedObject() == null ? null : model.getSelectedObject()
-										.getIdentifier();
-								if (newProject.getIdentifier().equals(curProjId)) {
-									activityView.renderActivity(result);
-								}
-							}
-						});
-
-		// Make our popup visible.
-		projectPopup.setVisible(true);
-		projectTitle.setText(newProject.getName());
-		projectTitle.setHref(ProjectHomePlace.createPlace(newProject.getIdentifier()).getHref());
-		projectDesc.setInnerText(newProject.getDescription());
-
-		setupWatchButton(newProject);
-	}
-
-	private static final String ACTIVE_STYLE = "active";
-
-	private HandlerRegistration clickHandlerReg = null;
-
-	@UiHandler("closeLink")
-	void closePopup(ClickEvent e) {
-		projectPopup.setVisible(false);
-		// Deselect the current object.
-		if (model.getSelectedObject() != null) {
-			projectList.getSelectionModel().setSelected(model.getSelectedObject(), false);
-		}
+	@Override
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
+		update();
 	}
 
 	private void setupWatchButton(final Project newProject) {
-
-		// Clear our old handler, if it exists.
-		if (clickHandlerReg != null) {
-			clickHandlerReg.removeHandler();
-			clickHandlerReg = null;
-		}
-
-		// Also clear out the previous styles on this button, if they exist
-		String[] curStyles = watchLink.getStyleName().split(" ");
-		for (String style : curStyles) {
-			if ("watch".equals(style) || "watching".equals(style)) {
-				watchLink.removeStyleName(style);
-			}
-		}
 
 		if (AuthenticationHelper.isAnonymous() || !newProject.getAccessibility().equals(ProjectAccessibility.PUBLIC)) {
 			// Can't watch if you're anonymous.
@@ -280,23 +199,8 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 			watchLink.addStyleName("watch");
 			watchLink.setHTML("<span></span>Watch");
 			watchLink.setEnabled(true);
-
-			// If we're not watching this project, set up our watch handler now.
-			clickHandlerReg = watchLink.addClickHandler(new WatchProjectClickHandler(newProject) {
-
-				@Override
-				protected void onWatchSuccess(Project project) {
-					// Reconfig our watch button, so it's now rendered correctly.
-					setupWatchButton(project);
-				}
-			});
 		}
-	}
 
-	@Override
-	public void setPresenter(Presenter presenter) {
-		this.presenter = presenter;
-		update();
 	}
 
 	private void update() {
@@ -318,9 +222,9 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 	interface PageTemplate extends SafeHtmlTemplates {
 
-		@Template("<div class=\"discover-project {5}\">{1}<div class=\"project-heading\"><div class=\"info-graphic right\"><span>Show Details</span></div><h2>{0}</h2><div class=\"clear\"></div><div class=\"project-activity\"><span class=\"timestamp left\">{4}</span>{2}<div class=\"clear\"></div></div><div class=\"clear\"></div></div><p class=\"project-description\">{3}</p></div>")
+		@Template("<div class=\"discover-project\">{1}<div class=\"discover-watch\">{5}</div><div class=\"project-heading\"><h2>{0}</h2><div class=\"clear\"></div><div class=\"project-activity\"><span class=\"timestamp left\">{4}</span>{2}<div class=\"clear\"></div></div><div class=\"clear\"></div></div><p class=\"project-description\">{3}</p></div>")
 		SafeHtml createProjectCell(SafeHtml title, SafeHtml pointer, SafeHtml commitWatchLabels, SafeHtml desc,
-				SafeHtml dashboardLink, String activeClass);
+				SafeHtml dashboardLink, SafeHtml button);
 
 		@Template("<div class=\"pointer-holder\"><div class=\"pointer\"></div></div>")
 		SafeHtml createPointer();
@@ -333,8 +237,37 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 	private final class ProjectCell extends AbstractCell<Project> {
 
+		public ProjectCell() {
+			super("click");
+		}
+
+		@Override
+		public void onBrowserEvent(final Context context, final Element parent, final Project value, NativeEvent event,
+				ValueUpdater<Project> valueUpdater) {
+			EventTarget target = event.getEventTarget();
+			Element element = Element.as(target);
+			while (element.hasParentElement()) {
+				if (element.getId().equals("watchButton")) {
+					ProfileEntryPoint.getInstance().getProfileService()
+							.watchProject(value.getIdentifier(), new AsyncCallbackSupport<Void>() {
+								@Override
+								protected void success(Void result) {
+									Credentials credentials = ProfileEntryPoint.getInstance().getAppState()
+											.getCredentials();
+									credentials.getRoles().add(Role.Community + "/" + value.getIdentifier());
+
+									setValue(context, parent, value);
+								}
+							});
+					return;
+				}
+				element = element.getParentElement();
+			}
+		}
+
 		@Override
 		public void render(Context context, Project value, SafeHtmlBuilder sb) {
+
 			// Checking for null value and bailing out as recommended at
 			// https://code.google.com/webtoolkit/doc/trunk/DevGuideUiCellWidgets.html#custom-cell
 			if (value == null) {
@@ -378,14 +311,18 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 			SafeHtml dashboardLinkHtml = new SafeHtmlBuilder().appendHtmlConstant(dashboardLink.toString())
 					.toSafeHtml();
 
+			setupWatchButton(value);
+			SafeHtml safeWatchLink = new SafeHtmlBuilder().appendHtmlConstant(watchLink.getElement().getString())
+					.toSafeHtml();
+
 			// Now, spit out HTML to render this row.
 			sb.append(TEMPLATE.createProjectCell(projectLinkHtml, pointer, commiterWatcherLabel, safeDesc,
-					dashboardLinkHtml, isSelected ? ACTIVE_STYLE : ""));
+					dashboardLinkHtml, safeWatchLink));
+
 		}
 	}
 
 	private void selectedFilterChanged(ProjectRelationship projectRelationship) {
-		closePopup(null);
 		setSelectedFilter(projectRelationship);
 		presenter.setProjectRelationship(projectRelationship); // Triggers RPC
 	}

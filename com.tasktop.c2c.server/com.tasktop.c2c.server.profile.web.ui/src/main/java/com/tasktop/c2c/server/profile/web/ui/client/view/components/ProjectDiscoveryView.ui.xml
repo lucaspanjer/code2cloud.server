@@ -30,25 +30,9 @@
 
 			<div class="project-detail-container discover">
 				<div class="discover-project-wrap">
-					
-					<g:HTMLPanel styleName="discover-popup-wrap active" ui:field="projectPopupWrapper">
+
+					<g:HTMLPanel styleName="discover-popup-wrap active">
 						<g:FlowPanel ui:field="projectsPanel" styleName="discover-project-list"/>
-						
-						<!--  Popup -->
-						<g:HTMLPanel styleName="discover-popup-content" ui:field="projectPopup" visible="false">
-							<div class="close">
-								<g:Anchor ui:field="closeLink" styleName="misc-icon close right"><span></span>Close</g:Anchor>
-							</div>
-							<h2>
-								<g:Anchor ui:field="projectTitle"/>
-								<g:Anchor ui:field="watchLink" styleName="button watch right"><span></span>Watch</g:Anchor>
-							</h2>
-							<div class="clear"></div>
-							<p ui:field="projectDesc"></p>
-							<div class="activities">
-								<c:SimpleActivityView ui:field='activityView'/>	
-							</div>
-						</g:HTMLPanel>
 						
 						<div class="discover-dashboard">
                           <h2>Welcome to <ui:text from='{msg.code2Cloud}'/>!</h2>

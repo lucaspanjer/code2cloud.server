@@ -1898,6 +1898,10 @@ textarea.document {
   padding-bottom: 5px;
 }
 
+.discover-watch {
+  padding-right: 10px;
+}
+
 .discover-graphic {
   width: 300px;
   height: 144px;
