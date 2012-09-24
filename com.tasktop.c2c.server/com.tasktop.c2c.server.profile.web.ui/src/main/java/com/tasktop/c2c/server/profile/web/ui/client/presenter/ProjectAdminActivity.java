@@ -74,8 +74,7 @@ public class ProjectAdminActivity extends AbstractActivity implements Splittable
 							protected void success(DeleteProjectResult result) {
 								AppGinjector.get.instance().getEventBus().fireEvent(new ClearCacheEvent());
 
-								Message message = Message
-										.createSuccessMessage("Project deletion has started. This may take a minute.");
+								Message message = Message.createSuccessMessage("Project deleted.");
 
 								IPlace p = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
 								p.displayOnArrival(message);
