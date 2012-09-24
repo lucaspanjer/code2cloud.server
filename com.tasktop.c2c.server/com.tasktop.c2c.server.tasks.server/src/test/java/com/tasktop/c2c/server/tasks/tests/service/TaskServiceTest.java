@@ -2063,7 +2063,7 @@ public class TaskServiceTest {
 	}
 
 	@Test
-	public void testCreateWithInitialComments() throws ValidationException, EntityNotFoundException {
+	public void testCreateWithInitialComment() throws ValidationException, EntityNotFoundException {
 		com.tasktop.c2c.server.tasks.domain.Task toCreate = getMockTask();
 		String c1Text = "c1Text";
 
@@ -2076,7 +2076,37 @@ public class TaskServiceTest {
 		com.tasktop.c2c.server.tasks.domain.Task created = taskService.createTask(toCreate);
 		assertEquals(1, created.getComments().size());
 		assertEquals(c1Text, created.getComments().get(0).getCommentText());
+	}
 
+	@Test
+	public void testCreateWithInitialComments() throws ValidationException, EntityNotFoundException {
+		com.tasktop.c2c.server.tasks.domain.Task toCreate = getMockTask();
+		String c1Text = "c1Text";
+		String c2Text = "c2Text";
+
+		Comment myComment = new Comment();
+		myComment.setCommentText(c1Text);
+		myComment.setAuthor(toCreate.getReporter());
+		myComment.setCreationDate(new Date());
+
+		Comment mySecondComment = new Comment();
+		mySecondComment.setCommentText(c2Text);
+		mySecondComment.setAuthor(toCreate.getReporter());
+		mySecondComment.setCreationDate(new Date());
+
+		toCreate.setComments(Arrays.asList(myComment, mySecondComment));
+		com.tasktop.c2c.server.tasks.domain.Task created = taskService.createTask(toCreate);
+		assertEquals(2, created.getComments().size());
+		boolean foundComment1 = false;
+		boolean foundComment2 = false;
+		for (Comment c : created.getComments()) {
+			if (c1Text.equals(c.getCommentText()))
+				foundComment1 = true;
+			else if (c2Text.equals(c.getCommentText()))
+				foundComment2 = true;
+		}
+		assertTrue(foundComment1);
+		assertTrue(foundComment2);
 	}
 
 	private int getNumCommentsInDB() {
