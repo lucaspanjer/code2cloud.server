@@ -29,7 +29,6 @@ import com.tasktop.c2c.server.common.tests.util.TestResourceUtil;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.TemplateProcessingConfigurator;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/applicationContext-test.xml" })
 public class TemplateProcessingConfiguratorTest {

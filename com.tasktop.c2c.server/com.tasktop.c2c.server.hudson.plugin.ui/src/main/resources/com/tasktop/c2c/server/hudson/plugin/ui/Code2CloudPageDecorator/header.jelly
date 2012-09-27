@@ -3,8 +3,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=100"> 
 	<script type="text/javascript">
 		var pageUrl = decodeURIComponent(window.location.toString());
-		var applicationRoot = pageUrl.split('/s/')[0];
-		var applicationId = pageUrl.split('/s/')[1].split('/')[0];
+		var applicationRoot = pageUrl.split(/\/s.?\//)[0];
+		var applicationId = pageUrl.split(/\/s.?\//)[1].split('/')[0];
 
 		/* Set page title */
 		document.title = 'Builds for ' + applicationId + ' - Code2Cloud';

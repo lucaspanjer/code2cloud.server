@@ -27,6 +27,7 @@
 					p:warTemplateFile="${alm.rootDir}/configuration/template/hudson-war/hudson.war"
 					p:targetHudsonHomeBaseDir="${alm.dataDir}/hudson-homes"
 					p:targetWebappsDir="${alm.hudson.webappsDir}"
+					p:hudsonPath="${alm.hudson.path}"
 				/>			
 			</list>
 		</property>
@@ -46,5 +47,7 @@
 					p:fromBaseDir="${alm.dataDir}/hudson-homes" p:toBaseDir="${alm.dataDir}/deleted" p:toDirName="hudson-home"/>
 			</list>
 		</property>
+		
 	</bean>
+		
 </beans>

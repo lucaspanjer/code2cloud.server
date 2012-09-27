@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.profile.service;
 
 import com.tasktop.c2c.server.common.service.BaseProfileConfiguration;
+import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 
 /**
  * Simple container class for the configuration needed by profile service.
@@ -67,5 +68,36 @@ public class ProfileServiceConfiguration extends BaseProfileConfiguration {
 
 	public void setAppName(String appName) {
 		this.appName = appName;
+	}
+
+	public String getUrlForService(ProjectService projectService) {
+		if (projectService.getExternalUrl() != null) {
+			return projectService.getExternalUrl();
+		} else {
+			String restOfUrl = "";
+			switch (projectService.getType()) {
+			case BUILD:
+				restOfUrl = "hudson/";
+				break;
+			case MAVEN:
+				restOfUrl = "maven/";
+				break;
+			case SCM:
+				restOfUrl = "scm/";
+				break;
+			case TASKS:
+				restOfUrl = "tasks/";
+				break;
+			case WIKI:
+				restOfUrl = "wiki/";
+				break;
+			case REVIEW:
+				restOfUrl = "gerrit/";
+				break;
+			}
+
+			return this.getServiceUrlPrefix(projectService.getProjectServiceProfile().getProject().getIdentifier())
+					+ restOfUrl;
+		}
 	}
 }

@@ -27,8 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
 
 /**
  * Sets up the hudson service and performs the following tasks:
@@ -54,6 +54,7 @@ public class HudsonServiceConfigurator implements Configurator {
 	private String warTemplateFile;
 	private String targetHudsonHomeBaseDir;
 	private String targetWebappsDir;
+	private String hudsonPath;
 
 	@Override
 	public void configure(ProjectServiceConfiguration configuration) {
@@ -116,8 +117,9 @@ public class HudsonServiceConfigurator implements Configurator {
 			// Clean up our resources.
 			jarOutStream.close();
 
-			String deployedUrl = configuration.getProperties()
-					.get(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL) + "hudson/";
+			String deployedUrl = configuration.getProperties().get(ProjectServiceConfiguration.PROFILE_BASE_URL)
+					+ hudsonPath + configuration.getProperties().get(ProjectServiceConfiguration.PROJECT_ID)
+					+ "/hudson/";
 			deployedUrl.replace("//", "/");
 			URL deployedHudsonUrl = new URL(deployedUrl);
 			String webappName = deployedHudsonUrl.getPath();
@@ -186,5 +188,10 @@ public class HudsonServiceConfigurator implements Configurator {
 	@Required
 	public void setTargetWebappsDir(String targetWebappsDir) {
 		this.targetWebappsDir = targetWebappsDir;
+	}
+
+	@Required
+	public void setHudsonPath(String hudsonPath) {
+		this.hudsonPath = hudsonPath;
 	}
 }

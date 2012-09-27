@@ -121,35 +121,7 @@ public class WebServiceDomain {
 			result.setAvailable(false);
 		}
 
-		if (internalService.getExternalUrl() != null) {
-			result.setUrl(internalService.getExternalUrl());
-		} else {
-			String restOfUrl = "";
-			switch (internalService.getType()) {
-			case BUILD:
-				restOfUrl = "hudson/";
-				break;
-			case MAVEN:
-				restOfUrl = "maven/";
-				break;
-			case SCM:
-				restOfUrl = "scm/";
-				break;
-			case TASKS:
-				restOfUrl = "tasks/";
-				break;
-			case WIKI:
-				restOfUrl = "wiki/";
-				break;
-			case REVIEW:
-				restOfUrl = "gerrit/";
-				break;
-			}
-
-			result.setUrl(configuration.getServiceUrlPrefix(internalService.getProjectServiceProfile().getProject()
-					.getIdentifier())
-					+ restOfUrl);
-		}
+		result.setUrl(configuration.getUrlForService(internalService));
 
 		return result;
 	}

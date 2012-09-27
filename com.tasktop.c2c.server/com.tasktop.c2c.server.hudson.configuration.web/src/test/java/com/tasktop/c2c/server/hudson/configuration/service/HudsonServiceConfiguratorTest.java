@@ -18,8 +18,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -95,11 +96,15 @@ public class HudsonServiceConfiguratorTest {
 			String expectedDestFile = webappsTarget + "s#test#hudson.war";
 			configurator.setTargetHudsonHomeBaseDir(expectedHomeDir);
 			configurator.setTargetWebappsDir(webappsTarget);
-
+			configurator.setHudsonPath("/s/");
 			ProjectServiceConfiguration config = new ProjectServiceConfiguration();
 			config.setProjectIdentifier("test123");
-			config.setProperties(Collections.singletonMap(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL,
-					"https://qcode.cloudfoundry.com/s/test/"));
+
+			Map<String, String> m = new HashMap<String, String>();
+			m.put(ProjectServiceConfiguration.PROJECT_ID, "test");
+			m.put(ProjectServiceConfiguration.PROFILE_BASE_URL, "https://qcode.cloudfoundry.com");
+			config.setProperties(m);
+
 			// Now, run it against our test setup
 			configurator.configure(config);
 
@@ -179,12 +184,15 @@ public class HudsonServiceConfiguratorTest {
 			String webappsTarget = FileUtils.getTempDirectoryPath() + "/webapps/";
 			String expectedDestFile = webappsTarget + "s#test123#hudson.war";
 			configurator.setTargetWebappsDir(webappsTarget);
+			configurator.setHudsonPath("/s/");
 			configurator.setTargetHudsonHomeBaseDir("/some/silly/random/homeDir");
 
 			ProjectServiceConfiguration config = new ProjectServiceConfiguration();
 			config.setProjectIdentifier("test123");
-			config.setProperties(Collections.singletonMap(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL,
-					"https://qcode.cloudfoundry.com/s/test123/"));
+			Map<String, String> m = new HashMap<String, String>();
+			m.put(ProjectServiceConfiguration.PROJECT_ID, "test123");
+			m.put(ProjectServiceConfiguration.PROFILE_BASE_URL, "https://qcode.cloudfoundry.com");
+			config.setProperties(m);
 
 			// Now, run it against our test setup
 			configurator.configure(config);
