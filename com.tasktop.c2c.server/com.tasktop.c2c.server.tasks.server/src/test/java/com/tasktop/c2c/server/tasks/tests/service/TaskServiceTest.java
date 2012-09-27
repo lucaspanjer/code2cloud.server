@@ -65,6 +65,7 @@ import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
+import com.tasktop.c2c.server.common.service.JacksonJsonObjectMapper;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
@@ -76,6 +77,8 @@ import com.tasktop.c2c.server.common.service.domain.criteria.ColumnCriteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
 import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
+import com.tasktop.c2c.server.common.service.domain.criteria.RelativeDate;
+import com.tasktop.c2c.server.common.service.domain.criteria.TimeUnit;
 import com.tasktop.c2c.server.common.tests.util.ValidationAssert;
 import com.tasktop.c2c.server.event.domain.Event;
 import com.tasktop.c2c.server.event.domain.TaskActivityEvent;
@@ -456,6 +459,45 @@ public class TaskServiceTest {
 		assertEquals(0, result.getTotalResultSize().intValue());
 		assertEquals(0, result.getResultPage().size());
 
+	}
+
+	@Test
+	public void testFindTasksWithCriteria_RelativeDate() throws Exception {
+		setupTestData();
+
+		// sanity
+		assertTrue(tasks.size() > 20);
+
+		Date oneDayAgo = new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 1));
+		Date threeDaysAgo = new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 3));
+
+		int numExpectedTasks = 1;
+		Set<Integer> expectedTasks = new HashSet<Integer>();
+		for (Task task : tasks) {
+			if (expectedTasks.size() >= numExpectedTasks) {
+				task.setDeltaTs(threeDaysAgo);
+			} else {
+				task.setDeltaTs(oneDayAgo);
+			}
+			entityManager.persist(task);
+			expectedTasks.add(task.getId());
+		}
+
+		RelativeDate relativeDate = new RelativeDate(-2, TimeUnit.DAYS);
+
+		// convert it to JSON and back, to replicate what happens in a REST call
+		JacksonJsonObjectMapper jsonMapper = new JacksonJsonObjectMapper();
+		String relativeDateJson = jsonMapper.writeValueAsString(relativeDate);
+		Object relativeDateFromJson = jsonMapper.readValue(relativeDateJson, Object.class);
+
+		Criteria criteria = new ColumnCriteria(TaskFieldConstants.LAST_UPDATE_FIELD, Operator.GREATER_THAN,
+				relativeDateFromJson);
+		QuerySpec querySpec = new QuerySpec(new Region(0, tasks.size() * 2), null);
+		QueryResult<com.tasktop.c2c.server.tasks.domain.Task> result = taskService.findTasksWithCriteria(criteria,
+				querySpec);
+
+		assertEquals(numExpectedTasks, result.getTotalResultSize().intValue());
+		assertEquals(numExpectedTasks, result.getResultPage().size());
 	}
 
 	@Test

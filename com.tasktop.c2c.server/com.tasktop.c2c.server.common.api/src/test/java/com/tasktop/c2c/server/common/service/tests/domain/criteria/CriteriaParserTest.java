@@ -21,9 +21,11 @@ import org.junit.Test;
 
 import com.tasktop.c2c.server.common.service.domain.criteria.ColumnCriteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria;
+import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
 import com.tasktop.c2c.server.common.service.domain.criteria.CriteriaParser;
 import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
-import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
+import com.tasktop.c2c.server.common.service.domain.criteria.RelativeDate;
+import com.tasktop.c2c.server.common.service.domain.criteria.TimeUnit;
 
 public class CriteriaParserTest {
 
@@ -85,6 +87,26 @@ public class CriteriaParserTest {
 		assertCriteriaParses(naryCriteria3);
 	}
 
+	@Test
+	public void testParseRelativeDate() {
+		ColumnCriteria criteria = new ColumnCriteria("modificationDate", Operator.GREATER_THAN, new RelativeDate(-2,
+				TimeUnit.DAYS));
+		assertCriteriaParses(criteria);
+	}
+
+	@Test
+	public void testParseRelativeDateWithOtherCriteria() {
+		ColumnCriteria relDateCriteria = new ColumnCriteria("modificationDate", Operator.GREATER_THAN,
+				new RelativeDate(2, TimeUnit.HOURS));
+		ColumnCriteria columnCriteriaString = new ColumnCriteria("Foo", Operator.EQUALS, "Bar");
+		ColumnCriteria columnCriteriaNumber = new ColumnCriteria("A", Operator.EQUALS, 1);
+		ColumnCriteria columnCriteriaDate = new ColumnCriteria("Foo", Operator.EQUALS, new Date());
+		NaryCriteria naryCriteria1 = new NaryCriteria(Operator.OR, relDateCriteria, columnCriteriaString);
+		NaryCriteria naryCriteria2 = new NaryCriteria(Operator.OR, columnCriteriaNumber, columnCriteriaDate);
+		NaryCriteria criteria = new NaryCriteria(Operator.AND, naryCriteria1, naryCriteria2);
+		assertCriteriaParses(criteria);
+	}
+
 	private void assertCriteriaParses(Criteria criteria) {
 		String queryString = criteria.toQueryString();
 		System.out.println("Parsing " + queryString);
@@ -92,5 +114,4 @@ public class CriteriaParserTest {
 		assertNotNull(parsed);
 		assertEquals(criteria, parsed);
 	}
-
 }

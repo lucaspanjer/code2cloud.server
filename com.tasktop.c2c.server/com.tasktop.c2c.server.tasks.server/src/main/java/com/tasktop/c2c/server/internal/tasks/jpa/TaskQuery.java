@@ -34,6 +34,8 @@ import com.tasktop.c2c.server.common.service.domain.SortInfo;
 import com.tasktop.c2c.server.common.service.domain.criteria.ColumnCriteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
+import com.tasktop.c2c.server.common.service.domain.criteria.RelativeDate;
+import com.tasktop.c2c.server.common.service.domain.criteria.TimeUnit;
 import com.tasktop.c2c.server.internal.tasks.domain.AbstractReferenceEntity;
 import com.tasktop.c2c.server.internal.tasks.domain.Cc;
 import com.tasktop.c2c.server.internal.tasks.domain.Comment;
@@ -299,6 +301,12 @@ public class TaskQuery {
 		// Special case: dates get serialized over REST API as longs.
 		if (value instanceof Long && valueClass.equals(Date.class)) {
 			value = new Date((Long) value);
+		}
+		// Special case: RelativeDate (deserialized from JSON as a Map)
+		if (value instanceof Map && RelativeDate.isDeserializedRelativeDate((Map) value)) {
+			Map valueMap = (Map) value;
+			value = RelativeDate.calculateTime((Integer) valueMap.get(RelativeDate.KEY_TIME_VALUE),
+					TimeUnit.valueOf((String) valueMap.get(RelativeDate.KEY_TIME_UNIT)));
 		}
 		if (!valueClass.isAssignableFrom(value.getClass())) {
 			throw new IllegalArgumentException("Criteria value for field " + criteria.getColumnName()

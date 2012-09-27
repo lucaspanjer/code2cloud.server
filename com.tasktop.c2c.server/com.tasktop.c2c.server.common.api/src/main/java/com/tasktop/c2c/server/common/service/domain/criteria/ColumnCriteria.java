@@ -16,8 +16,9 @@ import java.util.Date;
 
 @SuppressWarnings("serial")
 public class ColumnCriteria extends AbstractCriteria {
-	private String columnName;
-	private Object columnValue;
+
+	protected String columnName;
+	protected Object columnValue;
 
 	public ColumnCriteria() {
 		// Nothing
@@ -115,11 +116,10 @@ public class ColumnCriteria extends AbstractCriteria {
 		} else if (columnValue instanceof String) {
 			valuePart = "'" + columnValue + "'";
 		} else if (columnValue instanceof Date) {
-			valuePart = "date:" + ((Date) columnValue).getTime();
+			valuePart = CriteriaParser.DATE_PREFIX + ((Date) columnValue).getTime();
 		} else {
 			valuePart = columnValue.toString();
 		}
 		return columnName + " " + getOperator().toQueryString() + " " + valuePart;
 	}
-
 }
