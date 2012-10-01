@@ -5,8 +5,8 @@
  document.write('<link rel="stylesheet" type="text/css" href="' + applicationRoot + '/styles/main-new.css">');
 
  var url = decodeURIComponent(window.location.toString());
- var appRoot = url.split('/s/')[0];
- var projectIdentifier = url.split('/s/')[1].split('/')[0];
+ var appRoot = url.split(/\/s.?\//)[0];
+ var projectIdentifier = url.split(/\/s.?\//)[1].split('/')[0];
 
  var headerUrl = appRoot + '/#projects/' + projectIdentifier + '/section/header-wrapper';
  var footerUrl = appRoot + '/#projects/' + projectIdentifier + '/section/footer-stretch';
