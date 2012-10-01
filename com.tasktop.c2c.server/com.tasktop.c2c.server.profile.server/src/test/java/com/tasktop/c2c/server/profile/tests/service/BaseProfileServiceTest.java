@@ -71,6 +71,7 @@ import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.Job;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.internal.profile.service.EmailJob;
 import com.tasktop.c2c.server.internal.profile.service.InternalProfileService;
@@ -477,6 +478,30 @@ public abstract class BaseProfileServiceTest {
 
 		// should throw EntityNotFoundException
 		profileService.createProject(0L, project);
+	}
+
+	@Test
+	public void testCreateProjectWithTenantOrg() throws Exception {
+		// create an organization and set it as the current tenant
+		String orgId = "qa-dev";
+		Organization org = new Organization();
+		org.setIdentifier(orgId);
+		org.setName("test organization");
+		entityManager.persist(org);
+		TenancyUtil.setOrganizationTenancyContext(orgId);
+
+		Profile profile = createMockProfile(entityManager);
+		entityManager.flush();
+
+		Project project = MockProjectFactory.create(null);
+		Long id = profileService.createProject(profile.getId(), project).getId();
+		assertNotNull(id);
+		Project project2 = entityManager.find(Project.class, id);
+		assertNotNull(project2);
+		assertTrue(project2.getIdentifier().startsWith(orgId));
+
+		// reset our tenant org so that other tests aren't affected
+		TenancyUtil.clearContext();
 	}
 
 	private <T> int getEntityCount(Class<T> entityClass) {

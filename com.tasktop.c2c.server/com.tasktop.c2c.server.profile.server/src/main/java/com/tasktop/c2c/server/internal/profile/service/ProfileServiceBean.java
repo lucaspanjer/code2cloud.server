@@ -510,6 +510,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			associatedOrg = getOrganizationByIdentfier(TenancyUtil.getCurrentTenantOrganizationIdentifer());
 		}
 
+		project.setOrganization(associatedOrg);
 		project.computeIdentifier();
 
 		securityPolicy.create(project);
@@ -525,7 +526,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		entityManager.flush();
 
 		if (associatedOrg != null) {
-			project.setOrganization(associatedOrg);
 			associatedOrg.getProjects().add(project);
 		}
 
