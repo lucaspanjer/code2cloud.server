@@ -15,13 +15,6 @@ package com.tasktop.c2c.server.internal.profile.service;
 import java.security.PublicKey;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -43,9 +36,6 @@ import com.tasktop.c2c.server.profile.domain.internal.SshPublicKey;
 @Service("authenticationService")
 public class ProfileAuthenticationServiceBean extends AbstractAuthenticationServiceBean<Profile> implements
 		UserDetailsService, PublicKeyAuthenticationService {
-
-	@PersistenceContext
-	protected EntityManager entityManager;
 
 	@Autowired
 	protected IdentityManagmentService identityManagmentService;
@@ -82,13 +72,8 @@ public class ProfileAuthenticationServiceBean extends AbstractAuthenticationServ
 	@Override
 	public AuthenticationToken authenticate(String username, PublicKey publicKey) throws AuthenticationException {
 
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Profile> query = criteriaBuilder.createQuery(Profile.class);
-		Root<Profile> root = query.from(Profile.class);
-		query.select(root).where(criteriaBuilder.equal(root.get("username"), username));
-
 		try {
-			Profile profile = entityManager.createQuery(query).getSingleResult();
+			Profile profile = identityManagmentService.getProfileByUsername(username);
 
 			for (SshPublicKey sshPublicKey : profile.getSshPublicKeys()) {
 				if (sshPublicKey.isSameAs(publicKey)) {
@@ -96,7 +81,7 @@ public class ProfileAuthenticationServiceBean extends AbstractAuthenticationServ
 				}
 			}
 			throw new AuthenticationException();
-		} catch (NoResultException e) {
+		} catch (EntityNotFoundException e) {
 			throw new UsernameNotFoundException(username);
 		}
 	}
