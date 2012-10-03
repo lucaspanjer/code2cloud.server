@@ -119,8 +119,10 @@ public class ProjectView extends AbstractComposite {
 		scmPanel.clear();
 
 		if (repositories != null) {
+			String organizationIdentifier = project.getOrganization() != null ? project.getOrganization()
+					.getIdentifier() : null;
 			for (ScmRepository repository : repositories) {
-				scmPanel.add(new ProjectScmRepositoryRow(repository));
+				scmPanel.add(new ProjectScmRepositoryRow(repository, organizationIdentifier));
 			}
 		}
 	}

@@ -25,6 +25,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.DeploymentServiceAsync;
 import com.tasktop.c2c.server.profile.web.ui.client.activity.HeaderActivityMapper;
 import com.tasktop.c2c.server.profile.web.ui.client.activity.MainActivityMapper;
 import com.tasktop.c2c.server.profile.web.ui.client.resources.AppConstants;
+import com.tasktop.c2c.server.profile.web.ui.client.view.components.ScmRepositoryUrlBuilder;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -52,6 +53,8 @@ public interface AppGinjector extends ProfileGinjector {
 	AppConstants getConstants();
 
 	AppConfiguration getConfiguration();
+
+	ScmRepositoryUrlBuilder getScmRepositoryUrlBuilder();
 
 	public static class get {
 		private static AppGinjector instance = null;

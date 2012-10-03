@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-import java.util.Arrays;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -21,9 +19,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
-import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
-import com.tasktop.c2c.server.scm.domain.ScmLocation;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 public class ProjectScmRepositoryRow extends Composite {
@@ -33,6 +29,8 @@ public class ProjectScmRepositoryRow extends Composite {
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 
+	private String organizationIdentifier;
+
 	@UiField
 	Label repoLabel;
 	@UiField
@@ -40,7 +38,8 @@ public class ProjectScmRepositoryRow extends Composite {
 	@UiField
 	TextBox url2TextBox;
 
-	public ProjectScmRepositoryRow(ScmRepository repository) {
+	public ProjectScmRepositoryRow(ScmRepository repository, String organizationIdentifier) {
+		this.organizationIdentifier = organizationIdentifier;
 		initWidget(uiBinder.createAndBindUi(this));
 
 		String repositoryName = repository.getUrl();
@@ -62,19 +61,6 @@ public class ProjectScmRepositoryRow extends Composite {
 	}
 
 	private String addUserToUrl(ScmRepository repository, String url) {
-		if (AuthenticationHelper.isAnonymous() || !repository.getScmLocation().equals(ScmLocation.CODE2CLOUD)) {
-			return url;
-		}
-		// Encoded protocols
-		for (String protocol : Arrays.asList("http://", "https://", "ssh://")) {
-			if (url.startsWith(protocol)) {
-				String encodedUserName = com.google.gwt.http.client.URL.encodePathSegment(ProfileGinjector.get
-						.instance().getAppState().getCredentials().getProfile().getUsername());
-
-				return protocol + encodedUserName + "@" + url.substring(protocol.length());
-			}
-		}
-
-		return url;
+		return AppGinjector.get.instance().getScmRepositoryUrlBuilder().buildUrl(repository, url, organizationIdentifier);
 	}
 }
