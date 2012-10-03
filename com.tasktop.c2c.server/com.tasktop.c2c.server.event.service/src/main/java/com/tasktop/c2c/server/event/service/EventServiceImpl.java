@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.tenancy.provider.TenantProvider;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.common.service.domain.Role;
@@ -37,6 +38,9 @@ public class EventServiceImpl implements EventService {
 	private List<EventListener> eventListeners;
 
 	private ExecutorService executorService = Executors.newCachedThreadPool();
+
+	@Autowired
+	private TenantProvider tenantProvider;
 
 	@Secured(Role.System)
 	@Override
@@ -60,9 +64,7 @@ public class EventServiceImpl implements EventService {
 		@Override
 		public Object call() throws Exception {
 
-			// REVIEW : no orgId short tenant ID, ...
-			TenancyUtil.setProjectTenancyContext(event.getProjectId());
-
+			TenancyUtil.establishProfileHubTenancyContextFromProjectIdentifier(event.getProjectId(), tenantProvider);
 			AuthUtils.assumeSystemIdentity(event.getProjectId());
 
 			try {

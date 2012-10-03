@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +44,7 @@ import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
-import com.tasktop.c2c.server.common.service.web.ProfileHubTenant;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementService;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceClient;
@@ -345,10 +344,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 		// Need to establish the project tenancy context so that it gets propagated to internal services (used to
 		// compute database names and file locations).
-		// FIXME feels like a hack
-		ProfileHubTenant currentTenant = (ProfileHubTenant) TenancyContextHolder.getContext().getTenant();
-		currentTenant.setProjectIdentifier(managedProject.getIdentifier());
-		tenantProvider.findTenant(currentTenant); // Will fill it, keep as current tenancy ctx
+		TenancyUtil.establishProfileHubTenancyContextFromProjectIdentifier(managedProject.getIdentifier(), tenantProvider);
 
 		List<ProjectServiceStatus> result = new ArrayList<ProjectServiceStatus>();
 

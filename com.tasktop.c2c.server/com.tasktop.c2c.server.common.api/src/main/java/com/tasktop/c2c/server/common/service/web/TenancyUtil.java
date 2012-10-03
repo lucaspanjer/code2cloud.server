@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.common.service.web;
 import org.springframework.tenancy.context.TenancyContext;
 import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.tenancy.core.Tenant;
+import org.springframework.tenancy.provider.TenantProvider;
 
 /**
  * Util class for working the the Hub/Profile's tenancy concepts.
@@ -64,6 +65,22 @@ public final class TenancyUtil {
 		TenancyContextHolder.createEmptyContext();
 		TenancyContextHolder.getContext().setTenant(tenant);
 		return tenant;
+	}
+
+	/**
+	 * Uses the TenantProvider to fill in details of the tenant, and resets the tenancy context to the project tenant.
+	 * 
+	 * @param projectIdentifier
+	 * @param tenantProvider
+	 * @return the current tenant with details provided
+	 */
+	public static Tenant establishProfileHubTenancyContextFromProjectIdentifier(String projectIdentifier,
+			TenantProvider tenantProvider) {
+		ProfileHubTenant tenant = createProjectTenant(projectIdentifier);
+		Tenant filledInTenant = tenantProvider.findTenant(tenant);
+		TenancyContextHolder.createEmptyContext();
+		TenancyContextHolder.getContext().setTenant(filledInTenant);
+		return filledInTenant;
 	}
 
 	public static ProfileHubTenant createProjectTenant(String projectIdentifier) {

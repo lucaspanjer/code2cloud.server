@@ -56,7 +56,6 @@ import com.tasktop.c2c.server.common.service.io.FlushingChunkedOutputStream;
 import com.tasktop.c2c.server.common.service.io.InputPipe;
 import com.tasktop.c2c.server.common.service.io.MultiplexingInputStream;
 import com.tasktop.c2c.server.common.service.io.PacketType;
-import com.tasktop.c2c.server.common.service.web.ProfileHubTenant;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.internal.profile.service.ProfileHubTenantProvider;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
@@ -232,8 +231,7 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 	}
 
 	protected void establishTenancyContext(String projectId) {
-		ProfileHubTenant tenant = TenancyUtil.setProjectTenancyContext(projectId);
-		tenantProvider.findTenant(tenant); // Will fill it, keep as current tenancy ctx
+		TenancyUtil.establishProfileHubTenancyContextFromProjectIdentifier(projectId, tenantProvider);
 	}
 
 	private void pathNotFound(String path) throws CommandException {
