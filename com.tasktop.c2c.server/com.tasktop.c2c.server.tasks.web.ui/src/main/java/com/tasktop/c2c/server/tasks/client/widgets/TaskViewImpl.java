@@ -726,6 +726,8 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 				if (event.getValue() && !editingFields.contains(descriptionEditableField)) {
 					startInlineEdit(descriptionEditableField);
+				} else {
+					cancelInlineEdit(descriptionEditableField);
 				}
 			}
 		});
@@ -1100,6 +1102,8 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 	private void updateTaskInternal(Task task) {
 		this.task = task;
+
+		adjustEditControls(null);
 
 		editTaskAnchor.setHref(ProjectEditTaskPlace.createPlace(projectIdentifier, task.getId()).getHref());
 		editTaskAnchor.setVisible(!AuthenticationHelper.isAnonymous());
