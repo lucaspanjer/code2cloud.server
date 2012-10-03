@@ -14,13 +14,14 @@ package com.tasktop.c2c.server.common.profile.web.shared.actions;
 
 import net.customware.gwt.dispatch.shared.Action;
 
+import com.tasktop.c2c.server.common.web.shared.WriteAction;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class AddMemberToProjectTeamAction implements Action<GetProjectTeamResult> {
+public class AddMemberToProjectTeamAction implements Action<GetProjectTeamResult>, WriteAction {
 	private String projectId;
 	private Profile profile;
 
