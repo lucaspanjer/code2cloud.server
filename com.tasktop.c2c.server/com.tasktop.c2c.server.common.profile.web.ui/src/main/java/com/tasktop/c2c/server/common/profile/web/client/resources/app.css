@@ -1,4 +1,4 @@
-@external .external-nav, .internal-nav, .prefix, .header, .footer, .search, .search-button, .headerNav, .button, .special, .selected, .disabled, .discover-project, .spacer, .small; 
+@external .external-nav, .internal-nav, .prefix, .header, .footer, .search, .search-button, .headerNav, .button, .special, .selected, .disabled, .discover-project, .spacer, .small, .watch; 
 
 a {
   color: #062A55;
@@ -214,6 +214,28 @@ a.disabled{
 .button.special a,
 .button.special a:hover {
   color: #fff;
+}
+
+.button.watch {
+	font-weight: bold;
+	color: #4C7300 !important;
+	border-color: #cce1a3;
+	background: #e9f1d5; /* Old browsers */
+	background: -moz-linear-gradient(top, #e9f1d5 1%, #cce1a3 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#e9f1d5), color-stop(100%,#cce1a3)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #e9f1d5 1%,#cce1a3 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #e9f1d5 1%,#cce1a3 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #e9f1d5 1%,#cce1a3 100%); /* IE10+ */
+	background: linear-gradient(top, #e9f1d5 1%,#cce1a3 100%); /* W3C */
+}
+
+.button.watch:hover {
+}
+
+.button.watch span {
+  padding-left: 28px;
+  background: url("styles/i/misc-icons.png") 3px -122px no-repeat;
+  line-height: 15px;
 }
 
 .discover-project {
