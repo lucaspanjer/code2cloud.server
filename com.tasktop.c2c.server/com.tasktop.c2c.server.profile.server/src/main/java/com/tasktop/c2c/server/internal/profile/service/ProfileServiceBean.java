@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.internal.profile.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -1592,53 +1593,74 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		}
 
 		String fromString = "FROM " + Project.class.getSimpleName() + " project, IN(project.projectProfiles) pp ";
-		String whereString;
+		StringBuilder whereStringBldr = new StringBuilder();
 		boolean needIdParam = true;
 		boolean needPubParam = false;
 		boolean needPrivParam = false;
 		switch (projectRelationship) {
 		case ALL:
-			whereString = "WHERE (project.accessibility = :public OR pp.profile.id = :id";
+			// include projects with org private accessibility and current user is a member of an org associated with
+			// the project
+			whereStringBldr.append("WHERE (project.accessibility = :public OR pp.profile.id = :id");
 			if (orgIdentifierOrNull != null) {
-				whereString += " OR project.accessibility = :organizationPrivate";
+				whereStringBldr.append(" OR project.accessibility = :organizationPrivate");
 				needPrivParam = true;
 			}
-			whereString += ") ";
+			whereStringBldr.append(") ");
 			needPubParam = true;
+			if (orgIdentifierOrNull == null) {
+				// include org-private projects with the same organization id as one the current user is associated with
+
+				// use the security context to find this user's organization id(s) in case this is held in something
+				// other than a database
+				List<String> orgIdsForUser = AuthUtils.findOrganizationIdsForCurrentUser();
+				if (orgIdsForUser.size() > 0) {
+					whereStringBldr.append("OR (project.accessibility = :organizationPrivate AND (");
+					Iterator<String> it = orgIdsForUser.iterator();
+					while (it.hasNext()) {
+						whereStringBldr.append("project.organization.identifier = '").append(it.next()).append("' ");
+						if (it.hasNext()) {
+							whereStringBldr.append("OR ");
+						}
+					}
+					whereStringBldr.append(")) ");
+					needPrivParam = true;
+				}
+			}
 			break;
 		case MEMBER:
-			whereString = "WHERE pp.profile.id = :id AND pp.user = true ";
+			whereStringBldr.append("WHERE pp.profile.id = :id AND pp.user = true ");
 			break;
 		case OWNER:
-			whereString = "WHERE pp.profile.id = :id AND pp.owner = true ";
+			whereStringBldr.append("WHERE pp.profile.id = :id AND pp.owner = true ");
 			break;
 		case ORGANIZATION_PRIVATE: // requires an organization
 			if (orgIdentifierOrNull == null) {
 				throw new IllegalArgumentException();
 			}
-			whereString = "WHERE project.accessibility = :organizationPrivate ";
+			whereStringBldr.append("WHERE project.accessibility = :organizationPrivate ");
 			needPrivParam = true;
 			needIdParam = false;
 			break;
 		case WATCHER:
-			whereString = "WHERE pp.profile.id = :id AND pp.community = true ";
+			whereStringBldr.append("WHERE pp.profile.id = :id AND pp.community = true ");
 			break;
 		case PUBLIC:
 			needIdParam = false;
 			needPubParam = true;
-			whereString = "WHERE project.accessibility = :public ";
+			whereStringBldr.append("WHERE project.accessibility = :public ");
 			break;
 		default:
 			throw new IllegalStateException();
 		}
 
 		if (orgIdentifierOrNull != null) {
-			whereString += " AND project.organization.identifier = :orgId ";
+			whereStringBldr.append(" AND project.organization.identifier = :orgId ");
 		}
-		whereString += " AND project.deleted = false ";
+		whereStringBldr.append(" AND project.deleted = false ");
 
-		Query totalResultQuery = entityManager
-				.createQuery("SELECT count(DISTINCT project) " + fromString + whereString);
+		Query totalResultQuery = entityManager.createQuery("SELECT count(DISTINCT project) " + fromString
+				+ whereStringBldr.toString());
 		if (needPubParam) {
 			totalResultQuery.setParameter("public", ProjectAccessibility.PUBLIC);
 		}
@@ -1654,7 +1676,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		}
 		int totalResultSize = ((Long) totalResultQuery.getSingleResult()).intValue();
 
-		Query q = entityManager.createQuery("SELECT DISTINCT project " + fromString + whereString
+		Query q = entityManager.createQuery("SELECT DISTINCT project " + fromString + whereStringBldr.toString()
 				+ createSortClause("project", Project.class, new SortInfo("name")));
 		if (needPubParam) {
 			q.setParameter("public", ProjectAccessibility.PUBLIC);

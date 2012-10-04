@@ -1102,7 +1102,7 @@ public abstract class BaseProfileServiceTest {
 	@Test
 	public void testFindPublicProjects() {
 		int count = 20;
-		setupProjects(count, true, null);
+		setupProjects(count, ProjectAccessibility.PUBLIC, null);
 
 		Region region = new Region(0, count / 2);
 		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("tesT123", new QueryRequest(region,
@@ -1124,7 +1124,7 @@ public abstract class BaseProfileServiceTest {
 		logon(mockProfile);
 
 		int count = 20;
-		setupProjects(count, false, mockProfile);
+		setupProjects(count, ProjectAccessibility.PRIVATE, mockProfile);
 
 		Region region = new Region(0, count / 2);
 		QueryResult<Project> result = profileService.findProjects(new ProjectsQuery("tesT123", new QueryRequest(region,
@@ -1134,12 +1134,84 @@ public abstract class BaseProfileServiceTest {
 		assertEquals(region.getSize().intValue(), result.getResultPage().size());
 	}
 
-	private void setupProjects(int count, Boolean createPublic, Profile profile) {
+	@Test
+	public void testFindOrgPrivateProjectsForOrgUserNotBelongingToProjectWithOrgId() throws Exception {
+		Organization org = setupOrganization();
+		Profile projectOwner = createMockProfile(entityManager);
+		OrganizationProfile orgToOwner = new OrganizationProfile();
+		orgToOwner.setOrganization(org);
+		orgToOwner.setProfile(projectOwner);
+		org.getOrganizationProfiles().add(orgToOwner);
+		projectOwner.getOrganizationProfiles().add(orgToOwner);
+		entityManager.persist(orgToOwner);
+
+		Profile anotherGuyInSameOrg = createMockProfile(entityManager);
+		OrganizationProfile orgToAnotherGuy = new OrganizationProfile();
+		orgToAnotherGuy.setOrganization(org);
+		orgToAnotherGuy.setProfile(anotherGuyInSameOrg);
+		org.getOrganizationProfiles().add(orgToAnotherGuy);
+		anotherGuyInSameOrg.getOrganizationProfiles().add(orgToAnotherGuy);
+		entityManager.persist(orgToAnotherGuy);
+		entityManager.flush();
+
+		Project project = MockProjectFactory.create(null);
+		project.setAccessibility(ProjectAccessibility.ORGANIZATION_PRIVATE);
+		project.setOrganization(org);
+		profileService.createProject(projectOwner.getId(), project);
+
+		logon(anotherGuyInSameOrg);
+
+		ProjectsQuery query = new ProjectsQuery(ProjectRelationship.ALL, null);
+		query.setOrganizationIdentifier(org.getIdentifier());
+		QueryResult<Project> result = profileService.findProjects(query);
+		assertNotNull(result);
+		assertEquals(1, result.getTotalResultSize().intValue());
+	}
+
+	@Test
+	public void testFindOrgPrivateProjectsForOrgUserNotBelongingToProjectWithoutOrgId() throws Exception {
+		Organization org = setupOrganization();
+		Profile projectOwner = createMockProfile(entityManager);
+		OrganizationProfile orgToOwner = new OrganizationProfile();
+		orgToOwner.setOrganization(org);
+		orgToOwner.setProfile(projectOwner);
+		org.getOrganizationProfiles().add(orgToOwner);
+		projectOwner.getOrganizationProfiles().add(orgToOwner);
+		entityManager.persist(orgToOwner);
+
+		Profile anotherGuyInSameOrg = createMockProfile(entityManager);
+		entityManager.flush();
+
+		// create a org-private project ...
+		Project orgPrivateProject = MockProjectFactory.create(null);
+		orgPrivateProject.setAccessibility(ProjectAccessibility.ORGANIZATION_PRIVATE);
+		orgPrivateProject.setOrganization(org);
+		profileService.createProject(projectOwner.getId(), orgPrivateProject);
+
+		// ... and a private project (that should be excluded from results)
+		Project privateProject = MockProjectFactory.create(null);
+		privateProject.setAccessibility(ProjectAccessibility.PRIVATE);
+		privateProject.setOrganization(org);
+		profileService.createProject(projectOwner.getId(), privateProject);
+
+		// login the user with an authority associating the user to the organization
+		String authRole = AuthUtils.toCompoundOrganizationRole(Role.User, org.getIdentifier());
+		Authentication authentication = new UsernamePasswordAuthenticationToken(anotherGuyInSameOrg.getUsername(),
+				anotherGuyInSameOrg.getPassword(), AuthUtils.toGrantedAuthorities(Collections.singletonList(authRole)));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		ProjectsQuery query = new ProjectsQuery(ProjectRelationship.ALL, null);
+		QueryResult<Project> result = profileService.findProjects(query);
+		assertNotNull(result);
+		assertEquals(1, result.getTotalResultSize().intValue());
+	}
+
+	private void setupProjects(int count, ProjectAccessibility projectAccessibility, Profile profile) {
 		int max = count * 3;
 		List<Project> projects = MockProjectFactory.create(entityManager, max);
 		int x = -1;
 		for (Project project : projects) {
-			project.setAccessibility(createPublic ? ProjectAccessibility.PUBLIC : ProjectAccessibility.PRIVATE);
+			project.setAccessibility(projectAccessibility);
 			++x;
 			if (x < count) {
 				if (x % 3 == 0) {

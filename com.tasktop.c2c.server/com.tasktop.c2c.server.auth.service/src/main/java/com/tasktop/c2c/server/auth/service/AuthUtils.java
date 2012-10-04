@@ -34,6 +34,8 @@ import com.tasktop.c2c.server.common.service.domain.Role;
  */
 public final class AuthUtils {
 
+	private static final String ORG_PREFIX = "ORG_";
+
 	// No instantiation of this class
 	private AuthUtils() {
 
@@ -117,11 +119,12 @@ public final class AuthUtils {
 		if (roleName == null || roleName.contains("/")) {
 			throw new IllegalArgumentException();
 		}
-		return String.format("%s/ORG_%s", roleName, organizationIdentifier);
+		return String.format("%s/%s%s", roleName, ORG_PREFIX, organizationIdentifier);
 	}
 
-	public static String fromCompoundOrganizationRole(String compoundRole, String projectIdentifier) {
-		List<String> retList = fromCompoundOrganizationRoles(Collections.singletonList(compoundRole), projectIdentifier);
+	public static String fromCompoundOrganizationRole(String compoundRole, String organizationIdentifier) {
+		List<String> retList = fromCompoundOrganizationRoles(Collections.singletonList(compoundRole),
+				organizationIdentifier);
 		String retStr = null;
 
 		if (retList.size() > 0) {
@@ -131,8 +134,8 @@ public final class AuthUtils {
 		return retStr;
 	}
 
-	public static List<String> fromCompoundOrganizationRoles(List<String> compoundRoles, String projectIdentifier) {
-		Pattern rolePattern = computeOrganizationRolePattern(projectIdentifier);
+	public static List<String> fromCompoundOrganizationRoles(List<String> compoundRoles, String organizationIdentifier) {
+		Pattern rolePattern = computeOrganizationRolePattern(organizationIdentifier);
 		List<String> roleNames = new ArrayList<String>(compoundRoles.size());
 		for (String authority : compoundRoles) {
 			Matcher matcher = rolePattern.matcher(authority);
@@ -144,8 +147,27 @@ public final class AuthUtils {
 		return roleNames;
 	}
 
-	private static Pattern computeOrganizationRolePattern(String projectIdentifier) {
-		return Pattern.compile("([^/]+)/" + Pattern.quote("ORG_" + projectIdentifier));
+	public static List<String> findOrganizationIdsInRoles(Collection<? extends GrantedAuthority> collection) {
+		List<String> foundOrgs = new ArrayList<String>();
+		for (GrantedAuthority role : collection) {
+			String roleStr = role.getAuthority();
+			if (roleStr.contains(ORG_PREFIX)) {
+				String orgId = roleStr.substring(roleStr.indexOf(ORG_PREFIX) + ORG_PREFIX.length());
+				// the org id may already be present from another composite role
+				if (!foundOrgs.contains(orgId)) {
+					foundOrgs.add(orgId);
+				}
+			}
+		}
+		return foundOrgs;
+	}
+
+	public static List<String> findOrganizationIdsForCurrentUser() {
+		return findOrganizationIdsInRoles(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+	}
+
+	private static Pattern computeOrganizationRolePattern(String organizationIdentifier) {
+		return Pattern.compile("([^/]+)/" + Pattern.quote(ORG_PREFIX + organizationIdentifier));
 	}
 
 	private static AuthenticationToken createSystemAuthenticationToken(String projectIdentifier) {
