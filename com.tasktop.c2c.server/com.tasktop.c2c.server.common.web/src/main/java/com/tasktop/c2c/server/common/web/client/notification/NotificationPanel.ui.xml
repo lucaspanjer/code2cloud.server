@@ -3,6 +3,8 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
 	<g:HTMLPanel addStyleNames="mole-container">
-		<g:FlowPanel ui:field="messagesPanel"/>
+		<div class="mole-container-inner">
+			<g:FlowPanel ui:field="messagesPanel"/>
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

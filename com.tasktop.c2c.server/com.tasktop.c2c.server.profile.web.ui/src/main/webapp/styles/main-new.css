@@ -272,14 +272,15 @@ table.taskList td {
 	font-family: arial, sans-serif;
 	font-size: 13px;
 	height: 0px;
-	left: auto;
-	margin: auto;
+	margin-left: 50%;
 	position: fixed;
-	text-align: center;
 	top: auto;
 	visibility: visible;
-	width: 100%;
 	z-index: 1000;
+}
+
+.mole-container .mole-container-inner{
+	margin-left:-50%;
 }
 
 .mole {
