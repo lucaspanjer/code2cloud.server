@@ -282,7 +282,7 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 	}
 
 	protected void resetPassword(Profile profile, String password) {
-		profile.setPassword(passwordEncoder.encodePassword(profile.getPassword(), null));
+		profile.setPassword(passwordEncoder.encodePassword(password, null));
 	}
 
 	@Override
