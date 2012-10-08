@@ -44,6 +44,8 @@
 		p:location="classpath:com/tasktop/c2c/server/profile/web/views.xml" p:order="1"
 	/>
 
+	<bean id="avatarImageController" class="com.tasktop.c2c.server.common.web.server.AvatarImageController"/>
+
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<value>
@@ -53,6 +55,7 @@
 				/connect/**=externalConnectController 
 				/signin/**=externalSigninController 
 				/event/**=eventServiceController
+				/image/**=avatarImageController
 				/**=profileWebServiceController
 			</value>
 		</property>

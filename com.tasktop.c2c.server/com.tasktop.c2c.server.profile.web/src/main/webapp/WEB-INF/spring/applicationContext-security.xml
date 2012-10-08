@@ -71,6 +71,7 @@
 		<s:intercept-url pattern="/api/connect/**" access="permitAll"/> 
 		<s:intercept-url pattern="/api/signin/**" access="permitAll"/> 
 		<s:intercept-url pattern="/api/signup" access="permitAll"/> 
+		<s:intercept-url pattern="/api/image/**" access="permitAll"/> 
 		<s:intercept-url pattern="/api/**" access="isAuthenticated()"/> <!-- rest of api requires auth -->
 		<s:intercept-url pattern="/**" access="permitAll"/> <!--  Everything else is ok for anon -->
 	</s:http>

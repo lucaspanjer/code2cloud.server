@@ -40,11 +40,11 @@ public class Avatar {
 	private static final String[] alternateAvatarUrls;
 	static {
 		String[] alternates = new String[Size.values().length];
-		UrlBuilder urlBuilder = new UrlBuilder().setProtocol(Window.Location.getProtocol())
-				.setHost(Window.Location.getHost()).setPath(Path.getBasePath());
+		String urlBase = new UrlBuilder().setProtocol(Window.Location.getProtocol()).setHost(Window.Location.getHost())
+				.setPath(Path.getBasePath()).buildString();
 
 		for (Size size : Size.values()) {
-			alternates[size.ordinal()] = urlBuilder.buildString() + "/images/default_avatar" + size.getSize() + ".png";
+			alternates[size.ordinal()] = urlBase + "/images/default_avatar" + size.getSize() + ".png";
 		}
 		alternateAvatarUrls = alternates;
 	}
@@ -53,7 +53,7 @@ public class Avatar {
 		if (gravatarHash == null) {
 			gravatarHash = "00000000000000000000000000000000";
 		}
-		return "https://secure.gravatar.com/avatar/" + gravatarHash + ".jpg?s=" + size.getSize() + "&d="
+		return "/" + Path.getBasePath() + "api/image/" + gravatarHash + ".jpg?s=" + size.getSize() + "&d="
 				+ alternateAvatarUrls[size.ordinal()];
 	}
 
