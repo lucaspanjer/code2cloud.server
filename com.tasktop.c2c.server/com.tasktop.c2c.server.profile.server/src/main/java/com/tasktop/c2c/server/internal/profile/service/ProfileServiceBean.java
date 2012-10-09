@@ -43,7 +43,6 @@ import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.auth.service.AuthenticationService;
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
-import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
@@ -91,9 +90,10 @@ import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 import com.tasktop.c2c.server.profile.service.QuotaService;
 import com.tasktop.c2c.server.profile.service.provider.TaskServiceProvider;
+import com.tasktop.c2c.server.profile.service.provider.WikiServiceProvider;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
-import com.tasktop.c2c.server.tasks.domain.Team;
 import com.tasktop.c2c.server.tasks.service.TaskService;
+import com.tasktop.c2c.server.wiki.domain.Person;
 import com.tasktop.c2c.server.wiki.service.WikiService;
 
 /**
@@ -138,6 +138,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 	@Autowired
 	private TaskServiceProvider taskServiceProvider;
+
+	@Autowired
+	private WikiServiceProvider wikiServiceProvider;
 
 	@Autowired(required = true)
 	@Qualifier("main")
@@ -334,7 +337,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		if (nameChanged || emailChanged) {
 			for (ProjectProfile projectProfile : currentProfile.getProjectProfiles()) {
-				jobService.schedule(new ReplicateProjectTeamJob(projectProfile.getProject()));
+				jobService.schedule(new ReplicateProjectProfileJob(projectProfile.getProject(), projectProfile
+						.getProfile().getId()));
 			}
 		}
 		if (emailChanged) {
@@ -1022,7 +1026,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			projectProfile.setProfile(profile);
 			profile.getProjectProfiles().add(projectProfile);
 
-			jobService.schedule(new ReplicateProjectTeamJob(project));
+			jobService.schedule(new ReplicateProjectProfileJob(project, profile.getId()));
 		}
 
 		// Mark this profile as a user of the project.
@@ -1133,7 +1137,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			throw new ValidationException(errors);
 		}
 
-		jobService.schedule(new ReplicateProjectTeamJob(project));
+		jobService.schedule(new ReplicateProjectProfileJob(project, profileId));
 
 		project.getProjectProfiles().remove(profileToRemove);
 		profile.getProjectProfiles().remove(profileToRemove);
@@ -1430,7 +1434,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 	@Secured(Role.System)
 	@Override
-	public void replicateTeam(Long projectId) throws EntityNotFoundException {
+	public void replicateProjectProfile(Long profileId, Long projectId) throws EntityNotFoundException {
 		Project project = projectId == null ? null : entityManager.find(Project.class, projectId);
 		if (project == null) {
 			throw new EntityNotFoundException();
@@ -1439,23 +1443,33 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			return;
 		}
 		for (ProjectService projectService : project.getProjectServiceProfile().getProjectServices()) {
-			if (projectService.getServiceHost() != null && projectService.getServiceHost().isAvailable()
-					&& projectService.getType() == ServiceType.TASKS) {
-				Team team = new Team();
-
-				for (ProjectProfile teamMember : project.getProjectProfiles()) {
-					if ((teamMember.getUser() != null && teamMember.getUser())
-							|| (teamMember.getOwner() != null && teamMember.getOwner())) {
-						TaskUserProfile taskUserProfile = new TaskUserProfile();
-						Profile profile = teamMember.getProfile();
-						taskUserProfile.setLoginName(profile.getUsername());
-						taskUserProfile.setRealname(profile.getFullName());
-						taskUserProfile.setGravatarHash(profile.getGravatarHash());
-						team.add(taskUserProfile);
+			if (projectService.getServiceHost() != null && projectService.getServiceHost().isAvailable()) {
+				for (ProjectProfile projectProfile : project.getProjectProfiles()) {
+					if (projectProfile.getProfile() != null
+							&& profileId.longValue() == projectProfile.getProfile().getId().longValue()) {
+						Profile profile = projectProfile.getProfile();
+						switch (projectService.getType()) {
+						case TASKS: {
+							TaskUserProfile taskUserProfile = new TaskUserProfile();
+							taskUserProfile.setLoginName(profile.getUsername());
+							taskUserProfile.setRealname(profile.getFullName());
+							taskUserProfile.setGravatarHash(profile.getGravatarHash());
+							taskServiceProvider.getTaskService(project.getIdentifier()).replicateProfile(
+									taskUserProfile);
+							break;
+						}
+						case WIKI: {
+							Person person = new Person();
+							person.setLoginName(profile.getUsername());
+							person.setName(profile.getFullName());
+							wikiServiceProvider.getWikiService(project.getIdentifier()).replicateProfile(person);
+							break;
+						}
+						default:
+							break; // do nothing for other service types
+						}
 					}
 				}
-
-				taskServiceProvider.getTaskService(project.getIdentifier()).replicateTeam(team);
 			}
 		}
 	}

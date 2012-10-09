@@ -117,12 +117,14 @@ public interface ProfileService {
 	public void sendSignUpInvitation(String email) throws EntityNotFoundException;
 
 	/**
-	 * replicate members of a team to the ALM service user registries.
+	 * replicate a profile to the ALM service user registries.
 	 * 
+	 * @param profileId
+	 *            the id of the profile to be replicated
 	 * @param projectId
-	 *            the id of the project for which the users should be replicated.
+	 *            the id of the project to replicate the profile into
 	 */
-	public void replicateTeam(Long projectId) throws EntityNotFoundException;
+	public void replicateProjectProfile(Long profileId, Long projectId) throws EntityNotFoundException;
 
 	public Boolean isProjectCreateAvailable();
 

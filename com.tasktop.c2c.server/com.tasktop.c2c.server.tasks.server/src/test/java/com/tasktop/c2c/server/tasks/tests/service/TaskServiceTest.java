@@ -120,7 +120,6 @@ import com.tasktop.c2c.server.tasks.domain.TaskResolution;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
-import com.tasktop.c2c.server.tasks.domain.Team;
 import com.tasktop.c2c.server.tasks.domain.WorkLog;
 import com.tasktop.c2c.server.tasks.service.TaskService;
 import com.tasktop.c2c.server.tasks.tests.domain.mock.MockComponentFactory;
@@ -3988,32 +3987,21 @@ public class TaskServiceTest {
 	}
 
 	@Test
-	public void replicateTeam() {
+	public void replicateProfile() {
 		Profile profile = MockProfileFactory.create(entityManager);
-
-		Team team = new Team();
 
 		TaskUserProfile user1 = new TaskUserProfile();
 		user1.setLoginName(profile.getLoginName());
 		user1.setRealname(profile.getRealname() + "changed");
-		TaskUserProfile user2 = new TaskUserProfile();
-		user2.setLoginName("newusernotyetcreated");
-		user2.setRealname("Joe Bloe");
 
-		team.add(user1);
-		team.add(user2);
-
-		taskService.replicateTeam(team);
+		taskService.replicateProfile(user1);
 
 		assertUserExistsWithCurrentValues(user1);
-		assertUserExistsWithCurrentValues(user2);
 	}
 
 	@Test
 	public void gravatarHash() throws EntityNotFoundException {
 		Profile profile = MockProfileFactory.create(entityManager);
-
-		Team team = new Team();
 
 		String gravatarHash = UUID.randomUUID().toString().replace("-", "");
 
@@ -4022,9 +4010,7 @@ public class TaskServiceTest {
 		user1.setRealname(profile.getRealname() + "changed");
 		user1.setGravatarHash(gravatarHash);
 
-		team.add(user1);
-
-		taskService.replicateTeam(team);
+		taskService.replicateProfile(user1);
 
 		entityManager.flush();
 

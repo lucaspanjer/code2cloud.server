@@ -19,16 +19,17 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 
-
-public class ReplicateProjectTeamJob extends SystemJob {
+public class ReplicateProjectProfileJob extends SystemJob {
 
 	private static final long serialVersionUID = 1L;
 
 	private final Long projectId;
+	private final Long profileId;
 	private final String projectIdentifier;
 
-	public ReplicateProjectTeamJob(Project project) {
+	public ReplicateProjectProfileJob(Project project, Long profileId) {
 		this.projectId = project.getId();
+		this.profileId = profileId;
 		projectIdentifier = project.getIdentifier();
 		setType(Type.SHORT);
 	}
@@ -44,7 +45,7 @@ public class ReplicateProjectTeamJob extends SystemJob {
 			public void run() {
 				ProfileService service = applicationContext.getBean("profileService", ProfileService.class);
 				try {
-					service.replicateTeam(projectId);
+					service.replicateProjectProfile(profileId, projectId);
 				} catch (EntityNotFoundException e) {
 					throw new IllegalStateException(e);
 				}

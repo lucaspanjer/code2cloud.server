@@ -45,6 +45,7 @@ import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.doc.Documentation;
+import com.tasktop.c2c.server.common.service.doc.Exclude;
 import com.tasktop.c2c.server.common.service.doc.Section;
 import com.tasktop.c2c.server.common.service.doc.Title;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
@@ -57,6 +58,7 @@ import com.tasktop.c2c.server.wiki.domain.AttachmentHandle;
 import com.tasktop.c2c.server.wiki.domain.Page;
 import com.tasktop.c2c.server.wiki.domain.PageHandle;
 import com.tasktop.c2c.server.wiki.domain.PageOutline;
+import com.tasktop.c2c.server.wiki.domain.Person;
 import com.tasktop.c2c.server.wiki.domain.WikiActivity;
 import com.tasktop.c2c.server.wiki.service.SearchTermQueryArguments;
 import com.tasktop.c2c.server.wiki.service.WikiService;
@@ -452,6 +454,13 @@ public class WikiServiceController extends AbstractBuildInfoRestService implemen
 		throw new EntityNotFoundException("Only one property may be set"); // FIXME Throw different exception or handle
 																			// multiple property adding or change
 																			// params?
+	}
+
+	@Exclude
+	@RequestMapping(value = "/person", method = RequestMethod.POST)
+	@Override
+	public void replicateProfile(@RequestBody Person person) {
+		service.replicateProfile(person);
 	}
 
 	@Override

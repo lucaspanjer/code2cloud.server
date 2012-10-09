@@ -53,7 +53,7 @@ import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity;
 import com.tasktop.c2c.server.tasks.domain.TaskHandle;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
-import com.tasktop.c2c.server.tasks.domain.Team;
+import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
 
 /**
  * A client to communicate to the task REST webservice.
@@ -733,12 +733,12 @@ public class TaskServiceClient extends AbstractRestServiceClient implements Task
 		}
 	}
 
-	public void replicateTeam(Team team) {
+	public void replicateProfile(TaskUserProfile taskUserProfile) {
 		new PostCall<Object>() {
 			public Object getValue(ServiceCallResult result) {
 				return new Object();
 			}
-		}.doCall("team", team);
+		}.doCall("profile", taskUserProfile);
 	}
 
 	public Keyword createKeyword(Keyword keyword) throws ValidationException {

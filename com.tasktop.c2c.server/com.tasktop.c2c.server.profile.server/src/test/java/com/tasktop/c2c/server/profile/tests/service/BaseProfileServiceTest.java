@@ -75,7 +75,7 @@ import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.internal.profile.service.EmailJob;
 import com.tasktop.c2c.server.internal.profile.service.InternalProfileService;
-import com.tasktop.c2c.server.internal.profile.service.ReplicateProjectTeamJob;
+import com.tasktop.c2c.server.internal.profile.service.ReplicateProjectProfileJob;
 import com.tasktop.c2c.server.profile.domain.Email;
 import com.tasktop.c2c.server.profile.domain.internal.Agreement;
 import com.tasktop.c2c.server.profile.domain.internal.ConfigurationProperty;
@@ -107,8 +107,11 @@ import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectInvitationTok
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockProjectProfileFactory;
 import com.tasktop.c2c.server.profile.tests.domain.mock.MockSshPublicKeyFactory;
 import com.tasktop.c2c.server.profile.tests.mock.MockTaskServiceProvider;
-import com.tasktop.c2c.server.tasks.domain.Team;
+import com.tasktop.c2c.server.profile.tests.mock.MockWikiServiceProvider;
+import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
 import com.tasktop.c2c.server.tasks.service.TaskService;
+import com.tasktop.c2c.server.wiki.domain.Person;
+import com.tasktop.c2c.server.wiki.service.WikiService;
 
 @Transactional
 public abstract class BaseProfileServiceTest {
@@ -1407,7 +1410,7 @@ public abstract class BaseProfileServiceTest {
 	}
 
 	@Test
-	public void testReplicateUserTeam() throws EntityNotFoundException {
+	public void testReplicateProfile() throws EntityNotFoundException {
 		Profile profile = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
 		project.addProfile(profile);
@@ -1434,19 +1437,23 @@ public abstract class BaseProfileServiceTest {
 
 		entityManager.flush();
 
-		final TaskService taskService = context.mock(TaskService.class);
+		JUnit4Mockery mockery = new JUnit4Mockery();
+		final TaskService taskService = mockery.mock(TaskService.class);
+		final WikiService wikiService = mockery.mock(WikiService.class);
 
 		MockTaskServiceProvider.setTaskService(taskService);
+		MockWikiServiceProvider.setWikiService(wikiService);
 
-		context.checking(new Expectations() {
+		mockery.checking(new Expectations() {
 			{
-				oneOf(taskService).replicateTeam(with(any(Team.class)));
+				allowing(taskService).replicateProfile(with(any(TaskUserProfile.class)));
+				allowing(wikiService).replicateProfile(with(any(Person.class)));
 			}
 		});
 
-		profileService.replicateTeam(project.getId());
+		profileService.replicateProjectProfile(project.getId(), project.getId());
 
-		context.assertIsSatisfied();
+		mockery.assertIsSatisfied();
 	}
 
 	@Test
@@ -1468,8 +1475,8 @@ public abstract class BaseProfileServiceTest {
 	protected void assertReplicateJobScheduled(Project project) {
 		boolean found = false;
 		for (Job job : jobService.getScheduledJobs()) {
-			if (job instanceof ReplicateProjectTeamJob) {
-				ReplicateProjectTeamJob replicateProjectTeamJob = (ReplicateProjectTeamJob) job;
+			if (job instanceof ReplicateProjectProfileJob) {
+				ReplicateProjectProfileJob replicateProjectTeamJob = (ReplicateProjectProfileJob) job;
 				if (replicateProjectTeamJob.getProjectId().equals(project.getId())) {
 					found = true;
 				}

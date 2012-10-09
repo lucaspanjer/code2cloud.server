@@ -66,7 +66,6 @@ import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
 import com.tasktop.c2c.server.tasks.domain.TaskHandle;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
-import com.tasktop.c2c.server.tasks.domain.Team;
 import com.tasktop.c2c.server.tasks.service.CriteriaQueryArguments;
 import com.tasktop.c2c.server.tasks.service.PredefinedQueryArguments;
 import com.tasktop.c2c.server.tasks.service.SaveAttachmentArguments;
@@ -451,10 +450,10 @@ public class TaskServiceController extends AbstractBuildInfoRestService implemen
 	};
 
 	@Exclude
-	@RequestMapping(value = "/team", method = RequestMethod.POST)
+	@RequestMapping(value = "/profile", method = RequestMethod.POST)
 	@Override
-	public void replicateTeam(@RequestBody Team team) {
-		service.replicateTeam(team);
+	public void replicateProfile(@RequestBody TaskUserProfile taskUserProfile) {
+		service.replicateProfile(taskUserProfile);
 	}
 
 	@Title("Create Tag")

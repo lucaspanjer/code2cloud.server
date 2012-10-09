@@ -124,30 +124,45 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 
 	public Person getCurrentPerson() {
 		AuthenticationServiceUser serviceUser = AuthenticationServiceUser.getCurrent();
-		return serviceUser == null ? null : doProvisionAccount(serviceUser.getToken());
+		return serviceUser == null ? null : createOrUpdatePerson(personFromAuthenticationToken(serviceUser.getToken()));
 	}
 
-	private Person doProvisionAccount(AuthenticationToken token) {
+	private Person personFromAuthenticationToken(AuthenticationToken token) {
+		Person person = new Person();
+		person.setIdentity(token.getUsername());
+		person.setName((token.getFirstName() + ' ' + token.getLastName()).trim());
+		return person;
+	}
+
+	private Person apiPersonToEntityPerson(com.tasktop.c2c.server.wiki.domain.Person apiPerson) {
+		Person person = new Person();
+		person.setId(apiPerson.getId() == null ? null : Long.valueOf(apiPerson.getId()));
+		person.setIdentity(apiPerson.getLoginName());
+		person.setName(apiPerson.getName());
+		return person;
+	}
+
+	private Person createOrUpdatePerson(Person person) {
 
 		// verify that a user exists for the provided credentials
 		Query query = entityManager.createQuery("select e from " + Person.class.getSimpleName()
-				+ " e where e.identity = :username");
-		query.setParameter("username", token.getUsername());
+				+ " e where e.identity = :identity");
+		query.setParameter("identity", person.getIdentity());
 
-		Person person;
+		Person updatedPerson;
 		try {
-			person = (Person) query.getSingleResult();
+			updatedPerson = (Person) query.getSingleResult();
 		} catch (NoResultException e) {
-			person = new Person();
+			updatedPerson = new Person();
 		}
 		// propagate changes to user data such as name and email.
-		person.setIdentity(token.getUsername());
-		person.setName((token.getFirstName() + ' ' + token.getLastName()).trim());
-		if (!entityManager.contains(person)) {
-			entityManager.persist(person);
+		updatedPerson.setIdentity(person.getIdentity());
+		updatedPerson.setName(person.getName());
+		if (!entityManager.contains(updatedPerson)) {
+			entityManager.persist(updatedPerson);
 			entityManager.flush(); // Make id available
 		}
-		return person;
+		return updatedPerson;
 	}
 
 	@Secured({ Role.Observer, Role.User })
@@ -179,6 +194,14 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		returnValue.setContent(computeRenderedContent(lastPageContent));
 
 		return returnValue;
+	}
+
+	@Secured(Role.System)
+	@Override
+	public void replicateProfile(com.tasktop.c2c.server.wiki.domain.Person person) {
+		if (person.getLoginName() == null)
+			throw new IllegalArgumentException("The login name cannot be empty.");
+		createOrUpdatePerson(apiPersonToEntityPerson(person));
 	}
 
 	private String computeRenderedContent(PageContent pageContent) {

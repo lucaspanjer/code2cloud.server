@@ -24,6 +24,7 @@ import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.AttachmentHandle;
 import com.tasktop.c2c.server.wiki.domain.Page;
 import com.tasktop.c2c.server.wiki.domain.PageOutline;
+import com.tasktop.c2c.server.wiki.domain.Person;
 import com.tasktop.c2c.server.wiki.domain.WikiActivity;
 
 /**
@@ -231,5 +232,12 @@ public interface WikiService {
 	 * @throws EntityNotFoundException
 	 */
 	public String setConfigurationProperty(String name, String value);
+
+	/**
+	 * Replicate a Person when a Profile is changed
+	 * 
+	 * @param person
+	 */
+	public void replicateProfile(Person person);
 
 }

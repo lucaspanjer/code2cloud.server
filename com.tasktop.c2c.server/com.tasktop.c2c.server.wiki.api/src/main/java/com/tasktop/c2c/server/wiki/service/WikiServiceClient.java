@@ -39,6 +39,7 @@ import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.AttachmentHandle;
 import com.tasktop.c2c.server.wiki.domain.Page;
 import com.tasktop.c2c.server.wiki.domain.PageOutline;
+import com.tasktop.c2c.server.wiki.domain.Person;
 import com.tasktop.c2c.server.wiki.domain.WikiActivity;
 
 /**
@@ -479,5 +480,13 @@ public class WikiServiceClient extends AbstractRestServiceClient implements Wiki
 				return result.getString();
 			}
 		}.doCall("configuration", map);
+	}
+
+	public void replicateProfile(Person person) {
+		new PostCall<Object>() {
+			public Object getValue(ServiceCallResult result) {
+				return new Object();
+			}
+		}.doCall("person", person);
 	}
 }

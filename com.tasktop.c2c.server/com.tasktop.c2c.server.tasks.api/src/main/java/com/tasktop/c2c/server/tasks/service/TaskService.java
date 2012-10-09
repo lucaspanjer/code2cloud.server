@@ -40,7 +40,7 @@ import com.tasktop.c2c.server.tasks.domain.TaskActivity;
 import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
 import com.tasktop.c2c.server.tasks.domain.TaskHandle;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
-import com.tasktop.c2c.server.tasks.domain.Team;
+import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
 import com.tasktop.c2c.server.tasks.domain.validation.KeywordValidator;
 
 /**
@@ -329,9 +329,12 @@ public interface TaskService {
 	void deleteMilestone(Integer milestoneId) throws ValidationException, EntityNotFoundException;
 
 	/**
-	 * replicate a team (ie: a set of users)
+	 * replicate a task Profile
+	 * 
+	 * @param taskUserProfile
+	 *            TODO
 	 */
-	void replicateTeam(Team team);
+	void replicateProfile(TaskUserProfile taskUserProfile);
 
 	/**
 	 * Create a new keyword.

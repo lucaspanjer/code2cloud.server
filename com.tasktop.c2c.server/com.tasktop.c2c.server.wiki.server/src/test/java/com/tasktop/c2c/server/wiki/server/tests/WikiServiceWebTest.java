@@ -31,7 +31,6 @@ import com.tasktop.c2c.server.common.tests.util.WebApplicationContainerBean;
 import com.tasktop.c2c.server.wiki.server.tests.util.TestContextHolderStrategy;
 import com.tasktop.c2c.server.wiki.service.WikiServiceClient;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class WikiServiceWebTest extends HsqlWikiServiceTest {

@@ -106,7 +106,6 @@ import com.tasktop.c2c.server.tasks.domain.TaskStatus;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
-import com.tasktop.c2c.server.tasks.domain.Team;
 import com.tasktop.c2c.server.tasks.service.TaskService;
 
 /**
@@ -1895,13 +1894,11 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 	@Secured(Role.System)
 	@Override
-	public void replicateTeam(Team team) {
-		for (TaskUserProfile profile : team.getMembers()) {
-			try {
-				getOrCreateFullProfile(profile);
-			} catch (EntityNotFoundException e) {
-				// ignore
-			}
+	public void replicateProfile(TaskUserProfile taskUserProfile) {
+		try {
+			getOrCreateFullProfile(taskUserProfile);
+		} catch (EntityNotFoundException e) {
+			// ignore
 		}
 	}
 

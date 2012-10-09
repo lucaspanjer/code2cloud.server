@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import junit.framework.Assert;
 
@@ -40,12 +41,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.MockJobService;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
+import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.Job;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.common.tests.util.ValidationAssert;
@@ -754,4 +757,33 @@ public abstract class BaseWikiServiceTest {
 		assertTrue(html, html.contains("<h1"));
 	}
 
+	@Test
+	public void testReplicateProfile() throws Exception {
+
+		// log in author with System role
+		AuthenticationToken token = TestSecurity.createToken(author);
+		token.getAuthorities().add(Role.System);
+		TestSecurity.login(token);
+
+		// create a page, which saves the author
+		Page wikiPage = new Page();
+		wikiPage.setContent("abc 123\n456 ");
+		wikiPage.setCreationDate(null);
+		wikiPage.setPath("Foo Bar");
+		wikiService.createPage(wikiPage);
+
+		// the author changes his/her name and it gets replicated here
+		String newName = "Justin Bieber";
+		Person renamedAuthor = new Person();
+		renamedAuthor.setName(newName);
+		renamedAuthor.setLoginName(author.getLoginName());
+		wikiService.replicateProfile(renamedAuthor);
+
+		Query query = entityManager.createQuery("select e from " + Person.class.getSimpleName()
+				+ " e where e.identity = :identity");
+		query.setParameter("identity", author.getLoginName());
+		com.tasktop.c2c.server.internal.wiki.server.domain.Person updatedAuthor = (com.tasktop.c2c.server.internal.wiki.server.domain.Person) query
+				.getSingleResult();
+		assertEquals(newName, updatedAuthor.getName());
+	}
 }
