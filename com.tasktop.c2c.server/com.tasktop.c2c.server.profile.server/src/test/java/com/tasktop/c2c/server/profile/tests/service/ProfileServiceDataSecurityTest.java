@@ -17,6 +17,8 @@ import java.util.Arrays;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -334,4 +336,55 @@ public class ProfileServiceDataSecurityTest {
 
 		profileService.getProjectByIdentifier(project.getIdentifier());
 	}
+
+	@Test
+	public void testRetievePrivateOrgProjectByUserNotInOrg_task4783() throws Exception {
+		Organization org = MockOrganizationFactory.create(entityManager);
+		Profile projectOwner = profile;
+		OrganizationProfile orgToOwner = new OrganizationProfile();
+		orgToOwner.setOrganization(org);
+		orgToOwner.setProfile(projectOwner);
+		orgToOwner.setOwner(true);
+		org.getOrganizationProfiles().add(orgToOwner);
+		projectOwner.getOrganizationProfiles().add(orgToOwner);
+		entityManager.persist(orgToOwner);
+
+		Profile anotherGuyInSameOrg = profile2;
+		OrganizationProfile orgToAnotherGuy = new OrganizationProfile();
+		orgToAnotherGuy.setOrganization(org);
+		orgToAnotherGuy.setProfile(anotherGuyInSameOrg);
+		orgToAnotherGuy.setUser(true);
+		org.getOrganizationProfiles().add(orgToAnotherGuy);
+		anotherGuyInSameOrg.getOrganizationProfiles().add(orgToAnotherGuy);
+		entityManager.persist(orgToAnotherGuy);
+		entityManager.flush();
+
+		logon(projectOwner);
+		Project project = MockProjectFactory.create(null);
+		project.setAccessibility(ProjectAccessibility.PRIVATE);
+		project.setOrganization(org);
+		profileService.createProject(projectOwner.getId(), project);
+		logon(projectOwner); // to get new project roles
+		profileService.createProjectProfile(project.getIdentifier(), anotherGuyInSameOrg.getUsername());
+
+		logon(anotherGuyInSameOrg);
+
+		Project retrievedProject = profileService.getProjectByIdentifier(project.getIdentifier());
+		Assert.assertNotNull(retrievedProject);
+
+		// Remove org membership
+		entityManager.remove(orgToAnotherGuy);
+		anotherGuyInSameOrg.getOrganizationProfiles().clear();
+		entityManager.flush();
+
+		logon(anotherGuyInSameOrg);
+		try {
+			profileService.getProjectByIdentifier(project.getIdentifier());
+			Assert.fail("expected exception");
+		} catch (InsufficientPermissionsException e) {
+			// expected
+		}
+
+	}
+
 }
