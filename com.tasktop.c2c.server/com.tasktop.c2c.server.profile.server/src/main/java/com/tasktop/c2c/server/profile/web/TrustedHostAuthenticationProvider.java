@@ -172,7 +172,13 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 			// Used when events are pushed to the hub. No user code runs on these nodes
 			if (host.getServiceHostConfiguration().getSupportedServices().contains(ServiceType.TASKS)
 					|| host.getServiceHostConfiguration().getSupportedServices().contains(ServiceType.SCM)) {
-				authorities.add(new SimpleGrantedAuthority(Role.System));
+				String projectId = request.getHeader(HeaderConstants.TRUSTED_HOST_PROJECT_ID_HEADER);
+
+				// While not strictly necessary from a security point-of-view, this check ensures we won't give out
+				// roles in a local dev setup (when accessing from localhost which is also serving tasks/scm)
+				if (projectId != null) {
+					authorities.add(new SimpleGrantedAuthority(Role.System));
+				}
 			}
 		}
 		return authorities;
