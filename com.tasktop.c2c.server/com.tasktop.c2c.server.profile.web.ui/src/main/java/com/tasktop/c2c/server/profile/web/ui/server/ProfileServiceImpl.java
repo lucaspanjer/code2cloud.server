@@ -29,7 +29,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.tenancy.provider.TenantProvider;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
@@ -40,7 +39,7 @@ import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+import com.tasktop.c2c.server.common.service.web.TenancyManager;
 import com.tasktop.c2c.server.common.web.server.AbstractAutowiredRemoteServiceServlet;
 import com.tasktop.c2c.server.common.web.shared.AuthenticationFailedException;
 import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
@@ -583,9 +582,9 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	}
 
 	@Autowired
-	private TenantProvider tenantProvider;
+	private TenancyManager tenancyManager;
 
 	protected void setTenancyContext(String projectIdentifier) {
-		TenancyUtil.establishProfileHubTenancyContextFromProjectIdentifier(projectIdentifier, tenantProvider);
+		tenancyManager.establishTenancyContextFromProjectIdentifier(projectIdentifier);
 	}
 }

@@ -17,9 +17,8 @@ import net.customware.gwt.dispatch.shared.Result;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.tenancy.provider.TenantProvider;
 
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+import com.tasktop.c2c.server.common.service.web.TenancyManager;
 import com.tasktop.c2c.server.common.web.server.AbstractActionHandler;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
 
@@ -35,9 +34,9 @@ public abstract class AbstractProfileActionHandler<A extends Action<R>, R extend
 	protected ProfileWebService profileWebService;
 
 	@Autowired
-	private TenantProvider tenantProvider;
+	private TenancyManager tenancyManager;
 
 	protected final void setTenancyContext(String projectIdentifier) {
-		TenancyUtil.establishProfileHubTenancyContextFromProjectIdentifier(projectIdentifier, tenantProvider);
+		tenancyManager.establishTenancyContextFromProjectIdentifier(projectIdentifier);
 	}
 }

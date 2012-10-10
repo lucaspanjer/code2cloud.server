@@ -56,8 +56,8 @@ import com.tasktop.c2c.server.common.service.io.FlushingChunkedOutputStream;
 import com.tasktop.c2c.server.common.service.io.InputPipe;
 import com.tasktop.c2c.server.common.service.io.MultiplexingInputStream;
 import com.tasktop.c2c.server.common.service.io.PacketType;
+import com.tasktop.c2c.server.common.service.web.TenancyManager;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
-import com.tasktop.c2c.server.internal.profile.service.ProfileHubTenantProvider;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
@@ -95,7 +95,7 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 	private InternalTenancyContextHttpHeaderProvider tenancySerializer = new InternalTenancyContextHttpHeaderProvider();
 
 	@Autowired
-	private ProfileHubTenantProvider tenantProvider;
+	private TenancyManager tenancyManager;
 
 	private int bufferSize = 1024 * 16;
 
@@ -231,7 +231,7 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 	}
 
 	protected void establishTenancyContext(String projectId) {
-		TenancyUtil.establishProfileHubTenancyContextFromProjectIdentifier(projectId, tenantProvider);
+		tenancyManager.establishTenancyContextFromProjectIdentifier(projectId);
 	}
 
 	private void pathNotFound(String path) throws CommandException {

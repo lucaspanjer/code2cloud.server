@@ -40,6 +40,7 @@ public class ProfileHubTenantProvider implements TenantProvider {
 
 	@Override
 	public final Tenant findTenant(Object identityObj) {
+
 		ProfileHubTenant tenant;
 
 		if (identityObj instanceof String) {
@@ -51,7 +52,7 @@ public class ProfileHubTenantProvider implements TenantProvider {
 			tenant.setProjectIdentifier(projectId);
 		} else if (identityObj instanceof ProfileHubTenant) {
 			// A tenant is provided based on the org id
-			tenant = (ProfileHubTenant) identityObj;
+			return convert((ProfileHubTenant) identityObj);
 		} else {
 			throw new IllegalStateException();
 		}
@@ -59,6 +60,10 @@ public class ProfileHubTenantProvider implements TenantProvider {
 		fillTenant(tenant);
 
 		return tenant;
+	}
+
+	public final ProfileHubTenant findTenantForProjectIdentifer(String projectIdentifier) {
+		return (ProfileHubTenant) findTenant(projectIdentifier);
 	}
 
 	private void fillTenant(final ProfileHubTenant tenant) {
@@ -77,8 +82,12 @@ public class ProfileHubTenantProvider implements TenantProvider {
 
 		} catch (Exception e) {
 			// ignore, tenancy context will not be setup properly, but this is to be expected
-			LOG.debug("Error computing tenancy context", e);
+			LOG.info("Error computing tenancy context", e);
 		}
+	}
+
+	protected ProfileHubTenant convert(ProfileHubTenant tenant) {
+		return tenant;
 	}
 
 	protected void fillTenantInternal(final ProfileHubTenant tenant) throws Exception {

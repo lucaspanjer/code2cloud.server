@@ -16,13 +16,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import org.springframework.tenancy.context.TenancyContextHolder;
-
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
-import com.tasktop.c2c.server.common.service.web.ProfileHubTenant;
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
 public class ProjectServiceManagementServiceBean implements ProjectServiceManagementService {
 
@@ -45,28 +41,16 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 	@Override
 	public void provisionService(ProjectServiceConfiguration configuration) {
 		initializeConfiguration(configuration);
-		establishTenancyContext(configuration);
-
-		try {
-			for (String requiredProperty : ProjectServiceConfiguration.REQUIRED_PROPERTIES) {
-				if (!configuration.getProperties().containsKey(requiredProperty)) {
-					throw new IllegalArgumentException("Missing required property: " + requiredProperty);
-				}
+		for (String requiredProperty : ProjectServiceConfiguration.REQUIRED_PROPERTIES) {
+			if (!configuration.getProperties().containsKey(requiredProperty)) {
+				throw new IllegalArgumentException("Missing required property: " + requiredProperty);
 			}
-
-			for (Configurator configurator : configurators) {
-				configurator.configure(configuration);
-			}
-		} finally {
-			TenancyContextHolder.clearContext();
 		}
 
-	}
+		for (Configurator configurator : configurators) {
+			configurator.configure(configuration);
+		}
 
-	private void establishTenancyContext(ProjectServiceConfiguration configuration) {
-		TenancyUtil.setProjectTenancyContext(configuration.getProjectIdentifier());
-		ProfileHubTenant tenant = (ProfileHubTenant) TenancyContextHolder.getContext().getTenant();
-		tenant.setShortProjectIdentifier(configuration.getShortProjectIdentifer());
 	}
 
 	private void initializeConfiguration(ProjectServiceConfiguration config) {
@@ -100,17 +84,9 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 	@Override
 	public void deprovisionService(ProjectServiceConfiguration configuration) {
 		initializeConfiguration(configuration);
-		establishTenancyContext(configuration);
-
-		try {
-			for (Deprovisioner dp : deprovisioners) {
-				dp.deprovision(configuration);
-			}
-
-		} finally {
-			TenancyContextHolder.clearContext();
+		for (Deprovisioner dp : deprovisioners) {
+			dp.deprovision(configuration);
 		}
-
 	}
 
 	public void setConfigurators(List<Configurator> configurators) {

@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+import com.tasktop.c2c.server.common.service.web.TenancyManager;
 import com.tasktop.c2c.server.common.web.server.AbstractAutowiredRemoteServiceServlet;
 import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
 import com.tasktop.c2c.server.common.web.shared.ValidationFailedException;
@@ -43,6 +43,9 @@ public class DeploymentServiceImpl extends AbstractAutowiredRemoteServiceServlet
 
 	@Autowired
 	private GetProjectBuildInformationActionHandler getProjectBuildInformationActionHandler;
+
+	@Autowired
+	private TenancyManager tenantManager;
 
 	/*
 	 * (non-Javadoc)
@@ -192,7 +195,7 @@ public class DeploymentServiceImpl extends AbstractAutowiredRemoteServiceServlet
 	}
 
 	protected void setTenancyContext(String projectIdentifier) {
-		TenancyUtil.setProjectTenancyContext(projectIdentifier);
+		tenantManager.establishTenancyContextFromProjectIdentifier(projectIdentifier);
 	}
 
 }

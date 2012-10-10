@@ -25,18 +25,17 @@ import java.util.concurrent.Future;
 import javax.annotation.Resource;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.tenancy.context.DefaultTenancyContext;
 import org.springframework.tenancy.context.TenancyContext;
 import org.springframework.tenancy.context.TenancyContextHolder;
 
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.query.QueryUtil;
-import com.tasktop.c2c.server.common.service.web.ProfileHubTenant;
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+import com.tasktop.c2c.server.common.service.web.TenancyManager;
 import com.tasktop.c2c.server.profile.domain.activity.BuildActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectDashboard;
@@ -72,6 +71,9 @@ public class ActivityServiceBean implements ActivityService {
 
 	@Resource(name = "scmServiceProvider")
 	private ScmServiceProvider scmServiceProvider;
+
+	@Autowired
+	private TenancyManager tenancyManager;
 
 	private ExecutorService activityThreadPool = Executors.newCachedThreadPool();
 
@@ -254,24 +256,21 @@ public class ActivityServiceBean implements ActivityService {
 		return dashboard;
 	}
 
-	private static abstract class TenancyCallable<T> implements Callable<T> {
+	private abstract class TenancyCallable<T> implements Callable<T> {
 
-		private ProfileHubTenant tenant;
 		private SecurityContext secContect;
+		private String projectIdentifier;
 
 		private TenancyCallable(String projectIdentifier) {
-			tenant = TenancyUtil.createProjectTenant(projectIdentifier);
-			tenant.setOrganizationIdentifier(TenancyUtil.getCurrentTenantOrganizationIdentifer());
+			this.projectIdentifier = projectIdentifier;
 			secContect = SecurityContextHolder.getContext();
 		}
 
 		@Override
 		public T call() throws Exception {
-			DefaultTenancyContext context = new DefaultTenancyContext();
-			context.setTenant(tenant);
 			final TenancyContext previousTenancyContext = TenancyContextHolder.getContext();
 			final SecurityContext previousSecContext = SecurityContextHolder.getContext();
-			TenancyContextHolder.setContext(context);
+			tenancyManager.establishTenancyContextFromProjectIdentifier(projectIdentifier);
 			SecurityContextHolder.setContext(secContect);
 			try {
 				return callAsTenant();

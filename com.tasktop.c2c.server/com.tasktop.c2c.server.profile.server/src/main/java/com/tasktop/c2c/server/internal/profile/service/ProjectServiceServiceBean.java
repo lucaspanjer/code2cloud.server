@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +45,7 @@ import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+import com.tasktop.c2c.server.common.service.web.TenancyManager;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementService;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceClient;
@@ -153,11 +154,14 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 				.getNewService(domainServiceHost.getInternalNetworkAddress(), type);
 
 		try {
+			tenancyManager.establishTenancyContextFromProjectIdentifier(project.getIdentifier());
 			LOGGER.info("configuring node for " + type);
 			nodeConfigurationService.provisionService(config);
 			LOGGER.info("configuring done");
 		} catch (Exception e) {
 			throw new ProvisioningException("Caught exception while configuring node", e);
+		} finally {
+			TenancyContextHolder.clearContext();
 		}
 
 		for (ProjectService service : project.getProjectServiceProfile().getProjectServices()) {
@@ -337,14 +341,14 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	}
 
 	@Autowired
-	private ProfileHubTenantProvider tenantProvider;
+	private TenancyManager tenancyManager;
 
 	@Override
 	public List<ProjectServiceStatus> computeProjectServicesStatus(Project managedProject) {
 
 		// Need to establish the project tenancy context so that it gets propagated to internal services (used to
 		// compute database names and file locations).
-		TenancyUtil.establishProfileHubTenancyContextFromProjectIdentifier(managedProject.getIdentifier(), tenantProvider);
+		tenancyManager.establishTenancyContextFromProjectIdentifier(managedProject.getIdentifier());
 
 		List<ProjectServiceStatus> result = new ArrayList<ProjectServiceStatus>();
 
@@ -408,19 +412,28 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	}
 
 	private void deprovisionServiceViaServiceManageService(ProjectService projectService) {
-		ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
-				.getNewService(projectService.getServiceHost().getInternalNetworkAddress(), projectService.getType());
 
-		ProjectServiceConfiguration config = createProjectServiceConfiguration(projectService
-				.getProjectServiceProfile().getProject());
+		try {
+			tenancyManager.establishTenancyContextFromProjectIdentifier(projectService.getProjectServiceProfile()
+					.getProject().getIdentifier());
 
-		nodeConfigurationService.deprovisionService(config);
+			ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
+					.getNewService(projectService.getServiceHost().getInternalNetworkAddress(),
+							projectService.getType());
 
-		projectService.getProjectServiceProfile().getProjectServices().remove(projectService);
-		if (projectService.getServiceHost() != null) {
-			projectService.getServiceHost().getProjectServices().remove(projectService);
+			ProjectServiceConfiguration config = createProjectServiceConfiguration(projectService
+					.getProjectServiceProfile().getProject());
+
+			nodeConfigurationService.deprovisionService(config);
+
+			projectService.getProjectServiceProfile().getProjectServices().remove(projectService);
+			if (projectService.getServiceHost() != null) {
+				projectService.getServiceHost().getProjectServices().remove(projectService);
+			}
+			entityManager.remove(projectService);
+		} finally {
+			TenancyContextHolder.clearContext();
 		}
-		entityManager.remove(projectService);
 	}
 
 	@Secured(Role.Admin)

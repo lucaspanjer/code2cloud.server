@@ -23,10 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.tenancy.provider.TenantProvider;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.common.service.domain.Role;
+import com.tasktop.c2c.server.common.service.web.TenancyManager;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.event.domain.Event;
 
@@ -40,7 +40,7 @@ public class EventServiceImpl implements EventService {
 	private ExecutorService executorService = Executors.newCachedThreadPool();
 
 	@Autowired
-	private TenantProvider tenantProvider;
+	private TenancyManager tenancyManager;
 
 	@Secured(Role.System)
 	@Override
@@ -64,7 +64,7 @@ public class EventServiceImpl implements EventService {
 		@Override
 		public Object call() throws Exception {
 
-			TenancyUtil.establishProfileHubTenancyContextFromProjectIdentifier(event.getProjectId(), tenantProvider);
+			tenancyManager.establishTenancyContextFromProjectIdentifier(event.getProjectId());
 			AuthUtils.assumeSystemIdentity(event.getProjectId());
 
 			try {
