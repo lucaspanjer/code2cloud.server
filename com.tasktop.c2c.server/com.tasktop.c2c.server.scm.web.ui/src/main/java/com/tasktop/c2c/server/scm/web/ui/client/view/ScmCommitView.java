@@ -125,10 +125,14 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 	protected DateLabel commitDate = new DateLabel(Format.getDateTimeFormat());
 	private String projectId;
 
+	private final int maxPrettifiableLines = 1000;
+	private int totalDiffLines;
+
 	/**
 	 * @param commit
 	 */
 	public void setCommit(Commit commit) {
+
 		driver.edit(commit);
 
 		repository.setText(commit.getRepository());
@@ -187,7 +191,9 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 		authorImage.setUrl(Avatar.computeAvatarUrl(commit.getAuthor().getGravatarHash(), Avatar.Size.MEDIUM));
 
 		UIObject.setVisible(committerInfoDiv, commit.getCommitter() != null);
-		GoogleCodePrettifyUtil.run();
+		if (totalDiffLines < maxPrettifiableLines) {
+			GoogleCodePrettifyUtil.run();
+		}
 	}
 
 	private String computeElementId(int index) {
@@ -209,7 +215,9 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 		SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
 		String fileName;
 		int i = 0;
+		totalDiffLines = 0;
 		for (DiffEntry diff : changes) {
+			totalDiffLines = totalDiffLines + diff.getLinesAdded() + diff.getLinesRemoved();
 			String elId = computeElementId(i++);
 			switch (diff.getChangeType()) {
 			case ADD:
@@ -242,6 +250,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 					style = ScmResources.get.style().contentRemoved();
 					break;
 				}
+
 				htmlBuilder.append(template.content(style, content.getContent()));
 			}
 
