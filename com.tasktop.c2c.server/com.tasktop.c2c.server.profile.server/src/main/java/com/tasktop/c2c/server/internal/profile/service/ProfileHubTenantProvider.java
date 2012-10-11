@@ -52,7 +52,7 @@ public class ProfileHubTenantProvider implements TenantProvider {
 			tenant.setProjectIdentifier(projectId);
 		} else if (identityObj instanceof ProfileHubTenant) {
 			// A tenant is provided based on the org id
-			return convert((ProfileHubTenant) identityObj);
+			tenant = convert((ProfileHubTenant) identityObj);
 		} else {
 			throw new IllegalStateException();
 		}
