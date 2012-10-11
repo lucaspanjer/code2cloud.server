@@ -20,6 +20,7 @@ import java.net.URL;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Required;
 
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Deprovisioner;
@@ -33,12 +34,14 @@ public class HudsonWarDeprovisioner implements Deprovisioner {
 	private static final Logger LOG = LoggerFactory.getLogger(HudsonWarDeprovisioner.class.getName());
 
 	private String hudsonWebappsDir;
+	private String hudsonPath;
 
 	@Override
 	public void deprovision(ProjectServiceConfiguration configuration) {
 		try {
-			String deployedUrl = configuration.getProperties()
-					.get(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL) + "hudson/";
+			String deployedUrl = configuration.getProperties().get(ProjectServiceConfiguration.PROFILE_BASE_URL)
+					+ hudsonPath + configuration.getProperties().get(ProjectServiceConfiguration.PROJECT_ID)
+					+ "/hudson/";
 			deployedUrl.replace("//", "/");
 			URL deployedHudsonUrl = new URL(deployedUrl);
 			String webappName = deployedHudsonUrl.getPath();
@@ -85,6 +88,11 @@ public class HudsonWarDeprovisioner implements Deprovisioner {
 
 	public void setHudsonWebappsDir(String hudsonWebappsDir) {
 		this.hudsonWebappsDir = hudsonWebappsDir;
+	}
+
+	@Required
+	public void setHudsonPath(String hudsonPath) {
+		this.hudsonPath = hudsonPath;
 	}
 
 }

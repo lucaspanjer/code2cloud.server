@@ -42,7 +42,7 @@
 		<property name="deprovisioners">
 			<list>
 				<bean class="com.tasktop.c2c.server.hudson.configuration.service.HudsonWarDeprovisioner"
-					p:hudsonWebappsDir="${alm.hudson.webappsDir}"/>
+					p:hudsonWebappsDir="${alm.hudson.webappsDir}" p:hudsonPath="${alm.hudson.path}"/>
 				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisoiner"
 					p:fromBaseDir="${alm.dataDir}/hudson-homes" p:toBaseDir="${alm.dataDir}/deleted" p:toDirName="hudson-home"/>
 			</list>
