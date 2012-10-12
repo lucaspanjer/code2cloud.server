@@ -25,7 +25,6 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.transport.PostReceiveHook;
 import org.eclipse.jgit.transport.ReceiveCommand;
 import org.eclipse.jgit.transport.ReceivePack;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +32,6 @@ import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.event.domain.CommitEvent;
 import com.tasktop.c2c.server.event.service.EventService;
-import com.tasktop.c2c.server.event.service.EventServiceClient;
 import com.tasktop.c2c.server.scm.domain.Commit;
 
 /**
@@ -41,7 +39,7 @@ import com.tasktop.c2c.server.scm.domain.Commit;
  * 
  */
 @Component
-public class EventGeneratingPostRecieveHook implements PostReceiveHook, InitializingBean {
+public class EventGeneratingPostRecieveHook implements PostReceiveHook {
 
 	@Autowired
 	EventService eventService;
@@ -104,12 +102,6 @@ public class EventGeneratingPostRecieveHook implements PostReceiveHook, Initiali
 		event.setTimestamp(new Date());
 		eventService.publishEvent(event);
 
-	}
-
-	// Review better pattern?
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		((EventServiceClient) eventService).setBaseUrl(configuration.getProfileBaseUrl() + "/api/event");
 	}
 
 }

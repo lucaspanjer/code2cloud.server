@@ -13,7 +13,7 @@
 
 	<import resource="classpath:META-INF/spring/applicationContext-restClient.xml"/>
 
-	<bean id="eventServiceClient" class="com.tasktop.c2c.server.event.service.EventServiceClient">
+	<bean id="eventServiceClient" class="com.tasktop.c2c.server.event.service.InternalEventServiceClient" autowire="byType">
 		<property name="restTemplate" ref="restTemplate"/>
 	</bean>
 </beans>

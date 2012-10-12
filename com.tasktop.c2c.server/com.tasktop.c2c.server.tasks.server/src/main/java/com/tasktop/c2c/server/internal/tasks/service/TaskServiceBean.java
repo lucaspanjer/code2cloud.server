@@ -28,7 +28,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
@@ -59,7 +58,6 @@ import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.event.domain.TaskActivityEvent;
 import com.tasktop.c2c.server.event.service.EventService;
-import com.tasktop.c2c.server.event.service.EventServiceClient;
 import com.tasktop.c2c.server.internal.tasks.domain.AttachmentData;
 import com.tasktop.c2c.server.internal.tasks.domain.Cc;
 import com.tasktop.c2c.server.internal.tasks.domain.Classification;
@@ -119,8 +117,7 @@ import com.tasktop.c2c.server.tasks.service.TaskService;
 @Service("taskService")
 @Transactional(rollbackFor = { Exception.class })
 @Qualifier("main")
-public class TaskServiceBean extends AbstractJpaServiceBean implements TaskService, TaskServiceDependencies,
-		InitializingBean {
+public class TaskServiceBean extends AbstractJpaServiceBean implements TaskService, TaskServiceDependencies {
 
 	@Autowired
 	private TaskServiceConfiguration configuration;
@@ -1908,16 +1905,6 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	 */
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
-	 */
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		((EventServiceClient) eventService).setBaseUrl(configuration.getProfileBaseUrl() + "/api/event");
 	}
 
 	@Override
