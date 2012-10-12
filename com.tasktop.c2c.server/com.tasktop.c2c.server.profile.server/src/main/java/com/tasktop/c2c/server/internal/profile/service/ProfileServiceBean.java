@@ -1615,7 +1615,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		case ALL:
 			// include projects with org private accessibility and current user is a member of an org associated with
 			// the project
-			whereStringBldr.append("WHERE (project.accessibility = :public OR pp.profile.id = :id");
+			whereStringBldr
+					.append("WHERE (project.accessibility = :public OR (pp.profile.id = :id AND (pp.user = true OR pp.owner = true OR (pp.community = true AND project.accessibility = :public) ))");
 			if (orgIdentifierOrNull != null) {
 				whereStringBldr.append(" OR project.accessibility = :organizationPrivate");
 				needPrivParam = true;
@@ -1657,7 +1658,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			needIdParam = false;
 			break;
 		case WATCHER:
-			whereStringBldr.append("WHERE pp.profile.id = :id AND pp.community = true ");
+			whereStringBldr
+					.append("WHERE pp.profile.id = :id AND pp.community = true AND project.accessibility = :public");
+			needPubParam = true;
 			break;
 		case PUBLIC:
 			needIdParam = false;
