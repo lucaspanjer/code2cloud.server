@@ -29,7 +29,7 @@
 		
 		<property name="deprovisioners">
 			<list>
-				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisoiner"
+				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisioner"
 					p:fromBaseDir="${maven.repo.base}" p:toBaseDir="${alm.dataDir}/deleted/" p:toDirName="maven-repo"/>
 			</list>
 		</property>

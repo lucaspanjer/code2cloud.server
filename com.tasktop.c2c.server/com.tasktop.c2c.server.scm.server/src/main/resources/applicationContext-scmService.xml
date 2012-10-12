@@ -54,7 +54,7 @@
 		
 		<property name="deprovisioners">
 			<list>
-				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisoiner"
+				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisioner"
 					p:fromBaseDir="${git.root}" p:toBaseDir="${alm.dataDir}/deleted/" p:toDirName="git-repo"/>
 			</list>
 		</property>
