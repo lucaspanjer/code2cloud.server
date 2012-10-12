@@ -2,10 +2,12 @@ Hello,
 
 ${profile.FirstName} ${profile.LastName} (${profile.Username}) has invited you to the '${project.Name}' project on ${AppName}.
 
+#if(${project.Description})
 ${project.Name} is described as:
 
 ${project.Description}
 
+#end
 To accept this invitation, please visit:
 
 ${invitePageUrl}
