@@ -23,9 +23,9 @@ import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServ
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class DirectoryMovingDeprovisoiner implements Deprovisioner {
+public class DirectoryMovingDeprovisioner implements Deprovisioner {
 
-	private static final Logger LOG = LoggerFactory.getLogger(DirectoryMovingDeprovisoiner.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DirectoryMovingDeprovisioner.class);
 
 	private String fromBaseDir;
 	private String toBaseDir;

@@ -36,9 +36,9 @@ import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServ
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class DatabaseDumpingDeprovisoiner implements Deprovisioner {
+public class DatabaseDumpingDeprovisioner implements Deprovisioner {
 
-	private static final Logger LOG = LoggerFactory.getLogger(DatabaseDumpingDeprovisoiner.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DatabaseDumpingDeprovisioner.class);
 
 	private DatabaseNamingStrategy databaseNamingStrategy;
 
