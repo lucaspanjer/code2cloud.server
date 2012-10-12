@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -46,7 +45,9 @@ public class ProjectInvitationView extends AbstractComposite {
 
 	private void updateUi() {
 		projectName.setText(project.getName());
-		projectDescription.setInnerText(SafeHtmlUtils.htmlEscape(project.getDescription()));
+		if (project.getDescription() != null) {
+			projectDescription.setInnerText(SafeHtmlUtils.htmlEscape(project.getDescription()));
+		}
 	}
 
 	public Project getProject() {
