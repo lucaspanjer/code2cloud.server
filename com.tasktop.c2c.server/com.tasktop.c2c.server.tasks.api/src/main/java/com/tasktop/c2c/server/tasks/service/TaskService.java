@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
@@ -332,9 +333,10 @@ public interface TaskService {
 	 * replicate a task Profile
 	 * 
 	 * @param taskUserProfile
-	 *            TODO
+	 * @param scope
+	 * 
 	 */
-	void replicateProfile(TaskUserProfile taskUserProfile);
+	void replicateProfile(TaskUserProfile taskUserProfile, ReplicationScope scope);
 
 	/**
 	 * Create a new keyword.

@@ -15,10 +15,12 @@ package com.tasktop.c2c.server.internal.profile.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.NoResultException;
@@ -47,6 +49,7 @@ import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
@@ -336,15 +339,72 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		currentProfile = identityManagmentService.updateProfile(profile);
 
 		if (nameChanged || emailChanged) {
+			// use a Set to avoid duplicates - we don't want to update a project for this profile more than once
+			Set<String> projectsToUpdate = new HashSet<String>();
+
+			// update Projects the Profile is directly associated with
 			for (ProjectProfile projectProfile : currentProfile.getProjectProfiles()) {
+				projectsToUpdate.add(projectProfile.getProject().getIdentifier());
 				jobService.schedule(new ReplicateProjectProfileJob(projectProfile.getProject(), projectProfile
-						.getProfile().getId()));
+						.getProfile().getId(), ReplicationScope.UPDATE_IF_EXISTS));
+			}
+
+			// update Projects the Profile has access to (for example, public Projects)
+			for (ProjectProfile projectProfile : findAccessibleProjectsForProfile(currentProfile)) {
+				if (!projectsToUpdate.contains(projectProfile.getProject().getIdentifier())) {
+					jobService.schedule(new ReplicateProjectProfileJob(projectProfile.getProject(), projectProfile
+							.getProfile().getId(), ReplicationScope.UPDATE_IF_EXISTS));
+				}
 			}
 		}
 		if (emailChanged) {
 			currentProfile.setEmailVerified(false);
 			sendVerificationEmail(currentProfile);
 		}
+	}
+
+	/**
+	 * Looks up all Projects for which this Profile is indirectly associated, then returns a List of ProjectProfiles of
+	 * the same length, with each found Project is paired with the passed-in Profile. This includes public Projects as
+	 * well as org-private Projects for Organizations to which the Profile belongs.
+	 * 
+	 * @param profile
+	 * @return
+	 */
+	public List<ProjectProfile> findAccessibleProjectsForProfile(Profile profile) {
+		List<ProjectProfile> ppList = new ArrayList<ProjectProfile>();
+		// Query to find all Projects with Public access
+		Query publicQuery = entityManager.createQuery(
+				"SELECT project FROM " + Project.class.getSimpleName()
+						+ " project WHERE project.accessibility = :public").setParameter("public",
+				ProjectAccessibility.PUBLIC);
+		List<Project> publicResults = publicQuery.getResultList();
+		for (Project project : publicResults) {
+			ProjectProfile pp = new ProjectProfile();
+			pp.setProfile(profile);
+			pp.setProject(project);
+			ppList.add(pp);
+		}
+		List<String> orgIdsForCurrentUser = AuthUtils.findOrganizationIdsForCurrentUser();
+		// Query to find all Projects with Org-Private access, and where the Profile's Organization is related to the
+		// Profile
+		if (orgIdsForCurrentUser.size() > 0) {
+			StringBuilder queryBldr = new StringBuilder().append("SELECT project FROM ")
+					.append(Project.class.getSimpleName()).append(" ")
+					.append("project JOIN project.organization AS org ")
+					.append("WHERE project.accessibility = :orgPrivate ").append("AND org.identifier IN :orgIds");
+			Query orgPrivateQuery = entityManager.createQuery(queryBldr.toString());
+			orgPrivateQuery.setParameter("orgPrivate", ProjectAccessibility.ORGANIZATION_PRIVATE);
+			orgPrivateQuery.setParameter("orgIds", orgIdsForCurrentUser);
+			List<Project> orgPrivateResults = orgPrivateQuery.getResultList();
+			for (Project project : orgPrivateResults) {
+				ProjectProfile pp = new ProjectProfile();
+				pp.setProfile(profile);
+				pp.setProject(project);
+				ppList.add(pp);
+			}
+		}
+		return ppList;
 	}
 
 	@Secured(Role.User)
@@ -1026,7 +1086,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			projectProfile.setProfile(profile);
 			profile.getProjectProfiles().add(projectProfile);
 
-			jobService.schedule(new ReplicateProjectProfileJob(project, profile.getId()));
+			jobService.schedule(new ReplicateProjectProfileJob(project, profile.getId(),
+					ReplicationScope.CREATE_OR_UPDATE));
 		}
 
 		// Mark this profile as a user of the project.
@@ -1136,8 +1197,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			errors.reject("project.mustHaveOwner", null, "Cannot remove owner: an project must have at least one owner");
 			throw new ValidationException(errors);
 		}
-
-		jobService.schedule(new ReplicateProjectProfileJob(project, profileId));
 
 		project.getProjectProfiles().remove(profileToRemove);
 		profile.getProjectProfiles().remove(profileToRemove);
@@ -1434,9 +1493,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 	@Secured(Role.System)
 	@Override
-	public void replicateProjectProfile(Long profileId, Long projectId) throws EntityNotFoundException {
+	public void replicateProjectProfile(Long profileId, Long projectId, ReplicationScope scope)
+			throws EntityNotFoundException {
 		Project project = projectId == null ? null : entityManager.find(Project.class, projectId);
-		if (project == null) {
+		Profile profile = profileId == null ? null : entityManager.find(Profile.class, profileId);
+		if (project == null || profile == null) {
 			throw new EntityNotFoundException();
 		}
 		if (project.getProjectServiceProfile() == null) {
@@ -1444,31 +1505,25 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		}
 		for (ProjectService projectService : project.getProjectServiceProfile().getProjectServices()) {
 			if (projectService.getServiceHost() != null && projectService.getServiceHost().isAvailable()) {
-				for (ProjectProfile projectProfile : project.getProjectProfiles()) {
-					if (projectProfile.getProfile() != null
-							&& profileId.longValue() == projectProfile.getProfile().getId().longValue()) {
-						Profile profile = projectProfile.getProfile();
-						switch (projectService.getType()) {
-						case TASKS: {
-							TaskUserProfile taskUserProfile = new TaskUserProfile();
-							taskUserProfile.setLoginName(profile.getUsername());
-							taskUserProfile.setRealname(profile.getFullName());
-							taskUserProfile.setGravatarHash(profile.getGravatarHash());
-							taskServiceProvider.getTaskService(project.getIdentifier()).replicateProfile(
-									taskUserProfile);
-							break;
-						}
-						case WIKI: {
-							Person person = new Person();
-							person.setLoginName(profile.getUsername());
-							person.setName(profile.getFullName());
-							wikiServiceProvider.getWikiService(project.getIdentifier()).replicateProfile(person);
-							break;
-						}
-						default:
-							break; // do nothing for other service types
-						}
-					}
+				switch (projectService.getType()) {
+				case TASKS: {
+					TaskUserProfile taskUserProfile = new TaskUserProfile();
+					taskUserProfile.setLoginName(profile.getUsername());
+					taskUserProfile.setRealname(profile.getFullName());
+					taskUserProfile.setGravatarHash(profile.getGravatarHash());
+					taskServiceProvider.getTaskService(project.getIdentifier())
+							.replicateProfile(taskUserProfile, scope);
+					break;
+				}
+				case WIKI: {
+					Person person = new Person();
+					person.setLoginName(profile.getUsername());
+					person.setName(profile.getFullName());
+					wikiServiceProvider.getWikiService(project.getIdentifier()).replicateProfile(person, scope);
+					break;
+				}
+				default:
+					break; // do nothing for other service types
 				}
 			}
 		}

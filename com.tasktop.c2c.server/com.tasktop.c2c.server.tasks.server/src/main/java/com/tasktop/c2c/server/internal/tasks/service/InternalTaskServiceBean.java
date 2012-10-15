@@ -100,4 +100,22 @@ public class InternalTaskServiceBean extends AbstractJpaServiceBean implements I
 	public void setValidator(Validator validator) {
 		this.validator = validator;
 	}
+
+	@Override
+	public void updateAccountIfExists(TaskUserProfile taskUserProfile) {
+		Query query = entityManager.createQuery("select e from " + Profile.class.getSimpleName()
+				+ " e where e.loginName = :username");
+		query.setParameter("username", taskUserProfile.getLoginName());
+
+		try {
+			Profile profile = (Profile) query.getSingleResult();
+			profile.setRealname(taskUserProfile.getRealname());
+			if (!entityManager.contains(profile)) {
+				entityManager.persist(profile);
+				entityManager.flush(); // Make id available
+			}
+		} catch (NoResultException e) {
+			// No match found; nothing to do
+		}
+	}
 }

@@ -43,6 +43,7 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.doc.Documentation;
 import com.tasktop.c2c.server.common.service.doc.Exclude;
@@ -457,10 +458,14 @@ public class WikiServiceController extends AbstractBuildInfoRestService implemen
 	}
 
 	@Exclude
-	@RequestMapping(value = "/person", method = RequestMethod.POST)
+	@RequestMapping(value = "/person/{scope}", method = RequestMethod.POST)
+	public void replicateProfile(@RequestBody Person person, @PathVariable(value = "scope") String scope) {
+		this.replicateProfile(person, ReplicationScope.valueOf(scope));
+	}
+
 	@Override
-	public void replicateProfile(@RequestBody Person person) {
-		service.replicateProfile(person);
+	public void replicateProfile(Person person, ReplicationScope scope) {
+		service.replicateProfile(person, scope);
 	}
 
 	@Override

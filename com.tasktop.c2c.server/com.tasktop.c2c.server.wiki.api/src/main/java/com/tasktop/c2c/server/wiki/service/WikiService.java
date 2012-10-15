@@ -16,6 +16,7 @@ import java.util.List;
 
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
@@ -237,7 +238,8 @@ public interface WikiService {
 	 * Replicate a Person when a Profile is changed
 	 * 
 	 * @param person
+	 * @param scope
 	 */
-	public void replicateProfile(Person person);
+	public void replicateProfile(Person person, ReplicationScope scope);
 
 }

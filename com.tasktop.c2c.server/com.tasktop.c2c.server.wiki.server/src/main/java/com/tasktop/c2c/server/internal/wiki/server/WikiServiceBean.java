@@ -36,6 +36,7 @@ import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
@@ -165,6 +166,24 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		return updatedPerson;
 	}
 
+	private void updatePersonIfExists(Person person) {
+		Query query = entityManager.createQuery("select e from " + Person.class.getSimpleName()
+				+ " e where e.identity = :identity");
+		query.setParameter("identity", person.getIdentity());
+
+		try {
+			Person updatedPerson = (Person) query.getSingleResult();
+			updatedPerson.setIdentity(person.getIdentity());
+			updatedPerson.setName(person.getName());
+			if (!entityManager.contains(updatedPerson)) {
+				entityManager.persist(updatedPerson);
+				entityManager.flush();
+			}
+		} catch (NoResultException e) {
+			// if person not found, nothing to do
+		}
+	}
+
 	@Secured({ Role.Observer, Role.User })
 	@Override
 	public Page retrievePage(Integer pageId) throws EntityNotFoundException {
@@ -198,10 +217,17 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 
 	@Secured(Role.System)
 	@Override
-	public void replicateProfile(com.tasktop.c2c.server.wiki.domain.Person person) {
+	public void replicateProfile(com.tasktop.c2c.server.wiki.domain.Person person, ReplicationScope scope) {
 		if (person.getLoginName() == null)
 			throw new IllegalArgumentException("The login name cannot be empty.");
-		createOrUpdatePerson(apiPersonToEntityPerson(person));
+		switch (scope) {
+		case CREATE_OR_UPDATE:
+			// ignore: we do not want to create Persons that are not already there
+			break;
+		case UPDATE_IF_EXISTS:
+			updatePersonIfExists(apiPersonToEntityPerson(person));
+			break;
+		}
 	}
 
 	private String computeRenderedContent(PageContent pageContent) {

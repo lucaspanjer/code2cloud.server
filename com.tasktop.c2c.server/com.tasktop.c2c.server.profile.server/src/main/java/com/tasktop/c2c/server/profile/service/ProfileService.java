@@ -16,6 +16,7 @@ import java.util.List;
 
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
@@ -123,8 +124,9 @@ public interface ProfileService {
 	 *            the id of the profile to be replicated
 	 * @param projectId
 	 *            the id of the project to replicate the profile into
+	 * @param scope TODO
 	 */
-	public void replicateProjectProfile(Long profileId, Long projectId) throws EntityNotFoundException;
+	public void replicateProjectProfile(Long profileId, Long projectId, ReplicationScope scope) throws EntityNotFoundException;
 
 	public Boolean isProjectCreateAvailable();
 

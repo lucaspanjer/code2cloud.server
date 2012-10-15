@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.tasktop.c2c.server.auth.service.job.SystemJob;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 
@@ -26,11 +27,13 @@ public class ReplicateProjectProfileJob extends SystemJob {
 	private final Long projectId;
 	private final Long profileId;
 	private final String projectIdentifier;
+	private final ReplicationScope scope;
 
-	public ReplicateProjectProfileJob(Project project, Long profileId) {
+	public ReplicateProjectProfileJob(Project project, Long profileId, ReplicationScope scope) {
 		this.projectId = project.getId();
 		this.profileId = profileId;
 		projectIdentifier = project.getIdentifier();
+		this.scope = scope;
 		setType(Type.SHORT);
 	}
 
@@ -45,7 +48,7 @@ public class ReplicateProjectProfileJob extends SystemJob {
 			public void run() {
 				ProfileService service = applicationContext.getBean("profileService", ProfileService.class);
 				try {
-					service.replicateProjectProfile(profileId, projectId);
+					service.replicateProjectProfile(profileId, projectId, scope);
 				} catch (EntityNotFoundException e) {
 					throw new IllegalStateException(e);
 				}

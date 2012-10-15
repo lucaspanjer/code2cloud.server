@@ -66,6 +66,7 @@ import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.common.service.JacksonJsonObjectMapper;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
@@ -4036,7 +4037,7 @@ public class TaskServiceTest {
 		user1.setLoginName(profile.getLoginName());
 		user1.setRealname(profile.getRealname() + "changed");
 
-		taskService.replicateProfile(user1);
+		taskService.replicateProfile(user1, ReplicationScope.CREATE_OR_UPDATE);
 
 		assertUserExistsWithCurrentValues(user1);
 	}
@@ -4052,7 +4053,7 @@ public class TaskServiceTest {
 		user1.setRealname(profile.getRealname() + "changed");
 		user1.setGravatarHash(gravatarHash);
 
-		taskService.replicateProfile(user1);
+		taskService.replicateProfile(user1, ReplicationScope.CREATE_OR_UPDATE);
 
 		entityManager.flush();
 

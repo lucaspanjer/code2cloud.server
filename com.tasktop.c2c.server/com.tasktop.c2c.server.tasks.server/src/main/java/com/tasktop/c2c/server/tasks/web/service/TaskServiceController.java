@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.CsvWriter;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.doc.Documentation;
 import com.tasktop.c2c.server.common.service.doc.Exclude;
@@ -450,10 +451,15 @@ public class TaskServiceController extends AbstractBuildInfoRestService implemen
 	};
 
 	@Exclude
-	@RequestMapping(value = "/profile", method = RequestMethod.POST)
+	@RequestMapping(value = "/profile/{scope}", method = RequestMethod.POST)
+	public void replicateProfile(@RequestBody TaskUserProfile taskUserProfile,
+			@PathVariable(value = "scope") String scope) {
+		this.replicateProfile(taskUserProfile, ReplicationScope.valueOf(scope));
+	}
+
 	@Override
-	public void replicateProfile(@RequestBody TaskUserProfile taskUserProfile) {
-		service.replicateProfile(taskUserProfile);
+	public void replicateProfile(TaskUserProfile taskUserProfile, ReplicationScope scope) {
+		service.replicateProfile(taskUserProfile, scope);
 	}
 
 	@Title("Create Tag")

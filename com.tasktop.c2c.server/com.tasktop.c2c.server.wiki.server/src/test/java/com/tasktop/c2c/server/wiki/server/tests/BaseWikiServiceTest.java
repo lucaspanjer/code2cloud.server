@@ -45,6 +45,7 @@ import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.MockJobService;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
@@ -777,7 +778,7 @@ public abstract class BaseWikiServiceTest {
 		Person renamedAuthor = new Person();
 		renamedAuthor.setName(newName);
 		renamedAuthor.setLoginName(author.getLoginName());
-		wikiService.replicateProfile(renamedAuthor);
+		wikiService.replicateProfile(renamedAuthor, ReplicationScope.UPDATE_IF_EXISTS);
 
 		Query query = entityManager.createQuery("select e from " + Person.class.getSimpleName()
 				+ " e where e.identity = :identity");

@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.tasks.service;
 
-
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.Security;
@@ -30,6 +29,11 @@ public interface InternalTaskService {
 	 * Provision an {@link Profile account} for the given user profile
 	 */
 	public Profile provisionAccount(TaskUserProfile taskUserProfile);
+
+	/**
+	 * Update an {@link Profile account} for the given user profile, if it exists for the Task
+	 */
+	public void updateAccountIfExists(TaskUserProfile taskUserProfile);
 
 	/**
 	 * get the profile associated with the {@link Security#getCurrentUser() current user}

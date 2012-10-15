@@ -12,15 +12,21 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.profile.service;
 
+import java.util.List;
+
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.profile.domain.internal.Profile;
+import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
 public interface InternalProfileService {
-	void doDeprovisionServiceAndDeleteProjectIfReady(String projectIdentifier, Long projectServiceId) throws EntityNotFoundException;
+	void doDeprovisionServiceAndDeleteProjectIfReady(String projectIdentifier, Long projectServiceId)
+			throws EntityNotFoundException;
 
 	void doDeleteProject(String projectIdentifier) throws EntityNotFoundException;
 
+	List<ProjectProfile> findAccessibleProjectsForProfile(Profile profile);
 }

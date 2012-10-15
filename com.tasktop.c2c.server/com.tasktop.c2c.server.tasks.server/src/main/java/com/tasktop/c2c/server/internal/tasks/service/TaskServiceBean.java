@@ -44,6 +44,7 @@ import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
@@ -1891,9 +1892,16 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 	@Secured(Role.System)
 	@Override
-	public void replicateProfile(TaskUserProfile taskUserProfile) {
+	public void replicateProfile(TaskUserProfile taskUserProfile, ReplicationScope scope) {
 		try {
-			getOrCreateFullProfile(taskUserProfile);
+			switch (scope) {
+			case CREATE_OR_UPDATE:
+				getOrCreateFullProfile(taskUserProfile);
+				break;
+			case UPDATE_IF_EXISTS:
+				internalTaskService.updateAccountIfExists(taskUserProfile);
+				break;
+			}
 		} catch (EntityNotFoundException e) {
 			// ignore
 		}

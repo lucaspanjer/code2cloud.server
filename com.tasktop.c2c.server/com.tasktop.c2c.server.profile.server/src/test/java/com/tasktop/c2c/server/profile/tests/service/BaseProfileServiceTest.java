@@ -64,6 +64,7 @@ import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.MockJobService;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
@@ -176,6 +177,15 @@ public abstract class BaseProfileServiceTest {
 		// add the default role
 		Authentication authentication = new UsernamePasswordAuthenticationToken(profile.getUsername(),
 				profile.getPassword(), AuthUtils.toGrantedAuthorities(Collections.singletonList(Role.User)));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+
+	private void logonWithOrganization(Profile profile, String orgIdentifier) throws EntityNotFoundException,
+			ValidationException {
+		Organization org = setupOrganization();
+		Authentication authentication = new UsernamePasswordAuthenticationToken(profile.getUsername(),
+				profile.getPassword(), AuthUtils.toGrantedAuthorities(Collections.singletonList(AuthUtils
+						.toCompoundOrganizationRole(Role.User, orgIdentifier))));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
@@ -655,6 +665,9 @@ public abstract class BaseProfileServiceTest {
 		Profile profile = createMockProfile(entityManager);
 		entityManager.flush();
 		entityManager.clear();
+
+		Organization org = setupOrganization();
+		logonWithOrganization(profile, org.getIdentifier());
 
 		profile.setFirstName(profile.getFirstName() + "_updated");
 		profile.setLastName(profile.getLastName() + "_updated");
@@ -1446,29 +1459,25 @@ public abstract class BaseProfileServiceTest {
 
 		mockery.checking(new Expectations() {
 			{
-				allowing(taskService).replicateProfile(with(any(TaskUserProfile.class)));
-				allowing(wikiService).replicateProfile(with(any(Person.class)));
+				allowing(taskService).replicateProfile(with(any(TaskUserProfile.class)),
+						with(any(ReplicationScope.class)));
+				allowing(wikiService).replicateProfile(with(any(Person.class)), with(any(ReplicationScope.class)));
 			}
 		});
 
-		profileService.replicateProjectProfile(project.getId(), project.getId());
+		profileService.replicateProjectProfile(profile.getId(), project.getId(), ReplicationScope.CREATE_OR_UPDATE);
 
 		mockery.assertIsSatisfied();
 	}
 
 	@Test
-	public void testReplicateTeamGetsScheduledOnTeamModification() throws EntityNotFoundException, ValidationException {
+	public void testReplicateProfileGetsScheduledOnTeamModification() throws EntityNotFoundException,
+			ValidationException {
 		Profile profile = createMockProfile(entityManager);
-		Profile profile2 = createMockProfile(entityManager);
 		Project project = MockProjectFactory.create(entityManager);
-
 		entityManager.flush();
 
-		addProject(profile, project);
-		addProject(profile2, project);
-
-		profileService.removeProjectProfile(project.getId(), profile2.getId());
-
+		profileService.createProjectProfile(project.getIdentifier(), profile.getUsername());
 		assertReplicateJobScheduled(project);
 	}
 
@@ -1492,12 +1501,49 @@ public abstract class BaseProfileServiceTest {
 		project.addProfile(profile);
 
 		entityManager.flush();
+
+		Organization org = setupOrganization();
+		logonWithOrganization(profile, org.getIdentifier());
 		entityManager.detach(profile);
 
 		profile.setFirstName(profile.getFirstName() + "changed");
 		profileService.updateProfile(profile);
 
 		assertReplicateJobScheduled(project);
+	}
+
+	@Test
+	public void testFindAccessibleProjectsForProfile() throws Exception {
+		Profile profile = createMockProfile(entityManager);
+
+		// add an Organization and log on using it
+		Organization org = setupOrganization();
+		logonWithOrganization(profile, org.getIdentifier());
+
+		// create a private Project and add the Profile to it; this should be excluded in results
+		Project privateProject = MockProjectFactory.create(entityManager);
+		privateProject.setAccessibility(ProjectAccessibility.PRIVATE);
+		privateProject.addProfile(profile);
+
+		// create a public Project, which should be included in results
+		Project publicProject = MockProjectFactory.create(entityManager);
+		publicProject.setAccessibility(ProjectAccessibility.PUBLIC);
+		entityManager.flush();
+
+		List<ProjectProfile> pps = internalProfileService.findAccessibleProjectsForProfile(profile);
+		assertEquals(1, pps.size());
+		assertEquals(publicProject.getId().longValue(), pps.get(0).getProject().getId().longValue());
+
+		// create an org-private Project for the Organization we created earlier; this should also be included in
+		// results
+		Project orgPrivateProject = MockProjectFactory.create(entityManager);
+		orgPrivateProject.setAccessibility(ProjectAccessibility.ORGANIZATION_PRIVATE);
+		orgPrivateProject.setOrganization(org);
+		orgPrivateProject.addProfile(profile);
+		entityManager.flush();
+
+		pps = internalProfileService.findAccessibleProjectsForProfile(profile);
+		assertEquals(2, pps.size());
 	}
 
 	@Test

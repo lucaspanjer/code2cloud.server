@@ -31,6 +31,7 @@ import org.springframework.web.client.RequestCallback;
 
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
@@ -733,12 +734,12 @@ public class TaskServiceClient extends AbstractRestServiceClient implements Task
 		}
 	}
 
-	public void replicateProfile(TaskUserProfile taskUserProfile) {
+	public void replicateProfile(TaskUserProfile taskUserProfile, ReplicationScope scope) {
 		new PostCall<Object>() {
 			public Object getValue(ServiceCallResult result) {
 				return new Object();
 			}
-		}.doCall("profile", taskUserProfile);
+		}.doCall("profile/{scope}", taskUserProfile, scope);
 	}
 
 	public Keyword createKeyword(Keyword keyword) throws ValidationException {

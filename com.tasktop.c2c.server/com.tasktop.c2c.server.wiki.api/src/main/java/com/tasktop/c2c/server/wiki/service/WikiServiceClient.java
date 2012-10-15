@@ -29,6 +29,7 @@ import org.springframework.web.client.RequestCallback;
 
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
@@ -482,11 +483,11 @@ public class WikiServiceClient extends AbstractRestServiceClient implements Wiki
 		}.doCall("configuration", map);
 	}
 
-	public void replicateProfile(Person person) {
+	public void replicateProfile(Person person, ReplicationScope scope) {
 		new PostCall<Object>() {
 			public Object getValue(ServiceCallResult result) {
 				return new Object();
 			}
-		}.doCall("person", person);
+		}.doCall("person/{scope}", person, scope);
 	}
 }
