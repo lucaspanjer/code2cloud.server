@@ -1038,7 +1038,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 					continue;
 				}
 				if (hasPersistentField(entity, sortInfo.getSortField())) {
-					sql += (count++ > 0 ? ", " : " ") + entityAlias + "." + sortInfo.getSortField();
+					sql += (count++ > 0 ? ", " : " ") + "LOWER(" + entityAlias + "." + sortInfo.getSortField() + ")";
 					if (sortInfo.getSortOrder() == SortInfo.Order.DESCENDING) {
 						sql += " desc";
 					}
