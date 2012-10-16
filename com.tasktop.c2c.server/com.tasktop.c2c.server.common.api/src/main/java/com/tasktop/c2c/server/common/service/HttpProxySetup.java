@@ -55,6 +55,8 @@ public class HttpProxySetup implements InitializingBean {
 				logger.error("Error configuring proxy", e);
 			}
 
+		} else {
+			logger.info("No http proxy defined");
 		}
 
 		String https_proxy = System.getenv().get("https_proxy");
@@ -74,6 +76,8 @@ public class HttpProxySetup implements InitializingBean {
 				logger.error("Error configuring proxy", e);
 			}
 
+		} else {
+			logger.info("No https proxy defined");
 		}
 
 		String no_proxy = System.getenv().get("no_proxy");
