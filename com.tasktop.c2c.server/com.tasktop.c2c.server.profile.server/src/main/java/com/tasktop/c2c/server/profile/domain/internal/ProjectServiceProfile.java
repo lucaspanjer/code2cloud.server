@@ -62,15 +62,7 @@ public class ProjectServiceProfile extends BaseEntity {
 		ProjectServiceProfile copy = new ProjectServiceProfile();
 
 		for (ProjectService serviceTemplate : getProjectServices()) {
-			ProjectService projectService = new ProjectService();
-			projectService.setType(serviceTemplate.getType());
-			projectService.setInternalPort(serviceTemplate.getInternalPort());
-			projectService.setInternalProtocol(serviceTemplate.getInternalProtocol());
-			projectService.setInternalUriPrefix(serviceTemplate.getInternalUriPrefix());
-			projectService.setUriPattern(serviceTemplate.getUriPattern());
-			projectService.setAjpPort(serviceTemplate.getAjpPort());
-			projectService.setExternalUrl(serviceTemplate.getExternalUrl());
-			copy.add(projectService);
+			copy.add(serviceTemplate.copy());
 		}
 		return copy;
 	}

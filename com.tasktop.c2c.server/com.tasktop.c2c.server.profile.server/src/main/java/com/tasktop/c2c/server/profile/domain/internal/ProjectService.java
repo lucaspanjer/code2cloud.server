@@ -268,4 +268,24 @@ public class ProjectService extends BaseEntity {
 	public void setAllocationTime(Date allocationTime) {
 		this.allocationTime = allocationTime;
 	}
+
+	public ProjectService copy() {
+		ProjectService projectService;
+		try {
+			projectService = getClass().newInstance();
+		} catch (InstantiationException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+		projectService.setType(this.getType());
+		projectService.setInternalPort(this.getInternalPort());
+		projectService.setInternalProtocol(this.getInternalProtocol());
+		projectService.setInternalUriPrefix(this.getInternalUriPrefix());
+		projectService.setUriPattern(this.getUriPattern());
+		projectService.setAjpPort(this.getAjpPort());
+		projectService.setExternalUrl(this.getExternalUrl());
+		return projectService;
+	}
+
 }

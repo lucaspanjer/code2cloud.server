@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.auth.service.proxy;
 import java.util.Map.Entry;
 
 import org.apache.commons.httpclient.HttpMethodBase;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.CommonsClientHttpRequestFactory;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
@@ -24,7 +25,8 @@ public class ProxyPreAuthHttpRequestFactory extends CommonsClientHttpRequestFact
 
 	private AuthenticationTokenSerializer tokenSerializer = new AuthenticationTokenSerializer();
 
-	private InternalTenancyContextHttpHeaderProvider tenancySerializer = new InternalTenancyContextHttpHeaderProvider();
+	@Autowired
+	private InternalTenancyContextHttpHeaderProvider tenancySerializer;
 
 	@Override
 	protected void postProcessCommonsHttpMethod(final HttpMethodBase httpMethod) {

@@ -92,7 +92,8 @@ public abstract class AbstractInteractiveProxyCommand extends AbstractCommand {
 
 	private AuthenticationTokenSerializer tokenSerializer = new AuthenticationTokenSerializer();
 
-	private InternalTenancyContextHttpHeaderProvider tenancySerializer = new InternalTenancyContextHttpHeaderProvider();
+	@Autowired
+	private InternalTenancyContextHttpHeaderProvider tenancySerializer;
 
 	@Autowired
 	private TenancyManager tenancyManager;

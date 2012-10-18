@@ -37,6 +37,7 @@ import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.internal.profile.service.SecurityPolicy;
+import com.tasktop.c2c.server.internal.profile.service.ServiceAwareTenancyManager;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
@@ -62,9 +63,13 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 	@Autowired
 	private SecurityPolicy securityPolicy;
 
+	@Autowired
+	private ServiceAwareTenancyManager tenancyManager;
+
 	private AuthenticationTokenSerializer tokenSerializer = new AuthenticationTokenSerializer();
 
-	private InternalTenancyContextHttpHeaderProvider tenancySerializer = new InternalTenancyContextHttpHeaderProvider();
+	@Autowired
+	private InternalTenancyContextHttpHeaderProvider tenancySerializer;
 
 	@Value("${alm.proxy.disableAjp}")
 	private boolean disableAjp = false;
@@ -120,6 +125,7 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 		authenticationToken = internalAuthenticationService.specializeAuthenticationToken(authenticationToken, project);
 
 		tokenSerializer.serialize(proxyRequest, authenticationToken);
+		tenancyManager.establishTenancyContext(service);
 
 		for (Entry<String, String> header : tenancySerializer.computeHeaders().entrySet()) {
 			proxyRequest.addHeader(header.getKey(), header.getValue());

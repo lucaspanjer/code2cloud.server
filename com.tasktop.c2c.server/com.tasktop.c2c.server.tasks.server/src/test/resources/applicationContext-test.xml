@@ -21,6 +21,8 @@
 	<context:property-placeholder location="classpath*:/*-test.properties, classpath*:/config/*.properties, file:///opt/code2cloud-test/etc/*.properties" ignore-resource-not-found="true"/>
 
 	<tx:annotation-driven />
+
+	<bean id="tenancySerializer" class="com.tasktop.c2c.server.common.internal.tenancy.InternalTenancyContextHttpHeaderProvider"/>
 		
 	<bean class="com.tasktop.c2c.server.common.tests.jpa.SingletonTestEntityManagerFactory" 
 		id="tasksDomain" depends-on="liquibase">

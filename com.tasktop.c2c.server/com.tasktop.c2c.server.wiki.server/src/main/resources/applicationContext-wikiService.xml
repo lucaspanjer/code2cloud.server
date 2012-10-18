@@ -15,7 +15,7 @@
 	<context:annotation-config/>	
 	<context:component-scan base-package="com.tasktop.c2c.server.internal.wiki.domain,com.tasktop.c2c.server.internal.wiki.server,com.tasktop.c2c.server.wiki.service"/> 
 
-	<bean id="databaseNamingStrategy" class="com.tasktop.c2c.server.common.internal.tenancy.DatabaseNamingStrategy" p:suffix="_wiki" 
+	<bean id="databaseNamingStrategy" class="com.tasktop.c2c.server.common.internal.tenancy.SimpleDatabaseNamingStrategy" p:suffix="_wiki" 
 		p:useShortProjectIdentifier="false"/>
 
 	<bean class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close" id="rawDataSource"

@@ -19,8 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
-import com.tasktop.c2c.server.common.service.web.TenancyManager;
-import com.tasktop.c2c.server.profile.domain.internal.Project;
+import com.tasktop.c2c.server.internal.profile.service.ServiceAwareTenancyManager;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 
@@ -31,7 +30,7 @@ public abstract class AbstractServiceProvider<T> implements ServiceProvider<T> {
 	private ProjectServiceService projectServiceService;
 
 	@Autowired
-	private TenancyManager tenancyManager;
+	private ServiceAwareTenancyManager tenancyManager;
 
 	private final String serviceUri;
 
@@ -60,7 +59,8 @@ public abstract class AbstractServiceProvider<T> implements ServiceProvider<T> {
 			}
 
 			service.setBaseUrl(computeBaseUrl(baseUri));
-			establishTenancyContext(appService.getProjectServiceProfile().getProject());
+
+			establishTenancyContext(appService);
 			return (T) service;
 
 		} catch (EntityNotFoundException e) {
@@ -68,8 +68,8 @@ public abstract class AbstractServiceProvider<T> implements ServiceProvider<T> {
 		}
 	}
 
-	private void establishTenancyContext(Project project) {
-		tenancyManager.establishTenancyContextFromProjectIdentifier(project.getIdentifier());
+	private void establishTenancyContext(ProjectService projectService) {
+		tenancyManager.establishTenancyContext(projectService);
 	}
 
 	protected String computeBaseUrl(String internalBaseUri) {

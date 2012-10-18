@@ -11,47 +11,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.internal.tenancy;
 
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 
-/**
- * @author cmorgan (Tasktop Technologies Inc.)
- * 
- */
-public class DatabaseNamingStrategy {
-	private String suffix;
-	private String prefix = null;
-	private boolean useShortProjectIdentifier = false;
+public interface DatabaseNamingStrategy {
 
-	public String getCurrentTenantDatabaseName() {
-		String result;
-		if (useShortProjectIdentifier) {
-			result = TenancyUtil.getCurrentTenantShortProjectIdentifer();
-		} else {
-			result = TenancyUtil.getCurrentTenantProjectIdentifer();
-		}
-
-		if (result == null) {
-			throw new IllegalStateException("Could not get database name from tenancy context");
-		}
-
-		result = result + suffix;
-
-		if (prefix != null) {
-			result = prefix + result;
-		}
-		return result;
-
-	}
-
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
-	}
-
-	public void setUseShortProjectIdentifier(boolean useShortProjectIdentifier) {
-		this.useShortProjectIdentifier = useShortProjectIdentifier;
-	}
-
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
+	public String getCurrentTenantDatabaseName();
 }

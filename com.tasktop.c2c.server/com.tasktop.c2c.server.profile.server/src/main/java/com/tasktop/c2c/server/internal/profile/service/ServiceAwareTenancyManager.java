@@ -9,18 +9,17 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.common.service.web;
+package com.tasktop.c2c.server.internal.profile.service;
+
+import com.tasktop.c2c.server.common.service.web.TenancyManager;
+import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 
 /**
- * @author cmorgan (Tasktop Technologies Inc.)
+ * @author clint (Tasktop Technologies Inc.)
  * 
  */
-public interface TenancyManager {
+public interface ServiceAwareTenancyManager extends TenancyManager {
 
-	/**
-	 * Sets the tenancy context to the project tenant.
-	 * 
-	 * @param projectIdentifier
-	 */
-	public void establishTenancyContextFromProjectIdentifier(String projectIdentifier);
+	public void establishTenancyContext(ProjectService projectService);
+
 }

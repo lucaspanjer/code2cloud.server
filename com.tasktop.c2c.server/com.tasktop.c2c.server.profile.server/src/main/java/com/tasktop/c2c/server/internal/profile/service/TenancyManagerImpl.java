@@ -16,22 +16,29 @@ import org.springframework.stereotype.Component;
 import org.springframework.tenancy.context.TenancyContextHolder;
 
 import com.tasktop.c2c.server.common.service.web.ProfileHubTenant;
-import com.tasktop.c2c.server.common.service.web.TenancyManager;
+import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
 @Component
-public class TenancyManagerImpl implements TenancyManager {
+public class TenancyManagerImpl implements ServiceAwareTenancyManager {
 
 	@Autowired
-	private ProfileHubTenantProvider profileHubTenantProvider;
+	protected ProfileHubTenantProvider profileHubTenantProvider;
 
 	@Override
 	public void establishTenancyContextFromProjectIdentifier(String projectIdentifier) {
 		ProfileHubTenant tenant = profileHubTenantProvider.findTenantForProjectIdentifer(projectIdentifier);
 		TenancyContextHolder.createEmptyContext();
 		TenancyContextHolder.getContext().setTenant(tenant);
+	}
+
+	@Override
+	public void establishTenancyContext(ProjectService projectService) {
+		// NOTE: ProjectService information is not used
+		this.establishTenancyContextFromProjectIdentifier(projectService.getProjectServiceProfile().getProject()
+				.getIdentifier());
 	}
 }

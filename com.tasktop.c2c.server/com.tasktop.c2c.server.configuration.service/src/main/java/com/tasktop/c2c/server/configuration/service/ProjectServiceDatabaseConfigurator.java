@@ -49,10 +49,18 @@ public class ProjectServiceDatabaseConfigurator implements Configurator, Resourc
 
 	private ResourceLoader resourceLoader;
 
+	private boolean needsDatabaseCreation = true;
+
 	private void initializeNewProject(ProjectServiceConfiguration config) throws SQLException {
 		String dbName = databaseNamingStrategy.getCurrentTenantDatabaseName();
 
-		String dbType = createDatabase(dbName);
+		String dbType;
+		if (needsDatabaseCreation) {
+			dbType = createDatabase(dbName);
+		} else {
+			dbType = rawDatasource.getConnection().getMetaData().getDatabaseProductName();
+		}
+
 		installSchema(dbType, dbName);
 	}
 
@@ -156,6 +164,10 @@ public class ProjectServiceDatabaseConfigurator implements Configurator, Resourc
 
 	public void setDatabaseNamingStrategy(DatabaseNamingStrategy databaseNamingStrategy) {
 		this.databaseNamingStrategy = databaseNamingStrategy;
+	}
+
+	public void setNeedsDatabaseCreation(boolean needsDatabaseCreation) {
+		this.needsDatabaseCreation = needsDatabaseCreation;
 	}
 
 }

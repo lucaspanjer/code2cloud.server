@@ -14,6 +14,10 @@ package com.tasktop.c2c.server.common.service.web;
 
 public class HeaderConstants {
 
+	// Class should not be instantiable
+	private HeaderConstants() {
+	}
+
 	/** Prefix for headers that can be used from outside requests. */
 	public static final String ALM_PUBLIC_HEADER_PREFIX = "C2C-";
 

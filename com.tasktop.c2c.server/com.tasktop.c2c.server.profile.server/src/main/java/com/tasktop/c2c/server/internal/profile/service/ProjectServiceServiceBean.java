@@ -45,7 +45,6 @@ import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
-import com.tasktop.c2c.server.common.service.web.TenancyManager;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementService;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceClient;
@@ -66,6 +65,9 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 	@Autowired
 	private ProfileServiceConfiguration configuration;
+
+	@Autowired(required = false)
+	private List<ProjectServiceProvisioner> projectServiceProvisionerList;
 
 	@Autowired
 	private JobService jobService;
@@ -94,6 +96,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 			throw new EntityNotFoundException();
 		}
 		ProjectServiceProfile serviceProfile = template.createCopy();
+
 		serviceProfile.setProject(project);
 		project.setProjectServiceProfile(serviceProfile);
 
@@ -147,12 +150,27 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		ServiceHost serviceHost = convertToInternal(domainServiceHost);
 		LOGGER.info("provisioned to " + serviceHost.getInternalNetworkAddress());
 
+		ProjectService provisionedProjectService = null;
+		for (ProjectService service : project.getProjectServiceProfile().getProjectServices()) {
+			if (service.getType().equals(type)) {
+				provisionedProjectService = service;
+				if (projectServiceProvisionerList != null) {
+					for (ProjectServiceProvisioner projectServiceProvisioner : projectServiceProvisionerList) {
+						if (projectServiceProvisioner.supports(service)) {
+							projectServiceProvisioner.provision(service);
+						}
+					}
+				}
+				service.setServiceHost(serviceHost);
+			}
+		}
+
 		// Now configure the host for the new project.
 		ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
 				.getNewService(domainServiceHost.getInternalNetworkAddress(), type);
 
 		try {
-			tenancyManager.establishTenancyContextFromProjectIdentifier(project.getIdentifier());
+			tenancyManager.establishTenancyContext(provisionedProjectService);
 			LOGGER.info("configuring node for " + type);
 			ProjectServiceConfiguration config = createProjectServiceConfiguration(project);
 			nodeConfigurationService.provisionService(config);
@@ -162,13 +180,6 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		} finally {
 			TenancyContextHolder.clearContext();
 		}
-
-		for (ProjectService service : project.getProjectServiceProfile().getProjectServices()) {
-			if (service.getType().equals(type)) {
-				service.setServiceHost(serviceHost);
-			}
-		}
-
 	}
 
 	/**
@@ -341,7 +352,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	}
 
 	@Autowired
-	private TenancyManager tenancyManager;
+	private ServiceAwareTenancyManager tenancyManager;
 
 	@Override
 	public List<ProjectServiceStatus> computeProjectServicesStatus(Project managedProject) {

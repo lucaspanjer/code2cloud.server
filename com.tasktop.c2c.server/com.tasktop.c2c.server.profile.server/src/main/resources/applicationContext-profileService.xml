@@ -20,6 +20,8 @@
 	<context:component-scan base-package="com.tasktop.c2c.server.internal.profile,com.tasktop.c2c.server.profile"/>
 	
 	<bean id="profileHubTenantProvider" class="com.tasktop.c2c.server.internal.profile.service.ProfileHubTenantProvider"/>
+	
+	<bean id="tenancySerializer" class="com.tasktop.c2c.server.common.internal.tenancy.InternalTenancyContextHttpHeaderProvider"/>
 
 	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close"
 		p:driverClassName="${alm.database.driverClassName}"
