@@ -190,12 +190,6 @@
 	<changeSet id="autoIncrementConfigurationProperty" author="lpanjer" dbms="hsqldb, mysql">
 		<addAutoIncrement tableName="ConfigurationProperty" columnName="id" columnDataType="INTEGER" />
 	</changeSet>
-	<changeSet id="dropSequenceTable" author="lpanjer">
-		<preConditions onFail="MARK_RAN">
-			<tableExists tableName="SEQUENCE"/>
-		</preConditions>
-		<dropTable tableName="SEQUENCE"/>
-	</changeSet>
 	<changeSet author="cmorgan" id="modifyAttachmentContentSize-task2154" dbms="hsqldb, mysql">
 		<modifyDataType tableName="AttachmentContent" columnName="content" newDataType="MEDIUMBLOB"/>
 		 <modifySql dbms="hsqldb">
