@@ -678,6 +678,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.tasktop.c2c.server</groupId>
+				<artifactId>cloud.terremark</artifactId>
+				<version>${com.tasktop.c2c.server.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.tasktop.c2c.server</groupId>
 				<artifactId>configuration.service</artifactId>
 				<version>${com.tasktop.c2c.server.version}</version>
 			</dependency>

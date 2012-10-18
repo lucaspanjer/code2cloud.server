@@ -11,13 +11,14 @@
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd   
                            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd   
                            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
-                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd"
-                           >
-
-	<import resource="classpath:META-INF/spring/applicationContext-cloudService.xml"/>
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+                           
+   	<context:annotation-config/>
+	<context:component-scan base-package="com.tasktop.c2c.server.cloud"> 
+	</context:component-scan>
+                           
 
 	<bean id="creationParent" class="com.tasktop.c2c.server.cloud.service.BasicNodeCreationService" abstract="true">
-		<property name="cloudService" value="#{ '${alm.mockCloud}'.equals('true') ? mockCloudService : realCloudService }"/>
 		<property name="nodeReadyStrategy">
 			<bean class="com.tasktop.c2c.server.cloud.service.IsReachableNodeReadyStrategy"/>
 		</property>
@@ -41,7 +42,6 @@
 	</bean>
 	
 	<bean id="hudsonSlaveNodeCreationService" class="com.tasktop.c2c.server.cloud.service.NodeWithExtraDiskCreationService" >
-				<property name="cloudService" value="#{ '${alm.mockCloud}'.equals('true') ? mockCloudService : realCloudService }"/>
 				<property name="templateNodeName" value="${alm.hudsonSlave.templateNode}"/>
 				<property name="nodeNamePrefix" value="${alm.hudsonSlave.nodePrefix}"/>		
 				<property name="nodeReadyStrategy">

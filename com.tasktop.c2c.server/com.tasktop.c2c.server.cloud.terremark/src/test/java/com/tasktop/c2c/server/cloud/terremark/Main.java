@@ -10,7 +10,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.cloud.service.tests;
+package com.tasktop.c2c.server.cloud.terremark;
 
 import java.util.LinkedList;
 import java.util.Queue;

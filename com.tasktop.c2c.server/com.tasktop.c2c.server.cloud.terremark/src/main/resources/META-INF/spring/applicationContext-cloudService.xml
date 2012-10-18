@@ -21,7 +21,7 @@
 	
 	<bean class="org.jclouds.compute.ComputeServiceContextFactory"/>
 		
-	<bean class="com.tasktop.c2c.server.internal.cloud.service.terremark.VCloudExpressConfiguration">
+	<bean class="com.tasktop.c2c.server.internal.cloud.terremark.VCloudExpressConfiguration">
 		<property name="identity" value="${alm.cloud.terramark.identity}"/>
 		<property name="password" value="${alm.cloud.terramark.password}"/>
 	</bean>

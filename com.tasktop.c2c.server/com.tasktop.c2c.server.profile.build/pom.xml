@@ -18,6 +18,7 @@
 		<module>../com.tasktop.c2c.server.auth.service.spring2</module>
 		<module>../com.tasktop.c2c.server.cloud.api</module>
 		<module>../com.tasktop.c2c.server.cloud.service</module>
+		<module>../com.tasktop.c2c.server.cloud.terremark</module>
 		<module>../com.tasktop.c2c.server.common.api</module>
 		<module>../com.tasktop.c2c.server.common.service</module>
 		<module>../com.tasktop.c2c.server.common.web</module>

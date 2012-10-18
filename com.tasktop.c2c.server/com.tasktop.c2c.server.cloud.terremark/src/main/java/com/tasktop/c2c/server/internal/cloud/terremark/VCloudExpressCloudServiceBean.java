@@ -10,7 +10,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.internal.cloud.service.terremark;
+package com.tasktop.c2c.server.internal.cloud.terremark;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.profile.domain.internal.SshPublicKey;
 
-
 @Component
 @Qualifier("main")
 public class PublicKeyReaderManager implements PublicKeyReader {
@@ -29,7 +28,6 @@ public class PublicKeyReaderManager implements PublicKeyReader {
 	{
 		publicKeyReaders.add(new OpenSSHPublicKeyReader());
 		publicKeyReaders.add(new Rfc4716PublicKeyReader());
-		publicKeyReaders.add(new PemsPublicKeyReader());
 	}
 
 	@Override

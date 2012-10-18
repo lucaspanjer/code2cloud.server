@@ -12,6 +12,7 @@
                            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd   
                            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
+	<import resource="classpath:META-INF/spring/applicationContext-cloudService.xml"/>
 	<import resource="classpath:META-INF/spring/applicationContext-authenticationService.xml"/>
 	<import resource="classpath:META-INF/spring/applicationContext-hudsonSlavePoolServiceClient.xml"/>
 	<import resource="classpath:META-INF/spring/applicationContext-restServer.xml"/>

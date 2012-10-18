@@ -10,7 +10,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.cloud.service.tests;
+package com.tasktop.c2c.server.cloud.terremark;
 
 import static org.junit.Assert.assertEquals;
 
@@ -49,8 +49,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.google.common.base.Predicate;
 import com.tasktop.c2c.server.cloud.domain.Task;
 import com.tasktop.c2c.server.cloud.service.Template;
-import com.tasktop.c2c.server.internal.cloud.service.terremark.VCloudExpressCloudServiceBean;
-import com.tasktop.c2c.server.internal.cloud.service.terremark.VCloudExpressConfiguration;
+import com.tasktop.c2c.server.internal.cloud.terremark.VCloudExpressCloudServiceBean;
+import com.tasktop.c2c.server.internal.cloud.terremark.VCloudExpressConfiguration;
 
 @ContextConfiguration({ "/applicationContext-test.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
