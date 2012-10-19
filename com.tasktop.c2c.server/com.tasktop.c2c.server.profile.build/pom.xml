@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.tasktop.c2c.server</groupId>
 	<artifactId>profile.build</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>profile build</name>
 	<description>Build profile projects</description>

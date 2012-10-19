@@ -10,8 +10,7 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	
    	<context:annotation-config/>
-	        
-	
+
 	<bean id="mvnConfigServiceController" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceController">
 		<property name="projectServiceManagementService" ref="mvnConfigurationService"/>	
 	</bean>

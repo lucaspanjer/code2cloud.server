@@ -13,7 +13,6 @@
 
   	<import resource="classpath:applicationContext-eventServiceClient.xml"/>
 
-
 	<context:component-scan base-package="com.tasktop.c2c.server.scm.service"/>
 
 

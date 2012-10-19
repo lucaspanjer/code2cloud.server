@@ -9,7 +9,7 @@
   
   <groupId>com.tasktop.c2c.server</groupId>
   <artifactId>hudson-war</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Code2Cloud Hudson war</name>
   <description>
