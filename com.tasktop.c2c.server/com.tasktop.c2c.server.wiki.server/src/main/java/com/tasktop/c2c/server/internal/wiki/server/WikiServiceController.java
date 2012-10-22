@@ -95,12 +95,15 @@ public class WikiServiceController extends AbstractBuildInfoRestService implemen
 		return service.retrievePage(pageId);
 	}
 
+	private static final String PAGE_PATH = "page/path/";
+
 	@Section(value = "Wiki Pages", order = 0)
 	@Title("Retrieve Page By Path")
 	@Documentation("Retrieve a page by its path. The returned page content is in its original wiki markup format.")
-	@RequestMapping(value = "/page/path/**", method = RequestMethod.GET)
+	@RequestMapping(value = "/" + PAGE_PATH + "**", method = RequestMethod.GET)
 	public Page retrievePageByPath(HttpServletRequest request) throws EntityNotFoundException {
 		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+		path = path.startsWith(PAGE_PATH) ? path.substring(PAGE_PATH.length()) : path;
 		return retrievePageByPath(path);
 	}
 
@@ -109,12 +112,15 @@ public class WikiServiceController extends AbstractBuildInfoRestService implemen
 		return service.retrievePageByPath(path);
 	}
 
+	private static final String RENDERED_PAGE_PATH = "renderedPage/path/";
+
 	@Section(value = "Wiki Pages", order = 0)
 	@Title("Retrieve Rendered Page By Path")
 	@Documentation("Retrieve a rendered page by its path. The returned page content is rendered in HTML format.")
-	@RequestMapping(value = "/renderedPage/path/**", method = RequestMethod.GET)
+	@RequestMapping(value = "/" + RENDERED_PAGE_PATH + "**", method = RequestMethod.GET)
 	public Page retrieveRenderedPageByPath(HttpServletRequest request) throws EntityNotFoundException {
 		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+		path = path.startsWith(RENDERED_PAGE_PATH) ? path.substring(RENDERED_PAGE_PATH.length()) : path;
 		return retrieveRenderedPageByPath(path);
 	}
 
@@ -123,12 +129,15 @@ public class WikiServiceController extends AbstractBuildInfoRestService implemen
 		return service.retrieveOutlineByPath(path);
 	}
 
+	private static final String OUTLINE_PATH = "outline/path/";
+
 	@Section(value = "Wiki Pages", order = 0)
 	@Title("Retrieve Page outline By Path")
 	@Documentation("Retrieve an outline by its path.")
-	@RequestMapping(value = "/outline/path/**", method = RequestMethod.GET)
+	@RequestMapping(value = "/" + OUTLINE_PATH + "**", method = RequestMethod.GET)
 	public PageOutline retrieveOutlineByPath(HttpServletRequest request) throws EntityNotFoundException {
 		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+		path = path.startsWith(OUTLINE_PATH) ? path.substring(OUTLINE_PATH.length()) : path;
 		return retrieveOutlineByPath(path);
 	}
 
@@ -391,13 +400,15 @@ public class WikiServiceController extends AbstractBuildInfoRestService implemen
 		}
 	}
 
+	private static final String PAGE_PREVIEW = "page/preview/";
+
 	@Section(value = "Wiki Pages", order = 0)
 	@Title("Render a Page Preview")
-	@RequestMapping(value = "/page/preview/**", method = RequestMethod.POST)
+	@RequestMapping(value = "/" + PAGE_PREVIEW + "**", method = RequestMethod.POST)
 	public Map<String, String> doRenderPreview(HttpServletRequest request, @RequestBody String markup)
 			throws EntityNotFoundException {
 		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-
+		path = path.startsWith(PAGE_PREVIEW) ? path.substring(PAGE_PREVIEW.length()) : path;
 		return Collections.singletonMap("string", renderPreview(path, markup));
 	}
 
