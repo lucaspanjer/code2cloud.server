@@ -1185,7 +1185,7 @@ public abstract class BaseProfileServiceTest {
 	}
 
 	@Test
-	public void testFindOrgPrivateProjectsForOrgUserNotBelongingToProjectWithoutOrgId() throws Exception {
+	public void testFindAllProjectsForOrgUser() throws Exception {
 		Organization org = setupOrganization();
 		Profile projectOwner = createMockProfile(entityManager);
 		OrganizationProfile orgToOwner = new OrganizationProfile();
@@ -1204,11 +1204,23 @@ public abstract class BaseProfileServiceTest {
 		orgPrivateProject.setOrganization(org);
 		profileService.createProject(projectOwner.getId(), orgPrivateProject);
 
+		// create an org-private project in a different org
+		Organization org2 = setupOrganization();
+		Project orgPrivateProject2 = MockProjectFactory.create(null);
+		orgPrivateProject2.setAccessibility(ProjectAccessibility.ORGANIZATION_PRIVATE);
+		orgPrivateProject2.setOrganization(org2);
+		profileService.createProject(projectOwner.getId(), orgPrivateProject2);
+
 		// ... and a private project (that should be excluded from results)
 		Project privateProject = MockProjectFactory.create(null);
 		privateProject.setAccessibility(ProjectAccessibility.PRIVATE);
 		privateProject.setOrganization(org);
 		profileService.createProject(projectOwner.getId(), privateProject);
+
+		// create a public project without an orgId which should also appear in the results
+		Project publicProject = MockProjectFactory.create(null);
+		publicProject.setAccessibility(ProjectAccessibility.PUBLIC);
+		profileService.createProject(projectOwner.getId(), publicProject);
 
 		// login the user with an authority associating the user to the organization
 		String authRole = AuthUtils.toCompoundOrganizationRole(Role.User, org.getIdentifier());
@@ -1219,7 +1231,7 @@ public abstract class BaseProfileServiceTest {
 		ProjectsQuery query = new ProjectsQuery(ProjectRelationship.ALL, null);
 		QueryResult<Project> result = profileService.findProjects(query);
 		assertNotNull(result);
-		assertEquals(1, result.getTotalResultSize().intValue());
+		assertEquals(2, result.getTotalResultSize().intValue());
 	}
 
 	private void setupProjects(int count, ProjectAccessibility projectAccessibility, Profile profile) {

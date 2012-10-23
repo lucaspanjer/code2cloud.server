@@ -1666,12 +1666,13 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		boolean needIdParam = true;
 		boolean needPubParam = false;
 		boolean needPrivParam = false;
+		whereStringBldr.append("WHERE project.deleted = false AND ");
 		switch (projectRelationship) {
 		case ALL:
 			// include projects with org private accessibility and current user is a member of an org associated with
 			// the project
 			whereStringBldr
-					.append("WHERE (project.accessibility = :public OR (pp.profile.id = :id AND (pp.user = true OR pp.owner = true OR (pp.community = true AND project.accessibility = :public) ))");
+					.append("(project.accessibility = :public OR (pp.profile.id = :id AND (pp.user = true OR pp.owner = true OR (pp.community = true AND project.accessibility = :public) ))");
 			if (orgIdentifierOrNull != null) {
 				whereStringBldr.append(" OR project.accessibility = :organizationPrivate");
 				needPrivParam = true;
@@ -1685,42 +1686,44 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 				// other than a database
 				List<String> orgIdsForUser = AuthUtils.findOrganizationIdsForCurrentUser();
 				if (orgIdsForUser.size() > 0) {
-					whereStringBldr.append("OR (project.accessibility = :organizationPrivate AND (");
+					whereStringBldr.append("OR (project.id IN (SELECT innerQueryProject.id FROM "
+							+ Project.class.getSimpleName()
+							+ " innerQueryProject WHERE innerQueryProject.accessibility = :organizationPrivate AND (");
 					Iterator<String> it = orgIdsForUser.iterator();
 					while (it.hasNext()) {
-						whereStringBldr.append("project.organization.identifier = '").append(it.next()).append("' ");
+						whereStringBldr.append("innerQueryProject.organization.identifier = '").append(it.next())
+								.append("' ");
 						if (it.hasNext()) {
 							whereStringBldr.append("OR ");
 						}
 					}
-					whereStringBldr.append(")) ");
+					whereStringBldr.append("))) ");
 					needPrivParam = true;
 				}
 			}
 			break;
 		case MEMBER:
-			whereStringBldr.append("WHERE pp.profile.id = :id AND pp.user = true ");
+			whereStringBldr.append("pp.profile.id = :id AND pp.user = true ");
 			break;
 		case OWNER:
-			whereStringBldr.append("WHERE pp.profile.id = :id AND pp.owner = true ");
+			whereStringBldr.append("pp.profile.id = :id AND pp.owner = true ");
 			break;
 		case ORGANIZATION_PRIVATE: // requires an organization
 			if (orgIdentifierOrNull == null) {
 				throw new IllegalArgumentException();
 			}
-			whereStringBldr.append("WHERE project.accessibility = :organizationPrivate ");
+			whereStringBldr.append("project.accessibility = :organizationPrivate ");
 			needPrivParam = true;
 			needIdParam = false;
 			break;
 		case WATCHER:
-			whereStringBldr
-					.append("WHERE pp.profile.id = :id AND pp.community = true AND project.accessibility = :public");
+			whereStringBldr.append("pp.profile.id = :id AND pp.community = true AND project.accessibility = :public ");
 			needPubParam = true;
 			break;
 		case PUBLIC:
 			needIdParam = false;
 			needPubParam = true;
-			whereStringBldr.append("WHERE project.accessibility = :public ");
+			whereStringBldr.append("project.accessibility = :public ");
 			break;
 		default:
 			throw new IllegalStateException();
@@ -1729,7 +1732,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (orgIdentifierOrNull != null) {
 			whereStringBldr.append(" AND project.organization.identifier = :orgId ");
 		}
-		whereStringBldr.append(" AND project.deleted = false ");
 
 		Query totalResultQuery = entityManager.createQuery("SELECT count(DISTINCT project) " + fromString
 				+ whereStringBldr.toString());
