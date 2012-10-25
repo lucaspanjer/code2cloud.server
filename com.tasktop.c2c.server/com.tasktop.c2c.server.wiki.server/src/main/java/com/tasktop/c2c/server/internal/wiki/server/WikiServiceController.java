@@ -483,4 +483,9 @@ public class WikiServiceController extends AbstractBuildInfoRestService implemen
 	public String setConfigurationProperty(String name, String value) {
 		return service.setConfigurationProperty(name, value);
 	}
+
+	@RequestMapping(value = "/version", method = RequestMethod.GET)
+	public Map<String, String> getServiceVersion() {
+		return Collections.singletonMap("version", WikiService.VERSION);
+	}
 }

@@ -35,7 +35,7 @@ import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 import com.tasktop.c2c.server.common.service.domain.QueryRequest;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
-import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
+import com.tasktop.c2c.server.common.service.web.AbstractVersionedRestServiceClient;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.AttachmentHandle;
 import com.tasktop.c2c.server.wiki.domain.Page;
@@ -48,7 +48,7 @@ import com.tasktop.c2c.server.wiki.domain.WikiActivity;
  */
 @Service
 @Qualifier("webservice-client")
-public class WikiServiceClient extends AbstractRestServiceClient implements WikiService {
+public class WikiServiceClient extends AbstractVersionedRestServiceClient implements WikiService {
 
 	@SuppressWarnings("unused")
 	private static class ServiceCallResult {
@@ -138,7 +138,6 @@ public class WikiServiceClient extends AbstractRestServiceClient implements Wiki
 		public void setString(String string) {
 			this.string = string;
 		}
-
 	}
 
 	private abstract class GetCall<T> {
@@ -489,5 +488,9 @@ public class WikiServiceClient extends AbstractRestServiceClient implements Wiki
 				return new Object();
 			}
 		}.doCall("person/{scope}", person, scope);
+	}
+
+	public String getClientVersion() {
+		return WikiService.VERSION;
 	}
 }

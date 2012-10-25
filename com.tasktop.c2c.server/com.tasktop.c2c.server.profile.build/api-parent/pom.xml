@@ -42,8 +42,6 @@
 								<copy file="META-INF/MANIFEST.MF" toFile="target/MANIFEST.MF" />
 								<replace file="target/MANIFEST.MF" token=".qualifier"
 									value=".${maven.build.timestamp}" />
-								<replace file="target/MANIFEST.MF" token="serviceVersion"
-									value="${serviceVersion}" />
 							</target>
 						</configuration>
 						<goals>

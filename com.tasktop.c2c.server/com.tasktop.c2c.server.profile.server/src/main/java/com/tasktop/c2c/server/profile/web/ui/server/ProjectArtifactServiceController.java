@@ -12,7 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.server;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -59,4 +61,8 @@ public class ProjectArtifactServiceController extends AbstractRestService {
 		}
 	}
 
+	@RequestMapping(value = "/version", method = RequestMethod.GET)
+	public Map<String, String> getServiceVersionREST() {
+		return Collections.singletonMap("version", ProjectArtifactService.VERSION);
+	}
 }

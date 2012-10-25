@@ -35,7 +35,7 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
-import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
+import com.tasktop.c2c.server.common.service.web.AbstractVersionedRestServiceClient;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
@@ -50,7 +50,7 @@ import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 
 @Service
 @Qualifier("webservice-client")
-public class ProfileWebServiceClient extends AbstractRestServiceClient implements ProfileWebService {
+public class ProfileWebServiceClient extends AbstractVersionedRestServiceClient implements ProfileWebService {
 
 	@SuppressWarnings("unused")
 	private static class ServiceCallResult {
@@ -73,6 +73,7 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 		private List<SshPublicKey> sshPublicKeyList;
 		private List<ProjectServiceStatus> projectServiceStatusList;
 		private Organization organization;
+		private Map<String, String> serviceVersion;
 
 		public void setProfile(Profile profile) {
 			this.profile = profile;
@@ -216,6 +217,14 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 
 		public void setOrganization(Organization organization) {
 			this.organization = organization;
+		}
+
+		public Map<String, String> getServiceVersion() {
+			return serviceVersion;
+		}
+
+		public void setServiceVersion(Map<String, String> serviceVersion) {
+			this.serviceVersion = serviceVersion;
 		}
 	}
 
@@ -748,4 +757,7 @@ public class ProfileWebServiceClient extends AbstractRestServiceClient implement
 		throw new UnsupportedOperationException();
 	}
 
+	public String getClientVersion() {
+		return ProfileWebService.VERSION;
+	}
 }

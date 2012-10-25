@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>tasks.api</artifactId>
-	<version>${serviceVersion}-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<name>task api</name>
 	<parent>
 		<groupId>com.tasktop.c2c.server</groupId>
@@ -11,10 +11,6 @@
 		<version>1.1.0-SNAPSHOT</version>
 		<relativePath>../com.tasktop.c2c.server.profile.build/api-parent/pom.xml</relativePath>
 	</parent>
-
-	<properties>
-		<serviceVersion>1.1.0</serviceVersion>
-	</properties>
 
 	<dependencies>
 		<dependency>
@@ -47,9 +43,6 @@
 					<include>**/*.java</include>
 					<include>**/*.gwt.xml</include>
 				</includes>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>

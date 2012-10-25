@@ -173,4 +173,9 @@ public class ScmServiceController extends AbstractBuildInfoRestService implement
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@RequestMapping(value = "/version", method = RequestMethod.GET)
+	public Map<String, String> getServiceVersion() {
+		return Collections.singletonMap("version", ScmService.VERSION);
+	}
 }

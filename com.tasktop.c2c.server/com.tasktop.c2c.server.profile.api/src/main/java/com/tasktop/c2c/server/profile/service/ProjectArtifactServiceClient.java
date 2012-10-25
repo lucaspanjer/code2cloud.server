@@ -20,15 +20,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-
-import com.tasktop.c2c.server.common.service.WrappedCheckedException;
-import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
+import com.tasktop.c2c.server.common.service.web.AbstractVersionedRestServiceClient;
 import com.tasktop.c2c.server.profile.domain.project.ProjectArtifact;
 import com.tasktop.c2c.server.profile.domain.project.ProjectArtifacts;
 
 @Service
 @Qualifier("webservice-client")
-public class ProjectArtifactServiceClient extends AbstractRestServiceClient implements ProjectArtifactService {
+public class ProjectArtifactServiceClient extends AbstractVersionedRestServiceClient implements ProjectArtifactService {
 
 	public static final String ARTIFACT_LIST_URL = "{projectIdentifier}/list";
 
@@ -44,21 +42,16 @@ public class ProjectArtifactServiceClient extends AbstractRestServiceClient impl
 		public void setProjectArtifactsList(List<ProjectArtifacts> projectArtifactsList) {
 			this.projectArtifactsList = projectArtifactsList;
 		}
-
 	}
 
 	public List<ProjectArtifacts> listProjectArtifacts(String projectIdentifier) {
 		Map<String, String> variables = new HashMap<String, String>();
 		variables.put("projectIdentifier", projectIdentifier == null ? "" : projectIdentifier);
 
-		try {
-			ServiceCallResult callResult = template.getForObject(computeUrl(ARTIFACT_LIST_URL),
-					ServiceCallResult.class, variables);
-			if (callResult.getProjectArtifactsList() != null) {
-				return callResult.getProjectArtifactsList();
-			}
-		} catch (WrappedCheckedException e) {
-			throw e;
+		ServiceCallResult callResult = template.getForObject(computeUrl(ARTIFACT_LIST_URL), ServiceCallResult.class,
+				variables);
+		if (callResult.getProjectArtifactsList() != null) {
+			return callResult.getProjectArtifactsList();
 		}
 		throw new IllegalStateException("Illegal result from call");
 	}
@@ -68,14 +61,10 @@ public class ProjectArtifactServiceClient extends AbstractRestServiceClient impl
 		variables.put("projectIdentifier", projectIdentifier == null ? "" : projectIdentifier);
 		variables.put("nameRegexp", artifactNameRegularExpression);
 
-		try {
-			ServiceCallResult callResult = template.getForObject(computeUrl(ARTIFACT_LIST_URL + "?nameRegexp="
-					+ artifactNameRegularExpression), ServiceCallResult.class, variables);
-			if (callResult.getProjectArtifactsList() != null) {
-				return callResult.getProjectArtifactsList();
-			}
-		} catch (WrappedCheckedException e) {
-			throw e;
+		ServiceCallResult callResult = template.getForObject(computeUrl(ARTIFACT_LIST_URL + "?nameRegexp="
+				+ artifactNameRegularExpression), ServiceCallResult.class, variables);
+		if (callResult.getProjectArtifactsList() != null) {
+			return callResult.getProjectArtifactsList();
 		}
 		throw new IllegalStateException("Illegal result from call");
 	}
@@ -97,7 +86,10 @@ public class ProjectArtifactServiceClient extends AbstractRestServiceClient impl
 	 * com.tasktop.c2c.server.profile.domain.project.ProjectArtifact)
 	 */
 	public void downloadProjectArtifact(String projectId, File file, ProjectArtifact artifact) {
-		throw new UnsupportedOperationException("Not implmented yet");
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
+	public String getClientVersion() {
+		return ProjectArtifactService.VERSION;
+	}
 }

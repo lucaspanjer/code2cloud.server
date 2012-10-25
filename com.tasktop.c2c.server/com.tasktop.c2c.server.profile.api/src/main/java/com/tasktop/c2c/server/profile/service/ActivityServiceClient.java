@@ -19,13 +19,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
+import com.tasktop.c2c.server.common.service.web.AbstractVersionedRestServiceClient;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectDashboard;
 
 @Service
 @Qualifier("webservice-client")
-public class ActivityServiceClient extends AbstractRestServiceClient implements ActivityService {
+public class ActivityServiceClient extends AbstractVersionedRestServiceClient implements ActivityService {
 
 	@SuppressWarnings("unused")
 	private static class ServiceCallResult {
@@ -39,7 +39,6 @@ public class ActivityServiceClient extends AbstractRestServiceClient implements 
 		public void setProjectActivityList(List<ProjectActivity> projectActivityList) {
 			this.projectActivityList = projectActivityList;
 		}
-
 	}
 
 	private abstract class GetCall<T> {
@@ -103,4 +102,7 @@ public class ActivityServiceClient extends AbstractRestServiceClient implements 
 		return null;
 	}
 
+	public String getClientVersion() {
+		return ActivityService.VERSION;
+	}
 }

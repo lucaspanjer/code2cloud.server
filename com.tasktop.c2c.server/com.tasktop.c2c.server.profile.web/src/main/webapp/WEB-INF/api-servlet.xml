@@ -10,23 +10,16 @@
 	
 	<context:annotation-config/>
    
-	<context:property-placeholder location="classpath:profile-api.properties"  
-		ignore-resource-not-found="true"/>
-
 	<bean id="profileWebServiceController"
 		class="com.tasktop.c2c.server.profile.web.ui.server.ProfileWebServiceController"
-		p:serviceVersionString="${profile.service.version}"
 		autowire="byType"/>
 	
 	<bean id="activityServiceController"
 		class="com.tasktop.c2c.server.profile.web.ui.server.ActivityServiceController"
-		p:serviceVersionString="${profile.service.version}"
 		autowire="byType"/>
 		
 	<bean id="projectArtifactServiceController"
-		class="com.tasktop.c2c.server.profile.web.ui.server.ProjectArtifactServiceController" 
-		p:projectArtifactService-ref="projectArtifactService" 
-		p:serviceVersionString="${profile.service.version}"/>
+		class="com.tasktop.c2c.server.profile.web.ui.server.ProjectArtifactServiceController" p:projectArtifactService-ref="projectArtifactService" />
 
 	<bean id="externalConnectController"
 		class="org.springframework.social.connect.web.ConnectController" p:applicationUrl="#{psConfig.profileApplicationProtocol + '://' + psConfig.webHost + psConfig.baseContextPath}">
@@ -44,8 +37,7 @@
 		<constructor-arg ref="signInAdaptor"/>
 	</bean>
 
-	<bean id="eventServiceController" class="com.tasktop.c2c.server.event.service.EventServiceController" p:serviceVersionString="${profile.service.version}"
-		autowire="byType"/>
+	<bean id="eventServiceController" class="com.tasktop.c2c.server.event.service.EventServiceController" autowire="byType"/>
 
 	<!-- Add in a ViewResolver which handles the Spring Social controller redirects, and put it first in the chain -->
 	<bean id="redirectViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver"

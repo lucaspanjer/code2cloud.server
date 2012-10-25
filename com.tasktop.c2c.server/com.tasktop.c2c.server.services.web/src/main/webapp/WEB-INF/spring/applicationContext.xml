@@ -12,7 +12,7 @@
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-	<context:property-placeholder location="classpath:scm-api.properties, classpath*:/config/*.properties, /WEB-INF/spring/*.properties, file:///opt/code2cloud/etc/*.properties"  
+	<context:property-placeholder location="classpath*:/config/*.properties, /WEB-INF/spring/*.properties, file:///opt/code2cloud/etc/*.properties"  
 		ignore-resource-not-found="true"/>
 
 	<import resource="classpath:META-INF/spring/applicationContext-restServer.xml"/>
@@ -22,7 +22,7 @@
 	
 	<security:global-method-security secured-annotations="enabled" />	
 	
-	<bean id="scmApi" class="com.tasktop.c2c.server.scm.web.ScmServiceController" p:serviceVersionString="${scm.service.version}"/>
+	<bean id="scmApi" class="com.tasktop.c2c.server.scm.web.ScmServiceController" />
 	
 	<bean id="aopLogger" class="com.tasktop.c2c.server.common.service.ServiceLoggingAdvice"/>
 		

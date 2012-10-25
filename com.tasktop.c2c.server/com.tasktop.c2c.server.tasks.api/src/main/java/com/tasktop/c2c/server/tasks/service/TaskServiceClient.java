@@ -37,7 +37,7 @@ import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria;
-import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
+import com.tasktop.c2c.server.common.service.web.AbstractVersionedRestServiceClient;
 import com.tasktop.c2c.server.tasks.domain.Attachment;
 import com.tasktop.c2c.server.tasks.domain.AttachmentHandle;
 import com.tasktop.c2c.server.tasks.domain.Comment;
@@ -61,7 +61,7 @@ import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
  */
 @Service
 @Qualifier("webservice-client")
-public class TaskServiceClient extends AbstractRestServiceClient implements TaskService {
+public class TaskServiceClient extends AbstractVersionedRestServiceClient implements TaskService {
 
 	@SuppressWarnings("unused")
 	// All of the setters in this method are used programmatically by the JSON serializer.
@@ -929,5 +929,9 @@ public class TaskServiceClient extends AbstractRestServiceClient implements Task
 			}
 		}.doCall("configuration", map);
 
+	}
+
+	public String getClientVersion() {
+		return TaskService.VERSION;
 	}
 }

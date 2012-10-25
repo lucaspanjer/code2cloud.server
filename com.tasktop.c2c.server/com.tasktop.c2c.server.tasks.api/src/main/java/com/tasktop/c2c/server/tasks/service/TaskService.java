@@ -59,6 +59,9 @@ public interface TaskService {
 	static Region DEFAULT_PAGE_INFO = new Region(0, 20);
 	static SortInfo DEFAULT_SORT_INFO = new SortInfo(TaskFieldConstants.PRIORITY_FIELD, Order.DESCENDING);
 
+	// Keep this synchronized with the OSGI version in MANIFEST.MF
+	public static final String VERSION = "1.1.0";
+
 	/**
 	 * Create a task.
 	 * 

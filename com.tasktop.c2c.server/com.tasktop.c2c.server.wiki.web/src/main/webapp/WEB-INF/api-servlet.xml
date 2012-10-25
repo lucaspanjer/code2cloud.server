@@ -14,11 +14,7 @@
 	<context:component-scan base-package="com.tasktop.c2c.server.internal.wiki.server"
 		use-default-filters="false"/>
 
-	<context:property-placeholder location="classpath:wiki-api.properties"  
-		ignore-resource-not-found="true"/>
-
-	<bean id="wikiServiceController" class="com.tasktop.c2c.server.internal.wiki.server.WikiServiceController" 
-		p:serviceVersionString="${wiki.service.version}"/>
+	<bean id="wikiServiceController" class="com.tasktop.c2c.server.internal.wiki.server.WikiServiceController"/>
 
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">

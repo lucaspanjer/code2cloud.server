@@ -22,7 +22,7 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 import com.tasktop.c2c.server.common.service.domain.Region;
-import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
+import com.tasktop.c2c.server.common.service.web.AbstractVersionedRestServiceClient;
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
@@ -32,7 +32,7 @@ import com.tasktop.c2c.server.scm.domain.ScmSummary;
  * A client to communicate to the SCM REST service.
  */
 @Service
-public class ScmServiceClient extends AbstractRestServiceClient implements ScmService {
+public class ScmServiceClient extends AbstractVersionedRestServiceClient implements ScmService {
 
 	/**
 	 * Essentially a map entry, but spring does not like map return results that are meant to be response data.
@@ -118,17 +118,10 @@ public class ScmServiceClient extends AbstractRestServiceClient implements ScmSe
 			this.commit = commit;
 		}
 
-		/**
-		 * @return the string
-		 */
 		public String getString() {
 			return string;
 		}
 
-		/**
-		 * @param string
-		 *            the string to set
-		 */
 		public void setString(String string) {
 			this.string = string;
 		}
@@ -340,4 +333,7 @@ public class ScmServiceClient extends AbstractRestServiceClient implements ScmSe
 		}.doCall(PUBILC_SSH_KEY_URL);
 	}
 
+	public String getClientVersion() {
+		return ScmService.VERSION;
+	}
 }

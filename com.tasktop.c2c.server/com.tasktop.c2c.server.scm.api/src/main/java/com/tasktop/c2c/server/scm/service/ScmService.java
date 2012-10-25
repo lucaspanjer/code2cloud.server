@@ -32,6 +32,9 @@ import com.tasktop.c2c.server.scm.domain.ScmSummary;
  */
 public interface ScmService {
 
+	// Keep this synchronized with the OSGI version in MANIFEST.MF
+	public static final String VERSION = "1.1.0";
+
 	List<ScmRepository> getScmRepositories() throws EntityNotFoundException;
 
 	/**

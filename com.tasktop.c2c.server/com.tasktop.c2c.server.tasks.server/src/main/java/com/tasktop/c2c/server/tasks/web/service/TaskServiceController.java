@@ -865,4 +865,9 @@ public class TaskServiceController extends AbstractBuildInfoRestService implemen
 		return service.setConfigurationProperty(name, value);
 	}
 
+	@RequestMapping(value = "/version", method = RequestMethod.GET)
+	public Map<String, String> getServiceVersion() {
+		return Collections.singletonMap("version", TaskService.VERSION);
+	}
+
 }

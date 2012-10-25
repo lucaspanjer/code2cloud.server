@@ -42,6 +42,9 @@ import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
  */
 public interface ProfileWebService {
 
+	// Keep this synchronized with the OSGI version in MANIFEST.MF
+	public static final String VERSION = "1.1.0";
+
 	public Project getProjectForInvitationToken(String token) throws EntityNotFoundException;
 
 	public Project getProjectByIdentifier(String projectIdentifier) throws EntityNotFoundException;
@@ -170,5 +173,4 @@ public interface ProfileWebService {
 			ValidationException;
 
 	List<PoolStatus> computeNodePoolStatus(); // REVIEW mount elsewhere
-
 }

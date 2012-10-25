@@ -19,7 +19,9 @@ import static com.tasktop.c2c.server.profile.service.ActivityServiceClient.PROJE
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -95,5 +97,10 @@ public class ActivityServiceController extends AbstractRestService implements Ac
 	@Override
 	public ProjectDashboard getDashboard(@PathVariable("projectId") String projectIdentifier) {
 		return activityService.getDashboard(projectIdentifier);
+	}
+
+	@RequestMapping(value = "/version", method = RequestMethod.GET)
+	public Map<String, String> getServiceVersion() {
+		return Collections.singletonMap("version", ActivityService.VERSION);
 	}
 }

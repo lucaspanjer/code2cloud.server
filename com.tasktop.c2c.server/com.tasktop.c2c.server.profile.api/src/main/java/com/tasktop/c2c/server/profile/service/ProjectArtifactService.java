@@ -29,6 +29,9 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectArtifacts;
  */
 public interface ProjectArtifactService {
 
+	// Keep this synchronized with the OSGI version in MANIFEST.MF
+	public static final String VERSION = "1.1.0";
+
 	/**
 	 * Get all the project artifacts for a given project.
 	 * 

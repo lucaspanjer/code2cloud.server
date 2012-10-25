@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.tests.service;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -87,4 +88,10 @@ public class ProfileWebServiceClientTest extends ProfileWebServiceTest {
 		}
 	}
 
+	@Test
+	public void testGetVersion() {
+		String serviceVersion = profileWebServiceClient.getServiceVersion();
+		assertNotNull(serviceVersion);
+		assertTrue(serviceVersion.matches("\\d+\\.\\d+\\.\\d+"));
+	}
 }

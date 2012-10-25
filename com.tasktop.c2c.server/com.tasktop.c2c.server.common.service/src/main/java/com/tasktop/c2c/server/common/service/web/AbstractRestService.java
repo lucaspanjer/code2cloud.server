@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.common.service.web;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,8 +29,6 @@ import org.springframework.core.Conventions;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -46,17 +43,10 @@ public abstract class AbstractRestService {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private String serviceVersion;
-
 	@Autowired
 	protected MessageSource messageSource;
 	@Autowired
 	protected ObjectMapper jsonMapper;
-
-	@RequestMapping(value = "/version", method = RequestMethod.GET)
-	public Map<String, String> getServiceVersion() {
-		return Collections.singletonMap("version", serviceVersion);
-	}
 
 	/**
 	 * Override the content type and ensure contentType of text/html. This is needed to avoid browsers wrapping response
@@ -154,11 +144,5 @@ public abstract class AbstractRestService {
 
 		response.getWriter().write("{ \"" + property + "\" : " + valueString + "}");
 		response.setContentType("application/json");
-	}
-
-	// used for Spring injection; named "setServiceVersionString" because "getServiceVersion" returns a different type
-	// than String
-	public void setServiceVersionString(String serviceVersion) {
-		this.serviceVersion = serviceVersion;
 	}
 }
