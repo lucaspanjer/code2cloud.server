@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.common.service;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.commons.httpclient.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -35,6 +36,9 @@ public class HttpProxySetup implements InitializingBean {
 
 	private boolean dontProxyToProfile = true;
 
+	private String httpProxyHost = null;
+	private Integer httpProxyPort = null;
+
 	public void setupProxyFromEnvironment() {
 		String http_proxy = System.getenv().get("http_proxy");
 
@@ -46,9 +50,11 @@ public class HttpProxySetup implements InitializingBean {
 			logger.info("Configuring http proxy as: " + http_proxy);
 			try {
 				URL proxyUrl = new URL(http_proxy);
-				System.setProperty("http.proxyHost", proxyUrl.getHost());
-				if (proxyUrl.getPort() != 80) {
-					System.setProperty("http.proxyPort", proxyUrl.getPort() + "");
+				httpProxyHost = proxyUrl.getHost();
+				System.setProperty("http.proxyHost", httpProxyHost);
+				httpProxyPort = proxyUrl.getPort();
+				if (httpProxyPort != 80) {
+					System.setProperty("http.proxyPort", httpProxyPort + "");
 				}
 
 			} catch (MalformedURLException e) {
@@ -114,6 +120,25 @@ public class HttpProxySetup implements InitializingBean {
 
 	public void setDontProxyToProfile(boolean dontProxyToProfile) {
 		this.dontProxyToProfile = dontProxyToProfile;
+	}
+
+	public String getHttpProxyHost() {
+		return httpProxyHost;
+	}
+
+	public int getHttpProxyPort() {
+		return httpProxyPort;
+	}
+
+	/**
+	 * Configure an http client to use the http proxy if it is set.
+	 * 
+	 * @param httpClient
+	 */
+	public void configureHttpClient(HttpClient httpClient) {
+		if (httpProxyHost != null && !httpProxyHost.isEmpty()) {
+			httpClient.getHostConfiguration().setProxy(httpProxyHost, httpProxyPort);
+		}
 	}
 
 }
