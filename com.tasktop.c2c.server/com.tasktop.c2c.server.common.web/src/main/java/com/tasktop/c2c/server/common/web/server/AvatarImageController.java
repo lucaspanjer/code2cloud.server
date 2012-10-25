@@ -42,9 +42,9 @@ public class AvatarImageController implements InitializingBean {
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(AvatarImageController.class);
 
-	private String gravatarBaseJsonUrl = "http://www.gravatar.com/";
+	private String gravatarBaseJsonUrl = "http://en.gravatar.com/";
 	private String gravatarBaseImageUrl = "http://www.gravatar.com/avatar/";
-	private int avatarRequestTimeout = 1000;
+	private int avatarRequestTimeout = 10000;
 
 	private HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
 
