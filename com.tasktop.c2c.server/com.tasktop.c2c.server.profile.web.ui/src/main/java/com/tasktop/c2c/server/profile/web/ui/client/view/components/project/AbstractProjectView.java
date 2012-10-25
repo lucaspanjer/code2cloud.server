@@ -26,6 +26,7 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectPreferences;
 import com.tasktop.c2c.server.profile.domain.project.WikiMarkupLanguage;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 
 /**
  * @author clint.morgan@tasktop.com (Tasktop Technologies Inc.)
@@ -44,6 +45,8 @@ public abstract class AbstractProjectView extends Composite implements Editor<Pr
 	protected RadioButton privacyOrgPrivateOption;
 	@UiField
 	protected ParagraphElement orgPrivatePElement;
+	@UiField
+	protected ParagraphElement publicProjectElement;
 	@UiField(provided = true)
 	@Path("projectPreferences.wikiLanguage")
 	protected ValueListBox<WikiMarkupLanguage> wikiLanguageListBox = new ValueListBox<WikiMarkupLanguage>(
@@ -61,6 +64,8 @@ public abstract class AbstractProjectView extends Composite implements Editor<Pr
 		privacyPrivateOption.setValue(project.getAccessibility().equals(ProjectAccessibility.PRIVATE));
 		privacyOrgPrivateOption.setValue(project.getAccessibility().equals(ProjectAccessibility.ORGANIZATION_PRIVATE));
 		UIObject.setVisible(orgPrivatePElement, project.getOrganization() != null);
+		UIObject.setVisible(publicProjectElement, AppGinjector.get.instance().getConfiguration()
+				.isEnablePublicProjects());
 
 		wikiLanguageListBox.setValue(project.getProjectPreferences().getWikiLanguage());
 		wikiLanguageListBox.setAcceptableValues(Arrays.asList(WikiMarkupLanguage.values()));

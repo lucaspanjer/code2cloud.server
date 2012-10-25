@@ -31,6 +31,9 @@ public interface AppMessages extends Messages {
 			+ "have to build or maintain the tools you're using to build the world's next greatest application.")
 	SafeHtml welcomeOverviewHtml();
 
+	@DefaultMessage("Note: Setting a project as \"Public\" makes the project code, wiki docs, tasks and builds publicly available")
+	SafeHtml settingsProjectHelp();
+
 	@DefaultMessage("Want to participate in a project you see, or create your own public or private project? "
 			+ "Code2Cloud is currently in beta and is accepting requests to join. "
 			+ "<em>Just send your first name, last name, and email address to <a href=\"mailto:engineering-c2c@tasktop.com\">engineering-c2c@tasktop.com</a>.</em> ")

@@ -21,6 +21,7 @@ public class AppConfiguration {
 	private boolean enableGoogleAnalytics = true;
 	private boolean enablePasswordManagment = true;
 	private boolean enableGitHubAuth = true;
+	private boolean enablePublicProjects = true;
 
 	/**
 	 * @return the enableGoogleAnalytics
@@ -65,6 +66,20 @@ public class AppConfiguration {
 	 */
 	public void setEnableGitHubAuth(boolean enableGitHubAuth) {
 		this.enableGitHubAuth = enableGitHubAuth;
+	}
+
+	/**
+	 * @return the enablePublicProjects
+	 */
+	public boolean isEnablePublicProjects() {
+		return enablePublicProjects;
+	}
+
+	/**
+	 * @param enablePublicProjects the enablePublicProjects to set
+	 */
+	public void setEnablePublicProjects(boolean enablePublicProjects) {
+		this.enablePublicProjects = enablePublicProjects;
 	}
 
 }

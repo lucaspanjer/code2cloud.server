@@ -25,7 +25,7 @@
 					<fieldset>
 						<label>Privacy:</label>
 						<div>
-							<p>
+							<p ui:field="publicProjectElement">
 								<g:RadioButton ui:field="privacyPublicOption" name="privacy"/>
 								Public
 							</p>

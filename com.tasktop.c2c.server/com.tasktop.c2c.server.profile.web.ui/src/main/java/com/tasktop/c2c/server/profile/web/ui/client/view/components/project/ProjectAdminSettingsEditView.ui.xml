@@ -33,7 +33,7 @@
 						<g:RadioButton name="privacy" ui:field="privacyOrgPrivateOption"/>
 						Organization Private
 					</p>
-					<p>
+					<p ui:field="publicProjectElement">
 						<g:RadioButton name="privacy" ui:field="privacyPublicOption"/>
 						Public
 					</p>
