@@ -23,7 +23,8 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 
 public class TrustedHostAuthenticationProcessingFilter extends AbstractPreAuthenticatedProcessingFilter {
 
-	private static final String USERNAME = "Potential_Trusted_Host";
+	/** Username given to the TH token. Should not be a legal C2C User name. */
+	public static final String USERNAME = "!TRUSTED_HOST!";
 
 	@Override
 	protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
