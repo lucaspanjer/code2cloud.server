@@ -57,7 +57,7 @@ public class AuthenticationRoleProcessingFilter extends GenericFilterBean {
 
 	}
 
-	private void updateAuth(Authentication auth) {
+	protected void updateAuth(Authentication auth) {
 		// Push in the user's updated roles now.
 		if (auth instanceof UsernamePasswordAuthenticationToken) {
 
