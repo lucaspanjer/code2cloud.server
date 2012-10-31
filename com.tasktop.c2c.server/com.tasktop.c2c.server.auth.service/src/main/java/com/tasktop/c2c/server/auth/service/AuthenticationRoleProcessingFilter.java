@@ -30,7 +30,7 @@ import org.springframework.web.filter.GenericFilterBean;
 
 public class AuthenticationRoleProcessingFilter extends GenericFilterBean {
 
-	private UserDetailsService userDetailsService;
+	protected UserDetailsService userDetailsService;
 	private String rememberMeKey;
 
 	@Required
