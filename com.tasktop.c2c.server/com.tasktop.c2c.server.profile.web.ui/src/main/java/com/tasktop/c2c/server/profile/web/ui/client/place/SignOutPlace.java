@@ -15,14 +15,14 @@ package com.tasktop.c2c.server.profile.web.ui.client.place;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
-import com.tasktop.c2c.server.common.profile.web.client.place.AbstractPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.event.LogoutEvent;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class SignOutPlace extends AbstractPlace {
+public class SignOutPlace extends AbstractBatchFetchingPlace {
 
 	public static PageMapping SignOut = new PageMapping(new Tokenizer(), "signout");
 
@@ -45,14 +45,15 @@ public class SignOutPlace extends AbstractPlace {
 	}
 
 	public SignOutPlace() {
-
 	}
 
 	// Hacky work around the logic in AppPlaceController.
 	boolean ready = false;
 
 	@Override
-	public void go() {
+	protected void handleBatchResults() {
+		super.handleBatchResults();
+
 		if (!ready) {
 			ready = true;
 			ProfileGinjector.get.instance().getEventBus().fireEvent(new LogoutEvent());
