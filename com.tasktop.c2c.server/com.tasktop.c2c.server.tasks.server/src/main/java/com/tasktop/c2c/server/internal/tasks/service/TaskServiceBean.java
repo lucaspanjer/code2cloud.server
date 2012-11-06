@@ -686,6 +686,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 	private void lookupProfiles(Task task) throws EntityNotFoundException {
 		task.setAssignee(getProfileByLoginName(task.getAssignee()));
+		task.setReporter(getProfileByLoginName(task.getReporter()));
 		if (task.getWatchers() != null) {
 			for (int i = 0; i < task.getWatchers().size(); i++) {
 				TaskUserProfile profile = task.getWatchers().get(i);
