@@ -2215,7 +2215,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			String property) {
 		TaskUserProfile retVal = existingProfile;
 		// If not set, use the logged in user Profile
-		if (existingProfile == null) {
+		if (existingProfile == null || existingProfile.getLoginName() == null
+				|| existingProfile.getLoginName().length() == 0) {
 			retVal = loggedInUser;
 		} else {
 			// If the user has the Admin role, we allow it to impersonate the original reporter,
