@@ -16,7 +16,7 @@
   <classpathentry kind="var" path="M2_REPO/org/aspectj/aspectjweaver/1.6.11/aspectjweaver-1.6.11.jar" sourcepath="M2_REPO/org/aspectj/aspectjweaver/1.6.11/aspectjweaver-1.6.11-sources.jar"/>
   <classpathentry kind="src" path="/com.tasktop.c2c.server.auth.service.spring2"/>
   <classpathentry kind="src" path="/com.tasktop.c2c.server.cloud.api"/>
-  <classpathentry kind="src" path="/com.tasktop.c2c.server.common.api"/>
+  <classpathentry kind="var" path="M2_REPO/com/tasktop/c2c/server/common.api/0.1.0-SNAPSHOT/common.api-0.1.0-SNAPSHOT.jar" sourcepath="M2_REPO/com/tasktop/c2c/server/common.api/0.1.0-SNAPSHOT/common.api-0.1.0-SNAPSHOT-sources.jar"/>
   <classpathentry kind="src" path="/com.tasktop.c2c.server.common.service"/>
   <classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.8.0/commons-beanutils-1.8.0.jar" sourcepath="M2_REPO/commons-beanutils/commons-beanutils/1.8.0/commons-beanutils-1.8.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.4/commons-codec-1.4.jar" sourcepath="M2_REPO/commons-codec/commons-codec/1.4/commons-codec-1.4-sources.jar"/>
@@ -63,12 +63,12 @@
   <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.13/log4j-1.2.13.jar" sourcepath="M2_REPO/log4j/log4j/1.2.13/log4j-1.2.13-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/kohsuke/metainf-services/metainf-services/1.2/metainf-services-1.2.jar" sourcepath="M2_REPO/org/kohsuke/metainf-services/metainf-services/1.2/metainf-services-1.2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jgit/org.eclipse.jgit/1.2.0.201112221803-r/org.eclipse.jgit-1.2.0.201112221803-r.jar" sourcepath="M2_REPO/org/eclipse/jgit/org.eclipse.jgit/1.2.0.201112221803-r/org.eclipse.jgit-1.2.0.201112221803-r-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.confluence.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.confluence.core-1.6.1-SNAPSHOT.jar" sourcepath="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.confluence.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.confluence.core-1.6.1-SNAPSHOT-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.core-1.6.1-SNAPSHOT.jar" sourcepath="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.core-1.6.1-SNAPSHOT-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.mediawiki.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.mediawiki.core-1.6.1-SNAPSHOT.jar" sourcepath="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.mediawiki.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.mediawiki.core-1.6.1-SNAPSHOT-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.textile.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.textile.core-1.6.1-SNAPSHOT.jar" sourcepath="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.textile.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.textile.core-1.6.1-SNAPSHOT-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.tracwiki.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.tracwiki.core-1.6.1-SNAPSHOT.jar" sourcepath="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.tracwiki.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.tracwiki.core-1.6.1-SNAPSHOT-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.twiki.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.twiki.core-1.6.1-SNAPSHOT.jar" sourcepath="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.twiki.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.twiki.core-1.6.1-SNAPSHOT-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.confluence.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.confluence.core-1.6.1-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.core-1.6.1-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.mediawiki.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.mediawiki.core-1.6.1-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.textile.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.textile.core-1.6.1-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.tracwiki.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.tracwiki.core-1.6.1-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.twiki.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.twiki.core-1.6.1-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/persistence/org.eclipse.persistence.antlr/2.3.2/org.eclipse.persistence.antlr-2.3.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/persistence/org.eclipse.persistence.asm/2.3.2/org.eclipse.persistence.asm-2.3.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/persistence/org.eclipse.persistence.core/2.3.2/org.eclipse.persistence.core-2.3.2.jar"/>

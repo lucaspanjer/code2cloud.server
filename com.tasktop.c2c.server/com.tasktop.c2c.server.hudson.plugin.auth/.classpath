@@ -146,7 +146,7 @@
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-support/2.0.8/spring-support-2.0.8.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/tenancy/spring-tenancy/1.0.0.BUILD-SNAPSHOT/spring-tenancy-1.0.0.BUILD-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-tx/3.1.1.RELEASE/spring-tx-3.1.1.RELEASE.jar" sourcepath="M2_REPO/org/springframework/spring-tx/3.1.1.RELEASE/spring-tx-3.1.1.RELEASE-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/springframework/spring-web/3.1.1.RELEASE/spring-web-3.1.1.RELEASE.jar" sourcepath="M2_REPO/org/springframework/spring-web/3.1.1.RELEASE/spring-web-3.1.1.RELEASE-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/springframework/spring-web/3.0.5.RELEASE/spring-web-3.0.5.RELEASE.jar" sourcepath="M2_REPO/org/springframework/spring-web/3.0.5.RELEASE/spring-web-3.0.5.RELEASE-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-webmvc/3.1.1.RELEASE/spring-webmvc-3.1.1.RELEASE.jar" sourcepath="M2_REPO/org/springframework/spring-webmvc/3.1.1.RELEASE/spring-webmvc-3.1.1.RELEASE-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/hudson/stapler/stapler-core/3.0.0-M1-1/stapler-core-3.0.0-M1-1.jar" sourcepath="M2_REPO/org/eclipse/hudson/stapler/stapler-core/3.0.0-M1-1/stapler-core-3.0.0-M1-1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/hudson/stapler/stapler-jelly/3.0.0-M1-1/stapler-jelly-3.0.0-M1-1.jar" sourcepath="M2_REPO/org/eclipse/hudson/stapler/stapler-jelly/3.0.0-M1-1/stapler-jelly-3.0.0-M1-1-sources.jar"/>
