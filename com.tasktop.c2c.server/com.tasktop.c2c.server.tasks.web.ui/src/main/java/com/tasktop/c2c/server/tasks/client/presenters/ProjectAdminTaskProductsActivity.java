@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.tasktop.c2c.server.common.profile.web.client.ClientCallback;
@@ -147,8 +146,8 @@ public class ProjectAdminTaskProductsActivity extends AbstractTaskPresenter impl
 							}
 
 							@Override
-							public void onFailure(Throwable exception) {
-								super.onFailure(exception);
+							public void failure(Throwable exception) {
+								super.failure(exception);
 								// If a failure occurs, reset the view
 								ProjectAdminTasksEditView.getInstance().redraw();
 							}

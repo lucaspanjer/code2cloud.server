@@ -22,25 +22,27 @@ import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 import com.tasktop.c2c.server.common.web.client.view.ErrorCapableView;
+import com.tasktop.c2c.server.common.web.client.view.errors.ErrorHandler;
 
 public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 
 	public static final Message LOADING_MESSSAGE = new Message(0, "Loading...", Message.MessageType.PROGRESS);
 
-	public interface ErrorHandler {
-		List<String> getErrors(Throwable exception);
+	public interface ErrorInterpreter {
+		List<String> getErrorMessages(Throwable exception);
 	}
 
-	private static ErrorHandler errorHandler;
+	private static ErrorInterpreter errorInterpreter;
 
-	public static void setErrorHandler(ErrorHandler handler) {
-		errorHandler = handler;
+	public static void setErrorInterpreter(ErrorInterpreter interpreter) {
+		errorInterpreter = interpreter;
 
 	}
 
 	private OperationMessage operationMessage;
 	private ErrorCapableView overrideErrorView;
 	private Notifier notifier = CommonGinjector.get.instance().getNotifier();
+	private ErrorHandler errorHandler = CommonGinjector.get.instance().getErrorHandler();
 
 	public AsyncCallbackSupport() {
 		setup(null, null, null);
@@ -113,26 +115,34 @@ public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 	protected abstract void success(T result);
 
 	@Override
-	public void onFailure(Throwable exception) {
+	public final void onFailure(Throwable exception) {
 		operationEnd();
-		if (overrideErrorView != null) {
-			overrideErrorView.displayErrors(getErrors(exception));
+		if (errorHandler.overrideDefaultOnFailure(exception)) {
+			errorHandler.handleError(exception);
 		} else {
-			String errorMsg = StringUtils.concatenate(getErrors(exception));
-			Message message = new Message(0, errorMsg, Message.MessageType.ERROR);
-			notifier.displayMessage(message);
+			failure(exception);
 		}
 		setButtonToEnableState(true);
 	}
 
-	protected List<String> getErrors(Throwable exception) {
-		return errorHandler.getErrors(exception);
+	protected void failure(Throwable exception) {
+		if (overrideErrorView != null) {
+			overrideErrorView.displayErrors(getErrorMessages(exception));
+		} else {
+			String errorMsg = StringUtils.concatenate(getErrorMessages(exception));
+			Message message = new Message(0, errorMsg, Message.MessageType.ERROR);
+			notifier.displayMessage(message);
+		}
+	}
+
+	protected List<String> getErrorMessages(Throwable exception) {
+		return errorInterpreter.getErrorMessages(exception);
 	}
 
 	/**
 	 * @return the errorHandler
 	 */
-	public static ErrorHandler getErrorHandler() {
-		return errorHandler;
+	public static ErrorInterpreter getErrorHandler() {
+		return errorInterpreter;
 	}
 }

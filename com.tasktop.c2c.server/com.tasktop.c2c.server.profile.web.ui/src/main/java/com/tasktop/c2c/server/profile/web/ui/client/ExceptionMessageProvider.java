@@ -25,9 +25,9 @@ import com.tasktop.c2c.server.common.web.shared.AuthenticationFailedException;
 import com.tasktop.c2c.server.common.web.shared.AuthenticationRequiredException;
 import com.tasktop.c2c.server.common.web.shared.ValidationFailedException;
 
-public class ExceptionMessageProvider implements AsyncCallbackSupport.ErrorHandler {
+public class ExceptionMessageProvider implements AsyncCallbackSupport.ErrorInterpreter {
 	@Override
-	public List<String> getErrors(Throwable exception) {
+	public List<String> getErrorMessages(Throwable exception) {
 		// FIXME: NLS
 		if (exception instanceof ValidationFailedException) {
 			return ((ValidationFailedException) exception).getMessages();

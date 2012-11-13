@@ -31,6 +31,8 @@ import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.PlaceProvider;
 import com.tasktop.c2c.server.common.web.client.notification.NotificationPanel;
 import com.tasktop.c2c.server.common.web.client.notification.Notifier;
+import com.tasktop.c2c.server.common.web.client.view.errors.DefaultErrorHandler;
+import com.tasktop.c2c.server.common.web.client.view.errors.ErrorHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.AppShell;
 import com.tasktop.c2c.server.profile.web.ui.client.action.DispatchServiceAsync;
 import com.tasktop.c2c.server.profile.web.ui.client.activity.MainActivityMapper;
@@ -60,7 +62,12 @@ public class AppGinModule extends AbstractGinModule {
 		bind(DispatchAsync.class).to(DispatchServiceAsync.class).in(Singleton.class);
 		bind(PageMappingRegistry.class).in(Singleton.class);
 
+		configureErrorHandler();
 		configurePlaces();
+	}
+
+	protected void configureErrorHandler() {
+		bind(ErrorHandler.class).to(DefaultErrorHandler.class).in(Singleton.class);
 	}
 
 	protected void configurePlaces() {

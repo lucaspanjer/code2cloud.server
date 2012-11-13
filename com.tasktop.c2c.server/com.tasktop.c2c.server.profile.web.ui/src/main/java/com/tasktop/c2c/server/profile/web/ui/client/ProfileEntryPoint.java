@@ -39,7 +39,7 @@ public class ProfileEntryPoint implements EntryPoint {
 		instance = this;
 
 		// FIXME this could be in a better place
-		AsyncCallbackSupport.setErrorHandler(new ExceptionMessageProvider());
+		AsyncCallbackSupport.setErrorInterpreter(new ExceptionMessageProvider());
 
 		initializeInjector();
 		registerPageMappings();

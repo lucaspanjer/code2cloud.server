@@ -246,8 +246,8 @@ public class TaskPresenterImpl extends AbstractTaskPresenter implements TaskPres
 					}
 
 					@Override
-					public void onFailure(Throwable exception) {
-						super.onFailure(exception);
+					public void failure(Throwable exception) {
+						super.failure(exception);
 						taskView.reEnterEditMode();
 					}
 				});

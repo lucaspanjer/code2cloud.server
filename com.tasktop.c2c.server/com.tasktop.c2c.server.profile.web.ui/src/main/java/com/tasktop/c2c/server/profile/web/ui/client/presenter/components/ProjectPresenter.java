@@ -65,13 +65,13 @@ public class ProjectPresenter extends AbstractProfilePresenter implements Splitt
 								}
 
 								@Override
-								public void onFailure(Throwable exception) {
+								public void failure(Throwable exception) {
 									// ENFE is expected if the homepage doesn't exist - if it was anything else,
 									// go to the generic error handler
 									if (ExceptionsUtil.isEntityNotFound(exception)) {
 										view.setProjectWikiPage(null);
 									} else {
-										super.onFailure(exception);
+										super.failure(exception);
 									}
 								}
 							});

@@ -106,7 +106,7 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 						}
 
 						@Override
-						public void onFailure(Throwable result) {
+						public void failure(Throwable result) {
 							ProfileGinjector.get
 									.instance()
 									.getNotifier()
@@ -132,8 +132,8 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 					}
 
 					@Override
-					public void onFailure(Throwable exception) {
-						super.onFailure(exception);
+					public void failure(Throwable exception) {
+						super.failure(exception);
 						callback.onReturn(false);
 					}
 				});

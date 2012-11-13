@@ -63,12 +63,12 @@ public class PasswordResetRequestPresenter extends AbstractProfilePresenter {
 			}
 
 			@Override
-			public void onFailure(Throwable exception) {
+			public void failure(Throwable exception) {
 				if (exception instanceof NoSuchEntityException) {
 					// Show the same message even if we don't find the email. Don't reveal who is actually a user.
 					onSuccessfulRequest(email);
 				} else {
-					super.onFailure(exception);
+					super.failure(exception);
 				}
 			}
 		});

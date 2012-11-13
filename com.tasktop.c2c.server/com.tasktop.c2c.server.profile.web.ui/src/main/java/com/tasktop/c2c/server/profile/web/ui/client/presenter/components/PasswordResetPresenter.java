@@ -75,7 +75,7 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 			}
 
 			@Override
-			public void onFailure(Throwable exception) {
+			public void failure(Throwable exception) {
 				if (exception instanceof NoSuchEntityException) {
 					AppGinjector.get
 							.instance()
@@ -83,7 +83,7 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 							.displayMessage(
 									Message.createErrorMessage("Your profile could not be found. Please try again."));
 				} else {
-					super.onFailure(exception);
+					super.failure(exception);
 				}
 			}
 		});

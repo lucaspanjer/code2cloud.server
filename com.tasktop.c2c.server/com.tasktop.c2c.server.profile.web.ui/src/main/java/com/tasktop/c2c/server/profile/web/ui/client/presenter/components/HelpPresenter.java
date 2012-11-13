@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-
 import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
@@ -67,11 +66,11 @@ public class HelpPresenter extends AbstractProfilePresenter implements Splittabl
 							}
 
 							@Override
-							public void onFailure(Throwable exception) {
+							public void failure(Throwable exception) {
 								if (exception instanceof NoSuchEntityException) {
 									// ignore, this expected if the project or page doesn't exist.
 								} else {
-									super.onFailure(exception);
+									super.failure(exception);
 								}
 							}
 						});

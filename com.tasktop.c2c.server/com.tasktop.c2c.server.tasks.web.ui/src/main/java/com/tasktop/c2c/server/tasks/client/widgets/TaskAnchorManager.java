@@ -145,7 +145,7 @@ public class TaskAnchorManager {
 							}
 
 							@Override
-							public void onFailure(Throwable exception) {
+							public void failure(Throwable exception) {
 								if (exception instanceof ActionException
 										&& ((ActionException) exception).getCauseClassname().equals(
 												NoSuchEntityException.class.getName())) {
@@ -153,7 +153,7 @@ public class TaskAnchorManager {
 									// 100 exists yet) - we don't want to display an error of any kind, we just want to
 									// not display the popup.
 								} else {
-									super.onFailure(exception);
+									super.failure(exception);
 								}
 							}
 						});

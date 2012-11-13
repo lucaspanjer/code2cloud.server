@@ -54,11 +54,11 @@ public class SignInPresenter extends AbstractProfilePresenter {
 					}
 
 					@Override
-					public void onFailure(Throwable result) {
+					public void failure(Throwable result) {
 						signinView.password.setText("");
 						signinView.username.setSelectionRange(0, signinView.username.getText().length());
 						signinView.username.setFocus(true);
-						super.onFailure(result);
+						super.failure(result);
 					}
 				});
 	}

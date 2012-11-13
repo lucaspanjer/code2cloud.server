@@ -14,11 +14,11 @@ package com.tasktop.c2c.server.common.web.client.view;
 
 import net.customware.gwt.dispatch.client.DispatchAsync;
 
-
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.Ginjector;
 import com.tasktop.c2c.server.common.web.client.notification.NotificationPanel;
 import com.tasktop.c2c.server.common.web.client.notification.Notifier;
+import com.tasktop.c2c.server.common.web.client.view.errors.ErrorHandler;
 
 public interface CommonGinjector extends Ginjector {
 
@@ -27,6 +27,8 @@ public interface CommonGinjector extends Ginjector {
 	NotificationPanel getNotificationPanel();
 
 	Notifier getNotifier();
+
+	ErrorHandler getErrorHandler();
 
 	DispatchAsync getDispatchService();
 

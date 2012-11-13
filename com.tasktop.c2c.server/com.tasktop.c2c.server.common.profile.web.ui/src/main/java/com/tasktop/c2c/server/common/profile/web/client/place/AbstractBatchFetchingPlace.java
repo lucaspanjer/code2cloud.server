@@ -172,7 +172,7 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 		}
 
 		if (messages == null && AsyncCallbackSupport.getErrorHandler() != null) {
-			messages = AsyncCallbackSupport.getErrorHandler().getErrors(dispatchException);
+			messages = AsyncCallbackSupport.getErrorHandler().getErrorMessages(dispatchException);
 		}
 
 		if (messages == null) {

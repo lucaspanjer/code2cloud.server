@@ -241,8 +241,8 @@ public class TaskListPresenter extends AbstractTaskPresenter {
 			}
 
 			@Override
-			public void onFailure(Throwable exception) {
-				super.onFailure(exception);
+			public void failure(Throwable exception) {
+				super.failure(exception);
 				dataProvider.updateRowCount(0, false);
 			}
 		};
