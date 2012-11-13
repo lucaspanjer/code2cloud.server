@@ -3,5 +3,5 @@
    <description name="Code2Cloud Server API">
       Code2Cloud Server API for eclipse
    </description>
-    <feature url="features/com.tasktop.c2c.server.api_0.1.0.qualifier.jar" id="com.tasktop.c2c.server.api" version="0.1.0.qualifier"/>
+    <feature url="features/com.tasktop.c2c.server.api_0.1.0.qualifier.jar" id="com.tasktop.c2c.server.api" version="1.1.0.qualifier"/>
 </site>
