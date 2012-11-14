@@ -96,11 +96,11 @@ public class ProfileEntryPoint implements EntryPoint {
 	protected void updateServiceTarget(ServiceDefTarget target, String servletMappingBase, String servletMappingSuffix) {
 		String ep = target.getServiceEntryPoint();
 
-		String expectedPath = Path.getBasePath() + "/" + servletMappingBase + "/" + servletMappingSuffix;
+		String expectedPath = Path.getBasePath() + servletMappingBase + "/" + servletMappingSuffix;
 		int i = ep.lastIndexOf(expectedPath);
 
 		if (i != -1) {
-			ep = ep.substring(0, i) + Path.getBasePath() + "/profile" + "/" + servletMappingSuffix;
+			ep = ep.substring(0, i) + Path.getBasePath() + "profile" + "/" + servletMappingSuffix;
 		}
 		target.setServiceEntryPoint(ep);
 	}

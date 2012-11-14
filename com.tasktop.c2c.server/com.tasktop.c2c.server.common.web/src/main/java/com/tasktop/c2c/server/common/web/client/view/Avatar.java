@@ -44,7 +44,7 @@ public class Avatar {
 				.setPath(Path.getBasePath()).buildString();
 
 		for (Size size : Size.values()) {
-			alternates[size.ordinal()] = urlBase + "/images/default_avatar" + size.getSize() + ".png";
+			alternates[size.ordinal()] = urlBase + "images/default_avatar" + size.getSize() + ".png";
 		}
 		alternateAvatarUrls = alternates;
 	}

@@ -85,7 +85,12 @@ public class Path {
 		String moduleBaseURL = GWT.getModuleBaseURL().substring(0, GWT.getModuleBaseURL().lastIndexOf('/'));
 		String baseUrl = moduleBaseURL.replace(GWT.getModuleName(), "");
 		baseUrl = baseUrl.substring(baseUrl.indexOf("//") + 2, baseUrl.length());
-		return baseUrl.substring(baseUrl.indexOf('/') + 1, baseUrl.length());
+		baseUrl = baseUrl.substring(baseUrl.indexOf('/') + 1, baseUrl.length());
+		if (baseUrl.trim() != "") {
+			return baseUrl;
+		} else {
+			return "/";
+		}
 	}
 
 	private String computeHashtag(String stringPath) {
