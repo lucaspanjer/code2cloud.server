@@ -81,12 +81,15 @@ public class Path {
 		this.pathElements = pathElements.toArray(new PathElement[pathElements.size()]);
 	}
 
+	/**
+	 * @return the base path. It will always start and end with a '/' character
+	 */
 	public static String getBasePath() {
 		String moduleBaseURL = GWT.getModuleBaseURL().substring(0, GWT.getModuleBaseURL().lastIndexOf('/'));
 		String baseUrl = moduleBaseURL.replace(GWT.getModuleName(), "");
 		baseUrl = baseUrl.substring(baseUrl.indexOf("//") + 2, baseUrl.length());
 		baseUrl = baseUrl.substring(baseUrl.indexOf('/') + 1, baseUrl.length());
-		if (baseUrl.trim() != "") {
+		if (baseUrl.trim().equals("")) {
 			return baseUrl;
 		} else {
 			return "/";
