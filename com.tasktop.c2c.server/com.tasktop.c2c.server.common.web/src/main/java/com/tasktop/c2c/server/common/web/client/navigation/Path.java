@@ -89,7 +89,7 @@ public class Path {
 		String baseUrl = moduleBaseURL.replace(GWT.getModuleName(), "");
 		baseUrl = baseUrl.substring(baseUrl.indexOf("//") + 2, baseUrl.length());
 		baseUrl = baseUrl.substring(baseUrl.indexOf('/') + 1, baseUrl.length());
-		if (baseUrl.trim().equals("")) {
+		if (!baseUrl.trim().equals("")) {
 			return baseUrl;
 		} else {
 			return "/";
