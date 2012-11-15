@@ -31,7 +31,10 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
+import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetDeploymentServiceTypesAction;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetDeploymentServiceTypesResult;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsResult;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectDeploymentsAction;
@@ -60,6 +63,7 @@ public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implement
 	private List<Breadcrumb> breadcrumbs;
 	private List<DeploymentConfiguration> deploymentConfigurations;
 	private GetProjectBuildsResult buildInformation;
+	private List<DeploymentServiceType> serviceTypes;
 
 	public Project getProject() {
 		return project;
@@ -101,6 +105,7 @@ public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implement
 		super.addActions();
 		addAction(new GetProjectAction(projectId));
 		addAction(new GetProjectDeploymentsAction(projectId));
+		addAction(new GetDeploymentServiceTypesAction(projectId));
 		addAction(new GetProjectBuildsAction(projectId, null));
 	}
 
@@ -110,6 +115,7 @@ public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implement
 		project = getResult(GetProjectResult.class).get();
 		deploymentConfigurations = getResult(GetProjectDeploymentsResult.class).get();
 		buildInformation = getResult(GetProjectBuildsResult.class);
+		serviceTypes = getResult(GetDeploymentServiceTypesResult.class).get();
 		createBreadCrumbs(project);
 		onPlaceDataFetched();
 	}
@@ -131,5 +137,9 @@ public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implement
 	@Override
 	public String getWindowTitle() {
 		return "Deployments - " + project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
+	}
+
+	public List<DeploymentServiceType> getServiceTypes() {
+		return serviceTypes;
 	}
 }

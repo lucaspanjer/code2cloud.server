@@ -25,17 +25,23 @@
   							</div> 
   							<div class="clear"></div> 
   						</div>  						
-		<div class="credentials">  
+		<div ui:field="credentialsDiv" class="credentials">  
 			<span class="drop-down-icon"></span><h3>Credentials</h3>
 			<div class="clear"></div>
 			<d:CredentialsReadOnlyView ui:field="credentialsReadOnlyView"/>
 		</div>
-		<div class="settings">  
+		<div ui:field="settingsDiv" class="settings">  
 			<span class="drop-down-icon"></span><h3>Settings</h3>
 			<div class="clear"></div>
 			<d:SettingsReadOnlyView ui:field="settingsReadOnlyView"/>
 		</div>
-		<div class="services">  
+		<div ui:field="infoDiv" class="settings">
+			<fieldset>	
+			<label>Mapped URL:</label>
+			<div><g:FlowPanel ui:field="mappedUrls"/></div>
+			</fieldset>
+		</div>
+		<div ui:field="servicesDiv" class="services">  
 			<span class="drop-down-icon"></span><h3>Services</h3>
 			<div class="clear"></div>
 			<d:ServicesReadOnlyView ui:field="servicesReadOnlyView"/>

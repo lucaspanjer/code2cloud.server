@@ -10,7 +10,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.profile.web.ui.server.action;
+package com.tasktop.c2c.server.profile.web.ui.server;
 
 import net.customware.gwt.dispatch.shared.Action;
 import net.customware.gwt.dispatch.shared.Result;
@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.tasktop.c2c.server.common.profile.web.ui.server.AbstractProfileActionHandler;
+import com.tasktop.c2c.server.common.service.web.TenancyManager;
+import com.tasktop.c2c.server.common.web.server.AbstractActionHandler;
 import com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
 import com.tasktop.c2c.server.profile.service.provider.HudsonServiceProvider;

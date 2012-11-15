@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.internal.deployment.service;
 
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
+import com.tasktop.c2c.server.deployment.domain.DeploymentServiceTypes;
 
 /**
  * Helper class for translating between public and internal data-storage objects.
@@ -29,6 +30,7 @@ public class DeploymentDomain {
 		result.setApiToken(source.getApiToken());
 		result.setApiBaseUrl(source.getApiBaseUrl());
 		result.setName(source.getName());
+		result.setServiceType(DeploymentServiceTypes.findById(source.getServiceType()));
 		result.setUsername(source.getUsername());
 
 		result.setDeploymentType(source.getDeploymentType());
@@ -56,6 +58,7 @@ public class DeploymentDomain {
 		target.setApiToken(source.getApiToken());
 		target.setApiBaseUrl(source.getApiBaseUrl());
 		target.setName(source.getName());
+		target.setServiceType(source.getServiceType().getId());
 		target.setUsername(source.getUsername());
 
 		target.setBuildJobName(source.getBuildJobName());

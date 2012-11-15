@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.profile.web.ui.client.view.deployment;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -36,15 +37,26 @@ public class DeleteDeploymentDialog extends DialogBox {
 	interface Binder extends UiBinder<Widget, DeleteDeploymentDialog> {
 	}
 
+	private static DeleteDeploymentDialog instance;
+
+	public static DeleteDeploymentDialog getInstance() {
+		if (instance == null) {
+			instance = new DeleteDeploymentDialog();
+		}
+		return instance;
+	}
+
 	@UiField
-	CheckBox alsoDeleteInCF;
+	DivElement deleteInServiceDiv;
+	@UiField
+	CheckBox alsoDelete;
 
 	@UiField
 	Button deleteButton;
 	@UiField
 	Button cancelButton;
 
-	public DeleteDeploymentDialog() {
+	private DeleteDeploymentDialog() {
 		super(false, true);
 		setWidget(uiBinder.createAndBindUi(this));
 		setText("Confirm Delete");

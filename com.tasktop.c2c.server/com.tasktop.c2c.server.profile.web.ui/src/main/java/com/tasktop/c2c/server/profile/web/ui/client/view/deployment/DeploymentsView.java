@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.deployment;
 
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -28,9 +27,24 @@ import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
+import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
 
 public class DeploymentsView extends AbstractComposite {
+
+	public interface Presenter {
+		void save();
+
+		void update();
+
+		void delete(final DeploymentConfiguration config, boolean alsoDeleteFromCF);
+
+		void doStart();
+
+		void doStop();
+
+		void doRestart();
+	}
 
 	interface DeploymentsViewUiBinder extends UiBinder<Widget, DeploymentsView> {
 	}
@@ -58,6 +72,8 @@ public class DeploymentsView extends AbstractComposite {
 	public static DeploymentResources resources = GWT.create(DeploymentResources.class);
 
 	private List<DeploymentConfiguration> deployments;
+
+	private Presenter presenter;
 
 	public DeploymentsView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -227,6 +243,22 @@ public class DeploymentsView extends AbstractComposite {
 	public void setEnableEdit(boolean editEnabled) {
 		newButton.setVisible(editEnabled);
 		deploymentReadOnlyView.setEnableEdit(editEnabled);
+
+	}
+
+	public void setServiceTypes(List<DeploymentServiceType> serviceTypes) {
+		newDeploymentView.setServiceTypes(serviceTypes);
+
+	}
+
+	/**
+	 * @param deploymentsPresenter
+	 */
+	public void setPresenter(Presenter deploymentsPresenter) {
+		this.presenter = deploymentsPresenter;
+		deploymentReadOnlyView.setPresenter(presenter);
+		deploymentEditView.setPresenter(presenter);
+		newDeploymentView.setPresenter(presenter);
 
 	}
 }

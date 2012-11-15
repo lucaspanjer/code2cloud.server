@@ -14,14 +14,17 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.deployment;
 
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
@@ -29,6 +32,7 @@ import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.ArtifactEditView.IsDirtyHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.ArtifactEditView.JobNameChangedHandler;
+import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentsView.Presenter;
 
 public class DeploymentEditView extends Composite {
 	interface Binder extends UiBinder<Widget, DeploymentEditView> {
@@ -64,8 +68,16 @@ public class DeploymentEditView extends Composite {
 	@UiField
 	ArtifactEditView artifactEditView;
 
+	@UiField
+	protected DivElement servicesDiv;
+	@UiField
+	protected DivElement settingsDiv;
+	@UiField
+	protected DivElement credentialsDiv;
+
 	private DeploymentConfiguration originalValue;
 	private EditStartHandler editStartHandler;
+	private Presenter presenter;
 
 	public DeploymentEditView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -93,11 +105,18 @@ public class DeploymentEditView extends Composite {
 	}
 
 	public DeploymentConfiguration getValue() {
-		DeploymentConfiguration value = originalValue.copy();
+		DeploymentConfiguration value = originalValue; // FIXME was doing a copy here. Why?
 
-		credentialsEditView.updateValue(value);
-		servicesEditView.updateValue(value);
-		settingsEditView.updateValue(value);
+		if (value.getServiceType().isSupportsCredentials()) {
+			credentialsEditView.updateValue(value);
+		}
+		if (value.getServiceType().isSupportsServices()) {
+			servicesEditView.updateValue(value);
+		}
+		if (value.getServiceType().isSupportsSettings()) {
+			settingsEditView.updateValue(value);
+		}
+
 		artifactEditView.updateValue(value);
 
 		return value;
@@ -110,18 +129,29 @@ public class DeploymentEditView extends Composite {
 	public void setValue(DeploymentConfiguration deployment) {
 		this.originalValue = deployment;
 		title.setText(deployment.getName());
-		credentialsEditView.setValue(deployment);
-		settingsEditView.setValue(deployment);
-		servicesEditView.setValue(deployment);
+
+		if (deployment.getServiceType().isSupportsCredentials()) {
+			credentialsEditView.setValue(deployment);
+		}
+		if (deployment.getServiceType().isSupportsSettings()) {
+			settingsEditView.setValue(deployment);
+		}
+		if (deployment.getServiceType().isSupportsServices()) {
+			servicesEditView.setValue(deployment);
+		}
 		artifactEditView.setValue(deployment);
 
-		saveButton1.setText(DEFAULT_SAVE_TEXT);
+		setSaveButtonText(DEFAULT_SAVE_TEXT);
 		editStartHandler.editStarted(deployment);
+
+		UIObject.setVisible(credentialsDiv, deployment.getServiceType().isSupportsCredentials());
+		UIObject.setVisible(settingsDiv, deployment.getServiceType().isSupportsSettings());
+		UIObject.setVisible(servicesDiv, deployment.getServiceType().isSupportsServices());
 	}
 
-	public void addUpdateClickHandler(ClickHandler handler) {
-		saveButton1.addClickHandler(handler);
-		saveButton2.addClickHandler(handler);
+	@UiHandler({ "saveButton1", "saveButton2" })
+	protected void addUpdateClickHandler(ClickEvent ce) {
+		presenter.update();
 	}
 
 	public void addCancelClickHandler(ClickHandler handler) {
@@ -170,6 +200,10 @@ public class DeploymentEditView extends Composite {
 	 */
 	public void setEditStartHandler(EditStartHandler editStartHandler) {
 		this.editStartHandler = editStartHandler;
+	}
+
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
 	}
 
 }

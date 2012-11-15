@@ -60,9 +60,9 @@ public class DeploymentRowView extends Composite {
 
 	public void setSelected(boolean selected) {
 		if (selected) {
-			anchor.addStyleName(SELECTED_STYLE);
+			anchor.getElement().getParentElement().addClassName(SELECTED_STYLE);
 		} else {
-			anchor.removeStyleName(SELECTED_STYLE);
+			anchor.getElement().getParentElement().removeClassName(SELECTED_STYLE);
 		}
 	}
 

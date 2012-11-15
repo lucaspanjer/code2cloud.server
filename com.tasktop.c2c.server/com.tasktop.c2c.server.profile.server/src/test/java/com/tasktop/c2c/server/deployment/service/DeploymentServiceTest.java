@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.deployment.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -41,6 +42,7 @@ import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
+import com.tasktop.c2c.server.deployment.domain.DeploymentServiceTypes;
 import com.tasktop.c2c.server.deployment.domain.DeploymentType;
 import com.tasktop.c2c.server.internal.deployment.service.DeploymentConfigurationServiceImpl;
 import com.tasktop.c2c.server.internal.deployment.service.DeploymentService;
@@ -137,10 +139,18 @@ public class DeploymentServiceTest {
 				allowing(mockDeploymentService);
 
 				allowing(mockArtifactService);
+
 			}
 		});
+		DeploymentServiceFactory mockDeploymentFactory = new DeploymentServiceFactory() {
 
-		DeploymentConfigurationServiceImpl.getLastInstance().setCloudFoundryServiceFactory(mockCloudServiceFactory);
+			@Override
+			public DeploymentService constructService(DeploymentConfiguration configuration) throws ServiceException {
+				return mockDeploymentService;
+			}
+		};
+		DeploymentConfigurationServiceImpl.getLastInstance().setDeploymentServiceFactoriesByType(
+				Collections.singletonMap(DeploymentServiceTypes.CLOUD_FOUNDRY, mockDeploymentFactory));
 		DeploymentConfigurationServiceImpl.getLastInstance().setProjectArtifactService(mockArtifactService);
 	}
 
@@ -159,6 +169,7 @@ public class DeploymentServiceTest {
 		}
 
 		config.setName("name");
+		config.setServiceType(DeploymentServiceTypes.CLOUD_FOUNDRY);
 		config.setDeploymentType(DeploymentType.AUTOMATED);
 		deploymentConfigurationService.createDeployment(config);
 
@@ -176,6 +187,7 @@ public class DeploymentServiceTest {
 		Assert.assertEquals(1, config.getNumInstances());
 
 		config = new DeploymentConfiguration();
+		config.setServiceType(DeploymentServiceTypes.CLOUD_FOUNDRY);
 		config.setName("name");
 		config.setDeploymentType(DeploymentType.AUTOMATED);
 
@@ -192,6 +204,7 @@ public class DeploymentServiceTest {
 	public void testCreateServiceAndList() throws ValidationException, ServiceException {
 		DeploymentConfiguration config = new DeploymentConfiguration();
 		config.setName("name");
+		config.setServiceType(DeploymentServiceTypes.CLOUD_FOUNDRY);
 		config.setDeploymentType(DeploymentType.AUTOMATED);
 		deploymentConfigurationService.createDeployment(config);
 
@@ -212,6 +225,7 @@ public class DeploymentServiceTest {
 	public void testListServiceConfigurations() throws ServiceException {
 		DeploymentConfiguration config = new DeploymentConfiguration();
 		config.setName("name");
+		config.setServiceType(DeploymentServiceTypes.CLOUD_FOUNDRY);
 		config.setDeploymentType(DeploymentType.AUTOMATED);
 
 		List<DeploymentServiceConfiguration> serviceConfigs = deploymentConfigurationService
@@ -225,22 +239,6 @@ public class DeploymentServiceTest {
 		Assert.assertEquals("1.0", serviceConfig.getVersion());
 	}
 
-	// @Test
-	// public void testUpdateDeploymentConfiguration() throws EntityNotFoundException, ValidationException,
-	// ServiceException {
-	// DeploymentConfiguration config = new DeploymentConfiguration();
-	// config.setName("name");
-	// config.setServices(new ArrayList<DeploymentService>());
-	// config.setNumInstances(2);
-	//
-	// Assert.assertEquals(config.getServices().size(), 0);
-	//
-	// deploymentConfigurationService.updateDeployment(config);
-	//
-	// Assert.assertEquals(config.getServices().size(), 1);
-	// Assert.assertEquals(config.getServices().get(0), "service");
-	// }
-
 	@Test
 	public void testAutoDeployment() throws ValidationException {
 		DeploymentConfiguration config = new DeploymentConfiguration();
@@ -253,6 +251,7 @@ public class DeploymentServiceTest {
 		}
 
 		config.setName("name");
+		config.setServiceType(DeploymentServiceTypes.CLOUD_FOUNDRY);
 		config.setDeploymentType(DeploymentType.AUTOMATED);
 		String jobName = "job";
 		String jobNumber = "111";

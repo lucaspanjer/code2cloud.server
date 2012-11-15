@@ -25,55 +25,38 @@ import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
-import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
-import com.tasktop.c2c.server.profile.web.ui.client.DeploymentService;
+import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDeploymentPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.ControlDeploymentAction;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.ControlDeploymentAction.Action;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.CreateDeploymentAction;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeleteDeploymentAction;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeploymentConfigOptionsResult;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeploymentResult;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeploymentStatusResult;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetDeploymentConfigOptionsAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsResult;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.UpdateDeploymentAction;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.ValidateDeploymentAction;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.ValidateDeploymentResult;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.ArtifactEditView.JobNameChangedHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentEditView.EditStartHandler;
-import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentReadOnlyView.DeleteHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentsView;
 
-public class DeploymentsPresenter extends AbstractProfilePresenter implements SplittableActivity {
+public class DeploymentsPresenter extends AbstractProfilePresenter implements SplittableActivity,
+		DeploymentsView.Presenter {
 
 	private final DeploymentsView view;
 	private String projectIdentifier;
 	private List<DeploymentConfiguration> deploymentConfigurations;
 	private GetProjectBuildsResult buildInformation;
+	private List<DeploymentServiceType> serviceTypes;
 
 	public DeploymentsPresenter(DeploymentsView view) {
 		super(view);
 		this.view = view;
-	}
-
-	public DeploymentsPresenter() {
-		this(new DeploymentsView());
-	}
-
-	public void setPlace(Place place) {
-		ProjectDeploymentPlace depPlace = (ProjectDeploymentPlace) place;
-		this.projectIdentifier = depPlace.getProject().getIdentifier();
-		this.deploymentConfigurations = depPlace.getDeploymentConfigurations();
-		this.buildInformation = depPlace.getBuildInformation();
-	}
-
-	@Override
-	protected void bind() {
-		if (AuthenticationHelper.hasRoleForProject(Role.Admin, projectIdentifier)
-				|| AuthenticationHelper.hasRoleForProject(Role.User, projectIdentifier)) {
-			view.setEnableEdit(true);
-		} else {
-			view.setEnableEdit(false);
-		}
-
-		view.setDeploymentConfigurations(deploymentConfigurations);
-		if (!deploymentConfigurations.isEmpty()) {
-			view.setSelectedConfig(deploymentConfigurations.get(0));
-		}
-		// Populate the initial dropdown of job names
-		view.deploymentEditView.setJobNames(buildInformation.getBuildJobNames());
 
 		view.deploymentEditView.setBuildJobChangedHandler(new JobNameChangedHandler() {
 
@@ -85,7 +68,7 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 
 					@Override
 					protected void success(GetProjectBuildsResult result) {
-						view.deploymentEditView.setBuilds(jobName, result.getBuilds());
+						DeploymentsPresenter.this.view.deploymentEditView.setBuilds(jobName, result.getBuilds());
 					}
 
 				});
@@ -97,35 +80,13 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 
 			@Override
 			public void onClick(ClickEvent event) {
-				getDeploymentService().validateCredentials(view.newDeploymentView.getValue(),
-						new AsyncCallbackSupport<Boolean>() {
-
+				getDispatchService().execute(
+						new ValidateDeploymentAction(projectIdentifier,
+								DeploymentsPresenter.this.view.newDeploymentView.getValue()),
+						new AsyncCallbackSupport<ValidateDeploymentResult>() {
 							@Override
-							protected void success(Boolean result) {
-								view.newDeploymentView.setCredentialsValid(result);
-							}
-						});
-			}
-		});
-
-		view.newDeploymentView.saveButton.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				OperationMessage message = new OperationMessage("Saving");
-				getDeploymentService().createDeploymentConfiguration(projectIdentifier,
-						view.newDeploymentView.getValue(), new AsyncCallbackSupport<DeploymentConfiguration>(message) {
-
-							@Override
-							protected void success(DeploymentConfiguration result) {
-								if (result.hasError()) {
-									ProfileGinjector.get.instance().getNotifier()
-											.displayMessage(Message.createErrorMessage("Error while saving"));
-								} else {
-									ProfileGinjector.get.instance().getNotifier()
-											.displayMessage(Message.createSuccessMessage("Saved"));
-								}
-								view.newDeploymentCreated(result);
+							protected void success(ValidateDeploymentResult result) {
+								DeploymentsPresenter.this.view.newDeploymentView.setCredentialsValid(result.get());
 							}
 						});
 			}
@@ -135,36 +96,16 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 
 			@Override
 			public void onClick(ClickEvent event) {
-				getDeploymentService().validateCredentials(view.deploymentEditView.getValue(),
-						new AsyncCallbackSupport<Boolean>() {
-
+				getDispatchService().execute(
+						new ValidateDeploymentAction(projectIdentifier,
+								DeploymentsPresenter.this.view.newDeploymentView.getValue()),
+						new AsyncCallbackSupport<ValidateDeploymentResult>() {
 							@Override
-							protected void success(Boolean result) {
-								view.deploymentEditView.setCredentialsValid(result);
+							protected void success(ValidateDeploymentResult result) {
+								DeploymentsPresenter.this.view.deploymentEditView.setCredentialsValid(result.get());
 							}
 						});
-			}
-		});
 
-		view.deploymentEditView.addUpdateClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				getDeploymentService().updateDeployment(view.deploymentEditView.getValue(),
-						new AsyncCallbackSupport<DeploymentConfiguration>(new OperationMessage("Saving")) {
-
-							@Override
-							protected void success(DeploymentConfiguration result) {
-								if (result.hasError()) {
-									ProfileGinjector.get.instance().getNotifier()
-											.displayMessage(Message.createErrorMessage("Error while saving"));
-								} else {
-									ProfileGinjector.get.instance().getNotifier()
-											.displayMessage(Message.createSuccessMessage("Saved"));
-								}
-								view.updated(result);
-							}
-						});
 			}
 		});
 
@@ -172,101 +113,139 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 
 			@Override
 			public void editStarted(final DeploymentConfiguration config) {
-
-				getDeploymentService().getDeploymentConfigurationOptions(projectIdentifier, config,
-						new AsyncCallbackSupport<DeploymentService.DeploymentConfigurationOptions>() {
+				getDispatchService().execute(new GetDeploymentConfigOptionsAction(projectIdentifier, config),
+						new AsyncCallbackSupport<DeploymentConfigOptionsResult>() {
 
 							@Override
-							protected void success(DeploymentService.DeploymentConfigurationOptions result) {
+							protected void success(DeploymentConfigOptionsResult result) {
 
-								view.deploymentEditView.setMemoryValues(result.getAvailableMemories());
-								view.deploymentEditView.setServices(result.getAvailableServices());
-								view.deploymentEditView.setServiceConfigurations(result
+								DeploymentsPresenter.this.view.deploymentEditView.setMemoryValues(result
+										.getAvailableMemories());
+								DeploymentsPresenter.this.view.deploymentEditView.setServices(result
+										.getAvailableServices());
+								DeploymentsPresenter.this.view.deploymentEditView.setServiceConfigurations(result
 										.getAvailableServiceConfigurations());
-								if (result.getBuildInformation() != null) {
-									view.deploymentEditView.setBuilds(config.getBuildJobName(), result
-											.getBuildInformation().getBuilds());
-								}
-
 							}
 						});
 
-			}
-		});
-
-		view.deploymentReadOnlyView.addDeleteHandler(new DeleteHandler() {
-
-			@Override
-			public void delete(final DeploymentConfiguration config, boolean alsoDeleteFromCF) {
-				OperationMessage message = new OperationMessage("Deleting");
-				message.setSuccessText("Deleted");
-				getDeploymentService().deleteDeployment(config, alsoDeleteFromCF,
-						new AsyncCallbackSupport<Void>(message) {
-
-							@Override
-							protected void success(Void result) {
-								view.deleted(config);
-							}
-						});
-
-			}
-		});
-
-		view.deploymentReadOnlyView.addStartClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				OperationMessage message = new OperationMessage("Starting");
-				message.setSuccessText("Started");
-				final DeploymentConfiguration configuration = view.deploymentReadOnlyView.getOriginalValue();
-				getDeploymentService().startDeployment(configuration,
-						new AsyncCallbackSupport<DeploymentStatus>(message) {
-
-							@Override
-							protected void success(DeploymentStatus result) {
-								view.updateStatus(configuration, result);
-							}
-						});
-			}
-		});
-
-		view.deploymentReadOnlyView.addStopClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				OperationMessage message = new OperationMessage("Stopping");
-				message.setSuccessText("Stopped");
-				final DeploymentConfiguration configuration = view.deploymentReadOnlyView.getOriginalValue();
-				getDeploymentService().stopDeployment(configuration,
-						new AsyncCallbackSupport<DeploymentStatus>(message) {
-
-							@Override
-							protected void success(DeploymentStatus result) {
-								view.updateStatus(configuration, result);
-
-							}
-						});
-			}
-		});
-
-		view.deploymentReadOnlyView.addRestartClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				OperationMessage message = new OperationMessage("Restarting");
-				message.setSuccessText("Restarted");
-				final DeploymentConfiguration configuration = view.deploymentReadOnlyView.getOriginalValue();
-				getDeploymentService().restartDeployment(configuration,
-						new AsyncCallbackSupport<DeploymentStatus>(message) {
-
-							@Override
-							protected void success(DeploymentStatus result) {
-								view.updateStatus(configuration, result);
-
-							}
-						});
 			}
 		});
 
 	}
+
+	public DeploymentsPresenter() {
+		this(new DeploymentsView());
+	}
+
+	public void setPlace(Place place) {
+		ProjectDeploymentPlace depPlace = (ProjectDeploymentPlace) place;
+		this.projectIdentifier = depPlace.getProject().getIdentifier();
+		this.deploymentConfigurations = depPlace.getDeploymentConfigurations();
+		this.buildInformation = depPlace.getBuildInformation();
+		this.serviceTypes = depPlace.getServiceTypes();
+		view.setPresenter(this);
+
+		if (AuthenticationHelper.hasRoleForProject(Role.Admin, projectIdentifier)
+				|| AuthenticationHelper.hasRoleForProject(Role.User, projectIdentifier)) {
+			view.setEnableEdit(true);
+		} else {
+			view.setEnableEdit(false);
+		}
+
+		view.setDeploymentConfigurations(deploymentConfigurations);
+		view.setServiceTypes(serviceTypes);
+		if (!deploymentConfigurations.isEmpty()) {
+			view.setSelectedConfig(deploymentConfigurations.get(0));
+		}
+		view.deploymentEditView.setJobNames(buildInformation.getBuildJobNames());
+	}
+
+	@Override
+	protected void bind() {
+
+	}
+
+	@Override
+	public void doStart() {
+		doOperation("Starting", "Started", Action.START);
+	}
+
+	private void doOperation(String opMessage, String successMessage, Action type) {
+		OperationMessage message = new OperationMessage(opMessage);
+		message.setSuccessText(successMessage);
+		final DeploymentConfiguration configuration = view.deploymentReadOnlyView.getOriginalValue();
+		getDispatchService().execute(new ControlDeploymentAction(projectIdentifier, configuration, type),
+				new AsyncCallbackSupport<DeploymentStatusResult>(message) {
+
+					@Override
+					protected void success(DeploymentStatusResult result) {
+						view.updateStatus(configuration, result.get());
+
+					}
+				});
+	}
+
+	@Override
+	public void doStop() {
+		doOperation("Stopping", "Stopped", Action.STOP);
+	}
+
+	@Override
+	public void doRestart() {
+		doOperation("Restarting", "Restarted", Action.RESTART);
+	}
+
+	@Override
+	public void save() {
+		OperationMessage message = new OperationMessage("Saving");
+		getDispatchService().execute(new CreateDeploymentAction(projectIdentifier, view.newDeploymentView.getValue()),
+
+		new AsyncCallbackSupport<DeploymentResult>(message) {
+
+			@Override
+			protected void success(DeploymentResult result) {
+				if (result.get().hasError()) {
+					ProfileGinjector.get.instance().getNotifier()
+							.displayMessage(Message.createErrorMessage("Error while saving"));
+				} else {
+					ProfileGinjector.get.instance().getNotifier().displayMessage(Message.createSuccessMessage("Saved"));
+				}
+				view.newDeploymentCreated(result.get());
+			}
+		});
+	}
+
+	@Override
+	public void update() {
+		getDispatchService().execute(new UpdateDeploymentAction(projectIdentifier, view.deploymentEditView.getValue()),
+				new AsyncCallbackSupport<DeploymentResult>(new OperationMessage("Saving")) {
+
+					@Override
+					protected void success(DeploymentResult result) {
+						if (result.get().hasError()) {
+							ProfileGinjector.get.instance().getNotifier()
+									.displayMessage(Message.createErrorMessage("Error while saving"));
+						} else {
+							ProfileGinjector.get.instance().getNotifier()
+									.displayMessage(Message.createSuccessMessage("Saved"));
+						}
+						view.updated(result.get());
+					}
+				});
+	}
+
+	@Override
+	public void delete(final DeploymentConfiguration config, boolean alsoDeleteFromCF) {
+		OperationMessage message = new OperationMessage("Deleting");
+		message.setSuccessText("Deleted");
+		getDispatchService().execute(new DeleteDeploymentAction(projectIdentifier, config, alsoDeleteFromCF),
+				new AsyncCallbackSupport<DeploymentResult>(message) {
+					@Override
+					protected void success(DeploymentResult result) {
+						view.deleted(config);
+					}
+				});
+
+	}
+
 }

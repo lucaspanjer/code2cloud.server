@@ -31,8 +31,8 @@ import org.springframework.http.HttpStatus;
 
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
-import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration.ServiceTier;
+import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus.Result;
 import com.tasktop.c2c.server.deployment.service.ServiceException;
 
@@ -91,14 +91,14 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#uploadApplication(java.lang.String,
+	 * @see com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#uploadApplication(java.lang.String,
 	 * java.io.File)
 	 */
 	@Override
-	public void uploadApplication(String name, File warFile) throws IOException, ServiceException {
+	public void uploadApplication(DeploymentConfiguration deploymentConfiguration, File warFile) throws IOException,
+			ServiceException {
 		try {
-			client.uploadApplication(name, warFile);
+			client.uploadApplication(deploymentConfiguration.getName(), warFile);
 		} catch (CloudFoundryException e) {
 			wrapInServiceException(e);
 		}
@@ -107,8 +107,7 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#createAndUploadAndStartApplication
+	 * @see com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#createAndUploadAndStartApplication
 	 * (java .lang.String, java.lang.Object, int, java.io.File, java.util.List, java.util.List)
 	 */
 	@Override
@@ -125,8 +124,7 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	private List<String> getServiceNames(DeploymentConfiguration deploymentConfiguration) {
 		List<String> serviceNames = new ArrayList<String>();
 		if (deploymentConfiguration.getServices() != null) {
-			for (com.tasktop.c2c.server.deployment.domain.CloudService service : deploymentConfiguration
-					.getServices()) {
+			for (com.tasktop.c2c.server.deployment.domain.CloudService service : deploymentConfiguration.getServices()) {
 				serviceNames.add(service.getName());
 			}
 		}
@@ -136,13 +134,12 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#deleteApplication(java.lang.String)
+	 * @see com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#deleteApplication(java.lang.String)
 	 */
 	@Override
-	public void deleteApplication(String name) throws ServiceException {
+	public void deleteApplication(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
 		try {
-			client.deleteApplication(name);
+			client.deleteApplication(deploymentConfiguration.getName());
 		} catch (CloudFoundryException e) {
 			wrapInServiceException(e);
 		}
@@ -151,13 +148,12 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#stopApplication(java.lang.String)
+	 * @see com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#stopApplication(java.lang.String)
 	 */
 	@Override
-	public void stopApplication(String name) throws ServiceException {
+	public void stopApplication(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
 		try {
-			client.stopApplication(name);
+			client.stopApplication(deploymentConfiguration.getName());
 		} catch (CloudFoundryException e) {
 			wrapInServiceException(e);
 		}
@@ -166,13 +162,12 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#startApplication(java.lang.String)
+	 * @see com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#startApplication(java.lang.String)
 	 */
 	@Override
-	public void startApplication(String name) throws ServiceException {
+	public void startApplication(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
 		try {
-			client.startApplication(name);
+			client.startApplication(deploymentConfiguration.getName());
 		} catch (CloudFoundryException e) {
 			wrapInServiceException(e);
 		}
@@ -203,8 +198,7 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#createService(org.cloudfoundry.client
+	 * @see com.tasktop.c2c.server.internal.deployment.service.CloudFoundryService#createService(org.cloudfoundry.client
 	 * . lib.CloudService)
 	 */
 	@Override
@@ -295,8 +289,7 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 		}
 	}
 
-	private com.tasktop.c2c.server.deployment.domain.CloudService convertToDeploymentService(
-			CloudService cfService) {
+	private com.tasktop.c2c.server.deployment.domain.CloudService convertToDeploymentService(CloudService cfService) {
 		com.tasktop.c2c.server.deployment.domain.CloudService service = new com.tasktop.c2c.server.deployment.domain.CloudService();
 		service.setName(cfService.getName());
 		service.setType(cfService.getType());
@@ -319,8 +312,7 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.internal.deployment.service.DeploymentService#update(com.tasktop.c2c.server
+	 * @see com.tasktop.c2c.server.internal.deployment.service.DeploymentService#update(com.tasktop.c2c.server
 	 * .deployment .domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -382,8 +374,7 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.internal.deployment.service.DeploymentService#updateStatus(org.cloudfoundry.code
+	 * @see com.tasktop.c2c.server.internal.deployment.service.DeploymentService#updateStatus(org.cloudfoundry.code
 	 * .server.deployment .domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -403,8 +394,7 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#getAvailableServiceConfigurations
+	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#getAvailableServiceConfigurations
 	 * ()
 	 */
 	@Override
@@ -446,8 +436,7 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.internal.deployment.service.DeploymentService#exists(com.tasktop.c2c.server
+	 * @see com.tasktop.c2c.server.internal.deployment.service.DeploymentService#exists(com.tasktop.c2c.server
 	 * .deployment .domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -468,8 +457,7 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.tasktop.c2c.server.internal.deployment.service.DeploymentService#validateCredentials(org.cloudfoundry
+	 * @see com.tasktop.c2c.server.internal.deployment.service.DeploymentService#validateCredentials(org.cloudfoundry
 	 * .code.server .deployment.domain.DeploymentConfiguration)
 	 */
 	@Override
@@ -480,6 +468,11 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	@Override
+	public void restartApplication(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
+		startApplication(deploymentConfiguration);
 	}
 
 }

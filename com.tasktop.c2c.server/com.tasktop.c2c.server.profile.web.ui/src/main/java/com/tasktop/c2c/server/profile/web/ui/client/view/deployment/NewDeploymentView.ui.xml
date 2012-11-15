@@ -8,15 +8,19 @@
 	  <div class="deployment">
 	    <div class="deployment-heading">
 			    <h2 class="left">Create Deployment</h2>
-<!-- 			    					<div class="save"> -->
-<!-- 	  <button class="right button disabled" disabled="disabled">Create</button> -->
-<!-- 	  <button class="right button">Cancel</button> -->
-<!-- 	</div> -->
 			    <div class="clear"></div>
 			  </div>
   					  
 	<div class="name edit">
     <h3></h3>
+    <div ui:field="serviceTypeDiv">
+    <fieldset>
+		<label>Type:</label>
+		<div>
+			<g:ValueListBox ui:field="serviceType"/>
+		</div>
+	</fieldset>
+	</div>
 	<fieldset>
 		<label>Name:</label>
 		<div>
@@ -24,7 +28,7 @@
 		</div>
 	</fieldset>
 	</div>
-	<div class="credentials edit">
+	<div ui:field="credentialsDiv" class="credentials edit">
 	<h3>Credentials</h3>
 	<d:CredentialsEditView ui:field="credentialsEditView"/>
 	</div>

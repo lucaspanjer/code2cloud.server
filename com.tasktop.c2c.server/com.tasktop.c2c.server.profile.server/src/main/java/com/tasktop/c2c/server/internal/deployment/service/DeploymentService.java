@@ -38,7 +38,8 @@ public interface DeploymentService {
 
 	void updateStatus(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
 
-	void uploadApplication(String name, File warFile) throws ServiceException, IOException;
+	void uploadApplication(DeploymentConfiguration deploymentConfiguration, File warFile) throws ServiceException,
+			IOException;
 
 	/**
 	 * @param name
@@ -54,12 +55,12 @@ public interface DeploymentService {
 	/**
 	 * @param name
 	 */
-	void deleteApplication(String name) throws ServiceException;
+	void deleteApplication(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
 
 	/**
 	 * @param name
 	 */
-	void stopApplication(String name) throws ServiceException;
+	void stopApplication(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
 
 	/**
 	 * @return
@@ -86,7 +87,12 @@ public interface DeploymentService {
 	/**
 	 * @param name
 	 */
-	void startApplication(String name) throws ServiceException;
+	void startApplication(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
+
+	/**
+	 * @param name
+	 */
+	void restartApplication(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
 
 	public List<DeploymentServiceConfiguration> getAvailableServiceConfigurations(
 			DeploymentConfiguration deploymentConfiguration) throws ServiceException;

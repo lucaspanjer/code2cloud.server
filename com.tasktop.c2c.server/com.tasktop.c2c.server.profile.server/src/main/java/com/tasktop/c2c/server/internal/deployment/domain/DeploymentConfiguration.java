@@ -22,11 +22,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
 import com.tasktop.c2c.server.deployment.domain.DeploymentType;
 import com.tasktop.c2c.server.profile.domain.internal.BaseEntity;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
-
 
 /**
  * The stored DeploymentConfiguration.
@@ -38,6 +36,7 @@ import com.tasktop.c2c.server.profile.domain.internal.Project;
 public class DeploymentConfiguration extends BaseEntity {
 	private Project project;
 	private String name;
+	private String serviceType;
 
 	// Credentials
 	private String apiBaseUrl;
@@ -165,6 +164,14 @@ public class DeploymentConfiguration extends BaseEntity {
 	 */
 	public void setLastDeploymentDate(Date lastDeploymentDate) {
 		this.lastDeploymentDate = lastDeploymentDate;
+	}
+
+	public String getServiceType() {
+		return serviceType;
+	}
+
+	public void setServiceType(String type) {
+		this.serviceType = type;
 	}
 
 }

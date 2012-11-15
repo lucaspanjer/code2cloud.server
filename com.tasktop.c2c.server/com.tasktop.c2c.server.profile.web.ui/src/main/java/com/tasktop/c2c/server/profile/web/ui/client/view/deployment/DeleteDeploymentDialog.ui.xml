@@ -10,9 +10,9 @@
 			This will permanently remove the deployed application from this project. This operation cannot be undone.
 		</div>
 		<br/>
-		<div>
-			<g:CheckBox ui:field="alsoDeleteInCF"/>
-			Also delete this application in Cloud Foundry
+		<div ui:field="deleteInServiceDiv">
+			<g:CheckBox ui:field="alsoDelete"/>
+			Also delete this application in the service.
 		</div>
 		<br/>
 		<div class="center">

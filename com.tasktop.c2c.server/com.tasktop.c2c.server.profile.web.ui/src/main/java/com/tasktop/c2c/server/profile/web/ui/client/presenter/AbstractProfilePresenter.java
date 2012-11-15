@@ -20,7 +20,6 @@ import com.tasktop.c2c.server.common.profile.web.client.ProfileServiceAsync;
 import com.tasktop.c2c.server.common.web.client.presenter.AbstractPresenter;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.BuildServiceAsync;
-import com.tasktop.c2c.server.profile.web.ui.client.DeploymentServiceAsync;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 
 public abstract class AbstractProfilePresenter extends AbstractPresenter {
@@ -39,10 +38,6 @@ public abstract class AbstractProfilePresenter extends AbstractPresenter {
 
 	public BuildServiceAsync getBuildService() {
 		return ProfileEntryPoint.getInstance().getBuildService();
-	}
-
-	public DeploymentServiceAsync getDeploymentService() {
-		return ProfileEntryPoint.getInstance().getDeploymentService();
 	}
 
 	protected DispatchAsync getDispatchService() {

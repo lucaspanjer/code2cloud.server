@@ -21,6 +21,7 @@ import com.tasktop.c2c.server.common.service.logging.NoLog;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
+import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
 
@@ -104,11 +105,18 @@ public interface DeploymentConfigurationService {
 			DeploymentConfiguration deploymentConfiguration) throws ServiceException;
 
 	/**
-	 * To suppor tautomatic deployments
+	 * To support automatic deployments
 	 * 
 	 * @param jobName
 	 * @param buildDetails
 	 */
 	void onBuildCompleted(String jobName, BuildDetails buildDetails);
+
+	/**
+	 * Get a list of the supported service teyps
+	 * 
+	 * @return list of supported services
+	 */
+	List<DeploymentServiceType> getSupportedDeploymentServiceTypes();
 
 }

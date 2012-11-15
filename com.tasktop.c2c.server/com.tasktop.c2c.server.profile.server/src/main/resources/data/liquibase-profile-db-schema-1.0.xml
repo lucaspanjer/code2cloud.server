@@ -675,5 +675,11 @@
 		</addColumn>
 	</changeSet>
 	
+	<changeSet id="deploymentConfiguration-task4890" author="cmorgan">
+		<addColumn tableName="DEPLOYMENTCONFIGURATION">
+			<column name="SERVICETYPE" type="VARCHAR(255)" defaultValue="CloudFoundry"/>
+		</addColumn>
+	</changeSet>
+	
 
 </databaseChangeLog>

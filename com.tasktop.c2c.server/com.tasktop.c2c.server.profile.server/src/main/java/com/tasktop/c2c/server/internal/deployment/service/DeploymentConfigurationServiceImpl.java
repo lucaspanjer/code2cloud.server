@@ -17,7 +17,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.NoResultException;
 
@@ -25,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
@@ -39,6 +40,7 @@ import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
+import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
 import com.tasktop.c2c.server.deployment.domain.DeploymentType;
 import com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService;
@@ -58,9 +60,8 @@ import com.tasktop.c2c.server.profile.service.ProjectArtifactService;
  * 
  */
 @Transactional(rollbackFor = { Exception.class })
-@Service("deploymentConfigurationService")
 public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean implements
-		DeploymentConfigurationService {
+		DeploymentConfigurationService, DeploymentConfigurationServiceInternal {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeploymentConfigurationServiceImpl.class.getName());
 
@@ -85,7 +86,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	@Autowired
 	private SecurityPolicy securityPolicy;
 
-	private DeploymentServiceFactory cloudFoundryServiceFactory = new CloudFoundryServiceFactoryImpl();
+	private Map<DeploymentServiceType, DeploymentServiceFactory> deploymentServiceFactoriesByType = new HashMap<DeploymentServiceType, DeploymentServiceFactory>();
 
 	private String getProjectIdentifier() {
 		return TenancyUtil.getCurrentTenantProjectIdentifer();
@@ -99,12 +100,6 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#listDeployments(org.cloudfoundry
-	 * .code.server .common.service.domain.Region)
-	 */
 	@Override
 	public List<DeploymentConfiguration> listDeployments(Region region) {
 		// TODO paging params
@@ -138,12 +133,6 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		deploymentService.populate(deploymentConfiguration);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#createDeployment(org.cloudfoundry
-	 * .code.server .deployment.domain.DeploymentConfiguration)
-	 */
 	@Override
 	public DeploymentConfiguration createDeployment(DeploymentConfiguration deploymentConfiguration)
 			throws ValidationException {
@@ -153,9 +142,10 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			deploymentService = createDeploymentService(deploymentConfiguration);
 			updateTokenIfNeeded(deploymentConfiguration, deploymentService);
 		} catch (ServiceException e) {
-			Errors errors = createErrors(deploymentConfiguration);
-			errors.reject("deployment.credentials.invalid");
-			throw new ValidationException(errors);
+			throw new RuntimeException(e);
+			// Errors errors = createErrors(deploymentConfiguration);
+			// errors.reject("deployment.credentials.invalid");
+			// throw new ValidationException(errors);
 		}
 
 		try {
@@ -228,8 +218,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	private void deployWar(DeploymentConfiguration deploymentConfiguration, DeploymentService deploymentSerivce,
 			File warFile) throws ServiceException {
 		try {
-			String name = deploymentConfiguration.getName();
-			deploymentSerivce.uploadApplication(name, warFile);
+			deploymentSerivce.uploadApplication(deploymentConfiguration, warFile);
 
 		} catch (MalformedURLException e) {
 			throw new ServiceException("Failed to deploy war file " + warFile.getName(), e);
@@ -238,12 +227,6 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#updateDeployment(org.cloudfoundry
-	 * .code.server .deployment.domain.DeploymentConfiguration)
-	 */
 	@Override
 	public DeploymentConfiguration updateDeployment(DeploymentConfiguration deploymentConfiguration)
 			throws EntityNotFoundException, ValidationException {
@@ -268,27 +251,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			String projectId = internalDeploymentConfiguration.getProject().getIdentifier();
 
 			if (shouldDeploy) {
-				ProjectArtifacts artifacts = projectArtifactService.findBuildArtifacts(projectId,
-						deploymentConfiguration.getBuildJobName(), deploymentConfiguration.getBuildJobNumber());
-				ProjectArtifact artifact = null;
-				if (artifacts == null) {
-					setStatusErrorMessage(deploymentConfiguration, "Could not find build");
-				} else {
-					for (ProjectArtifact a : artifacts.getArtifacts()) {
-						if (a.getPath().equals(deploymentConfiguration.getBuildArtifactPath())) {
-							artifact = a;
-						}
-					}
-					if (artifact == null) {
-						setStatusErrorMessage(deploymentConfiguration, "Could not find artifact");
-					} else {
-
-						File tempWarFile = File.createTempFile("deploy", "war");
-						projectArtifactService.downloadProjectArtifact(projectId, tempWarFile, artifact);
-						deployWar(deploymentConfiguration, deploymentService, tempWarFile);
-						deploymentConfiguration.setLastDeploymentDate(new Date());
-					}
-				}
+				deployLatestArtifact(deploymentConfiguration, deploymentService, projectId);
 			}
 
 		} catch (ServiceException e) {
@@ -309,6 +272,34 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		DeploymentDomain.updateInternal(deploymentConfiguration, internalDeploymentConfiguration);
 
 		return deploymentConfiguration;
+	}
+
+	@Override
+	public void deployLatestArtifact(DeploymentConfiguration deploymentConfiguration,
+			DeploymentService deploymentService, String projectId) throws IOException, ServiceException {
+		ProjectArtifacts artifacts = projectArtifactService.findBuildArtifacts(projectId,
+				deploymentConfiguration.getBuildJobName(), deploymentConfiguration.getBuildJobNumber());
+		ProjectArtifact artifact = null;
+		if (artifacts == null) {
+			setStatusErrorMessage(deploymentConfiguration, "Could not find build");
+		} else {
+			for (ProjectArtifact a : artifacts.getArtifacts()) {
+				if (a.getPath().equals(deploymentConfiguration.getBuildArtifactPath())) {
+					artifact = a;
+					break;
+				}
+			}
+			if (artifact == null) {
+				setStatusErrorMessage(deploymentConfiguration, "Could not find artifact");
+			} else {
+
+				File tempWarFile = File.createTempFile("deploy", ".war");
+				projectArtifactService.downloadProjectArtifact(projectId, tempWarFile, artifact);
+				deployWar(deploymentConfiguration, deploymentService, tempWarFile);
+				deploymentConfiguration.setLastDeploymentDate(new Date());
+			}
+		}
+		deploymentService.populate(deploymentConfiguration);
 	}
 
 	/**
@@ -337,12 +328,6 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		deploymentConfiguration.setErrorString(message);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#deleteDeployment(org.cloudfoundry
-	 * .code.server .deployment.domain.DeploymentConfiguration)
-	 */
 	@Override
 	public void deleteDeployment(DeploymentConfiguration deploymentConfiguration, boolean alsoDeleteFromCF)
 			throws EntityNotFoundException, ServiceException {
@@ -356,21 +341,15 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		entityManager.remove(internalDeploymentConfiguration);
 
 		if (alsoDeleteFromCF) {
-			createDeploymentService(deploymentConfiguration).deleteApplication(deploymentConfiguration.getName());
+			createDeploymentService(deploymentConfiguration).deleteApplication(deploymentConfiguration);
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#startDeployment(org.cloudfoundry
-	 * .code.server .deployment.domain.DeploymentConfiguration)
-	 */
 	@Override
 	public DeploymentStatus startDeployment(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
 		checkUpdatePermissions(deploymentConfiguration);
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
-		deploymentService.startApplication(deploymentConfiguration.getName());
+		deploymentService.startApplication(deploymentConfiguration);
 		deploymentService.updateStatus(deploymentConfiguration);
 
 		return deploymentConfiguration.getStatus();
@@ -386,40 +365,30 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		securityPolicy.modify(internalDeploymentConfiguration);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#stopDeployment(org.cloudfoundry
-	 * .code.server .deployment.domain.DeploymentConfiguration)
-	 */
 	@Override
 	public DeploymentStatus stopDeployment(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
 		checkUpdatePermissions(deploymentConfiguration);
 
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
 		String name = deploymentConfiguration.getName();
-		deploymentService.stopApplication(name);
+		deploymentService.stopApplication(deploymentConfiguration);
 		deploymentService.updateStatus(deploymentConfiguration);
 
 		return deploymentConfiguration.getStatus();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#restartDeployment(org.cloudfoundry
-	 * .code.server .deployment.domain.DeploymentConfiguration)
-	 */
 	@Override
 	public DeploymentStatus restartDeployment(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
-		return startDeployment(deploymentConfiguration);
+		checkUpdatePermissions(deploymentConfiguration);
+
+		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
+		deploymentService.restartApplication(deploymentConfiguration);
+
+		deploymentService.updateStatus(deploymentConfiguration);
+
+		return deploymentConfiguration.getStatus();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#getAvailableServices()
-	 */
 	@Override
 	public List<com.tasktop.c2c.server.deployment.domain.CloudService> getAvailableServices(
 			DeploymentConfiguration deploymentConfiguration) throws ServiceException {
@@ -427,12 +396,6 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		return deploymentService.getServices();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#createService(org.cloudfoundry
-	 * .code.server .deployment.domain.DeploymentService)
-	 */
 	@Override
 	public CloudService createService(CloudService service, DeploymentConfiguration deploymentConfiguration)
 			throws ServiceException {
@@ -441,11 +404,6 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		return deploymentService.createService(service);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#getAvailableMemoryConfigurations()
-	 */
 	@Override
 	public List<Integer> getAvailableMemoryConfigurations(DeploymentConfiguration deploymentConfiguration)
 			throws ServiceException {
@@ -453,19 +411,15 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
 		int[] choices = deploymentService.getApplicationMemoryChoices();
-		for (int choice : choices) {
-			options.add(choice);
+		if (choices != null) {
+			for (int choice : choices) {
+				options.add(choice);
+			}
 		}
 
 		return options;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#getAvailableServiceConfigurations
-	 * ()
-	 */
 	@Override
 	public List<DeploymentServiceConfiguration> getAvailableServiceConfigurations(
 			DeploymentConfiguration deploymentConfiguration) throws ServiceException {
@@ -475,15 +429,15 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 	private DeploymentService createDeploymentService(DeploymentConfiguration deploymentConfiguration)
 			throws ServiceException {
-		return cloudFoundryServiceFactory.constructService(deploymentConfiguration);
+		DeploymentServiceFactory factory = deploymentServiceFactoriesByType.get(deploymentConfiguration
+				.getServiceType());
+		if (factory == null) {
+			throw new ServiceException(String.format("No such deployment type [%s]",
+					deploymentConfiguration.getServiceType()), null);
+		}
+		return factory.constructService(deploymentConfiguration);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#validateCredentials(java.lang.
-	 * String, java.lang.String, java.lang.String)
-	 */
 	// TODO, push down to service.
 	@Override
 	public boolean validateCredentials(String url, String username, String password) {
@@ -501,16 +455,6 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		}
 	}
 
-	public void setCloudFoundryServiceFactory(DeploymentServiceFactory cloudFoundryServiceFactory) {
-		this.cloudFoundryServiceFactory = cloudFoundryServiceFactory;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService #onBuildCompleted(java.lang.String,
-	 * com.tasktop.c2c.server.profile.domain.build.BuildDetails)
-	 */
 	@Override
 	// TODO explicit security check.
 	public void onBuildCompleted(String jobName, BuildDetails buildDetails) {
@@ -567,11 +511,21 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		return pathMatcher.match(artifactPath, artifact.getRelativePath());
 	}
 
+	@Override
+	public List<DeploymentServiceType> getSupportedDeploymentServiceTypes() {
+		return new ArrayList<DeploymentServiceType>(deploymentServiceFactoriesByType.keySet());
+	}
+
 	/**
 	 * @param projectArtifactService
 	 *            the projectArtifactService to set
 	 */
 	public void setProjectArtifactService(ProjectArtifactService projectArtifactService) {
 		this.projectArtifactService = projectArtifactService;
+	}
+
+	public void setDeploymentServiceFactoriesByType(
+			Map<DeploymentServiceType, DeploymentServiceFactory> deploymentServiceFactoriesByType) {
+		this.deploymentServiceFactoriesByType = deploymentServiceFactoriesByType;
 	}
 }

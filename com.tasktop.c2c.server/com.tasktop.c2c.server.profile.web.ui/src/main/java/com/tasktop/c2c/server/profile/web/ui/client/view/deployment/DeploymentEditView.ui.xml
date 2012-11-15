@@ -17,16 +17,16 @@
 	    <div class="clear"></div> 
 	  </div> 
 			
-		<div class="credentials edit">  
+		<div ui:field="credentialsDiv" class="credentials edit">  
 			<h3>Credentials</h3>
 			<d:CredentialsEditView ui:field="credentialsEditView"/>
 		</div>
-		<div class="settings edit">  
+		<div ui:field="settingsDiv" class="settings edit">  
 			<h3>Settings</h3>
 			<div class="clear"></div> <!--  WHY? -->
 			<d:SettingsEditView ui:field="settingsEditView"/>
 		</div>
-		<div class="services edit">  
+		<div ui:field="servicesDiv" class="services edit">  
 			<h3>Services</h3>
 			<d:ServicesEditView ui:field="servicesEditView"/>
 		</div>

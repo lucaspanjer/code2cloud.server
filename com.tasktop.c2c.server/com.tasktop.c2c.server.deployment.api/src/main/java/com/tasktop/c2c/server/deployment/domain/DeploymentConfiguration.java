@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.deployment.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +26,7 @@ import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
 public class DeploymentConfiguration extends AbstractEntity {
 	private String name;
 	private String description;
+	private DeploymentServiceType serviceType;
 
 	// Credentials
 	private String apiBaseUrl;
@@ -41,7 +41,7 @@ public class DeploymentConfiguration extends AbstractEntity {
 	private int numInstances;
 	private int memory;
 
-	// C2C Configuration
+	// Common C2C Configuration
 	private DeploymentType deploymentType;
 	private String buildJobName;
 	private String buildJobNumber;
@@ -181,38 +181,6 @@ public class DeploymentConfiguration extends AbstractEntity {
 		this.buildJobNumber = buildJobNumber;
 	}
 
-	/**
-	 * @return
-	 */
-	public DeploymentConfiguration copy() {
-		// Error string not copied
-		DeploymentConfiguration copy = new DeploymentConfiguration();
-		copy.apiBaseUrl = this.apiBaseUrl;
-		copy.apiToken = this.apiToken;
-		copy.buildArtifactPath = this.buildArtifactPath;
-		copy.artifactUrl = this.artifactUrl;
-		copy.buildJobName = this.buildJobName;
-		copy.buildJobNumber = this.buildJobNumber;
-		copy.deploymentType = this.deploymentType;
-		copy.deployUnstableBuilds = this.deployUnstableBuilds;
-		copy.description = this.description;
-		copy.id = this.id;
-		copy.lastDeploymentDate = this.lastDeploymentDate;
-		if (this.mappedUrls != null) {
-			copy.mappedUrls = new ArrayList<String>(this.mappedUrls);
-		}
-		copy.memory = this.memory;
-		copy.name = this.name;
-		copy.numInstances = this.numInstances;
-		copy.password = this.password;
-		if (this.services != null) {
-			copy.services = new ArrayList<CloudService>(this.services);
-		}
-		copy.status = this.status;
-		copy.username = this.username;
-		return copy;
-	}
-
 	public String getErrorString() {
 		return errorString;
 	}
@@ -253,6 +221,14 @@ public class DeploymentConfiguration extends AbstractEntity {
 	 */
 	public void setLastDeploymentDate(Date lastDeploymentDate) {
 		this.lastDeploymentDate = lastDeploymentDate;
+	}
+
+	public DeploymentServiceType getServiceType() {
+		return serviceType;
+	}
+
+	public void setServiceType(DeploymentServiceType type) {
+		this.serviceType = type;
 	}
 
 }

@@ -12,25 +12,29 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.deployment;
 
-
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
+import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentsView.Presenter;
 
 public class DeploymentReadOnlyView extends Composite {
 	interface Binder extends UiBinder<Widget, DeploymentReadOnlyView> {
 	}
 
 	public interface DeleteHandler {
-		void delete(DeploymentConfiguration config, boolean alsoDeleteFromCF);
+		void delete(DeploymentConfiguration config, boolean alsoDeleteService);
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
@@ -40,11 +44,11 @@ public class DeploymentReadOnlyView extends Composite {
 	@UiField
 	Label status;
 	@UiField
-	Anchor startButton;
+	protected Anchor startButton;
 	@UiField
-	Anchor stopButton;
+	protected Anchor stopButton;
 	@UiField
-	Anchor restartButton;
+	protected Anchor restartButton;
 	@UiField
 	Anchor deleteButton;
 	@UiField
@@ -59,9 +63,20 @@ public class DeploymentReadOnlyView extends Composite {
 	@UiField
 	ArtifactReadOnlyView artifactReadOnlyView;
 
-	private DeleteHandler deleteHandler;
+	@UiField
+	protected DivElement servicesDiv;
+	@UiField
+	protected DivElement infoDiv;
+	@UiField
+	protected FlowPanel mappedUrls;
+	@UiField
+	protected DivElement settingsDiv;
+	@UiField
+	protected DivElement credentialsDiv;
 
 	private DeploymentConfiguration originalValue;
+
+	private Presenter presenter;
 
 	public DeploymentReadOnlyView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -70,12 +85,12 @@ public class DeploymentReadOnlyView extends Composite {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				final DeleteDeploymentDialog deleteDialog = new DeleteDeploymentDialog();
+				final DeleteDeploymentDialog deleteDialog = DeleteDeploymentDialog.getInstance();
 				deleteDialog.deleteButton.addClickHandler(new ClickHandler() {
 
 					@Override
 					public void onClick(ClickEvent event) {
-						deleteHandler.delete(getOriginalValue(), deleteDialog.alsoDeleteInCF.getValue());
+						presenter.delete(getOriginalValue(), deleteDialog.alsoDelete.getValue());
 						deleteDialog.hide();
 
 					}
@@ -99,10 +114,43 @@ public class DeploymentReadOnlyView extends Composite {
 
 		updateStatus(deployment.getStatus());
 
-		credentialsReadOnlyView.setValue(deployment);
-		settingsReadOnlyView.setValue(deployment);
-		servicesReadOnlyView.setValue(deployment);
+		if (deployment.getServiceType().isSupportsCredentials()) {
+			credentialsReadOnlyView.setValue(deployment);
+		}
+		if (deployment.getServiceType().isSupportsSettings()) {
+			settingsReadOnlyView.setValue(deployment);
+		}
+		if (deployment.getServiceType().isSupportsServices()) {
+			servicesReadOnlyView.setValue(deployment);
+		}
 		artifactReadOnlyView.setValue(deployment);
+
+		UIObject.setVisible(credentialsDiv, deployment.getServiceType().isSupportsCredentials());
+		UIObject.setVisible(settingsDiv, deployment.getServiceType().isSupportsSettings());
+		UIObject.setVisible(infoDiv, !deployment.getServiceType().isSupportsSettings());
+		mappedUrls.clear();
+		if (deployment.getMappedUrls() != null && !deployment.getMappedUrls().isEmpty()) {
+			boolean needSep = false;
+			for (String url : deployment.getMappedUrls()) {
+				if (needSep) {
+					mappedUrls.add(new Label(", "));
+				} else {
+					needSep = true;
+				}
+				mappedUrls.add(new Anchor(url, url, "new"));
+			}
+		} else {
+			mappedUrls.add(new Label("<none>"));
+		}
+		UIObject.setVisible(servicesDiv, deployment.getServiceType().isSupportsServices());
+		if (deployment.getServiceType().isAlwaysDeleteInService()) {
+			UIObject.setVisible(DeleteDeploymentDialog.getInstance().deleteInServiceDiv, false);
+			DeleteDeploymentDialog.getInstance().alsoDelete.setValue(true);
+		} else {
+			UIObject.setVisible(DeleteDeploymentDialog.getInstance().deleteInServiceDiv, true);
+			DeleteDeploymentDialog.getInstance().alsoDelete.setValue(false);
+
+		}
 	}
 
 	/**
@@ -143,38 +191,6 @@ public class DeploymentReadOnlyView extends Composite {
 	}
 
 	/**
-	 * @param clickHandler
-	 */
-	public void addDeleteHandler(DeleteHandler deleteHandler) {
-		this.deleteHandler = deleteHandler;
-	}
-
-	public void addStopClickHandler(ClickHandler clickHandler) {
-		addEnabledRespectingClickHandler(stopButton, clickHandler);
-	}
-
-	public void addStartClickHandler(ClickHandler clickHandler) {
-		addEnabledRespectingClickHandler(startButton, clickHandler);
-	}
-
-	public void addRestartClickHandler(ClickHandler clickHandler) {
-		addEnabledRespectingClickHandler(restartButton, clickHandler);
-	}
-
-	private void addEnabledRespectingClickHandler(final Anchor a, final ClickHandler clickHandler) {
-		a.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				if (a.isEnabled()) {
-					clickHandler.onClick(event);
-				}
-
-			}
-		});
-	}
-
-	/**
 	 * @param editEnabled
 	 */
 	public void setEnableEdit(boolean editEnabled) {
@@ -183,6 +199,34 @@ public class DeploymentReadOnlyView extends Composite {
 		stopButton.setVisible(editEnabled);
 		restartButton.setVisible(editEnabled);
 		deleteButton.setVisible(editEnabled);
+	}
+
+	/**
+	 * @param presenter
+	 */
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
+	}
+
+	@UiHandler("startButton")
+	protected void onStartClicked(ClickEvent e) {
+		if (startButton.isEnabled()) {
+			presenter.doStart();
+		}
+	}
+
+	@UiHandler("stopButton")
+	protected void onStopClicked(ClickEvent e) {
+		if (stopButton.isEnabled()) {
+			presenter.doStop();
+		}
+	}
+
+	@UiHandler("restartButton")
+	protected void onRestartClicked(ClickEvent e) {
+		if (restartButton.isEnabled()) {
+			presenter.doRestart();
+		}
 	}
 
 }
