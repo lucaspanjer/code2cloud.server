@@ -24,7 +24,6 @@ import com.tasktop.c2c.server.profile.web.ui.client.view.Footer;
 public class HudsonAPI {
 
 	public static void attachHeader(String elementId, String projectIdentifier) {
-
 		HudsonHeaderPlace place = HudsonHeaderPlace.createPlace(projectIdentifier, elementId);
 		place.go();
 	}
@@ -46,7 +45,9 @@ public class HudsonAPI {
 													}-*/;
 
 	public static native void onApiReady() /*-{
-											$wnd.onHudsonApiReady();
+											if($wnd.onHudsonApiReady != null) {
+												$wnd.onHudsonApiReady();
+												}
 											}-*/;
 
 }

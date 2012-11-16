@@ -16,7 +16,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.tasktop.c2c.server.common.profile.web.client.AppState;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileServiceAsync;
@@ -42,7 +41,7 @@ public class ProfileEntryPoint implements EntryPoint {
 		AsyncCallbackSupport.setErrorInterpreter(new ExceptionMessageProvider());
 
 		initializeInjector();
-		registerPageMappings();
+		registerPageMappings(); // REVIEW, push to BOOT??
 	}
 
 	protected void registerPageMappings() {
@@ -89,11 +88,13 @@ public class ProfileEntryPoint implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
-		RootPanel.get().add(injector.getNotificationPanel());
-		injector.getApp().run(RootPanel.get());
+		HudsonAPI.exportStaticMethod();
+		HudsonAPI.onApiReady();
+		BootAPI.exportStaticMethod();
+		BootAPI.onApiReady();
 	}
 
-	protected void updateServiceTarget(ServiceDefTarget target, String servletMappingBase, String servletMappingSuffix) {
+	static void updateServiceTarget(ServiceDefTarget target, String servletMappingBase, String servletMappingSuffix) {
 		String ep = target.getServiceEntryPoint();
 
 		String expectedPath = Path.getBasePath() + servletMappingBase + "/" + servletMappingSuffix;

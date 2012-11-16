@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module rename-to="hudsonApi">
-
-	<inherits name="com.tasktop.c2c.server.profile.web.Base"/>
-
-	<!-- Specify the app entry point class.                         -->
-	<entry-point class="com.tasktop.c2c.server.profile.web.ui.client.HudsonAPIEntryPoint"/>
-
-</module>

@@ -38,7 +38,7 @@ var pageHTML = ' '+
 ' <div class="auto-refresh right"><a href="?auto_refresh=true">ENABLE AUTO REFRESH</a></div></div>'+
 ' <div id="footerDiv"></div>';
 
-document.write('<scr'+'ipt type="text/javascript" src="'+appRoot+'/hudsonApi/hudsonApi.nocache.js">' +
+document.write('<scr'+'ipt type="text/javascript" src="'+appRoot+'/profile/profile.nocache.js">' +
 		'</scr'+'ipt>');
 
 document.write('<scr'+'ipt type="text/javascript">' + 
