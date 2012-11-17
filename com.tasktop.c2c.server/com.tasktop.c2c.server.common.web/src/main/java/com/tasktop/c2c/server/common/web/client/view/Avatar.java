@@ -42,7 +42,9 @@ public class Avatar {
 		String[] alternates = new String[Size.values().length];
 		String urlBase = new UrlBuilder().setProtocol(Window.Location.getProtocol()).setHost(Window.Location.getHost())
 				.setPath(Path.getBasePath()).buildString();
-
+		if (!urlBase.endsWith("/")) {
+			urlBase = urlBase + "/";
+		}
 		for (Size size : Size.values()) {
 			alternates[size.ordinal()] = urlBase + "images/default_avatar" + size.getSize() + ".png";
 		}
@@ -53,7 +55,7 @@ public class Avatar {
 		if (gravatarHash == null) {
 			gravatarHash = "00000000000000000000000000000000";
 		}
-		return "/" + Path.getBasePath() + "api/image/" + gravatarHash + ".jpg?s=" + size.getSize() + "&d="
+		return Path.getBasePath() + "api/image/" + gravatarHash + ".jpg?s=" + size.getSize() + "&d="
 				+ alternateAvatarUrls[size.ordinal()];
 	}
 
