@@ -235,7 +235,7 @@ ul.inline-tabs li > a {
   width: 100%;
 }
 
-.breadcrumbs a {
+.breadcrumbs a, .breadcrumbs a:visited {
   color: #444444;
 }
 
