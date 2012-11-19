@@ -383,7 +383,7 @@ h1 .icon {
 	margin: 3px 5px 7px;
 }
 
-a.project-nav-item {
+a.project-nav-item, a.project-nav-item:visited {
 	color: #666666;
 	display: block;
 	padding-top: 4px;
