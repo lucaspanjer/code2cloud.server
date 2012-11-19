@@ -35,11 +35,6 @@
 			<groupId>com.google.gwt.inject</groupId>
 			<artifactId>gin</artifactId>
 		</dependency>
-       <dependency>
-             <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <scope>test</scope>
-        </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
