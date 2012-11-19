@@ -20,9 +20,16 @@
 	<bean id="databaseNamingStrategy" class="com.tasktop.c2c.server.common.internal.tenancy.DatabaseNamingStrategy" p:suffix="_tasks" 
 		p:useShortProjectIdentifier="false"/> 
 	
-	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="rawDataSource"
+	<bean class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close" id="rawDataSource"
 		p:driverClassName="${task.database.driverClassName}" p:url="${task.database.url}"
-		p:username="${task.database.username}" p:password="${task.database.password}" />
+		p:username="${task.database.username}" p:password="${task.database.password}" 
+		p:timeBetweenEvictionRunsMillis="${task.database.pool.timeBetweenEvictionRunsMillis}"
+		p:minEvictableIdleTimeMillis="${task.database.pool.minEvictableIdleTimeMillis}"
+		p:numTestsPerEvictionRun="${task.database.pool.numTestsPerEvictionRun}"
+		p:removeAbandoned="${task.database.pool.removeAbandoned}"
+		p:removeAbandonedTimeout="${task.database.pool.abandonedTimeout}"
+		p:maxActive="${task.database.pool.maxActive}"
+		p:maxIdle="${task.database.pool.maxIdle}"/>
 	
 	<bean class="com.tasktop.c2c.server.common.internal.tenancy.ProjectTenantAwareDataSource" id="dataSource"
 		p:wrappedDataSource-ref="rawDataSource"
