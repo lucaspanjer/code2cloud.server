@@ -272,7 +272,7 @@ ul.inline-tabs li > a {
   border-left: 1px solid #2B5480;
 }
 
-.account-options a {
+.account-options a, .account-options a:visited {
   display: block;
   text-align: left;
   padding: 4px 0 4px 4px;
