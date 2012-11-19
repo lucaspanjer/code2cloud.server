@@ -101,16 +101,16 @@ public class AdminProfileView extends AbstractComposite implements Editor<Profil
 	protected TextBox filterText;
 	@UiField
 	@Ignore
-	protected CheckBox showDisabled;
+	protected CheckBox hideDisabled;
 	@UiField
 	@Ignore
-	protected CheckBox showNewsEmailOptOut;
+	protected CheckBox hideNewsEmailOptOut;
 	@UiField
 	@Ignore
-	protected CheckBox showServiceEmailOptOut;
+	protected CheckBox hideServiceEmailOptOut;
 	@UiField
 	@Ignore
-	protected CheckBox showUnverified;
+	protected CheckBox hideUnverified;
 	@UiField
 	protected DisclosurePanel emailsPanel;
 	@UiField
@@ -149,11 +149,11 @@ public class AdminProfileView extends AbstractComposite implements Editor<Profil
 	public AdminProfileView() {
 		ProfileResources.get.style().ensureInjected(); // FIXME, put in a common place
 		initWidget(uiBinder.createAndBindUi(this));
-		showDisabled.setValue(false);
-		showNewsEmailOptOut.setValue(true);
-		showServiceEmailOptOut.setValue(true);
-		showUnverified.setValue(false);
-		for (CheckBox box : Arrays.asList(showDisabled, showNewsEmailOptOut, showServiceEmailOptOut, showUnverified)) {
+		hideDisabled.setValue(true);
+		hideNewsEmailOptOut.setValue(false);
+		hideServiceEmailOptOut.setValue(false);
+		hideUnverified.setValue(false);
+		for (CheckBox box : Arrays.asList(hideDisabled, hideNewsEmailOptOut, hideServiceEmailOptOut, hideUnverified)) {
 			box.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
 				@Override
@@ -254,18 +254,18 @@ public class AdminProfileView extends AbstractComposite implements Editor<Profil
 		List<Profile> result = new ArrayList<Profile>(list.size());
 
 		for (Profile p : list) {
-			if (!showDisabled.getValue() && p.getAccountDisabled()) {
+			if (hideDisabled.getValue() && p.getAccountDisabled()) {
 				continue;
 			}
-			if (!showNewsEmailOptOut.getValue() && p.getNotificationSettings() != null
+			if (hideNewsEmailOptOut.getValue() && p.getNotificationSettings() != null
 					&& !p.getNotificationSettings().getEmailNewsAndEvents()) {
 				continue;
 			}
-			if (!showServiceEmailOptOut.getValue() && p.getNotificationSettings() != null
+			if (hideServiceEmailOptOut.getValue() && p.getNotificationSettings() != null
 					&& !p.getNotificationSettings().getEmailServiceAndMaintenance()) {
 				continue;
 			}
-			if (!showUnverified.getValue() && !p.getEmailVerfied()) {
+			if (hideUnverified.getValue() && !p.getEmailVerfied()) {
 				continue;
 			}
 

@@ -16,11 +16,11 @@
 				</li>
 			</ul>
 			<ul class="right">
-			  <li>Show:</li>
-			  	<li><g:CheckBox ui:field="showDisabled" text="Disabled"/></li>
-				<li><g:CheckBox ui:field="showNewsEmailOptOut" text="Opted Out of News Emails"/></li>
-				<li><g:CheckBox ui:field="showServiceEmailOptOut" text="Opted Out of Service Emails"/></li>
-				<li><g:CheckBox ui:field="showUnverified" text="Unverified email addresses"/></li>
+			  <li>Hide:</li>
+			  	<li><g:CheckBox ui:field="hideDisabled" text="Disabled"/></li>
+				<li><g:CheckBox ui:field="hideNewsEmailOptOut" text="Opted Out of News Emails"/></li>
+				<li><g:CheckBox ui:field="hideServiceEmailOptOut" text="Opted Out of Service Emails"/></li>
+				<li><g:CheckBox ui:field="hideUnverified" text="Unverified Email Addresses"/></li>
 			</ul>
 			<div class="clear"/>
 		</div>
