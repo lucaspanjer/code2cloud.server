@@ -109,6 +109,9 @@ public class AdminProfileView extends AbstractComposite implements Editor<Profil
 	@Ignore
 	protected CheckBox showServiceEmailOptOut;
 	@UiField
+	@Ignore
+	protected CheckBox showUnverified;
+	@UiField
 	protected DisclosurePanel emailsPanel;
 	@UiField
 	@Ignore
@@ -149,7 +152,8 @@ public class AdminProfileView extends AbstractComposite implements Editor<Profil
 		showDisabled.setValue(false);
 		showNewsEmailOptOut.setValue(true);
 		showServiceEmailOptOut.setValue(true);
-		for (CheckBox box : Arrays.asList(showDisabled, showNewsEmailOptOut, showServiceEmailOptOut)) {
+		showUnverified.setValue(false);
+		for (CheckBox box : Arrays.asList(showDisabled, showNewsEmailOptOut, showServiceEmailOptOut, showUnverified)) {
 			box.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
 				@Override
@@ -259,6 +263,9 @@ public class AdminProfileView extends AbstractComposite implements Editor<Profil
 			}
 			if (!showServiceEmailOptOut.getValue() && p.getNotificationSettings() != null
 					&& !p.getNotificationSettings().getEmailServiceAndMaintenance()) {
+				continue;
+			}
+			if (!showUnverified.getValue() && !p.getEmailVerfied()) {
 				continue;
 			}
 

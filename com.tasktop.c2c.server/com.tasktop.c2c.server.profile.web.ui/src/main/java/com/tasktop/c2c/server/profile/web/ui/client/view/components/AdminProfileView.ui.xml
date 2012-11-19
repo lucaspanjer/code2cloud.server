@@ -20,6 +20,7 @@
 			  	<li><g:CheckBox ui:field="showDisabled" text="Disabled"/></li>
 				<li><g:CheckBox ui:field="showNewsEmailOptOut" text="Opted Out of News Emails"/></li>
 				<li><g:CheckBox ui:field="showServiceEmailOptOut" text="Opted Out of Service Emails"/></li>
+				<li><g:CheckBox ui:field="showUnverified" text="Unverified email addresses"/></li>
 			</ul>
 			<div class="clear"/>
 		</div>
