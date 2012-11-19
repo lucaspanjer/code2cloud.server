@@ -193,12 +193,10 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 		if (isWatching) {
 			watchLink.addStyleName("watching");
-			watchLink.setHTML("<span></span>Watching");
-			watchLink.setEnabled(false);
+			watchLink.setHTML("<span></span>Unwatch");
 		} else {
 			watchLink.addStyleName("watch");
 			watchLink.setHTML("<span></span>Watch");
-			watchLink.setEnabled(true);
 		}
 
 	}
@@ -248,17 +246,29 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 			Element element = Element.as(target);
 			while (element.hasParentElement()) {
 				if (element.getId().equals("watchButton")) {
-					ProfileEntryPoint.getInstance().getProfileService()
-							.watchProject(value.getIdentifier(), new AsyncCallbackSupport<Void>() {
-								@Override
-								protected void success(Void result) {
-									Credentials credentials = ProfileEntryPoint.getInstance().getAppState()
-											.getCredentials();
-									credentials.getRoles().add(Role.Community + "/" + value.getIdentifier());
-
-									setValue(context, parent, value);
-								}
-							});
+					if (AuthenticationHelper.isWatching(value.getIdentifier())) {
+						ProfileEntryPoint.getInstance().getProfileService()
+								.unwatchProject(value.getIdentifier(), new AsyncCallbackSupport<Void>() {
+									@Override
+									protected void success(Void result) {
+										Credentials credentials = ProfileEntryPoint.getInstance().getAppState()
+												.getCredentials();
+										credentials.getRoles().remove(Role.Community + "/" + value.getIdentifier());
+										setValue(context, parent, value);
+									}
+								});
+					} else {
+						ProfileEntryPoint.getInstance().getProfileService()
+								.watchProject(value.getIdentifier(), new AsyncCallbackSupport<Void>() {
+									@Override
+									protected void success(Void result) {
+										Credentials credentials = ProfileEntryPoint.getInstance().getAppState()
+												.getCredentials();
+										credentials.getRoles().add(Role.Community + "/" + value.getIdentifier());
+										setValue(context, parent, value);
+									}
+								});
+					}
 					return;
 				}
 				element = element.getParentElement();
