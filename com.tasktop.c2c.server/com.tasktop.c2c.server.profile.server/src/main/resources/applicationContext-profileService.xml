@@ -21,7 +21,7 @@
 	
 	<bean id="profileHubTenantProvider" class="com.tasktop.c2c.server.internal.profile.service.ProfileHubTenantProvider"/>
 
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
+	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close"
 		p:driverClassName="${alm.database.driverClassName}"
 		p:url="${alm.database.url}"
 		p:username="${alm.database.username}"

@@ -28,9 +28,10 @@
 		</property>
 	</bean>
 
-	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource"
+	<bean class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close" id="dataSource"
 		p:driverClassName="${alm.database.driverClassName}" p:url="${alm.database.url}"
 		p:username="sa" p:password="${alm.database.password}" />
+
 	
 	<bean class="org.springframework.orm.jpa.JpaTransactionManager"
 		id="transactionManager" p:entityManagerFactory-ref="entityManagerFactory"

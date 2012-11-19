@@ -20,7 +20,7 @@
 	<bean id="databaseNamingStrategy" class="com.tasktop.c2c.server.common.internal.tenancy.DatabaseNamingStrategy" p:suffix="_tasks" 
 		p:useShortProjectIdentifier="false"/> 
 	
-	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="rawDataSource"
+	<bean class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close" id="rawDataSource"
 		p:driverClassName="${task.database.driverClassName}" p:url="${task.database.url}"
 		p:username="${task.database.username}" p:password="${task.database.password}" />
 	

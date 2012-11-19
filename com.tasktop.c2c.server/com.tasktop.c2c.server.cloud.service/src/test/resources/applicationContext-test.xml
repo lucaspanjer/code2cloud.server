@@ -29,7 +29,7 @@
 		</property>
 	</bean>
 
-	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource"
+	<bean class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close" id="dataSource"
 		p:driverClassName="${alm.database.driverClassName}" p:url="${alm.database.url}"
 		p:username="${alm.database.username}" p:password="${alm.database.password}"
 	/>

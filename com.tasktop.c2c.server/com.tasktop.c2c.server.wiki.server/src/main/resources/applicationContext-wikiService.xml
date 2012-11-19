@@ -18,7 +18,7 @@
 	<bean id="databaseNamingStrategy" class="com.tasktop.c2c.server.common.internal.tenancy.DatabaseNamingStrategy" p:suffix="_wiki" 
 		p:useShortProjectIdentifier="false"/>
 
-	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="rawDataSource"
+	<bean class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close" id="rawDataSource"
 		p:driverClassName="${wiki.database.driverClassName}" p:url="${wiki.database.url}"
 		p:username="${wiki.database.username}" p:password="${wiki.database.password}" />
 
