@@ -17,14 +17,4 @@ import java.io.Serializable;
 public class Priority extends AbstractReferenceValue implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private boolean isActive;
-
-	public boolean isActive() {
-		return isActive;
-	}
-
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
-
 }

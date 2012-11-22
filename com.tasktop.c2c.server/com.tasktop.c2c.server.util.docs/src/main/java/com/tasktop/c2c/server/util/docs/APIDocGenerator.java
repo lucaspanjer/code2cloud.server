@@ -754,7 +754,6 @@ public class APIDocGenerator {
 
 	private Priority createTaskPriority(String value) {
 		Priority priority = new Priority();
-		priority.setActive(true);
 		priority.setId(123);
 		priority.setSortkey((short) 7);
 		priority.setValue(value);
