@@ -394,6 +394,7 @@ a.project-nav-item, a.project-nav-item:visited {
 	font-size: 13px;
 	line-height: 22px;
 	background: none;
+	background-color: inherit;
 	text-shadow: #FFF 0px 1px  0px;
 }
 
