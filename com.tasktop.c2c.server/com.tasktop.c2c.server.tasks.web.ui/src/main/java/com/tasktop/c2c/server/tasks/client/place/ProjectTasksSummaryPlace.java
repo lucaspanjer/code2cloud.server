@@ -182,8 +182,8 @@ public class ProjectTasksSummaryPlace extends AbstractProjectTaskBatchingPlace {
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHistoryToken(),
-				"Tasks"));
+		breadcrumbs
+				.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(), "Tasks"));
 
 	}
 

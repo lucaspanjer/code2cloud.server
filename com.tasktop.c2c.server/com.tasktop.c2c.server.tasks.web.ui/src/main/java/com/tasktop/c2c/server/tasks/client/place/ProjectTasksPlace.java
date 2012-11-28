@@ -329,7 +329,7 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Tasks"));
+		breadcrumbs.add(new Breadcrumb(getHref(), "Tasks"));
 	}
 
 	/**

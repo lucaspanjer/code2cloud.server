@@ -23,21 +23,21 @@ public class Breadcrumb {
 
 	public static List<Breadcrumb> getBaseBreadcrumbs() {
 		List<Breadcrumb> result = new ArrayList<Breadcrumb>();
-		result.add(new Breadcrumb(ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace().getHistoryToken(), "Projects"));
+		result.add(new Breadcrumb(ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace().getHref(),
+				"Projects"));
 		return result;
 	}
 
 	public static List<Breadcrumb> getProjectSpecficBreadcrumbs(Project project) {
 		List<Breadcrumb> result = getBaseBreadcrumbs();
-		result.add(new Breadcrumb(ProjectHomePlace.createPlace(project.getIdentifier()).getHistoryToken(), project
-				.getName()));
+		result.add(new Breadcrumb(ProjectHomePlace.createPlace(project.getIdentifier()).getHref(), project.getName()));
 		return result;
 	}
 
 	public static List<Breadcrumb> getOrganizationSpecificBreadcrumbs(Organization organization) {
 		List<Breadcrumb> result = new ArrayList<Breadcrumb>();
 		result.add(new Breadcrumb(ProfileGinjector.get.instance().getPlaceProvider()
-				.getOrganizationPlace(organization.getIdentifier()).getHistoryToken(), organization.getName()));
+				.getOrganizationPlace(organization.getIdentifier()).getHref(), organization.getName()));
 		return result;
 	}
 

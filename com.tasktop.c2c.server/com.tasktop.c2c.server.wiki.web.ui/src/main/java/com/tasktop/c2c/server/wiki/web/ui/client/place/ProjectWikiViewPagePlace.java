@@ -141,8 +141,8 @@ public class ProjectWikiViewPagePlace extends AbstractProjectWikiPlace implement
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ProjectWikiHomePlace.createDefaultPlace(projectId).getHistoryToken(), "Wiki"));
-		breadcrumbs.add(new Breadcrumb(getHistoryToken(), pagePath));
+		breadcrumbs.add(new Breadcrumb(ProjectWikiHomePlace.createDefaultPlace(projectId).getHref(), "Wiki"));
+		breadcrumbs.add(new Breadcrumb(getHref(), pagePath));
 	}
 
 	@Override

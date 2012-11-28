@@ -120,8 +120,8 @@ public class ScmRepoPlace extends AbstractBatchFetchingPlace implements HeadingP
 	@Override
 	public List<Breadcrumb> getBreadcrumbs() {
 		List<Breadcrumb> breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ScmPlace.createPlace(projectId).getHistoryToken(), "Source"));
-		breadcrumbs.add(new Breadcrumb(getHistoryToken(), repositoryName));
+		breadcrumbs.add(new Breadcrumb(ScmPlace.createPlace(projectId).getHref(), "Source"));
+		breadcrumbs.add(new Breadcrumb(getHref(), repositoryName));
 		return breadcrumbs;
 	}
 

@@ -113,7 +113,7 @@ public class ScmPlace extends AbstractBatchFetchingPlace implements HeadingPlace
 	@Override
 	public List<Breadcrumb> getBreadcrumbs() {
 		List<Breadcrumb> breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Source"));
+		breadcrumbs.add(new Breadcrumb(getHref(), "Source"));
 		return breadcrumbs;
 	}
 

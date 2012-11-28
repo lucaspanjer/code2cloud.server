@@ -91,6 +91,6 @@ public class UserAccountPlace extends LoggedInPlace implements HeadingPlace, Win
 
 	@Override
 	public List<Breadcrumb> getBreadcrumbs() {
-		return Arrays.asList(new Breadcrumb("", "Projects"), new Breadcrumb(getHistoryToken(), "Account"));
+		return Arrays.asList(new Breadcrumb("", "Projects"), new Breadcrumb(getHref(), "Account"));
 	}
 }

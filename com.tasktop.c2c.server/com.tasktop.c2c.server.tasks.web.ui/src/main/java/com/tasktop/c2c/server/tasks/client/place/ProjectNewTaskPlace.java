@@ -146,10 +146,10 @@ public class ProjectNewTaskPlace extends AbstractProjectTaskBatchingPlace implem
 
 	private void createBreadcrumbs(Project project, Task task) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHistoryToken(),
-				"Tasks"));
+		breadcrumbs
+				.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(), "Tasks"));
 		String placeBreadcrumbText = "New Task";
-		breadcrumbs.add(new Breadcrumb(getHistoryToken(), placeBreadcrumbText));
+		breadcrumbs.add(new Breadcrumb(getHref(), placeBreadcrumbText));
 	}
 
 	/**

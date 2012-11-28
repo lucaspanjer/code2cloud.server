@@ -133,14 +133,14 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ProjectWikiHomePlace.createDefaultPlace(projectId).getHistoryToken(), "Wiki"));
+		breadcrumbs.add(new Breadcrumb(ProjectWikiHomePlace.createDefaultPlace(projectId).getHref(), "Wiki"));
 
 		if (!isNew) {
-			breadcrumbs.add(new Breadcrumb(ProjectWikiViewPagePlace.createPlaceForPage(projectId, pagePath)
-					.getHistoryToken(), pagePath));
-			breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Edit"));
+			breadcrumbs.add(new Breadcrumb(ProjectWikiViewPagePlace.createPlaceForPage(projectId, pagePath).getHref(),
+					pagePath));
+			breadcrumbs.add(new Breadcrumb(getHref(), "Edit"));
 		} else {
-			breadcrumbs.add(new Breadcrumb(getHistoryToken(), "New Page"));
+			breadcrumbs.add(new Breadcrumb(getHref(), "New Page"));
 
 		}
 	}

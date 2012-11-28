@@ -115,7 +115,7 @@ public class ProjectTeamPlace extends AbstractBatchFetchingPlace implements Head
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Team"));
+		breadcrumbs.add(new Breadcrumb(getHref(), "Team"));
 	}
 
 	@Override

@@ -118,9 +118,9 @@ public class ProjectAdminSourcePlace extends ProjectAdminPlace implements Breadc
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(
-				ProjectAdminSettingsPlace.createPlace(project.getIdentifier()).getHistoryToken(), "Settings"));
-		breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Source"));
+		breadcrumbs.add(new Breadcrumb(ProjectAdminSettingsPlace.createPlace(project.getIdentifier()).getHref(),
+				"Settings"));
+		breadcrumbs.add(new Breadcrumb(getHref(), "Source"));
 	}
 
 	/**

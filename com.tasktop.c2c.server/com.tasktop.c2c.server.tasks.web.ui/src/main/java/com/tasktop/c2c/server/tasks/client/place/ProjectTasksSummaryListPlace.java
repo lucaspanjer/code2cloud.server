@@ -54,27 +54,26 @@ public class ProjectTasksSummaryListPlace extends AbstractProjectTaskBatchingPla
 
 		if (product == null) {
 			// If there's no product, the rest don't matter
-			targetHistoryToken = ProjectTasksSummaryListPlace.createDefaultListPlace(projectIdentifier)
-					.getHistoryToken();
+			targetHistoryToken = ProjectTasksSummaryListPlace.createDefaultListPlace(projectIdentifier).getHref();
 		} else if (component == null) {
 			// If we're at this point, milestone may still be specified - check for it now.
 			if (milestone == null) {
 				// There's only a product
 				targetHistoryToken = ProjectTasksSummaryListPlace.createProductListPlace(projectIdentifier,
-						product.getId()).getHistoryToken();
+						product.getId()).getHref();
 			} else {
 				// There's both a product and a milestone
 				targetHistoryToken = ProjectTasksSummaryPlace.createPlaceForRelease(projectIdentifier, product.getId(),
-						milestone.getValue()).getHistoryToken();
+						milestone.getValue()).getHref();
 			}
 		} else if (milestone == null) {
 			// If we're at this point, component and product are specified
 			targetHistoryToken = ProjectTasksSummaryPlace.createPlaceForComponent(projectIdentifier, product.getId(),
-					component.getId()).getHistoryToken();
+					component.getId()).getHref();
 		} else {
 			// If we're at this point, all 3 are specified
 			targetHistoryToken = ProjectTasksSummaryPlace.createPlaceForComponentAndRelease(projectIdentifier,
-					product.getId(), component.getId(), milestone.getValue()).getHistoryToken();
+					product.getId(), component.getId(), milestone.getValue()).getHref();
 		}
 		return new Hyperlink(linkLabel, targetHistoryToken);
 	}
@@ -211,8 +210,8 @@ public class ProjectTasksSummaryListPlace extends AbstractProjectTaskBatchingPla
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHistoryToken(),
-				"Tasks"));
+		breadcrumbs
+				.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(), "Tasks"));
 	}
 
 	/**

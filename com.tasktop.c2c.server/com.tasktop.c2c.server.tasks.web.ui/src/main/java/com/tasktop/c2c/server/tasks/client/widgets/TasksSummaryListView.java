@@ -93,8 +93,7 @@ public class TasksSummaryListView extends AbstractComposite {
 
 		for (Component curComponent : componentList) {
 			renderRow(sb, curComponent.getName(),
-					ProjectTasksSummaryPlace.createPlaceForComponent(appId, productId, curComponent.getId())
-							.getHistoryToken());
+					ProjectTasksSummaryPlace.createPlaceForComponent(appId, productId, curComponent.getId()).getHref());
 		}
 
 		taskSummaryPanel.add(new HTML(sb.toSafeHtml()));
@@ -109,8 +108,7 @@ public class TasksSummaryListView extends AbstractComposite {
 
 		for (Milestone curMilestone : milestoneList) {
 			renderRow(sb, curMilestone.getValue(),
-					ProjectTasksSummaryPlace.createPlaceForRelease(appId, productId, curMilestone.getValue())
-							.getHistoryToken());
+					ProjectTasksSummaryPlace.createPlaceForRelease(appId, productId, curMilestone.getValue()).getHref());
 		}
 
 		taskSummaryPanel.add(new HTML(sb.toSafeHtml()));

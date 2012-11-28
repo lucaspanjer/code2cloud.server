@@ -111,7 +111,7 @@ public class ProjectDashboardPlace extends AbstractBatchFetchingPlace implements
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ProjectDashboardPlace.createPlace(project.getIdentifier()).getHistoryToken(),
+		breadcrumbs.add(new Breadcrumb(ProjectDashboardPlace.createPlace(project.getIdentifier()).getHref(),
 				"Dashboard"));
 	}
 

@@ -159,7 +159,7 @@ public class HeaderView extends BaseHeaderView implements Header {
 				span.setText("/");
 				breadcrumbNavigation.add(span);
 			}
-			Anchor link = new Anchor(breadcrumb.getLabel(), "#" + breadcrumb.getUri());
+			Anchor link = new Anchor(breadcrumb.getLabel(), breadcrumb.getUri());
 			link.setStyleName("crumb");
 			breadcrumbNavigation.add(link);
 

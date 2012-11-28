@@ -123,7 +123,7 @@ public class ProjectWikiHomePlace extends AbstractProjectWikiPlace implements He
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Wiki"));
+		breadcrumbs.add(new Breadcrumb(getHref(), "Wiki"));
 	}
 
 	@Override

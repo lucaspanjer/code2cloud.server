@@ -93,8 +93,8 @@ public class ProjectAdminTeamPlace extends ProjectAdminPlace {
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(
-				ProjectAdminSettingsPlace.createPlace(project.getIdentifier()).getHistoryToken(), "Settings"));
+		breadcrumbs.add(new Breadcrumb(ProjectAdminSettingsPlace.createPlace(project.getIdentifier()).getHref(),
+				"Settings"));
 
 		breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Team"));
 	}

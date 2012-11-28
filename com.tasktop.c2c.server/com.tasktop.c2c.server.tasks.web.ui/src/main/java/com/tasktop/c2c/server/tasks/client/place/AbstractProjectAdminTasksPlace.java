@@ -15,9 +15,6 @@ package com.tasktop.c2c.server.tasks.client.place;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectAdminPlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
@@ -65,7 +62,7 @@ public abstract class AbstractProjectAdminTasksPlace extends ProjectAdminPlace {
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
 		// TODO admin
-		breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Tasks"));
+		breadcrumbs.add(new Breadcrumb(getHref(), "Tasks"));
 	}
 
 	@Override
