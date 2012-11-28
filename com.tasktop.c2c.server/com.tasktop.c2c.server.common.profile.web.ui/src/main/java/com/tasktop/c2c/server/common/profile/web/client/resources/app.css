@@ -7,6 +7,9 @@ a {
 a:visited {
   color: #062A55;
 }
+a:link {
+	text-decoration:none;
+}
 
 a:hover, a.selected {
   color: #1282CC;
