@@ -73,8 +73,12 @@ public class ProjectServiceServiceTest {
 
 		projectServiceService.provisionDefaultServices(project.getId());
 
-		// Should be jobs for the task, wiki, scm, maven, build. Deployment is not enabled by default
-		assertEquals(5, jobService.getScheduledJobs().size());
+		assertEquals(getNumExpectedInitialServices(), jobService.getScheduledJobs().size());
+	}
+
+	// Should be jobs for the task, wiki, scm, maven, build. Deployment is not enabled by default
+	protected int getNumExpectedInitialServices() {
+		return 5;
 	}
 
 	@Test
