@@ -12,9 +12,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.profile.web.client.place;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Window;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
@@ -46,7 +46,15 @@ public abstract class AbstractPlace extends Place implements IPlace {
 	public abstract String getPrefix();
 
 	public String getHref() {
-		UrlBuilder urlBuilder = Window.Location.createUrlBuilder();
+
+		if (!GWT.isClient()) {
+			// For tests
+			return "http://localhost/#" + getHistoryToken();
+		}
+		UrlBuilder urlBuilder = new UrlBuilder();
+		urlBuilder.setProtocol("http");
+		urlBuilder.setHost("localhsot");
+
 		urlBuilder.setPath(Path.getBasePath());
 		return urlBuilder.setHash(getHistoryToken()).buildString();
 	}
