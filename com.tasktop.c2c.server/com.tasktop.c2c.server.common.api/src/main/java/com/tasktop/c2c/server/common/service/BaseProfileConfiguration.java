@@ -22,6 +22,8 @@ import com.tasktop.c2c.server.common.service.web.TenancyUtil;
  */
 public class BaseProfileConfiguration {
 
+	public static final String PROJECTS_WEB_PATH = "#projects";
+
 	private String profileApplicationProtocol;
 	private String webHost;
 	private String serviceProxyPath;
@@ -53,10 +55,7 @@ public class BaseProfileConfiguration {
 	}
 
 	public void setServiceProxyPath(String serviceProxyPath) {
-		this.serviceProxyPath = serviceProxyPath;
-		if (!this.serviceProxyPath.startsWith("/") && !this.serviceProxyPath.isEmpty()) {
-			this.serviceProxyPath = "/" + this.serviceProxyPath;
-		}
+		this.serviceProxyPath = prefixPathIfMissing(serviceProxyPath);
 	}
 
 	public String getBaseContextPath() {
@@ -64,10 +63,7 @@ public class BaseProfileConfiguration {
 	}
 
 	public void setBaseContextPath(String baseContextPath) {
-		this.baseContextPath = baseContextPath;
-		if (!this.baseContextPath.startsWith("/") && !this.baseContextPath.isEmpty()) {
-			this.baseContextPath = "/" + this.baseContextPath;
-		}
+		this.baseContextPath = prefixPathIfMissing(baseContextPath);
 	}
 
 	public String getProfileBaseUrl() {
@@ -104,4 +100,10 @@ public class BaseProfileConfiguration {
 		this.prefixHostnameWithOrgId = prefixHostnameWithOrgId;
 	}
 
+	private String prefixPathIfMissing(String path) {
+		if (!path.startsWith("/") && !path.isEmpty()) {
+			path = "/" + path;
+		}
+		return path;
+	}
 }

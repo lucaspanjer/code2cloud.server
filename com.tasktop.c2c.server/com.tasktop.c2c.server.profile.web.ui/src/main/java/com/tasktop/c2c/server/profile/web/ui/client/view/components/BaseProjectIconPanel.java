@@ -155,7 +155,7 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 
 				switch (projectService.getServiceType()) {
 				case BUILD:
-					setServiceLinkEnabled(isAvailable, builds, projectService.getUrl());
+					setServiceLinkEnabled(isAvailable, builds, projectService.getWebUrl());
 					break;
 
 				case TASKS:
@@ -175,7 +175,7 @@ public abstract class BaseProjectIconPanel extends Composite implements IProject
 					break;
 
 				case REVIEW:
-					setServiceLinkEnabled(isAvailable, reviews, projectService.getUrl());
+					setServiceLinkEnabled(isAvailable, reviews, projectService.getWebUrl());
 					break;
 
 				default:

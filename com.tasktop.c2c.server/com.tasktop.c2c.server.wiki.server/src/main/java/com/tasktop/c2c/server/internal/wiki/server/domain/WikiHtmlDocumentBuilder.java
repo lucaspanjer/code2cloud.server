@@ -18,6 +18,7 @@ import java.net.URLEncoder;
 
 import org.eclipse.mylyn.wikitext.core.parser.Attributes;
 
+import com.tasktop.c2c.server.common.service.BaseProfileConfiguration;
 import com.tasktop.c2c.server.common.service.wiki.WebSafeHtmlDocumentBuilder;
 import com.tasktop.c2c.server.internal.wiki.server.WikiServiceConfiguration;
 
@@ -28,7 +29,7 @@ import com.tasktop.c2c.server.internal.wiki.server.WikiServiceConfiguration;
 public class WikiHtmlDocumentBuilder extends WebSafeHtmlDocumentBuilder {
 
 	public static final char HASHTAG_DELIMITER = '-';
-	private static final String PROJECT_PREFIX = "#projects/";
+	private static final String PROJECT_PREFIX = BaseProfileConfiguration.PROJECTS_WEB_PATH + "/";
 
 	private final Page page;
 	private final String pageHashtag;

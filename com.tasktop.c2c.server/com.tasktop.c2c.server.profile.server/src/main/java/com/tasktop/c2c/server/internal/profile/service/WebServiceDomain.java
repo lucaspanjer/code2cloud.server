@@ -121,7 +121,8 @@ public class WebServiceDomain {
 			result.setAvailable(false);
 		}
 
-		result.setUrl(configuration.getUrlForService(internalService));
+		result.setUrl(configuration.getMainUrlForService(internalService));
+		result.setWebUrl(configuration.getWebUrlForService(internalService));
 
 		return result;
 	}

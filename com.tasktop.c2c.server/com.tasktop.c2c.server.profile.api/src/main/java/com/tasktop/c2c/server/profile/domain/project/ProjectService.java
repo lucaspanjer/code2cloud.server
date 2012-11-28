@@ -19,8 +19,17 @@ import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
 public class ProjectService extends AbstractEntity {
 
 	private ServiceType serviceType;
-	private String url;
 	private Boolean available;
+
+	/**
+	 * The API URL, for example, a REST service
+	 */
+	private String url;
+
+	/**
+	 * The Web URL
+	 */
+	private String webUrl;
 
 	public ServiceType getServiceType() {
 		return serviceType;
@@ -36,6 +45,14 @@ public class ProjectService extends AbstractEntity {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getWebUrl() {
+		return webUrl;
+	}
+
+	public void setWebUrl(String webUrl) {
+		this.webUrl = webUrl;
 	}
 
 	public Boolean isAvailable() {

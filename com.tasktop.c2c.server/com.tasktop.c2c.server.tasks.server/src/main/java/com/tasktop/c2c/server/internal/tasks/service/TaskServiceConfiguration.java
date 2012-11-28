@@ -33,7 +33,8 @@ public class TaskServiceConfiguration extends BaseProfileConfiguration {
 	}
 
 	public String getWebUrlForTask(Integer taskId) {
-		return String.format("%s/#projects/%s/task/%s", getProfileBaseUrl(), getProfileProjectIdentifier(), taskId);
+		return String.format("%s/%s/%s/task/%s", getProfileBaseUrl(), PROJECTS_WEB_PATH, getProfileProjectIdentifier(),
+				taskId);
 	}
 
 	public String getWebUrlForAttachment(Integer attachmentId) {
@@ -63,5 +64,4 @@ public class TaskServiceConfiguration extends BaseProfileConfiguration {
 	public void setTreatEmptyStringAsNullInDatabase(boolean treatEmptyStringAsNullInDatabase) {
 		this.treatEmptyStringAsNullInDatabase = treatEmptyStringAsNullInDatabase;
 	}
-
 }

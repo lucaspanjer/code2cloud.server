@@ -70,34 +70,59 @@ public class ProfileServiceConfiguration extends BaseProfileConfiguration {
 		this.appName = appName;
 	}
 
-	public String getUrlForService(ProjectService projectService) {
+	public String getMainUrlForService(ProjectService projectService) {
 		if (projectService.getExternalUrl() != null) {
 			return projectService.getExternalUrl();
 		} else {
-			String restOfUrl = "";
-			switch (projectService.getType()) {
-			case BUILD:
-				restOfUrl = "hudson/";
-				break;
-			case MAVEN:
-				restOfUrl = "maven/";
-				break;
-			case SCM:
-				restOfUrl = "scm/";
-				break;
-			case TASKS:
-				restOfUrl = "tasks/";
-				break;
-			case WIKI:
-				restOfUrl = "wiki/";
-				break;
-			case REVIEW:
-				restOfUrl = "gerrit/";
-				break;
-			}
 
-			return this.getServiceUrlPrefix(projectService.getProjectServiceProfile().getProject().getIdentifier())
-					+ restOfUrl;
+			String projectIdentifier = projectService.getProjectServiceProfile().getProject().getIdentifier();
+			switch (projectService.getType()) {
+			case TASKS:
+				return buildServiceProxyUrl(projectIdentifier, "tasks");
+			case WIKI:
+				return buildServiceProxyUrl(projectIdentifier, "wiki");
+			case SCM:
+				return buildServiceProxyUrl(projectIdentifier, "scm");
+			case DEPLOYMENT:
+				return null; // ??
+			case REVIEW:
+				return buildServiceProxyUrl(projectIdentifier, "gerrit");
+			case BUILD:
+				return buildServiceProxyUrl(projectIdentifier, "hudson");
+			case MAVEN:
+				return buildServiceProxyUrl(projectIdentifier, "maven");
+			default:
+				return null;
+			}
 		}
+	}
+
+	public String getWebUrlForService(ProjectService service) {
+		String projectIdentifier = service.getProjectServiceProfile().getProject().getIdentifier();
+
+		switch (service.getType()) {
+		case TASKS:
+			return buildWebUrl(projectIdentifier, "tasks");
+		case WIKI:
+			return buildWebUrl(projectIdentifier, "wiki");
+		case SCM:
+			return buildWebUrl(projectIdentifier, "scm");
+		case DEPLOYMENT:
+			return buildWebUrl(projectIdentifier, "deployments");
+		case REVIEW:
+		case BUILD:
+			return getMainUrlForService(service);
+		default:
+			return null;
+		}
+	}
+
+	private String buildWebUrl(String projectIdentifier, String restOfUrl) {
+		return getProfileBaseUrl() + "/" + PROJECTS_WEB_PATH + "/" + projectIdentifier + "/" + restOfUrl;
+
+	}
+
+	private String buildServiceProxyUrl(String projectIdentifier, String restOfUrl) {
+		return getProfileBaseUrl() + getServiceProxyPath() + "/" + projectIdentifier + "/" + restOfUrl + "/";
 	}
 }

@@ -35,7 +35,7 @@ public class WikiServiceConfiguration extends BaseProfileConfiguration {
 
 	public String computePathForPage(String pagePath) {
 		try {
-			return "#projects/" + getProfileProjectIdentifier() + "/wiki/p/"
+			return PROJECTS_WEB_PATH + "/" + getProfileProjectIdentifier() + "/wiki/p/"
 					+ URLEncoder.encode(pagePath, "utf-8").replace("%20", "+").replace("%2F", "/");
 		} catch (UnsupportedEncodingException e) {
 			throw new IllegalStateException();
@@ -67,5 +67,4 @@ public class WikiServiceConfiguration extends BaseProfileConfiguration {
 	public void setMaxAttachmentSize(Integer maxAttachmentSize) {
 		this.maxAttachmentSize = maxAttachmentSize;
 	}
-
 }

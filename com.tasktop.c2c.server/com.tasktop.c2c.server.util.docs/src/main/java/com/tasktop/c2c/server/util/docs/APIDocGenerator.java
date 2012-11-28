@@ -908,6 +908,7 @@ public class APIDocGenerator {
 		service.setId(1234L);
 		service.setServiceType(ServiceType.SCM);
 		service.setUrl("https://hostname/s/pet-clinic/scm/pet-clinic.git");
+		service.setWebUrl("https://hostname/s2/pet-clinic/scm/pet-clinic.git");
 		return service;
 	}
 

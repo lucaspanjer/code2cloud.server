@@ -24,6 +24,8 @@ import org.eclipse.mylyn.wikitext.textile.core.TextileLanguage;
 import org.eclipse.mylyn.wikitext.tracwiki.core.TracWikiLanguage;
 import org.eclipse.mylyn.wikitext.twiki.core.TWikiLanguage;
 
+import com.tasktop.c2c.server.common.service.BaseProfileConfiguration;
+
 /**
  * @author straxus (Tasktop Technologies Inc.)
  * 
@@ -69,7 +71,7 @@ public class MarkupLanguageUtil {
 		// Wire up our task detection.
 		TenantAwareLinkReplacementToken taskLinkReplacer = new TenantAwareLinkReplacementToken(
 				"(?:(?:(?:[Dd][Uu][Pp][Ll][Ii][Cc][Aa][Tt][Ee] [Oo][Ff])|(?:[Tt][Aa][Ss][Kk])|(?:[Ff][Ee][Aa][Tt][Uu][Rr][Ee])|(?:[Dd][Ee][Ff][Ee][Cc][Tt])|(?:[Bb][Uu][Gg]))[ \t]*#?[ \t]*(\\d+))",
-				"#projects/%1$s/task/%2$s");
+				BaseProfileConfiguration.PROJECTS_WEB_PATH + "/%1$s/task/%2$s");
 
 		configuration.getPhraseModifiers().add(emailReplacer);
 		configuration.getPhraseModifiers().add(taskLinkReplacer);
