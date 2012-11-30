@@ -30,9 +30,7 @@
   <classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.8.0/commons-beanutils-1.8.0.jar" sourcepath="M2_REPO/commons-beanutils/commons-beanutils/1.8.0/commons-beanutils-1.8.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.4/commons-codec-1.4.jar" sourcepath="M2_REPO/commons-codec/commons-codec/1.4/commons-codec-1.4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-collections/commons-collections/3.2/commons-collections-3.2.jar" sourcepath="M2_REPO/commons-collections/commons-collections/3.2/commons-collections-3.2-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-dbcp/7.0.32/tomcat-dbcp-7.0.32.jar" sourcepath="M2_REPO/org/apache/tomcat/tomcat-dbcp/7.0.32/tomcat-dbcp-7.0.32-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-jdbc/7.0.32/tomcat-jdbc-7.0.32.jar" sourcepath="M2_REPO/org/apache/tomcat/tomcat-jdbc/7.0.32/tomcat-jdbc-7.0.32-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-juli/7.0.32/tomcat-juli-7.0.32.jar" sourcepath="M2_REPO/org/apache/tomcat/tomcat-juli/7.0.32/tomcat-juli-7.0.32-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.jar" sourcepath="M2_REPO/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-digester/commons-digester/1.7/commons-digester-1.7.jar" sourcepath="M2_REPO/commons-digester/commons-digester/1.7/commons-digester-1.7-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-digester3/3.0/commons-digester3-3.0.jar" sourcepath="M2_REPO/org/apache/commons/commons-digester3/3.0/commons-digester3-3.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-discovery/commons-discovery/0.4/commons-discovery-0.4.jar" sourcepath="M2_REPO/commons-discovery/commons-discovery/0.4/commons-discovery-0.4-sources.jar"/>
@@ -48,6 +46,7 @@
   <classpathentry kind="var" path="M2_REPO/commons-lang/commons-lang/2.4/commons-lang-2.4.jar" sourcepath="M2_REPO/commons-lang/commons-lang/2.4/commons-lang-2.4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.0.1/commons-lang3-3.0.1.jar" sourcepath="M2_REPO/org/apache/commons/commons-lang3/3.0.1/commons-lang3-3.0.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" sourcepath="M2_REPO/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.jar" sourcepath="M2_REPO/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/net/sourceforge/cssparser/cssparser/0.9.5/cssparser-0.9.5.jar" sourcepath="M2_REPO/net/sourceforge/cssparser/cssparser/0.9.5/cssparser-0.9.5-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jvnet/hudson/dom4j/dom4j/1.6.1-hudson-3/dom4j-1.6.1-hudson-3.jar" sourcepath="M2_REPO/org/jvnet/hudson/dom4j/dom4j/1.6.1-hudson-3/dom4j-1.6.1-hudson-3-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/easymock/easymock/3.0/easymock-3.0.jar" sourcepath="M2_REPO/org/easymock/easymock/3.0/easymock-3.0-sources.jar"/>

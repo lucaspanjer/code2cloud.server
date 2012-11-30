@@ -51,10 +51,8 @@
   <classpathentry kind="var" path="M2_REPO/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3.jar" sourcepath="M2_REPO/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-jms/3.1.1.RELEASE/spring-jms-3.1.1.RELEASE.jar" sourcepath="M2_REPO/org/springframework/spring-jms/3.1.1.RELEASE/spring-jms-3.1.1.RELEASE-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hsqldb/hsqldb/2.2.8/hsqldb-2.2.8.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.jar" sourcepath="M2_REPO/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.jar" sourcepath="M2_REPO/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-dbcp/7.0.32/tomcat-dbcp-7.0.32.jar" sourcepath="M2_REPO/org/apache/tomcat/tomcat-dbcp/7.0.32/tomcat-dbcp-7.0.32-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-jdbc/7.0.32/tomcat-jdbc-7.0.32.jar" sourcepath="M2_REPO/org/apache/tomcat/tomcat-jdbc/7.0.32/tomcat-jdbc-7.0.32-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-juli/7.0.32/tomcat-juli-7.0.32.jar" sourcepath="M2_REPO/org/apache/tomcat/tomcat-juli/7.0.32/tomcat-juli-7.0.32-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/jetty-server/7.1.6.v20100715/jetty-server-7.1.6.v20100715.jar" sourcepath="M2_REPO/org/eclipse/jetty/jetty-server/7.1.6.v20100715/jetty-server-7.1.6.v20100715-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/jetty-continuation/7.1.6.v20100715/jetty-continuation-7.1.6.v20100715.jar" sourcepath="M2_REPO/org/eclipse/jetty/jetty-continuation/7.1.6.v20100715/jetty-continuation-7.1.6.v20100715-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/jetty-http/7.1.6.v20100715/jetty-http-7.1.6.v20100715.jar" sourcepath="M2_REPO/org/eclipse/jetty/jetty-http/7.1.6.v20100715/jetty-http-7.1.6.v20100715-sources.jar"/>

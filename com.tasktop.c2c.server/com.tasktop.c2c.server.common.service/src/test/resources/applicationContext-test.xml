@@ -28,17 +28,9 @@
 		</property>
 	</bean>
 
-	<bean class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close" id="dataSource"
+	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource"
 		p:driverClassName="${alm.database.driverClassName}" p:url="${alm.database.url}"
-		p:username="sa" p:password="${alm.database.password}" 
-		p:timeBetweenEvictionRunsMillis="${task.database.pool.timeBetweenEvictionRunsMillis}"
-		p:minEvictableIdleTimeMillis="${task.database.pool.minEvictableIdleTimeMillis}"
-		p:numTestsPerEvictionRun="${task.database.pool.numTestsPerEvictionRun}"
-		p:removeAbandoned="${task.database.pool.removeAbandoned}"
-		p:removeAbandonedTimeout="${task.database.pool.abandonedTimeout}"
-		p:maxActive="${task.database.pool.maxActive}"
-		p:maxIdle="${task.database.pool.maxIdle}"/>
-
+		p:username="sa" p:password="${alm.database.password}" />
 	
 	<bean class="org.springframework.orm.jpa.JpaTransactionManager"
 		id="transactionManager" p:entityManagerFactory-ref="entityManagerFactory"

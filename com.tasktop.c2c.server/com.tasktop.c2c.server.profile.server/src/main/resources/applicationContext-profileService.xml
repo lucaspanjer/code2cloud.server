@@ -21,18 +21,11 @@
 	
 	<bean id="profileHubTenantProvider" class="com.tasktop.c2c.server.internal.profile.service.ProfileHubTenantProvider"/>
 
-	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close"
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
 		p:driverClassName="${alm.database.driverClassName}"
 		p:url="${alm.database.url}"
 		p:username="${alm.database.username}"
-		p:password="${alm.database.password}" 
-		p:timeBetweenEvictionRunsMillis="${alm.database.pool.timeBetweenEvictionRunsMillis}"
-		p:minEvictableIdleTimeMillis="${alm.database.pool.minEvictableIdleTimeMillis}"
-		p:numTestsPerEvictionRun="${alm.database.pool.numTestsPerEvictionRun}"
-		p:removeAbandoned="${alm.database.pool.removeAbandoned}"
-		p:removeAbandonedTimeout="${alm.database.pool.abandonedTimeout}"
-		p:maxActive="${alm.database.pool.maxActive}"
-		p:maxIdle="${alm.database.pool.maxIdle}"/>
+		p:password="${alm.database.password}" />
 
 	<bean class="org.springframework.orm.jpa.JpaTransactionManager"
 		id="transactionManager" p:entityManagerFactory-ref="entityManagerFactory" />

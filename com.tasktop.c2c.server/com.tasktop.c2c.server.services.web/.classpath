@@ -42,9 +42,8 @@
   <classpathentry kind="var" path="M2_REPO/org/aspectj/aspectjrt/1.6.10/aspectjrt-1.6.10.jar" sourcepath="M2_REPO/org/aspectj/aspectjrt/1.6.10/aspectjrt-1.6.10-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/aspectj/aspectjweaver/1.6.10/aspectjweaver-1.6.10.jar" sourcepath="M2_REPO/org/aspectj/aspectjweaver/1.6.10/aspectjweaver-1.6.10-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-jms/3.1.1.RELEASE/spring-jms-3.1.1.RELEASE.jar" sourcepath="M2_REPO/org/springframework/spring-jms/3.1.1.RELEASE/spring-jms-3.1.1.RELEASE-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-dbcp/7.0.32/tomcat-dbcp-7.0.32.jar" sourcepath="M2_REPO/org/apache/tomcat/tomcat-dbcp/7.0.32/tomcat-dbcp-7.0.32-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-jdbc/7.0.32/tomcat-jdbc-7.0.32.jar" sourcepath="M2_REPO/org/apache/tomcat/tomcat-jdbc/7.0.32/tomcat-jdbc-7.0.32-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-juli/7.0.32/tomcat-juli-7.0.32.jar" sourcepath="M2_REPO/org/apache/tomcat/tomcat-juli/7.0.32/tomcat-juli-7.0.32-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.jar" sourcepath="M2_REPO/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.jar" sourcepath="M2_REPO/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.core-1.6.1-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.textile.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.textile.core-1.6.1-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/mylyn/docs/org.eclipse.mylyn.wikitext.confluence.core/1.6.1-SNAPSHOT/org.eclipse.mylyn.wikitext.confluence.core-1.6.1-SNAPSHOT.jar"/>
