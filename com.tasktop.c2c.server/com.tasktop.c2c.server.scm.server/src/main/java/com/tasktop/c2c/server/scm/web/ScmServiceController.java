@@ -44,7 +44,7 @@ import com.tasktop.c2c.server.scm.service.ScmServiceClient.CommitsForAuthor;
 @Title("SCM Service")
 @Documentation("A SCM service for managing the SCM repositories Code2Cloud project.\n"
 		+ "The SCM service methods are available by appending the URI to the base URL\n"
-		+ "https://{hostname}/s/{projectIdentifier}/scm + URI, for example: https://example.com/s/code2cloud/scm/summary")
+		+ "https://{hostname}/s/{projectIdentifier}/scm/api + URI, for example: https://example.com/s/code2cloud/scm/api/summary")
 @Controller
 public class ScmServiceController extends AbstractBuildInfoRestService implements ScmService {
 

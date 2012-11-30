@@ -70,6 +70,11 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.web.ui.server.ProfileWebServiceController;
+import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.ScmLocation;
+import com.tasktop.c2c.server.scm.domain.ScmRepository;
+import com.tasktop.c2c.server.scm.domain.ScmType;
+import com.tasktop.c2c.server.scm.web.ScmServiceController;
 import com.tasktop.c2c.server.tasks.domain.Comment;
 import com.tasktop.c2c.server.tasks.domain.CommentType;
 import com.tasktop.c2c.server.tasks.domain.Component;
@@ -159,6 +164,7 @@ public class APIDocGenerator {
 		apiClasses.add(WikiServiceController.class);
 		apiClasses.add(TaskServiceController.class);
 		apiClasses.add(ProfileWebServiceController.class);
+		apiClasses.add(ScmServiceController.class);
 
 		for (Class<?> apiClass : apiClasses) {
 			generateDocs(apiClass);
@@ -379,8 +385,46 @@ public class APIDocGenerator {
 			return createTaskKeyword();
 		} else if (classType == SavedTaskQuery.class) {
 			return createSavedTaskQuery();
+		} else if (classType == Map.class) {
+			return new HashMap<String, String>();
+		} else if (classType == Commit.class) {
+			return createCommit();
+		} else if (classType == ScmRepository.class) {
+			return createScmRepository();
 		}
 		return classType.newInstance();
+	}
+
+	private ScmRepository createScmRepository() {
+		ScmRepository result = new ScmRepository();
+		result.setName("my-repo");
+		result.setUrl("https://q.tasktop.com/alm/s/c2c/scm/my-repo.git");
+		result.setAlternateUrl("ssh://q.tasktop.com:2222/c2c/my-repo.git");
+		result.setBranches(Arrays.asList("master", "topic"));
+		result.setType(ScmType.GIT);
+		result.setScmLocation(ScmLocation.CODE2CLOUD);
+		return result;
+	}
+
+	private Commit createCommit() {
+		Commit result = new Commit();
+		result.setDate(new Date());
+		result.setAuthor(createScmProfile());
+		result.setComment("This commit fixes my issue");
+		result.setCommitDate(new Date());
+		result.setCommitId("cc6f48070faaf4b6ba827a5802f5a53f4202f674");
+		return result;
+	}
+
+	private com.tasktop.c2c.server.scm.domain.Profile createScmProfile() {
+		com.tasktop.c2c.server.scm.domain.Profile result = new com.tasktop.c2c.server.scm.domain.Profile();
+		result.setEmail("jdoe@example.com");
+		result.setFirstName("John");
+		result.setLastName("Doe");
+		result.setId(12l);
+		result.setUsername("jdoe@example.com");
+
+		return result;
 	}
 
 	private SavedTaskQuery createSavedTaskQuery() {

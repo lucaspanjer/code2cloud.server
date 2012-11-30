@@ -19,6 +19,7 @@ package com.tasktop.c2c.server.tasks.domain;
 public class Iteration extends CustomFieldValue {
 	public Iteration(String value) {
 		setValue(value);
+		setIsActive(true);
 	}
 
 	public Iteration() {
