@@ -35,6 +35,10 @@
 			<artifactId>scm.server</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>event.service</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<scope>provided</scope>

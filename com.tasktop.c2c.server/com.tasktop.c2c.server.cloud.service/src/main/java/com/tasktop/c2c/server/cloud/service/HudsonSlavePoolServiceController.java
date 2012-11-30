@@ -12,16 +12,20 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.cloud.service;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tasktop.c2c.server.cloud.domain.PoolStatus;
-import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolService;
-import com.tasktop.c2c.server.cloud.service.RequestBuildSlaveResult;
 import com.tasktop.c2c.server.common.service.ValidationException;
+import com.tasktop.c2c.server.common.service.doc.Documentation;
+import com.tasktop.c2c.server.common.service.doc.Title;
 import com.tasktop.c2c.server.common.service.web.AbstractRestService;
 
+@Title("Hudson Slave Pool Service")
+@Documentation("An internal service used by Hudson masters to acquire and release slave VMs for running builds.")
+@Controller
 public class HudsonSlavePoolServiceController extends AbstractRestService implements HudsonSlavePoolService {
 
 	private static HudsonSlavePoolServiceController lastInstance = null;

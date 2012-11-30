@@ -24,6 +24,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +47,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
+import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolServiceController;
+import com.tasktop.c2c.server.cloud.service.RequestBuildSlaveResult;
 import com.tasktop.c2c.server.common.service.doc.DocumentElementContainer;
 import com.tasktop.c2c.server.common.service.doc.Documentation;
 import com.tasktop.c2c.server.common.service.doc.Exclude;
@@ -61,6 +65,11 @@ import com.tasktop.c2c.server.common.service.domain.criteria.ColumnCriteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
 import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceController;
+import com.tasktop.c2c.server.event.domain.CommitEvent;
+import com.tasktop.c2c.server.event.domain.Event;
+import com.tasktop.c2c.server.event.service.EventServiceController;
 import com.tasktop.c2c.server.internal.wiki.server.WikiServiceController;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
 import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
@@ -69,6 +78,7 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
+import com.tasktop.c2c.server.profile.web.ui.server.ActivityServiceController;
 import com.tasktop.c2c.server.profile.web.ui.server.ProfileWebServiceController;
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.domain.ScmLocation;
@@ -165,6 +175,10 @@ public class APIDocGenerator {
 		apiClasses.add(TaskServiceController.class);
 		apiClasses.add(ProfileWebServiceController.class);
 		apiClasses.add(ScmServiceController.class);
+		apiClasses.add(HudsonSlavePoolServiceController.class);
+		apiClasses.add(EventServiceController.class);
+		apiClasses.add(ProjectServiceManagementServiceController.class);
+		apiClasses.add(ActivityServiceController.class);
 
 		for (Class<?> apiClass : apiClasses) {
 			generateDocs(apiClass);
@@ -391,8 +405,53 @@ public class APIDocGenerator {
 			return createCommit();
 		} else if (classType == ScmRepository.class) {
 			return createScmRepository();
+		} else if (classType == RequestBuildSlaveResult.class) {
+			return createBuildSlaveResult();
+		} else if (classType == Event.class) {
+			return createEvent();
+		} else if (classType == ProjectServiceConfiguration.class) {
+			return createPSConfig();
+		} else if (classType == ProjectServiceStatus.class) {
+			return createProjectServiceStatus();
 		}
 		return classType.newInstance();
+	}
+
+	private Object createProjectServiceStatus() {
+		ProjectServiceStatus result = new ProjectServiceStatus();
+		result.setProjectIdentifier("my-project");
+		result.setServiceType(ServiceType.TASKS);
+		result.setMetrics(Collections.singletonMap("diskUsage.humanReadable", "100M"));
+		return result;
+	}
+
+	private Object createPSConfig() {
+		ProjectServiceConfiguration result = new ProjectServiceConfiguration();
+		result.setProjectIdentifier("my-project");
+		result.setShortProjectIdentifer("AA");
+		result.setProperty("profile.hostname", "example.com");
+		return result;
+	}
+
+	private Event createEvent() {
+		CommitEvent result = new CommitEvent();
+
+		result.setCommits(Arrays.asList(createCommit()));
+		result.setProjectId("my-project");
+		result.setTimestamp(new Date());
+		result.setUserId("jdoe");
+
+		return result;
+	}
+
+	private RequestBuildSlaveResult createBuildSlaveResult() {
+		RequestBuildSlaveResult result = new RequestBuildSlaveResult();
+
+		result.setSlaveDueDate(new Date());
+		result.setType(com.tasktop.c2c.server.cloud.service.RequestBuildSlaveResult.Type.SLAVE);
+		result.setSlaveIp("127.0.0.1");
+
+		return result;
 	}
 
 	private ScmRepository createScmRepository() {

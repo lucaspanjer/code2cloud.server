@@ -13,16 +13,20 @@
 package com.tasktop.c2c.server.event.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.tasktop.c2c.server.common.service.doc.Documentation;
+import com.tasktop.c2c.server.common.service.doc.Title;
 import com.tasktop.c2c.server.common.service.web.AbstractRestService;
 import com.tasktop.c2c.server.event.domain.Event;
-import com.tasktop.c2c.server.event.service.EventService;
-import com.tasktop.c2c.server.event.service.EventServiceClient;
 
-
+@Title("Event Service")
+@Documentation("An internal service used by internal services (task, hudson, scm) to generate events."
+		+ "Event listenters in the hub can then operate on the events, for example to associate a task with a commit")
+@Controller
 public class EventServiceController extends AbstractRestService {
 	@Autowired
 	private EventService eventService;

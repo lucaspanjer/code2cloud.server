@@ -20,8 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
+import com.tasktop.c2c.server.common.service.doc.Documentation;
+import com.tasktop.c2c.server.common.service.doc.Title;
 import com.tasktop.c2c.server.common.service.web.AbstractBuildInfoRestService;
 
+@Title("Project-Service Management Service")
+@Documentation("An internal service used to manage a projects services. This includes creating, getting status, and removing.")
 @Controller
 public class ProjectServiceManagementServiceController extends AbstractBuildInfoRestService {
 

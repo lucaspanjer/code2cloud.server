@@ -36,11 +36,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.doc.Documentation;
+import com.tasktop.c2c.server.common.service.doc.Title;
 import com.tasktop.c2c.server.common.service.web.AbstractRestService;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ProjectDashboard;
 import com.tasktop.c2c.server.profile.service.ActivityService;
 
+@Title("Activity Service")
+@Documentation("Provides a view of the current activity on a projects across all of its services.")
 @Controller
 public class ActivityServiceController extends AbstractRestService implements ActivityService {
 
