@@ -24,6 +24,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.Section;
+import com.tasktop.c2c.server.common.profile.web.client.place.SectionPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
@@ -41,7 +42,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.view.components.Header;
  * @author Myles Feichtinger (Tasktop Technologies Inc.)
  */
 public class HudsonHeaderPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace,
-		BreadcrumbPlace, WindowTitlePlace {
+		BreadcrumbPlace, WindowTitlePlace, SectionPlace {
 
 	private final String projectId;
 	private Project project;
@@ -111,6 +112,11 @@ public class HudsonHeaderPlace extends AbstractBatchFetchingPlace implements Hea
 			return WindowTitleBuilder.createWindowTitle(Section.BUILDS, project.getName());
 		}
 		return null; // Don't use this title.
+	}
+
+	@Override
+	public Section getSection() {
+		return Section.BUILDS;
 	}
 
 }
