@@ -12,8 +12,10 @@
   	<!-- JMS ConnectionFactory to use -->
   	<bean id="amqConnectionFactory"
   		class="org.apache.activemq.ActiveMQConnectionFactory"
-  		p:brokerURL="vm://broker?create=false" depends-on="brokerService"/>
+  		p:brokerURL="vm://broker?create=false" p:redeliveryPolicy-ref="redeliveryPolicy" depends-on="brokerService"/>
   	
+  	<bean id="redeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy" p:maximumRedeliveries="3" p:initialRedeliveryDelay="20000" p:redeliveryDelay="20000"/>
+
 	<bean id="brokerService"
 		class="org.apache.activemq.broker.BrokerService"
 		init-method="start"
