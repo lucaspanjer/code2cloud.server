@@ -19,8 +19,20 @@
 		p:useShortProjectIdentifier="false"/>
 
 	<bean class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close" id="rawDataSource"
-		p:driverClassName="${wiki.database.driverClassName}" p:url="${wiki.database.url}"
-		p:username="${wiki.database.username}" p:password="${wiki.database.password}" />
+		p:driverClassName="${wiki.database.driverClassName}" 
+		p:url="${wiki.database.url}"
+		p:username="${wiki.database.username}" 
+		p:password="${wiki.database.password}" 
+		p:maxActive="${wiki.database.pool.maxActive}"
+		p:maxIdle="${wiki.database.pool.maxIdle}"
+		p:removeAbandoned="${wiki.database.pool.removeAbandoned}"
+		p:removeAbandonedTimeout="${wiki.database.pool.abandonedTimeout}"
+		p:timeBetweenEvictionRunsMillis="${wiki.database.pool.timeBetweenEvictionRunsMillis}"
+		p:minEvictableIdleTimeMillis="${wiki.database.pool.minEvictableIdleTimeMillis}"
+		p:numTestsPerEvictionRun="${wiki.database.pool.numTestsPerEvictionRun}"
+		p:testWhileIdle="${wiki.database.pool.testWhileIdle}"
+		p:testOnBorrow="${wiki.database.pool.testOnBorrow}"
+		p:validationQuery="${wiki.database.pool.validationQuery}"/>
 
  	<bean class="com.tasktop.c2c.server.common.internal.tenancy.ProjectTenantAwareDataSource" id="dataSource"
 		p:wrappedDataSource-ref="rawDataSource" p:language="${wiki.database.dialect}" p:databaseNamingStrategy-ref="databaseNamingStrategy">

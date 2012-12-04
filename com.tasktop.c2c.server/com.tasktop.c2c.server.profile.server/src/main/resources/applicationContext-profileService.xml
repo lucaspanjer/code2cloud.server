@@ -25,7 +25,17 @@
 		p:driverClassName="${alm.database.driverClassName}"
 		p:url="${alm.database.url}"
 		p:username="${alm.database.username}"
-		p:password="${alm.database.password}" />
+		p:password="${alm.database.password}" 
+		p:maxActive="${alm.database.pool.maxActive}"
+		p:maxIdle="${alm.database.pool.maxIdle}"
+		p:removeAbandoned="${alm.database.pool.removeAbandoned}"
+		p:removeAbandonedTimeout="${alm.database.pool.abandonedTimeout}"
+		p:timeBetweenEvictionRunsMillis="${alm.database.pool.timeBetweenEvictionRunsMillis}"
+		p:minEvictableIdleTimeMillis="${alm.database.pool.minEvictableIdleTimeMillis}"
+		p:numTestsPerEvictionRun="${alm.database.pool.numTestsPerEvictionRun}"
+		p:testWhileIdle="${alm.database.pool.testWhileIdle}"
+		p:testOnBorrow="${alm.database.pool.testOnBorrow}"
+		p:validationQuery="${alm.database.pool.validationQuery}"/>
 
 	<bean class="org.springframework.orm.jpa.JpaTransactionManager"
 		id="transactionManager" p:entityManagerFactory-ref="entityManagerFactory" />
