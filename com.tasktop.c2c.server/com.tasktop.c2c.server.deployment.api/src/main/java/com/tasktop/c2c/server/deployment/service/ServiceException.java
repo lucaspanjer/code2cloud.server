@@ -22,4 +22,8 @@ public class ServiceException extends Exception {
 		super(errorMessage, exception);
 	}
 
+	public ServiceException(String errorMessage) {
+		super(errorMessage);
+	}
+
 }

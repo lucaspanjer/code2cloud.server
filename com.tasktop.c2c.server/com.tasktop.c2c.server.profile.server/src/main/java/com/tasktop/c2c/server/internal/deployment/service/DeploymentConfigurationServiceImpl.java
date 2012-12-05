@@ -281,7 +281,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 				deploymentConfiguration.getBuildJobName(), deploymentConfiguration.getBuildJobNumber());
 		ProjectArtifact artifact = null;
 		if (artifacts == null) {
-			setStatusErrorMessage(deploymentConfiguration, "Could not find build");
+			throw new ServiceException("Could not find build to deploy");
 		} else {
 			for (ProjectArtifact a : artifacts.getArtifacts()) {
 				if (a.getPath().equals(deploymentConfiguration.getBuildArtifactPath())) {
@@ -290,9 +290,8 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 				}
 			}
 			if (artifact == null) {
-				setStatusErrorMessage(deploymentConfiguration, "Could not find artifact");
+				throw new ServiceException("Could not find artifact to deploy");
 			} else {
-
 				File tempWarFile = File.createTempFile("deploy", ".war");
 				projectArtifactService.downloadProjectArtifact(projectId, tempWarFile, artifact);
 				deployWar(deploymentConfiguration, deploymentService, tempWarFile);
