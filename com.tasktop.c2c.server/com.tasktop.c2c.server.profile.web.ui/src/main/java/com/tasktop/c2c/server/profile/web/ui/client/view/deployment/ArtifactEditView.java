@@ -17,7 +17,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -243,6 +242,7 @@ public class ArtifactEditView extends Composite {
 		buildsListBox.setAcceptableValues(Collections.EMPTY_LIST); // New values will come in afterward
 		artifactListBox.setValue(originalValue.getBuildArtifactPath());
 		artifactListBox.setAcceptableValues(Collections.EMPTY_LIST); // New values will come in afterward
+		jobNameChangedHandler.jobNameChanged(originalValue.getBuildJobName()); // Trigger RPC to calculate new values.
 
 		// If we have no URL right now, use a default.
 		String origArtifactPath = originalValue.getBuildArtifactPath();

@@ -86,17 +86,19 @@ public class DeploymentReadOnlyView extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				final DeleteDeploymentDialog deleteDialog = DeleteDeploymentDialog.getInstance();
-				deleteDialog.deleteButton.addClickHandler(new ClickHandler() {
 
-					@Override
-					public void onClick(ClickEvent event) {
-						presenter.delete(getOriginalValue(), deleteDialog.alsoDelete.getValue());
-						deleteDialog.hide();
-
-					}
-				});
 				deleteDialog.center();
 				deleteDialog.show();
+			}
+		});
+
+		DeleteDeploymentDialog.getInstance().deleteButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				presenter.delete(getOriginalValue(), DeleteDeploymentDialog.getInstance().alsoDelete.getValue());
+				DeleteDeploymentDialog.getInstance().hide();
+
 			}
 		});
 

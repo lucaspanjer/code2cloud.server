@@ -229,7 +229,7 @@ public class DeploymentsView extends AbstractComposite {
 	}
 
 	private void updateError(DeploymentConfiguration deployment) {
-		if (deployment != null && deployment.getErrorString() != null && !deployment.getErrorString().isEmpty()) {
+		if (deployment != null && deployment.hasError()) {
 			errorLabel.setText(deployment.getErrorString());
 			deploymentErrorPanel.setVisible(true);
 		} else {
