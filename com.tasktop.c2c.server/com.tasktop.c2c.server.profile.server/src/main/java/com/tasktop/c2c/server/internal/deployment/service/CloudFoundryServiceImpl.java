@@ -374,26 +374,6 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.tasktop.c2c.server.internal.deployment.service.DeploymentService#updateStatus(org.cloudfoundry.code
-	 * .server.deployment .domain.DeploymentConfiguration)
-	 */
-	@Override
-	public void updateStatus(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
-
-		try {
-			DeploymentStatus status = new DeploymentStatus();
-			deploymentConfiguration.setStatus(status);
-
-			CloudApplication application = client.getApplication(deploymentConfiguration.getName());
-			status.setResult(getStatusResult(application.getState()));
-		} catch (CloudFoundryException e) {
-			wrapInServiceException(e);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService#getAvailableServiceConfigurations
 	 * ()
 	 */

@@ -36,8 +36,6 @@ public interface DeploymentService {
 	/** Update all the configuration in this deployment. This includes creating new services if needed. **/
 	void update(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
 
-	void updateStatus(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
-
 	void uploadApplication(DeploymentConfiguration deploymentConfiguration, File warFile) throws ServiceException,
 			IOException;
 

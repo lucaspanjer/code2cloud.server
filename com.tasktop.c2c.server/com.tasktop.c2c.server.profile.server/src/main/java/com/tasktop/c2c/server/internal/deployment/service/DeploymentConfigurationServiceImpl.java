@@ -349,7 +349,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		checkUpdatePermissions(deploymentConfiguration);
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
 		deploymentService.startApplication(deploymentConfiguration);
-		deploymentService.updateStatus(deploymentConfiguration);
+		deploymentService.populate(deploymentConfiguration);
 
 		return deploymentConfiguration.getStatus();
 	}
@@ -369,9 +369,8 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		checkUpdatePermissions(deploymentConfiguration);
 
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
-		String name = deploymentConfiguration.getName();
 		deploymentService.stopApplication(deploymentConfiguration);
-		deploymentService.updateStatus(deploymentConfiguration);
+		deploymentService.populate(deploymentConfiguration);
 
 		return deploymentConfiguration.getStatus();
 	}
@@ -382,8 +381,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
 		deploymentService.restartApplication(deploymentConfiguration);
-
-		deploymentService.updateStatus(deploymentConfiguration);
+		deploymentService.populate(deploymentConfiguration);
 
 		return deploymentConfiguration.getStatus();
 	}
