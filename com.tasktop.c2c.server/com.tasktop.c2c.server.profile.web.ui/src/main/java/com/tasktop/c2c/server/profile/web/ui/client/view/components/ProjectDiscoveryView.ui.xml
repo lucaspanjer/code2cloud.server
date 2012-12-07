@@ -4,7 +4,7 @@
 		xmlns:p='urn:import:com.tasktop.c2c.server.common.web.client.widgets'
 		xmlns:c='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.components'
         xmlns:g="urn:import:com.google.gwt.user.client.ui">
-        <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.AppMessages"/>
+        <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
         <g:HTMLPanel>
         <!--  FIXME Now the filter controls (Public|Watcher..) are in the header, so i can't really lay out here. -->
                          

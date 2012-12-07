@@ -24,7 +24,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.Section;
  */
 abstract public class WindowTitleBuilder {
 
-	public static String PRODUCT_NAME = ProfileGinjector.get.instance().messages().code2Cloud();
+	public static String PRODUCT_NAME = ProfileGinjector.get.instance().getMessages().code2Cloud();
 
 	public static String createWindowTitle(Section section) {
 		String feature = getSectionTitle(section);
