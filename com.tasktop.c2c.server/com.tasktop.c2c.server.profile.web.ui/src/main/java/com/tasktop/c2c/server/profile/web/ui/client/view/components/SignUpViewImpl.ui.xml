@@ -3,7 +3,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:a='urn:import:com.tasktop.c2c.server.common.web.client.widgets'>
-    <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.AppMessages"/>
+    <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	
 	<g:HTMLPanel debugId="sign-up-page" >
 	<g:FlowPanel debugId="messagePanel" ui:field="messagePanel" styleName="warningMessage signUpMessage" visible="false">

@@ -1,6 +1,6 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-        <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.AppMessages"/>
+        <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 
 	<g:HTMLPanel>
 
