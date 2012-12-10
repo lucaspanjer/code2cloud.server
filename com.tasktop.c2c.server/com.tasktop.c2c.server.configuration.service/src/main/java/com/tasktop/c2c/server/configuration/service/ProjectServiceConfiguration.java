@@ -32,6 +32,9 @@ public class ProjectServiceConfiguration {
 	/** Property name for the profile hostname. */
 	public static final String PROFILE_HOSTNAME = "profile.hostname";
 
+	/** Property name for the profile hostname that may be specific to the tenant */
+	public static final String ORG_PROFILE_HOSTNAME = "org.profile.hostname";
+
 	/** Property name for the profile base service URL for the given project (up to the ../s/{projectId}/). */
 	public static final String PROFILE_BASE_SERVICE_URL = "profile.service.path";
 

@@ -136,8 +136,6 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 		AuthUtils.assumeSystemIdentity(project.getIdentifier());
 
-		ProjectServiceConfiguration config = createProjectServiceConfiguration(project);
-
 		NodeProvisioningService nodeProvisioningService = nodeProvisioningServiceByType.get(type);
 		if (nodeProvisioningService == null) {
 			LOGGER.info("Not seting up service " + type + " no node provisionService available");
@@ -156,6 +154,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		try {
 			tenancyManager.establishTenancyContextFromProjectIdentifier(project.getIdentifier());
 			LOGGER.info("configuring node for " + type);
+			ProjectServiceConfiguration config = createProjectServiceConfiguration(project);
 			nodeConfigurationService.provisionService(config);
 			LOGGER.info("configuring done");
 		} catch (Exception e) {
@@ -183,7 +182,8 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 			config.setOrganizationIdentifier(project.getOrganization().getIdentifier());
 		}
 		config.setShortProjectIdentifer(project.getShortIdentifier());
-		config.setProperty(ProjectServiceConfiguration.PROFILE_HOSTNAME, configuration.getWebHost());
+		config.setProperty(ProjectServiceConfiguration.PROFILE_HOSTNAME, configuration.getBaseWebHost());
+		config.setProperty(ProjectServiceConfiguration.ORG_PROFILE_HOSTNAME, configuration.getWebHost());
 		config.setProperty(ProjectServiceConfiguration.PROFILE_PROTOCOL, configuration.getProfileApplicationProtocol());
 		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_URL, configuration.getProfileBaseUrl());
 		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL,
