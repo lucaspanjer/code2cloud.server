@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -27,6 +26,8 @@ import com.tasktop.c2c.server.profile.domain.activity.ProjectActivity;
 import com.tasktop.c2c.server.profile.domain.activity.ScmActivity;
 import com.tasktop.c2c.server.profile.domain.activity.TaskActivity;
 import com.tasktop.c2c.server.profile.domain.activity.WikiActivity;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.widgets.build.BuildResources;
 
 public class ActivityDay extends Composite {
@@ -35,6 +36,8 @@ public class ActivityDay extends Composite {
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 	public static BuildResources buildResources = GWT.create(BuildResources.class);
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
 
 	public ActivityDay() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -61,7 +64,7 @@ public class ActivityDay extends Composite {
 			} else if (activity instanceof WikiActivity) {
 				row = new WikiActivityRow((WikiActivity) activity);
 			} else {
-				throw new UnsupportedOperationException("Unknown activity type");
+				throw new UnsupportedOperationException(messages.unknownActivityType());
 			}
 
 			dayPanel.add(row);

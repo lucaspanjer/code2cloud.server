@@ -23,19 +23,23 @@ import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.ListProfilesAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.ListProfilesResult;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class AdminProfilePlace extends LoggedInPlace implements HeadingPlace, WindowTitlePlace {
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
 
 	private List<Profile> profiles;
 
 	@Override
 	public String getHeading() {
-		return "Administer Users";
+		return messages.administerUsers();
 	}
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle("Administer Users");
+		return WindowTitleBuilder.createWindowTitle(messages.administerUsers());
 	}
 
 	public static PageMapping AdminProfiles = new PageMapping(new AdminProfilePlace.Tokenizer(), "admin/profile");

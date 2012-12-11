@@ -54,7 +54,7 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 
 	private final String query;
 
-	private CommonProfileMessages messages = ProfileGinjector.get.instance().getMessages();
+	private CommonProfileMessages messages = ProfileGinjector.get.instance().getCommonProfileMessages();
 
 	protected ProjectsPlace(String query) {
 		this.query = query;

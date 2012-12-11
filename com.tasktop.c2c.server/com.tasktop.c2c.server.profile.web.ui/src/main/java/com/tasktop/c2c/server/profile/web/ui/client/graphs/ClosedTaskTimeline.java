@@ -14,16 +14,20 @@ package com.tasktop.c2c.server.profile.web.ui.client.graphs;
 
 import java.util.List;
 
-
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.LegendPosition;
 import com.google.gwt.visualization.client.visualizations.AreaChart;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
 
 public class ClosedTaskTimeline extends AreaChart {
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+
 	public void draw(List<TaskSummary> summaries) {
 		AbstractDataTable data = createData(summaries);
 		super.draw(data, createOptions());
@@ -34,7 +38,7 @@ public class ClosedTaskTimeline extends AreaChart {
 		options.setWidth(DashboardChartConstants.TIMELINE_WIDTH);
 		options.setHeight(DashboardChartConstants.TIMELINE_HEIGHT);
 		options.setLegend(LegendPosition.NONE);
-		options.setTitle("Closed Tasks");
+		options.setTitle(messages.closedTasks());
 		options.setPointSize(DashboardChartConstants.POINT_SIZE);
 		return options;
 	}
@@ -42,8 +46,8 @@ public class ClosedTaskTimeline extends AreaChart {
 	private AbstractDataTable createData(List<TaskSummary> summaries) {
 		DataTable data = DataTable.create();
 
-		data.addColumn(ColumnType.DATE, "Day");
-		data.addColumn(ColumnType.NUMBER, "Closed Tasks");
+		data.addColumn(ColumnType.DATE, messages.day());
+		data.addColumn(ColumnType.NUMBER, messages.closedTasks());
 
 		data.addRows(summaries.size());
 		int row = 0;

@@ -20,12 +20,16 @@ import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectCreateAvailableAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectCreateAvailableResult;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
  * 
  */
 public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, WindowTitlePlace {
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
 
 	private boolean createAvailable = false;
 
@@ -42,7 +46,7 @@ public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	@Override
 	public String getHeading() {
-		return "Create Project";
+		return messages.createProject();
 	}
 
 	protected NewProjectPlace() {
@@ -63,7 +67,7 @@ public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle("Create Project");
+		return WindowTitleBuilder.createWindowTitle(messages.createProject());
 	}
 
 	@Override

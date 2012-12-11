@@ -22,7 +22,7 @@ public interface ProfileGinjector extends CommonGinjector {
 
 	AppResources getAppResources();
 
-	CommonProfileMessages getMessages();
+	CommonProfileMessages getCommonProfileMessages();
 
 	ProfileServiceAsync getProfileService();
 

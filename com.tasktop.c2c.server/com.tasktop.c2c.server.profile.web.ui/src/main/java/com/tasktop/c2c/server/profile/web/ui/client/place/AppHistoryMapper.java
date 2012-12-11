@@ -20,6 +20,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -27,6 +28,8 @@ import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
  * 
  */
 public class AppHistoryMapper extends AbstractPlaceHistoryMapper<Place> {
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
 
 	@Override
 	protected PrefixAndToken getPrefixAndToken(Place newPlace) {
@@ -65,7 +68,7 @@ public class AppHistoryMapper extends AbstractPlaceHistoryMapper<Place> {
 		}
 
 		AppGinjector.get.instance().getNotifier()
-				.displayMessage(Message.createErrorMessage("Error: Unexpected error (HTTP 404)"));
+				.displayMessage(Message.createErrorMessage(messages.unexpectedError() + " (HTTP 404)"));
 		return AppGinjector.get.instance().getPlaceController().getWhere();
 	}
 }

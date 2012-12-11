@@ -14,16 +14,20 @@ package com.tasktop.c2c.server.profile.web.ui.client.graphs;
 
 import java.util.List;
 
-
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.visualizations.ImageSparklineChart;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
 
 public class ActivitySparkTimeline extends ImageSparklineChart {
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+
 	public void draw(List<TaskSummary> summaries, List<ScmSummary> scmSummaries) {
 		AbstractDataTable data = createData(summaries, scmSummaries);
 		super.draw(data, createOptions());
@@ -47,12 +51,12 @@ public class ActivitySparkTimeline extends ImageSparklineChart {
 		DataTable data = DataTable.create();
 
 		if (summaries != null && !summaries.isEmpty()) {
-			data.addColumn(ColumnType.NUMBER, "Open Tasks");
-			data.addColumn(ColumnType.NUMBER, "Closed Tasks");
+			data.addColumn(ColumnType.NUMBER, messages.openTasks());
+			data.addColumn(ColumnType.NUMBER, messages.closedTasks());
 		}
 
 		if (scmSummaries != null && !scmSummaries.isEmpty()) {
-			data.addColumn(ColumnType.NUMBER, "Commits");
+			data.addColumn(ColumnType.NUMBER, messages.commits());
 		}
 
 		int numRows = summaries != null ? summaries.size() : scmSummaries != null ? scmSummaries.size() : 0;

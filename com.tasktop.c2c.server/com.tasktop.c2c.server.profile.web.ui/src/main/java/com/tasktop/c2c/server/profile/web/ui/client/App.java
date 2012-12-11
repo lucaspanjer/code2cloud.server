@@ -31,6 +31,7 @@ import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.web.ui.client.event.LogoutEvent;
 import com.tasktop.c2c.server.profile.web.ui.client.event.LogoutEventHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.Footer;
 
 /**
@@ -40,6 +41,8 @@ import com.tasktop.c2c.server.profile.web.ui.client.view.Footer;
 public class App {
 
 	private static final AppGinjector injector = AppGinjector.get.instance();
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
 
 	public void run(HasWidgets.ForIsWidget root) {
 		addHandlers();
@@ -77,8 +80,8 @@ public class App {
 		GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
 			@Override
 			public void onUncaughtException(Throwable e) {
-				injector.getNotifier().displayMessage(Message.createErrorMessage("A client-side error has occurred"));
-				appLogger.log(Level.SEVERE, "Client side error", e);
+				injector.getNotifier().displayMessage(Message.createErrorMessage(messages.clientSideErrorOccurred()));
+				appLogger.log(Level.SEVERE, messages.clientSideError(), e);
 			}
 		});
 
@@ -125,7 +128,7 @@ public class App {
 			public void success(Boolean result) {
 				injector.getAppState().setCredentials(null);
 				IPlace place = injector.getPlaceProvider().getAfterSignoutPlace();
-				place.displayOnArrival(Message.createSuccessMessage("Signed out"));
+				place.displayOnArrival(Message.createSuccessMessage(messages.signedOut()));
 				place.go();
 			}
 		});

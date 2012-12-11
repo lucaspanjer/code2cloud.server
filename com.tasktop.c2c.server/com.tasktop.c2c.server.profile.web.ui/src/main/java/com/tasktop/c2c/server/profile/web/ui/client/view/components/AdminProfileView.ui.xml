@@ -6,6 +6,7 @@
     xmlns:cellview="urn:import:com.google.gwt.user.cellview.client">
 	
   	<ui:with field='res' type='com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileResources'/>
+  	<ui:with field="c" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 
 	<g:HTMLPanel>
 		<div class="clear"/>
@@ -16,11 +17,11 @@
 				</li>
 			</ul>
 			<ul class="right">
-			  <li>Hide:</li>
-			  	<li><g:CheckBox ui:field="hideDisabled" text="Disabled"/></li>
-				<li><g:CheckBox ui:field="hideNewsEmailOptOut" text="Opted Out of News Emails"/></li>
-				<li><g:CheckBox ui:field="hideServiceEmailOptOut" text="Opted Out of Service Emails"/></li>
-				<li><g:CheckBox ui:field="hideUnverified" text="Unverified Email Addresses"/></li>
+			  <li><ui:text from="{c.hide}"/>:</li>
+			  	<li><g:CheckBox ui:field="hideDisabled" text="{c.hideDisabled}"/></li>
+				<li><g:CheckBox ui:field="hideNewsEmailOptOut" text="{c.hideNewsEmailOptOut}"/></li>
+				<li><g:CheckBox ui:field="hideServiceEmailOptOut" text="{c.hideServiceEmailOptOut}"/></li>
+				<li><g:CheckBox ui:field="hideUnverified" text="{c.hideUnverified}"/></li>
 			</ul>
 			<div class="clear"/>
 		</div>
@@ -34,26 +35,26 @@
 			<div class="{res.style.profileEditPanel} menu" ui:field="editProfileDiv">
 				<ul>
 				<li>
-					<h3>Properties</h3>
+					<h3><ui:text from="{c.properties}"/></h3>
 				</li>				
 				<li>
 				<fieldset>
-					<label>Name</label>
+					<label><ui:text from="{c.name}"/></label>
 					<div>
 					<g:Label ui:field="firstName"/>
 					<g:Label ui:field="lastName"/>
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Username</label>
+					<label><ui:text from="{c.username}"/></label>
 					<g:Label ui:field="username"/>
 				</fieldset>
 				<fieldset>
-					<label>Email</label>
+					<label><ui:text from="{c.email}"/></label>
 					<g:Label ui:field="email"/>
 				</fieldset>
 				<fieldset>
-					<Label>Status</Label>
+					<Label><ui:text from="{c.status}"/></Label>
 					<g:Label ui:field="status"/>
 					<div class="actions">
 						<g:Button styleName="button special" ui:field="toggleDisableButton"/>
@@ -64,7 +65,7 @@
 			</div>
 		<div class="clear"/>
 				<g:DisclosurePanel ui:field="emailsPanel">
-					<g:header>Full Email List</g:header>
+					<g:header><ui:text from="{c.fullEmailList}"/></g:header>
 					<g:TextArea ui:field="emailArea" visibleLines="20"/>
 				</g:DisclosurePanel>
 	

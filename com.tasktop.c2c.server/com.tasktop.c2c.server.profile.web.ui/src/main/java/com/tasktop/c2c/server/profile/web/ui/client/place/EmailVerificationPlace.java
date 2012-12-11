@@ -21,6 +21,7 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class EmailVerificationPlace extends LoggedInPlace {
 
@@ -42,6 +43,8 @@ public class EmailVerificationPlace extends LoggedInPlace {
 	}
 
 	private String verificationToken;
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
 
 	private EmailVerificationPlace(String verificationToken) {
 		this.verificationToken = verificationToken;
@@ -65,12 +68,8 @@ public class EmailVerificationPlace extends LoggedInPlace {
 
 					@Override
 					public void success(Void result) {
-						AppGinjector.get
-								.instance()
-								.getPlaceProvider()
-								.getDefaultPlace()
-								.displayOnArrival(
-										Message.createSuccessMessage("Your email address has been verified. ")).go();
+						AppGinjector.get.instance().getPlaceProvider().getDefaultPlace()
+								.displayOnArrival(Message.createSuccessMessage(messages.emailVerified())).go();
 					}
 				});
 	}

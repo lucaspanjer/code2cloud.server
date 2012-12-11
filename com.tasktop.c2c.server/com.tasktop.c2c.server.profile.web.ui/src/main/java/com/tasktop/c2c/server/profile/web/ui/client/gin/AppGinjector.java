@@ -23,7 +23,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.AppShell;
 import com.tasktop.c2c.server.profile.web.ui.client.BuildServiceAsync;
 import com.tasktop.c2c.server.profile.web.ui.client.activity.HeaderActivityMapper;
 import com.tasktop.c2c.server.profile.web.ui.client.activity.MainActivityMapper;
-import com.tasktop.c2c.server.profile.web.ui.client.resources.AppConstants;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.ScmRepositoryUrlBuilder;
 
 /**
@@ -47,7 +47,7 @@ public interface AppGinjector extends ProfileGinjector {
 
 	HeaderActivityMapper getHeaderActivityMapper();
 
-	AppConstants getConstants();
+	ProfileMessages getProfileMessages();
 
 	AppConfiguration getConfiguration();
 

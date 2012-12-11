@@ -5,23 +5,24 @@
 		xmlns:c='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.components'
         xmlns:g="urn:import:com.google.gwt.user.client.ui">
         <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+        <ui:with field="c" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
         <g:HTMLPanel>
         <!--  FIXME Now the filter controls (Public|Watcher..) are in the header, so i can't really lay out here. -->
                          
         <div class="discover page-menu no-padding">
           <div class="left" ui:field="filterDivElement">
             <ul class="project-filter right">
-                          <li><g:Anchor ui:field="publicFilterAnchor" styleName="button first">Public</g:Anchor></li>
-                          <li><g:Anchor ui:field="organizationFilterAnchor" styleName="button first">Organization Shared</g:Anchor></li>
-                          <li><g:Anchor ui:field="watcherFilterAnchor" styleName="button">Watcher</g:Anchor></li>
-                          <li><g:Anchor ui:field="memberFilterAnchor" styleName="button">Member</g:Anchor></li>
-                          <li><g:Anchor ui:field="ownerFilterAnchor" styleName="button">Owner</g:Anchor></li>
-                          <li><g:Anchor ui:field="allFilterAnchor" styleName="button last">All</g:Anchor></li>
+                          <li><g:Anchor ui:field="publicFilterAnchor" styleName="button first"><ui:text from="{c.public_}"/></g:Anchor></li>
+                          <li><g:Anchor ui:field="organizationFilterAnchor" styleName="button first"><ui:text from="{c.organizationShared}"/></g:Anchor></li>
+                          <li><g:Anchor ui:field="watcherFilterAnchor" styleName="button"><ui:text from="{c.watcher}"/></g:Anchor></li>
+                          <li><g:Anchor ui:field="memberFilterAnchor" styleName="button"><ui:text from="{c.member}"/></g:Anchor></li>
+                          <li><g:Anchor ui:field="ownerFilterAnchor" styleName="button"><ui:text from="{c.owner}"/></g:Anchor></li>
+                          <li><g:Anchor ui:field="allFilterAnchor" styleName="button last"><ui:text from="{c.all}"/></g:Anchor></li>
                   </ul>
           </div>
           <div class="right">
-          	<a ui:field="orgAdminElement" class="button special org-admin left"><span>Edit Organization</span></a>
-          	<a ui:field="createAnchorElement" class="button special right"><span>Create Project</span></a>
+          	<a ui:field="orgAdminElement" class="button special org-admin left"><span><ui:text from="{c.editOrganization}"/></span></a>
+          	<a ui:field="createAnchorElement" class="button special right"><span><ui:text from="{c.createProject}"/></span></a>
           </div>
           <div class="clear"></div>
  			</div>
@@ -35,7 +36,7 @@
 						<g:FlowPanel ui:field="projectsPanel" styleName="discover-project-list"/>
 						
 						<div class="discover-dashboard">
-                          <h2>Welcome to <ui:text from='{msg.code2Cloud}'/>!</h2>
+                          <h2><ui:text from="{c.welcomeTo}"/> <ui:text from='{msg.code2Cloud}'/>!</h2>
                           <p><ui:safehtml from='{msg.welcomeOverviewHtml}'/></p>
                           <p><ui:safehtml from='{msg.participateInstructions}'/></p>
                         </div>

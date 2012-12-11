@@ -19,9 +19,14 @@ import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.LegendPosition;
 import com.google.gwt.visualization.client.visualizations.AreaChart;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
 
 public class ScmActivityTimeline extends AreaChart {
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+
 	public void draw(List<ScmSummary> summaries) {
 		AbstractDataTable data = createData(summaries);
 		super.draw(data, createOptions());
@@ -31,7 +36,7 @@ public class ScmActivityTimeline extends AreaChart {
 		Options options = Options.create();
 		options.setWidth(DashboardChartConstants.TIMELINE_WIDTH);
 		options.setHeight(DashboardChartConstants.TIMELINE_HEIGHT);
-		options.setTitle("Commits");
+		options.setTitle(messages.commits());
 		options.setLegend(LegendPosition.NONE);
 		options.setPointSize(DashboardChartConstants.POINT_SIZE);
 		options.set("hAxis.fontSize", DashboardChartConstants.H_AXIS_FONT_SIZE);
@@ -42,9 +47,9 @@ public class ScmActivityTimeline extends AreaChart {
 	private AbstractDataTable createData(List<ScmSummary> summaries) {
 		DataTable data = DataTable.create();
 
-		data.addColumn(ColumnType.DATE, "Day");
+		data.addColumn(ColumnType.DATE, messages.day());
 
-		data.addColumn(ColumnType.NUMBER, "Commits");
+		data.addColumn(ColumnType.NUMBER, messages.commits());
 
 		data.addRows(summaries.size());
 		int row = 0;

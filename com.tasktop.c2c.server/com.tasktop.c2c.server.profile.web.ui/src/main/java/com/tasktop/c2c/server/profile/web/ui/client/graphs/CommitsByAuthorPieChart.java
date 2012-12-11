@@ -20,12 +20,16 @@ import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.Color3D;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.visualizations.PieChart;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.scm.domain.Profile;
 
 /**
  * A summary pie chart of commits by author.
  */
 public class CommitsByAuthorPieChart extends PieChart {
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
 
 	public void draw(Map<Profile, Integer> commitsByAuthor) {
 		if (commitsByAuthor == null || commitsByAuthor.isEmpty()) {
@@ -41,9 +45,7 @@ public class CommitsByAuthorPieChart extends PieChart {
 		options.setWidth(DashboardChartConstants.PIE_CHART_WIDTH);
 		options.setHeight(DashboardChartConstants.PIE_CHART_HEIGHT);
 		options.setLegend(DashboardChartConstants.PIE_CHART_LEGEND_POS);
-		// options.setColors(DashboardChartConstants.COLOR_PALETTE);
 		options.setColors(getPallete());
-		// options.set("pieSliceText", "label");
 		return options;
 	}
 
@@ -62,8 +64,8 @@ public class CommitsByAuthorPieChart extends PieChart {
 	private AbstractDataTable createData(Map<Profile, Integer> commitsByAuthor) {
 		DataTable data = DataTable.create();
 
-		data.addColumn(ColumnType.STRING, "Author");
-		data.addColumn(ColumnType.NUMBER, "Commits");
+		data.addColumn(ColumnType.STRING, messages.author());
+		data.addColumn(ColumnType.NUMBER, messages.commits());
 
 		data.addRows(commitsByAuthor.size());
 		int i = 0;

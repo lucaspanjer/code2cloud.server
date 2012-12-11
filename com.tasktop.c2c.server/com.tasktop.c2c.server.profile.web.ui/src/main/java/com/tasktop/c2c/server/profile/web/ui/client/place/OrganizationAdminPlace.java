@@ -30,12 +30,16 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetOrganizationR
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 /**
  * @author Myles Feichtinger (Tasktop Technologies Inc.)
  * 
  */
 public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlace, WindowTitlePlace, BreadcrumbPlace {
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
 
 	private Organization organization;
 
@@ -61,7 +65,7 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 
 	@Override
 	public String getHeading() {
-		return "Edit Organization";
+		return messages.editOrganization();
 	}
 
 	protected OrganizationAdminPlace(String organizationId) {
@@ -87,7 +91,7 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle("Edit Organization");
+		return WindowTitleBuilder.createWindowTitle(messages.editOrganization());
 	}
 
 	@Override
@@ -111,7 +115,7 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 
 	private void createBreadcrumbs(Organization organization) {
 		breadcrumbs = Breadcrumb.getOrganizationSpecificBreadcrumbs(organization);
-		breadcrumbs.add(new Breadcrumb(getHref(), "Edit"));
+		breadcrumbs.add(new Breadcrumb(getHref(), messages.edit()));
 	}
 
 	@Override

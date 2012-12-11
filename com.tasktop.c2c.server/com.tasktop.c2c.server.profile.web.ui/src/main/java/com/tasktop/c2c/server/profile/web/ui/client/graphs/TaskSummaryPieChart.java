@@ -12,11 +12,12 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.graphs;
 
-
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.visualizations.PieChart;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.tasks.domain.TaskSummary;
 import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
 
@@ -24,6 +25,8 @@ import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
  * A summary pie chart of open tasks by severity.
  */
 public class TaskSummaryPieChart extends PieChart {
+
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
 
 	public void draw(TaskSummary taskSummary) {
 		AbstractDataTable data = createData(taskSummary);
@@ -36,15 +39,14 @@ public class TaskSummaryPieChart extends PieChart {
 		options.setHeight(DashboardChartConstants.PIE_CHART_HEIGHT);
 		options.setColors(DashboardChartConstants.SEVERITY_COLORS);
 		options.setLegend(DashboardChartConstants.PIE_CHART_LEGEND_POS);
-		// options.set("pieSliceText", "label");
 		return options;
 	}
 
 	private AbstractDataTable createData(TaskSummary taskSummary) {
 		DataTable data = DataTable.create();
 
-		data.addColumn(ColumnType.STRING, "Severity");
-		data.addColumn(ColumnType.NUMBER, "Total");
+		data.addColumn(ColumnType.STRING, messages.severity());
+		data.addColumn(ColumnType.NUMBER, messages.total());
 
 		data.addRows(taskSummary.getItems().size());
 		int i = 0;

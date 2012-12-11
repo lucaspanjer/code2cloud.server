@@ -16,12 +16,16 @@ import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlace
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.LoggedInPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class InvitationCreatorPlace extends LoggedInPlace implements HeadingPlace {
 
+	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+
 	@Override
 	public String getHeading() {
-		return "Invitation Creator";
+		return messages.invitationCreator();
 	}
 
 	public static PageMapping InvitationCreator = new PageMapping(new InvitationCreatorPlace.Tokenizer(),
