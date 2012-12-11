@@ -14,10 +14,6 @@
   	<set-configuration-property name="compiler.emulatedStack.recordLineNumbers" value="true"/>
   	<set-configuration-property name="compiler.emulatedStack.recordFileNames" value="true"/>
   	
-	<!--  Comment in to cut down build time. -->
-	<!--  <set-property name="user.agent" value="gecko"/>-->
-
 	<!-- Specify the app entry point class.                         -->
 	<entry-point class="com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint"/>
-
 </module>

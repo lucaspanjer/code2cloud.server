@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- To be used in development environments. This minimizes GWT permutations compiled for faster builds. -->
+<module rename-to="profile">
+	<inherits name="com.tasktop.c2c.server.profile.web.ProfileWebBase"/>
+	<set-property name="user.agent" value="gecko1_8"/>
+</module>
