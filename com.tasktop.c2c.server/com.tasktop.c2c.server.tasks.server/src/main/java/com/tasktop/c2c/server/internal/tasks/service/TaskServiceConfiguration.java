@@ -37,6 +37,10 @@ public class TaskServiceConfiguration extends BaseProfileConfiguration {
 				taskId);
 	}
 
+	public String getAttachmentUploadWebUrl() {
+		return getExternalTaskServiceUrl() + "/upload";
+	}
+
 	public String getWebUrlForAttachment(Integer attachmentId) {
 		return getExternalTaskServiceUrl() + "/attachment/" + attachmentId;
 	}

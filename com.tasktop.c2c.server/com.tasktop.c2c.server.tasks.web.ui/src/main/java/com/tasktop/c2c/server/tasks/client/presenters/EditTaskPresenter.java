@@ -55,7 +55,7 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 
 		List<Attachment> getAttachments();
 
-		void setProjectIdentifier(String projectIdentifier);
+		void setAttachmentUploadUrl(String url);
 	}
 
 	public EditTaskPresenter(EditTaskDisplay view) {
@@ -81,7 +81,7 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 		task = place.getTask();
 		projectIdentifier = place.getProjectId();
 		repositoryConfiguration = place.getRepositoryConfiguration();
-		editTaskView.getAttachmentDisplay().setProjectIdentifier(projectIdentifier);
+		editTaskView.getAttachmentDisplay().setAttachmentUploadUrl(repositoryConfiguration.getAttachmentUploadUrl());
 	}
 
 	@Override

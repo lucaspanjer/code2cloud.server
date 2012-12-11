@@ -1184,6 +1184,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		result.setConfigurationProperties(getConfigurationProperties());
 		result.setStateTransitions(computeStateTransitions());
 		result.setUrl(configuration.getExternalTaskServiceUrl());
+		result.setAttachmentUploadUrl(configuration.getAttachmentUploadWebUrl());
 		result.setUsers(getUsers());
 		result.setProducts(getProducts());
 		result.setComponents(getComponents());

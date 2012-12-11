@@ -32,6 +32,7 @@ import com.tasktop.c2c.server.tasks.service.TaskService;
 public class RepositoryConfiguration implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String url;
+	private String attachmentUploadUrl;
 	private List<TaskStatus> statuses;
 	private TaskStatus defaultStatus;
 	private List<Milestone> milestones;
@@ -366,6 +367,14 @@ public class RepositoryConfiguration implements Serializable {
 
 	public String getMarkupLanguage() {
 		return configurationProperties.get(TaskService.MARKUP_LANGUAGE_DB_KEY);
+	}
+
+	public String getAttachmentUploadUrl() {
+		return attachmentUploadUrl;
+	}
+
+	public void setAttachmentUploadUrl(String attachmentUploadUrl) {
+		this.attachmentUploadUrl = attachmentUploadUrl;
 	}
 
 }

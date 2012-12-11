@@ -19,7 +19,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -132,11 +131,7 @@ public class AttachmentsEditorView extends AbstractComposite implements EditTask
 	}
 
 	@Override
-	public void setProjectIdentifier(String applicatoinId) {
-		String path = Window.Location.getPath();
-		String appCtx = path.substring(0, path.lastIndexOf("/"));
-		// REVIEW Should source the url from elsewhere
-		String actionUrl = appCtx + "/s/" + applicatoinId + "/tasks/upload/";
-		attachmentForm.setAction(actionUrl);
+	public void setAttachmentUploadUrl(String url) {
+		attachmentForm.setAction(url);
 	}
 }
