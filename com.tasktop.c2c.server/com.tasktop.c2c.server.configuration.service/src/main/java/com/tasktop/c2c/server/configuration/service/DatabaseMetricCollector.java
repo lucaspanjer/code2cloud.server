@@ -18,6 +18,8 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import liquibase.util.JdbcUtils;
+
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,9 +56,10 @@ public class DatabaseMetricCollector implements MetricCollector {
 		String query = sqlSizeQuery.replace(DATABSE_NAME_VAR, databaseName);
 		LOG.debug(String.format("Collecting database metrics with query: [%s]", query));
 		Connection c = null;
+		ResultSet resultSet = null;
 		try {
 			c = dataSource.getConnection();
-			ResultSet resultSet = c.createStatement().executeQuery(query);
+			resultSet = c.createStatement().executeQuery(query);
 			if (resultSet.next()) {
 				int totalByteSize = resultSet.getInt(1);
 				status.setServiceState(ServiceState.RUNNING);
@@ -67,6 +70,7 @@ public class DatabaseMetricCollector implements MetricCollector {
 			e.printStackTrace();
 			status.setServiceState(ServiceState.UNAVAILABLE);
 		} finally {
+			JdbcUtils.closeResultSet(resultSet);
 			if (c != null) {
 				try {
 					c.close();
