@@ -133,6 +133,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		assertEquals(internalProfile.getUsername(), webProfile.getUsername());
 		assertEquals(internalProfile.getId(), webProfile.getId());
 		assertNull(webProfile.getPassword());
+		assertEquals(internalProfile.getLanguage(), webProfile.getLanguage());
 	}
 
 	@Test
@@ -271,6 +272,7 @@ public class ProfileWebServiceTest implements ApplicationContextAware {
 		String pwd = PASSWORD;
 		internalProfile.setPassword(pwd);
 		internalProfile.setAdmin(isAdmin);
+		internalProfile.setLanguage("en_US");
 		profileService.createProfile(internalProfile);
 
 		SecurityContextHolder.getContext().setAuthentication(

@@ -46,6 +46,7 @@ public class Profile extends BaseEntity {
 	private NotificationSettings notificationSettings;
 	private Boolean sentWelcomeEmail = false;
 	private Boolean disabled = false;
+	private String language;
 
 	@Transient
 	private String gravatarHash;
@@ -262,6 +263,22 @@ public class Profile extends BaseEntity {
 	 */
 	public void setDisabled(Boolean disabled) {
 		this.disabled = disabled;
+	}
+
+	/**
+	 * @return the user's preferred language
+	 */
+	@Column
+	public String getLanguage() {
+		return language;
+	}
+
+	/**
+	 * @param language
+	 *            the user's preferred language
+	 */
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	@OneToMany(cascade = { CascadeType.PERSIST }, mappedBy = "profile")

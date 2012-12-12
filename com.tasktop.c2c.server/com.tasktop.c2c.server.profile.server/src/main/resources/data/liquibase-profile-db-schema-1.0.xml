@@ -681,5 +681,10 @@
 		</addColumn>
 	</changeSet>
 	
+	<changeSet id="addLanguagePref-task5072" author="mnelson">
+		<addColumn tableName="PROFILE">
+			<column name="LANGUAGE" type="VARCHAR(5)" defaultValue="en"/>
+		</addColumn>
+	</changeSet>
 
 </databaseChangeLog>

@@ -26,6 +26,7 @@ public class Profile extends AbstractEntity implements Comparable<Profile> {
 	private NotificationSettings notificationSettings;
 	private Boolean emailVerfied;
 	private Boolean accountDisabled;
+	private String language;
 
 	public String getUsername() {
 		return username;
@@ -150,6 +151,21 @@ public class Profile extends AbstractEntity implements Comparable<Profile> {
 	 */
 	public void setAccountDisabled(Boolean accountDisabled) {
 		this.accountDisabled = accountDisabled;
+	}
+
+	/**
+	 * @return the user's preferred language
+	 */
+	public String getLanguage() {
+		return language;
+	}
+
+	/**
+	 * @param language
+	 *            the user's preferred language
+	 */
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 }

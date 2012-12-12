@@ -162,6 +162,7 @@ public class WebServiceDomain {
 		profile.setId(p.getId());
 		profile.setNotificationSettings(copy(p.getNotificationSettings()));
 		profile.setDisabled(p.getAccountDisabled());
+		profile.setLanguage(p.getLanguage());
 		return profile;
 	}
 
@@ -177,6 +178,7 @@ public class WebServiceDomain {
 		// NOTE: we never copy password here
 		p.setNotificationSettings(copy(profile.getNotificationSettings()));
 		p.setAccountDisabled(profile.getDisabled());
+		p.setLanguage(profile.getLanguage());
 		return p;
 	}
 
