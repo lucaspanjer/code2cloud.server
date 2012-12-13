@@ -204,6 +204,22 @@ public abstract class BaseWikiServiceTest {
 	}
 
 	@Test
+	public void testCreatePage_InvalidPath() throws ValidationException, Exception {
+		logon(author);
+
+		Page wikiPage = new Page();
+		wikiPage.setContent("abc 123\n456 ");
+		wikiPage.setCreationDate(null);
+		wikiPage.setPath("Foo Bar/");
+		try {
+			wikiService.createPage(wikiPage);
+			fail("expected failure");
+		} catch (ValidationException e) {
+			ValidationAssert.assertHaveValidationError(e, "invalidValue.path", wikiPage.getPath());
+		}
+	}
+
+	@Test
 	public void testRetrievePage_NotFound() throws EntityNotFoundException {
 		logon(author);
 

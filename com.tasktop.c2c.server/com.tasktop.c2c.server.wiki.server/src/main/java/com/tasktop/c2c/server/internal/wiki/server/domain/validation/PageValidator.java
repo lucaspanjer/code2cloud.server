@@ -38,7 +38,7 @@ public class PageValidator implements Validator {
 
 		if (page.getPath() != null && page.getPath().length() > 0) {
 			if (!pathPattern.matcher(page.getPath()).matches() || !page.getPath().trim().equals(page.getPath())
-					|| page.getPath().contains("/ ")) {
+					|| page.getPath().contains("/ ") || page.getPath().endsWith("/")) {
 				errors.rejectValue("path", "invalidValue", new Object[] { page.getPath() }, "bad path");
 			}
 		}
