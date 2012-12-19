@@ -27,6 +27,8 @@
 		p:persistenceXmlLocation="classpath*:META-INF/${wiki.persistenceXmlFilename}"
 	/>
 	
+	<bean class="com.tasktop.c2c.server.common.service.Log4JConfiguration" p:location="/opt/code2cloud/etc/log4j-wiki.xml" />
+	
 	<security:global-method-security secured-annotations="enabled" />
 	
 </beans>

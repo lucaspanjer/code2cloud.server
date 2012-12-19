@@ -26,6 +26,8 @@
 	
 	<bean id="aopLogger" class="com.tasktop.c2c.server.common.service.ServiceLoggingAdvice"/>
 		
+	<bean class="com.tasktop.c2c.server.common.service.Log4JConfiguration" p:location="/opt/code2cloud/etc/log4j-services.xml" />
+		
 	<aop:config>
 		<aop:aspect ref="aopLogger">
 			<aop:pointcut id="serviceCall" expression="bean(scmService)"/>

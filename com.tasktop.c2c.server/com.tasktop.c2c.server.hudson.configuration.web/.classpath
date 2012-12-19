@@ -54,4 +54,6 @@
   <classpathentry kind="var" path="M2_REPO/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar" sourcepath="M2_REPO/commons-io/commons-io/2.0.1/commons-io-2.0.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/liquibase/liquibase-core/2.0.3-c2c/liquibase-core-2.0.3-c2c.jar"/>
   <classpathentry kind="var" path="M2_REPO/junit/junit/4.7/junit-4.7.jar" sourcepath="M2_REPO/junit/junit/4.7/junit-4.7-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16.jar" sourcepath="M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/log4j/apache-log4j-extras/1.1/apache-log4j-extras-1.1.jar" sourcepath="M2_REPO/log4j/apache-log4j-extras/1.1/apache-log4j-extras-1.1.jar"/>
 </classpath>

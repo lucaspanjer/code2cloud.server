@@ -824,6 +824,11 @@
 				<version>1.2.16</version>
 			</dependency>
 			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>apache-log4j-extras</artifactId>
+				<version>1.1</version>
+			</dependency>
+			<dependency>
 				<groupId>org.eclipse.mylyn.docs</groupId>
 				<artifactId>org.eclipse.mylyn.wikitext.core</artifactId>
 				<version>${wikitext.version}</version>
