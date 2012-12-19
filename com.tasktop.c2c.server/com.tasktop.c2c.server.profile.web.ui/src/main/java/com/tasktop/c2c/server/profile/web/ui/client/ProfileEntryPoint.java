@@ -45,9 +45,11 @@ public class ProfileEntryPoint implements EntryPoint {
 		registerPageMappings(); // REVIEW, push to BOOT??
 
 		// TODO Move elsewhere
-		HeaderSettingRequestBuilder builder = GWT.create(HeaderSettingRequestBuilder.class);
-		((ServiceDefTarget) injector.getProfileService()).setRpcRequestBuilder(builder);
-		((ServiceDefTarget) DispatchServiceAsync.getRealService()).setRpcRequestBuilder(builder);
+		if (GWT.isClient()) {
+			HeaderSettingRequestBuilder builder = GWT.create(HeaderSettingRequestBuilder.class);
+			((ServiceDefTarget) injector.getProfileService()).setRpcRequestBuilder(builder);
+			((ServiceDefTarget) DispatchServiceAsync.getRealService()).setRpcRequestBuilder(builder);
+		}
 
 	}
 
