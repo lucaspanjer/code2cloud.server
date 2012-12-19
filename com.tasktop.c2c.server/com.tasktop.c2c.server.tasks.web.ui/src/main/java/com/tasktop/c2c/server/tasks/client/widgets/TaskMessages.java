@@ -12,8 +12,12 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets;
 
+import com.google.gwt.i18n.client.LocalizableResource.Generate;
+import com.google.gwt.i18n.client.LocalizableResource.GenerateKeys;
 import com.google.gwt.i18n.client.Messages;
 
+@GenerateKeys("com.google.gwt.i18n.server.keygen.MethodNameKeyGenerator")
+@Generate(format = "com.google.gwt.i18n.rebind.format.PropertiesFormat")
 public interface TaskMessages extends Messages {
 
 	@DefaultMessage("Attachments ({0})")

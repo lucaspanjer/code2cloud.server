@@ -11,6 +11,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.profile.web.client;
 
+import com.google.gwt.i18n.client.LocalizableResource.Generate;
+import com.google.gwt.i18n.client.LocalizableResource.GenerateKeys;
 import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.safehtml.shared.SafeHtml;
 
@@ -18,6 +20,8 @@ import com.google.gwt.safehtml.shared.SafeHtml;
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
+@GenerateKeys("com.google.gwt.i18n.server.keygen.MethodNameKeyGenerator")
+@Generate(format = "com.google.gwt.i18n.rebind.format.PropertiesFormat")
 public interface CommonProfileMessages extends Messages {
 
 	@DefaultMessage("Browse Projects")
