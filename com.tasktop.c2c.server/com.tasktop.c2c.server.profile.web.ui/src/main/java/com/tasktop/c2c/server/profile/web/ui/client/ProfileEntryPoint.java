@@ -23,6 +23,7 @@ import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMappingRe
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.action.DispatchServiceAsync;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjectorBinding;
 import com.tasktop.c2c.server.profile.web.ui.client.navigation.ProfilePageMappings;
@@ -42,6 +43,12 @@ public class ProfileEntryPoint implements EntryPoint {
 
 		initializeInjector();
 		registerPageMappings(); // REVIEW, push to BOOT??
+
+		// TODO Move elsewhere
+		HeaderSettingRequestBuilder builder = GWT.create(HeaderSettingRequestBuilder.class);
+		((ServiceDefTarget) injector.getProfileService()).setRpcRequestBuilder(builder);
+		((ServiceDefTarget) DispatchServiceAsync.getRealService()).setRpcRequestBuilder(builder);
+
 	}
 
 	protected void registerPageMappings() {

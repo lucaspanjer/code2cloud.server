@@ -46,13 +46,9 @@ import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 
 public class DispatchServiceAsync extends AbstractDispatchAsync {
 
-	private static StandardDispatchServiceAsync realService = null;
+	private static StandardDispatchServiceAsync realService = GWT.create(StandardDispatchService.class);
 
 	public static StandardDispatchServiceAsync getRealService() {
-		// This hack is to work around gwt deferred binding bug
-		if (realService == null) {
-			realService = GWT.create(StandardDispatchService.class);
-		}
 		return realService;
 	}
 
