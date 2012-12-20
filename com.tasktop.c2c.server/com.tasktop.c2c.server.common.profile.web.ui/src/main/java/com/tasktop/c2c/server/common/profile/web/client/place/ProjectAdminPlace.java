@@ -50,7 +50,7 @@ public abstract class ProjectAdminPlace extends LoggedInPlace implements Heading
 
 	@Override
 	public String getHeading() {
-		return super.messages.projectAdmin();
+		return super.commonProfileMessages.projectAdmin();
 	}
 
 	@Override

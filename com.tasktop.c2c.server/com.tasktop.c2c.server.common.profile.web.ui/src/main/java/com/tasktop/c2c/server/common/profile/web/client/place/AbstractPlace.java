@@ -33,7 +33,7 @@ public abstract class AbstractPlace extends Place implements IPlace {
 
 	protected Message displayOnArrival;
 	protected Notifier notifier = ProfileGinjector.get.instance().getNotifier();
-	protected CommonProfileMessages messages = ProfileGinjector.get.instance().getCommonProfileMessages();
+	protected CommonProfileMessages commonProfileMessages = ProfileGinjector.get.instance().getCommonProfileMessages();
 
 	public AbstractPlace displayOnArrival(Message displayOnArrival) {
 		this.displayOnArrival = displayOnArrival;
@@ -102,9 +102,9 @@ public abstract class AbstractPlace extends Place implements IPlace {
 
 	private String getNotAuthorizedMessage() {
 		if (ProfileGinjector.get.instance().getAppState().getCredentials().getProfile().getAccountDisabled()) {
-			return messages.accountDisabled();
+			return commonProfileMessages.accountDisabled();
 		}
-		return messages.noPermissionsToVisitPage();
+		return commonProfileMessages.noPermissionsToVisitPage();
 	}
 
 	/*

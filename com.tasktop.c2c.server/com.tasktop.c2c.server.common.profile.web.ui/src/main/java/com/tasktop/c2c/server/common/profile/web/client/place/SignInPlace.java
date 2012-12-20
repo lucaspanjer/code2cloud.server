@@ -58,7 +58,7 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 
 	@Override
 	public String getHeading() {
-		return super.messages.signIn();
+		return super.commonProfileMessages.signIn();
 	}
 
 	public String getPrefix() {
@@ -89,7 +89,7 @@ public class SignInPlace extends AnonymousPlace implements WindowTitlePlace, Hea
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle(super.messages.signIn());
+		return WindowTitleBuilder.createWindowTitle(super.commonProfileMessages.signIn());
 	}
 
 	@Override

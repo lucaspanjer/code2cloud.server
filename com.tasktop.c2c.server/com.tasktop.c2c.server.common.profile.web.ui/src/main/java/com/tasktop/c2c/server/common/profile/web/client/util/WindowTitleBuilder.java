@@ -25,8 +25,9 @@ import com.tasktop.c2c.server.common.profile.web.client.place.Section;
  */
 abstract public class WindowTitleBuilder {
 
-	private static CommonProfileMessages MESSAGES = ProfileGinjector.get.instance().getCommonProfileMessages();
-	public static String PRODUCT_NAME = MESSAGES.code2Cloud();
+	private static CommonProfileMessages COMMON_PROFILE_MESSAGES = ProfileGinjector.get.instance()
+			.getCommonProfileMessages();
+	public static String PRODUCT_NAME = COMMON_PROFILE_MESSAGES.code2Cloud();
 
 	public static String createWindowTitle(Section section) {
 		String feature = getSectionTitle(section);
@@ -57,21 +58,21 @@ abstract public class WindowTitleBuilder {
 	private static String getSectionTitle(Section section) {
 		switch (section) {
 		case HOME:
-			return MESSAGES.home();
+			return COMMON_PROFILE_MESSAGES.home();
 		case DASHBOARD:
-			return MESSAGES.dashboard();
+			return COMMON_PROFILE_MESSAGES.dashboard();
 		case TASKS:
-			return MESSAGES.tasks();
+			return COMMON_PROFILE_MESSAGES.tasks();
 		case BUILDS:
-			return MESSAGES.builds();
+			return COMMON_PROFILE_MESSAGES.builds();
 		case DEPLOYMENTS:
-			return MESSAGES.deployments();
+			return COMMON_PROFILE_MESSAGES.deployments();
 		case TEAM:
-			return MESSAGES.team();
+			return COMMON_PROFILE_MESSAGES.team();
 		case WIKI:
-			return MESSAGES.wiki();
+			return COMMON_PROFILE_MESSAGES.wiki();
 		case ADMIN:
-			return MESSAGES.admin();
+			return COMMON_PROFILE_MESSAGES.admin();
 		default:
 			return "";
 		}

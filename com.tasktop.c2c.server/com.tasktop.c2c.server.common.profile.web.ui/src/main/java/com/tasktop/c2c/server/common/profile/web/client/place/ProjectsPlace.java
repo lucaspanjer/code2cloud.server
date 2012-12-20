@@ -58,7 +58,7 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 
 	@Override
 	public String getHeading() {
-		return super.messages.discoverProjects();
+		return super.commonProfileMessages.discoverProjects();
 	}
 
 	public static ProjectsPlace createPlace() {
@@ -82,7 +82,7 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle(super.messages.browseProjects());
+		return WindowTitleBuilder.createWindowTitle(super.commonProfileMessages.browseProjects());
 	}
 
 	@Override

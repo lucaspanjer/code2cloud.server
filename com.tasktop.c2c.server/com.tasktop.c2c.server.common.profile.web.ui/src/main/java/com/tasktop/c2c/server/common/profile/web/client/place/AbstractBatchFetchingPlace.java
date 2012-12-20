@@ -176,7 +176,7 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 		}
 
 		if (errorMessages == null) {
-			errorMessages = Collections.singletonList(super.messages.serverSideErrorOccured());
+			errorMessages = Collections.singletonList(super.commonProfileMessages.serverSideErrorOccured());
 		}
 		notifier.displayMessage(Message.createErrorMessage(StringUtils.concatenate(errorMessages)));
 		return false;
