@@ -30,6 +30,7 @@ import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.ProjectAdminMenu;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.ProjectAdminView;
 
@@ -40,6 +41,7 @@ public class ProjectAdminActivity extends AbstractActivity implements Splittable
 	private ProjectAdminActivityMapper adminActivityMapper = new ProjectAdminActivityMapper();
 	private ActivityManager adminActivityManager = new ActivityManager(adminActivityMapper, AppGinjector.get.instance()
 			.getEventBus());
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public ProjectAdminActivity() {
 		adminActivityManager.setDisplay(view.getContentContainer());
@@ -67,14 +69,16 @@ public class ProjectAdminActivity extends AbstractActivity implements Splittable
 		AppGinjector.get
 				.instance()
 				.getDispatchService()
-				.execute(new DeleteProjectAction(project.getIdentifier()),
-						new AsyncCallbackSupport<DeleteProjectResult>(OperationMessage.create("Deleting Project")) {
+				.execute(
+						new DeleteProjectAction(project.getIdentifier()),
+						new AsyncCallbackSupport<DeleteProjectResult>(OperationMessage.create(profileMessages
+								.deletingProject())) {
 
 							@Override
 							protected void success(DeleteProjectResult result) {
 								AppGinjector.get.instance().getEventBus().fireEvent(new ClearCacheEvent());
 
-								Message message = Message.createSuccessMessage("Project deleted.");
+								Message message = Message.createSuccessMessage(profileMessages.projectDeleted());
 
 								IPlace p = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
 								p.displayOnArrival(message);

@@ -24,15 +24,18 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectPreferences;
 import com.tasktop.c2c.server.profile.domain.project.WikiMarkupLanguage;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationNewProjectPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.NewProjectView.Presenter;
 
 public class NewProjectPresenter extends AbstractProfilePresenter implements Presenter, SplittableActivity {
 
 	private final NewProjectView view;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public NewProjectPresenter() {
 		this(NewProjectView.getInstance());
@@ -53,14 +56,14 @@ public class NewProjectPresenter extends AbstractProfilePresenter implements Pre
 	public void createProject(Project project) {
 		getProfileService().createProject(
 				project,
-				new AsyncCallbackSupport<String>(new OperationMessage("Creating project..."), null, view
+				new AsyncCallbackSupport<String>(new OperationMessage(profileMessages.creatingProject()), null, view
 						.getCreateButton()) {
 					@Override
 					protected void success(final String projectIdentifier) {
 						ProjectHomePlace
 								.createPlace(projectIdentifier)
 								.displayOnArrival(
-										Message.createSuccessMessage("Project created! Provisioning project services. This will take a minute."))
+										Message.createSuccessMessage(profileMessages.projectCreatedAndProvisioning()))
 								.go();
 
 					}

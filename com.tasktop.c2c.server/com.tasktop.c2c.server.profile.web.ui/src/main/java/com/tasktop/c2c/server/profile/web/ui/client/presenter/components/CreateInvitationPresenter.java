@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -21,12 +20,15 @@ import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.domain.project.SignUpTokens;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.CreateInvitationView;
 
 public class CreateInvitationPresenter extends AbstractProfilePresenter {
 
 	private final CreateInvitationView view;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public CreateInvitationPresenter(CreateInvitationView invitationView) {
 		super(invitationView);
@@ -52,7 +54,7 @@ public class CreateInvitationPresenter extends AbstractProfilePresenter {
 
 					@Override
 					protected void success(SignUpTokens result) {
-						String output = "First Name, Last Name, Email Address, Token, URL\n";
+						String output = profileMessages.invitationTokens() + "\n";
 						for (SignUpToken token : result.getTokens()) {
 							output += token.getFirstname() + ", " + token.getLastname() + ", " + token.getEmail()
 									+ ", " + token.getToken() + ", " + token.getUrl() + "\n";
@@ -64,7 +66,7 @@ public class CreateInvitationPresenter extends AbstractProfilePresenter {
 								.instance()
 								.getNotifier()
 								.displayMessage(
-										Message.createSuccessMessage("Invitations created.  See below for details:"));
+										Message.createSuccessMessage(profileMessages.invitationsCreatedSeeBelow()));
 					}
 				});
 	}

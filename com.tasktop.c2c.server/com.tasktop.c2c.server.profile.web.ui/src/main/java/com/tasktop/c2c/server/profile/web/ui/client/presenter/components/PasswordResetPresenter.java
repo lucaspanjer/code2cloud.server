@@ -24,12 +24,14 @@ import com.tasktop.c2c.server.profile.web.ui.client.event.LogonEvent;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ResetPasswordPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.PasswordResetView;
 
 public class PasswordResetPresenter extends AbstractProfilePresenter implements ClickHandler {
 
 	private final PasswordResetView passwordResetView;
 	private String passwordResetToken;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public PasswordResetPresenter(PasswordResetView view, String passwordResetToken) {
 		super(view);
@@ -51,7 +53,7 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 			String password = passwordResetView.password.getText();
 			if (password != null && password.length() > 0 && !password.equals(passwordConfirm)) {
 				ProfileGinjector.get.instance().getNotifier()
-						.displayMessage(Message.createErrorMessage("Password and Confirm Password must be the same."));
+						.displayMessage(Message.createErrorMessage(profileMessages.passwordAndConfirmationMustMatch()));
 			} else {
 				doPasswordReset();
 			}
@@ -65,23 +67,15 @@ public class PasswordResetPresenter extends AbstractProfilePresenter implements 
 			@Override
 			public void success(Credentials result) {
 				getEventBus().fireEvent(new LogonEvent(result));
-				ProfileGinjector.get
-						.instance()
-						.getPlaceProvider()
-						.getDefaultPlace()
-						.displayOnArrival(
-								Message.createSuccessMessage("Your password has been updated. You are now signed in."))
-						.go();
+				ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace()
+						.displayOnArrival(Message.createSuccessMessage(profileMessages.passwordUpdatedSignedIn())).go();
 			}
 
 			@Override
 			public void failure(Throwable exception) {
 				if (exception instanceof NoSuchEntityException) {
-					AppGinjector.get
-							.instance()
-							.getNotifier()
-							.displayMessage(
-									Message.createErrorMessage("Your profile could not be found. Please try again."));
+					AppGinjector.get.instance().getNotifier()
+							.displayMessage(Message.createErrorMessage(profileMessages.profileNotFound()));
 				} else {
 					super.failure(exception);
 				}

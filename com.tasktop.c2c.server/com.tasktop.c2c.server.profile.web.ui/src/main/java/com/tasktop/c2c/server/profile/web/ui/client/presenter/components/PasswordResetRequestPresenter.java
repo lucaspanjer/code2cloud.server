@@ -22,11 +22,13 @@ import com.tasktop.c2c.server.common.web.shared.NoSuchEntityException;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.RequestPasswordResetPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.PasswordResetRequestView;
 
 public class PasswordResetRequestPresenter extends AbstractProfilePresenter {
 
 	private final PasswordResetRequestView passwordResetRequestView;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public PasswordResetRequestPresenter(PasswordResetRequestView view, RequestPasswordResetPlace place) {
 		super(view);
@@ -48,11 +50,11 @@ public class PasswordResetRequestPresenter extends AbstractProfilePresenter {
 
 		if (email == null || email.isEmpty()) {
 			AppGinjector.get.instance().getNotifier()
-					.displayMessage(Message.createErrorMessage("Please enter an email"));
+					.displayMessage(Message.createErrorMessage(profileMessages.enterEmail()));
 			return;
 		} else if (!ValidationUtils.isValidEmail(email)) {
 			AppGinjector.get.instance().getNotifier()
-					.displayMessage(Message.createErrorMessage("Please enter a valid email"));
+					.displayMessage(Message.createErrorMessage(profileMessages.enterValidEmail()));
 			return;
 		}
 
@@ -76,9 +78,7 @@ public class PasswordResetRequestPresenter extends AbstractProfilePresenter {
 
 	private void onSuccessfulRequest(String email) {
 		passwordResetRequestView.email.setText("");
-		SignInPlace
-				.createPlace()
-				.displayOnArrival(
-						Message.createSuccessMessage("Password reset instructions have been sent to your email.")).go();
+		SignInPlace.createPlace()
+				.displayOnArrival(Message.createSuccessMessage(profileMessages.passwordResetInstructionsSent())).go();
 	}
 }

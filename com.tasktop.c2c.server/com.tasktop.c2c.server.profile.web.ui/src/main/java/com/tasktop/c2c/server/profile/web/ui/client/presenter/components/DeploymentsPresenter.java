@@ -26,8 +26,10 @@ import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDeploymentPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.ControlDeploymentAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.ControlDeploymentAction.Action;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.CreateDeploymentAction;
@@ -53,6 +55,7 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 	private List<DeploymentConfiguration> deploymentConfigurations;
 	private GetProjectBuildsResult buildInformation;
 	private List<DeploymentServiceType> serviceTypes;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public DeploymentsPresenter(DeploymentsView view) {
 		super(view);
@@ -167,7 +170,7 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 
 	@Override
 	public void doStart() {
-		doOperation("Starting", "Started", Action.START);
+		doOperation(profileMessages.starting(), profileMessages.started(), Action.START);
 	}
 
 	private void doOperation(String opMessage, String successMessage, Action type) {
@@ -187,17 +190,17 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 
 	@Override
 	public void doStop() {
-		doOperation("Stopping", "Stopped", Action.STOP);
+		doOperation(profileMessages.stopping(), profileMessages.stopped(), Action.STOP);
 	}
 
 	@Override
 	public void doRestart() {
-		doOperation("Restarting", "Restarted", Action.RESTART);
+		doOperation(profileMessages.restarting(), profileMessages.restarted(), Action.RESTART);
 	}
 
 	@Override
 	public void save() {
-		OperationMessage message = new OperationMessage("Saving");
+		OperationMessage message = new OperationMessage(profileMessages.saving());
 		getDispatchService().execute(new CreateDeploymentAction(projectIdentifier, view.newDeploymentView.getValue()),
 
 		new AsyncCallbackSupport<DeploymentResult>(message) {
@@ -206,9 +209,10 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 			protected void success(DeploymentResult result) {
 				if (result.get().hasError()) {
 					ProfileGinjector.get.instance().getNotifier()
-							.displayMessage(Message.createErrorMessage("Error while saving"));
+							.displayMessage(Message.createErrorMessage(profileMessages.errorWhileSaving()));
 				} else {
-					ProfileGinjector.get.instance().getNotifier().displayMessage(Message.createSuccessMessage("Saved"));
+					ProfileGinjector.get.instance().getNotifier()
+							.displayMessage(Message.createSuccessMessage(profileMessages.saved()));
 				}
 				view.newDeploymentCreated(result.get());
 			}
@@ -218,16 +222,16 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 	@Override
 	public void update() {
 		getDispatchService().execute(new UpdateDeploymentAction(projectIdentifier, view.deploymentEditView.getValue()),
-				new AsyncCallbackSupport<DeploymentResult>(new OperationMessage("Saving")) {
+				new AsyncCallbackSupport<DeploymentResult>(new OperationMessage(profileMessages.saving())) {
 
 					@Override
 					protected void success(DeploymentResult result) {
 						if (result.get().hasError()) {
 							ProfileGinjector.get.instance().getNotifier()
-									.displayMessage(Message.createErrorMessage("Error while saving"));
+									.displayMessage(Message.createErrorMessage(profileMessages.errorWhileSaving()));
 						} else {
 							ProfileGinjector.get.instance().getNotifier()
-									.displayMessage(Message.createSuccessMessage("Saved"));
+									.displayMessage(Message.createSuccessMessage(profileMessages.saved()));
 						}
 						view.updated(result.get());
 					}
@@ -236,8 +240,8 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 
 	@Override
 	public void delete(final DeploymentConfiguration config, boolean alsoDeleteFromCF) {
-		OperationMessage message = new OperationMessage("Deleting");
-		message.setSuccessText("Deleted");
+		OperationMessage message = new OperationMessage(profileMessages.deleting());
+		message.setSuccessText(profileMessages.deleted());
 		getDispatchService().execute(new DeleteDeploymentAction(projectIdentifier, config, alsoDeleteFromCF),
 				new AsyncCallbackSupport<DeploymentResult>(message) {
 					@Override

@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter;
 
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -26,6 +25,7 @@ import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectAdminSettingsPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.settings.ProjectAdminSettingsView;
 
 public class ProjectAdminSettingsActivity extends AbstractActivity implements ProjectAdminSettingsView.Presenter,
@@ -34,6 +34,7 @@ public class ProjectAdminSettingsActivity extends AbstractActivity implements Pr
 	private boolean editing = false;
 	private Project project;
 	private ProjectAdminSettingsView view = ProjectAdminSettingsView.getInstance();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public ProjectAdminSettingsActivity() {
 	}
@@ -74,7 +75,7 @@ public class ProjectAdminSettingsActivity extends AbstractActivity implements Pr
 						project = result.get();
 						updateView();
 						ProfileGinjector.get.instance().getNotifier()
-								.displayMessage(Message.createSuccessMessage("Project saved"));
+								.displayMessage(Message.createSuccessMessage(profileMessages.projectSaved()));
 					}
 				});
 	}

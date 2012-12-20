@@ -18,7 +18,9 @@ import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.ProjectInvitationView;
 
 public class ProjectInvitationPresenter extends AbstractProfilePresenter {
@@ -26,6 +28,7 @@ public class ProjectInvitationPresenter extends AbstractProfilePresenter {
 	private final ProjectInvitationView view;
 	private final String invitationToken;
 	private final Project project;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public ProjectInvitationPresenter(ProjectInvitationView invitationView, String token, Project project) {
 		super(invitationView);
@@ -55,7 +58,7 @@ public class ProjectInvitationPresenter extends AbstractProfilePresenter {
 			@Override
 			protected void success(Void result) {
 				ProjectHomePlace.createPlace(project.getIdentifier())
-						.displayOnArrival(Message.createSuccessMessage("Invitation accepted")).go();
+						.displayOnArrival(Message.createSuccessMessage(profileMessages.invitationAccepted())).go();
 			}
 		});
 	}

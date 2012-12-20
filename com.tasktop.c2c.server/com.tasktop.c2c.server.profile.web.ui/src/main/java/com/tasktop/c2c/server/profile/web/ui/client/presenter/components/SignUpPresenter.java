@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-import com.tasktop.c2c.server.profile.domain.project.Profile;
-
 /**
  * @author jhickey (Tasktop Technologies Inc.)
  * 

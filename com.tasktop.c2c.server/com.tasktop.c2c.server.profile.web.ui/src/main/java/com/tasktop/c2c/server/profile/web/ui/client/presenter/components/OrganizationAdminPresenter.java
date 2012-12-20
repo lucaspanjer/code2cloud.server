@@ -26,6 +26,7 @@ import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.OrganizationAdminPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.organization.OrganizationAdminEditView;
 
 public class OrganizationAdminPresenter extends AbstractActivity implements OrganizationAdminEditView.Presenter,
@@ -33,6 +34,7 @@ public class OrganizationAdminPresenter extends AbstractActivity implements Orga
 
 	private Organization organization;
 	private OrganizationAdminEditView view = OrganizationAdminEditView.getInstance();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public OrganizationAdminPresenter() {
 	}
@@ -57,13 +59,16 @@ public class OrganizationAdminPresenter extends AbstractActivity implements Orga
 		AppGinjector.get
 				.instance()
 				.getDispatchService()
-				.execute(new UpdateOrganizationAction(organization),
-						new AsyncCallbackSupport<UpdateOrganizationResult>(Message.createProgressMessage("Saving")) {
+				.execute(
+						new UpdateOrganizationAction(organization),
+						new AsyncCallbackSupport<UpdateOrganizationResult>(Message
+								.createProgressMessage(profileMessages.saving())) {
 							@Override
 							protected void success(UpdateOrganizationResult result) {
 								organization = result.get();
 								IPlace after = ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace();
-								after.displayOnArrival(Message.createSuccessMessage("Organization updated"));
+								after.displayOnArrival(Message.createSuccessMessage(profileMessages
+										.organizationUpdated()));
 								after.go();
 							}
 						});

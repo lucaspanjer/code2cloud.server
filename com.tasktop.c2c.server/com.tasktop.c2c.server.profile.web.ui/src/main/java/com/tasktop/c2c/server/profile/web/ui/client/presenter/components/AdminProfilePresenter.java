@@ -20,14 +20,17 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.ToggleProfileDis
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.AdminProfilePlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePresenter;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.AdminProfileView;
 
 public class AdminProfilePresenter extends AbstractProfilePresenter {
 
 	private final AdminProfileView view;
 	private List<Profile> profiles;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public AdminProfilePresenter(AdminProfileView view) {
 		super(view);
@@ -52,7 +55,7 @@ public class AdminProfilePresenter extends AbstractProfilePresenter {
 
 	public void toggleAccountEnabled(final Profile profile) {
 		if (getAppState().getCredentials().getProfile().equals(profile)) {
-			getNotifier().displayMessage(Message.createErrorMessage("You cannot disable your own account."));
+			getNotifier().displayMessage(Message.createErrorMessage(profileMessages.cannotDisableOwnAccount()));
 			return;
 		}
 		final boolean disable = !profile.getAccountDisabled();
@@ -67,9 +70,9 @@ public class AdminProfilePresenter extends AbstractProfilePresenter {
 						view.setProfileList(profiles);
 						String msg;
 						if (disable) {
-							msg = "Profile Disabled";
+							msg = profileMessages.profileDisabled();
 						} else {
-							msg = "Profile Enabled";
+							msg = profileMessages.profileEnabled();
 						}
 						getNotifier().displayMessage(Message.createSuccessMessage(msg));
 					}

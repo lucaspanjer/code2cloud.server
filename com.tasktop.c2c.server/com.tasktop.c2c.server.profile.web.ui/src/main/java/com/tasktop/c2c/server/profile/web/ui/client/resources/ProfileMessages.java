@@ -29,6 +29,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Author")
 	String author();
 
+	@DefaultMessage("You cannot disable your own account.")
+	String cannotDisableOwnAccount();
+
 	@DefaultMessage("Client side error")
 	String clientSideError();
 
@@ -53,6 +56,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Creating product...")
 	String creatingProduct();
 
+	@DefaultMessage("Creating project...")
+	String creatingProject();
+
 	@DefaultMessage("Dashboard")
 	String dashboard();
 
@@ -62,11 +68,17 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Deleted.")
 	String deleted();
 
+	@DefaultMessage("Deleting...")
+	String deleting();
+
 	@DefaultMessage("Deleting component...")
 	String deletingComponent();
 
 	@DefaultMessage("Deleting product...")
 	String deletingProduct();
+
+	@DefaultMessage("Deleting project...")
+	String deletingProject();
 
 	@DefaultMessage("Deleting release...")
 	String deletingRelease();
@@ -88,6 +100,15 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("The referenced entity cannot be found or no longer exists.")
 	String entityNotFound();
+
+	@DefaultMessage("Please enter an email")
+	String enterEmail();
+
+	@DefaultMessage("Please enter a valid email")
+	String enterValidEmail();
+
+	@DefaultMessage("Error while saving")
+	String errorWhileSaving();
 
 	@DefaultMessage("Full Email List")
 	String fullEmailList();
@@ -113,11 +134,17 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Invalid username or password. Please try again.")
 	String invalidUsername();
 
+	@DefaultMessage("Invitation accepted")
+	String invitationAccepted();
+
 	@DefaultMessage("Invitation Creator")
 	String invitationCreator();
 
 	@DefaultMessage("Invitations created.")
 	String invitationsCreated();
+
+	@DefaultMessage("Invitations created. See below for details:")
+	String invitationsCreatedSeeBelow();
 
 	@DefaultMessage("Invitation sent to")
 	String invitationSentTo();
@@ -127,6 +154,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Invitation token is not valid.")
 	String invitationTokenNotValid();
+
+	@DefaultMessage("First Name, Last Name, Email Address, Token, URL")
+	String invitationTokens();
 
 	@DefaultMessage("Member")
 	String member();
@@ -140,11 +170,23 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Organization Shared")
 	String organizationShared();
 
+	@DefaultMessage("Organization updated")
+	String organizationUpdated();
+
 	@DefaultMessage("Owner")
 	String owner();
 
 	@DefaultMessage("Password Reset")
 	String passwordReset();
+
+	@DefaultMessage("Password and Confirm Password must be the same.")
+	String passwordAndConfirmationMustMatch();
+
+	@DefaultMessage("Password reset instructions have been sent to your email.")
+	String passwordResetInstructionsSent();
+
+	@DefaultMessage("Your password has been updated. You are now signed in.")
+	String passwordUpdatedSignedIn();
 
 	@DefaultMessage("Product created.")
 	String productCreated();
@@ -155,8 +197,23 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Product saved.")
 	String productSaved();
 
+	@DefaultMessage("Profile Disabled")
+	String profileDisabled();
+
+	@DefaultMessage("Profile Enabled")
+	String profileEnabled();
+
+	@DefaultMessage("Your profile could not be found. Please try again.")
+	String profileNotFound();
+
 	@DefaultMessage("projects")
 	String projectBaseUrl();
+
+	@DefaultMessage("Project created! Provisioning project services. This will take a minute.")
+	String projectCreatedAndProvisioning();
+
+	@DefaultMessage("Project deleted.")
+	String projectDeleted();
 
 	@DefaultMessage("Project saved.")
 	String projectSaved();
@@ -169,6 +226,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Release deleted.")
 	String releaseDeleted();
+
+	@DefaultMessage("Restarting...")
+	String restarting();
 
 	@DefaultMessage("Restarted.")
 	String restarted();
@@ -203,11 +263,17 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Started.")
 	String started();
 
+	@DefaultMessage("Starting...")
+	String starting();
+
 	@DefaultMessage("Status")
 	String status();
 
 	@DefaultMessage("Stopped.")
 	String stopped();
+
+	@DefaultMessage("Stopping...")
+	String stopping();
 
 	@DefaultMessage("Team")
 	String team();
