@@ -18,6 +18,8 @@ import com.tasktop.c2c.server.common.profile.web.client.place.AnonymousPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -37,13 +39,15 @@ public class RequestPasswordResetPlace extends AnonymousPlace implements Heading
 
 	}
 
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+
 	public static RequestPasswordResetPlace createPlace() {
 		return new RequestPasswordResetPlace();
 	}
 
 	@Override
 	public String getHeading() {
-		return "Password Reset";
+		return profileMessages.passwordReset();
 	}
 
 	@Override
@@ -53,7 +57,7 @@ public class RequestPasswordResetPlace extends AnonymousPlace implements Heading
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle("Password Reset");
+		return WindowTitleBuilder.createWindowTitle(profileMessages.passwordReset());
 	}
 
 	protected void handleBatchResults() {

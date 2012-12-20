@@ -23,7 +23,7 @@ public class HelpPlace extends AbstractBatchFetchingPlace implements HeadingPlac
 
 	public static PageMapping Help = new PageMapping(new HelpPlace.Tokenizer(), "help");
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private static class Tokenizer extends AbstractPlaceTokenizer<HelpPlace> {
 
@@ -49,7 +49,7 @@ public class HelpPlace extends AbstractBatchFetchingPlace implements HeadingPlac
 
 	@Override
 	public String getHeading() {
-		return messages.help();
+		return profileMessages.help();
 	}
 
 	protected void handleBatchResults() {

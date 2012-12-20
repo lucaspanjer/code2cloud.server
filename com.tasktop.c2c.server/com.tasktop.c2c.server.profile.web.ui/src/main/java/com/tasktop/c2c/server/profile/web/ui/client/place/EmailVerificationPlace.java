@@ -44,7 +44,7 @@ public class EmailVerificationPlace extends LoggedInPlace {
 
 	private String verificationToken;
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private EmailVerificationPlace(String verificationToken) {
 		this.verificationToken = verificationToken;
@@ -69,7 +69,7 @@ public class EmailVerificationPlace extends LoggedInPlace {
 					@Override
 					public void success(Void result) {
 						AppGinjector.get.instance().getPlaceProvider().getDefaultPlace()
-								.displayOnArrival(Message.createSuccessMessage(messages.emailVerified())).go();
+								.displayOnArrival(Message.createSuccessMessage(profileMessages.emailVerified())).go();
 					}
 				});
 	}

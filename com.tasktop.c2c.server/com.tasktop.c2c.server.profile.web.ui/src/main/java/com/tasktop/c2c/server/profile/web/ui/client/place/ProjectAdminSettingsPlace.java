@@ -53,7 +53,7 @@ public class ProjectAdminSettingsPlace extends ProjectAdminPlace implements Brea
 
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	protected ProjectAdminSettingsPlace(String projectId) {
 		super(projectId);
@@ -97,6 +97,6 @@ public class ProjectAdminSettingsPlace extends ProjectAdminPlace implements Brea
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(getHref(), messages.settings()));
+		breadcrumbs.add(new Breadcrumb(getHref(), profileMessages.settings()));
 	}
 }

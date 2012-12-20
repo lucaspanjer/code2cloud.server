@@ -29,6 +29,7 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace {
 
@@ -48,6 +49,7 @@ public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implement
 
 	private final String invitationToken;
 	private Project project;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public static ProjectInvitationPlace createPlace(String invitationToken) {
 		return new ProjectInvitationPlace(invitationToken);
@@ -64,7 +66,7 @@ public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implement
 
 	@Override
 	public String getHeading() {
-		return "Invitation to join " + project.getName();
+		return profileMessages.invitationToJoin(project.getName());
 	}
 
 	public String getInvitationToken() {
@@ -87,7 +89,7 @@ public class ProjectInvitationPlace extends AbstractBatchFetchingPlace implement
 	protected boolean handleExceptionInResults(Action<?> action, DispatchException dispatchException) {
 		// Assume its a token not found
 		AppGinjector.get.instance().getPlaceProvider().getDefaultPlace()
-				.displayOnArrival(Message.createErrorMessage("Invitation token is not valid.")).go();
+				.displayOnArrival(Message.createErrorMessage(profileMessages.invitationTokenNotValid())).go();
 		return false;
 	}
 

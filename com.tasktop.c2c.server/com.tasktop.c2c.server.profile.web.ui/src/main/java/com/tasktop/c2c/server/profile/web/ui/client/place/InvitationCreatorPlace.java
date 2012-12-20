@@ -21,11 +21,11 @@ import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class InvitationCreatorPlace extends LoggedInPlace implements HeadingPlace {
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	@Override
 	public String getHeading() {
-		return messages.invitationCreator();
+		return profileMessages.invitationCreator();
 	}
 
 	public static PageMapping InvitationCreator = new PageMapping(new InvitationCreatorPlace.Tokenizer(),

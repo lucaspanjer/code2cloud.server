@@ -34,6 +34,8 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTeamSummary;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ProjectTeamPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace,
 		BreadcrumbPlace, SectionPlace, WindowTitlePlace {
@@ -57,6 +59,7 @@ public class ProjectTeamPlace extends AbstractBatchFetchingPlace implements Head
 	private Project project;
 	private ProjectTeamSummary projectTeamSummary;
 	private List<Breadcrumb> breadcrumbs;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	protected ProjectTeamPlace(String projectId) {
 		this.projectId = projectId;
@@ -115,7 +118,7 @@ public class ProjectTeamPlace extends AbstractBatchFetchingPlace implements Head
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(getHref(), "Team"));
+		breadcrumbs.add(new Breadcrumb(getHref(), profileMessages.team()));
 	}
 
 	@Override

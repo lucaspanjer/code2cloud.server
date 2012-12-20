@@ -29,7 +29,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
  */
 public class AppHistoryMapper extends AbstractPlaceHistoryMapper<Place> {
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	@Override
 	protected PrefixAndToken getPrefixAndToken(Place newPlace) {
@@ -68,7 +68,7 @@ public class AppHistoryMapper extends AbstractPlaceHistoryMapper<Place> {
 		}
 
 		AppGinjector.get.instance().getNotifier()
-				.displayMessage(Message.createErrorMessage(messages.unexpectedError() + " (HTTP 404)"));
+				.displayMessage(Message.createErrorMessage(profileMessages.unexpectedError() + " (HTTP 404)"));
 		return AppGinjector.get.instance().getPlaceController().getWhere();
 	}
 }

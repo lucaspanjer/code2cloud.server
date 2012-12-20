@@ -26,6 +26,8 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetPasswordReset
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetPasswordResetTokenResult;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.util.ExceptionsUtil;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 
@@ -49,6 +51,7 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 
 	private String resetToken;
 	private String username;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private ResetPasswordPlace(String resetToken) {
 		this.resetToken = resetToken;
@@ -64,7 +67,7 @@ public class ResetPasswordPlace extends AnonymousPlace implements HeadingPlace {
 
 	@Override
 	public String getHeading() {
-		return "Password Reset";
+		return profileMessages.passwordReset();
 	}
 
 	@Override

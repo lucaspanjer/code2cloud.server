@@ -29,7 +29,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
  */
 public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, WindowTitlePlace {
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private boolean createAvailable = false;
 
@@ -46,7 +46,7 @@ public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	@Override
 	public String getHeading() {
-		return messages.createProject();
+		return profileMessages.createProject();
 	}
 
 	protected NewProjectPlace() {
@@ -67,7 +67,7 @@ public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle(messages.createProject());
+		return WindowTitleBuilder.createWindowTitle(profileMessages.createProject());
 	}
 
 	@Override

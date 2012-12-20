@@ -21,8 +21,8 @@ import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AnonymousPlace;
-import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
+import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProfileDataFromGitubConnectionAction;
@@ -43,6 +43,7 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 /**
  * @author straxus (Tasktop Technologies Inc.)
@@ -79,6 +80,7 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 	private ProjectInvitationToken projectInvitationTokenData;
 	private Project projectForInvitationToken;
 	private Profile githubProfile;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public String getPrefix() {
 		if (StringUtils.hasText(signUpToken)) {
@@ -112,7 +114,7 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 
 	@Override
 	public String getHeading() {
-		return "Sign Up";
+		return profileMessages.signUp();
 	}
 
 	private SignUpPlace(String signUpToken, IPlace postSignUpPlace) {
@@ -181,11 +183,11 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 
 		if (tokenRequired && !StringUtils.hasText(signUpToken)) {
 			ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace()
-					.displayOnArrival(Message.createErrorMessage("Token required for sign up.")).go();
+					.displayOnArrival(Message.createErrorMessage(profileMessages.tokenRequiredForSignUp())).go();
 			return;
 		} else if (tokenRequired && projectInvitationTokenData == null && signUpTokenData == null) {
 			ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace()
-					.displayOnArrival(Message.createErrorMessage("Invitation token is not valid.")).go();
+					.displayOnArrival(Message.createErrorMessage(profileMessages.invitationTokenNotValid())).go();
 			return;
 		}
 
@@ -194,7 +196,7 @@ public class SignUpPlace extends AnonymousPlace implements HeadingPlace, WindowT
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle("Sign Up");
+		return WindowTitleBuilder.createWindowTitle(profileMessages.signUp());
 	}
 
 	/**

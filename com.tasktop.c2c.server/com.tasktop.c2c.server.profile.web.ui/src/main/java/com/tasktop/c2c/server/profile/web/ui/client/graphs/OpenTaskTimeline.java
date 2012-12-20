@@ -26,7 +26,7 @@ import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
 
 public class OpenTaskTimeline extends AreaChart {
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public void draw(List<TaskSummary> summaries) {
 		AbstractDataTable data = createData(summaries);
@@ -37,7 +37,7 @@ public class OpenTaskTimeline extends AreaChart {
 		Options options = Options.create();
 		options.setWidth(DashboardChartConstants.TIMELINE_WIDTH);
 		options.setHeight(DashboardChartConstants.TIMELINE_HEIGHT);
-		options.setTitle(messages.openTasks());
+		options.setTitle(profileMessages.openTasks());
 		options.setLegend(LegendPosition.NONE);
 		options.setPointSize(DashboardChartConstants.POINT_SIZE);
 
@@ -47,8 +47,8 @@ public class OpenTaskTimeline extends AreaChart {
 	private AbstractDataTable createData(List<TaskSummary> summaries) {
 		DataTable data = DataTable.create();
 
-		data.addColumn(ColumnType.DATE, messages.day());
-		data.addColumn(ColumnType.NUMBER, messages.openTasks());
+		data.addColumn(ColumnType.DATE, profileMessages.day());
+		data.addColumn(ColumnType.NUMBER, profileMessages.openTasks());
 
 		data.addRows(summaries.size());
 		int row = 0;

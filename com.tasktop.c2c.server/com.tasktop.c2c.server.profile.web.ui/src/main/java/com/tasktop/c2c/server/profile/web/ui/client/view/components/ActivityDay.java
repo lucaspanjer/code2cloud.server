@@ -37,7 +37,7 @@ public class ActivityDay extends Composite {
 	private static Binder uiBinder = GWT.create(Binder.class);
 	public static BuildResources buildResources = GWT.create(BuildResources.class);
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public ActivityDay() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -64,7 +64,7 @@ public class ActivityDay extends Composite {
 			} else if (activity instanceof WikiActivity) {
 				row = new WikiActivityRow((WikiActivity) activity);
 			} else {
-				throw new UnsupportedOperationException(messages.unknownActivityType());
+				throw new UnsupportedOperationException(profileMessages.unknownActivityType());
 			}
 
 			dayPanel.add(row);

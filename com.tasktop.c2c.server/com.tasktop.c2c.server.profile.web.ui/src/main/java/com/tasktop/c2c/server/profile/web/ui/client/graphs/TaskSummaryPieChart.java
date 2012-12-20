@@ -26,7 +26,7 @@ import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
  */
 public class TaskSummaryPieChart extends PieChart {
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public void draw(TaskSummary taskSummary) {
 		AbstractDataTable data = createData(taskSummary);
@@ -45,8 +45,8 @@ public class TaskSummaryPieChart extends PieChart {
 	private AbstractDataTable createData(TaskSummary taskSummary) {
 		DataTable data = DataTable.create();
 
-		data.addColumn(ColumnType.STRING, messages.severity());
-		data.addColumn(ColumnType.NUMBER, messages.total());
+		data.addColumn(ColumnType.STRING, profileMessages.severity());
+		data.addColumn(ColumnType.NUMBER, profileMessages.total());
 
 		data.addRows(taskSummary.getItems().size());
 		int i = 0;

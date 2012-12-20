@@ -53,6 +53,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Creating product...")
 	String creatingProduct();
 
+	@DefaultMessage("Dashboard")
+	String dashboard();
+
 	@DefaultMessage("Day")
 	String day();
 
@@ -67,6 +70,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Deleting release...")
 	String deletingRelease();
+
+	@DefaultMessage("Deployments")
+	String deployments();
 
 	@DefaultMessage("Edit")
 	String edit();
@@ -116,6 +122,12 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Invitation sent to")
 	String invitationSentTo();
 
+	@DefaultMessage("Invitation to join {0}")
+	String invitationToJoin(String projectName);
+
+	@DefaultMessage("Invitation token is not valid.")
+	String invitationTokenNotValid();
+
 	@DefaultMessage("Member")
 	String member();
 
@@ -130,6 +142,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Owner")
 	String owner();
+
+	@DefaultMessage("Password Reset")
+	String passwordReset();
 
 	@DefaultMessage("Product created.")
 	String productCreated();
@@ -182,6 +197,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Signed out")
 	String signedOut();
 
+	@DefaultMessage("Sign Up")
+	String signUp();
+
 	@DefaultMessage("Started.")
 	String started();
 
@@ -191,8 +209,14 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Stopped.")
 	String stopped();
 
+	@DefaultMessage("Team")
+	String team();
+
 	@DefaultMessage("Team member updated.")
 	String teamMemberUpdated();
+
+	@DefaultMessage("Token required for sign up.")
+	String tokenRequiredForSignUp();
 
 	@DefaultMessage("Total")
 	String total();

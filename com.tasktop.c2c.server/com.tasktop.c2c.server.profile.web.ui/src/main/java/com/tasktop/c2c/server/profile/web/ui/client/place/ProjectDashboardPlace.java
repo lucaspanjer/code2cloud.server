@@ -32,6 +32,8 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ProjectDashboardPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace,
 		BreadcrumbPlace, SectionPlace, WindowTitlePlace {
@@ -55,6 +57,7 @@ public class ProjectDashboardPlace extends AbstractBatchFetchingPlace implements
 	private String projectId;
 	private Project project;
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	@Override
 	public Project getProject() {
@@ -111,12 +114,12 @@ public class ProjectDashboardPlace extends AbstractBatchFetchingPlace implements
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ProjectDashboardPlace.createPlace(project.getIdentifier()).getHref(),
-				"Dashboard"));
+		breadcrumbs.add(new Breadcrumb(ProjectDashboardPlace.createPlace(project.getIdentifier()).getHref(), profileMessages
+				.dashboard()));
 	}
 
 	@Override
 	public String getWindowTitle() {
-		return "Dashboard - " + project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
+		return profileMessages.dashboard() + " - " + project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
 	}
 }

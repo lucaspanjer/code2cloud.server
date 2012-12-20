@@ -25,7 +25,7 @@ import com.tasktop.c2c.server.scm.domain.ScmSummary;
 
 public class ScmActivityTimeline extends AreaChart {
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public void draw(List<ScmSummary> summaries) {
 		AbstractDataTable data = createData(summaries);
@@ -36,7 +36,7 @@ public class ScmActivityTimeline extends AreaChart {
 		Options options = Options.create();
 		options.setWidth(DashboardChartConstants.TIMELINE_WIDTH);
 		options.setHeight(DashboardChartConstants.TIMELINE_HEIGHT);
-		options.setTitle(messages.commits());
+		options.setTitle(profileMessages.commits());
 		options.setLegend(LegendPosition.NONE);
 		options.setPointSize(DashboardChartConstants.POINT_SIZE);
 		options.set("hAxis.fontSize", DashboardChartConstants.H_AXIS_FONT_SIZE);
@@ -47,9 +47,9 @@ public class ScmActivityTimeline extends AreaChart {
 	private AbstractDataTable createData(List<ScmSummary> summaries) {
 		DataTable data = DataTable.create();
 
-		data.addColumn(ColumnType.DATE, messages.day());
+		data.addColumn(ColumnType.DATE, profileMessages.day());
 
-		data.addColumn(ColumnType.NUMBER, messages.commits());
+		data.addColumn(ColumnType.NUMBER, profileMessages.commits());
 
 		data.addRows(summaries.size());
 		int row = 0;

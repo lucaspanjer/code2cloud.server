@@ -39,7 +39,7 @@ import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
  */
 public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlace, WindowTitlePlace, BreadcrumbPlace {
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private Organization organization;
 
@@ -65,7 +65,7 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 
 	@Override
 	public String getHeading() {
-		return messages.editOrganization();
+		return profileMessages.editOrganization();
 	}
 
 	protected OrganizationAdminPlace(String organizationId) {
@@ -91,7 +91,7 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle(messages.editOrganization());
+		return WindowTitleBuilder.createWindowTitle(profileMessages.editOrganization());
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 
 	private void createBreadcrumbs(Organization organization) {
 		breadcrumbs = Breadcrumb.getOrganizationSpecificBreadcrumbs(organization);
-		breadcrumbs.add(new Breadcrumb(getHref(), messages.edit()));
+		breadcrumbs.add(new Breadcrumb(getHref(), profileMessages.edit()));
 	}
 
 	@Override

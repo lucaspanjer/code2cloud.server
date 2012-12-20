@@ -29,7 +29,7 @@ import com.tasktop.c2c.server.scm.domain.Profile;
  */
 public class CommitsByAuthorPieChart extends PieChart {
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public void draw(Map<Profile, Integer> commitsByAuthor) {
 		if (commitsByAuthor == null || commitsByAuthor.isEmpty()) {
@@ -64,8 +64,8 @@ public class CommitsByAuthorPieChart extends PieChart {
 	private AbstractDataTable createData(Map<Profile, Integer> commitsByAuthor) {
 		DataTable data = DataTable.create();
 
-		data.addColumn(ColumnType.STRING, messages.author());
-		data.addColumn(ColumnType.NUMBER, messages.commits());
+		data.addColumn(ColumnType.STRING, profileMessages.author());
+		data.addColumn(ColumnType.NUMBER, profileMessages.commits());
 
 		data.addRows(commitsByAuthor.size());
 		int i = 0;

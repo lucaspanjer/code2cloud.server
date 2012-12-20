@@ -26,7 +26,7 @@ import com.tasktop.c2c.server.tasks.domain.TaskSummaryItem;
 
 public class ActivitySparkTimeline extends ImageSparklineChart {
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public void draw(List<TaskSummary> summaries, List<ScmSummary> scmSummaries) {
 		AbstractDataTable data = createData(summaries, scmSummaries);
@@ -51,12 +51,12 @@ public class ActivitySparkTimeline extends ImageSparklineChart {
 		DataTable data = DataTable.create();
 
 		if (summaries != null && !summaries.isEmpty()) {
-			data.addColumn(ColumnType.NUMBER, messages.openTasks());
-			data.addColumn(ColumnType.NUMBER, messages.closedTasks());
+			data.addColumn(ColumnType.NUMBER, profileMessages.openTasks());
+			data.addColumn(ColumnType.NUMBER, profileMessages.closedTasks());
 		}
 
 		if (scmSummaries != null && !scmSummaries.isEmpty()) {
-			data.addColumn(ColumnType.NUMBER, messages.commits());
+			data.addColumn(ColumnType.NUMBER, profileMessages.commits());
 		}
 
 		int numRows = summaries != null ? summaries.size() : scmSummaries != null ? scmSummaries.size() : 0;

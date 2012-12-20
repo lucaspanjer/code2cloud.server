@@ -42,7 +42,7 @@ public class App {
 
 	private static final AppGinjector injector = AppGinjector.get.instance();
 
-	private ProfileMessages messages = AppGinjector.get.instance().getProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public void run(HasWidgets.ForIsWidget root) {
 		addHandlers();
@@ -80,8 +80,8 @@ public class App {
 		GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
 			@Override
 			public void onUncaughtException(Throwable e) {
-				injector.getNotifier().displayMessage(Message.createErrorMessage(messages.clientSideErrorOccurred()));
-				appLogger.log(Level.SEVERE, messages.clientSideError(), e);
+				injector.getNotifier().displayMessage(Message.createErrorMessage(profileMessages.clientSideErrorOccurred()));
+				appLogger.log(Level.SEVERE, profileMessages.clientSideError(), e);
 			}
 		});
 
@@ -128,7 +128,7 @@ public class App {
 			public void success(Boolean result) {
 				injector.getAppState().setCredentials(null);
 				IPlace place = injector.getPlaceProvider().getAfterSignoutPlace();
-				place.displayOnArrival(Message.createSuccessMessage(messages.signedOut()));
+				place.displayOnArrival(Message.createSuccessMessage(profileMessages.signedOut()));
 				place.go();
 			}
 		});
