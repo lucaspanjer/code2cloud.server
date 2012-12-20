@@ -63,7 +63,7 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 
 	@Override
 	public String getHeading() {
-		return "Projects for " + organization.getName();
+		return super.messages.projectsForOrganization(organization.getName());
 	}
 
 	public static OrganizationProjectsPlace createPlaceForOrg(String orgId) {
@@ -88,7 +88,7 @@ public class OrganizationProjectsPlace extends ProjectsPlace {
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle("Browse Projects");
+		return WindowTitleBuilder.createWindowTitle(super.messages.browseProjects());
 	}
 
 	@Override

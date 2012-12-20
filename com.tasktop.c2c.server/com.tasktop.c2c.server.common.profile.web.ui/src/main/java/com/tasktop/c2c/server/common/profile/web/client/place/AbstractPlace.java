@@ -17,6 +17,7 @@ import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
@@ -32,6 +33,7 @@ public abstract class AbstractPlace extends Place implements IPlace {
 
 	protected Message displayOnArrival;
 	protected Notifier notifier = ProfileGinjector.get.instance().getNotifier();
+	protected CommonProfileMessages messages = ProfileGinjector.get.instance().getCommonProfileMessages();
 
 	public AbstractPlace displayOnArrival(Message displayOnArrival) {
 		this.displayOnArrival = displayOnArrival;
@@ -100,9 +102,9 @@ public abstract class AbstractPlace extends Place implements IPlace {
 
 	private String getNotAuthorizedMessage() {
 		if (ProfileGinjector.get.instance().getAppState().getCredentials().getProfile().getAccountDisabled()) {
-			return "Your account has been disabled";
+			return messages.accountDisabled();
 		}
-		return "You do not have permissions to visit the page";
+		return messages.noPermissionsToVisitPage();
 	}
 
 	/*

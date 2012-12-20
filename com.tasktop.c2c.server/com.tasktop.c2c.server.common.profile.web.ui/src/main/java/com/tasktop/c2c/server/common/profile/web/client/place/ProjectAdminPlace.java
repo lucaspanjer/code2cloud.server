@@ -12,11 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.profile.web.client.place;
 
-import java.util.List;
-
-import net.customware.gwt.dispatch.shared.Action;
-
-
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult;
@@ -55,7 +50,7 @@ public abstract class ProjectAdminPlace extends LoggedInPlace implements Heading
 
 	@Override
 	public String getHeading() {
-		return "Project Admin";
+		return super.messages.projectAdmin();
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	@Override
 	public String getHeading() {
-		return "Legal Agreements";
+		return super.messages.legalAgreements();
 	}
 
 	public List<Agreement> getAgreements() {
@@ -87,6 +87,6 @@ public class AgreementsPlace extends LoggedInPlace implements HeadingPlace, Wind
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle("Legal Agreements");
+		return WindowTitleBuilder.createWindowTitle(super.messages.legalAgreements());
 	}
 }

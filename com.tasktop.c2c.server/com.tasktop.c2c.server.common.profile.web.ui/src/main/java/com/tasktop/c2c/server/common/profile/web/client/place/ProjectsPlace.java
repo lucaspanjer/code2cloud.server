@@ -14,8 +14,6 @@ package com.tasktop.c2c.server.common.profile.web.client.place;
 
 import java.util.LinkedHashMap;
 
-import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
-import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
@@ -54,15 +52,13 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 
 	private final String query;
 
-	private CommonProfileMessages messages = ProfileGinjector.get.instance().getCommonProfileMessages();
-
 	protected ProjectsPlace(String query) {
 		this.query = query;
 	}
 
 	@Override
 	public String getHeading() {
-		return messages.discoverProjects();
+		return super.messages.discoverProjects();
 	}
 
 	public static ProjectsPlace createPlace() {
@@ -86,7 +82,7 @@ public class ProjectsPlace extends AbstractBatchFetchingPlace implements Heading
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle(messages.browseProjects());
+		return WindowTitleBuilder.createWindowTitle(super.messages.browseProjects());
 	}
 
 	@Override

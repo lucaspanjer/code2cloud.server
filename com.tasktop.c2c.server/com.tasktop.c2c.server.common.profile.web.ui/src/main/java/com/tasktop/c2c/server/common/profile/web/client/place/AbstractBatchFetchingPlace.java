@@ -162,23 +162,23 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 	 * @return true to continue with place. false if we should abort
 	 */
 	protected boolean handleExceptionInResults(Action<?> action, DispatchException dispatchException) {
-		List<String> messages = null;
+		List<String> errorMessages = null;
 
 		if (action instanceof KnowsErrorMessageAction) {
 			String aMessage = ((KnowsErrorMessageAction) action).getErrorMessage(dispatchException);
 			if (aMessage != null) {
-				messages = Collections.singletonList(aMessage);
+				errorMessages = Collections.singletonList(aMessage);
 			}
 		}
 
-		if (messages == null && AsyncCallbackSupport.getErrorHandler() != null) {
-			messages = AsyncCallbackSupport.getErrorHandler().getErrorMessages(dispatchException);
+		if (errorMessages == null && AsyncCallbackSupport.getErrorHandler() != null) {
+			errorMessages = AsyncCallbackSupport.getErrorHandler().getErrorMessages(dispatchException);
 		}
 
-		if (messages == null) {
-			messages = Collections.singletonList("A server side error occured");
+		if (errorMessages == null) {
+			errorMessages = Collections.singletonList(super.messages.serverSideErrorOccured());
 		}
-		notifier.displayMessage(Message.createErrorMessage(StringUtils.concatenate(messages)));
+		notifier.displayMessage(Message.createErrorMessage(StringUtils.concatenate(errorMessages)));
 		return false;
 	}
 
