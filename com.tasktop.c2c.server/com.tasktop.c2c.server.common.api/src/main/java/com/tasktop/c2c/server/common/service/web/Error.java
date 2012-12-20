@@ -16,7 +16,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -124,7 +123,7 @@ public class Error {
 			String fieldName = error instanceof FieldError ? ((FieldError) error).getField() : null;
 			String defaultMessage;
 			try {
-				defaultMessage = messageSource.getMessage(error, getLocale());
+				defaultMessage = messageSource.getMessage(error, validationException.getLocale());
 			} catch (NoSuchMessageException e) {
 				defaultMessage = error.getDefaultMessage();
 				LoggerFactory.getLogger(Error.class).warn(e.getMessage(), e);
@@ -136,11 +135,6 @@ public class Error {
 			}
 			message += defaultMessage;
 		}
-	}
-
-	private Locale getLocale() {
-		// FIXME
-		return Locale.ENGLISH;
 	}
 
 	/**

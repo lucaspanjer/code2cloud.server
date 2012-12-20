@@ -22,7 +22,6 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
-
 public class AuthenticationToken implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,6 +31,8 @@ public class AuthenticationToken implements Serializable, Cloneable {
 	private String username;
 	private String firstName;
 	private String lastName;
+	private String language;
+
 	private List<String> authorities = new ArrayList<String>();
 
 	public AuthenticationToken() {
@@ -83,6 +84,14 @@ public class AuthenticationToken implements Serializable, Cloneable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	public synchronized List<String> getAuthorities() {

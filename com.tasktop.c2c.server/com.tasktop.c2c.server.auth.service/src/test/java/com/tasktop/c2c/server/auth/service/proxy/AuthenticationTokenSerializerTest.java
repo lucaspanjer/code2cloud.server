@@ -46,6 +46,7 @@ public class AuthenticationTokenSerializerTest {
 		token.setFirstName("Joe");
 		token.setLastName("Tester");
 		token.setUsername("jtester");
+		token.setLanguage("en");
 		token.setIssued(new Date());
 		token.setKey(UUID.randomUUID().toString());
 		token.setExpiry(new Date(System.currentTimeMillis() + 1000000L));

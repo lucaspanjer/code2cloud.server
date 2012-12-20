@@ -860,7 +860,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 					errors.reject("task.taskStatusRequiresComment", new Object[] { newStatusValue },
 							"A comment is required to save a task with status " + newStatusValue);
 
-					throw new ValidationException(errors);
+					throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
 				}
 			}
 		} catch (NoResultException e) {
@@ -872,7 +872,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 				errors.reject("task.invalidWorkflow", new Object[] { newStatusValue, originalStatusValue },
 						"Invalid workflow");
 			}
-			throw new ValidationException(errors);
+			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
 		}
 	}
 
@@ -957,7 +957,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			}
 		}
 		if (errors.hasErrors()) {
-			throw new ValidationException(errors);
+			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
 		}
 		taskCustomFieldService.updateTaskCustomFields(internalTask.getId(), fields);
 	}
@@ -1595,7 +1595,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			}
 		}
 
-		return new ValidationException(allErrors);
+		return new ValidationException(allErrors, AuthenticationServiceUser.getCurrentUserLocale());
 	}
 
 	@Override
@@ -1925,7 +1925,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		if (findKeyworddefByName(keyword) != null) {
 			Errors errors = createErrors(keyword);
 			errors.reject("keyword.nameExists");
-			throw new ValidationException(errors);
+			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
 		}
 
 		Keyworddef keyworddef = createManaged(keyword);
@@ -1968,7 +1968,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		if (keyworddef.getKeywordses().size() > 0) {
 			Errors errors = createErrors(keyworddef);
 			errors.reject("keyword.mappedToTasks");
-			throw new ValidationException(errors);
+			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
 		}
 		entityManager.remove(keyworddef);
 	}
@@ -2003,7 +2003,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		if (!q.getResultList().isEmpty()) {
 			Errors errors = createErrors(query);
 			errors.reject("query.nameUnique");
-			throw new ValidationException(errors);
+			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
 		}
 	}
 
@@ -2099,7 +2099,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			if (otherValue.getValue().equals(value.getValue()) && !otherValue.getId().equals(value.getId())) {
 				Errors errors = createErrors(value);
 				errors.reject("customField.value.nameUnique");
-				throw new ValidationException(errors);
+				throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
 			}
 		}
 	}

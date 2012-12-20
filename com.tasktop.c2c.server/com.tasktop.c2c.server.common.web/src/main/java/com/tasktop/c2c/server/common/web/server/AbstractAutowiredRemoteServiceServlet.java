@@ -18,7 +18,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -182,7 +181,7 @@ public abstract class AbstractAutowiredRemoteServiceServlet extends RemoteServic
 					// Check to see if this is one of our custom messages, intended for a multi-object form - if it is,
 					// chop it up.
 					Matcher matcher = validationPattern.matcher(error.getCode());
-					String origErrorMsg = messageSource.getMessage(error, getLocale());
+					String origErrorMsg = messageSource.getMessage(error, exception.getLocale());
 
 					if (matcher.find()) {
 						// This is one of our custom messages - try message lookup with the custom section removed
@@ -190,7 +189,7 @@ public abstract class AbstractAutowiredRemoteServiceServlet extends RemoteServic
 
 						// This will return a new error message if it's present, or the original if it wasn't.
 						String libraryErrorMessage = messageSource.getMessage(newCode, error.getArguments(),
-								origErrorMsg, getLocale());
+								origErrorMsg, exception.getLocale());
 
 						// Grab our first match, and then issue another find() call to grab the second group.
 						String className = matcher.group(1);
@@ -231,10 +230,4 @@ public abstract class AbstractAutowiredRemoteServiceServlet extends RemoteServic
 	protected void handle(EntityNotFoundException e) throws NoSuchEntityException {
 		throw new NoSuchEntityException();
 	}
-
-	private Locale getLocale() {
-		// FIXME get user's locale
-		return Locale.ENGLISH;
-	}
-
 }

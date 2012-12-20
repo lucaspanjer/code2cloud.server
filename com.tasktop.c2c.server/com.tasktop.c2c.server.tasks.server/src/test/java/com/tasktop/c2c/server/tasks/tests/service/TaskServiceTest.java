@@ -2953,6 +2953,7 @@ public class TaskServiceTest {
 		token.setFirstName("first");
 		token.setLastName("Las");
 		token.setUsername("username");
+		token.setLanguage("en");
 		token.setKey("foobar");
 
 		SecurityContextHolder.getContext().setAuthentication(

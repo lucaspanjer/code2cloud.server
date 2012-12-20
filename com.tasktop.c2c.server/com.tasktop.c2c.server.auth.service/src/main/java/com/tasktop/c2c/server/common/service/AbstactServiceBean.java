@@ -21,9 +21,11 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
+
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
- *
+ * 
  */
 public class AbstactServiceBean {
 
@@ -57,7 +59,8 @@ public class AbstactServiceBean {
 			validator.validate(target, validationResult);
 		}
 		if (validationResult.hasErrors()) {
-			throw new ValidationException(validationResult, messageSource);
+			throw new ValidationException(validationResult, messageSource,
+					AuthenticationServiceUser.getCurrentUserLocale());
 		}
 	}
 

@@ -24,23 +24,32 @@ public class ValidationException extends Exception {
 
 	private final Errors errors;
 
-	public ValidationException(Errors errors) {
+	private final Locale locale;
+
+	public ValidationException(Errors errors, Locale locale) {
 		super(computeMessage(errors));
 		this.errors = errors;
+		this.locale = locale;
 	}
 
-	public ValidationException(Errors errors, MessageSource messageSource) {
-		super(computeMessage(errors, messageSource));
+	public ValidationException(Errors errors, MessageSource messageSource, Locale locale) {
+		super(computeMessage(errors, messageSource, locale));
 		this.errors = errors;
+		this.locale = locale;
 	}
 
 	public ValidationException(String message, Errors errors) {
 		super(message);
 		this.errors = errors;
+		this.locale = null;
 	}
 
 	public Errors getErrors() {
 		return errors;
+	}
+
+	public Locale getLocale() {
+		return locale;
 	}
 
 	private static String computeMessage(Errors errors) {
@@ -54,13 +63,13 @@ public class ValidationException extends Exception {
 		return message.toString();
 	}
 
-	private static String computeMessage(Errors errors, MessageSource messageSource) {
+	private static String computeMessage(Errors errors, MessageSource messageSource, Locale locale) {
 		StringBuffer message = new StringBuffer();
 		for (ObjectError error : errors.getAllErrors()) {
 			if (message.length() > 0) {
 				message.append(", ");
 			}
-			message.append(messageSource.getMessage(error, Locale.ENGLISH));
+			message.append(messageSource.getMessage(error, locale));
 		}
 		return message.toString();
 	}

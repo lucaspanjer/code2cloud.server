@@ -56,6 +56,7 @@ public class TestSecurity {
 		if (token.getUsername() == null) {
 			token.setUsername(profile.getLoginName());
 		}
+		token.setLanguage("en");
 		return token;
 	}
 

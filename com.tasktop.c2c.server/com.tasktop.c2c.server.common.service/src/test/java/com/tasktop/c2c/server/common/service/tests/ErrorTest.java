@@ -17,6 +17,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 
+import java.util.Locale;
+
 import org.junit.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.ObjectError;
@@ -26,7 +28,6 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.web.Error;
 
-
 public class ErrorTest {
 
 	@Test
@@ -34,7 +35,7 @@ public class ErrorTest {
 		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(this, "foo");
 		errors.addError(new ObjectError("foo", "message1"));
 		errors.addError(new ObjectError("foo", "message2"));
-		ValidationException originalException = new ValidationException(errors);
+		ValidationException originalException = new ValidationException(errors, Locale.ENGLISH);
 
 		Error error = new Error(originalException);
 

@@ -24,6 +24,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
@@ -31,6 +32,7 @@ import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.github.api.GitHub;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
+import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.QueryResult;
@@ -57,6 +59,9 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 
 	@Autowired
 	protected UsersConnectionRepository usersConnRepo;
+
+	@Autowired
+	MessageSource messageSource;
 
 	@Override
 	public Profile getProfileByUsername(String username) throws EntityNotFoundException {
@@ -114,7 +119,8 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 		if (retProfile != null && retProfile.getDisabled() != null && retProfile.getDisabled()) {
 			throw new AuthenticationException("Account disabled");
 		} else if (retProfile == null) {
-			throw new AuthenticationException("Username and password do not match");
+			throw new AuthenticationException(messageSource.getMessage("username.password.differ", null,
+					AuthenticationServiceUser.getCurrentUserLocale()));
 		}
 		if (entityManager.contains(retProfile)) {
 			entityManager.refresh(retProfile);

@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.auth.service.proxy;
 
+import java.util.Locale;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,6 +40,7 @@ public class AuthenticationTokenUserDetailsService implements AuthenticationUser
 				// We have an anonymous user - plug in our role as our username so that Spring's User object doesn't
 				// throw an exception (it hates empty usernames).
 				authenticationToken.setUsername(Role.Anonymous);
+				authenticationToken.setLanguage(Locale.getDefault().getLanguage());
 				authenticationToken.setKey(Role.Anonymous);
 			}
 

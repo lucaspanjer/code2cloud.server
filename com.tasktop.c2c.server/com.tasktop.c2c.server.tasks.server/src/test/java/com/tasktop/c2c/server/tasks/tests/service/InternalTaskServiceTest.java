@@ -90,6 +90,7 @@ public class InternalTaskServiceTest {
 		authenticationToken.setExpiry(new Date(authenticationToken.getIssued().getTime() + 100000000L));
 		authenticationToken.setKey(UUID.randomUUID().toString());
 		authenticationToken.setUsername(username);
+		authenticationToken.setLanguage("en");
 
 		TestSecurity.login(authenticationToken);
 

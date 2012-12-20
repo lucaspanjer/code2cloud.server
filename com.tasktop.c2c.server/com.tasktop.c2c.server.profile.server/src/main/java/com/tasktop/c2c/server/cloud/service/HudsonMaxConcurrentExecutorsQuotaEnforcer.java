@@ -53,7 +53,7 @@ public class HudsonMaxConcurrentExecutorsQuotaEnforcer implements QuotaEnforcer<
 				EnumSet.of(ServiceType.BUILD_SLAVE), projectIdentifier);
 		if (currentSlaves.size() >= maxSlaves) {
 			throw new ValidationException("Maximum number of concurrent build executors (" + quota.getValue()
-					+ ") already reached.", null);
+					+ ") already reached.", null); // TODO Internationalize this
 		}
 	}
 

@@ -41,6 +41,13 @@ public class ProfileAuthenticationServiceBean extends AbstractAuthenticationServ
 	protected IdentityManagmentService identityManagmentService;
 
 	@Override
+	protected AuthenticationToken createAuthenticationToken(String username, Profile data) {
+		AuthenticationToken authToken = super.createAuthenticationToken(username, data);
+		authToken.setLanguage(data.getLanguage());
+		return authToken;
+	}
+
+	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
 
 		Profile profile;

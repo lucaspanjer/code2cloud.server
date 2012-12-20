@@ -54,6 +54,7 @@ public class InternalAuthenticationServiceTest {
 		origToken.setFirstName("first");
 		origToken.setLastName("last");
 		origToken.setUsername("username");
+		origToken.setLanguage("en");
 		assertEquals(3, origToken.getAuthorities().size());
 	}
 

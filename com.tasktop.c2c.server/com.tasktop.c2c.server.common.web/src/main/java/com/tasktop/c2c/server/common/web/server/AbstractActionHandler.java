@@ -15,7 +15,6 @@ package com.tasktop.c2c.server.common.web.server;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,7 +54,7 @@ public abstract class AbstractActionHandler<A extends Action<R>, R extends Resul
 					// Check to see if this is one of our custom messages, intended for a multi-object form - if it is,
 					// chop it up.
 					Matcher matcher = validationPattern.matcher(error.getCode());
-					String origErrorMsg = messageSource.getMessage(error, getLocale());
+					String origErrorMsg = messageSource.getMessage(error, exception.getLocale());
 
 					if (matcher.find()) {
 						// This is one of our custom messages - try message lookup with the custom section removed
@@ -63,7 +62,7 @@ public abstract class AbstractActionHandler<A extends Action<R>, R extends Resul
 
 						// This will return a new error message if it's present, or the original if it wasn't.
 						String libraryErrorMessage = messageSource.getMessage(newCode, error.getArguments(),
-								origErrorMsg, getLocale());
+								origErrorMsg, exception.getLocale());
 
 						// Grab our first match, and then issue another find() call to grab the second group.
 						String className = matcher.group(1);
@@ -100,10 +99,5 @@ public abstract class AbstractActionHandler<A extends Action<R>, R extends Resul
 	protected void handle(ConcurrentUpdateException exception) throws DispatchException {
 		throw new ActionException(new ValidationFailedException(
 				Arrays.asList("The object has been modified since it was loaded")));
-	}
-
-	private Locale getLocale() {
-		// FIXME get user's locale
-		return Locale.ENGLISH;
 	}
 }

@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.profile.service;
 
+
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
@@ -69,7 +70,7 @@ public class MaxProjectsQuotaEnforcer implements QuotaEnforcer<Project> {
 
 		if (org.getProjects().size() >= maxProjects) {
 			throw new ValidationException("Maximum number of Projects (" + quota.getValue() + ") already reached.",
-					null);
+					null); // TODO Internationalize this
 		}
 	}
 }

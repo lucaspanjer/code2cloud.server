@@ -18,6 +18,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 
@@ -497,7 +498,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 			} catch (IOException e) {
 				Errors errors = new BeanPropertyBindingResult(invitationTokens, "invitations");
 				errors.reject("invalidFormat", "Cannot read CSV: " + e.getMessage());
-				throw new ValidationException(errors);
+				throw new ValidationException(errors, Locale.ENGLISH); // TODO internationalize this
 			}
 			return profileService.createInvitations(invitationTokens, sendEmail);
 		} catch (ValidationException e) {
