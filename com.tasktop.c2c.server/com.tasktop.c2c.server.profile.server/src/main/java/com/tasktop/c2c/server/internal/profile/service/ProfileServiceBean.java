@@ -37,7 +37,6 @@ import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -96,6 +95,7 @@ import com.tasktop.c2c.server.profile.service.provider.TaskServiceProvider;
 import com.tasktop.c2c.server.profile.service.provider.WikiServiceProvider;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
 import com.tasktop.c2c.server.tasks.service.TaskService;
+import com.tasktop.c2c.server.util.VelocityUtils;
 import com.tasktop.c2c.server.wiki.domain.Person;
 import com.tasktop.c2c.server.wiki.service.WikiService;
 
@@ -161,11 +161,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Autowired
 	private QuotaService quotaService;
 
-	private String profileCreatedTemplate = "email_templates/profileCreated.vm";
-	private String passwordResetTemplate = "email_templates/passwordResetRequest.vm";
-	private String projectInvitationTemplate = "email_templates/projectInvitation.vm";
-	private String signUpInvitationTemplate = "email_templates/signUpInvitation.vm";
-	private String emailVerificationTemplate = "email_templates/emailVerification.vm";
+	private static final String profileCreatedTemplate = "email_templates/profileCreated.vm";
+	private static final String passwordResetTemplate = "email_templates/passwordResetRequest.vm";
+	private static final String projectInvitationTemplate = "email_templates/projectInvitation.vm";
+	private static final String signUpInvitationTemplate = "email_templates/signUpInvitation.vm";
+	private static final String emailVerificationTemplate = "email_templates/emailVerification.vm";
 
 	public void setTaskServiceProvider(TaskServiceProvider taskServiceProvider) {
 		this.taskServiceProvider = taskServiceProvider;
@@ -298,7 +298,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		model.put("AppName", configuration.getAppName());
 		model.put("AppBaseUrl", configuration.getProfileBaseUrl());
 
-		String bodyText = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, profileCreatedTemplate, model);
+		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, profileCreatedTemplate, model,
+				AuthenticationServiceUser.getCurrentUserLanguage());
 		Email email = new Email(profile.getEmail(), "Welcome to " + configuration.getAppName(), bodyText, "text/plain");
 		emailService.schedule(email);
 	}
@@ -787,13 +788,14 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	private void emailPasswordResetMessage(Profile profile, String passwordResetURL) {
-		Map<String, String> model = new HashMap<String, String>();
+		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("passwordResetURL", passwordResetURL);
 		model.put("AppName", configuration.getAppName());
 		model.put("AppBaseUrl", configuration.getProfileBaseUrl());
 		model.put("username", profile.getUsername());
 
-		String bodyText = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, passwordResetTemplate, model);
+		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, passwordResetTemplate, model,
+				AuthenticationServiceUser.getCurrentUserLanguage());
 		Email email = new Email(profile.getEmail(), "Password Reset", bodyText, "text/plain");
 		emailService.schedule(email);
 	}
@@ -879,7 +881,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		model.put("invitePageUrl", configuration.getInvitationURL(token.getToken()));
 		model.put("AppName", configuration.getAppName());
 
-		String bodyText = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, projectInvitationTemplate, model);
+		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, projectInvitationTemplate, model,
+				AuthenticationServiceUser.getCurrentUserLanguage());
 		Email email = new Email(token.getEmail(), token.getIssuingProfile().getFirstName()
 				+ " has invited you to a project on " + configuration.getAppName(), bodyText, "text/plain");
 		emailService.schedule(email);
@@ -968,7 +971,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		model.put("AppName", configuration.getAppName());
 		model.put("AppBaseUrl", configuration.getProfileBaseUrl());
 		model.put("URL", configuration.getEmailVerificationURL(token.getToken()));
-		String bodyText = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, emailVerificationTemplate, model);
+		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, emailVerificationTemplate, model,
+				AuthenticationServiceUser.getCurrentUserLanguage());
 		Email email = new Email(token.getEmail(), "Verify your " + configuration.getAppName() + " email", bodyText,
 				"text/plain");
 		emailService.schedule(email);
@@ -1474,7 +1478,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		model.put("AppName", configuration.getAppName());
 		model.put("AppBaseUrl", configuration.getProfileBaseUrl());
 		model.put("UpdateSite", configuration.getUpdateSiteUrl());
-		String bodyText = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, signUpInvitationTemplate, model);
+		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, signUpInvitationTemplate, model,
+				AuthenticationServiceUser.getCurrentUserLanguage());
 		Email email = new Email(token.getEmail(), "You have been invited to join " + configuration.getAppName(),
 				bodyText, "text/plain");
 		emailService.schedule(email);
