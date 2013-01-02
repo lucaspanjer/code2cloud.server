@@ -49,8 +49,10 @@ import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectDashboardPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.IProjectDiscoryView;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ProjectDiscoveryView extends AbstractComposite implements IProjectDiscoryView {
 
@@ -100,6 +102,7 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 	private CellList<Project> projectList;
 	private NoSelectionModel<Project> model;
 	private Presenter presenter;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private ProjectDiscoveryView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -193,10 +196,10 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 		if (isWatching) {
 			watchLink.addStyleName("watching");
-			watchLink.setHTML("<span></span>Unwatch");
+			watchLink.setHTML("<span></span>" + profileMessages.unwatch());
 		} else {
 			watchLink.addStyleName("watch");
-			watchLink.setHTML("<span></span>Watch");
+			watchLink.setHTML("<span></span>" + profileMessages.watch());
 		}
 
 	}
@@ -206,7 +209,6 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 		UIObject.setVisible(createAnchorElement, !AuthenticationHelper.isAnonymous());
 		setSelectedFilter(presenter.getProjectRelationship());
 		setCurrentQuery(presenter.getCurrentQuery());
-		// this.projectList.setRowData(presenter.getCurrentResult().getResultPage());
 	}
 
 	/**
@@ -304,20 +306,13 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 			SafeHtml commiterWatcherLabel = TEMPLATE.createCommitterAndWatcherLabels(value.getNumWatchers(),
 					value.getNumCommiters());
 
-			String projectLinkClass = "misc-icon";
-
-			if (AuthenticationHelper.isWatching(value.getIdentifier())) {
-				projectLinkClass += " watcher";
-			} else if (AuthenticationHelper.isCommitter(value.getIdentifier())) {
-				projectLinkClass += " commiter";
-			}
 			String projectLink = "<a href=\"" + ProjectHomePlace.createPlace(value.getIdentifier()).getHref()
 					+ "\" class=\"misc-icon\">" + value.getName() + "</a>";
 
 			SafeHtml projectLinkHtml = new SafeHtmlBuilder().appendHtmlConstant(projectLink).toSafeHtml();
 
-			Anchor dashboardLink = new Anchor("View Project Dashboard", ProjectDashboardPlace.createPlace(
-					value.getIdentifier()).getHref());
+			Anchor dashboardLink = new Anchor(profileMessages.viewProjectDashboard(), ProjectDashboardPlace
+					.createPlace(value.getIdentifier()).getHref());
 			SafeHtml dashboardLinkHtml = new SafeHtmlBuilder().appendHtmlConstant(dashboardLink.toString())
 					.toSafeHtml();
 

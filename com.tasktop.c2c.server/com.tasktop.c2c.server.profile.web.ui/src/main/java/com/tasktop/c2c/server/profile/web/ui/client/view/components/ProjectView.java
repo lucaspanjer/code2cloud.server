@@ -34,6 +34,8 @@ import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.wiki.domain.Page;
 import com.tasktop.c2c.server.wiki.web.ui.client.place.ProjectWikiViewPagePlace;
@@ -83,6 +85,8 @@ public class ProjectView extends AbstractComposite {
 	DivElement scmSectionDiv;
 	@UiField
 	DivElement mavenSectionDiv;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private ProjectView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -151,7 +155,7 @@ public class ProjectView extends AbstractComposite {
 	private void setHasWikiHome(boolean hasWikiHome) {
 		wikiHomePageLink.setVisible(hasWikiHome);
 		if (!hasWikiHome) {
-			wikiContentPanel.setWidget(new Label("You can add content here by creating a wiki page called \"Home\"."));
+			wikiContentPanel.setWidget(new Label(profileMessages.wikiHomePage()));
 		}
 	}
 
@@ -170,7 +174,6 @@ public class ProjectView extends AbstractComposite {
 	public void setHasWikiService(boolean hasWiki) {
 		readMoreAnchor.setVisible(hasWiki);
 		wikiWrapper.setVisible(hasWiki);
-		// wikiHomePageLink.setVisible(hasWiki);
 	}
 
 	public void setMavenService(ProjectService mavenService) {

@@ -22,7 +22,6 @@ import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -34,12 +33,12 @@ import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.event.LeaveProjectClickHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.event.UnwatchProjectClickHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.event.WatchProjectClickHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectAdminSettingsPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ProjectOptionsPopupPanel extends PopupPanel {
 
@@ -66,6 +65,8 @@ public class ProjectOptionsPopupPanel extends PopupPanel {
 	LIElement adminWrapper;
 	@UiField
 	UListElement wrapperList;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public ProjectOptionsPopupPanel() {
 		super(true);
@@ -96,7 +97,6 @@ public class ProjectOptionsPopupPanel extends PopupPanel {
 		removalList.clear();
 
 		final String projId = project.getIdentifier();
-		final EventBus bus = ProfileEntryPoint.getInstance().getEventBus();
 
 		adminLink.setHref(ProjectAdminSettingsPlace.createPlace(projId).getHref());
 
@@ -106,8 +106,11 @@ public class ProjectOptionsPopupPanel extends PopupPanel {
 			protected void onWatchSuccess(Project project) {
 				// Re-set the project to trigger a menu re-render.
 				ProjectOptionsPopupPanel.this.setProject(project);
-				ProfileGinjector.get.instance().getNotifier()
-						.displayMessage(Message.createSuccessMessage("Watching project " + project.getName()));
+				ProfileGinjector.get
+						.instance()
+						.getNotifier()
+						.displayMessage(
+								Message.createSuccessMessage(profileMessages.watchingProject(project.getName())));
 			}
 		}));
 
@@ -117,8 +120,11 @@ public class ProjectOptionsPopupPanel extends PopupPanel {
 			protected void onUnwatchSuccess(Project project) {
 				// Re-set the project to trigger a menu re-render.
 				ProjectOptionsPopupPanel.this.setProject(project);
-				ProfileGinjector.get.instance().getNotifier()
-						.displayMessage(Message.createSuccessMessage("Unwatched project " + project.getName()));
+				ProfileGinjector.get
+						.instance()
+						.getNotifier()
+						.displayMessage(
+								Message.createSuccessMessage(profileMessages.unwatchedProject(project.getName())));
 			}
 		}));
 
@@ -128,7 +134,8 @@ public class ProjectOptionsPopupPanel extends PopupPanel {
 			protected void onLeaveSuccess(Project project) {
 				// Navigate to the "My Projects" page.
 				ProfileGinjector.get.instance().getPlaceProvider().getDefaultPlace()
-						.displayOnArrival(Message.createSuccessMessage("Left project " + project.getName())).go();
+						.displayOnArrival(Message.createSuccessMessage(profileMessages.leftProject(project.getName())))
+						.go();
 			}
 		}));
 

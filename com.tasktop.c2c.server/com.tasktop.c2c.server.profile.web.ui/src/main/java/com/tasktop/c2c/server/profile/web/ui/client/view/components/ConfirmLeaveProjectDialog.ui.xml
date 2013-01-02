@@ -1,19 +1,19 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-	 <ui:style>
-    	.popup { width: 400px;
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
+	<ui:style>
+		.popup { width: 400px;
 				 padding: 15px; }
-  	</ui:style>
+	</ui:style>
 <g:HTMLPanel styleName="{style.popup}">
 		<div>
-			Please confirm you would like to leave this project as a member. Once you leave the project, you will not be able to participate in the project 
-			any longer and will require being invited to join the project.
+			<ui:txt from="{pm.confirmLeaveProjectMsg}"/>
 		</div>
 		<br/>
 		<div class="center">
-			  <g:Button ui:field="leaveButton" styleName="button special">Leave this Project</g:Button>
-			  <g:Button ui:field="cancelButton" styleName="button">Cancel</g:Button>
+			  <g:Button ui:field="leaveButton" styleName="button special"><ui:txt from="{pm.leaveProject}"/></g:Button>
+			  <g:Button ui:field="cancelButton" styleName="button"><ui:txt from="{pm.cancel}"/></g:Button>
 		  </div>	
 	</g:HTMLPanel>
 </ui:UiBinder>

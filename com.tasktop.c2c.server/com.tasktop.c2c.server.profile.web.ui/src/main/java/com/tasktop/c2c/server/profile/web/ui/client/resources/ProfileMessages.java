@@ -20,14 +20,38 @@ import com.google.gwt.i18n.client.Messages;
 @Generate(format = "com.google.gwt.i18n.rebind.format.PropertiesFormat")
 public interface ProfileMessages extends Messages {
 
+	@DefaultMessage("Active")
+	String active();
+
 	@DefaultMessage("Administer Users")
 	String administerUsers();
+
+	@DefaultMessage("Agree")
+	String agree();
 
 	@DefaultMessage("All")
 	String all();
 
 	@DefaultMessage("Author")
 	String author();
+
+	@DefaultMessage("Build")
+	String build();
+
+	@DefaultMessage("Build {0}")
+	String buildNumber(Integer number);
+
+	@DefaultMessage("{0} Build took {1}.")
+	String buildDuration(String description, String duration);
+
+	@DefaultMessage("resulted in {0}.")
+	String buildResult(String result);
+
+	@DefaultMessage("is pending.")
+	String buildResultPending();
+
+	@DefaultMessage("Cancel")
+	String cancel();
 
 	@DefaultMessage("You cannot disable your own account.")
 	String cannotDisableOwnAccount();
@@ -46,6 +70,18 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Component deleted.")
 	String componentDeleted();
+
+	@DefaultMessage("Confirm Leave This Project")
+	String confirmLeaveProject();
+
+	@DefaultMessage("Please confirm you would like to leave this project as a member. Once you leave the project, you will not be able to participate in the project any longer and will require being invited to join the project.")
+	String confirmLeaveProjectMsg();
+
+	@DefaultMessage("Create")
+	String create();
+
+	@DefaultMessage("Create Invitations")
+	String createInvitations();
 
 	@DefaultMessage("Create Project")
 	String createProject();
@@ -86,6 +122,12 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Deployments")
 	String deployments();
 
+	@DefaultMessage("Disable")
+	String disable();
+
+	@DefaultMessage("Disabled")
+	String disabled();
+
 	@DefaultMessage("Edit")
 	String edit();
 
@@ -95,8 +137,17 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Email")
 	String email();
 
+	@DefaultMessage("Email Address")
+	String emailAddress();
+
 	@DefaultMessage("Your email address has been verified.")
 	String emailVerified();
+
+	@DefaultMessage("Enable")
+	String enable();
+
+	@DefaultMessage("Enabled")
+	String enabled();
 
 	@DefaultMessage("The referenced entity cannot be found or no longer exists.")
 	String entityNotFound();
@@ -110,8 +161,20 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Error while saving")
 	String errorWhileSaving();
 
+	@DefaultMessage("First, Last, email@example.com")
+	String firstLastEmailExample();
+
+	@DefaultMessage("Enter your email address and your login information will be sent to you.")
+	String forgotPasswordEnterEmail();
+
+	@DefaultMessage("Format (one per line)")
+	String formatOnePerLine();
+
 	@DefaultMessage("Full Email List")
 	String fullEmailList();
+
+	@DefaultMessage("GitHub Account \"{0}\" Successfully Linked")
+	String githubAccountLinkedSuccessfully(String username);
 
 	@DefaultMessage("Help")
 	String help();
@@ -140,6 +203,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Invitation Creator")
 	String invitationCreator();
 
+	@DefaultMessage("Invitation recipients (CSV)")
+	String invitationRecipientsCsv();
+
 	@DefaultMessage("Invitations created.")
 	String invitationsCreated();
 
@@ -158,8 +224,17 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("First Name, Last Name, Email Address, Token, URL")
 	String invitationTokens();
 
+	@DefaultMessage("Leave this Project")
+	String leaveProject();
+
+	@DefaultMessage("Left project {0}")
+	String leftProject(String projectName);
+
 	@DefaultMessage("Member")
 	String member();
+
+	@DefaultMessage("{0} minutes")
+	String minutes(Long duration);
 
 	@DefaultMessage("Name")
 	String name();
@@ -176,11 +251,44 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Owner")
 	String owner();
 
+	@DefaultMessage("owner")
+	String ownerLowercase();
+
+	@DefaultMessage("{0} of {1}")
+	String pagerOf(String current, String total);
+
+	@DefaultMessage("{0} of over {1}")
+	String pagerOfOver(String current, String totalEstimate);
+
+	@DefaultMessage("Password")
+	String password();
+
+	@DefaultMessage("Confirm Password")
+	String passwordConfirm();
+
+	@DefaultMessage("Your password must:")
+	String passwordRulesLabel();
+
+	@DefaultMessage("have at least one digit character")
+	String passwordRulesIncludeDigit();
+
+	@DefaultMessage("have at least one lowercase character")
+	String passwordRulesIncludeLc();
+
+	@DefaultMessage("be at least 8 characters in length")
+	String passwordRulesMinLength();
+
+	@DefaultMessage("not include your username")
+	String passwordRulesNotIncludeUsername();
+
 	@DefaultMessage("Password Reset")
 	String passwordReset();
 
 	@DefaultMessage("Password and Confirm Password must be the same.")
 	String passwordAndConfirmationMustMatch();
+
+	@DefaultMessage("Please choose a new password.")
+	String passwordResetNewPassword();
 
 	@DefaultMessage("Password reset instructions have been sent to your email.")
 	String passwordResetInstructionsSent();
@@ -224,6 +332,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Public")
 	String public_();
 
+	@DefaultMessage("Recent Activity")
+	String recentActivity();
+
 	@DefaultMessage("Release deleted.")
 	String releaseDeleted();
 
@@ -236,6 +347,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Saved.")
 	String saved();
 
+	@DefaultMessage("Save New Password")
+	String saveNewPassword();
+
 	@DefaultMessage("Saving...")
 	String saving();
 
@@ -245,8 +359,17 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Saving project...")
 	String savingProject();
 
+	@DefaultMessage("Search")
+	String search();
+
+	@DefaultMessage("{0} seconds")
+	String seconds(Long duration);
+
 	@DefaultMessage("Sending invitation.")
 	String sendingInvitation();
+
+	@DefaultMessage("Send Invitation Emails")
+	String sendInvitationEmails();
 
 	@DefaultMessage("Settings")
 	String settings();
@@ -254,11 +377,20 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Severity")
 	String severity();
 
+	@DefaultMessage("Show")
+	String show();
+
 	@DefaultMessage("Signed out")
 	String signedOut();
 
+	@DefaultMessage("Sign In")
+	String signIn();
+
 	@DefaultMessage("Sign Up")
 	String signUp();
+
+	@DefaultMessage("Source")
+	String source();
 
 	@DefaultMessage("Started.")
 	String started();
@@ -274,6 +406,15 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Stopping...")
 	String stopping();
+
+	@DefaultMessage("Submit Request")
+	String submitRequest();
+
+	@DefaultMessage("System Invitations")
+	String systemInvitations();
+
+	@DefaultMessage("Tasks")
+	String tasks();
 
 	@DefaultMessage("Team")
 	String team();
@@ -293,15 +434,39 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Unknown activity type")
 	String unknownActivityType();
 
+	@DefaultMessage("Unwatch")
+	String unwatch();
+
+	@DefaultMessage("Unwatched project {0}")
+	String unwatchedProject(String projectName);
+
 	@DefaultMessage("Updating team member...")
 	String updatingTeamMember();
+
+	@DefaultMessage("View Project Dashboard")
+	String viewProjectDashboard();
+
+	@DefaultMessage("has invited you to collaborate on a project")
+	String userHasInvitedToCollaborate();
 
 	@DefaultMessage("Username")
 	String username();
 
+	@DefaultMessage("Watch")
+	String watch();
+
 	@DefaultMessage("Watcher")
 	String watcher();
 
+	@DefaultMessage("Watching project {0}")
+	String watchingProject(String projectName);
+
 	@DefaultMessage("Welcome To")
 	String welcomeTo();
+
+	@DefaultMessage("Wiki")
+	String wiki();
+
+	@DefaultMessage("You can add content here by creating a wiki page called \"Home\".")
+	String wikiHomePage();
 }

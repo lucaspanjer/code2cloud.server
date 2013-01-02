@@ -50,8 +50,10 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.AdminProfilePresenter;
 import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileCellListResources;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileResources;
 
 public class AdminProfileView extends AbstractComposite implements Editor<Profile> {
@@ -145,6 +147,7 @@ public class AdminProfileView extends AbstractComposite implements Editor<Profil
 
 	private Driver driver = GWT.create(Driver.class);
 	private AdminProfilePresenter presenter;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public AdminProfileView() {
 		ProfileResources.get.style().ensureInjected(); // FIXME, put in a common place
@@ -207,11 +210,11 @@ public class AdminProfileView extends AbstractComposite implements Editor<Profil
 		editingProfile = selectedObject;
 		driver.edit(editingProfile);
 		if (editingProfile.getAccountDisabled()) {
-			status.setText("Disabled");
-			toggleDisableButton.setText("Enable");
+			status.setText(profileMessages.disabled());
+			toggleDisableButton.setText(profileMessages.enable());
 		} else {
-			status.setText("Active");
-			toggleDisableButton.setText("Disable");
+			status.setText(profileMessages.active());
+			toggleDisableButton.setText(profileMessages.disable());
 		}
 
 	}

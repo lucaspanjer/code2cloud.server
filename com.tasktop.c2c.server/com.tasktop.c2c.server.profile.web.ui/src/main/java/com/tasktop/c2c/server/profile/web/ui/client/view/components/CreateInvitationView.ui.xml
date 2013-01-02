@@ -3,20 +3,21 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:a='urn:import:com.tasktop.c2c.server.common.web.client.widgets'>
-    <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	
 	<g:HTMLPanel>
 		<g:FlowPanel ui:field="invitations"/>
-		<h2>Create <ui:text from='{msg.code2Cloud}'/> System Invitations</h2>
+		<h2><ui:text from="{pm.create}"/> <ui:text from="{cpm.code2Cloud}"/> <ui:text from="{pm.systemInvitations}"/></h2>
 		<div>
-			Invitations recipients (CSV):<br/>
+			<ui:text from="{pm.invitationRecipientsCsv}"/>:<br/>
 			<g:TextArea ui:field="invitationRecipients" /><br/>
-			Format (one per line):<br/>
-			First, Last, email@example.com
+			<ui:text from="{pm.formatOnePerLine}"/>:<br/>
+			<ui:text from="{pm.firstLastEmailExample}"/>
 		</div>
-		<g:CheckBox ui:field="sendEmail">Send Invitation Emails</g:CheckBox>
+		<g:CheckBox ui:field="sendEmail"><ui:text from="{pm.sendInvitationEmails}"/></g:CheckBox>
 		<div>
-			<g:Button ui:field="createInvitationsButton">Create invitations</g:Button>
+			<g:Button ui:field="createInvitationsButton"><ui:text from="{pm.createInvitations}"/></g:Button>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

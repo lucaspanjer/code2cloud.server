@@ -3,9 +3,10 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:a='urn:import:com.tasktop.c2c.server.common.web.client.widgets'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 		<h2 class="agreement-title"><g:Label ui:field="title"></g:Label></h2>
 		<div class="agreement-text"><g:HTML ui:field="text"/></div>
-		<div class="agreement-buttons"><g:Button ui:field="agreeButton">Agree</g:Button></div>
+		<div class="agreement-buttons"><g:Button ui:field="agreeButton"><ui:text from="{pm.agree}"/></g:Button></div>
 	</g:HTMLPanel>
 </ui:UiBinder>

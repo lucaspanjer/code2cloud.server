@@ -12,11 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.i18n.client.Constants;
-import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -38,8 +35,10 @@ import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.ProjectInvitationToken;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectInvitationPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.SignUpPresenter;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class SignUpViewImpl extends AbstractComposite implements SignUpView {
 
@@ -57,28 +56,12 @@ public class SignUpViewImpl extends AbstractComposite implements SignUpView {
 
 	private static SignUpWithTokenViewUiBinder uiBinder = GWT.create(SignUpWithTokenViewUiBinder.class);
 
-	public interface SignUpConstants extends Constants {
-
-		@DefaultStringValue("has invited you to collaborate on a project")
-		String userHasInvitedToCollaborate();
-
-		@DefaultStringValue("Account Information")
-		String accountInformation();
-	}
-
-	public interface SignUpMessages extends Messages {
-		@DefaultMessage("GitHub Account \"{0}\" Successfully Linked")
-		String githubAccountLinkedSuccessfully(String username);
-	}
-
 	public interface HtmlTemplate extends SafeHtmlTemplates {
 
 		@Template("{0} {1} {2}")
 		SafeHtml issuingUser(String firstName, String lastName, String userHasInvitedToCollaborateConstant);
 	}
 
-	private final SignUpConstants CONSTANTS = GWT.create(SignUpConstants.class);
-	private final SignUpMessages MESSAGES = GWT.create(SignUpMessages.class);
 	private final HtmlTemplate TEMPLATE = GWT.create(HtmlTemplate.class);
 
 	@UiField
@@ -121,6 +104,7 @@ public class SignUpViewImpl extends AbstractComposite implements SignUpView {
 	Anchor signInAnchor;
 
 	private SignUpPresenter presenter;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private SignUpViewImpl() {
 		// Give our Github form a target of "_self" - that will ensure that it replaces the current page when the
@@ -166,7 +150,7 @@ public class SignUpViewImpl extends AbstractComposite implements SignUpView {
 
 	public void setGitHubProfileData(Profile profileData) {
 		if (profileData != null) {
-			githubLinkedLabel.setText(MESSAGES.githubAccountLinkedSuccessfully(profileData.getUsername()));
+			githubLinkedLabel.setText(profileMessages.githubAccountLinkedSuccessfully(profileData.getUsername()));
 			linkGithubPanel.setVisible(false);
 			githubLinkedPanel.setVisible(true);
 			username.setText(profileData.getUsername());
@@ -193,7 +177,7 @@ public class SignUpViewImpl extends AbstractComposite implements SignUpView {
 		email.setText(token.getEmail());
 		if (token.getIssuingUser() != null) {
 			String issuingUserStr = TEMPLATE.issuingUser(token.getIssuingUser().getFirstName(),
-					token.getIssuingUser().getLastName(), CONSTANTS.userHasInvitedToCollaborate()).asString();
+					token.getIssuingUser().getLastName(), profileMessages.userHasInvitedToCollaborate()).asString();
 			issuingUser.setText(issuingUserStr);
 			issuingUserHeader.setVisible(true);
 		}

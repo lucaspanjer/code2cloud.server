@@ -16,6 +16,8 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.view.client.HasRows;
 import com.google.gwt.view.client.Range;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 /**
  * A custom Pager that maintains a set page size and displays page numbers and total pages more elegantly. SimplePager
@@ -28,6 +30,8 @@ public class PageIndexingSimplePager extends SimplePager {
 
 	// Page size is normally derived from the visibleRange
 	private int pageSize = 20;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public PageIndexingSimplePager() {
 		super();
@@ -104,7 +108,7 @@ public class PageIndexingSimplePager extends SimplePager {
 
 	/**
 	 * Overridden to display "0 of 0" when there are no records(otherwise you get "1-1 of 0") and "1 of 1" when there is
-	 * only one record (otherwise you get "1-1 of 1"). Not internationalized (but neither is SimplePager)
+	 * only one record (otherwise you get "1-1 of 1").
 	 * 
 	 * @return page index text
 	 */
@@ -119,11 +123,12 @@ public class PageIndexingSimplePager extends SimplePager {
 		endIndex = Math.max(pageStart, endIndex);
 		boolean exact = display.isRowCountExact();
 		if (dataSize == 0) {
-			return "0 of 0";
+			return profileMessages.pagerOf("0", "0");
 		} else if (pageStart == endIndex) {
-			return formatter.format(pageStart) + " of " + formatter.format(dataSize);
+			return profileMessages.pagerOf(formatter.format(pageStart), formatter.format(dataSize));
 		}
-		return formatter.format(pageStart) + "-" + formatter.format(endIndex) + (exact ? " of " : " of over ")
-				+ formatter.format(dataSize);
+		String currentRange = formatter.format(pageStart) + "-" + formatter.format(endIndex);
+		return exact ? profileMessages.pagerOf(currentRange, formatter.format(dataSize)) : profileMessages.pagerOfOver(
+				currentRange, formatter.format(dataSize));
 	}
 }

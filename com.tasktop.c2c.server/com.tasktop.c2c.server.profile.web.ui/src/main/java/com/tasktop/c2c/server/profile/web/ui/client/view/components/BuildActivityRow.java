@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -25,6 +24,8 @@ import com.tasktop.c2c.server.common.web.client.widgets.Format;
 import com.tasktop.c2c.server.profile.domain.activity.BuildActivity;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails.BuildResult;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.widgets.build.BuildResources;
 
 public class BuildActivityRow extends Composite {
@@ -50,10 +51,12 @@ public class BuildActivityRow extends Composite {
 	@UiField
 	Label descriptionLabel;
 
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+
 	private void render(BuildActivity buildActivity) {
 		dateLabel.setText(Format.stringValueTime(buildActivity.getActivityDate()));
 		resultLabel.setText(getBuildText(buildActivity.getBuildDetails()));
-		buildAnchor.setText("Build " + buildActivity.getBuildDetails().getNumber());
+		buildAnchor.setText(profileMessages.buildNumber(buildActivity.getBuildDetails().getNumber()));
 		buildAnchor.setHref(buildActivity.getBuildDetails().getUrl());
 		jobAnchor.setText(buildActivity.getJobSummary().getName());
 		jobAnchor.setHref(buildActivity.getJobSummary().getUrl());
@@ -61,8 +64,8 @@ public class BuildActivityRow extends Composite {
 				.getBuildDetails().getCause() + ".";
 		if (!buildActivity.getBuildDetails().getBuilding() && buildActivity.getBuildDetails().getDuration() != null
 				&& buildActivity.getBuildDetails().getResult() != null) {
-			descriptionText = descriptionText + " Build took "
-					+ millisecondsToString(buildActivity.getBuildDetails().getDuration()) + ".";
+			descriptionText = profileMessages.buildDuration(descriptionText, millisecondsToString(buildActivity
+					.getBuildDetails().getDuration()));
 		}
 		descriptionLabel.setText(descriptionText);
 		setParentStyleFromResult(buildActivity.getBuildDetails().getResult());
@@ -73,9 +76,9 @@ public class BuildActivityRow extends Composite {
 
 	private String millisecondsToString(Long duration) {
 		if (duration < MILLISECONDS_IN_MINUTE) {
-			return Math.round((double) duration / MILLISECONDS_IN_SECOND) + " seconds";
+			return profileMessages.seconds(Math.round((double) duration / MILLISECONDS_IN_SECOND));
 		}
-		return Math.round((double) duration / MILLISECONDS_IN_MINUTE) + " minutes";
+		return profileMessages.minutes(Math.round((double) duration / MILLISECONDS_IN_MINUTE));
 	}
 
 	// FIXME UGLY STYELING CONSTANTS
@@ -105,9 +108,9 @@ public class BuildActivityRow extends Composite {
 
 	private String getBuildText(BuildDetails details) {
 		if (details.getBuilding() || details.getResult() == null) {
-			return "is pending.";
+			return profileMessages.buildResultPending();
 		}
-		return "resulted in " + details.getResult().name().toLowerCase() + ".";
+		return profileMessages.buildResult(details.getResult().name().toLowerCase());
 	}
 
 }

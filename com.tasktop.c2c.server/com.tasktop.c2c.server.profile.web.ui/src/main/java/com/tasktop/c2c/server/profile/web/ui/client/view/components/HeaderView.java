@@ -37,6 +37,8 @@ import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class HeaderView extends BaseHeaderView implements Header {
 
@@ -59,6 +61,8 @@ public class HeaderView extends BaseHeaderView implements Header {
 	public Panel breadcrumbNavigation;
 
 	protected UserMenuPopupPanel userMenuPopupPanel = null;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private HeaderView() {
 		ProfileGinjector.get.instance().getAppResources().appCss().ensureInjected();
@@ -140,7 +144,7 @@ public class HeaderView extends BaseHeaderView implements Header {
 			this.ownerBadge.setText("");
 		} else {
 			if (AuthenticationHelper.isAdmin(project.getIdentifier())) {
-				this.ownerBadge.setText("owner");
+				this.ownerBadge.setText(profileMessages.ownerLowercase());
 			}
 		}
 	}
