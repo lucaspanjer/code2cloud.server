@@ -28,8 +28,8 @@ import java.util.logging.Logger;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 
+import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.profile.domain.Email;
@@ -45,6 +45,7 @@ import com.tasktop.c2c.server.tasks.domain.TaskActivity;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity.FieldUpdate;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity.Type;
 import com.tasktop.c2c.server.tasks.domain.TaskUserProfile;
+import com.tasktop.c2c.server.util.VelocityUtils;
 
 /**
  * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
@@ -64,11 +65,11 @@ public class NotificationServiceImpl extends AbstractJpaServiceBean implements N
 	@Autowired
 	private VelocityEngine velocityEngine;
 
-	private String taskCreateHeaderTemplate = "email_templates/taskCreateActivityHeader.vm";
-	private String taskUpdateHeaderTemplate = "email_templates/taskUpdateActivityHeader.vm";
-	private String taskAttachActivityTemplate = "email_templates/taskAttachActivity.vm";
-	private String taskUpdateActivityTemplate = "email_templates/taskUpdateActivity.vm";
-	private String taskCommentActivityTemplate = "email_templates/taskCommentActivity.vm";
+	private static final String taskCreateHeaderTemplate = "email_templates/taskCreateActivityHeader.vm";
+	private static final String taskUpdateHeaderTemplate = "email_templates/taskUpdateActivityHeader.vm";
+	private static final String taskAttachActivityTemplate = "email_templates/taskAttachActivity.vm";
+	private static final String taskUpdateActivityTemplate = "email_templates/taskUpdateActivity.vm";
+	private static final String taskCommentActivityTemplate = "email_templates/taskCommentActivity.vm";
 
 	/*
 	 * (non-Javadoc)
@@ -262,7 +263,8 @@ public class NotificationServiceImpl extends AbstractJpaServiceBean implements N
 		model.put("taskWatchers", taskWatchers);
 		model.put("taskOwner", task.getAssignee() == null ? "" : task.getAssignee().getLoginName());
 		String template = isCreateActivity ? taskCreateHeaderTemplate : taskUpdateHeaderTemplate;
-		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, template, model);
+		return VelocityUtils.getLocalizedTemplateText(velocityEngine, template, model,
+				AuthenticationServiceUser.getCurrentUserLanguage());
 	}
 
 	private static final int UPDATE_FIELD_NAME_COL_SPACES = 20;
@@ -299,8 +301,8 @@ public class NotificationServiceImpl extends AbstractJpaServiceBean implements N
 			throw new RuntimeException("Unknown activity type: " + activity.getActivityType());
 		}
 
-		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, template, model);
-
+		return VelocityUtils.getLocalizedTemplateText(velocityEngine, template, model,
+				AuthenticationServiceUser.getCurrentUserLanguage());
 	}
 
 	/**
