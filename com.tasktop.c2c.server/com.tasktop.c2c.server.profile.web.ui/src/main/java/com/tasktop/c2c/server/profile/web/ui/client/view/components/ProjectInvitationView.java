@@ -22,6 +22,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ProjectInvitationView extends AbstractComposite {
 
@@ -33,18 +35,20 @@ public class ProjectInvitationView extends AbstractComposite {
 	private Project project;
 
 	@UiField
-	Label projectName;
+	Label projectInvitation;
 	@UiField
 	ParagraphElement projectDescription;
 	@UiField
 	public Anchor acceptInviteAnchor;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public ProjectInvitationView() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
 	private void updateUi() {
-		projectName.setText(project.getName());
+		projectInvitation.setText(profileMessages.projectInvited(project.getName()));
 		if (project.getDescription() != null) {
 			projectDescription.setInnerText(SafeHtmlUtils.htmlEscape(project.getDescription()));
 		}

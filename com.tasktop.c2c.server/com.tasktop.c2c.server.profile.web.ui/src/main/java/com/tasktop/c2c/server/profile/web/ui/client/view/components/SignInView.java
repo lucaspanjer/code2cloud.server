@@ -22,15 +22,18 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.NamedFrame;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.util.TextBoxUtil;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.components.SignInPresenter;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class SignInView extends AbstractComposite {
 
@@ -64,8 +67,13 @@ public class SignInView extends AbstractComposite {
 	public FormPanel githubForm;
 	@UiField
 	DivElement gitHubDiv;
+	@UiField
+	HTML gitHubSignInDescription;
 
 	private SignInPresenter presenter;
+
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private SignInView() {
 		// Give our Github form a target of "_self" - that will ensure that it replaces the current page when the
@@ -79,6 +87,8 @@ public class SignInView extends AbstractComposite {
 		if (!AppGinjector.get.instance().getConfiguration().isEnableGitHubAuth()) {
 			UIObject.setVisible(gitHubDiv, false);
 		}
+
+		gitHubSignInDescription.setHTML(profileMessages.gitHubSignInDescription(commonProfileMessages.code2Cloud()));
 	}
 
 	@UiHandler("githubButton")

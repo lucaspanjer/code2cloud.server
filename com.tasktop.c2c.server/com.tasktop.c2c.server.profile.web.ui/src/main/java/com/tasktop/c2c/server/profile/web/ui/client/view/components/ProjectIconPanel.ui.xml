@@ -2,38 +2,40 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<g:HTMLPanel>
 			<div class="project-nav-wrapper">
 				<div class="project-nav-section">
 					<div class="left">
-						<g:Anchor ui:field="projectHome" styleName="button project-nav-item">Home</g:Anchor>
+						<g:Anchor ui:field="projectHome" styleName="button project-nav-item"><ui:text from="{pm.home}"/></g:Anchor>
 					</div>
 					<div class="left">
-						<g:Anchor ui:field="dashboard" styleName="button project-nav-item">Dashboard</g:Anchor>
+						<g:Anchor ui:field="dashboard" styleName="button project-nav-item"><ui:text from="{cpm.dashboard}"/></g:Anchor>
 					</div>
 					<div class="left">
-						<g:Anchor ui:field="tasks" styleName="button project-nav-item">Tasks</g:Anchor>
+						<g:Anchor ui:field="tasks" styleName="button project-nav-item"><ui:text from="{cpm.tasks}"/></g:Anchor>
 					</div>
 					<div class="left">
-						<g:Anchor ui:field="wiki" styleName="button project-nav-item">Wiki</g:Anchor>
+						<g:Anchor ui:field="wiki" styleName="button project-nav-item"><ui:text from="{cpm.wiki}"/></g:Anchor>
 					</div>
 					<div class="left">
-						<g:Anchor ui:field="source" styleName="button project-nav-item">Source</g:Anchor>
+						<g:Anchor ui:field="source" styleName="button project-nav-item"><ui:text from="{pm.source}"/></g:Anchor>
 					</div>
 					<div class="left">
-						<g:Anchor ui:field="builds" styleName="button project-nav-item">Builds</g:Anchor>
+						<g:Anchor ui:field="builds" styleName="button project-nav-item"><ui:text from="{cpm.builds}"/></g:Anchor>
 					</div>
 					<div class="left">
-						<g:Anchor ui:field="reviews" styleName="button project-nav-item">Reviews</g:Anchor>
+						<g:Anchor ui:field="reviews" styleName="button project-nav-item"><ui:text from="{pm.reviews}"/></g:Anchor>
 					</div>
 					<div class="left">
-						<g:Anchor ui:field="deployments" styleName="button project-nav-item">Deployments</g:Anchor>
+						<g:Anchor ui:field="deployments" styleName="button project-nav-item"><ui:text from="{cpm.deployments}"/></g:Anchor>
 					</div>
 					<div class="left">
-						<g:Anchor ui:field="team" styleName="button project-nav-item">Team</g:Anchor>
+						<g:Anchor ui:field="team" styleName="button project-nav-item"><ui:text from="{cpm.team}"/></g:Anchor>
 					</div>
 					<div class="left" ui:field="optionsWrapper">
-						<g:Anchor ui:field="options" styleName="button project-nav-item">Options</g:Anchor>
+						<g:Anchor ui:field="options" styleName="button project-nav-item"><ui:text from="{pm.options}"/></g:Anchor>
 					</div>
 				</div>
       		</div>

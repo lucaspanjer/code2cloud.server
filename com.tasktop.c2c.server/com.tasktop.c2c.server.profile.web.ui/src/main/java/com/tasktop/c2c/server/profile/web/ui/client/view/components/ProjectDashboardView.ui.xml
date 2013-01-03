@@ -4,24 +4,25 @@
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:c='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.components'
 	xmlns:graphs="urn:import:com.tasktop.c2c.server.profile.web.ui.client.graphs">
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel styleName="project-detail-container">
 		<div class="three-column">
 			<div class="column first left">
 				<div class="project-latest-activity build-status">
-					<h4>Build Status</h4>
+					<h4><ui:text from="{pm.buildStatus}"/></h4>
 					<c:HudsonStatusView ui:field='hudsonStatusView' />
 				</div>
 			</div>
 			<div class="column left">
 				<div class="project-latest-activity author-commits">
-					<h4>Commits By Author (60 Days)</h4>
+					<h4><ui:text from="{pm.commitsByAuthorRecent}"/></h4>
 						<g:FlowPanel ui:field="commitsByAuthorPanel" styleName="commit-graph"/>
 				</div>
 			</div>
 
 			<div class="column left last">
 				<div class="project-latest-activity author-activity">
-					<h4>Activity (60 Days)</h4>
+					<h4><ui:text from="{pm.activityRecent}"/></h4>
 					<g:FlowPanel ui:field="activityTimelinePanel" styleName="activity-graph"/>
 				</div>
 			</div>

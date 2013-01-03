@@ -3,11 +3,12 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:a='urn:import:com.tasktop.c2c.server.common.web.client.widgets'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 		<div class="left">
-			<h2>You have been invited to the '<g:Label ui:field="projectName"/>' project</h2>
+			<h2><g:Label ui:field="projectInvitation"/></h2>
 			<p ui:field="projectDescription"/>
-			<g:Anchor ui:field="acceptInviteAnchor" styleName="button special login">Accept Invitation</g:Anchor>
+			<g:Anchor ui:field="acceptInviteAnchor" styleName="button special login"><ui:text from="{pm.acceptInvitation}"/></g:Anchor>
 		</div>
 		<div class="clear"></div> 
 	</g:HTMLPanel>

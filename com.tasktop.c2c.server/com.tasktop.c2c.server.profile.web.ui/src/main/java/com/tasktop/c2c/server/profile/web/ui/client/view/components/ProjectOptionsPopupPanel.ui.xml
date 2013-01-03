@@ -2,12 +2,13 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel addStyleNames="project-options">
 		<ul ui:field="wrapperList">
-			<li ui:field="watchWrapper"><g:Anchor ui:field="watchLink">Watch</g:Anchor></li>
-			<li ui:field="unwatchWrapper"><g:Anchor ui:field="unwatchLink">Unwatch</g:Anchor></li>
-			<li ui:field="leaveWrapper"><g:Anchor ui:field="leaveLink">Leave this project</g:Anchor></li>
-			<li ui:field="adminWrapper"><g:Anchor ui:field="adminLink">Administration</g:Anchor></li>
+			<li ui:field="watchWrapper"><g:Anchor ui:field="watchLink"><ui:text from="{pm.watch}"/></g:Anchor></li>
+			<li ui:field="unwatchWrapper"><g:Anchor ui:field="unwatchLink"><ui:text from="{pm.unwatch}"/></g:Anchor></li>
+			<li ui:field="leaveWrapper"><g:Anchor ui:field="leaveLink"><ui:text from="{pm.leaveProject}"/></g:Anchor></li>
+			<li ui:field="adminWrapper"><g:Anchor ui:field="adminLink"><ui:text from="{pm.administration}"/></g:Anchor></li>
 		</ul>
 	</g:HTMLPanel>
 </ui:UiBinder>

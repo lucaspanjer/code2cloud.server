@@ -19,9 +19,9 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
@@ -56,13 +57,19 @@ public class SignUpViewImpl extends AbstractComposite implements SignUpView {
 
 	private static SignUpWithTokenViewUiBinder uiBinder = GWT.create(SignUpWithTokenViewUiBinder.class);
 
-	public interface HtmlTemplate extends SafeHtmlTemplates {
-
+	public interface IssuingUserTemplate extends SafeHtmlTemplates {
 		@Template("{0} {1} {2}")
 		SafeHtml issuingUser(String firstName, String lastName, String userHasInvitedToCollaborateConstant);
 	}
 
-	private final HtmlTemplate TEMPLATE = GWT.create(HtmlTemplate.class);
+	public interface SignInAnchorTemplate extends SafeHtmlTemplates {
+		@Template("<a href=\"{0}\">{1}</a>")
+		SafeHtml signInAnchor(String href, String anchorLabel);
+	}
+
+	private static final IssuingUserTemplate ISSUING_USER_TEMPLATE = GWT.create(IssuingUserTemplate.class);
+
+	private static final SignInAnchorTemplate SIGN_IN_ANCHOR_TEMPLATE = GWT.create(SignInAnchorTemplate.class);
 
 	@UiField
 	HTMLPanel signUpForm;
@@ -101,9 +108,18 @@ public class SignUpViewImpl extends AbstractComposite implements SignUpView {
 	@UiField
 	Label issuingUser;
 	@UiField
-	Anchor signInAnchor;
+	Label invitationOnlyLabel;
+	@UiField
+	HTML signUpOrInLabel;
+	@UiField
+	HTML gitHubDetailsLabel;
+	@UiField
+	Label nowCreateYourAccountLabel;
+	@UiField
+	Label completeSignUpLabel;
 
 	private SignUpPresenter presenter;
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private SignUpViewImpl() {
@@ -113,6 +129,10 @@ public class SignUpViewImpl extends AbstractComposite implements SignUpView {
 		initWidget(uiBinder.createAndBindUi(this));
 		hookDefaultButton(createAccountButton);
 
+		invitationOnlyLabel.setText(profileMessages.invitationOnly(commonProfileMessages.code2Cloud()));
+		gitHubDetailsLabel.setHTML(profileMessages.gitHubDetailsContent(commonProfileMessages.code2Cloud()));
+		nowCreateYourAccountLabel.setText(profileMessages.nowCreateYourAccount(commonProfileMessages.code2Cloud()));
+		completeSignUpLabel.setText(profileMessages.completeSignUp(commonProfileMessages.code2Cloud()));
 	}
 
 	@UiHandler("githubButton")
@@ -150,7 +170,7 @@ public class SignUpViewImpl extends AbstractComposite implements SignUpView {
 
 	public void setGitHubProfileData(Profile profileData) {
 		if (profileData != null) {
-			githubLinkedLabel.setText(profileMessages.githubAccountLinkedSuccessfully(profileData.getUsername()));
+			githubLinkedLabel.setText(profileMessages.gitHubAccountLinkedSuccessfully(profileData.getUsername()));
 			linkGithubPanel.setVisible(false);
 			githubLinkedPanel.setVisible(true);
 			username.setText(profileData.getUsername());
@@ -176,12 +196,14 @@ public class SignUpViewImpl extends AbstractComposite implements SignUpView {
 	public void setProjectInvitationToken(ProjectInvitationToken token) {
 		email.setText(token.getEmail());
 		if (token.getIssuingUser() != null) {
-			String issuingUserStr = TEMPLATE.issuingUser(token.getIssuingUser().getFirstName(),
+			String issuingUserStr = ISSUING_USER_TEMPLATE.issuingUser(token.getIssuingUser().getFirstName(),
 					token.getIssuingUser().getLastName(), profileMessages.userHasInvitedToCollaborate()).asString();
 			issuingUser.setText(issuingUserStr);
 			issuingUserHeader.setVisible(true);
 		}
-		signInAnchor.setHref(SignInPlace.createPlace(ProjectInvitationPlace.createPlace(token.getToken())).getHref());
+		String signInHref = SignInPlace.createPlace(ProjectInvitationPlace.createPlace(token.getToken())).getHref();
+		SafeHtml signInAnchor = SIGN_IN_ANCHOR_TEMPLATE.signInAnchor(signInHref, profileMessages.signInLc());
+		signUpOrInLabel.setHTML(profileMessages.projectAccessSignUpOrIn(signInAnchor));
 		signUpForm.setVisible(true);
 		createAccountButton.setVisible(true);
 		messagePanel.setVisible(false);

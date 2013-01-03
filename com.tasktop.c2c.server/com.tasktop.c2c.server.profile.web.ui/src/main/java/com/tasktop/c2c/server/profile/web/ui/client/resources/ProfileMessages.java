@@ -15,16 +15,32 @@ package com.tasktop.c2c.server.profile.web.ui.client.resources;
 import com.google.gwt.i18n.client.LocalizableResource.Generate;
 import com.google.gwt.i18n.client.LocalizableResource.GenerateKeys;
 import com.google.gwt.i18n.client.Messages;
+import com.google.gwt.safehtml.shared.SafeHtml;
 
 @GenerateKeys("com.google.gwt.i18n.server.keygen.MethodNameKeyGenerator")
 @Generate(format = "com.google.gwt.i18n.rebind.format.PropertiesFormat")
 public interface ProfileMessages extends Messages {
 
+	@DefaultMessage("About Project")
+	String aboutProject();
+
+	@DefaultMessage("Accept Invitation")
+	String acceptInvitation();
+
+	@DefaultMessage("Account Information")
+	String accountInformation();
+
 	@DefaultMessage("Active")
 	String active();
 
+	@DefaultMessage("Activity (60 Days)")
+	String activityRecent();
+
 	@DefaultMessage("Administer Users")
 	String administerUsers();
+
+	@DefaultMessage("Administration")
+	String administration();
 
 	@DefaultMessage("Agree")
 	String agree();
@@ -50,6 +66,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("is pending.")
 	String buildResultPending();
 
+	@DefaultMessage("Build Status")
+	String buildStatus();
+
 	@DefaultMessage("Cancel")
 	String cancel();
 
@@ -65,8 +84,17 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Closed Tasks")
 	String closedTasks();
 
+	@DefaultMessage("Commited")
+	String commited();
+
 	@DefaultMessage("Commits")
 	String commits();
+
+	@DefaultMessage("Commits By Author (60 Days)")
+	String commitsByAuthorRecent();
+
+	@DefaultMessage("To complete Sign Up, enter account information in the form to the left to create your {0} account.")
+	String completeSignUp(String code2Cloud);
 
 	@DefaultMessage("Component deleted.")
 	String componentDeleted();
@@ -79,6 +107,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Create")
 	String create();
+
+	@DefaultMessage("Create Account")
+	String createAccount();
 
 	@DefaultMessage("Create Invitations")
 	String createInvitations();
@@ -161,11 +192,17 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Error while saving")
 	String errorWhileSaving();
 
+	@DefaultMessage("First Name")
+	String firstName();
+
 	@DefaultMessage("First, Last, email@example.com")
 	String firstLastEmailExample();
 
 	@DefaultMessage("Enter your email address and your login information will be sent to you.")
 	String forgotPasswordEnterEmail();
+
+	@DefaultMessage("Forgot your username or password?")
+	String forgotUsernameOrPassword();
 
 	@DefaultMessage("Format (one per line)")
 	String formatOnePerLine();
@@ -174,7 +211,20 @@ public interface ProfileMessages extends Messages {
 	String fullEmailList();
 
 	@DefaultMessage("GitHub Account \"{0}\" Successfully Linked")
-	String githubAccountLinkedSuccessfully(String username);
+	String gitHubAccountLinkedSuccessfully(String username);
+
+	@DefaultMessage("GitHub Credentials")
+	String gitHubCredentials();
+
+	@DefaultMessage("You can link your <a href=\"http://www.github.com\" class=\"underline\">GitHub</a> account to your {0} account. "
+			+ "After linking your accounts, you can sign in to {0} using either your {0} credentials or your GitHub credentials.")
+	SafeHtml gitHubDetailsContent(String code2Cloud);
+
+	@DefaultMessage("You can link your <a href=\"http://www.github.com/\" target=\"_blank\">GitHub</a> account and sign in to {0} using your GitHub credentials.")
+	SafeHtml gitHubSignInDescription(String code2Cloud);
+
+	@DefaultMessage("Go To Wiki Page")
+	String goToWikiPage();
 
 	@DefaultMessage("Help")
 	String help();
@@ -182,8 +232,8 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Hide")
 	String hide();
 
-	@DefaultMessage("Disabled")
-	String hideDisabled();
+	@DefaultMessage("Home")
+	String home();
 
 	@DefaultMessage("Opted Out of News Emails")
 	String hideNewsEmailOptOut();
@@ -202,6 +252,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Invitation Creator")
 	String invitationCreator();
+
+	@DefaultMessage("{0} is currently invitation only.")
+	String invitationOnly(String code2Cloud);
 
 	@DefaultMessage("Invitation recipients (CSV)")
 	String invitationRecipientsCsv();
@@ -224,11 +277,29 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("First Name, Last Name, Email Address, Token, URL")
 	String invitationTokens();
 
+	@DefaultMessage("Last Name")
+	String lastName();
+
 	@DefaultMessage("Leave this Project")
 	String leaveProject();
 
 	@DefaultMessage("Left project {0}")
 	String leftProject(String projectName);
+
+	@DefaultMessage("Link Your GitHub Account")
+	String linkYourGitHubAccount();
+
+	@DefaultMessage("Manage Members")
+	String manageMembers();
+
+	@DefaultMessage("Maven")
+	String maven();
+
+	@DefaultMessage("To deploy Maven artifacts to this repository, use:")
+	String mavenDeployLocation();
+
+	@DefaultMessage("The Maven repository for this project is located at:")
+	String mavenRepositoryLocation();
 
 	@DefaultMessage("Member")
 	String member();
@@ -239,13 +310,19 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Name")
 	String name();
 
+	@DefaultMessage("Now Create Your {0} Account")
+	String nowCreateYourAccount(String code2Cloud);
+
 	@DefaultMessage("Open Tasks")
 	String openTasks();
+
+	@DefaultMessage("Options")
+	String options();
 
 	@DefaultMessage("Organization Shared")
 	String organizationShared();
 
-	@DefaultMessage("Organization updated")
+	@DefaultMessage("Organization Updated")
 	String organizationUpdated();
 
 	@DefaultMessage("Owner")
@@ -314,6 +391,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Your profile could not be found. Please try again.")
 	String profileNotFound();
 
+	@DefaultMessage("To access this project, sign up for an account or {0} with your existing account")
+	SafeHtml projectAccessSignUpOrIn(SafeHtml signInAnchor);
+
 	@DefaultMessage("projects")
 	String projectBaseUrl();
 
@@ -322,6 +402,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Project deleted.")
 	String projectDeleted();
+
+	@DefaultMessage("You have been invited to the ''{0}'' project.")
+	String projectInvited(String projectName);
 
 	@DefaultMessage("Project saved.")
 	String projectSaved();
@@ -332,17 +415,26 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Public")
 	String public_();
 
+	@DefaultMessage("Read More")
+	String readMore();
+
 	@DefaultMessage("Recent Activity")
 	String recentActivity();
 
 	@DefaultMessage("Release deleted.")
 	String releaseDeleted();
 
+	@DefaultMessage("Remember Me")
+	String rememberMe();
+
 	@DefaultMessage("Restarting...")
 	String restarting();
 
 	@DefaultMessage("Restarted.")
 	String restarted();
+
+	@DefaultMessage("Reviews")
+	String reviews();
 
 	@DefaultMessage("Saved.")
 	String saved();
@@ -386,11 +478,23 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Sign In")
 	String signIn();
 
+	@DefaultMessage("sign in")
+	String signInLc();
+
+	@DefaultMessage("Sign in with GitHub")
+	String signInWithGitHub();
+
 	@DefaultMessage("Sign Up")
 	String signUp();
 
 	@DefaultMessage("Source")
 	String source();
+
+	@DefaultMessage("Git source code repositories are located at:")
+	String sourceRepositoryLocation();
+
+	@DefaultMessage("Sources")
+	String sources();
 
 	@DefaultMessage("Started.")
 	String started();

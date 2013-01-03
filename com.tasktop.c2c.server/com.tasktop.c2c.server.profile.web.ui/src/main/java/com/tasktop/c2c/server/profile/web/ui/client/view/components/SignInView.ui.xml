@@ -3,41 +3,37 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:a="urn:import:com.tasktop.c2c.server.common.web.client.widgets">
-    <ui:with field="msg" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
-
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<a:FormSectionPanel>
 		<g:HTMLPanel styleName="container" debugId="signin-form">
 			<div class="create-account left">
 				<div id="sign-up-form" class="add-form">
 					<fieldset>
-						<label>Username</label>
+						<label><ui:text from="{pm.username}"/></label>
 						<div>
 							<g:TextBox ui:field="username" debugId="username" name="username" styleName="text"/>
 						</div>
 					</fieldset>
 					<fieldset>
-						<label>Password</label>
+						<label><ui:text from="{pm.password}"/></label>
 						<div>
 							<g:PasswordTextBox ui:field="password" debugId="password" name="password" styleName="text"/>
 						</div>
 					</fieldset>
 					<fieldset>						
 					  <label class="input"><g:CheckBox ui:field="rememberMe" name="remember-me" value="true"/></label>
-					  <div>Remember Me</div>
+					  <div><ui:text from="{pm.rememberMe}"/></div>
 					</fieldset>
 					<div class="form-button-holder margin-top10">
-						<div><g:Anchor ui:field="requestPasswordReset">Forgot your username or password?</g:Anchor></div>
-						<g:Button ui:field="logonButton" debugId="signin-button" addStyleNames="button special login">Sign In</g:Button>
+						<div><g:Anchor ui:field="requestPasswordReset"><ui:text from="{pm.forgotUsernameOrPassword}"/></g:Anchor></div>
+						<g:Button ui:field="logonButton" debugId="signin-button" addStyleNames="button special login"><ui:text from="{pm.signIn}"/></g:Button>
 					</div>
 				</div>
 			</div>
 			<div class="git-hub-details right" ui:field="gitHubDiv">
-				<div class="headingMedium">GitHub Credentials</div>
+				<div class="headingMedium"><ui:text from="{pm.gitHubCredentials}"/></div>
 				<div class="git-hub-details-content">
-					<p>
-						You can link your <a href="http://www.github.com/" target="_blank">GitHub</a> account and sign in
-						to <ui:text from='{msg.code2Cloud}'/> using your GitHub credentials. 
-					</p>
+					<p><g:HTML ui:field="gitHubSignInDescription"/></p>
 					<div class="text-center">
 						<g:FormPanel ui:field="githubForm" method="POST" action="api/signin/github">
 							<g:Button ui:field="githubButton" addStyleNames="button special login">Sign in with GitHub</g:Button>
@@ -45,7 +41,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="clear"></div>			
+			<div class="clear"></div>
 		</g:HTMLPanel>
 	</a:FormSectionPanel>
 </ui:UiBinder>

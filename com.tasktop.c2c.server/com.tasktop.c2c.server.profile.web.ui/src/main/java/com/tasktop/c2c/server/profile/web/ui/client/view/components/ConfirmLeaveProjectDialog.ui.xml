@@ -8,12 +8,12 @@
 	</ui:style>
 <g:HTMLPanel styleName="{style.popup}">
 		<div>
-			<ui:txt from="{pm.confirmLeaveProjectMsg}"/>
+			<ui:text from="{pm.confirmLeaveProjectMsg}"/>
 		</div>
 		<br/>
 		<div class="center">
-			  <g:Button ui:field="leaveButton" styleName="button special"><ui:txt from="{pm.leaveProject}"/></g:Button>
-			  <g:Button ui:field="cancelButton" styleName="button"><ui:txt from="{pm.cancel}"/></g:Button>
+			  <g:Button ui:field="leaveButton" styleName="button special"><ui:text from="{pm.leaveProject}"/></g:Button>
+			  <g:Button ui:field="cancelButton" styleName="button"><ui:text from="{pm.cancel}"/></g:Button>
 		  </div>	
 	</g:HTMLPanel>
 </ui:UiBinder>

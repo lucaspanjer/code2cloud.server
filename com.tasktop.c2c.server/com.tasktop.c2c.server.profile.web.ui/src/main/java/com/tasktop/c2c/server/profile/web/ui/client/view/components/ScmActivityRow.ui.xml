@@ -4,18 +4,19 @@
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' 
 	xmlns:p="urn:import:com.tasktop.c2c.server.common.web.client.widgets.chooser.person" 
 	xmlns:h="urn:import:com.tasktop.c2c.server.common.web.client.widgets.hyperlink">
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 		<g:HTMLPanel>
 			<div class="project-action commits">
-			  <a class="social-icon"></a>
-			  <p class="oneline">
-	   			<g:Anchor ui:field='expandButton' styleName="button right"></g:Anchor>
-			  	<p:PersonLabel ui:field="personLabel"/>
-				Committed
-				<g:Anchor ui:field='commitLabel'/>
-	   			<span class="date"><g:Label ui:field='dateLabel'/></span>
-			    <br/>
-			    <h:HyperlinkingLabel ui:field="expandingTextLabel"/>
-			  </p>
+				<a class="social-icon"></a>
+				<p class="oneline">
+					<g:Anchor ui:field='expandButton' styleName="button right"></g:Anchor>
+					<p:PersonLabel ui:field="personLabel"/>
+					<ui:text from="{pm.commited}"/>
+					<g:Anchor ui:field='commitLabel'/>
+					<span class="date"><g:Label ui:field='dateLabel'/></span>
+					<br/>
+					<h:HyperlinkingLabel ui:field="expandingTextLabel"/>
+				</p>
 				<div class="spacer clear small"></div>
 			</div>
 	</g:HTMLPanel>
