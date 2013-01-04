@@ -2,13 +2,13 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 			 xmlns:g="urn:import:com.google.gwt.user.client.ui">
-
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
-		<g:Anchor ui:field="account" addStyleNames="misc-icon account"><span/>Account
+		<g:Anchor ui:field="account" addStyleNames="misc-icon account"><span/><ui:text from="{pm.account}"/>
 		</g:Anchor>
-		<g:Anchor ui:field="help" addStyleNames="misc-icon help"><span/>Help
+		<g:Anchor ui:field="help" addStyleNames="misc-icon help"><span/><ui:text from="{pm.help}"/>
 		</g:Anchor>
-		<g:Anchor ui:field="signOut" addStyleNames="misc-icon sign-out"><span/>Sign Out
+		<g:Anchor ui:field="signOut" addStyleNames="misc-icon sign-out"><span/><ui:text from="{pm.signOut}"/>
 		</g:Anchor>
 	</g:HTMLPanel>
 </ui:UiBinder>

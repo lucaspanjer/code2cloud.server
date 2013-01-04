@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -28,6 +27,8 @@ import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonLab
 import com.tasktop.c2c.server.common.web.client.widgets.time.TimePeriodRenderer;
 import com.tasktop.c2c.server.profile.domain.activity.TaskActivity;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskAnchor;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskAnchorManager;
 import com.tasktop.c2c.server.tasks.domain.Task;
@@ -53,6 +54,8 @@ public class TaskActivityRow extends HasExpandingTextPanel {
 	DivElement timeDiv;
 	@UiField
 	Label timeLabel;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public TaskActivityRow(TaskActivity taskActivity) {
 		// Create our TaskAnchor now, before we bind (since we've marked it as provided)
@@ -80,10 +83,10 @@ public class TaskActivityRow extends HasExpandingTextPanel {
 		dateLabel.setText(Format.stringValueTime(taskActivity.getActivityDate()));
 		changeType.setText(taskActivity.getActivityType().getPrettyName());
 
-		if (taskActivity.getActivityType().equals(
-				com.tasktop.c2c.server.tasks.domain.TaskActivity.Type.LOGGED_TIME)) {
+		if (taskActivity.getActivityType().equals(com.tasktop.c2c.server.tasks.domain.TaskActivity.Type.LOGGED_TIME)) {
 			UIObject.setVisible(timeDiv, true);
-			timeLabel.setText(TimePeriodRenderer.HOUR_RENDERER.render(taskActivity.getWorkLog().getHoursWorked()));
+			String hoursWorked = TimePeriodRenderer.HOUR_RENDERER.render(taskActivity.getWorkLog().getHoursWorked());
+			timeLabel.setText(profileMessages.timeLabel(hoursWorked));
 		} else {
 			UIObject.setVisible(timeDiv, false);
 		}

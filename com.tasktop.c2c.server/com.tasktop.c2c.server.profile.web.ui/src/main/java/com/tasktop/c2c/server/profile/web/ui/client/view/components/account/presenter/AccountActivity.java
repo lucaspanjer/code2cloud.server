@@ -31,6 +31,7 @@ import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.UserAccountPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.AccountView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.place.AccountProfilePlace;
 
@@ -43,6 +44,7 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 	// to configure themselves from the place information
 	private Place where;
 	private String originalEmail;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public AccountActivity() {
 	}
@@ -91,10 +93,10 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 		ProfileGinjector.get.instance().getNotifier().clearMessages();
 		if (!newPassword.equals(newPasswordConfirmation)) {
 			ProfileGinjector.get.instance().getNotifier()
-					.displayMessage(Message.createErrorMessage("New Password and Confirm Password must be the same."));
+					.displayMessage(Message.createErrorMessage(profileMessages.passwordNewAndConfirmationMustMatch()));
 		} else if (!(newPassword.length() > 0)) {
 			ProfileGinjector.get.instance().getNotifier()
-					.displayMessage(Message.createErrorMessage("Please provide a password."));
+					.displayMessage(Message.createErrorMessage(profileMessages.passwordProvide()));
 		} else {
 			// verify old password
 			ProfileEntryPoint.getInstance().getProfileService()
@@ -107,11 +109,8 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 
 						@Override
 						public void failure(Throwable result) {
-							ProfileGinjector.get
-									.instance()
-									.getNotifier()
-									.displayMessage(
-											Message.createErrorMessage("The current password you gave is incorrect."));
+							ProfileGinjector.get.instance().getNotifier()
+									.displayMessage(Message.createErrorMessage(profileMessages.passwordIncorrect()));
 						}
 					});
 		}
@@ -126,7 +125,7 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 						if (result != null) {
 							ProfileEntryPoint.getInstance().getAppState().setCredentials(result);
 							ProfileGinjector.get.instance().getNotifier()
-									.displayMessage(Message.createSuccessMessage("Password updated."));
+									.displayMessage(Message.createSuccessMessage(profileMessages.passwordUpdated()));
 							callback.onReturn(true);
 						}
 					}
@@ -164,8 +163,8 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 								.instance()
 								.getNotifier()
 								.displayMessage(
-										Message.createSuccessMessage("Public Key saved: " + result.getName() + " ("
-												+ result.getFingerprint() + ")"));
+										Message.createSuccessMessage(profileMessages.publicKeySaved(result.getName(),
+												result.getFingerprint())));
 					}
 				});
 	}
@@ -182,8 +181,8 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 								.instance()
 								.getNotifier()
 								.displayMessage(
-										Message.createSuccessMessage("Public Key updated: " + result.getName() + " ("
-												+ result.getFingerprint() + ")"));
+										Message.createSuccessMessage(profileMessages.publicKeyUpdated(result.getName(),
+												result.getFingerprint())));
 					}
 				});
 	}
@@ -231,13 +230,13 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 						profile = result.getProfile();
 						updateView();
 						ProfileGinjector.get.instance().getNotifier()
-								.displayMessage(Message.createSuccessMessage("Profile updated."));
+								.displayMessage(Message.createSuccessMessage(profileMessages.profileUpdated()));
 						if (!originalEmail.equals(profile.getEmail())) {
 							ProfileGinjector.get
 									.instance()
 									.getNotifier()
 									.displayMessage(
-											Message.createSuccessMessage("Verification email sent. Please check your email to confirm your address."));
+											Message.createSuccessMessage(profileMessages.verificationEmailSent()));
 							originalEmail = profile.getEmail();
 						}
 					}
@@ -256,13 +255,9 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 			@Override
 			public void success(Void result) {
 
-				ProfileGinjector.get
-						.instance()
-						.getNotifier()
-						.displayMessage(
-								Message.createSuccessMessage("Verification email sent. Please check your email to confirm your address."));
+				ProfileGinjector.get.instance().getNotifier()
+						.displayMessage(Message.createSuccessMessage(profileMessages.verificationEmailSent()));
 			}
 		});
-
 	}
 }

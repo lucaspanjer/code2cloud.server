@@ -16,7 +16,7 @@
 			<span class="date"><g:Label ui:field="dateLabel"/></span>
 			<br/>
 			<div ui:field="timeDiv">
-				Time: <g:Label ui:field="timeLabel"/>.
+				<g:Label ui:field="timeLabel"/>
 			</div>
 			<div style="float: left;">
 			<h:HyperlinkingLabel ui:field="expandingTextLabel"/>

@@ -27,6 +27,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Accept Invitation")
 	String acceptInvitation();
 
+	@DefaultMessage("Account")
+	String account();
+
 	@DefaultMessage("Account Information")
 	String accountInformation();
 
@@ -35,6 +38,12 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Activity (60 Days)")
 	String activityRecent();
+
+	@DefaultMessage("Add Key")
+	String addKey();
+
+	@DefaultMessage("Add SSH Key")
+	String addSshKey();
 
 	@DefaultMessage("Administer Users")
 	String administerUsers();
@@ -47,6 +56,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("All")
 	String all();
+
+	@DefaultMessage("Authentication")
+	String authentication();
 
 	@DefaultMessage("Author")
 	String author();
@@ -135,6 +147,12 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Deleted.")
 	String deleted();
 
+	@DefaultMessage("Delete SSH Key")
+	String deleteSshKey();
+
+	@DefaultMessage("Are you sure you want to remove this SSH key?")
+	String deleteSshKeyConfirm();
+
 	@DefaultMessage("Deleting...")
 	String deleting();
 
@@ -164,6 +182,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Edit Organization")
 	String editOrganization();
+
+	@DefaultMessage("Edit SSH Key")
+	String editSshKey();
 
 	@DefaultMessage("Email")
 	String email();
@@ -210,8 +231,14 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Full Email List")
 	String fullEmailList();
 
+	@DefaultMessage("GitHub")
+	String gitHub();
+
 	@DefaultMessage("GitHub Account \"{0}\" Successfully Linked")
 	String gitHubAccountLinkedSuccessfully(String username);
+
+	@DefaultMessage("Associate your <a href=\"http://www.github.com\" target=\"_blank\" class=\"underline\">GitHub</a> account with your {0} account.")
+	SafeHtml gitHubAssociateAccount(String code2Cloud);
 
 	@DefaultMessage("GitHub Credentials")
 	String gitHubCredentials();
@@ -277,8 +304,14 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("First Name, Last Name, Email Address, Token, URL")
 	String invitationTokens();
 
+	@DefaultMessage("Key")
+	String key();
+
 	@DefaultMessage("Last Name")
 	String lastName();
+
+	@DefaultMessage("Latest Activity")
+	String latestActivity();
 
 	@DefaultMessage("Leave this Project")
 	String leaveProject();
@@ -310,8 +343,14 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Name")
 	String name();
 
+	@DefaultMessage("Notifications")
+	String notifications();
+
 	@DefaultMessage("Now Create Your {0} Account")
 	String nowCreateYourAccount(String code2Cloud);
+
+	@DefaultMessage("OK")
+	String ok();
 
 	@DefaultMessage("Open Tasks")
 	String openTasks();
@@ -340,8 +379,20 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Password")
 	String password();
 
+	@DefaultMessage("Change your Password")
+	String passwordChange();
+
 	@DefaultMessage("Confirm Password")
 	String passwordConfirm();
+
+	@DefaultMessage("The current password you gave is incorrect.")
+	String passwordIncorrect();
+
+	@DefaultMessage("New Password")
+	String passwordNew();
+
+	@DefaultMessage("Old Password")
+	String passwordOld();
 
 	@DefaultMessage("Your password must:")
 	String passwordRulesLabel();
@@ -364,11 +415,20 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Password and Confirm Password must be the same.")
 	String passwordAndConfirmationMustMatch();
 
+	@DefaultMessage("New Password and Confirm Password must be the same.")
+	String passwordNewAndConfirmationMustMatch();
+
+	@DefaultMessage("Please provide a password.")
+	String passwordProvide();
+
 	@DefaultMessage("Please choose a new password.")
 	String passwordResetNewPassword();
 
 	@DefaultMessage("Password reset instructions have been sent to your email.")
 	String passwordResetInstructionsSent();
+
+	@DefaultMessage("Password updated.")
+	String passwordUpdated();
 
 	@DefaultMessage("Your password has been updated. You are now signed in.")
 	String passwordUpdatedSignedIn();
@@ -382,6 +442,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Product saved.")
 	String productSaved();
 
+	@DefaultMessage("Profile")
+	String profile();
+
 	@DefaultMessage("Profile Disabled")
 	String profileDisabled();
 
@@ -390,6 +453,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Your profile could not be found. Please try again.")
 	String profileNotFound();
+
+	@DefaultMessage("Profile updated.")
+	String profileUpdated();
 
 	@DefaultMessage("To access this project, sign up for an account or {0} with your existing account")
 	SafeHtml projectAccessSignUpOrIn(SafeHtml signInAnchor);
@@ -415,6 +481,12 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Public")
 	String public_();
 
+	@DefaultMessage("Public Key saved: {0} ({1})")
+	String publicKeySaved(String keyName, String keyFingerprint);
+
+	@DefaultMessage("Public Key updated: {0} ({1})")
+	String publicKeyUpdated(String keyName, String keyFingerprint);
+
 	@DefaultMessage("Read More")
 	String readMore();
 
@@ -427,6 +499,12 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Remember Me")
 	String rememberMe();
 
+	@DefaultMessage("Remove")
+	String remove();
+
+	@DefaultMessage("Remove GitHub link for {0}")
+	String removeGitHubLinkFor(String linkOwner);
+
 	@DefaultMessage("Restarting...")
 	String restarting();
 
@@ -435,6 +513,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Reviews")
 	String reviews();
+
+	@DefaultMessage("Save")
+	String save();
 
 	@DefaultMessage("Saved.")
 	String saved();
@@ -484,6 +565,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Sign in with GitHub")
 	String signInWithGitHub();
 
+	@DefaultMessage("Sign Out")
+	String signOut();
+
 	@DefaultMessage("Sign Up")
 	String signUp();
 
@@ -495,6 +579,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Sources")
 	String sources();
+
+	@DefaultMessage("SSH Keys")
+	String sshKeys();
 
 	@DefaultMessage("Started.")
 	String started();
@@ -526,6 +613,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Team member updated.")
 	String teamMemberUpdated();
 
+	@DefaultMessage("Time: {0}.")
+	String timeLabel(String timeValue);
+
 	@DefaultMessage("Token required for sign up.")
 	String tokenRequiredForSignUp();
 
@@ -546,6 +636,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Updating team member...")
 	String updatingTeamMember();
+
+	@DefaultMessage("Verification email sent. Please check your email to confirm your address.")
+	String verificationEmailSent();
 
 	@DefaultMessage("View Project Dashboard")
 	String viewProjectDashboard();

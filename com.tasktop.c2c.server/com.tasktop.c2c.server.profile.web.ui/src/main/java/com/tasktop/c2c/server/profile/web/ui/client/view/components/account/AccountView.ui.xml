@@ -1,15 +1,16 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 		<ul class="inline-tabs">
 			<li>
-				<g:Anchor ui:field="profileSelector" addStyleNames="button">Profile</g:Anchor>
+				<g:Anchor ui:field="profileSelector" addStyleNames="button"><ui:text from="{pm.profile}"/></g:Anchor>
 			</li>
 			<li>
-				<g:Anchor ui:field="authenticationSelector" addStyleNames="button">Authentication</g:Anchor>
+				<g:Anchor ui:field="authenticationSelector" addStyleNames="button"><ui:text from="{pm.authentication}"/></g:Anchor>
 			</li>
 			<li>
-				<g:Anchor ui:field="notificationsSelector" addStyleNames="button">Notifications</g:Anchor>
+				<g:Anchor ui:field="notificationsSelector" addStyleNames="button"><ui:text from="{pm.notifications}"/></g:Anchor>
 			</li>
 		</ul>
 		<div class="clear"/>

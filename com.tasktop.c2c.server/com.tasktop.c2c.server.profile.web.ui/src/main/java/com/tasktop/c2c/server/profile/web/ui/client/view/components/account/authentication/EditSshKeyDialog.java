@@ -18,7 +18,8 @@ import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -30,6 +31,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.tasktop.c2c.server.common.web.client.view.ErrorCapableView;
 import com.tasktop.c2c.server.common.web.client.view.errors.ErrorCabableDialogBox;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.presenter.IAccountView;
 
 public class EditSshKeyDialog extends ErrorCabableDialogBox implements Editor<SshPublicKey>,
@@ -51,6 +54,14 @@ public class EditSshKeyDialog extends ErrorCabableDialogBox implements Editor<Ss
 	}
 
 	private static SshKeyDialogUiBinder ourUiBinder = GWT.create(SshKeyDialogUiBinder.class);
+
+	public interface Heading2Template extends SafeHtmlTemplates {
+		@Template("<h2>{0}</h2>")
+		SafeHtml insertText(String text);
+	}
+
+	private static final Heading2Template HEADING_2_TEMPLATE = GWT.create(Heading2Template.class);
+
 	@UiField
 	@Path("name")
 	TextBox sshKeyNameField;
@@ -64,6 +75,7 @@ public class EditSshKeyDialog extends ErrorCabableDialogBox implements Editor<Ss
 
 	private Driver driver = GWT.create(Driver.class);
 	private SshKeyPresenter presenter;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private EditSshKeyDialog() {
 		setWidget(ourUiBinder.createAndBindUi(this));
@@ -86,9 +98,9 @@ public class EditSshKeyDialog extends ErrorCabableDialogBox implements Editor<Ss
 		driver.edit(presenter.getSelectedSshKey());
 		boolean isNew = presenter.getSelectedSshKey().getId() == null;
 		if (isNew) {
-			getCaption().setHTML(SafeHtmlUtils.fromSafeConstant("<h2>Add SSH Key</h2>"));
+			getCaption().setHTML(HEADING_2_TEMPLATE.insertText(profileMessages.addSshKey()));
 		} else {
-			getCaption().setHTML(SafeHtmlUtils.fromSafeConstant("<h2>Edit SSH Key</h2>"));
+			getCaption().setHTML(HEADING_2_TEMPLATE.insertText(profileMessages.editSshKey()));
 		}
 		sshKeyField.setEnabled(isNew);
 		center();

@@ -12,14 +12,14 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.account.authentication;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
@@ -28,6 +28,8 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.presenter.IAccountView;
 
 /**
@@ -50,6 +52,13 @@ public class DeleteSshKeyDialog extends DialogBox implements Editor<SshPublicKey
 		return instance;
 	}
 
+	public interface Heading2Template extends SafeHtmlTemplates {
+		@Template("<h2>{0}</h2>")
+		SafeHtml insertText(String text);
+	}
+
+	private static final Heading2Template HEADING_2_TEMPLATE = GWT.create(Heading2Template.class);
+
 	@UiField
 	Button okButton;
 	@UiField
@@ -57,11 +66,12 @@ public class DeleteSshKeyDialog extends DialogBox implements Editor<SshPublicKey
 	@UiField
 	Label keyLabel;
 	private SshKeyPresenter presenter;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public DeleteSshKeyDialog() {
 		super(false, true);
 		setWidget(uiBinder.createAndBindUi(this));
-		setText("Delete SSH Key");
+		setText(profileMessages.deleteSshKey());
 		setAnimationEnabled(true);
 		setGlassEnabled(true);
 
@@ -95,8 +105,7 @@ public class DeleteSshKeyDialog extends DialogBox implements Editor<SshPublicKey
 	@Override
 	public void setPresenter(SshKeyPresenter presenter) {
 		this.presenter = presenter;
-		// driver.edit(presenter.getSelectedSshKey());
-		getCaption().setHTML(SafeHtmlUtils.fromSafeConstant("<h2>Remove SSH Key</h2>"));
+		getCaption().setHTML(HEADING_2_TEMPLATE.insertText(profileMessages.deleteSshKey()));
 		keyLabel.setText(presenter.getSelectedSshKey().getName() + " ("
 				+ presenter.getSelectedSshKey().getFingerprint() + ")");
 		center();

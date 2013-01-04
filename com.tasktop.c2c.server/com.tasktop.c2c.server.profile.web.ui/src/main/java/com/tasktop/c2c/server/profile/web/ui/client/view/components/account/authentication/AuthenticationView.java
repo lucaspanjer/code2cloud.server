@@ -18,10 +18,8 @@ import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
-import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -31,6 +29,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.NamedFrame;
@@ -38,21 +37,17 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.UIObject;
 import com.tasktop.c2c.server.common.profile.web.client.ClientCallback;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.DelegateCell;
 import com.tasktop.c2c.server.common.web.client.view.CellTableResources;
 import com.tasktop.c2c.server.profile.domain.project.SshPublicKey;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.presenter.IAccountView;
 
 public class AuthenticationView extends Composite implements IAccountView<IAccountView.AccountAuthenticationPresenter> {
 
 	interface AuthenticationViewUiBinder extends UiBinder<HTMLPanel, AuthenticationView> {
-	}
-
-	interface Template extends SafeHtmlTemplates {
-
-		@Template("<div class=\"left lock misc-icon my-ssh-key\"><span></span><a style=\"cursor:pointer\">{0}</a></div>")
-		SafeHtml sshKeyName(String name);
 	}
 
 	private static AuthenticationView instance;
@@ -65,7 +60,20 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 	}
 
 	private static AuthenticationViewUiBinder ourUiBinder = GWT.create(AuthenticationViewUiBinder.class);
-	private static Template template = GWT.create(Template.class);
+
+	public interface SshKeyTemplate extends SafeHtmlTemplates {
+		@Template("<div class=\"left lock misc-icon my-ssh-key\"><span></span><a style=\"cursor:pointer\">{0}</a></div>")
+		SafeHtml sshKeyName(String name);
+	}
+
+	private static final SshKeyTemplate SSH_KEY_TEMPLATE = GWT.create(SshKeyTemplate.class);
+
+	public interface RemoveLinkTemplate extends SafeHtmlTemplates {
+		@Template("<div class=\"left\"><a style=\"cursor:pointer\" class=\" red-link\">{0}</a></div>")
+		SafeHtml removeLink(String removeText);
+	}
+
+	private static final RemoveLinkTemplate REMOVE_LINK_TEMPLATE = GWT.create(RemoveLinkTemplate.class);
 
 	@UiField
 	DivElement changePasswordDiv;
@@ -91,11 +99,15 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 	HTMLPanel changePasswordPanel;
 	@UiField(provided = true)
 	public FormPanel githubForm;
+	@UiField
+	HTML associateGitHubAccountLabel;
 
 	@UiField(provided = true)
 	CellTable<SshPublicKey> sshKeyTable;
 
 	private AccountAuthenticationPresenter presenter;
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public AuthenticationView() {
 		createSshKeyTable();
@@ -109,6 +121,7 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 		if (!AppGinjector.get.instance().getConfiguration().isEnableGitHubAuth()) {
 			UIObject.setVisible(linkGitHubDiv, false);
 		}
+		associateGitHubAccountLabel.setHTML(profileMessages.gitHubAssociateAccount(commonProfileMessages.code2Cloud()));
 	}
 
 	@Override
@@ -118,7 +131,7 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 				&& !presenter.getProfile().getGithubUsername().trim().isEmpty()) {
 			// There's a GitHub username, change the form to allow for delete of the link.
 			((Panel) this.githubForm.getWidget()).add(new Hidden("_method", "DELETE"));
-			linkGitHubButton.setText("Remove GitHub link for " + presenter.getProfile().getGithubUsername());
+			linkGitHubButton.setText(profileMessages.removeGitHubLinkFor(presenter.getProfile().getGithubUsername()));
 		}
 		sshKeyTable.setRowData(presenter.getSshKeys());
 		resetPasswords();
@@ -134,20 +147,19 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 	private void createSshKeyTable() {
 		sshKeyTable = new CellTable<SshPublicKey>(10, CellTableResources.get.resources);
 		sshKeyTable.setTableLayoutFixed(true);
-		DelegateCell<String> nameCell = new DelegateCell<String>(
-				new DelegateCell.RenderDelegate<String>() {
-					@Override
-					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
-						return template.sshKeyName(presenter.getSshKeys().get(context.getIndex()).getName());
-					}
-				}, new DelegateCell.ActionDelegate<String>() {
-					@Override
-					public void execute(Cell.Context context) {
-						SshPublicKey toEdit = presenter.getSshKeys().get(context.getIndex());
-						presenter.selectSshKey(toEdit);
-						EditSshKeyDialog.getInstance().setPresenter(presenter);
-					}
-				});
+		DelegateCell<String> nameCell = new DelegateCell<String>(new DelegateCell.RenderDelegate<String>() {
+			@Override
+			public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
+				return SSH_KEY_TEMPLATE.sshKeyName(presenter.getSshKeys().get(context.getIndex()).getName());
+			}
+		}, new DelegateCell.ActionDelegate<String>() {
+			@Override
+			public void execute(Cell.Context context) {
+				SshPublicKey toEdit = presenter.getSshKeys().get(context.getIndex());
+				presenter.selectSshKey(toEdit);
+				EditSshKeyDialog.getInstance().setPresenter(presenter);
+			}
+		});
 		Column<SshPublicKey, String> nameColumn = new Column<SshPublicKey, String>(nameCell) {
 			@Override
 			public String getValue(SshPublicKey object) {
@@ -156,19 +168,18 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 		};
 		sshKeyTable.addColumn(nameColumn);
 		sshKeyTable.setColumnWidth(nameColumn, 200, Style.Unit.PX);
-		DelegateCell<String> removeKeyCell = new DelegateCell<String>(
-				new DelegateCell.RenderDelegate<String>() {
-					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
-						return SafeHtmlUtils.fromSafeConstant("<div class=\"left\"><a style=\"cursor:pointer\" class=\" red-link\">Remove</a></div>");
-					}
-				}, new DelegateCell.ActionDelegate<String>() {
-					@Override
-					public void execute(Cell.Context context) {
-						SshPublicKey toDelete = presenter.getSshKeys().get(context.getIndex());
-						presenter.selectSshKey(toDelete);
-						DeleteSshKeyDialog.getInstance().setPresenter(presenter);
-					}
-				});
+		DelegateCell<String> removeKeyCell = new DelegateCell<String>(new DelegateCell.RenderDelegate<String>() {
+			public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
+				return REMOVE_LINK_TEMPLATE.removeLink(profileMessages.remove());
+			}
+		}, new DelegateCell.ActionDelegate<String>() {
+			@Override
+			public void execute(Cell.Context context) {
+				SshPublicKey toDelete = presenter.getSshKeys().get(context.getIndex());
+				presenter.selectSshKey(toDelete);
+				DeleteSshKeyDialog.getInstance().setPresenter(presenter);
+			}
+		});
 		sshKeyTable.addColumn(new Column<SshPublicKey, String>(removeKeyCell) {
 			@Override
 			public String getValue(SshPublicKey object) {

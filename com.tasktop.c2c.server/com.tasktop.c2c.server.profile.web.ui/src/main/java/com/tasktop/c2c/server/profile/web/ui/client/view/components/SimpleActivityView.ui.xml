@@ -2,10 +2,11 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
-        <div class="project-latest-activity">
-			<h2>Latest Activity</h2>
-		  	<g:FlowPanel ui:field="activityPanel" />
-	  	</div>
+		<div class="project-latest-activity">
+			<h2><ui:text from="{pm.latestActivity}"/></h2>
+			<g:FlowPanel ui:field="activityPanel" />
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

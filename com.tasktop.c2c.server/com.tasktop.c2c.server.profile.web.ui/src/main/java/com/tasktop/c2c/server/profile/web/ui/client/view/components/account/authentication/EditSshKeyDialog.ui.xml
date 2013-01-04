@@ -1,5 +1,6 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<ui:style field="local">
 		.popup {
 			background: #ebf3f8;
@@ -33,20 +34,20 @@
 		<div class="clear"/>
 		<div class="create-key-form">
 			<fieldset>
-				<label>Name</label>
+				<label><ui:text from="{pm.name}"/></label>
 				<div>
 					<g:TextBox ui:field="sshKeyNameField" addStyleNames="{local.add-sshkey-popup-textbox}"/>
 				</div>
 			</fieldset>
 			<fieldset>
-				<label>Key</label>
+				<label><ui:text from="{pm.key}"/></label>
 				<div>
 					<g:TextArea ui:field="sshKeyField" addStyleNames="{local.add-sshkey-popup-textarea}"/>
 				</div>
 			</fieldset>
 			<div class="right">
-				<g:Button ui:field="saveButton" addStyleNames="button special" text="Save"/>
-				<g:Button ui:field="cancelButton" addStyleNames="button cancel" text="Cancel"/>
+				<g:Button ui:field="saveButton" addStyleNames="button special"><ui:text from="{pm.save}"/></g:Button>
+				<g:Button ui:field="cancelButton" addStyleNames="button cancel"><ui:text from="{pm.cancel}"/></g:Button>
 			</div>
 			<div class="clear"/>
 		</div>
