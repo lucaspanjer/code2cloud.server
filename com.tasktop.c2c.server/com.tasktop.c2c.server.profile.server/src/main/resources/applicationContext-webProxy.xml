@@ -7,7 +7,17 @@
 	<import resource="classpath:META-INF/spring/applicationContext-httpProxy.xml"/>
 	<import resource="classpath:META-INF/spring/applicationContext-ajpProxy.xml"/>
 	
-	<bean class="com.tasktop.c2c.server.profile.web.proxy.ApplicationServiceProxy" id="applicationServiceProxy" autowire="byType">
+	<bean class="com.tasktop.c2c.server.profile.web.proxy.AcceptLanguageHeaderSettingInterceptor" 
+		id="acceptLanguageHeaderSettingInterceptor">
+		<property name="compatibleServiceTypes">
+			<set value-type="com.tasktop.c2c.server.cloud.domain.ServiceType">
+				<value>BUILD</value>
+			</set>
+		</property>
+	</bean>
+	
+	<bean class="com.tasktop.c2c.server.profile.web.proxy.ApplicationServiceProxy" 
+		id="applicationServiceProxy" autowire="byType">
 		<property name="proxies">
 			<list value-type="com.tasktop.c2c.server.web.proxy.WebProxy">
 				<ref bean="ajpProxy"/>
@@ -15,7 +25,11 @@
 			</list>
 		</property>
 		<property name="disableAjp" value="${alm.proxy.disableAjp}"/>
+		<property name="projectServiceProxyInterceptors">
+			<list value-type="com.tasktop.c2c.server.profile.web.proxy.ProjectServiceProxyInterceptor">
+				<ref bean="acceptLanguageHeaderSettingInterceptor"/>
+			</list>
+		</property>
 	</bean>
-
 
 </beans>

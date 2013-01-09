@@ -71,6 +71,8 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 	@Autowired
 	private InternalTenancyContextHttpHeaderProvider tenancySerializer;
 
+	private List<ProjectServiceProxyInterceptor> projectServiceProxyInterceptors;
+
 	@Value("${alm.proxy.disableAjp}")
 	private boolean disableAjp = false;
 
@@ -131,6 +133,10 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 			proxyRequest.addHeader(header.getKey(), header.getValue());
 		}
 
+		for (ProjectServiceProxyInterceptor interceptor : projectServiceProxyInterceptors) {
+			interceptor.prepareProxyRequest(proxyRequest, service);
+		}
+
 		LOG.info("Proxying service [" + service.getType() + "] to url [" + targetUrl + "]");
 
 		boolean handlerFound = false;
@@ -167,4 +173,11 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 		this.disableAjp = disableAjp;
 	}
 
+	public List<ProjectServiceProxyInterceptor> getProjectServiceProxyInterceptors() {
+		return projectServiceProxyInterceptors;
+	}
+
+	public void setProjectServiceProxyInterceptors(List<ProjectServiceProxyInterceptor> projectServiceProxyInterceptors) {
+		this.projectServiceProxyInterceptors = projectServiceProxyInterceptors;
+	}
 }
