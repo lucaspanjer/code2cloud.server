@@ -56,6 +56,8 @@ public class C2CSlaveCloud extends Cloud {
 	private String sshUser;
 	private String sshKeyFilePath;
 	private String projectIdentifier;
+	private String javaOptions = "";
+
 	private String remoteFS = "/home/c2c/hudson";
 
 	private static final int SLAVE_LEASE_EXPIRY_RENEW_TIME = 5 * 60 * 1000;
@@ -299,6 +301,17 @@ public class C2CSlaveCloud extends Cloud {
 
 	public void setSshKeyFilePath(String sshKeyFilePath) {
 		this.sshKeyFilePath = sshKeyFilePath;
+	}
+
+	public String getJavaOptions() {
+		if (javaOptions == null) {
+			return "";
+		}
+		return javaOptions;
+	}
+
+	public void setJavaOptions(String javaOptions) {
+		this.javaOptions = javaOptions;
 	}
 
 	public String getProjectIdentifier() {

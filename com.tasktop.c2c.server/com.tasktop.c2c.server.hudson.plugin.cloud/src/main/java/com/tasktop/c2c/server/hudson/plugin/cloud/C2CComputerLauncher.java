@@ -68,7 +68,8 @@ public class C2CComputerLauncher extends ComputerLauncher {
 			conn = connectToSsh(address);
 			logger.println("Launching slave agent");
 			final Session sess = conn.openSession();
-			sess.execCommand("java -jar " + SLAVE_JAR_LOCATION);
+			C2CSlaveCloud c2cSlaveCloud = C2CSlaveCloud.get();
+			sess.execCommand("java " + c2cSlaveCloud.getJavaOptions() + " -jar " + SLAVE_JAR_LOCATION);
 			computer.setChannel(sess.getStdout(), sess.getStdin(), logger, new Listener() {
 				public void onClosed(Channel channel, IOException cause) {
 					sess.close();
