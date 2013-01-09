@@ -2,35 +2,34 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'
 			 xmlns:d='urn:import:com.google.gwt.dom.client'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 				<div class="clear"></div><!-- Project Tab Navigation End-->
 	
 	<!-- Account Profile  Contents start-->
 			<div class="deployment">
-				<p>
-                   Email notifications will be sent to <span style="font-weight:bold"><g:Label ui:field="emailLabel"/></span>.
-				</p>
+				<p><g:HTML ui:field="emailNotificationsSentToLabel"/></p>
 			  <div class="notifications">
 			    <h3>
 			      <span class="heading left first">&nbsp;</span>
-			      <span class="heading left">Email</span>
+			      <span class="heading left"><ui:text from="{pm.email}"/></span>
 			      <span class="heading right last">
-			      	<g:Anchor ui:field="editButton" styleName="misc-icon edit"><span></span>Edit</g:Anchor>
+			      	<g:Anchor ui:field="editButton" styleName="misc-icon edit"><span></span><ui:text from="{pm.edit}"/></g:Anchor>
 			      </span>
 			      <div class="clear"></div>
 			    </h3>
 			    <div class="row">
-			      <span class="heading left">Task updates, attachments and comments</span>
+			      <span class="heading left"><ui:text from="{pm.notificationsTaskUpdatesAttachmentsComments}"/></span>
 			      <span ui:field="emailTaskActivityCheckboxSpan" class="checkbox-item left active"><span></span></span>
 			      <div class="clear"></div>
 	          	</div>
 	          	<div class="row">
-			      <span class="heading left">New features, tips, and events</span>
+			      <span class="heading left"><ui:text from="{pm.notificationsNewFeaturesTipsEvents}"/></span>
 			      <span ui:field="emailNewsAndEventsCheckboxSpan" class="checkbox-item left active"><span></span></span>
 			      <div class="clear"></div>
 	          	</div>
 	          	<div class="row">
-			      <span class="heading left">Service and system maintenance updates</span>
+			      <span class="heading left"><ui:text from="{pm.notificationsServiceMaintenanceUpdates}"/></span>
 			      <span ui:field="emailServiceAndMaintenanceCheckboxSpan" class="checkbox-item left active"><span></span></span>
 			      <div class="clear"></div>
 	          	</div>

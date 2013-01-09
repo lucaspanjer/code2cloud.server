@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.account.profile;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.editor.client.Editor;
@@ -21,10 +20,12 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.profile.domain.project.NotificationSettings;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.presenter.IAccountView;
 
 public class AccountNotificationsReadOnlyView extends Composite implements Editor<NotificationSettings>,
@@ -45,11 +46,14 @@ public class AccountNotificationsReadOnlyView extends Composite implements Edito
 	SpanElement emailServiceAndMaintenanceCheckboxSpan;
 
 	@UiField
-	Label emailLabel;
+	@Ignore
+	HTML emailNotificationsSentToLabel;
 
 	Runnable onEdit;
 
 	private AccountProfilePresenter presenter;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public AccountNotificationsReadOnlyView() {
 		initWidget(ourUiBinder.createAndBindUi(this));
@@ -66,7 +70,7 @@ public class AccountNotificationsReadOnlyView extends Composite implements Edito
 	 * @param notificationSettings
 	 */
 	private void setValue(Profile profile) {
-		emailLabel.setText(profile.getEmail());
+		emailNotificationsSentToLabel.setHTML(profileMessages.emailNotificationsSentTo(profile.getEmail()));
 		updateCBSpanStyle(emailTaskActivityCheckboxSpan, profile.getNotificationSettings().getEmailTaskActivity());
 		updateCBSpanStyle(emailNewsAndEventsCheckboxSpan, profile.getNotificationSettings().getEmailNewsAndEvents());
 		updateCBSpanStyle(emailServiceAndMaintenanceCheckboxSpan, profile.getNotificationSettings()

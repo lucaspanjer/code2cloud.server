@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.account.profile;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
@@ -22,9 +21,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.tasktop.c2c.server.profile.domain.project.NotificationSettings;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.presenter.IAccountView;
 
 public class AccountNotificationsEditView extends Composite implements Editor<NotificationSettings>,
@@ -39,10 +40,6 @@ public class AccountNotificationsEditView extends Composite implements Editor<No
 	private static AccountNotificationsViewUiBinder ourUiBinder = GWT.create(AccountNotificationsViewUiBinder.class);
 
 	@UiField
-	@Ignore
-	Label emailLabel;
-
-	@UiField
 	@Path("emailTaskActivity")
 	CheckBox emailTaskActivityField;
 
@@ -54,11 +51,17 @@ public class AccountNotificationsEditView extends Composite implements Editor<No
 	@Path("emailServiceAndMaintenance")
 	CheckBox emailServiceAndMaintenanceField;
 
+	@UiField
+	@Ignore
+	HTML emailNotificationsSentToLabel;
+
 	private AccountProfilePresenter presenter;
 	private static Driver driver = GWT.create(Driver.class);
 
 	private Runnable onCancel;
 	private Runnable onSave;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public AccountNotificationsEditView() {
 		initWidget(ourUiBinder.createAndBindUi(this));
@@ -69,7 +72,8 @@ public class AccountNotificationsEditView extends Composite implements Editor<No
 	public void setPresenter(AccountProfilePresenter presenter) {
 		this.presenter = presenter;
 		driver.edit(presenter.getProfile().getNotificationSettings());
-		emailLabel.setText(presenter.getProfile().getEmail());
+		emailNotificationsSentToLabel.setHTML(profileMessages.emailNotificationsSentTo(presenter.getProfile()
+				.getEmail()));
 	}
 
 	@UiHandler("saveButton")

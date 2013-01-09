@@ -171,6 +171,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Deployments")
 	String deployments();
 
+	@DefaultMessage("Details")
+	String details();
+
 	@DefaultMessage("Disable")
 	String disable();
 
@@ -179,6 +182,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Edit")
 	String edit();
+
+	@DefaultMessage("Editing")
+	String editing();
 
 	@DefaultMessage("Edit Organization")
 	String editOrganization();
@@ -191,6 +197,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Email Address")
 	String emailAddress();
+
+	@DefaultMessage("Email notifications will be sent to <span style=\"font-weight:bold\">{0}</span>.")
+	SafeHtml emailNotificationsSentTo(String email);
 
 	@DefaultMessage("Your email address has been verified.")
 	String emailVerified();
@@ -271,6 +280,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Unverified Email Addresses")
 	String hideUnverified();
 
+	@DefaultMessage("Image from <a href=\"http://www.gravatar.com\" target=\"_blank\" class=\"underline\">gravatar.com</a>")
+	SafeHtml imageFromGravatar();
+
 	@DefaultMessage("Invalid username or password. Please try again.")
 	String invalidUsername();
 
@@ -345,6 +357,15 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Notifications")
 	String notifications();
+
+	@DefaultMessage("New features, tips, and events")
+	String notificationsNewFeaturesTipsEvents();
+
+	@DefaultMessage("Service and system maintenance updates")
+	String notificationsServiceMaintenanceUpdates();
+
+	@DefaultMessage("Task updates, attachments and comments")
+	String notificationsTaskUpdatesAttachmentsComments();
 
 	@DefaultMessage("Now Create Your {0} Account")
 	String nowCreateYourAccount(String code2Cloud);
@@ -432,6 +453,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Your password has been updated. You are now signed in.")
 	String passwordUpdatedSignedIn();
+
+	@DefaultMessage("Picture")
+	String picture();
 
 	@DefaultMessage("Product created.")
 	String productCreated();
@@ -543,6 +567,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Send Invitation Emails")
 	String sendInvitationEmails();
+
+	@DefaultMessage("Send Verification")
+	String sendVerification();
 
 	@DefaultMessage("Settings")
 	String settings();
@@ -660,6 +687,17 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Welcome To")
 	String welcomeTo();
+
+	@DefaultMessage("What is Email Verification?")
+	String whatIsEmailVerification();
+
+	@DefaultMessage("<p>When you create your account or modify your account email address, we''ll send a verification link to the email address you used.</p>"
+			+ "<p>Click the link in that email to verify that you own the email address.</p>"
+			+ "<p>Email verification is required to access certain {0} features, such a system alerts.</p>")
+	SafeHtml whatIsEmailVerificationDetails(String code2Cloud);
+
+	@DefaultMessage("(What is Verification?)")
+	String whatIsVerificationParens();
 
 	@DefaultMessage("Wiki")
 	String wiki();

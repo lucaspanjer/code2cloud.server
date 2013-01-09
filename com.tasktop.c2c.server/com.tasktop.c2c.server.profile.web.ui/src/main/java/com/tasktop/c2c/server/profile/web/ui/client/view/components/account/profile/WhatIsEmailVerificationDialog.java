@@ -22,7 +22,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 /**
  * @author Clint Morgan (Tasktop Technologies Inc.)
@@ -38,10 +42,18 @@ public class WhatIsEmailVerificationDialog extends DialogBox {
 	@UiField
 	Button okButton;
 
+	@UiField
+	HTML whatIsEmailVerificationDetailsLabel;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
+
 	public WhatIsEmailVerificationDialog() {
 		super(false, true);
 		setWidget(uiBinder.createAndBindUi(this));
-		setText("What is Email Verification?");
+		setText(profileMessages.whatIsEmailVerification());
+		whatIsEmailVerificationDetailsLabel.setHTML(profileMessages
+				.whatIsEmailVerificationDetails(commonProfileMessages.code2Cloud()));
 		setAnimationEnabled(true);
 		setGlassEnabled(true);
 		okButton.addClickHandler(new ClickHandler() {

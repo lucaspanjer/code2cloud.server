@@ -20,10 +20,13 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.account.presenter.IAccountView;
 
 public class AccountProfileEditView extends AbstractAccountProfileView implements Editor<Profile>,
@@ -61,11 +64,17 @@ public class AccountProfileEditView extends AbstractAccountProfileView implement
 	Button cancelButton;
 	@UiField
 	Button saveButton;
+	@UiField
+	@Ignore
+	HTML imageFromGravatarLabel;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private static Driver driver = GWT.create(Driver.class);
 
 	public AccountProfileEditView() {
 		initWidget(ourUiBinder.createAndBindUi(this));
+		imageFromGravatarLabel.setHTML(profileMessages.imageFromGravatar());
 		driver.initialize(this);
 	}
 
