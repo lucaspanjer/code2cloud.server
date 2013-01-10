@@ -26,7 +26,9 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTeamSummary;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectAdminSettingsPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ProjectAdminTeamPlace extends ProjectAdminPlace {
 
@@ -50,6 +52,8 @@ public class ProjectAdminTeamPlace extends ProjectAdminPlace {
 
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
 	private ProjectTeamSummary projectTeamSummary;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private ProjectAdminTeamPlace(String projectId) {
 		super(projectId);
@@ -94,8 +98,8 @@ public class ProjectAdminTeamPlace extends ProjectAdminPlace {
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
 		breadcrumbs.add(new Breadcrumb(ProjectAdminSettingsPlace.createPlace(project.getIdentifier()).getHref(),
-				"Settings"));
+				profileMessages.settings()));
 
-		breadcrumbs.add(new Breadcrumb(getHistoryToken(), "Team"));
+		breadcrumbs.add(new Breadcrumb(getHistoryToken(), profileMessages.team()));
 	}
 }

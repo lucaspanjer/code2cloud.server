@@ -1,22 +1,23 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 		<div id="project-admin" class="add-form edit project-admin left" >
-			<h4>Edit Organization</h4>
+			<h4><ui:text from="{pm.editOrganization}"/></h4>
 			<fieldset>
-				<label class="left">Name:</label>
+				<label class="left"><ui:text from="{pm.name}"/><ui:text from="{pm.colon}"/></label>
 				<div>
 					<g:TextBox ui:field="projectName" addStyleNames="text"/>
 				</div>
 			</fieldset>
 			<fieldset>
-				<label class="left">Description:</label>
+				<label class="left"><ui:text from="{pm.description}"/><ui:text from="{pm.colon}"/></label>
 				<p>
 					<g:TextArea ui:field="projectDescription" addStyleNames="text"/>
 				</p>
 			</fieldset>
 			<fieldset>
-				<label>Wiki Markup:</label>
+				<label><ui:text from="{pm.wikiMarkup}"/><ui:text from="{pm.colon}"/></label>
 	 			<div>
 					<g:ValueListBox ui:field="wikiLanguageListBox"/>
 				</div>
@@ -25,8 +26,8 @@
 			<fieldset>
 				<label>&#160;</label>
 				<div class="save">
-					<g:Button ui:field="saveButton" addStyleNames="button special" text="Save and Close"/>
-					<g:Button ui:field="cancelEditButton" addStyleNames="button" text="Cancel"/>
+					<g:Button ui:field="saveButton" addStyleNames="button special" text="{pm.saveAndClose}"/>
+					<g:Button ui:field="cancelEditButton" addStyleNames="button" text="{pm.cancel}"/>
 				</div>
 			</fieldset>
 			<div class="clear"/>

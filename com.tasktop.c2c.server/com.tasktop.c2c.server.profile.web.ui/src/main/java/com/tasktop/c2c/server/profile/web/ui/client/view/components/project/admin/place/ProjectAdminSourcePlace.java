@@ -27,7 +27,9 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectScmRep
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.ProjectAdminSettingsPlace;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 public class ProjectAdminSourcePlace extends ProjectAdminPlace implements BreadcrumbPlace {
@@ -57,6 +59,8 @@ public class ProjectAdminSourcePlace extends ProjectAdminPlace implements Breadc
 	private String publicSshKey;
 
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private ProjectAdminSourcePlace(String projectId) {
 		super(projectId);
@@ -119,8 +123,8 @@ public class ProjectAdminSourcePlace extends ProjectAdminPlace implements Breadc
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
 		breadcrumbs.add(new Breadcrumb(ProjectAdminSettingsPlace.createPlace(project.getIdentifier()).getHref(),
-				"Settings"));
-		breadcrumbs.add(new Breadcrumb(getHref(), "Source"));
+				profileMessages.settings()));
+		breadcrumbs.add(new Breadcrumb(getHref(), profileMessages.source()));
 	}
 
 	/**

@@ -28,6 +28,7 @@ import com.tasktop.c2c.server.common.web.client.view.ErrorCapableView;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.place.ProjectAdminSourcePlace;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.source.IProjectAdminSourceView;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.source.ProjectScmAdminView;
@@ -42,6 +43,7 @@ public class ProjectAdminSourceActivity extends AbstractActivity implements IPro
 	private List<ScmRepository> repositories;
 	private Project project;
 	private ProjectScmAdminView view = ProjectScmAdminView.getInstance();
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public ProjectAdminSourceActivity() {
 	}
@@ -79,8 +81,8 @@ public class ProjectAdminSourceActivity extends AbstractActivity implements IPro
 
 	@Override
 	public void onDeleteRepository(final ScmRepository repo) {
-		OperationMessage message = new OperationMessage("Deleting repository");
-		message.setSuccessText("Repository deleted");
+		OperationMessage message = new OperationMessage(profileMessages.deletingRepository());
+		message.setSuccessText(profileMessages.repositoryDeleted());
 		ProfileEntryPoint.getInstance().getProfileService()
 				.deleteProjectGitRepository(projectIdentifier, repo, new AsyncCallbackSupport<Void>(message) {
 					@Override
@@ -100,8 +102,8 @@ public class ProjectAdminSourceActivity extends AbstractActivity implements IPro
 
 	@Override
 	public void onCreateRepository(ErrorCapableView errorView, ScmRepository repository) {
-		OperationMessage message = new OperationMessage("Adding repository");
-		message.setSuccessText("Repository added");
+		OperationMessage message = new OperationMessage(profileMessages.addingRepository());
+		message.setSuccessText(profileMessages.repositoryAdded());
 		ProfileEntryPoint
 				.getInstance()
 				.getProfileService()

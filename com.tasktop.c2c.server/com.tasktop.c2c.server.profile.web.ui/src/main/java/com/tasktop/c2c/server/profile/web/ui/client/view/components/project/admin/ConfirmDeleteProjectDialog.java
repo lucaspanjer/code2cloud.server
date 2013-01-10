@@ -26,7 +26,9 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.presenter.ProjectAdminActivity;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 /**
  * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
@@ -47,6 +49,8 @@ public class ConfirmDeleteProjectDialog extends DialogBox {
 
 	private ProjectAdminActivity presenter;
 
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+
 	public static ConfirmDeleteProjectDialog getInstance(ProjectAdminActivity presenter) {
 		if (instance == null) {
 			instance = new ConfirmDeleteProjectDialog();
@@ -59,7 +63,7 @@ public class ConfirmDeleteProjectDialog extends DialogBox {
 
 	private ConfirmDeleteProjectDialog() {
 		super(false, true);
-		setText("Confirm Delete");
+		setText(profileMessages.confirmDelete());
 		setWidget(uiBinder.createAndBindUi(this));
 		setAnimationEnabled(true); // Why not?
 		setGlassEnabled(true);

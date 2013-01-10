@@ -34,6 +34,7 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTeamSummary;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.ProjectAdminMenu;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.place.ProjectAdminTeamPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.team.IProjectAdminTeamView;
@@ -45,6 +46,7 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 	private ProjectTeamAdminView view = ProjectTeamAdminView.getInstance();
 	private ProjectTeamSummary projectTeamSummary;
 	private Project project;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public ProjectAdminTeamActivity() {
 	}
@@ -74,8 +76,8 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 
 	@Override
 	public void removeTeamMember(ProjectTeamMember teamMember) {
-		OperationMessage message = new OperationMessage("Saving");
-		message.setSuccessText("Member Removed");
+		OperationMessage message = new OperationMessage(profileMessages.saving());
+		message.setSuccessText(profileMessages.memberRemoved());
 		ProfileEntryPoint.getInstance().getProfileService()
 				.removeTeamMember(project.getIdentifier(), teamMember, new AsyncCallbackSupport<Boolean>(message) {
 					@Override
@@ -88,8 +90,8 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 
 	@Override
 	public void updateTeamMember(ProjectTeamMember teamMember) {
-		OperationMessage message = new OperationMessage("Saving");
-		message.setSuccessText("Member Updated");
+		OperationMessage message = new OperationMessage(profileMessages.saving());
+		message.setSuccessText(profileMessages.memberUpdated());
 		ProfileEntryPoint.getInstance().getProfileService()
 				.updateTeamMemberRoles(project.getIdentifier(), teamMember, new AsyncCallbackSupport<Boolean>(message) {
 					@Override
@@ -104,11 +106,11 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 	public void sendInvite(final String email) {
 		if (email == null || email.isEmpty()) {
 			ProfileGinjector.get.instance().getNotifier()
-					.displayMessage(Message.createErrorMessage("Please enter an email"));
+					.displayMessage(Message.createErrorMessage(profileMessages.enterEmail()));
 			return;
 		} else if (!ValidationUtils.isValidEmail(email)) {
 			ProfileGinjector.get.instance().getNotifier()
-					.displayMessage(Message.createErrorMessage("Please enter a valid email"));
+					.displayMessage(Message.createErrorMessage(profileMessages.enterValidEmail()));
 			return;
 		}
 
@@ -119,8 +121,11 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 					protected void success(Void result) {
 						// Set a status message indicating that this user was invited
 						view.clearInput();
-						ProfileGinjector.get.instance().getNotifier()
-								.displayMessage(Message.createSuccessMessage("Invitation email sent to " + email));
+						ProfileGinjector.get
+								.instance()
+								.getNotifier()
+								.displayMessage(
+										Message.createSuccessMessage(profileMessages.invitationEmailSentTo(email)));
 					}
 				});
 	}
@@ -134,7 +139,7 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 	public void addToProject(final Profile user) {
 		if (user == null) {
 			ProfileGinjector.get.instance().getNotifier()
-					.displayMessage(Message.createErrorMessage("Please select a user first"));
+					.displayMessage(Message.createErrorMessage(profileMessages.selectUserFirst()));
 			return;
 		}
 		AppGinjector.get
@@ -152,7 +157,8 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 										.instance()
 										.getNotifier()
 										.displayMessage(
-												Message.createSuccessMessage("Added user " + user.getUsername()));
+												Message.createSuccessMessage(profileMessages.addedUser(user
+														.getUsername())));
 
 							}
 						});

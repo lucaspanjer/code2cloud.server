@@ -39,6 +39,12 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Activity (60 Days)")
 	String activityRecent();
 
+	@DefaultMessage("Added user {0}.")
+	String addedUser(String user);
+
+	@DefaultMessage("Adding repository...")
+	String addingRepository();
+
 	@DefaultMessage("Add Key")
 	String addKey();
 
@@ -96,6 +102,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Closed Tasks")
 	String closedTasks();
 
+	@DefaultMessage(":")
+	String colon();
+
 	@DefaultMessage("Commited")
 	String commited();
 
@@ -110,6 +119,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Component deleted.")
 	String componentDeleted();
+
+	@DefaultMessage("Confirm Delete")
+	String confirmDelete();
 
 	@DefaultMessage("Confirm Leave This Project")
 	String confirmLeaveProject();
@@ -144,8 +156,20 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Day")
 	String day();
 
+	@DefaultMessage("Delete")
+	String delete();
+
 	@DefaultMessage("Deleted.")
 	String deleted();
+
+	@DefaultMessage("Delete Project")
+	String deleteProject();
+
+	@DefaultMessage("I understand that my project will be permanently deleted.")
+	String deleteProjectIUnderstand();
+
+	@DefaultMessage("This will permanently delete the project including all associated services and thier data. This operation cannot be undone.")
+	String deleteProjectWarning();
 
 	@DefaultMessage("Delete SSH Key")
 	String deleteSshKey();
@@ -168,8 +192,14 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Deleting release...")
 	String deletingRelease();
 
+	@DefaultMessage("Deleting repository...")
+	String deletingRepository();
+
 	@DefaultMessage("Deployments")
 	String deployments();
+
+	@DefaultMessage("Description")
+	String description();
 
 	@DefaultMessage("Details")
 	String details();
@@ -213,10 +243,10 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("The referenced entity cannot be found or no longer exists.")
 	String entityNotFound();
 
-	@DefaultMessage("Please enter an email")
+	@DefaultMessage("Please enter an email.")
 	String enterEmail();
 
-	@DefaultMessage("Please enter a valid email")
+	@DefaultMessage("Please enter a valid email.")
 	String enterValidEmail();
 
 	@DefaultMessage("Error while saving")
@@ -304,6 +334,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Invitations created. See below for details:")
 	String invitationsCreatedSeeBelow();
 
+	@DefaultMessage("Invitation email sent to {0}")
+	String invitationEmailSentTo(String recipient);
+
 	@DefaultMessage("Invitation sent to")
 	String invitationSentTo();
 
@@ -348,6 +381,12 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Member")
 	String member();
+
+	@DefaultMessage("Member removed.")
+	String memberRemoved();
+
+	@DefaultMessage("Member updated.")
+	String memberUpdated();
 
 	@DefaultMessage("{0} minutes")
 	String minutes(Long duration);
@@ -430,6 +469,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("not include your username")
 	String passwordRulesNotIncludeUsername();
 
+	@DefaultMessage("Organization Private")
+	String organizationPrivate();
+
 	@DefaultMessage("Password Reset")
 	String passwordReset();
 
@@ -456,6 +498,12 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Picture")
 	String picture();
+
+	@DefaultMessage("Privacy")
+	String privacy();
+
+	@DefaultMessage("Private")
+	String private_();
 
 	@DefaultMessage("Product created.")
 	String productCreated();
@@ -493,6 +541,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Project deleted.")
 	String projectDeleted();
 
+	@DefaultMessage("Project Details")
+	String projectDetails();
+
 	@DefaultMessage("You have been invited to the ''{0}'' project.")
 	String projectInvited(String projectName);
 
@@ -529,6 +580,12 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Remove GitHub link for {0}")
 	String removeGitHubLinkFor(String linkOwner);
 
+	@DefaultMessage("Repository added.")
+	String repositoryAdded();
+
+	@DefaultMessage("Repository deleted.")
+	String repositoryDeleted();
+
 	@DefaultMessage("Restarting...")
 	String restarting();
 
@@ -540,6 +597,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Save")
 	String save();
+
+	@DefaultMessage("Save and Close")
+	String saveAndClose();
 
 	@DefaultMessage("Saved.")
 	String saved();
@@ -561,6 +621,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("{0} seconds")
 	String seconds(Long duration);
+
+	@DefaultMessage("Please select a user first.")
+	String selectUserFirst();
 
 	@DefaultMessage("Sending invitation.")
 	String sendingInvitation();
@@ -600,6 +663,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Source")
 	String source();
+
+	@DefaultMessage("Source Code")
+	String sourceCode();
 
 	@DefaultMessage("Git source code repositories are located at:")
 	String sourceRepositoryLocation();
@@ -648,6 +714,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Total")
 	String total();
+
+	@DefaultMessage("Unable to create project at this time. Please try again later.")
+	String unableToCreateProject();
 
 	@DefaultMessage("Unexpected error")
 	String unexpectedError();
@@ -704,4 +773,7 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("You can add content here by creating a wiki page called \"Home\".")
 	String wikiHomePage();
+
+	@DefaultMessage("Wiki Markup")
+	String wikiMarkup();
 }
