@@ -12,7 +12,6 @@
   <classpathentry kind="var" path="M2_REPO/javax/inject/javax.inject/1/javax.inject-1.jar" sourcepath="M2_REPO/javax/inject/javax.inject/1/javax.inject-1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA-sources.jar"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-  <classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
   <classpathentry kind="src" path="/com.tasktop.c2c.server.profile.server"/>
   <classpathentry kind="src" path="/com.tasktop.c2c.server.profile.api"/>
   <classpathentry kind="src" path="/com.tasktop.c2c.server.common.api"/>

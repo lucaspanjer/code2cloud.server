@@ -127,7 +127,6 @@
 		<configuration>
 		   <classpathContainers>
 		          <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
-		          <classpathContainer>com.google.gwt.eclipse.core.GWT_CONTAINER</classpathContainer>
 		   </classpathContainers>
 		   <additionalProjectnatures>
 		          <projectnature>com.google.gwt.eclipse.core.gwtNature</projectnature>
