@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -26,6 +25,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.ObjectListBox.Renderer;
 
 /**
@@ -46,7 +46,8 @@ public class ServiceEditView extends Composite {
 	@UiField
 	Anchor addButton;
 
-	private static final String CREATE_NEW_SERVICE_TEXT = "Create New Service...";
+	private static final String CREATE_NEW_SERVICE_TEXT = AppGinjector.get.instance().getProfileMessages()
+			.createNewService();
 
 	public ServiceEditView(CloudService serviceOrNull, final CreateServiceDialog createServiceDialog) {
 		initWidget(uiBinder.createAndBindUi(this));

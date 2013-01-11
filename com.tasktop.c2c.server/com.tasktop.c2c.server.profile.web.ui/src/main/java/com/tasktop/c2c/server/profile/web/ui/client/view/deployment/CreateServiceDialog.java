@@ -14,21 +14,22 @@ package com.tasktop.c2c.server.profile.web.ui.client.view.deployment;
 
 import java.util.List;
 
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.user.client.Window;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.ObjectListBox.Renderer;
 
 /**
@@ -52,6 +53,7 @@ public class CreateServiceDialog extends DialogBox {
 	@UiField
 	Button cancelButton;
 	private ServiceEditView viewForNewService;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public CreateServiceDialog() {
 		super(false, true);
@@ -61,7 +63,7 @@ public class CreateServiceDialog extends DialogBox {
 
 			@Override
 			public String renderToString(DeploymentServiceConfiguration object) {
-				return object.getVendor() + " (" + object.getType() + ")";
+				return object.getVendor() + " " + profileMessages.parentheses(object.getType());
 			}
 		});
 

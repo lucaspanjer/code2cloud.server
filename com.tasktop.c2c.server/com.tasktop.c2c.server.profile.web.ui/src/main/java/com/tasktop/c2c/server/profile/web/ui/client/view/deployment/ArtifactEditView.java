@@ -35,6 +35,8 @@ import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentType;
 import com.tasktop.c2c.server.profile.domain.build.BuildArtifact;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ArtifactEditView extends Composite {
 	interface Binder extends UiBinder<Widget, ArtifactEditView> {
@@ -75,6 +77,7 @@ public class ArtifactEditView extends Composite {
 	private static final class BuildRenderer extends AbstractRenderer<BuildDetails> {
 
 		private final String nullText;
+		private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 		public BuildRenderer(String nullText) {
 			this.nullText = nullText;
@@ -88,7 +91,7 @@ public class ArtifactEditView extends Composite {
 			if (object.getResult() == null) {
 				return object.getNumber() + "";
 			}
-			return object.getNumber() + " (" + object.getResult().getFriendlyName() + ")";
+			return object.getNumber() + " " + profileMessages.parentheses(object.getResult().getFriendlyName());
 		}
 
 	}
@@ -105,6 +108,8 @@ public class ArtifactEditView extends Composite {
 
 	}
 
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+
 	@UiField
 	RadioButton automaticType;
 	@UiField
@@ -112,14 +117,15 @@ public class ArtifactEditView extends Composite {
 	@UiField
 	CheckBox deployUnstableBuilds;
 	@UiField(provided = true)
-	ValueListBox<String> jobNameListBox = new ValueListBox<String>(new StringRenderer("Select a Job..."));
+	ValueListBox<String> jobNameListBox = new ValueListBox<String>(new StringRenderer(profileMessages.selectAJob()));
 	@UiField(provided = true)
-	ValueListBox<BuildDetails> buildsListBox = new ValueListBox<BuildDetails>(new BuildRenderer("Select a Build..."),
-			new BuildKeyProvider());
+	ValueListBox<BuildDetails> buildsListBox = new ValueListBox<BuildDetails>(new BuildRenderer(
+			profileMessages.selectABuild()), new BuildKeyProvider());
 	@UiField
 	Label jobNumberLabel;
 	@UiField(provided = true)
-	ValueListBox<String> artifactListBox = new ValueListBox<String>(new StringRenderer("Select an Artifact..."));
+	ValueListBox<String> artifactListBox = new ValueListBox<String>(new StringRenderer(
+			profileMessages.selectAnArtifact()));
 	@UiField
 	TextBox artifactTextBox;
 	@UiField
@@ -202,10 +208,10 @@ public class ArtifactEditView extends Composite {
 
 	private void updateDeploymentInfoMessages() {
 		if (automaticType.getValue()) {
-			infoMessage.setText("Deployment will happen after the next build");
+			infoMessage.setText(profileMessages.deploymentAfterNextBuild());
 			onDirty(true);
 		} else if (manualType.getValue()) {
-			infoMessage.setText("Deployment will happen after saving");
+			infoMessage.setText(profileMessages.deploymentAfterSaving());
 			onDirty(false);
 		}
 

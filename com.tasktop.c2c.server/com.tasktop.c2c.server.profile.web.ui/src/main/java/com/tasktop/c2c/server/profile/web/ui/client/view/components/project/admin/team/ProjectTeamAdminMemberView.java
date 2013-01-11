@@ -25,6 +25,8 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRole;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ProjectTeamAdminMemberView extends Composite {
 
@@ -49,14 +51,16 @@ public class ProjectTeamAdminMemberView extends Composite {
 
 	private ProjectTeamMember member;
 
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+
 	public ProjectTeamAdminMemberView(ProjectTeamMember member, boolean isSelf) {
 		this.member = member;
 		initWidget(uiBinder.createAndBindUi(this));
-		roleListBox.addItem("Member");
-		roleListBox.addItem("Owner + Member");
+		roleListBox.addItem(profileMessages.member());
+		roleListBox.addItem(profileMessages.ownerAndMember());
 
 		this.name.setText(member.getProfile().getFirstName() + " " + member.getProfile().getLastName());
-		this.username.setText(member.getProfile().getUsername());
+		this.username.setText(profileMessages.parentheses(member.getProfile().getUsername()));
 		this.email.setText(member.getProfile().getEmail()); // ALLOWED????
 
 		String roleText = getRole(member.getRoles());
@@ -80,8 +84,8 @@ public class ProjectTeamAdminMemberView extends Composite {
 		for (ProjectRole role : roles) {
 			if (highestRole == null) {
 				highestRole = role.getLabel();
-			} else if (role.getLabel().equals("Owner")) {
-				highestRole = "Owner + Member";
+			} else if (role.getLabel().equals(profileMessages.owner())) {
+				highestRole = profileMessages.ownerAndMember();
 			}
 		}
 		return highestRole;

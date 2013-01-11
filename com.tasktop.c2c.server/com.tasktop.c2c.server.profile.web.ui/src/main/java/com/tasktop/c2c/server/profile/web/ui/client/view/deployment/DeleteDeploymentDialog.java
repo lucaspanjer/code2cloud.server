@@ -25,6 +25,8 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 /**
  * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
@@ -56,10 +58,12 @@ public class DeleteDeploymentDialog extends DialogBox {
 	@UiField
 	Button cancelButton;
 
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+
 	private DeleteDeploymentDialog() {
 		super(false, true);
 		setWidget(uiBinder.createAndBindUi(this));
-		setText("Confirm Delete");
+		setText(profileMessages.confirmDelete());
 		setAnimationEnabled(true); // Why not?
 		setGlassEnabled(true);
 		cancelButton.addClickHandler(new ClickHandler() {

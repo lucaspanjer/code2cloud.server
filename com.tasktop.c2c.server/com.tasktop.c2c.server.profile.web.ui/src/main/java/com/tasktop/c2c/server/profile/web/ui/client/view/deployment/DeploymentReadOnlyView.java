@@ -27,6 +27,8 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentsView.Presenter;
 
 public class DeploymentReadOnlyView extends Composite {
@@ -77,6 +79,7 @@ public class DeploymentReadOnlyView extends Composite {
 	private DeploymentConfiguration originalValue;
 
 	private Presenter presenter;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public DeploymentReadOnlyView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -135,14 +138,14 @@ public class DeploymentReadOnlyView extends Composite {
 			boolean needSep = false;
 			for (String url : deployment.getMappedUrls()) {
 				if (needSep) {
-					mappedUrls.add(new Label(", "));
+					mappedUrls.add(new Label(profileMessages.comma() + " "));
 				} else {
 					needSep = true;
 				}
-				mappedUrls.add(new Anchor(url, url, "new"));
+				mappedUrls.add(new Anchor(url, url, profileMessages.newLc()));
 			}
 		} else {
-			mappedUrls.add(new Label("<none>"));
+			mappedUrls.add(new Label(profileMessages.noneBracketed()));
 		}
 		UIObject.setVisible(servicesDiv, deployment.getServiceType().isSupportsServices());
 		if (deployment.getServiceType().isAlwaysDeleteInService()) {
@@ -164,20 +167,20 @@ public class DeploymentReadOnlyView extends Composite {
 		setEnabledWithStyle(restartButton, true);
 
 		if (deploymentStatus == null || deploymentStatus.getResult() == null) {
-			status.setText("Unknown");
+			status.setText(profileMessages.unknown());
 		} else {
 			switch (deploymentStatus.getResult()) {
 			case STARTED:
-				status.setText("Started");
+				status.setText(profileMessages.started());
 				setEnabledWithStyle(startButton, false);
 				break;
 			case STOPPED:
-				status.setText("Stopped");
+				status.setText(profileMessages.stopped());
 				setEnabledWithStyle(stopButton, false);
 				setEnabledWithStyle(restartButton, false);
 				break;
 			case UPDATING:
-				status.setText("Updating");
+				status.setText(profileMessages.updating());
 				break;
 			}
 		}

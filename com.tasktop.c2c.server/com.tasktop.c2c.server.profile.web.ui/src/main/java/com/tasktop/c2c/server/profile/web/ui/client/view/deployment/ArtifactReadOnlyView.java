@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.deployment;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
@@ -23,6 +22,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ArtifactReadOnlyView extends Composite {
 	interface Binder extends UiBinder<Widget, ArtifactReadOnlyView> {
@@ -45,6 +46,8 @@ public class ArtifactReadOnlyView extends Composite {
 	@UiField
 	Label artifactLabel;
 
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+
 	public ArtifactReadOnlyView() {
 		initWidget(uiBinder.createAndBindUi(this));
 
@@ -62,10 +65,10 @@ public class ArtifactReadOnlyView extends Composite {
 		if (deployment.getDeploymentType() != null) {
 			switch (deployment.getDeploymentType()) {
 			case AUTOMATED:
-				artifactTypeLabel.setText("Automatic");
+				artifactTypeLabel.setText(profileMessages.automatic());
 				break;
 			case MANUAL:
-				artifactTypeLabel.setText("Manual");
+				artifactTypeLabel.setText(profileMessages.manual());
 				break;
 			}
 		} else {
@@ -79,7 +82,7 @@ public class ArtifactReadOnlyView extends Composite {
 			lastDeploymentDate.setText(DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM).format(
 					deployment.getLastDeploymentDate()));
 		} else {
-			lastDeploymentDate.setText("Not yet");
+			lastDeploymentDate.setText(profileMessages.notYet());
 		}
 	}
 

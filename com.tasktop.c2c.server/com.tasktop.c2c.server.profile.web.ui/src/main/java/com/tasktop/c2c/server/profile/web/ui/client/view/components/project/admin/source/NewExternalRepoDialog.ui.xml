@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<ui:style>
 		.popup {
 			width: 500px;
@@ -26,7 +27,7 @@
 	</ui:style>
 	<g:HTMLPanel styleName="{style.popup} ">
 		<fieldset>
-			<label>URL:</label>
+			<label><ui:text from="{pm.url}"/><ui:text from="{pm.colon}"/></label>
 			<div>
 				<g:TextBox ui:field="repositoryUrl" visibleLength="50"/>
 			</div>
@@ -34,8 +35,8 @@
 		<g:FlowPanel ui:field="errorPanel"/>
 		<div class="clear"></div>
 		<div class="center">
-			<g:Button ui:field="addButton" styleName="button special">Save</g:Button>
-			<g:Button ui:field="cancelButton" styleName="button">Cancel</g:Button>
+			<g:Button ui:field="addButton" styleName="button special"><ui:text from="{pm.save}"/></g:Button>
+			<g:Button ui:field="cancelButton" styleName="button"><ui:text from="{pm.cancel}"/></g:Button>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<ui:style>
 		.popup {
 			width: 400px;
@@ -8,13 +9,11 @@
 		}
 	</ui:style>
 	<g:HTMLPanel styleName="{style.popup}">
-		<div>
-			Do you want to remove this person from the project?
-		</div>
+		<div><ui:text from="{pm.removeMemberConfirmation}"/></div>
 		<br/>
 		<div class="center">
-			<g:Button ui:field="removeButton" styleName="button special">Yes</g:Button>
-			<g:Button ui:field="cancelButton" styleName="button">No</g:Button>
+			<g:Button ui:field="removeButton" styleName="button special"><ui:text from="{pm.yes}"/></g:Button>
+			<g:Button ui:field="cancelButton" styleName="button"><ui:text from="{pm.no}"/></g:Button>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

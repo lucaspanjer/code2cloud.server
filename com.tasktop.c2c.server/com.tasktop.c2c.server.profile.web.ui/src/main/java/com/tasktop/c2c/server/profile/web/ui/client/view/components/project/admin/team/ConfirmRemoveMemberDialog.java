@@ -23,6 +23,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 /**
  * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
@@ -39,10 +41,12 @@ public class ConfirmRemoveMemberDialog extends DialogBox {
 	@UiField
 	Button cancelButton;
 
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+
 	public ConfirmRemoveMemberDialog() {
 		super(false, true);
 		setWidget(uiBinder.createAndBindUi(this));
-		setText("Confirm Remove");
+		setText(profileMessages.confirmRemove());
 		setAnimationEnabled(true); // Why not?
 		setGlassEnabled(true);
 		cancelButton.addClickHandler(new ClickHandler() {

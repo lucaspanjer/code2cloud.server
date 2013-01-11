@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.team.IProjectAdminTeamView.Presenter;
 
 /**
@@ -33,6 +35,8 @@ public class MemberInviteWidget extends Composite implements IMemberAddWidget {
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+
 	@UiField
 	protected TextBox inviteEmail;
 	@UiField
@@ -42,7 +46,7 @@ public class MemberInviteWidget extends Composite implements IMemberAddWidget {
 
 	public MemberInviteWidget() {
 		initWidget(uiBinder.createAndBindUi(this));
-		inviteEmail.getElement().setPropertyString("placeholder", "Enter Email Address");
+		inviteEmail.getElement().setPropertyString("placeholder", profileMessages.enterEmailAddress());
 	}
 
 	@Override

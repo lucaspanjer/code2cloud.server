@@ -30,6 +30,8 @@ import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.ArtifactEditView.IsDirtyHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.ArtifactEditView.JobNameChangedHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentsView.Presenter;
@@ -42,8 +44,10 @@ public class DeploymentEditView extends Composite {
 		void editStarted(DeploymentConfiguration config);
 	}
 
-	private static final String DEFAULT_SAVE_TEXT = "Save";
-	private static final String SAVE_AND_DEPLOY_TEXT = "Save and Deploy";
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+
+	private final String DEFAULT_SAVE_TEXT = profileMessages.save();
+	private final String SAVE_AND_DEPLOY_TEXT = profileMessages.saveAndDeploy();
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 

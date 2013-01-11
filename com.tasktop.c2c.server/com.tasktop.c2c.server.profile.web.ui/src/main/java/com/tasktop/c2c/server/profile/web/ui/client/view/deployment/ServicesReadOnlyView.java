@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.deployment;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -22,6 +21,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class ServicesReadOnlyView extends Composite {
 	interface Binder extends UiBinder<Widget, ServicesReadOnlyView> {
@@ -31,6 +32,8 @@ public class ServicesReadOnlyView extends Composite {
 
 	@UiField
 	Panel servicePanel;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public ServicesReadOnlyView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -44,7 +47,7 @@ public class ServicesReadOnlyView extends Composite {
 				servicePanel.add(new ServiceRowView(service));
 			}
 		} else {
-			servicePanel.add(new Label("No services defined"));
+			servicePanel.add(new Label(profileMessages.noServicesDefined()));
 		}
 
 	}

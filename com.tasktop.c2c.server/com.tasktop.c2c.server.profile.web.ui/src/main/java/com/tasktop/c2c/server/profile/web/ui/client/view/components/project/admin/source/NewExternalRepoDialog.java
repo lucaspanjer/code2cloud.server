@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.source;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -26,6 +25,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.ErrorCapableView;
 import com.tasktop.c2c.server.common.web.client.view.errors.ErrorCabableDialogBox;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.scm.domain.ScmLocation;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.domain.ScmType;
@@ -58,10 +59,11 @@ public class NewExternalRepoDialog extends ErrorCabableDialogBox implements
 	@UiField
 	Button cancelButton;
 	private Presenter presenter;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public NewExternalRepoDialog() {
 		super(false, true);
-		setText("Add External Repository");
+		setText(profileMessages.addExternalRepository());
 		setWidget(uiBinder.createAndBindUi(this));
 		setAnimationEnabled(true); // Why not?
 		setGlassEnabled(true);

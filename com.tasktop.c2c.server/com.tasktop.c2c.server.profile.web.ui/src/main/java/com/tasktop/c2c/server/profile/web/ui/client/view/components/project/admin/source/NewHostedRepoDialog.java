@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.source;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -29,6 +28,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.errors.ErrorCabableDialogBox;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.scm.domain.ScmLocation;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.domain.ScmType;
@@ -67,12 +68,13 @@ public class NewHostedRepoDialog extends ErrorCabableDialogBox implements
 
 	private String baseUrl;
 	private Presenter presenter;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private static final String PLACEHOLDER_TEXT = "NewRepositoryName";
 
 	public NewHostedRepoDialog() {
 		super(false, true);
-		setText("Add Hosted Repository");
+		setText(profileMessages.addHostedRepository());
 		setWidget(uiBinder.createAndBindUi(this));
 		setAnimationEnabled(true); // Why not?
 		setGlassEnabled(true);

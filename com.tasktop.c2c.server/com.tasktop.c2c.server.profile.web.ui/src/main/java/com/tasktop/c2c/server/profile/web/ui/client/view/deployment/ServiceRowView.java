@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.deployment;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -20,6 +19,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 /**
  * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
@@ -31,12 +32,14 @@ public class ServiceRowView extends Composite {
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	@UiField
 	Label serviceLabel;
 
 	public ServiceRowView(CloudService service) {
 		initWidget(uiBinder.createAndBindUi(this));
-		serviceLabel.setText(service.getName() + " : " + service.getVendor() + " (" + service.getType() + ")");
+		serviceLabel.setText(service.getName() + " " + profileMessages.colon() + " " + service.getVendor() + " "
+				+ profileMessages.parentheses(service.getType()));
 	}
 }

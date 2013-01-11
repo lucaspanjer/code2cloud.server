@@ -22,8 +22,10 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 
 /**
@@ -42,10 +44,11 @@ public class ConfirmDeleteRepoDialog extends DialogBox implements
 	@UiField
 	Button cancelButton;
 	@UiField
-	Label name;
+	HTML name;
 
 	private Presenter presenter;
 	private ScmRepository repository;
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private static ConfirmDeleteRepoDialog instance;
 
@@ -60,12 +63,12 @@ public class ConfirmDeleteRepoDialog extends DialogBox implements
 
 	private void setRepository(ScmRepository repository) {
 		this.repository = repository;
-		name.setText(repository.getName());
+		name.setHTML(profileMessages.removeRepositoryConfirmation(repository.getName()));
 	}
 
 	private ConfirmDeleteRepoDialog() {
 		super(false, true);
-		setText("Confirm Delete");
+		setText(profileMessages.confirmDelete());
 		setWidget(uiBinder.createAndBindUi(this));
 		setAnimationEnabled(true); // Why not?
 		setGlassEnabled(true);

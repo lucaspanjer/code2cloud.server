@@ -2,6 +2,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 			 xmlns:g="urn:import:com.google.gwt.user.client.ui">
+<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 <ui:style>
 div.key {
 	border: 1px solid #EDEEED;
@@ -13,9 +14,9 @@ div.key {
 	<g:HTMLPanel>
 		<div class="deployment">
 			<div class="hosted-repos">
-				<h3>Hosted Source Repositories
-					<g:Anchor ui:field="addInternalRepositoryLink" addStyleNames="misc-icon plus right"><span></span>Add
-						Hosted Repository
+				<h3><ui:text from="{pm.hostedSourceRepositories}"/>
+					<g:Anchor ui:field="addInternalRepositoryLink" addStyleNames="misc-icon plus right">
+						<span></span><ui:text from="{pm.addHostedRepository}"/>
 					</g:Anchor>
 				</h3>
 				<fieldset>
@@ -23,9 +24,9 @@ div.key {
 				</fieldset>
 			</div>
 			<div class="external-repos">
-				<h3>External Source Repositories
-					<g:Anchor ui:field="addExternalRepositoryLink" addStyleNames="misc-icon plus right"><span></span>Add
-						External Repository
+				<h3><ui:text from="{pm.externalSourceRepositories}"/>
+					<g:Anchor ui:field="addExternalRepositoryLink" addStyleNames="misc-icon plus right">
+						<span></span><ui:text from="{pm.addExternalRepository}"/>
 					</g:Anchor>
 				</h3>
 				<fieldset>
@@ -34,7 +35,7 @@ div.key {
 			</div>
 
 			<div>
-				<h3>SSH Public Key (for external source repositories)</h3>
+				<h3><ui:text from="{pm.sshPublicKeyForExternalRepos}"/></h3>
 				<div class="{style.key}">
 					<g:Label ui:field="publicSshKey"/>
 				</div> 

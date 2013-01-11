@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.deployment;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -22,6 +21,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class SettingsReadOnlyView extends Composite {
 	interface Binder extends UiBinder<Widget, SettingsReadOnlyView> {
@@ -35,6 +36,8 @@ public class SettingsReadOnlyView extends Composite {
 	Label memory;
 	@UiField
 	Label instances;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public SettingsReadOnlyView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -51,10 +54,10 @@ public class SettingsReadOnlyView extends Composite {
 				} else {
 					needSep = true;
 				}
-				mappedUrls.add(new Anchor(url, "http://" + url, "new"));
+				mappedUrls.add(new Anchor(url, "http://" + url, profileMessages.newLc()));
 			}
 		} else {
-			mappedUrls.add(new Label("<none>"));
+			mappedUrls.add(new Label(profileMessages.noneBracketed()));
 		}
 		memory.setText(deployment.getMemory() + " MB");
 		instances.setText(deployment.getNumInstances() + "");
