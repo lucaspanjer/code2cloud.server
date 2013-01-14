@@ -115,10 +115,21 @@ public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 	protected abstract void success(T result);
 
 	@Override
-	public final void onFailure(Throwable exception) {
+	public final void onFailure(final Throwable exception) {
 		operationEnd();
 		if (errorHandler.overrideDefaultOnFailure(exception)) {
-			errorHandler.handleError(exception);
+			errorHandler.handleError(exception, new AsyncCallback<T>() {
+
+				@Override
+				public void onFailure(Throwable arg0) {
+					AsyncCallbackSupport.this.failure(exception);
+				}
+
+				@Override
+				public void onSuccess(T arg0) {
+					onSuccess(arg0);
+				}
+			});
 		} else {
 			failure(exception);
 		}

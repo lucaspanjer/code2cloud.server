@@ -11,12 +11,27 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.web.client.view.errors;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 /**
  * @author michaelnelson (Tasktop Technologies Inc.)
  * 
  */
 public interface ErrorHandler {
-	public void handleError(Throwable t);
 
+	/**
+	 * Determine if we want to handle this error by looking at the Throwable.
+	 * 
+	 * @param t
+	 * @return
+	 */
 	public boolean overrideDefaultOnFailure(Throwable t);
+
+	/**
+	 * Handle the error, and if for some reason we cannot, invoke the default handler.
+	 * 
+	 * @param t
+	 * @param defaultHandler
+	 */
+	public <T> void handleError(Throwable t, AsyncCallback<T> defaultHandler);
 }
