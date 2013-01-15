@@ -3,9 +3,10 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:d='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.deployment'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 		<p>
-			<d:ObjectListBox ui:field="name" styleName="left" noSelectionText="Select a Service..."/>
+			<d:ObjectListBox ui:field="name" styleName="left" noSelectionText="{pm.selectAService}"/>
 			<g:Anchor ui:field="removeButton" styleName="misc-icon cancel"><span></span></g:Anchor>
 			<g:Anchor ui:field="addButton" styleName="misc-icon add right"><span></span></g:Anchor>
 		</p>			

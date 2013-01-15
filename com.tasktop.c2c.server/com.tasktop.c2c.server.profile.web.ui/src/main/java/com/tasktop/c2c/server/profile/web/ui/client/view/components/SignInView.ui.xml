@@ -9,7 +9,7 @@
 			<div class="create-account left">
 				<div id="sign-up-form" class="add-form">
 					<fieldset>
-						<label><ui:text from="{pm.username}"/></label>
+						<label><ui:text from="{pm.userName}"/></label>
 						<div>
 							<g:TextBox ui:field="username" debugId="username" name="username" styleName="text"/>
 						</div>

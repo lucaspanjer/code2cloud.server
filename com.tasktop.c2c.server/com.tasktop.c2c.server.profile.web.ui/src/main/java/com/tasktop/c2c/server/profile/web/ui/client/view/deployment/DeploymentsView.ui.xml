@@ -4,6 +4,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:a="urn:import:com.tasktop.c2c.server.common.web.client.widgets"
 	xmlns:d='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.deployment'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 		<div class="toaster">
 			<div class="messages">
@@ -19,7 +20,7 @@
 				<div class="clear"></div>
 				<div class="menu-items">
 					<div class="top">
-						<h5>Deployments<g:Anchor ui:field="newButton" styleName="right action add-deployment">+</g:Anchor></h5>
+						<h5><ui:text from="{pm.deployments}"/><g:Anchor ui:field="newButton" styleName="right action add-deployment">+</g:Anchor></h5>
 					</div>
 					<ul>
 						<g:FlowPanel ui:field="deploymentsListPanel" />
@@ -33,7 +34,7 @@
 			<g:HTMLPanel ui:field="noDeploymentsMessagePanel"  visible="false">
 				<div class="clear"></div>
 				<div>
-					<g:Label>You don't have any deployments yet. Create a new deployment to get started.</g:Label>
+					<g:Label><ui:text from="{pm.noDeploymentsMessage}"/></g:Label>
 				</div>
 			</g:HTMLPanel>
 			<div class="clear"></div>

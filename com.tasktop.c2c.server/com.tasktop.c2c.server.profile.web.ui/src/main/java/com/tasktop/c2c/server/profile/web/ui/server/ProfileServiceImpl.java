@@ -18,7 +18,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 
@@ -33,6 +32,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
+import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileService;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
@@ -62,6 +62,8 @@ import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.service.ActivityService;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
 import com.tasktop.c2c.server.profile.service.provider.ScmServiceProvider;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.service.ScmService;
 
@@ -89,6 +91,8 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	@Autowired
 	private LogoutHandler logoutHandler;
 
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+
 	@Override
 	public ProjectDashboard getDashboard(String projectIdentifier) throws NoSuchEntityException {
 		return activityService.getDashboard(projectIdentifier);
@@ -98,7 +102,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	public Credentials logon(String username, String password, boolean rememberMe) throws AuthenticationFailedException {
 
 		try {
-			Long profileId = profileService.authenticate(username, password);
+			profileService.authenticate(username, password);
 			Credentials credentials = getCurrentUser();
 			if (rememberMe && SecurityContextHolder.getContext().getAuthentication() != null) {
 				rememberMeServices.loginSuccess(getThreadLocalRequest(), getThreadLocalResponse(),
@@ -238,7 +242,7 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 			ValidationFailedException, AuthenticationFailedException {
 		try {
 			String username = profileService.resetPassword(token, newPassword);
-			Long profileId = profileService.authenticate(username, newPassword);
+			profileService.authenticate(username, newPassword);
 			return getCurrentUser();
 		} catch (ValidationException e) {
 			handle(e);
@@ -490,15 +494,14 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 							signUpToken.setEmail(unescapeCsvValue(split[2]));
 							invitationTokens.add(signUpToken);
 						} else {
-							throw new IOException("Invalid format at line " + lineNumber
-									+ ": expecting First Name, Last Name, Email");
+							throw new IOException(profileMessages.signUpTokenFromCsvInvalidFormat(lineNumber));
 						}
 					}
 				}
 			} catch (IOException e) {
 				Errors errors = new BeanPropertyBindingResult(invitationTokens, "invitations");
-				errors.reject("invalidFormat", "Cannot read CSV: " + e.getMessage());
-				throw new ValidationException(errors, Locale.ENGLISH); // TODO internationalize this
+				errors.reject("invalidFormat", profileMessages.cannotReadCsv(e.getMessage()));
+				throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
 			}
 			return profileService.createInvitations(invitationTokens, sendEmail);
 		} catch (ValidationException e) {

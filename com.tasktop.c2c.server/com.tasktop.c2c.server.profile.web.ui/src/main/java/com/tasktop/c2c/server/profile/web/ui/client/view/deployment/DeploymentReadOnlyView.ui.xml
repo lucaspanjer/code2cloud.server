@@ -3,51 +3,50 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:d='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.deployment'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
-	
-	
 	<div class="content right"> 
 					  <div class="deployment"> 
 					    <div class="deployment-heading"> 
-  					    <h2 class="left"><g:Label ui:field="title"/><span>(<g:Label ui:field="status" />)</span></h2>
-  					    <g:Anchor ui:field="editButton" styleName="right edit misc-icon"> <span></span>Edit</g:Anchor>
+  					    <h2 class="left"><g:Label ui:field="title"/><span><g:Label ui:field="status" /></span></h2>
+  					    <g:Anchor ui:field="editButton" styleName="right edit misc-icon"> <span></span><ui:text from="{pm.edit}"/></g:Anchor>
   					    <div class="clear"></div> 
   					  </div> 
   						<div class="deployment-controls"> 
   							<div class="left"> 
-  							<g:Anchor ui:field='startButton' styleName="misc-icon large start-deployment"><span></span>Start</g:Anchor>
-							<g:Anchor ui:field='stopButton' styleName="misc-icon large stop-deployment"><span></span>Stop</g:Anchor>
-							<g:Anchor ui:field='restartButton' styleName="misc-icon large restart-deployment"><span></span>Restart</g:Anchor>
+  							<g:Anchor ui:field='startButton' styleName="misc-icon large start-deployment"><span></span><ui:text from="{pm.start}"/></g:Anchor>
+							<g:Anchor ui:field='stopButton' styleName="misc-icon large stop-deployment"><span></span><ui:text from="{pm.stop}"/></g:Anchor>
+							<g:Anchor ui:field='restartButton' styleName="misc-icon large restart-deployment"><span></span><ui:text from="{pm.restart}"/></g:Anchor>
 			  							
   							</div> 
   							<div class="right"> 
-								<g:Anchor ui:field='deleteButton' styleName="button">Delete</g:Anchor>
+								<g:Anchor ui:field='deleteButton' styleName="button"><ui:text from="{pm.delete}"/></g:Anchor>
   							</div> 
   							<div class="clear"></div> 
   						</div>  						
 		<div ui:field="credentialsDiv" class="credentials">  
-			<span class="drop-down-icon"></span><h3>Credentials</h3>
+			<span class="drop-down-icon"></span><h3><ui:text from="{pm.credentials}"/></h3>
 			<div class="clear"></div>
 			<d:CredentialsReadOnlyView ui:field="credentialsReadOnlyView"/>
 		</div>
 		<div ui:field="settingsDiv" class="settings">  
-			<span class="drop-down-icon"></span><h3>Settings</h3>
+			<span class="drop-down-icon"></span><h3><ui:text from="{pm.settings}"/></h3>
 			<div class="clear"></div>
 			<d:SettingsReadOnlyView ui:field="settingsReadOnlyView"/>
 		</div>
 		<div ui:field="infoDiv" class="settings">
 			<fieldset>	
-			<label>Mapped URL:</label>
+			<label><ui:text from="{pm.mappedUrl}"/><ui:text from="{pm.colon}"/></label>
 			<div><g:FlowPanel ui:field="mappedUrls"/></div>
 			</fieldset>
 		</div>
 		<div ui:field="servicesDiv" class="services">  
-			<span class="drop-down-icon"></span><h3>Services</h3>
+			<span class="drop-down-icon"></span><h3><ui:text from="{pm.services}"/></h3>
 			<div class="clear"></div>
 			<d:ServicesReadOnlyView ui:field="servicesReadOnlyView"/>
 		</div>
 		<div class="artifact">    
-			<span class="drop-down-icon"></span><h3>Artifact</h3>
+			<span class="drop-down-icon"></span><h3><ui:text from="{pm.artifact}"/></h3>
 			<div class="clear"></div>
 			<d:ArtifactReadOnlyView ui:field="artifactReadOnlyView"/>
 		</div>

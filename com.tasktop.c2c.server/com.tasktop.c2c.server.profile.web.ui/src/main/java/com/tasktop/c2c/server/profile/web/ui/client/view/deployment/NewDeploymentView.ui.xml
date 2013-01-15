@@ -3,11 +3,12 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:d='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.deployment'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 	<div class="content right">
 	  <div class="deployment">
 	    <div class="deployment-heading">
-			    <h2 class="left">Create Deployment</h2>
+			    <h2 class="left"><ui:text from="{pm.createDeployment}"/></h2>
 			    <div class="clear"></div>
 			  </div>
   					  
@@ -15,26 +16,26 @@
     <h3></h3>
     <div ui:field="serviceTypeDiv">
     <fieldset>
-		<label>Type:</label>
+		<label><ui:text from="{pm.type}"/><ui:text from="{pm.colon}"/></label>
 		<div>
 			<g:ValueListBox ui:field="serviceType"/>
 		</div>
 	</fieldset>
 	</div>
 	<fieldset>
-		<label>Name:</label>
+		<label><ui:text from="{pm.name}"/><ui:text from="{pm.colon}"/></label>
 		<div>
 			<g:TextBox ui:field="name"/>
 		</div>
 	</fieldset>
 	</div>
 	<div ui:field="credentialsDiv" class="credentials edit">
-	<h3>Credentials</h3>
+	<h3><ui:text from="{pm.credentials}"/></h3>
 	<d:CredentialsEditView ui:field="credentialsEditView"/>
 	</div>
 	<div class="save">						
-	  <g:Button ui:field="saveButton" styleName="right button special">Create Deployment</g:Button>
-   	  <g:Button ui:field="cancelButton" styleName="right button">Cancel</g:Button>
+	  <g:Button ui:field="saveButton" styleName="right button special"><ui:text from="{pm.createDeployment}"/></g:Button>
+   	  <g:Button ui:field="cancelButton" styleName="right button"><ui:text from="{pm.cancel}"/></g:Button>
  	</div>
 	</div>
 	</div>

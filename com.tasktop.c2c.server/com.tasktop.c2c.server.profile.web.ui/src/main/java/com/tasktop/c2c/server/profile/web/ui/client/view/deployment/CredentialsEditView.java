@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.deployment;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -24,6 +23,8 @@ import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
+import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class CredentialsEditView extends Composite {
 	interface Binder extends UiBinder<Widget, CredentialsEditView> {
@@ -48,9 +49,17 @@ public class CredentialsEditView extends Composite {
 	Panel credentialsInvalidPanel;
 	@UiField
 	Panel credentialsValidPanel;
+	@UiField
+	Label errorLabel;
+	@UiField
+	Label successLabel;
+
+	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public CredentialsEditView() {
 		initWidget(uiBinder.createAndBindUi(this));
+		errorLabel.setText(profileMessages.exclamationMark(profileMessages.error()));
+		successLabel.setText(profileMessages.exclamationMark(profileMessages.success()));
 		clearValidationMessages();
 		setUserUrlEditable(false);
 	}

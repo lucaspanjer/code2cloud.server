@@ -167,20 +167,20 @@ public class DeploymentReadOnlyView extends Composite {
 		setEnabledWithStyle(restartButton, true);
 
 		if (deploymentStatus == null || deploymentStatus.getResult() == null) {
-			status.setText(profileMessages.unknown());
+			status.setText(profileMessages.parentheses(profileMessages.unknown()));
 		} else {
 			switch (deploymentStatus.getResult()) {
 			case STARTED:
-				status.setText(profileMessages.started());
+				status.setText(profileMessages.parentheses(profileMessages.started()));
 				setEnabledWithStyle(startButton, false);
 				break;
 			case STOPPED:
-				status.setText(profileMessages.stopped());
+				status.setText(profileMessages.parentheses(profileMessages.stopped()));
 				setEnabledWithStyle(stopButton, false);
 				setEnabledWithStyle(restartButton, false);
 				break;
 			case UPDATING:
-				status.setText(profileMessages.updating());
+				status.setText(profileMessages.parentheses(profileMessages.updating()));
 				break;
 			}
 		}

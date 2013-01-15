@@ -3,40 +3,39 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:d='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.deployment'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
-	
-	
 	<div class="content right"> 
 	  <div class="deployment"> 
 	    <div class="deployment-heading"> 
-   	    <h2 class="left">Edit: <g:Label ui:field="title"/></h2> <!-- TODO make editable? -->
+   	    <h2 class="left"><ui:text from="{pm.edit}"/><ui:text from="{pm.colon}"/> <g:Label ui:field="title"/></h2> <!-- TODO make editable? -->
 		<div class="save"> 
-			<g:Anchor ui:field='saveButton1' styleName="right button special">Save</g:Anchor>
-			<g:Anchor ui:field='cancelButton1' styleName="right button">Cancel</g:Anchor>
+			<g:Anchor ui:field='saveButton1' styleName="right button special"><ui:text from="{pm.save}"/></g:Anchor>
+			<g:Anchor ui:field='cancelButton1' styleName="right button"><ui:text from="{pm.cancel}"/></g:Anchor>
 	  </div>					    
 	    <div class="clear"></div> 
 	  </div> 
 			
 		<div ui:field="credentialsDiv" class="credentials edit">  
-			<h3>Credentials</h3>
+			<h3><ui:text from="{pm.credentials}"/></h3>
 			<d:CredentialsEditView ui:field="credentialsEditView"/>
 		</div>
 		<div ui:field="settingsDiv" class="settings edit">  
-			<h3>Settings</h3>
+			<h3><ui:text from="{pm.settings}"/></h3>
 			<div class="clear"></div> <!--  WHY? -->
 			<d:SettingsEditView ui:field="settingsEditView"/>
 		</div>
 		<div ui:field="servicesDiv" class="services edit">  
-			<h3>Services</h3>
+			<h3><ui:text from="{pm.services}"/></h3>
 			<d:ServicesEditView ui:field="servicesEditView"/>
 		</div>
 		<div class="artifact edit">    
-			<h3>Artifact</h3>
+			<h3><ui:text from="{pm.artifact}"/></h3>
 			<d:ArtifactEditView ui:field="artifactEditView"/>
 		</div>
 			<div class="save"> 
-								<g:Anchor ui:field='saveButton2' styleName="right button special">Save</g:Anchor>
-								<g:Anchor ui:field='cancelButton2' styleName="right button">Cancel</g:Anchor>
+								<g:Anchor ui:field='saveButton2' styleName="right button special"><ui:text from="{pm.save}"/></g:Anchor>
+								<g:Anchor ui:field='cancelButton2' styleName="right button"><ui:text from="{pm.cancel}"/></g:Anchor>
       				  </div>	
 		
 		

@@ -3,19 +3,20 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:d='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.deployment'>
+	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 		<fieldset>
-			<label>Mapped URL's:</label>
+			<label><ui:text from="{pm.mappedUrls}"/><ui:text from="{pm.colon}"/></label>
 				 <g:FlowPanel ui:field="mappedUrlEditPanel"/>
 		</fieldset>
 		<fieldset>
-			<label>Memory:</label>
+			<label><ui:text from="{pm.memory}"/><ui:text from="{pm.colon}"/></label>
 			<div>
 				<d:ObjectListBox ui:field="memoryListBox"/>
 			</div>
 		</fieldset>
 		<fieldset>
-			<label>Instances:</label>
+			<label><ui:text from="{pm.instances}"/><ui:text from="{pm.colon}"/></label>
 			<div>
 				<g:TextBox ui:field="instancesTextBox" visibleLength="3"/>
 			</div>

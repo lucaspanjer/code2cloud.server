@@ -6,7 +6,7 @@
 				<div class="profile">
 					<form class="deployment" id="myform" action="" method="post">
 						<fieldset>
-							<label><ui:text from="{pm.username}"/></label>
+							<label><ui:text from="{pm.userName}"/></label>
 							<g:Label ui:field="userNameField"/>
 						</fieldset>
 						<div class="details">

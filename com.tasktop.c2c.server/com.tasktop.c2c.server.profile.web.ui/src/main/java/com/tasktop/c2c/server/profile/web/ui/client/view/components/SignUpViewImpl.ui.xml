@@ -22,7 +22,7 @@
 						<div class="headingMedium" ><ui:text from="{pm.accountInformation}"/></div>
 						<form id="sign-up-form" class="sign-up-form" action="#" method="post">
 							<fieldset>
-								<label><ui:text from="{pm.username}"/></label>
+								<label><ui:text from="{pm.userName}"/></label>
 								<g:TextBox debugId="username" styleName="input" name="username" ui:field="username"/>
 							</fieldset>
 							<fieldset>

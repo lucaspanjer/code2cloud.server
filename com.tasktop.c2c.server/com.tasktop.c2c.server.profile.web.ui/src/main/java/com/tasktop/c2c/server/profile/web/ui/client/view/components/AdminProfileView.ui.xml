@@ -46,7 +46,7 @@
 					</div>
 				</fieldset>
 				<fieldset>
-					<label><ui:text from="{pm.username}"/></label>
+					<label><ui:text from="{pm.userName}"/></label>
 					<g:Label ui:field="username"/>
 				</fieldset>
 				<fieldset>
