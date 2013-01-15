@@ -62,8 +62,6 @@ import com.tasktop.c2c.server.profile.domain.project.SshPublicKeySpec;
 import com.tasktop.c2c.server.profile.service.ActivityService;
 import com.tasktop.c2c.server.profile.service.ProfileWebService;
 import com.tasktop.c2c.server.profile.service.provider.ScmServiceProvider;
-import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
-import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.service.ScmService;
 
@@ -90,8 +88,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 
 	@Autowired
 	private LogoutHandler logoutHandler;
-
-	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	@Override
 	public ProjectDashboard getDashboard(String projectIdentifier) throws NoSuchEntityException {
@@ -494,13 +490,14 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 							signUpToken.setEmail(unescapeCsvValue(split[2]));
 							invitationTokens.add(signUpToken);
 						} else {
-							throw new IOException(profileMessages.signUpTokenFromCsvInvalidFormat(lineNumber));
+							throw new IOException("Invalid format at line " + lineNumber
+									+ ": expecting First Name, Last Name, Email");
 						}
 					}
 				}
 			} catch (IOException e) {
 				Errors errors = new BeanPropertyBindingResult(invitationTokens, "invitations");
-				errors.reject("invalidFormat", profileMessages.cannotReadCsv(e.getMessage()));
+				errors.reject("invalidFormat", "Cannot read CSV: " + e.getMessage());
 				throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
 			}
 			return profileService.createInvitations(invitationTokens, sendEmail);
