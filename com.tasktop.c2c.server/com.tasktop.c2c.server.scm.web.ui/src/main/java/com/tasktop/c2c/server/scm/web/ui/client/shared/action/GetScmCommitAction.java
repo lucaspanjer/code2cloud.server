@@ -14,9 +14,11 @@ package com.tasktop.c2c.server.scm.web.ui.client.shared.action;
 import net.customware.gwt.dispatch.shared.Action;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
+import com.google.gwt.core.client.GWT;
 import com.tasktop.c2c.server.common.web.client.util.ExceptionsUtil;
 import com.tasktop.c2c.server.common.web.shared.CachableReadAction;
 import com.tasktop.c2c.server.common.web.shared.KnowsErrorMessageAction;
+import com.tasktop.c2c.server.scm.web.ui.client.resources.ScmMessages;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -26,6 +28,7 @@ public class GetScmCommitAction implements Action<GetScmCommitResult>, CachableR
 	private String repoName;
 	private String commitId;
 	private String projectId;
+	private ScmMessages scmMessages = GWT.create(ScmMessages.class);
 
 	public GetScmCommitAction(String repoName, String commitId, String projectId) {
 		this.repoName = repoName;
@@ -40,7 +43,7 @@ public class GetScmCommitAction implements Action<GetScmCommitResult>, CachableR
 	@Override
 	public String getErrorMessage(DispatchException e) {
 		if (ExceptionsUtil.isEntityNotFound(e)) {
-			return "Commit \"" + commitId + "\" not found.";
+			return scmMessages.commitNotFound(commitId);
 		}
 		return null;
 	}

@@ -3,6 +3,7 @@ package com.tasktop.c2c.server.scm.web.ui.client.place;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
@@ -20,6 +21,7 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.web.ui.client.resources.ScmMessages;
 import com.tasktop.c2c.server.scm.web.ui.client.shared.action.GetScmCommitAction;
 import com.tasktop.c2c.server.scm.web.ui.client.shared.action.GetScmCommitResult;
 
@@ -73,6 +75,7 @@ public class ScmCommitPlace extends AbstractBatchFetchingPlace implements Headin
 	protected String projectId;
 	protected Project project;
 	protected Commit commit;
+	private ScmMessages scmMessages = GWT.create(ScmMessages.class);
 
 	public Project getProject() {
 		return project;
@@ -112,15 +115,13 @@ public class ScmCommitPlace extends AbstractBatchFetchingPlace implements Headin
 
 	@Override
 	public String getWindowTitle() {
-		return "Commit " + commitId + " of " + repositoryName + " - " + project.getName() + " - "
-				+ WindowTitleBuilder.PRODUCT_NAME;
-
+		return scmMessages.commitTitle(commitId, repositoryName, project.getName(), WindowTitleBuilder.PRODUCT_NAME);
 	}
 
 	@Override
 	public List<Breadcrumb> getBreadcrumbs() {
 		List<Breadcrumb> breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ScmPlace.createPlace(projectId).getHref(), "Source"));
+		breadcrumbs.add(new Breadcrumb(ScmPlace.createPlace(projectId).getHref(), scmMessages.source()));
 		breadcrumbs.add(new Breadcrumb(ScmRepoPlace.createPlace(projectId, repositoryName).getHref(), repositoryName));
 		breadcrumbs.add(new Breadcrumb(getHref(), commit == null ? commitId : commit.getMinimizedCommitId()));
 		return breadcrumbs;

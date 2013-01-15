@@ -3,6 +3,7 @@ package com.tasktop.c2c.server.scm.web.ui.client.place;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
@@ -22,6 +23,7 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
+import com.tasktop.c2c.server.scm.web.ui.client.resources.ScmMessages;
 
 /*******************************************************************************
  * Copyright (c) 2010, 2012 Tasktop Technologies
@@ -66,6 +68,7 @@ public class ScmPlace extends AbstractBatchFetchingPlace implements HeadingPlace
 	protected String projectId;
 	protected Project project;
 	private List<ScmRepository> repositories;
+	private ScmMessages scmMessages = GWT.create(ScmMessages.class);
 
 	public Project getProject() {
 		return project;
@@ -106,14 +109,13 @@ public class ScmPlace extends AbstractBatchFetchingPlace implements HeadingPlace
 
 	@Override
 	public String getWindowTitle() {
-		return "Source repositories - " + project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
-
+		return scmMessages.scmTitle(project.getName(), WindowTitleBuilder.PRODUCT_NAME);
 	}
 
 	@Override
 	public List<Breadcrumb> getBreadcrumbs() {
 		List<Breadcrumb> breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(getHref(), "Source"));
+		breadcrumbs.add(new Breadcrumb(getHref(), scmMessages.source()));
 		return breadcrumbs;
 	}
 

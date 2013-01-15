@@ -11,6 +11,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.scm.web.ui.client.presenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.HasData;
@@ -22,6 +23,7 @@ import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmRepoPlace;
+import com.tasktop.c2c.server.scm.web.ui.client.resources.ScmMessages;
 import com.tasktop.c2c.server.scm.web.ui.client.shared.action.GetScmLogAction;
 import com.tasktop.c2c.server.scm.web.ui.client.shared.action.GetScmLogResult;
 import com.tasktop.c2c.server.scm.web.ui.client.view.ScmRepoView;
@@ -40,6 +42,7 @@ public class ScmRepoPresenter extends AbstractPresenter implements IScmRepoView.
 	private String repoName;
 	private Region region;
 	private String currentBranch;
+	private ScmMessages scmMessages = GWT.create(ScmMessages.class);
 
 	/**
 	 * @param view
@@ -105,7 +108,7 @@ public class ScmRepoPresenter extends AbstractPresenter implements IScmRepoView.
 		this.repoName = place.getRepositoryName();
 		if (place.getRepository() == null) {
 			ProfileGinjector.get.instance().getNotifier()
-					.displayMessage(Message.createErrorMessage("Repository not found"));
+					.displayMessage(Message.createErrorMessage(scmMessages.repoNotFound()));
 			return;
 		}
 		if (place.getRepository().getBranches().contains("master")) {

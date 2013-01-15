@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.domain.DiffEntry;
+import com.tasktop.c2c.server.scm.web.ui.client.resources.ScmMessages;
 import com.tasktop.c2c.server.scm.web.ui.client.resources.ScmResources;
 
 /**
@@ -50,6 +51,7 @@ public class DiffEntryView extends Composite implements Editor<Commit> {
 
 	private int maxFileNameSize = 115;
 	private int fileNamePartSize = (maxFileNameSize / 2) - 2;
+	private ScmMessages scmMessages = GWT.create(ScmMessages.class);
 
 	public DiffEntryView(DiffEntry diff) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -74,13 +76,13 @@ public class DiffEntryView extends Composite implements Editor<Commit> {
 			break;
 		case RENAME:
 			renameFrom.setVisible(true);
-			renameFrom.setText(trimFilename(diff.getOldPath()) + " renamed to ");
+			renameFrom.setText(scmMessages.renamedTo(trimFilename(diff.getOldPath()), ""));
 			opRes = ScmResources.get.changeIcon();
 			filename = diff.getNewPath();
 			break;
 		case COPY:
 			renameFrom.setVisible(true);
-			renameFrom.setText(trimFilename(diff.getOldPath()) + " copied to ");
+			renameFrom.setText(scmMessages.copiedTo(trimFilename(diff.getOldPath()), ""));
 			opRes = ScmResources.get.changeIcon();
 			filename = diff.getNewPath();
 			break;

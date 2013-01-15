@@ -48,6 +48,7 @@ import com.tasktop.c2c.server.scm.domain.DiffEntry;
 import com.tasktop.c2c.server.scm.domain.DiffEntry.Content;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmCommitPlace;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmRepoPlace;
+import com.tasktop.c2c.server.scm.web.ui.client.resources.ScmMessages;
 import com.tasktop.c2c.server.scm.web.ui.client.resources.ScmResources;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskHyperlinkDetector;
 
@@ -127,6 +128,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 
 	private final int maxPrettifiableLines = 1000;
 	private int totalDiffLines;
+	private ScmMessages scmMessages = GWT.create(ScmMessages.class);
 
 	/**
 	 * @param commit
@@ -228,10 +230,10 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 				fileName = diff.getOldPath();
 				break;
 			case RENAME:
-				fileName = diff.getOldPath() + " renamed to " + diff.getNewPath(); // FIXME use diff template
+				fileName = scmMessages.renamedTo(diff.getOldPath(), diff.getNewPath()); // FIXME use diff template
 				break;
 			case COPY:
-				fileName = diff.getOldPath() + " copied to " + diff.getNewPath(); // FIXME use diff template
+				fileName = scmMessages.copiedTo(diff.getOldPath(), diff.getNewPath()); // FIXME use diff template
 				break;
 			default:
 				fileName = diff.getNewPath();
