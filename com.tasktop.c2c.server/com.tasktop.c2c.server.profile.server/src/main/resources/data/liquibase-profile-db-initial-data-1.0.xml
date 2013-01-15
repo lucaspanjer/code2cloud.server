@@ -18,6 +18,19 @@
 			<column name="VALUE" value="1000" />
 		</insert>
 	</changeSet>
+	
+	<changeSet id="insert_hudson.maxBuildTimeInMinutes_task_5099" author="cmorgan">
+		<preConditions onFail="MARK_RAN">
+			<sqlCheck expectedResult="0">select count(*) from CONFIGURATIONPROPERTY where NAME = 'hudson.maxBuildTimeInMinutes'</sqlCheck>
+		</preConditions>
+		<insert tableName="CONFIGURATIONPROPERTY">
+			<column name="ID" value="2"/>
+			<column name="VERSION" value="1"/>
+			<column name="NAME" value="hudson.maxBuildTimeInMinutes" />
+			<column name="VALUE" value="30" />
+		</insert>
+	
+	</changeSet>
 
 	
 </databaseChangeLog>
