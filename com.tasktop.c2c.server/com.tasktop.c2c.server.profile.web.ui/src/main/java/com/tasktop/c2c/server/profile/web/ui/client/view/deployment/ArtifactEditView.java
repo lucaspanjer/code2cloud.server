@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentType;
 import com.tasktop.c2c.server.profile.domain.build.BuildArtifact;
@@ -77,6 +78,7 @@ public class ArtifactEditView extends Composite {
 	private static final class BuildRenderer extends AbstractRenderer<BuildDetails> {
 
 		private final String nullText;
+		private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 		private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 		public BuildRenderer(String nullText) {
@@ -91,7 +93,7 @@ public class ArtifactEditView extends Composite {
 			if (object.getResult() == null) {
 				return object.getNumber() + "";
 			}
-			return object.getNumber() + " " + profileMessages.parentheses(object.getResult().getFriendlyName());
+			return object.getNumber() + " " + commonProfileMessages.parentheses(object.getResult().getFriendlyName());
 		}
 
 	}

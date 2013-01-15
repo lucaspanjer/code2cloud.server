@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRole;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
@@ -51,6 +52,7 @@ public class ProjectTeamAdminMemberView extends Composite {
 
 	private ProjectTeamMember member;
 
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public ProjectTeamAdminMemberView(ProjectTeamMember member, boolean isSelf) {
@@ -60,7 +62,7 @@ public class ProjectTeamAdminMemberView extends Composite {
 		roleListBox.addItem(profileMessages.ownerAndMember());
 
 		this.name.setText(member.getProfile().getFirstName() + " " + member.getProfile().getLastName());
-		this.username.setText(profileMessages.parentheses(member.getProfile().getUsername()));
+		this.username.setText(commonProfileMessages.parentheses(member.getProfile().getUsername()));
 		this.email.setText(member.getProfile().getEmail()); // ALLOWED????
 
 		String roleText = getRole(member.getRoles());

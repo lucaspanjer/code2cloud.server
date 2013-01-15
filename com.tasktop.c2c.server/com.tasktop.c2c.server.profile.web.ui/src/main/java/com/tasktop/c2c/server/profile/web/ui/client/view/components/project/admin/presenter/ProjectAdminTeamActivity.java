@@ -18,6 +18,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.ValidationUtils;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.AddMemberToProjectTeamAction;
@@ -46,6 +47,7 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 	private ProjectTeamAdminView view = ProjectTeamAdminView.getInstance();
 	private ProjectTeamSummary projectTeamSummary;
 	private Project project;
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public ProjectAdminTeamActivity() {
@@ -76,7 +78,7 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 
 	@Override
 	public void removeTeamMember(ProjectTeamMember teamMember) {
-		OperationMessage message = new OperationMessage(profileMessages.saving());
+		OperationMessage message = new OperationMessage(commonProfileMessages.saving());
 		message.setSuccessText(profileMessages.memberRemoved());
 		ProfileEntryPoint.getInstance().getProfileService()
 				.removeTeamMember(project.getIdentifier(), teamMember, new AsyncCallbackSupport<Boolean>(message) {
@@ -90,7 +92,7 @@ public class ProjectAdminTeamActivity extends AbstractActivity implements IProje
 
 	@Override
 	public void updateTeamMember(ProjectTeamMember teamMember) {
-		OperationMessage message = new OperationMessage(profileMessages.saving());
+		OperationMessage message = new OperationMessage(commonProfileMessages.saving());
 		message.setSuccessText(profileMessages.memberUpdated());
 		ProfileEntryPoint.getInstance().getProfileService()
 				.updateTeamMemberRoles(project.getIdentifier(), teamMember, new AsyncCallbackSupport<Boolean>(message) {

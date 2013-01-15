@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
@@ -53,6 +54,7 @@ public class CreateServiceDialog extends DialogBox {
 	@UiField
 	Button cancelButton;
 	private ServiceEditView viewForNewService;
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public CreateServiceDialog() {
@@ -63,7 +65,7 @@ public class CreateServiceDialog extends DialogBox {
 
 			@Override
 			public String renderToString(DeploymentServiceConfiguration object) {
-				return object.getVendor() + " " + profileMessages.parentheses(object.getType());
+				return object.getVendor() + " " + commonProfileMessages.parentheses(object.getType());
 			}
 		});
 

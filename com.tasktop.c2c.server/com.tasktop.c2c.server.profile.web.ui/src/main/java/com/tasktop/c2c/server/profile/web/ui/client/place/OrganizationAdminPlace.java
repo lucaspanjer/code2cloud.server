@@ -115,7 +115,7 @@ public class OrganizationAdminPlace extends LoggedInPlace implements HeadingPlac
 
 	private void createBreadcrumbs(Organization organization) {
 		breadcrumbs = Breadcrumb.getOrganizationSpecificBreadcrumbs(organization);
-		breadcrumbs.add(new Breadcrumb(getHref(), profileMessages.edit()));
+		breadcrumbs.add(new Breadcrumb(getHref(), commonProfileMessages.edit()));
 	}
 
 	@Override

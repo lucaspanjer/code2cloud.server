@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<ui:style>
 		.popup {
@@ -16,8 +17,8 @@
 		</div>
 		<br/>
 		<div class="center">
-			<g:Button ui:field="deleteButton" styleName="button special"><ui:text from="{pm.delete}"/></g:Button>
-			<g:Button ui:field="cancelButton" styleName="button"><ui:text from="{pm.cancel}"/></g:Button>
+			<g:Button ui:field="deleteButton" styleName="button special"><ui:text from="{cpm.delete}"/></g:Button>
+			<g:Button ui:field="cancelButton" styleName="button"><ui:text from="{cpm.cancel}"/></g:Button>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

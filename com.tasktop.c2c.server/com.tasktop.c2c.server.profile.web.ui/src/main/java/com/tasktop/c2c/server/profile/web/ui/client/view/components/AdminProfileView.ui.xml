@@ -6,6 +6,7 @@
     xmlns:cellview="urn:import:com.google.gwt.user.cellview.client">
 	
   	<ui:with field='res' type='com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileResources'/>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
   	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 
 	<g:HTMLPanel>
@@ -17,8 +18,8 @@
 				</li>
 			</ul>
 			<ul class="right">
-			  <li><ui:text from="{pm.hide}"/>:</li>
-			  	<li><g:CheckBox ui:field="hideDisabled" text="{pm.disabled}"/></li>
+			  <li><ui:text from="{cpm.hide}"/>:</li>
+			  	<li><g:CheckBox ui:field="hideDisabled" text="{cpm.disabled}"/></li>
 				<li><g:CheckBox ui:field="hideNewsEmailOptOut" text="{pm.hideNewsEmailOptOut}"/></li>
 				<li><g:CheckBox ui:field="hideServiceEmailOptOut" text="{pm.hideServiceEmailOptOut}"/></li>
 				<li><g:CheckBox ui:field="hideUnverified" text="{pm.hideUnverified}"/></li>
@@ -39,7 +40,7 @@
 				</li>				
 				<li>
 				<fieldset>
-					<label><ui:text from="{pm.name}"/></label>
+					<label><ui:text from="{cpm.name}"/></label>
 					<div>
 					<g:Label ui:field="firstName"/>
 					<g:Label ui:field="lastName"/>
@@ -54,7 +55,7 @@
 					<g:Label ui:field="email"/>
 				</fieldset>
 				<fieldset>
-					<Label><ui:text from="{pm.status}"/></Label>
+					<Label><ui:text from="{cpm.status}"/></Label>
 					<g:Label ui:field="status"/>
 					<div class="actions">
 						<g:Button styleName="button special" ui:field="toggleDisableButton"/>

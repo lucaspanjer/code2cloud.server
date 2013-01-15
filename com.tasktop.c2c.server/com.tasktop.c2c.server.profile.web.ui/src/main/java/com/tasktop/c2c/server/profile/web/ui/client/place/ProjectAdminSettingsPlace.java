@@ -25,8 +25,6 @@ import com.tasktop.c2c.server.common.profile.web.client.place.Section;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
-import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 // TDODO batch fetch 
 public class ProjectAdminSettingsPlace extends ProjectAdminPlace implements BreadcrumbPlace {
@@ -52,8 +50,6 @@ public class ProjectAdminSettingsPlace extends ProjectAdminPlace implements Brea
 	}
 
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
-
-	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	protected ProjectAdminSettingsPlace(String projectId) {
 		super(projectId);
@@ -97,6 +93,6 @@ public class ProjectAdminSettingsPlace extends ProjectAdminPlace implements Brea
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(getHref(), profileMessages.settings()));
+		breadcrumbs.add(new Breadcrumb(getHref(), super.commonProfileMessages.settings()));
 	}
 }

@@ -2,6 +2,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 	<g:HTMLPanel ui:field="noDeploymentPanel">
@@ -13,23 +14,23 @@
 
 	<g:HTMLPanel ui:field="hasDeploymentPanel">
 		<fieldset>	
-			<label><ui:text from="{pm.lastDeployment}"/><ui:text from="{pm.colon}"/></label>
+			<label><ui:text from="{pm.lastDeployment}"/><ui:text from="{cpm.colon}"/></label>
 			<p><g:Label ui:field="lastDeploymentDate"/></p>
 		</fieldset>
 		<fieldset>	
-			<label><ui:text from="{pm.type}"/><ui:text from="{pm.colon}"/></label>
+			<label><ui:text from="{cpm.type}"/><ui:text from="{cpm.colon}"/></label>
 			<p><g:Label ui:field="artifactTypeLabel"/></p>
 		</fieldset>
 		<fieldset>	
-			<label><ui:text from="{pm.job}"/><ui:text from="{pm.colon}"/></label>
+			<label><ui:text from="{pm.job}"/><ui:text from="{cpm.colon}"/></label>
 			<p><g:Label ui:field="jobLabel"/></p>
 		</fieldset>
 		<fieldset>	
-			<label><ui:text from="{pm.build}"/><ui:text from="{pm.colon}"/></label>
+			<label><ui:text from="{cpm.build}"/><ui:text from="{cpm.colon}"/></label>
 			<p><g:Label ui:field="buildLabel"/></p>
 		</fieldset>
 		<fieldset>	
-			<label><ui:text from="{pm.artifact}"/><ui:text from="{pm.colon}"/></label>
+			<label><ui:text from="{pm.artifact}"/><ui:text from="{cpm.colon}"/></label>
 			<p><g:Label ui:field="artifactLabel"/></p>
 		</fieldset>
 	</g:HTMLPanel>

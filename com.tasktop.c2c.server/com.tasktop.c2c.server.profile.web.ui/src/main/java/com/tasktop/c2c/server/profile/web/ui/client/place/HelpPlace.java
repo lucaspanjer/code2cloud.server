@@ -12,18 +12,18 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
-import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class HelpPlace extends AbstractBatchFetchingPlace implements HeadingPlace {
 
 	public static PageMapping Help = new PageMapping(new HelpPlace.Tokenizer(), "help");
 
-	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 
 	private static class Tokenizer extends AbstractPlaceTokenizer<HelpPlace> {
 
@@ -49,7 +49,7 @@ public class HelpPlace extends AbstractBatchFetchingPlace implements HeadingPlac
 
 	@Override
 	public String getHeading() {
-		return profileMessages.help();
+		return commonProfileMessages.help();
 	}
 
 	protected void handleBatchResults() {

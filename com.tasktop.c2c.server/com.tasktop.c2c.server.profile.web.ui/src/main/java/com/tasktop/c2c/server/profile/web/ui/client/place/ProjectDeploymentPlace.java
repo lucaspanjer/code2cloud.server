@@ -133,13 +133,14 @@ public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implement
 
 	private void createBreadCrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ProjectDeploymentPlace.createPlace(project.getIdentifier()).getHref(), profileMessages
-				.deployments()));
+		breadcrumbs.add(new Breadcrumb(ProjectDeploymentPlace.createPlace(project.getIdentifier()).getHref(),
+				commonProfileMessages.deployments()));
 	}
 
 	@Override
 	public String getWindowTitle() {
-		return profileMessages.deployments() + " - " + project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
+		return commonProfileMessages.deployments() + " - " + project.getName() + " - "
+				+ WindowTitleBuilder.PRODUCT_NAME;
 	}
 
 	public List<DeploymentServiceType> getServiceTypes() {

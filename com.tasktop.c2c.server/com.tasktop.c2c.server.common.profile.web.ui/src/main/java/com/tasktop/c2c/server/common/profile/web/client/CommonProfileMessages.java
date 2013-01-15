@@ -30,14 +30,29 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Admin")
 	String admin();
 
+	@DefaultMessage("Administration")
+	String administration();
+
 	@DefaultMessage("Browse Projects")
 	String browseProjects();
+
+	@DefaultMessage("Build")
+	String build();
 
 	@DefaultMessage("Builds")
 	String builds();
 
+	@DefaultMessage("Cancel")
+	String cancel();
+
 	@DefaultMessage("Code2Cloud")
 	String code2Cloud();
+
+	@DefaultMessage(":")
+	String colon();
+
+	@DefaultMessage(",")
+	String comma();
 
 	@DefaultMessage("Dashboard")
 	String dashboard();
@@ -45,8 +60,59 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Deployments")
 	String deployments();
 
+	@DefaultMessage("Details")
+	String details();
+
 	@DefaultMessage("Discover Projects")
 	String discoverProjects();
+
+	@DefaultMessage("{0}!")
+	String exclamationMark(String text);
+
+	@DefaultMessage("({0})")
+	String parentheses(String innerText);
+
+	@DefaultMessage("{0}?")
+	String questionMark(String text);
+
+	@DefaultMessage("Create")
+	String create();
+
+	@DefaultMessage("Delete")
+	String delete();
+
+	@DefaultMessage("Deleted.")
+	String deleted();
+
+	@DefaultMessage("Deleting...")
+	String deleting();
+
+	@DefaultMessage("Disable")
+	String disable();
+
+	@DefaultMessage("Disabled")
+	String disabled();
+
+	@DefaultMessage("Edit")
+	String edit();
+
+	@DefaultMessage("Editing")
+	String editing();
+
+	@DefaultMessage("Enable")
+	String enable();
+
+	@DefaultMessage("Enabled")
+	String enabled();
+
+	@DefaultMessage("Error")
+	String error();
+
+	@DefaultMessage("Help")
+	String help();
+
+	@DefaultMessage("Hide")
+	String hide();
 
 	@DefaultMessage("Home")
 	String home();
@@ -54,8 +120,20 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Legal Agreements")
 	String legalAgreements();
 
+	@DefaultMessage("Name")
+	String name();
+
+	@DefaultMessage("No")
+	String no();
+
 	@DefaultMessage("You do not have permissions to visit the page")
 	String noPermissionsToVisitPage();
+
+	@DefaultMessage("OK")
+	String ok();
+
+	@DefaultMessage("Options")
+	String options();
 
 	@DefaultMessage("Organization \"{0}\" not found.")
 	String organizationNotFound(String organizationId);
@@ -74,20 +152,89 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Projects for {0}")
 	String projectsForOrganization(String organizationName);
 
+	@DefaultMessage("Remove")
+	String remove();
+
+	@DefaultMessage("Restart")
+	String restart();
+
+	@DefaultMessage("Restarting...")
+	String restarting();
+
+	@DefaultMessage("Restarted.")
+	String restarted();
+
+	@DefaultMessage("Save")
+	String save();
+
+	@DefaultMessage("Saved.")
+	String saved();
+
+	@DefaultMessage("Saving...")
+	String saving();
+
+	@DefaultMessage("Search")
+	String search();
+
 	@DefaultMessage("A server side error occurred")
 	String serverSideErrorOccured();
+
+	@DefaultMessage("Settings")
+	String settings();
 
 	@DefaultMessage("Note: Setting a project as \"Public\" makes the project code, wiki docs, tasks and builds publicly available")
 	SafeHtml settingsProjectHelp();
 
+	@DefaultMessage("Show")
+	String show();
+
 	@DefaultMessage("Sign In")
 	String signIn();
+
+	@DefaultMessage("Source")
+	String source();
+
+	@DefaultMessage("Start")
+	String start();
+
+	@DefaultMessage("Started.")
+	String started();
+
+	@DefaultMessage("Starting...")
+	String starting();
+
+	@DefaultMessage("Status")
+	String status();
+
+	@DefaultMessage("Stop")
+	String stop();
+
+	@DefaultMessage("Stopped.")
+	String stopped();
+
+	@DefaultMessage("Stopping...")
+	String stopping();
+
+	@DefaultMessage("Success")
+	String success();
 
 	@DefaultMessage("Tasks")
 	String tasks();
 
 	@DefaultMessage("Team")
 	String team();
+
+	@DefaultMessage("Type")
+	String type();
+
+	@DefaultMessage("Updating")
+	String updating();
+
+	@DefaultMessage("URL")
+	String url();
+
+	@DefaultMessage("Validate")
+	String validate();
 
 	@DefaultMessage("Code2Cloud is an online service for <em>creating, hosting, and deploying software development projects</em>. In just a "
 			+ "few clicks, you can create your own project ready to store <em>source code</em> (Git), "
@@ -99,4 +246,8 @@ public interface CommonProfileMessages extends Messages {
 
 	@DefaultMessage("Wiki")
 	String wiki();
+
+	@DefaultMessage("Yes")
+	String yes();
+
 }

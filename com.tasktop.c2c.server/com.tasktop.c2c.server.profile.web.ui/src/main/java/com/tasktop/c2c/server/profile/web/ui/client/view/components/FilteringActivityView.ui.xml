@@ -2,16 +2,17 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 	
 					<div class="project-filter">
 						<ul class="right filter-activity ">
-						  <li><ui:text from="{pm.show}"/>:</li>
-						  	<li><g:CheckBox ui:field="buildToggleButton" text="{pm.build}" /></li>
-							<li><g:CheckBox ui:field="wikiToggleButton" text="{pm.wiki}" /></li>
-							<li><g:CheckBox ui:field="taskToggleButton" text="{pm.tasks}" /></li>
-							<li><g:CheckBox ui:field="scmToggleButton" text="{pm.source}" /></li>
+						  <li><ui:text from="{cpm.show}"/>:</li>
+						  	<li><g:CheckBox ui:field="buildToggleButton" text="{cpm.build}" /></li>
+							<li><g:CheckBox ui:field="wikiToggleButton" text="{cpm.wiki}" /></li>
+							<li><g:CheckBox ui:field="taskToggleButton" text="{cpm.tasks}" /></li>
+							<li><g:CheckBox ui:field="scmToggleButton" text="{cpm.source}" /></li>
 						</ul>
 						<div class="clear"></div>
 					</div>

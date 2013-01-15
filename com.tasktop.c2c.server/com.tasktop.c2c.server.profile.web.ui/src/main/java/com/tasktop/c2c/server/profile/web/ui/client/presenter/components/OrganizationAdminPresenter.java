@@ -16,6 +16,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.UpdateOrganizationAction;
@@ -34,6 +35,7 @@ public class OrganizationAdminPresenter extends AbstractActivity implements Orga
 
 	private Organization organization;
 	private OrganizationAdminEditView view = OrganizationAdminEditView.getInstance();
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public OrganizationAdminPresenter() {
@@ -62,7 +64,7 @@ public class OrganizationAdminPresenter extends AbstractActivity implements Orga
 				.execute(
 						new UpdateOrganizationAction(organization),
 						new AsyncCallbackSupport<UpdateOrganizationResult>(Message
-								.createProgressMessage(profileMessages.saving())) {
+								.createProgressMessage(commonProfileMessages.saving())) {
 							@Override
 							protected void success(UpdateOrganizationResult result) {
 								organization = result.get();

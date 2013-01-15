@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
@@ -44,9 +45,10 @@ public class DeploymentEditView extends Composite {
 		void editStarted(DeploymentConfiguration config);
 	}
 
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
-	private final String DEFAULT_SAVE_TEXT = profileMessages.save();
+	private final String DEFAULT_SAVE_TEXT = commonProfileMessages.save();
 	private final String SAVE_AND_DEPLOY_TEXT = profileMessages.saveAndDeploy();
 
 	private static Binder uiBinder = GWT.create(Binder.class);

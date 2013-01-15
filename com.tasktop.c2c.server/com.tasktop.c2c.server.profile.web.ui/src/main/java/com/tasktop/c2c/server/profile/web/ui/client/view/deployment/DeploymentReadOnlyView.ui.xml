@@ -3,24 +3,25 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:d='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.deployment'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 	<div class="content right"> 
 					  <div class="deployment"> 
 					    <div class="deployment-heading"> 
   					    <h2 class="left"><g:Label ui:field="title"/><span><g:Label ui:field="status" /></span></h2>
-  					    <g:Anchor ui:field="editButton" styleName="right edit misc-icon"> <span></span><ui:text from="{pm.edit}"/></g:Anchor>
+  					    <g:Anchor ui:field="editButton" styleName="right edit misc-icon"> <span></span><ui:text from="{cpm.edit}"/></g:Anchor>
   					    <div class="clear"></div> 
   					  </div> 
   						<div class="deployment-controls"> 
   							<div class="left"> 
-  							<g:Anchor ui:field='startButton' styleName="misc-icon large start-deployment"><span></span><ui:text from="{pm.start}"/></g:Anchor>
-							<g:Anchor ui:field='stopButton' styleName="misc-icon large stop-deployment"><span></span><ui:text from="{pm.stop}"/></g:Anchor>
-							<g:Anchor ui:field='restartButton' styleName="misc-icon large restart-deployment"><span></span><ui:text from="{pm.restart}"/></g:Anchor>
+  							<g:Anchor ui:field='startButton' styleName="misc-icon large start-deployment"><span></span><ui:text from="{cpm.start}"/></g:Anchor>
+							<g:Anchor ui:field='stopButton' styleName="misc-icon large stop-deployment"><span></span><ui:text from="{cpm.stop}"/></g:Anchor>
+							<g:Anchor ui:field='restartButton' styleName="misc-icon large restart-deployment"><span></span><ui:text from="{cpm.restart}"/></g:Anchor>
 			  							
   							</div> 
   							<div class="right"> 
-								<g:Anchor ui:field='deleteButton' styleName="button"><ui:text from="{pm.delete}"/></g:Anchor>
+								<g:Anchor ui:field='deleteButton' styleName="button"><ui:text from="{cpm.delete}"/></g:Anchor>
   							</div> 
   							<div class="clear"></div> 
   						</div>  						
@@ -30,13 +31,13 @@
 			<d:CredentialsReadOnlyView ui:field="credentialsReadOnlyView"/>
 		</div>
 		<div ui:field="settingsDiv" class="settings">  
-			<span class="drop-down-icon"></span><h3><ui:text from="{pm.settings}"/></h3>
+			<span class="drop-down-icon"></span><h3><ui:text from="{cpm.settings}"/></h3>
 			<div class="clear"></div>
 			<d:SettingsReadOnlyView ui:field="settingsReadOnlyView"/>
 		</div>
 		<div ui:field="infoDiv" class="settings">
 			<fieldset>	
-			<label><ui:text from="{pm.mappedUrl}"/><ui:text from="{pm.colon}"/></label>
+			<label><ui:text from="{pm.mappedUrl}"/><ui:text from="{cpm.colon}"/></label>
 			<div><g:FlowPanel ui:field="mappedUrls"/></div>
 			</fieldset>
 		</div>

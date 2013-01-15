@@ -22,9 +22,9 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
-import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
 public class CredentialsEditView extends Composite {
 	interface Binder extends UiBinder<Widget, CredentialsEditView> {
@@ -54,12 +54,12 @@ public class CredentialsEditView extends Composite {
 	@UiField
 	Label successLabel;
 
-	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 
 	public CredentialsEditView() {
 		initWidget(uiBinder.createAndBindUi(this));
-		errorLabel.setText(profileMessages.exclamationMark(profileMessages.error()));
-		successLabel.setText(profileMessages.exclamationMark(profileMessages.success()));
+		errorLabel.setText(commonProfileMessages.exclamationMark(commonProfileMessages.error()));
+		successLabel.setText(commonProfileMessages.exclamationMark(commonProfileMessages.success()));
 		clearValidationMessages();
 		setUserUrlEditable(false);
 	}

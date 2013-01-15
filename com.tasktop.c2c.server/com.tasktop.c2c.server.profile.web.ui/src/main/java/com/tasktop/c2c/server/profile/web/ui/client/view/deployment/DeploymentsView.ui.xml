@@ -4,6 +4,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:a="urn:import:com.tasktop.c2c.server.common.web.client.widgets"
 	xmlns:d='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.deployment'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 		<div class="toaster">
@@ -20,7 +21,7 @@
 				<div class="clear"></div>
 				<div class="menu-items">
 					<div class="top">
-						<h5><ui:text from="{pm.deployments}"/><g:Anchor ui:field="newButton" styleName="right action add-deployment">+</g:Anchor></h5>
+						<h5><ui:text from="{cpm.deployments}"/><g:Anchor ui:field="newButton" styleName="right action add-deployment">+</g:Anchor></h5>
 					</div>
 					<ul>
 						<g:FlowPanel ui:field="deploymentsListPanel" />

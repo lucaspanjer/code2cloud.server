@@ -170,7 +170,7 @@ public class AuthenticationView extends Composite implements IAccountView<IAccou
 		sshKeyTable.setColumnWidth(nameColumn, 200, Style.Unit.PX);
 		DelegateCell<String> removeKeyCell = new DelegateCell<String>(new DelegateCell.RenderDelegate<String>() {
 			public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
-				return REMOVE_LINK_TEMPLATE.removeLink(profileMessages.remove());
+				return REMOVE_LINK_TEMPLATE.removeLink(commonProfileMessages.remove());
 			}
 		}, new DelegateCell.ActionDelegate<String>() {
 			@Override

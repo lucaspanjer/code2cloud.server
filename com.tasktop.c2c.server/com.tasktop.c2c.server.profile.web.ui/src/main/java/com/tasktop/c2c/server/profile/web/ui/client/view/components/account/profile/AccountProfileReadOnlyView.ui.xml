@@ -1,5 +1,6 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 			<div>
@@ -10,8 +11,8 @@
 							<g:Label ui:field="userNameField"/>
 						</fieldset>
 						<div class="details">
-							<h2><ui:text from="{pm.details}"/>
-  				      <g:Anchor ui:field="editAnchor" styleName="misc-icon edit right" ><span></span><ui:text from="{pm.edit}"/></g:Anchor>
+							<h2><ui:text from="{cpm.details}"/>
+  				      <g:Anchor ui:field="editAnchor" styleName="misc-icon edit right" ><span></span><ui:text from="{cpm.edit}"/></g:Anchor>
 							</h2>
 							<div class="inner-contents">
     						<fieldset>

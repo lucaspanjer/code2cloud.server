@@ -3,6 +3,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:d='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.deployment'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 		<fieldset>
@@ -12,7 +13,7 @@
 			</div>
 		</fieldset>
 		<fieldset>
-			<label><ui:text from="{pm.type}"/><ui:text from="{pm.colon}"/></label>
+			<label><ui:text from="{cpm.type}"/><ui:text from="{cpm.colon}"/></label>
 			<div>
 				<p><g:RadioButton ui:field="manualType" name="type"><ui:text from="{pm.manual}"/></g:RadioButton></p>
 				<p><g:RadioButton ui:field="automaticType" name="type"><ui:text from="{pm.automatic}"/></g:RadioButton></p>
@@ -20,25 +21,25 @@
 			</div>
 		</fieldset>
 		<fieldset>
-			<label><ui:text from="{pm.job}"/><ui:text from="{pm.colon}"/></label>
+			<label><ui:text from="{pm.job}"/><ui:text from="{cpm.colon}"/></label>
 			<div>
 				<g:ValueListBox ui:field="jobNameListBox"/>
 			</div>
 		</fieldset>
 		<fieldset>
-			<label><g:Label ui:field="jobNumberLabel"><ui:text from="{pm.build}"/><ui:text from="{pm.colon}"/></g:Label></label>
+			<label><g:Label ui:field="jobNumberLabel"><ui:text from="{cpm.build}"/><ui:text from="{cpm.colon}"/></g:Label></label>
 			<div>
 				<g:ValueListBox ui:field="buildsListBox"/>
 			</div>
 		</fieldset>
 		<fieldset>
-			<label><g:Label ui:field="artifactLabel"><ui:text from="{pm.artifact}"/><ui:text from="{pm.colon}"/></g:Label></label>
+			<label><g:Label ui:field="artifactLabel"><ui:text from="{pm.artifact}"/><ui:text from="{cpm.colon}"/></g:Label></label>
 			<div>
 				<g:ValueListBox ui:field="artifactListBox"/>
 			</div>
 		</fieldset>
 		<fieldset>
-			<label><g:Label ui:field="artifactPathLabel"><ui:text from="{pm.artifactPath}"/><ui:text from="{pm.colon}"/></g:Label></label>
+			<label><g:Label ui:field="artifactPathLabel"><ui:text from="{pm.artifactPath}"/><ui:text from="{cpm.colon}"/></g:Label></label>
 			<div>
 				<g:TextBox ui:field="artifactTextBox" visibleLength="50"/>
 			</div>

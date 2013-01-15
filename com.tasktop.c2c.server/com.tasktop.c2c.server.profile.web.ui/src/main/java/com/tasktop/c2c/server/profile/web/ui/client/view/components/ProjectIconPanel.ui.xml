@@ -8,7 +8,7 @@
 			<div class="project-nav-wrapper">
 				<div class="project-nav-section">
 					<div class="left">
-						<g:Anchor ui:field="projectHome" styleName="button project-nav-item"><ui:text from="{pm.home}"/></g:Anchor>
+						<g:Anchor ui:field="projectHome" styleName="button project-nav-item"><ui:text from="{cpm.home}"/></g:Anchor>
 					</div>
 					<div class="left">
 						<g:Anchor ui:field="dashboard" styleName="button project-nav-item"><ui:text from="{cpm.dashboard}"/></g:Anchor>
@@ -20,7 +20,7 @@
 						<g:Anchor ui:field="wiki" styleName="button project-nav-item"><ui:text from="{cpm.wiki}"/></g:Anchor>
 					</div>
 					<div class="left">
-						<g:Anchor ui:field="source" styleName="button project-nav-item"><ui:text from="{pm.source}"/></g:Anchor>
+						<g:Anchor ui:field="source" styleName="button project-nav-item"><ui:text from="{cpm.source}"/></g:Anchor>
 					</div>
 					<div class="left">
 						<g:Anchor ui:field="builds" styleName="button project-nav-item"><ui:text from="{cpm.builds}"/></g:Anchor>
@@ -35,7 +35,7 @@
 						<g:Anchor ui:field="team" styleName="button project-nav-item"><ui:text from="{cpm.team}"/></g:Anchor>
 					</div>
 					<div class="left" ui:field="optionsWrapper">
-						<g:Anchor ui:field="options" styleName="button project-nav-item"><ui:text from="{pm.options}"/></g:Anchor>
+						<g:Anchor ui:field="options" styleName="button project-nav-item"><ui:text from="{cpm.options}"/></g:Anchor>
 					</div>
 				</div>
       		</div>

@@ -1,5 +1,6 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 
@@ -11,8 +12,8 @@
 						<g:Label ui:field="userNameField"/>
 					</fieldset>
 					<div class="details edit">
-							<h2><ui:text from="{pm.details}"/>
-  				      <span class="right"><ui:text from="{pm.editing}"/></span>
+							<h2><ui:text from="{cpm.details}"/>
+  				      <span class="right"><ui:text from="{cpm.editing}"/></span>
 							</h2>
 							<div class="inner-contents">
 					<fieldset>
@@ -52,8 +53,8 @@
 						</fieldset>
 						</div>
 						 <div class="save right top-margin bottom-margin">
-							<g:Button ui:field="saveButton" addStyleNames="button special" text="{pm.save}"/>
-							<g:Button ui:field="cancelButton" addStyleNames="button " text="{pm.cancel}"/>
+							<g:Button ui:field="saveButton" addStyleNames="button special" text="{cpm.save}"/>
+							<g:Button ui:field="cancelButton" addStyleNames="button " text="{cpm.cancel}"/>
  	    					<div class="clear"></div>
 						</div>
 						<div class="clear"/>

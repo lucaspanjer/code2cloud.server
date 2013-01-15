@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 		<div class="clear"></div><!-- Project Tab Navigation End-->
@@ -11,7 +12,7 @@
 			    <h3>
 			      <span class="heading left first">&nbsp;</span>
 			      <span class="heading left"><ui:text from="{pm.email}"/></span>
-			      <span class="heading right last"><ui:text from="{pm.editing}"/></span>
+			      <span class="heading right last"><ui:text from="{cpm.editing}"/></span>
 			      <div class="clear"></div>
 			    </h3>
 			    <div class="row">
@@ -30,8 +31,8 @@
 			      <div class="clear"></div>
 	            </div>
           	    <div class="save">
-				  <g:Button ui:field="cancelButton" styleName="right button marginleft" text="{pm.cancel}"/>
-				  <g:Button ui:field="saveButton" styleName="right button special" text="{pm.save}"/>
+				  <g:Button ui:field="cancelButton" styleName="right button marginleft" text="{cpm.cancel}"/>
+				  <g:Button ui:field="saveButton" styleName="right button special" text="{cpm.save}"/>
 				  <div class="clear"></div>
 			    </div>
 			  </div>

@@ -47,6 +47,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
@@ -147,6 +148,7 @@ public class AdminProfileView extends AbstractComposite implements Editor<Profil
 
 	private Driver driver = GWT.create(Driver.class);
 	private AdminProfilePresenter presenter;
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public AdminProfileView() {
@@ -210,11 +212,11 @@ public class AdminProfileView extends AbstractComposite implements Editor<Profil
 		editingProfile = selectedObject;
 		driver.edit(editingProfile);
 		if (editingProfile.getAccountDisabled()) {
-			status.setText(profileMessages.disabled());
-			toggleDisableButton.setText(profileMessages.enable());
+			status.setText(commonProfileMessages.disabled());
+			toggleDisableButton.setText(commonProfileMessages.enable());
 		} else {
 			status.setText(profileMessages.active());
-			toggleDisableButton.setText(profileMessages.disable());
+			toggleDisableButton.setText(commonProfileMessages.disable());
 		}
 
 	}

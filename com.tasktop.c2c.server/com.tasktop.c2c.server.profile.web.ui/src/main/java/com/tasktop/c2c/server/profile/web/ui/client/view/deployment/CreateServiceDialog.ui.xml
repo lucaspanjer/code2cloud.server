@@ -2,6 +2,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:d='urn:import:com.tasktop.c2c.server.profile.web.ui.client.view.deployment'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 		<ui:style>
 		.popup {
@@ -32,13 +33,13 @@
 	</ui:style>
 	<g:HTMLPanel styleName="{style.popup}">
 		<fieldset>
-			<label><ui:text from="{pm.name}"/><ui:text from="{pm.colon}"/></label>
+			<label><ui:text from="{cpm.name}"/><ui:text from="{cpm.colon}"/></label>
 			<div>
 				<g:TextBox ui:field="name"/>
 			</div>
 		</fieldset>
 		<fieldset>
-			<label><ui:text from="{pm.type}"/><ui:text from="{pm.colon}"/></label>
+			<label><ui:text from="{cpm.type}"/><ui:text from="{cpm.colon}"/></label>
 			<div>
 				<d:ObjectListBox ui:field="type"/>
 			</div>
@@ -46,8 +47,8 @@
 <!-- 		<g:FlowPanel ui:field="errorPanel"/> -->
 		<div class="clear"></div>
 		<div class="center">
-			<g:Button ui:field="saveButton" styleName="button special"><ui:text from="{pm.save}"/></g:Button>
-			<g:Button ui:field="cancelButton" styleName="button "><ui:text from="{pm.cancel}"/></g:Button>
+			<g:Button ui:field="saveButton" styleName="button special"><ui:text from="{cpm.save}"/></g:Button>
+			<g:Button ui:field="cancelButton" styleName="button "><ui:text from="{cpm.cancel}"/></g:Button>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

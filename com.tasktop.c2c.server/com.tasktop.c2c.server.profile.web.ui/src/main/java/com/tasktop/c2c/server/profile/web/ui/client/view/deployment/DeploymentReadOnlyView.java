@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
@@ -79,6 +80,7 @@ public class DeploymentReadOnlyView extends Composite {
 	private DeploymentConfiguration originalValue;
 
 	private Presenter presenter;
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public DeploymentReadOnlyView() {
@@ -138,7 +140,7 @@ public class DeploymentReadOnlyView extends Composite {
 			boolean needSep = false;
 			for (String url : deployment.getMappedUrls()) {
 				if (needSep) {
-					mappedUrls.add(new Label(profileMessages.comma() + " "));
+					mappedUrls.add(new Label(commonProfileMessages.comma() + " "));
 				} else {
 					needSep = true;
 				}
@@ -167,20 +169,20 @@ public class DeploymentReadOnlyView extends Composite {
 		setEnabledWithStyle(restartButton, true);
 
 		if (deploymentStatus == null || deploymentStatus.getResult() == null) {
-			status.setText(profileMessages.parentheses(profileMessages.unknown()));
+			status.setText(commonProfileMessages.parentheses(profileMessages.unknown()));
 		} else {
 			switch (deploymentStatus.getResult()) {
 			case STARTED:
-				status.setText(profileMessages.parentheses(profileMessages.started()));
+				status.setText(commonProfileMessages.parentheses(commonProfileMessages.started()));
 				setEnabledWithStyle(startButton, false);
 				break;
 			case STOPPED:
-				status.setText(profileMessages.parentheses(profileMessages.stopped()));
+				status.setText(commonProfileMessages.parentheses(commonProfileMessages.stopped()));
 				setEnabledWithStyle(stopButton, false);
 				setEnabledWithStyle(restartButton, false);
 				break;
 			case UPDATING:
-				status.setText(profileMessages.parentheses(profileMessages.updating()));
+				status.setText(commonProfileMessages.parentheses(commonProfileMessages.updating()));
 				break;
 			}
 		}

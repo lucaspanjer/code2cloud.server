@@ -1,20 +1,21 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 		<div class="admin-menu">
 			<ul class="inline-tabs">
 				<li >
-					<g:Anchor addStyleNames="button" ui:field="adminSettings"><ui:text from="{pm.settings}"/></g:Anchor>
+					<g:Anchor addStyleNames="button" ui:field="adminSettings"><ui:text from="{cpm.settings}"/></g:Anchor>
 				</li>
 				<li>
-					<g:Anchor addStyleNames="button" ui:field="adminTasks"><ui:text from="{pm.tasks}"/></g:Anchor>
+					<g:Anchor addStyleNames="button" ui:field="adminTasks"><ui:text from="{cpm.tasks}"/></g:Anchor>
 				</li>
 				<li>
 					<g:Anchor addStyleNames="button" ui:field="adminSourceCode"><ui:text from="{pm.sourceCode}"/></g:Anchor>
 				</li>
 				<li>
-					<g:Anchor addStyleNames="button" ui:field="adminTeam"><ui:text from="{pm.team}"/></g:Anchor>
+					<g:Anchor addStyleNames="button" ui:field="adminTeam"><ui:text from="{cpm.team}"/></g:Anchor>
 				</li>
 				<li class="right">
 					<g:Anchor  ui:field="deleteProject"><ui:text from="{pm.deleteProject}"/></g:Anchor>

@@ -8,7 +8,7 @@
 	
 	<g:HTMLPanel>
 		<g:FlowPanel ui:field="invitations"/>
-		<h2><ui:text from="{pm.create}"/> <ui:text from="{cpm.code2Cloud}"/> <ui:text from="{pm.systemInvitations}"/></h2>
+		<h2><ui:text from="{cpm.create}"/> <ui:text from="{cpm.code2Cloud}"/> <ui:text from="{pm.systemInvitations}"/></h2>
 		<div>
 			<ui:text from="{pm.invitationRecipientsCsv}"/>:<br/>
 			<g:TextArea ui:field="invitationRecipients" /><br/>
