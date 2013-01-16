@@ -31,12 +31,14 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.NoSelectionModel;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
@@ -98,10 +100,13 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 
 	@UiField
 	public Pager pager;
+	@UiField
+	public Label welcomeLabel;
 
 	private CellList<Project> projectList;
 	private NoSelectionModel<Project> model;
 	private Presenter presenter;
+	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private ProjectDiscoveryView() {
@@ -119,6 +124,7 @@ public class ProjectDiscoveryView extends AbstractComposite implements IProjectD
 		pager.setDisplay(projectList);
 		pager.itemLabel.setText("projects:");
 		setupFilterAnchors();
+		welcomeLabel.setText(profileMessages.welcomeTo(commonProfileMessages.code2Cloud()));
 	}
 
 	private void setupFilterAnchors() {

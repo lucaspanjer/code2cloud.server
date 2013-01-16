@@ -778,8 +778,8 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Watching project {0}")
 	String watchingProject(String projectName);
 
-	@DefaultMessage("Welcome To")
-	String welcomeTo();
+	@DefaultMessage("Welcome To {0}!")
+	String welcomeTo(String code2Cloud);
 
 	@DefaultMessage("What is Email Verification?")
 	String whatIsEmailVerification();

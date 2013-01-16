@@ -8,7 +8,7 @@
 	
 					<div class="project-filter">
 						<ul class="right filter-activity ">
-						  <li><ui:text from="{cpm.show}"/>:</li>
+						  <li><ui:text from="{cpm.show}"/><ui:text from="{cpm.colon}"/></li>
 						  	<li><g:CheckBox ui:field="buildToggleButton" text="{cpm.build}" /></li>
 							<li><g:CheckBox ui:field="wikiToggleButton" text="{cpm.wiki}" /></li>
 							<li><g:CheckBox ui:field="taskToggleButton" text="{cpm.tasks}" /></li>

@@ -36,7 +36,7 @@
 						<g:FlowPanel ui:field="projectsPanel" styleName="discover-project-list"/>
 						
 						<div class="discover-dashboard">
-                          <h2><ui:text from="{pm.welcomeTo}"/> <ui:text from='{cpm.code2Cloud}'/>!</h2>
+                          <h2><g:Label ui:field="welcomeLabel"/></h2>
                           <p><ui:safehtml from='{cpm.welcomeOverviewHtml}'/></p>
                           <p><ui:safehtml from='{cpm.participateInstructions}'/></p>
                         </div>

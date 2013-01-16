@@ -18,7 +18,7 @@
 				</li>
 			</ul>
 			<ul class="right">
-			  <li><ui:text from="{cpm.hide}"/>:</li>
+			  <li><ui:text from="{cpm.hide}"/><ui:text from="{cpm.colon}"/></li>
 			  	<li><g:CheckBox ui:field="hideDisabled" text="{cpm.disabled}"/></li>
 				<li><g:CheckBox ui:field="hideNewsEmailOptOut" text="{pm.hideNewsEmailOptOut}"/></li>
 				<li><g:CheckBox ui:field="hideServiceEmailOptOut" text="{pm.hideServiceEmailOptOut}"/></li>

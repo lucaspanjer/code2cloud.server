@@ -10,9 +10,9 @@
 		<g:FlowPanel ui:field="invitations"/>
 		<h2><ui:text from="{cpm.create}"/> <ui:text from="{cpm.code2Cloud}"/> <ui:text from="{pm.systemInvitations}"/></h2>
 		<div>
-			<ui:text from="{pm.invitationRecipientsCsv}"/>:<br/>
+			<ui:text from="{pm.invitationRecipientsCsv}"/><ui:text from="{cpm.colon}"/><br/>
 			<g:TextArea ui:field="invitationRecipients" /><br/>
-			<ui:text from="{pm.formatOnePerLine}"/>:<br/>
+			<ui:text from="{pm.formatOnePerLine}"/><ui:text from="{cpm.colon}"/><br/>
 			<ui:text from="{pm.firstLastEmailExample}"/>
 		</div>
 		<g:CheckBox ui:field="sendEmail"><ui:text from="{pm.sendInvitationEmails}"/></g:CheckBox>
