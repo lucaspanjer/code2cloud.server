@@ -28,7 +28,6 @@ public class GetScmCommitAction implements Action<GetScmCommitResult>, CachableR
 	private String repoName;
 	private String commitId;
 	private String projectId;
-	private ScmMessages scmMessages = GWT.create(ScmMessages.class);
 
 	public GetScmCommitAction(String repoName, String commitId, String projectId) {
 		this.repoName = repoName;
@@ -43,7 +42,8 @@ public class GetScmCommitAction implements Action<GetScmCommitResult>, CachableR
 	@Override
 	public String getErrorMessage(DispatchException e) {
 		if (ExceptionsUtil.isEntityNotFound(e)) {
-			return scmMessages.commitNotFound(commitId);
+			ScmMessages messages = GWT.create(ScmMessages.class);
+			return messages.commitNotFound(commitId);
 		}
 		return null;
 	}
