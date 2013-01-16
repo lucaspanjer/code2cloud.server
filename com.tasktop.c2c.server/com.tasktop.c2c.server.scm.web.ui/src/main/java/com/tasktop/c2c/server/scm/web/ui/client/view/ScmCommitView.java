@@ -62,7 +62,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 
 	public static ScmCommitView getInstance() {
 		if (instance == null) {
-			instance = new ScmCommitView();
+			instance = GWT.create(ScmCommitView.class);
 		}
 		return instance;
 	}
@@ -77,8 +77,16 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 
 	private Driver driver = GWT.create(Driver.class);
 
-	private ScmCommitView() {
+	protected ScmCommitView() {
+		bindUI();
+		initializeAfterBind();
+	}
+
+	protected void bindUI() {
 		initWidget(uiBinder.createAndBindUi(this));
+	}
+
+	protected void initializeAfterBind() {
 		comment = HasTextEditor.of(commentLabel);
 		driver.initialize(this);
 		patchPanel.getHeader().getElement().getParentElement().setClassName(""); // prevent style collision
@@ -88,43 +96,42 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 
 		patchPanel.getContent().removeStyleName("content");
 		changesPanel.getContent().removeStyleName("content");
-
 	}
 
 	@UiField
-	protected Label commitId;
+	public Label commitId;
 	@UiField
 	@Path("author.email")
-	protected Label authorEmail;
+	public Label authorEmail;
 	@UiField
-	protected Image authorImage;
+	public Image authorImage;
 	@UiField(provided = true)
-	protected DateLabel date = new DateLabel(Format.getDateTimeFormat());
+	public DateLabel date = new DateLabel(Format.getDateTimeFormat());
 	@UiField
-	protected HyperlinkingLabel commentLabel;
+	public HyperlinkingLabel commentLabel;
 	private TaskHyperlinkDetector taskHyperlinkDetector = new TaskHyperlinkDetector(null);
 	protected HasTextEditor comment;
 	@UiField
-	protected Panel parentsPanel;
+	public Panel parentsPanel;
 	@UiField
-	protected Panel filesPanel;
+	public Panel filesPanel;
 	@UiField
-	protected DisclosurePanel changesPanel;
+	public DisclosurePanel changesPanel;
 	@UiField
 	@Editor.Ignore
-	protected HTML diffHtml;
+	public HTML diffHtml;
 	@UiField
-	protected Anchor repository;
+	public Anchor repository;
 	@UiField
-	protected DisclosurePanel patchPanel;
+	public DisclosurePanel patchPanel;
 	@UiField
-	protected DivElement committerInfoDiv;
+	public DivElement committerInfoDiv;
 	@Path("committer.email")
 	@UiField
-	protected Label committerEmail;
+	public Label committerEmail;
 	@UiField(provided = true)
-	protected DateLabel commitDate = new DateLabel(Format.getDateTimeFormat());
-	private String projectId;
+	public DateLabel commitDate = new DateLabel(Format.getDateTimeFormat());
+	protected String projectId;
 
 	private final int maxPrettifiableLines = 1000;
 	private int totalDiffLines;
