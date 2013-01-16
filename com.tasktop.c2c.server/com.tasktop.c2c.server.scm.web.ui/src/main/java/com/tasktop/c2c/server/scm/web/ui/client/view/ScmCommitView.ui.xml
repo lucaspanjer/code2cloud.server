@@ -4,6 +4,8 @@
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' 
 	xmlns:p="urn:import:com.tasktop.c2c.server.common.web.client.widgets.chooser.person" 
 	xmlns:h="urn:import:com.tasktop.c2c.server.common.web.client.widgets.hyperlink">
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="scmm" type="com.tasktop.c2c.server.scm.web.ui.client.resources.ScmMessages"/>
 <ui:style>
 .commitMeta {
 	width: 100%;
@@ -40,36 +42,33 @@
 			<div class="{style.commitMeta}">
 			  	<div class="left">
 			  		<div class="left">
-						<label>Commit:</label> 
+						<label><ui:text from="{scmm.commit}"/><ui:text from="{cpm.colon}"/></label> 
 						<g:Label ui:field='commitId'/>
 					</div>
 			  		<div class="right {style.repository}">
-						(<g:Anchor ui:field='repository'/>)
+						<g:Anchor ui:field='repository'/>
 					</div>
 				</div>
 				<div class="right">
-					<label>Parent:</label> 
+					<label><ui:text from="{scmm.parent}"/><ui:text from="{cpm.colon}"/></label> 
 					<g:FlowPanel ui:field='parentsPanel' styleName="{style.parentsPanel}"/>
 				</div>
 			</div>	
 			<br/>
 			<div class="{style.commitMeta}">
 				<div class="left">
-					<label>Date:</label> 
+					<label><ui:text from="{scmm.date}"/><ui:text from="{cpm.colon}"/></label> 
 					<g:DateLabel ui:field='date'/>
 				</div>
 			</div>
 			<br/>
 			<div class="{style.commitMeta}">
 				<div class="left">
-					<label>Author:</label>
+					<label><ui:text from="{scmm.author}"/><ui:text from="{cpm.colon}"/></label>
 					<g:Label ui:field='authorEmail'/>  
 				</div>
 				<div ui:field="committerInfoDiv" class="right">
-					Committed by 
-					<g:Label ui:field='committerEmail'/>
-					on
-					<g:DateLabel ui:field='commitDate'/>
+					<g:Label ui:field="committedByLabel"/>
 				</div>
 			</div>
 			<div class="clear"/>
@@ -85,13 +84,13 @@
 
 			<div class="spacer clear small"/>
 			<g:DisclosurePanel ui:field="changesPanel" open="true" width="100%">
-				<g:header>Files</g:header>
+				<g:header><ui:text from="{scmm.files}"/></g:header>
 				<g:FlowPanel ui:field='filesPanel' styleName="{style.parentsPanel}"/>
 			</g:DisclosurePanel>
 			
 			<div class="spacer clear small"/>
-			<g:DisclosurePanel ui:field="patchPanel" title="Patch Text" open="false" width="100%">
-				<g:header>Changes</g:header>
+			<g:DisclosurePanel ui:field="patchPanel" title="{scmm.patchText}" open="false" width="100%">
+				<g:header><ui:text from="{scmm.changes}"/></g:header>
 				<g:HTML ui:field="diffHtml" styleName="{style.code}"/>
 			</g:DisclosurePanel>
 			

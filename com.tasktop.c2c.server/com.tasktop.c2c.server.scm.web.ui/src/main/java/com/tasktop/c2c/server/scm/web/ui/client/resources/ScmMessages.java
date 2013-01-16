@@ -19,6 +19,18 @@ import com.google.gwt.i18n.client.Messages;
 @Generate(format = "com.google.gwt.i18n.rebind.format.PropertiesFormat")
 public interface ScmMessages extends Messages {
 
+	@DefaultMessage("Author")
+	String author();
+
+	@DefaultMessage("Changes")
+	String changes();
+
+	@DefaultMessage("Commit")
+	String commit();
+
+	@DefaultMessage("Committed by {0} on {1}")
+	String committedByOn(String committerEmail, String committedDate);
+
 	@DefaultMessage("Commit \"{0}\" not found.")
 	String commitNotFound(String commitId);
 
@@ -27,6 +39,18 @@ public interface ScmMessages extends Messages {
 
 	@DefaultMessage("{0} copied to {1}")
 	String copiedTo(String oldPath, String newPath);
+
+	@DefaultMessage("Date")
+	String date();
+
+	@DefaultMessage("Files")
+	String files();
+
+	@DefaultMessage("Parent")
+	String parent();
+
+	@DefaultMessage("Patch Text")
+	String patchText();
 
 	@DefaultMessage("{0} renamed to {1}")
 	String renamedTo(String oldPath, String newPath);

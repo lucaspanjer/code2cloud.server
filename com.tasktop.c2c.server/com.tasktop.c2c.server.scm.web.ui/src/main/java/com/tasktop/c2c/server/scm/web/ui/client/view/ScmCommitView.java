@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.google_code_prettify.GoogleCodePrettifyUtil;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.web.client.navigation.Navigation;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
 import com.tasktop.c2c.server.common.web.client.widgets.Format;
@@ -126,15 +127,14 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 	public DisclosurePanel patchPanel;
 	@UiField
 	public DivElement committerInfoDiv;
-	@Path("committer.email")
 	@UiField
-	public Label committerEmail;
-	@UiField(provided = true)
-	public DateLabel commitDate = new DateLabel(Format.getDateTimeFormat());
+	@Ignore
+	public Label committedByLabel;
 	protected String projectId;
 
 	private final int maxPrettifiableLines = 1000;
 	private int totalDiffLines;
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
 	private ScmMessages scmMessages = GWT.create(ScmMessages.class);
 
 	/**
@@ -144,7 +144,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 
 		driver.edit(commit);
 
-		repository.setText(commit.getRepository());
+		repository.setText(commonProfileMessages.parentheses(commit.getRepository()));
 		repository.setHref(ScmRepoPlace.createPlace(projectId, commit.getRepository()).getHref());
 
 		parentsPanel.clear();
@@ -154,7 +154,7 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 			boolean needSep = false;
 			for (String parentId : commit.getParents()) {
 				if (needSep) {
-					parentsPanel.add(new Label(","));
+					parentsPanel.add(new Label(commonProfileMessages.comma()));
 				} else {
 					needSep = true;
 				}
@@ -200,6 +200,10 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 		authorImage.setUrl(Avatar.computeAvatarUrl(commit.getAuthor().getGravatarHash(), Avatar.Size.MEDIUM));
 
 		UIObject.setVisible(committerInfoDiv, commit.getCommitter() != null);
+		if (commit.getCommitter() != null) {
+			committedByLabel.setText(scmMessages.committedByOn(commit.getCommitter().getEmail(), Format
+					.getDateTimeFormat().format(commit.getCommitDate())));
+		}
 		if (totalDiffLines < maxPrettifiableLines) {
 			GoogleCodePrettifyUtil.run();
 		}
@@ -237,10 +241,10 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 				fileName = diff.getOldPath();
 				break;
 			case RENAME:
-				fileName = scmMessages.renamedTo(diff.getOldPath(), diff.getNewPath()); // FIXME use diff template
+				fileName = scmMessages.renamedTo(diff.getOldPath(), diff.getNewPath());
 				break;
 			case COPY:
-				fileName = scmMessages.copiedTo(diff.getOldPath(), diff.getNewPath()); // FIXME use diff template
+				fileName = scmMessages.copiedTo(diff.getOldPath(), diff.getNewPath());
 				break;
 			default:
 				fileName = diff.getNewPath();
