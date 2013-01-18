@@ -55,7 +55,7 @@ public class FileSystemMetricCollector implements MetricCollector {
 			totalByteSize = com.tasktop.c2c.server.configuration.service.FileUtils.size(directory);
 			status.setServiceState(ServiceState.RUNNING);
 			status.getMetrics().put(metricName, totalByteSize + "");
-			status.getMetrics().put(metricName + ".humanReadable", FileUtils.byteCountToDisplaySize(totalByteSize));
+			status.getMetrics().put(metricName + "_humanReadable", FileUtils.byteCountToDisplaySize(totalByteSize));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -421,7 +421,7 @@ public class APIDocGenerator {
 		ProjectServiceStatus result = new ProjectServiceStatus();
 		result.setProjectIdentifier("my-project");
 		result.setServiceType(ServiceType.TASKS);
-		result.setMetrics(Collections.singletonMap("diskUsage.humanReadable", "100M"));
+		result.setMetrics(Collections.singletonMap("diskUsage_humanReadable", "100M"));
 		return result;
 	}
 
