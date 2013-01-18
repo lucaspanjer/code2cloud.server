@@ -59,7 +59,7 @@ import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 @Service("projectServiceService")
 @Transactional(rollbackFor = Exception.class)
 public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements ProjectServiceService,
-		InternalApplicationService {
+		InternalProjectServiceService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProjectServiceServiceBean.class.getSimpleName());
 
@@ -239,7 +239,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW, noRollbackFor = { EntityNotFoundException.class,
 			NoResultException.class })
-	public void initializeApplicationServiceProfileTemplate() {
+	public void initializeProjectServiceProfileTemplate() {
 
 		ProjectServiceProfile templateServiceProfile = getDefaultTemplate();
 

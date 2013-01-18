@@ -32,8 +32,8 @@ public class ProjectServicesProvisioningJob extends Job {
 
 	@Override
 	public void execute(ApplicationContext applicationContext) {
-		InternalApplicationService service = applicationContext.getBean("projectServiceService",
-				InternalApplicationService.class);
+		InternalProjectServiceService service = applicationContext.getBean("projectServiceService",
+				InternalProjectServiceService.class);
 		try {
 			service.doProvisionServices(projectId, serviceType);
 		} catch (EntityNotFoundException e) {

@@ -22,7 +22,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class DefaultApplicationServiceProfileInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired
-	private InternalApplicationService service;
+	private InternalProjectServiceService service;
 
 	@Autowired
 	protected PlatformTransactionManager trxManager;
@@ -30,7 +30,7 @@ public class DefaultApplicationServiceProfileInitializer implements ApplicationL
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 
-		service.initializeApplicationServiceProfileTemplate();
+		service.initializeProjectServiceProfileTemplate();
 
 	}
 }

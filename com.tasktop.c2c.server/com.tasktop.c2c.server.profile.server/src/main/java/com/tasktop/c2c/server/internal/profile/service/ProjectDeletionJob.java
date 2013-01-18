@@ -5,29 +5,24 @@ import org.springframework.context.ApplicationContext;
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.job.Job;
-import com.tasktop.c2c.server.common.service.job.JobService;
 
-public class ProjectServiceDeprovisioningJob extends Job {
+public class ProjectDeletionJob extends Job {
 
 	private String projectId;
-	private Long projectServiceId;
 
 	/**
 	 * @param id
 	 */
-	public ProjectServiceDeprovisioningJob(String projectId, Long projectServiceId) {
+	public ProjectDeletionJob(String projectId) {
 		this.projectId = projectId;
-		this.projectServiceId = projectServiceId;
 	}
 
 	@Override
 	public void execute(ApplicationContext applicationContext) {
-		InternalProjectServiceService service = applicationContext.getBean(InternalProjectServiceService.class);
+		InternalProfileService service = applicationContext.getBean(InternalProfileService.class);
 		try {
 			AuthUtils.assumeSystemIdentity(projectId);
-			service.doDeprovisionService(projectServiceId);
-			JobService jobService = applicationContext.getBean("jobService", JobService.class);
-			jobService.schedule(new ProjectDeletionJob(projectId));
+			service.doDeleteProjectIfReady(projectId);
 		} catch (EntityNotFoundException e) {
 			throw new IllegalStateException(e);
 		}

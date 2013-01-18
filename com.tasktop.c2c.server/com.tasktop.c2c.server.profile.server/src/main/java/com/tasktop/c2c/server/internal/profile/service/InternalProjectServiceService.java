@@ -15,9 +15,9 @@ package com.tasktop.c2c.server.internal.profile.service;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 
-public interface InternalApplicationService {
+public interface InternalProjectServiceService {
 
-	public void initializeApplicationServiceProfileTemplate();
+	public void initializeProjectServiceProfileTemplate();
 
 	public void doProvisionServices(Long projectId, ServiceType serviceType) throws EntityNotFoundException,
 			ProvisioningException;

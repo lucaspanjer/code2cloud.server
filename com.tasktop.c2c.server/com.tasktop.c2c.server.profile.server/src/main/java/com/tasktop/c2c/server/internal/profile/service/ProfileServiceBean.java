@@ -30,6 +30,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.apache.velocity.app.VelocityEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
@@ -112,6 +114,8 @@ import com.tasktop.c2c.server.wiki.service.WikiService;
 @Qualifier("main")
 @Transactional(rollbackFor = { Exception.class })
 public class ProfileServiceBean extends AbstractJpaServiceBean implements ProfileService, InternalProfileService {
+
+	private static final Logger LOG = LoggerFactory.getLogger(ProfileServiceBean.class);
 
 	private static final int MAX_SIZE = 1000;
 
@@ -1885,13 +1889,10 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 				jobService.schedule(new ProjectServiceDeprovisioningJob(project.getIdentifier(), service.getId()));
 			}
 		}
-
 	}
 
 	@Override
-	public void doDeprovisionServiceAndDeleteProjectIfReady(String projectIdentifier, Long projectServiceId)
-			throws EntityNotFoundException {
-		internalApplicationService.doDeprovisionService(projectServiceId);
+	public void doDeleteProjectIfReady(String projectIdentifier) throws EntityNotFoundException {
 
 		Project project = getProjectByIdentifierInternal(projectIdentifier);
 		boolean readyToDelete = true;
@@ -1902,13 +1903,13 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			}
 		}
 
+		LOG.debug(String.format("We have [%s] service for project [%s], and %s ready to delete", project
+				.getProjectServiceProfile().getProjectServices().size(), projectIdentifier, readyToDelete ? "are"
+				: "are not"));
 		if (readyToDelete) {
 			doDeleteProject(projectIdentifier);
 		}
 	}
-
-	@Autowired
-	private InternalApplicationService internalApplicationService;
 
 	@Override
 	public void doDeleteProject(String projectIdentifier) throws EntityNotFoundException {
