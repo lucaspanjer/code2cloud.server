@@ -15,6 +15,8 @@ package com.tasktop.c2c.server.tasks.client.place;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -22,6 +24,7 @@ import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.shared.action.GetRepositoryConfigurationAction;
@@ -57,6 +60,8 @@ public class ProjectTaskPlace extends AbstractProjectTaskBatchingPlace {
 	private Task task;
 	private RepositoryConfiguration repositoryConfiguration;
 	private List<Breadcrumb> breadcrumbs;
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public static ProjectTaskPlace createPlace(String projectId, Integer taskId) {
 		return new ProjectTaskPlace(projectId, taskId);
@@ -79,8 +84,8 @@ public class ProjectTaskPlace extends AbstractProjectTaskBatchingPlace {
 
 	@Override
 	public String getWindowTitle() {
-		return task.getTaskType() + " " + task.getId() + " - " + task.getShortDescription() + " - " + project.getName()
-				+ " - " + WindowTitleBuilder.PRODUCT_NAME;
+		return tasksMessages.taskWindowTitle(task.getTaskType(), task.getId(), task.getShortDescription(),
+				project.getName(), WindowTitleBuilder.PRODUCT_NAME);
 	}
 
 	public String getPrefix() {
@@ -131,8 +136,8 @@ public class ProjectTaskPlace extends AbstractProjectTaskBatchingPlace {
 
 	private void createBreadcrumbs(Project project, Task task) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs
-				.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(), "Tasks"));
+		breadcrumbs.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(),
+				commonProfileMessages.tasks()));
 		breadcrumbs.add(new Breadcrumb(getHref(), task.getTaskType() + " #" + task.getId()));
 	}
 

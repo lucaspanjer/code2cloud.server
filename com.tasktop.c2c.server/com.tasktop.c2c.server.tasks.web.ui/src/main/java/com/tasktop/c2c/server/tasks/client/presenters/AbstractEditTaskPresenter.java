@@ -149,7 +149,7 @@ public abstract class AbstractEditTaskPresenter<EditTaskViewType extends Abstrac
 	@Override
 	public String mayStop() {
 		if (editTaskView.isDirty()) {
-			return taskMessages.dirtyNavigateWarning();
+			return tasksMessages.dirtyNavigateWarning();
 		}
 		return null;
 	}

@@ -14,14 +14,13 @@ package com.tasktop.c2c.server.tasks.client.presenters;
 
 import net.customware.gwt.dispatch.client.DispatchAsync;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.tasktop.c2c.server.common.profile.web.client.AppState;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.presenter.AbstractPresenter;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
-import com.tasktop.c2c.server.tasks.client.widgets.TaskMessages;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -29,7 +28,7 @@ import com.tasktop.c2c.server.tasks.client.widgets.TaskMessages;
  */
 public abstract class AbstractTaskPresenter extends AbstractPresenter {
 
-	protected TaskMessages taskMessages = GWT.create(TaskMessages.class);
+	protected TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	protected String projectIdentifier;
 

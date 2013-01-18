@@ -15,6 +15,8 @@ package com.tasktop.c2c.server.tasks.client.place;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -22,6 +24,7 @@ import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity;
 import com.tasktop.c2c.server.tasks.shared.action.GetTaskAction;
@@ -57,6 +60,8 @@ public class ProjectTaskHistoryPlace extends AbstractProjectTaskBatchingPlace {
 	private Task task;
 	private List<TaskActivity> taskActivity;
 	private List<Breadcrumb> breadcrumbs;
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public static ProjectTaskHistoryPlace createPlace(String projectId, Integer taskId) {
 		return new ProjectTaskHistoryPlace(projectId, taskId);
@@ -69,8 +74,8 @@ public class ProjectTaskHistoryPlace extends AbstractProjectTaskBatchingPlace {
 
 	@Override
 	public String getWindowTitle() {
-		return "History of " + task.getTaskType() + " " + task.getId() + " - " + project.getName() + " - "
-				+ WindowTitleBuilder.PRODUCT_NAME;
+		return tasksMessages.historyWindowTitle(task.getTaskType(), task.getId(), project.getName(),
+				WindowTitleBuilder.PRODUCT_NAME);
 	}
 
 	public String getPrefix() {
@@ -114,11 +119,11 @@ public class ProjectTaskHistoryPlace extends AbstractProjectTaskBatchingPlace {
 
 	private void createBreadcrumbs(Project project, Task task) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs
-				.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(), "Tasks"));
+		breadcrumbs.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(),
+				commonProfileMessages.tasks()));
 		breadcrumbs.add(new Breadcrumb(ProjectTaskPlace.createPlace(project.getIdentifier(), task.getId()).getHref(),
 				task.getTaskType() + " #" + task.getId()));
-		breadcrumbs.add(new Breadcrumb(getHref(), "History"));
+		breadcrumbs.add(new Breadcrumb(getHref(), tasksMessages.history()));
 	}
 
 	/**

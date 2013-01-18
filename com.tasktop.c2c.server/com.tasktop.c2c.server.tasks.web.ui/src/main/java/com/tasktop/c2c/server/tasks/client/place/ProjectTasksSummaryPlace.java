@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -30,6 +32,7 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
 import com.tasktop.c2c.server.tasks.shared.action.GetTaskSummaryAction;
@@ -111,6 +114,8 @@ public class ProjectTasksSummaryPlace extends AbstractProjectTaskBatchingPlace {
 	private String release;
 	private List<Task> tasks = new ArrayList<Task>();
 	private List<Breadcrumb> breadcrumbs;
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public Integer getProductId() {
 		return productId;
@@ -182,8 +187,8 @@ public class ProjectTasksSummaryPlace extends AbstractProjectTaskBatchingPlace {
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs
-				.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(), "Tasks"));
+		breadcrumbs.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(),
+				commonProfileMessages.tasks()));
 
 	}
 
@@ -199,6 +204,6 @@ public class ProjectTasksSummaryPlace extends AbstractProjectTaskBatchingPlace {
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle("Task Summary", project.getName());
+		return WindowTitleBuilder.createWindowTitle(tasksMessages.taskSummary(), project.getName());
 	}
 }

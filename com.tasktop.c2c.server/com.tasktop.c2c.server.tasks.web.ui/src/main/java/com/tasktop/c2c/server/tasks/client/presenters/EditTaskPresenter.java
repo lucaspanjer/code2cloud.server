@@ -16,6 +16,7 @@ import static com.tasktop.c2c.server.tasks.client.widgets.presenter.person.Perso
 
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
@@ -29,6 +30,7 @@ import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.place.ProjectEditTaskPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTaskPlace;
 import com.tasktop.c2c.server.tasks.client.widgets.EditTaskDisplay;
@@ -43,6 +45,8 @@ import com.tasktop.c2c.server.tasks.shared.action.UpdateTaskAction;
 import com.tasktop.c2c.server.tasks.shared.action.UpdateTaskResult;
 
 public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay> implements SplittableActivity {
+
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public interface AttachmentDisplay {
 		void addSubmitCompleteHandler(FormPanel.SubmitCompleteHandler handler);
@@ -101,8 +105,8 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 		UpdateTaskAction action = new UpdateTaskAction(projectIdentifier, task);
 		getDispatchService().execute(
 				action,
-				new AsyncCallbackSupport<UpdateTaskResult>(new OperationMessage("Saving Task..."), null, editTaskView
-						.getSaveHasEnabled()) {
+				new AsyncCallbackSupport<UpdateTaskResult>(new OperationMessage(tasksMessages.savingTask()), null,
+						editTaskView.getSaveHasEnabled()) {
 
 					@Override
 					protected void success(UpdateTaskResult actionResult) {
@@ -111,11 +115,11 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 						if (actionResult.isUpdatedAlready()) {
 							task = result;
 							populateUi(task);
-							getNotifier().displayMessage(
-									Message.createErrorMessage("Task has been updated. Review changes and try again."));
+							getNotifier()
+									.displayMessage(Message.createErrorMessage(tasksMessages.taskUpdatedMessage()));
 						} else {
 							ProjectTaskPlace place = ProjectTaskPlace.createPlaceWithTask(projectIdentifier, result);
-							place.displayOnArrival(Message.createSuccessMessage("Task Saved"));
+							place.displayOnArrival(Message.createSuccessMessage(tasksMessages.taskSaved()));
 							place.go();
 						}
 					}
@@ -157,7 +161,7 @@ public class EditTaskPresenter extends AbstractEditTaskPresenter<EditTaskDisplay
 			editTaskView.getAttachmentDisplay().resetForm();
 
 		} else {
-			String message = "Error: Unexpected server response";
+			String message = tasksMessages.unexpectedServerResponse();
 			JSONValue errorValue = value.isObject().get("error");
 			JSONObject errorObject = errorValue == null ? null : errorValue.isObject();
 			if (errorObject != null) {

@@ -15,7 +15,9 @@ package com.tasktop.c2c.server.tasks.client.place;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -25,6 +27,7 @@ import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.presenters.TasksSummaryListPresenter.ListScope;
 import com.tasktop.c2c.server.tasks.domain.Component;
 import com.tasktop.c2c.server.tasks.domain.Milestone;
@@ -139,6 +142,8 @@ public class ProjectTasksSummaryListPlace extends AbstractProjectTaskBatchingPla
 	private List<Product> products;
 	private Project project;
 	private List<Breadcrumb> breadcrumbs;
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	private ProjectTasksSummaryListPlace(String projectId, Integer productId, ListScope scope) {
 		super(projectId);
@@ -210,8 +215,8 @@ public class ProjectTasksSummaryListPlace extends AbstractProjectTaskBatchingPla
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs
-				.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(), "Tasks"));
+		breadcrumbs.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(),
+				commonProfileMessages.tasks()));
 	}
 
 	/**
@@ -223,6 +228,6 @@ public class ProjectTasksSummaryListPlace extends AbstractProjectTaskBatchingPla
 
 	@Override
 	public String getWindowTitle() {
-		return WindowTitleBuilder.createWindowTitle("Task Summary", project.getName());
+		return WindowTitleBuilder.createWindowTitle(tasksMessages.taskSummary(), project.getName());
 	}
 }

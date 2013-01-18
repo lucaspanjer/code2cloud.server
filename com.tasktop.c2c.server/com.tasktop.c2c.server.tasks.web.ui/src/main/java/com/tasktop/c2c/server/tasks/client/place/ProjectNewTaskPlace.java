@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -28,6 +30,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.shared.action.GetRepositoryConfigurationAction;
@@ -68,6 +71,8 @@ public class ProjectNewTaskPlace extends AbstractProjectTaskBatchingPlace implem
 	private Task parent;
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
 	private RepositoryConfiguration repositoryConfiguration;
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public static ProjectNewTaskPlace createNewTaskPlace(String projectId) {
 		return new ProjectNewTaskPlace(projectId, null);
@@ -98,7 +103,7 @@ public class ProjectNewTaskPlace extends AbstractProjectTaskBatchingPlace implem
 
 	@Override
 	public String getWindowTitle() {
-		return "New Task - " + project.getName();
+		return tasksMessages.newTaskWindowTitle(project.getName());
 	}
 
 	@Override
@@ -146,9 +151,9 @@ public class ProjectNewTaskPlace extends AbstractProjectTaskBatchingPlace implem
 
 	private void createBreadcrumbs(Project project, Task task) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs
-				.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(), "Tasks"));
-		String placeBreadcrumbText = "New Task";
+		breadcrumbs.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(),
+				commonProfileMessages.tasks()));
+		String placeBreadcrumbText = tasksMessages.newTask();
 		breadcrumbs.add(new Breadcrumb(getHref(), placeBreadcrumbText));
 	}
 

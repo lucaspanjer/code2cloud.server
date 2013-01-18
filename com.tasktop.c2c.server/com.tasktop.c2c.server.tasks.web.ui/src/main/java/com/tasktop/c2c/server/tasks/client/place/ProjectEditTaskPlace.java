@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
@@ -29,6 +31,7 @@ import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.web.client.navigation.Args;
 import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.shared.action.GetRepositoryConfigurationAction;
@@ -59,6 +62,8 @@ public class ProjectEditTaskPlace extends AbstractProjectTaskBatchingPlace imple
 	private RepositoryConfiguration repositoryConfiguration;
 	private Task task;
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	protected ProjectEditTaskPlace(String projectId, Integer taskId) {
 		super(projectId);
@@ -111,15 +116,15 @@ public class ProjectEditTaskPlace extends AbstractProjectTaskBatchingPlace imple
 	@Override
 	public String getHeading() {
 		if (project == null) {
-			throw new IllegalStateException("Place data for " + this.getClass().getName() + "isn't available.");
+			throw new IllegalStateException(tasksMessages.placeDataNotAvailable(this.getClass().getName()));
 		}
 		return project.getName();
 	}
 
 	@Override
 	public String getWindowTitle() {
-		return "Edit " + task.getTaskType() + " " + task.getId() + " - " + task.getShortDescription() + " - "
-				+ project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
+		return tasksMessages.editTaskWindowTitle(task.getTaskType(), task.getId(), task.getShortDescription(),
+				project.getName(), WindowTitleBuilder.PRODUCT_NAME);
 	}
 
 	@Override
@@ -134,10 +139,10 @@ public class ProjectEditTaskPlace extends AbstractProjectTaskBatchingPlace imple
 
 	private void createBreadcrumbs(Project project, Task task) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs
-				.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(), "Tasks"));
+		breadcrumbs.add(new Breadcrumb(ProjectTasksPlace.createDefaultPlace(project.getIdentifier()).getHref(),
+				commonProfileMessages.tasks()));
 		breadcrumbs.add(new Breadcrumb(ProjectTaskPlace.createPlace(project.getIdentifier(), task.getId()).getHref(),
 				task.getTaskType() + " #" + task.getId()));
-		breadcrumbs.add(new Breadcrumb(getHref(), "Edit"));
+		breadcrumbs.add(new Breadcrumb(getHref(), commonProfileMessages.edit()));
 	}
 }

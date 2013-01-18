@@ -285,7 +285,7 @@ public class TaskPresenterImpl extends AbstractTaskPresenter implements TaskPres
 	@Override
 	public String mayStop() {
 		if (taskView.isDirty()) {
-			return taskMessages.dirtyNavigateWarning();
+			return tasksMessages.dirtyNavigateWarning();
 		}
 		return null;
 	}

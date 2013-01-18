@@ -12,10 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.place;
 
-import java.util.List;
-
-import net.customware.gwt.dispatch.shared.Action;
-
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
@@ -71,7 +67,6 @@ public abstract class AbstractProjectTaskBatchingPlace extends AbstractBatchFetc
 	public Section getSection() {
 		return Section.TASKS;
 	}
-
 
 	@Override
 	protected void addActions() {

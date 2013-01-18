@@ -568,8 +568,6 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 	private CFDriver customFieldDriver = GWT.create(CFDriver.class);
 
-	protected TaskMessages taskMessages = GWT.create(TaskMessages.class);
-
 	private RepositoryConfiguration repositoryConfiguration;
 	private List<InlineEditableField<?>> inlineEditFields = new ArrayList<InlineEditableField<?>>();
 	private List<InlineEditableField<?>> editingFields = new ArrayList<InlineEditableField<?>>();

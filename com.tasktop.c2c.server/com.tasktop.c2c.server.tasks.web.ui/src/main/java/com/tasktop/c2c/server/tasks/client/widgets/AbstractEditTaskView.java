@@ -202,7 +202,6 @@ public class AbstractEditTaskView extends AbstractComposite implements AbstractE
 
 	protected Task task;
 	protected Person self;
-	protected TaskMessages taskMessages = GWT.create(TaskMessages.class);
 	private boolean isEditing = false;
 
 	public AbstractEditTaskView() {

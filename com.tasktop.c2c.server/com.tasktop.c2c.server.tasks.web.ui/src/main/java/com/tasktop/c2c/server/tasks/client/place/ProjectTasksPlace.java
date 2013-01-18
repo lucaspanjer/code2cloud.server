@@ -19,7 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.URL;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
@@ -39,6 +41,7 @@ import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.PredefinedTaskQuery;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.SavedTaskQuery;
@@ -171,6 +174,8 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 	private List<Breadcrumb> breadcrumbs = new ArrayList<Breadcrumb>();
 	private RepositoryConfiguration repositoryConfiguration;
 	private static ProjectTasksPlace lastVisited = null;
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	private ProjectTasksPlace(String projectId, QueryType type, String queryName) {
 		super(projectId);
@@ -286,8 +291,11 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 			setupDefaultQuery();
 		} else if (queryState.getQueryType().equals(QueryType.Named)) {
 			if (!resolveNamedQuery(queryState.getQueryString())) {
-				ProfileGinjector.get.instance().getNotifier()
-						.displayMessage(Message.createErrorMessage("No query named: " + queryState.getQueryString()));
+				ProfileGinjector.get
+						.instance()
+						.getNotifier()
+						.displayMessage(
+								Message.createErrorMessage(tasksMessages.queryNotFound(queryState.getQueryString())));
 				return;
 			}
 		}
@@ -329,7 +337,7 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(getHref(), "Tasks"));
+		breadcrumbs.add(new Breadcrumb(getHref(), commonProfileMessages.tasks()));
 	}
 
 	/**
@@ -359,7 +367,7 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 		String querySummary;
 		switch (queryState.getQueryType()) {
 		case Criteria:
-			querySummary = "Advanced Search - ";
+			querySummary = tasksMessages.advancedSearch() + " - ";
 			break;
 		case Predefined:
 			querySummary = queryState.getPredefinedQuery().getLabel() + " - ";
@@ -368,7 +376,7 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 			querySummary = queryState.getSavedQuery().getName() + " - ";
 			break;
 		case Text:
-			querySummary = "Search for '" + queryState.getQueryString() + "' - ";
+			querySummary = tasksMessages.searchFor() + " '" + queryState.getQueryString() + "' - ";
 			break;
 		case Default:// Should never happen
 		case Named:
@@ -376,7 +384,8 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 			querySummary = "";
 
 		}
-		return querySummary + "Tasks - " + project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
+		return querySummary + commonProfileMessages.tasks() + " - " + project.getName() + " - "
+				+ WindowTitleBuilder.PRODUCT_NAME;
 	}
 
 }
