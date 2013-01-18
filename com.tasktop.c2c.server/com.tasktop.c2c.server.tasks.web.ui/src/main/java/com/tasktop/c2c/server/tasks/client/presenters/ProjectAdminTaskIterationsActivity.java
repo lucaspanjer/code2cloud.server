@@ -15,14 +15,12 @@ package com.tasktop.c2c.server.tasks.client.presenters;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
-import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.place.ProjectAdminIterationsPlace;
 import com.tasktop.c2c.server.tasks.client.widgets.admin.iterations.IIterationsAdminView;
 import com.tasktop.c2c.server.tasks.client.widgets.admin.iterations.IterationsAdminView;
@@ -37,10 +35,8 @@ public class ProjectAdminTaskIterationsActivity extends AbstractTaskPresenter im
 	private String projectIdentifier;
 	private List<Iteration> iterations;
 	private IIterationsAdminView view;
-	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public ProjectAdminTaskIterationsActivity() {
-		// this(ProjectAdminIterationsView.getInstance());
 		this(IterationsAdminView.getInstance());
 	}
 

@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.tasks.client.presenters;
 
 import java.util.List;
 
-
 import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTasksSummaryListPlace;
@@ -59,7 +58,7 @@ public class TasksSummaryListPresenter extends AbstractTaskPresenter implements 
 	private void renderSummaryList() {
 		tasksView.clear();
 		if (productList.isEmpty()) {
-			tasksView.setHeader("No task summaries found");
+			tasksView.setHeader(super.tasksMessages.noTaskSummariesFound());
 			return;
 		}
 
@@ -67,25 +66,25 @@ public class TasksSummaryListPresenter extends AbstractTaskPresenter implements 
 		switch (scope) {
 		case None:
 
-			tasksView.setHeader("By Product and Release");
+			tasksView.setHeader(super.tasksMessages.byProductAndRelease());
 			tasksView.renderProductList(productList);
 			break;
 
 		case Product:
 
-			tasksView.setHeader("Product " + product.getName() + ", by Release");
+			tasksView.setHeader(super.tasksMessages.productByRelease(product.getName()));
 			tasksView.renderProduct(product);
 			break;
 
 		case Component:
 
-			tasksView.setHeader("Product " + product.getName() + ", by Component");
+			tasksView.setHeader(super.tasksMessages.productByComponent(product.getName()));
 			tasksView.renderProductComponents(product);
 			break;
 
 		case Milestone:
 
-			tasksView.setHeader("Product " + product.getName() + ", by Release");
+			tasksView.setHeader(super.tasksMessages.productByRelease(product.getName()));
 			tasksView.renderProductMilestones(product);
 			break;
 		}

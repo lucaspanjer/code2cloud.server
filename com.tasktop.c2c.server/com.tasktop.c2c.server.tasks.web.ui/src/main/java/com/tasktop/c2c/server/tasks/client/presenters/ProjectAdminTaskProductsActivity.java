@@ -91,7 +91,6 @@ public class ProjectAdminTaskProductsActivity extends AbstractTaskPresenter impl
 							protected void success(GetRepositoryConfigurationResult result) {
 								repositoryConfiguration = result.get();
 								view.setPresenter(ProjectAdminTaskProductsActivity.this);
-								// ProjectAdminMenu.getInstance().updateUrls(project);
 							}
 						});
 	}
@@ -139,7 +138,8 @@ public class ProjectAdminTaskProductsActivity extends AbstractTaskPresenter impl
 																.instance()
 																.getNotifier()
 																.displayMessage(
-																		Message.createSuccessMessage("Product saved"));
+																		Message.createSuccessMessage(tasksMessages
+																				.productSaved()));
 														updateView();
 													}
 												});
@@ -176,7 +176,7 @@ public class ProjectAdminTaskProductsActivity extends AbstractTaskPresenter impl
 								editing = true;
 								updateView();
 								ProfileGinjector.get.instance().getNotifier()
-										.displayMessage(Message.createSuccessMessage("Product saved"));
+										.displayMessage(Message.createSuccessMessage(tasksMessages.productSaved()));
 							}
 						});
 	}
@@ -344,7 +344,7 @@ public class ProjectAdminTaskProductsActivity extends AbstractTaskPresenter impl
 	private Product createNewProduct() {
 		Product selectedProduct = new Product();
 		selectedProduct.setId(-1);
-		selectedProduct.setName(getUniqueProductName("New Product"));
+		selectedProduct.setName(getUniqueProductName(super.tasksMessages.newProduct()));
 		selectedProduct.setComponents(new ArrayList<Component>());
 		selectedProduct.setMilestones(new ArrayList<Milestone>());
 		selectedProduct.setDefaultComponent(createNewTransientComponent(selectedProduct.getComponents()));
@@ -397,7 +397,7 @@ public class ProjectAdminTaskProductsActivity extends AbstractTaskPresenter impl
 			callback.onReturn(null);
 			return;
 		}
-		if (!Window.confirm("Are you sure you want to delete this component? This operation cannot be undone.")) {
+		if (!Window.confirm(super.tasksMessages.componentDeleteConfirmation())) {
 			// Didn't get confirmation, so bail out.
 			return;
 		}
@@ -412,7 +412,7 @@ public class ProjectAdminTaskProductsActivity extends AbstractTaskPresenter impl
 								removeComponent(toModify, componentId);
 								callback.onReturn(null);
 								ProfileGinjector.get.instance().getNotifier()
-										.displayMessage(Message.createSuccessMessage("Component deleted"));
+										.displayMessage(Message.createSuccessMessage(tasksMessages.componentDeleted()));
 							}
 						});
 	}
@@ -445,7 +445,7 @@ public class ProjectAdminTaskProductsActivity extends AbstractTaskPresenter impl
 			return;
 		}
 
-		if (!Window.confirm("Are you sure you want to delete this release? This operation cannot be undone.")) {
+		if (!Window.confirm(super.tasksMessages.releaseDeleteConfirmation())) {
 			// Didn't get confirmation, so bail out.
 			return;
 		}
@@ -461,7 +461,7 @@ public class ProjectAdminTaskProductsActivity extends AbstractTaskPresenter impl
 								removeMilestone(toModify, milestoneId);
 								callback.onReturn(null);
 								ProfileGinjector.get.instance().getNotifier()
-										.displayMessage(Message.createSuccessMessage("Release deleted"));
+										.displayMessage(Message.createSuccessMessage(tasksMessages.releaseDeleted()));
 							}
 						});
 	}
@@ -469,7 +469,7 @@ public class ProjectAdminTaskProductsActivity extends AbstractTaskPresenter impl
 	@Override
 	public void onDeleteProduct() {
 
-		if (!Window.confirm("Are you sure you want to delete this product? This operation cannot be undone.")) {
+		if (!Window.confirm(super.tasksMessages.productDeleteConfirmation())) {
 			return;
 		}
 
@@ -493,7 +493,7 @@ public class ProjectAdminTaskProductsActivity extends AbstractTaskPresenter impl
 									selectedProduct = repositoryConfiguration.getDefaultProduct();
 								}
 								ProfileGinjector.get.instance().getNotifier()
-										.displayMessage(Message.createSuccessMessage("Product deleted"));
+										.displayMessage(Message.createSuccessMessage(tasksMessages.productDeleted()));
 								updateView();
 							}
 						});

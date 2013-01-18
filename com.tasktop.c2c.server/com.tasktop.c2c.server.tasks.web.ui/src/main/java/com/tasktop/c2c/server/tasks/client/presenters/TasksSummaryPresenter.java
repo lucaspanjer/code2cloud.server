@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTasksSummaryPlace;
@@ -65,7 +64,7 @@ public class TasksSummaryPresenter extends AbstractTaskPresenter implements Spli
 	private void renderTaskList() {
 		tasksView.clear();
 		if (tasks.isEmpty()) {
-			this.tasksView.setHeader("No tasks found");
+			this.tasksView.setHeader(super.tasksMessages.noTasksFound());
 
 			// We're done, bail out.
 			return;
@@ -76,15 +75,15 @@ public class TasksSummaryPresenter extends AbstractTaskPresenter implements Spli
 		if (isSearchByMilestone() && isSearchByComponent()) {
 
 			// If we're here, both a component and a milestone were specified.
-			this.tasksView.setHeader("Product: " + sampleTask.getProduct().getName() + ", Component: "
-					+ sampleTask.getComponent().getName() + ", Release: " + sampleTask.getMilestone().getValue());
+			this.tasksView.setHeader(super.tasksMessages.productComponentReleaseHeader(sampleTask.getProduct()
+					.getName(), sampleTask.getComponent().getName(), sampleTask.getMilestone().getValue()));
 
 			this.tasksView.renderTaskSummaryForList(tasks);
 
 		} else if (isSearchByComponent()) {
 
-			this.tasksView.setHeader("Product: " + sampleTask.getProduct().getName() + ", Component: "
-					+ sampleTask.getComponent().getName());
+			this.tasksView.setHeader(super.tasksMessages.productComponentHeader(sampleTask.getProduct().getName(),
+					sampleTask.getComponent().getName()));
 
 			HashMap<String, List<Task>> taskMap = new HashMap<String, List<Task>>();
 
@@ -102,8 +101,8 @@ public class TasksSummaryPresenter extends AbstractTaskPresenter implements Spli
 		} else {
 
 			// This means we're reporting on a milestone (since we had to search by either component or milestone)
-			this.tasksView.setHeader("Product: " + sampleTask.getProduct().getName() + ", Release: "
-					+ sampleTask.getMilestone().getValue());
+			this.tasksView.setHeader(super.tasksMessages.productReleaseHeader(sampleTask.getProduct().getName(),
+					sampleTask.getMilestone().getValue()));
 
 			HashMap<String, List<Task>> taskMap = new HashMap<String, List<Task>>();
 

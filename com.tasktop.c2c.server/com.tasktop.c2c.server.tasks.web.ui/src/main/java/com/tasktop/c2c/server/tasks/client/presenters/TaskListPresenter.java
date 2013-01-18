@@ -121,7 +121,7 @@ public class TaskListPresenter extends AbstractTaskPresenter {
 			doSearch(queryState.getQueryString());
 			break;
 		default:
-			throw new IllegalStateException("Illegal query type: " + queryState.getQueryType());
+			throw new IllegalStateException(super.tasksMessages.illegalQueryType(queryState.getQueryType().name()));
 		}
 	}
 
@@ -189,7 +189,7 @@ public class TaskListPresenter extends AbstractTaskPresenter {
 				resultsTable.getColumnSortList().push(csi);
 			} else {
 				ProfileGinjector.get.instance().getNotifier()
-						.displayMessage(new Message(10, "Unknown sort", MessageType.ERROR));
+						.displayMessage(new Message(10, super.tasksMessages.unknownSort(), MessageType.ERROR));
 			}
 		}
 		// This will trigger a call to fetchRange()

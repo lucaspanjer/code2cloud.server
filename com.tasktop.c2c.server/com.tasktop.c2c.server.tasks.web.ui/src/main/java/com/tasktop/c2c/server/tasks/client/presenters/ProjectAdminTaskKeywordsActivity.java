@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.tasks.client.presenters;
 
 import java.util.List;
 
-
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
@@ -98,7 +97,7 @@ public class ProjectAdminTaskKeywordsActivity extends AbstractTaskPresenter impl
 								editing = false;
 								updateView();
 								ProfileGinjector.get.instance().getNotifier()
-										.displayMessage(Message.createSuccessMessage("Tag saved."));
+										.displayMessage(Message.createSuccessMessage(tasksMessages.tagSaved()));
 							}
 						});
 	}
@@ -195,7 +194,7 @@ public class ProjectAdminTaskKeywordsActivity extends AbstractTaskPresenter impl
 	@Override
 	public void onDeleteKeyword() {
 
-		if (!Window.confirm("Are you sure you want to delete this tag? This operation cannot be undone.")) {
+		if (!Window.confirm(super.tasksMessages.tagDeleteConfirmation())) {
 			return;
 		}
 
@@ -207,7 +206,7 @@ public class ProjectAdminTaskKeywordsActivity extends AbstractTaskPresenter impl
 					protected void success(DeleteKeywordResult result) {
 						selectedKeyword = keywords.size() > 0 ? keywords.get(0) : null;
 						ProfileGinjector.get.instance().getNotifier()
-								.displayMessage(Message.createSuccessMessage("Tag deleted."));
+								.displayMessage(Message.createSuccessMessage(tasksMessages.tagDeleted()));
 						updateView();
 					}
 				});

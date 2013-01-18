@@ -16,14 +16,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.History;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
 import com.tasktop.c2c.server.common.web.client.presenter.SplittableActivity;
-import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.place.ProjectNewTaskPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTaskPlace;
 import com.tasktop.c2c.server.tasks.client.widgets.NewTaskDisplay;
@@ -69,7 +67,6 @@ public class NewTaskPresenter extends AbstractEditTaskPresenter<NewTaskDisplay> 
 	private Task parentTask = null;
 	private Task subTask = null;
 	private Map<String, LastValues> projectIdToLastValues = new HashMap<String, NewTaskPresenter.LastValues>();
-	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public NewTaskPresenter(NewTaskDisplay view) {
 		super(view);
@@ -139,8 +136,8 @@ public class NewTaskPresenter extends AbstractEditTaskPresenter<NewTaskDisplay> 
 		CreateTaskAction action = new CreateTaskAction(projectIdentifier, task);
 		getDispatchService().execute(
 				action,
-				new AsyncCallbackSupport<CreateTaskResult>(new OperationMessage(tasksMessages.creatingTask()), null,
-						editTaskView.getSaveHasEnabled()) {
+				new AsyncCallbackSupport<CreateTaskResult>(new OperationMessage(super.tasksMessages.creatingTask()),
+						null, editTaskView.getSaveHasEnabled()) {
 					@Override
 					protected void success(CreateTaskResult actionResult) {
 						Task result = actionResult.get();

@@ -15,12 +15,10 @@ package com.tasktop.c2c.server.tasks.client.presenters;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
-import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.place.ProjectAdminCustomFieldsPlace;
 import com.tasktop.c2c.server.tasks.client.widgets.admin.customfields.CustomFieldsAdminView;
 import com.tasktop.c2c.server.tasks.client.widgets.admin.customfields.ICustomFieldsAdminView;
@@ -39,7 +37,6 @@ public class ProjectAdminTaskCustomFieldsActivity extends AbstractTaskPresenter 
 
 	private ICustomFieldsAdminView view;
 	private List<FieldDescriptor> fields;
-	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public ProjectAdminTaskCustomFieldsActivity() {
 		this(CustomFieldsAdminView.getInstance());
@@ -79,8 +76,8 @@ public class ProjectAdminTaskCustomFieldsActivity extends AbstractTaskPresenter 
 	public void createCustomField(FieldDescriptor newField) {
 		getDispatchService().execute(
 				new CreateCustomFieldAction(projectIdentifier, newField),
-				new AsyncCallbackSupport<CreateCustomFieldResult>(
-						OperationMessage.create(tasksMessages.creatingField())) {
+				new AsyncCallbackSupport<CreateCustomFieldResult>(OperationMessage.create(super.tasksMessages
+						.creatingField())) {
 
 					@Override
 					protected void success(CreateCustomFieldResult result) {
@@ -95,8 +92,8 @@ public class ProjectAdminTaskCustomFieldsActivity extends AbstractTaskPresenter 
 	public void updateCustomField(FieldDescriptor newField) {
 		getDispatchService().execute(
 				new UpdateCustomFieldAction(projectIdentifier, newField),
-				new AsyncCallbackSupport<UpdateCustomFieldResult>(
-						OperationMessage.create(tasksMessages.updatingField())) {
+				new AsyncCallbackSupport<UpdateCustomFieldResult>(OperationMessage.create(super.tasksMessages
+						.updatingField())) {
 
 					@Override
 					protected void success(UpdateCustomFieldResult result) {
@@ -113,8 +110,8 @@ public class ProjectAdminTaskCustomFieldsActivity extends AbstractTaskPresenter 
 	public void deleteCustomField(FieldDescriptor customField) {
 		getDispatchService().execute(
 				new DeleteCustomFieldAction(projectIdentifier, customField.getId()),
-				new AsyncCallbackSupport<DeleteCustomFieldResult>(
-						OperationMessage.create(tasksMessages.deletingField())) {
+				new AsyncCallbackSupport<DeleteCustomFieldResult>(OperationMessage.create(super.tasksMessages
+						.deletingField())) {
 
 					@Override
 					protected void success(DeleteCustomFieldResult result) {

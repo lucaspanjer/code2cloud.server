@@ -92,8 +92,8 @@ public class TaskPresenterImpl extends AbstractTaskPresenter implements TaskPres
 			UpdateTaskAction action = new UpdateTaskAction(projectIdentifier, task);
 			getDispatchService().execute(
 					action,
-					new AsyncCallbackSupport<UpdateTaskResult>(new OperationMessage("Posting Comment..."), null,
-							taskView.getCommentButton()) {
+					new AsyncCallbackSupport<UpdateTaskResult>(new OperationMessage(super.tasksMessages
+							.postingComment()), null, taskView.getCommentButton()) {
 						@Override
 						protected void success(UpdateTaskResult actionResult) {
 							Task result = actionResult.get();
@@ -101,19 +101,19 @@ public class TaskPresenterImpl extends AbstractTaskPresenter implements TaskPres
 
 							if (!actionResult.isUpdatedAlready()) {
 								taskView.updateCommentView(result);
-								getNotifier().displayMessage(Message.createSuccessMessage("Comment Saved"));
+								getNotifier()
+										.displayMessage(Message.createSuccessMessage(tasksMessages.commentSaved()));
 							} else {
 								taskView.setTask(result);
 								taskView.setCommentText(comment);
-								getNotifier()
-										.displayMessage(
-												Message.createErrorMessage("Task has been updated. Review changes and post again."));
+								getNotifier().displayMessage(
+										Message.createErrorMessage(tasksMessages.taskUpdatedMessage()));
 							}
 						}
 
 					});
 		} else {
-			getNotifier().displayMessage(Message.createErrorMessage("Comment text is required."));
+			getNotifier().displayMessage(Message.createErrorMessage(super.tasksMessages.commentTextRequired()));
 		}
 
 	}
@@ -227,7 +227,7 @@ public class TaskPresenterImpl extends AbstractTaskPresenter implements TaskPres
 	private void updateTask() {
 		UpdateTaskAction action = new UpdateTaskAction(projectIdentifier, task);
 		getDispatchService().execute(action,
-				new AsyncCallbackSupport<UpdateTaskResult>(new OperationMessage("Saving Task...")) {
+				new AsyncCallbackSupport<UpdateTaskResult>(new OperationMessage(super.tasksMessages.savingTask())) {
 					@Override
 					protected void success(UpdateTaskResult actionResult) {
 						Task result = actionResult.get();
@@ -237,11 +237,11 @@ public class TaskPresenterImpl extends AbstractTaskPresenter implements TaskPres
 						taskView.updateCommentView(result);
 						taskView.setCommentText(currentComment);
 						if (actionResult.isUpdatedAlready()) {
-							getNotifier().displayMessage(
-									Message.createErrorMessage("Task has been updated. Review changes and try again."));
+							getNotifier()
+									.displayMessage(Message.createErrorMessage(tasksMessages.taskUpdatedMessage()));
 
 						} else {
-							getNotifier().displayMessage(Message.createSuccessMessage("Task Saved"));
+							getNotifier().displayMessage(Message.createSuccessMessage(tasksMessages.taskSaved()));
 						}
 					}
 

@@ -256,19 +256,22 @@ public class TasksPresenter extends AbstractTaskPresenter implements ITaskListVi
 		newQuery.setName(newQueryName);
 		newQuery.setQueryString(this.currentCriteria);
 
-		getDispatchService().execute(new CreateQueryAction(projectIdentifier, newQuery),
-				new AsyncCallbackSupport<CreateQueryResult>(new OperationMessage("Saving")) {
+		getDispatchService()
+				.execute(
+						new CreateQueryAction(projectIdentifier, newQuery),
+						new AsyncCallbackSupport<CreateQueryResult>(new OperationMessage(super.commonProfileMessages
+								.saving())) {
 
-					@Override
-					protected void success(CreateQueryResult actionResult) {
-						SavedTaskQuery result = actionResult.get();
-						repositoryConfiguration.getSavedTaskQueries().add(result);
-						view.savedQueryMenuPanel.clear();
-						setupSavedQueryLinks();
-						doQuery(result);
-						taskListPresenter.onQuerySaved();
-					}
-				});
+							@Override
+							protected void success(CreateQueryResult actionResult) {
+								SavedTaskQuery result = actionResult.get();
+								repositoryConfiguration.getSavedTaskQueries().add(result);
+								view.savedQueryMenuPanel.clear();
+								setupSavedQueryLinks();
+								doQuery(result);
+								taskListPresenter.onQuerySaved();
+							}
+						});
 	}
 
 	@Override
@@ -313,8 +316,10 @@ public class TasksPresenter extends AbstractTaskPresenter implements ITaskListVi
 
 	@Override
 	public void doDeleteQuery(final SavedTaskQuery query) {
-		getDispatchService().execute(new DeleteQueryAction(projectIdentifier, query),
-				new AsyncCallbackSupport<DeleteQueryResult>(new OperationMessage("Deleting")) {
+		getDispatchService().execute(
+				new DeleteQueryAction(projectIdentifier, query),
+				new AsyncCallbackSupport<DeleteQueryResult>(
+						new OperationMessage(super.commonProfileMessages.deleting())) {
 
 					@Override
 					protected void success(DeleteQueryResult result) {

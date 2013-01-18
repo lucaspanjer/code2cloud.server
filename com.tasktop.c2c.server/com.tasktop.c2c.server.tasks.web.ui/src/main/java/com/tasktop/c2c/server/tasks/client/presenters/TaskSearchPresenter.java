@@ -28,8 +28,8 @@ import com.google.gwt.user.datepicker.client.DateBox;
 import com.tasktop.c2c.server.common.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.common.service.domain.criteria.ColumnCriteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria;
-import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
 import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
+import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -38,8 +38,8 @@ import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTasksPlace;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskSearchDisplay;
 import com.tasktop.c2c.server.tasks.client.widgets.WidgetUtil;
-import com.tasktop.c2c.server.tasks.client.widgets.presenter.person.PersonUtil;
 import com.tasktop.c2c.server.tasks.client.widgets.presenter.person.KeywordSuggestService;
+import com.tasktop.c2c.server.tasks.client.widgets.presenter.person.PersonUtil;
 import com.tasktop.c2c.server.tasks.domain.FieldDescriptor;
 import com.tasktop.c2c.server.tasks.domain.Keyword;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
@@ -446,17 +446,20 @@ public class TaskSearchPresenter extends AbstractTaskPresenter {
 	// REVIEW consider pushing this up to TasksPresenter. Then we can just swap out some displays and avoid full reload
 	private void doUpdateQuery() {
 		editQuery.setQueryString(calculateCriteria().toQueryString());
-		getDispatchService().execute(new UpdateQueryAction(projectIdentifier, editQuery),
-				new AsyncCallbackSupport<UpdateQueryResult>(new OperationMessage("Saving")) {
+		getDispatchService()
+				.execute(
+						new UpdateQueryAction(projectIdentifier, editQuery),
+						new AsyncCallbackSupport<UpdateQueryResult>(new OperationMessage(super.commonProfileMessages
+								.saving())) {
 
-					@Override
-					protected void success(UpdateQueryResult actionResult) {
-						ProjectTasksPlace place = ProjectTasksPlace.createPlaceForNamedQuery(projectIdentifier,
-								editQuery.getName());
-						place.displayOnArrival(Message.createSuccessMessage("Query Saved"));
-						place.go();
-					}
-				});
+							@Override
+							protected void success(UpdateQueryResult actionResult) {
+								ProjectTasksPlace place = ProjectTasksPlace.createPlaceForNamedQuery(projectIdentifier,
+										editQuery.getName());
+								place.displayOnArrival(Message.createSuccessMessage(tasksMessages.querySaved()));
+								place.go();
+							}
+						});
 	}
 
 }
