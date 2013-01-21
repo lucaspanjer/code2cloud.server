@@ -43,6 +43,13 @@
 						</div>
 						<div class="clear"/>
 					</fieldset>
+					<fieldset ui:field="languageFieldSet">
+						<label class="left"><ui:text from="{pm.language}"/></label>
+						<div>
+							<g:ValueListBox ui:field="languageField"/>
+						</div>
+						<div class="clear"/>
+					</fieldset>
 					<fieldset>
 
 						<label><ui:text from="{pm.picture}"/></label>

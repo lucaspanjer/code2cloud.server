@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Window;
 import com.tasktop.c2c.server.common.profile.web.client.place.IPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
@@ -50,7 +52,12 @@ public class SignInPresenter extends AbstractProfilePresenter {
 					public void success(Credentials result) {
 						getEventBus().fireEvent(new LogonEvent(result));
 						AppGinjector.get.instance().getAppState().setCredentials(result);
-						postActionPlace.go();
+						if (!result.getProfile().getLanguage().equals(LocaleInfo.getCurrentLocale().getLocaleName())) {
+							Window.Location.assign(postActionPlace.getHref());
+							Window.Location.reload(); // reload with the new language
+						} else {
+							postActionPlace.go();
+						}
 					}
 
 					@Override

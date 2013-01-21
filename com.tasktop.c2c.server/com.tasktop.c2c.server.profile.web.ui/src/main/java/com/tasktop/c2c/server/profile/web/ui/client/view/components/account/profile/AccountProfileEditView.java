@@ -12,10 +12,16 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.account.profile;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.FieldSetElement;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -24,6 +30,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.ValueListBox;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
@@ -60,6 +68,14 @@ public class AccountProfileEditView extends AbstractAccountProfileView implement
 	@UiField
 	@Path("lastName")
 	TextBox lastNameField;
+	@UiField(provided = true)
+	@Path("language")
+	ValueListBox<String> languageField = new ValueListBox<String>(new AbstractRenderer<String>() {
+		@Override
+		public String render(String value) {
+			return value != null ? LocaleInfo.getLocaleNativeDisplayName(value) : "";
+		}
+	});
 	@UiField
 	Button cancelButton;
 	@UiField
@@ -67,6 +83,8 @@ public class AccountProfileEditView extends AbstractAccountProfileView implement
 	@UiField
 	@Ignore
 	HTML imageFromGravatarLabel;
+	@UiField
+	FieldSetElement languageFieldSet;
 
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
@@ -74,6 +92,19 @@ public class AccountProfileEditView extends AbstractAccountProfileView implement
 
 	public AccountProfileEditView() {
 		initWidget(ourUiBinder.createAndBindUi(this));
+		String[] localeNames = LocaleInfo.getAvailableLocaleNames();
+		// sort the locale names and filter out the "default" value
+		Set<String> filteredLocaleNames = new TreeSet<String>();
+		for (String name : localeNames) {
+			if (!"default".equals(name)) {
+				filteredLocaleNames.add(name);
+			}
+		}
+		languageField.setValue(filteredLocaleNames.iterator().next());
+		languageField.setAcceptableValues(filteredLocaleNames);
+		if (filteredLocaleNames.size() < 2) {
+			UIObject.setVisible(languageFieldSet, false);
+		}
 		imageFromGravatarLabel.setHTML(profileMessages.imageFromGravatar());
 		driver.initialize(this);
 	}

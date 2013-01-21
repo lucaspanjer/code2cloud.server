@@ -28,7 +28,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.GenericFilterBean;
 
-public class AuthenticationRoleProcessingFilter extends GenericFilterBean {
+/**
+ * This looks for changes in authentication details (such as roles and preferred language) and updates our security
+ * context when changes are found.
+ */
+public class AuthenticationRefreshFilter extends GenericFilterBean {
 
 	protected UserDetailsService userDetailsService;
 	private String rememberMeKey;
@@ -67,6 +71,11 @@ public class AuthenticationRoleProcessingFilter extends GenericFilterBean {
 			if (auth.getDetails() instanceof AuthenticationToken) {
 				// Dump these updated roles into our token.
 				((AuthenticationToken) auth.getDetails()).setAuthorities(userDetails.getAuthorities());
+				// Set the language in our token.
+				if (userDetails instanceof AuthenticationServiceUser) {
+					String language = ((AuthenticationServiceUser) userDetails).getToken().getLanguage();
+					((AuthenticationToken) auth.getDetails()).setLanguage(language);
+				}
 			}
 
 			// Recalculate and update our user roles.

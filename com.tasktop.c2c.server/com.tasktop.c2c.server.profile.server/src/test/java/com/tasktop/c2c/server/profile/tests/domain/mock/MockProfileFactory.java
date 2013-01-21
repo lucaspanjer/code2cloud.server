@@ -51,6 +51,7 @@ public class MockProfileFactory {
 		profile.setLastName("Bloe" + index);
 		profile.setPassword("123456aA@" + index);
 		profile.setUsername(profile.getEmail());
+		profile.setLanguage("en");
 		profile.setEmailVerified(false);
 		passwordByUserName.put(profile.getUsername(), profile.getPassword());
 		return profile;

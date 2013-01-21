@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -365,6 +366,20 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (emailChanged) {
 			currentProfile.setEmailVerified(false);
 			sendVerificationEmail(currentProfile);
+		}
+
+		// update security context when language changes
+		if (!profile.getLanguage().equals(AuthenticationServiceUser.getCurrentUserLanguage())) {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication != null) {
+				Object principal = authentication.getPrincipal();
+				if (principal instanceof AuthenticationServiceUser) {
+					AuthenticationServiceUser user = (AuthenticationServiceUser) principal;
+					if (profile.getUsername().equals(user.getUsername())) {
+						user.getToken().setLanguage(profile.getLanguage());
+					}
+				}
+			}
 		}
 	}
 

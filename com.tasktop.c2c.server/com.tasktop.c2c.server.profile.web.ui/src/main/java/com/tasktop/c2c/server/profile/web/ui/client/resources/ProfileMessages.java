@@ -367,6 +367,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Last Deployment")
 	String lastDeployment();
 
+	@DefaultMessage("Language")
+	String language();
+
 	@DefaultMessage("Last Name")
 	String lastName();
 

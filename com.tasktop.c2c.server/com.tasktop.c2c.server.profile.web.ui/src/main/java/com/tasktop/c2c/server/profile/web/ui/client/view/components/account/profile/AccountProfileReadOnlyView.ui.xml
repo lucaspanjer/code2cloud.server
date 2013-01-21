@@ -41,9 +41,15 @@
     							</div>
     							<div class="clear"></div>
     						</fieldset>
+    						<fieldset ui:field="languageFieldSet">
+    							<label class="left">Language</label> 
+    							<div>
+    								<g:ValueLabel ui:field="languageField"/>
+    							</div>
+    							<div class="clear"></div>
+    						</fieldset>
     						<fieldset>
     							<label><ui:text from="{pm.picture}"/></label>
-    							
 								<div class="avatar">
 									<g:Image ui:field="avatarImage"/>
 								</div>

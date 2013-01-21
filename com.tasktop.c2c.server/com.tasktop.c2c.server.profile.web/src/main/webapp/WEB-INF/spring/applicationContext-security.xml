@@ -36,7 +36,7 @@
 		p:alwaysRemember="true"
 	/>
 	
-	<bean id="authRoleSecurityFilter" class="com.tasktop.c2c.server.auth.service.AuthenticationRoleProcessingFilter"
+	<bean id="authRefreshFilter" class="com.tasktop.c2c.server.auth.service.AuthenticationRefreshFilter"
 		p:userDetailsService-ref="authenticationService"
 		p:rememberMeKey="#{rememberMeServices.key}"
 	/>
@@ -47,7 +47,7 @@
 	/>
 	
 	<!--  This section never needs any filters to be run -->
-	<s:http pattern="/index.html" security="none"/> 
+<!--  	<s:http pattern="/index.html" security="none"/>  --> <!--  We want to run our security chain on index.html to drop locale cookies needed as gwt boots up -->
  	<s:http pattern="/profile/**/*.html" security="none"/> 
  	<s:http pattern="/profile/**/*.js" security="none"/> 
  	<s:http pattern="/profile/**/*.css" security="none"/> 
@@ -66,7 +66,7 @@
 		<s:session-management />
 		<s:custom-filter ref="trustedHostAuthenticationProcessingFilter" after="BASIC_AUTH_FILTER"/>
 		<s:custom-filter ref="rememberMeAuthFilter" position="REMEMBER_ME_FILTER"/>
-		<s:custom-filter ref="authRoleSecurityFilter" after="LAST"/> <!-- Make this the last filter, after all authentication is done. -->
+		<s:custom-filter ref="authRefreshFilter" after="LAST"/> <!-- Make this the last filter, after all authentication is done. -->
 		
 		<s:intercept-url pattern="/api/connect/**" access="permitAll"/> 
 		<s:intercept-url pattern="/api/signin/**" access="permitAll"/> 

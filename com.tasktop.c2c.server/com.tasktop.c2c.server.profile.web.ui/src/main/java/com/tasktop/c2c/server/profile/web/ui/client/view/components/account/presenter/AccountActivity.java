@@ -12,11 +12,15 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.account.presenter;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.tasktop.c2c.server.common.profile.web.client.ClientCallback;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
@@ -238,6 +242,17 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 									.displayMessage(
 											Message.createSuccessMessage(profileMessages.verificationEmailSent()));
 							originalEmail = profile.getEmail();
+						}
+						if (!result.getProfile().getLanguage().equals(LocaleInfo.getCurrentLocale().getLocaleName())) {
+							// We'd prefer to have the GwtLocaleCookieFilter be the only place where this cookie is set,
+							// but in this instance we find that when we refresh the page, the security context has not
+							// yet been updated by the AuthenticationRefreshFilter, so GwtLocaleCookieFilter uses the
+							// previous language value in the cookie. Since we cannot refresh twice, we instead set the
+							// cookie here.
+							Cookies.setCookie(LocaleInfo.getLocaleCookieName(), result.getProfile().getLanguage(),
+									new Date(System.currentTimeMillis() + (1209600 * 1000)));
+							// reload with the new language
+							Window.Location.reload();
 						}
 					}
 				});

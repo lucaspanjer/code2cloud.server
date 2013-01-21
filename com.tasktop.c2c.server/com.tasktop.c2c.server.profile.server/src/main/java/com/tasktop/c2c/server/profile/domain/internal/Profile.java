@@ -62,6 +62,7 @@ public class Profile extends BaseEntity {
 		this.emailVerified = p.emailVerified;
 		this.firstName = p.firstName;
 		this.lastName = p.lastName;
+		this.language = p.language;
 		this.admin = p.admin;
 		this.notificationSettings = p.notificationSettings;
 		this.sentWelcomeEmail = p.sentWelcomeEmail;
