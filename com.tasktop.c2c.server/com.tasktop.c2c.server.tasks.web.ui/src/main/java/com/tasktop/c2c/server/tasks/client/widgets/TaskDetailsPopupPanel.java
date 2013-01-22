@@ -46,9 +46,11 @@ import com.google.gwt.user.client.ui.NumberLabel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.ValueLabel;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.web.client.event.AppScrollEvent;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 import com.tasktop.c2c.server.common.web.client.widgets.time.TimePeriodRenderer;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.Keyword;
 import com.tasktop.c2c.server.tasks.domain.Task;
 
@@ -79,6 +81,9 @@ public class TaskDetailsPopupPanel extends DecoratedPopupPanel implements Editor
 		return instance;
 	}
 
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+
 	@UiField
 	Label taskType;
 
@@ -93,7 +98,8 @@ public class TaskDetailsPopupPanel extends DecoratedPopupPanel implements Editor
 	AnchorElement taskAnchorElement;
 
 	@UiField
-	@Editor.Path("reporter.loginName")
+	// @Editor.Path("reporter.loginName")
+	@Ignore
 	Label reporter;
 
 	@UiField(provided = true)
@@ -158,7 +164,7 @@ public class TaskDetailsPopupPanel extends DecoratedPopupPanel implements Editor
 			if (keywords != null) {
 				for (Keyword k : keywords) {
 					if (!result.isEmpty()) {
-						result += ", ";
+						result += commonProfileMessages.comma() + " ";
 					}
 					result += k.getName();
 				}
@@ -235,8 +241,9 @@ public class TaskDetailsPopupPanel extends DecoratedPopupPanel implements Editor
 		}
 
 		taskAnchorElement.setHref(urlString);
-		commentsAnchor.setText(task.getComments().size() + " comments");
+		commentsAnchor.setText(tasksMessages.numberOfComments(task.getComments().size()));
 		commentsAnchor.setHref(urlString);
+		reporter.setText(tasksMessages.createdByReporter(task.getReporter().getLoginName()));
 
 		UIObject.setVisible(resolvedStatusIconSpanElement, !task.getStatus().isOpen());
 

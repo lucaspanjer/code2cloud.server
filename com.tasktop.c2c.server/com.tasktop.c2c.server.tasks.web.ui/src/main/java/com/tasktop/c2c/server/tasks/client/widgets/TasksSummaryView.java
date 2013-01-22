@@ -15,7 +15,6 @@ package com.tasktop.c2c.server.tasks.client.widgets;
 import java.util.List;
 import java.util.Map;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -26,6 +25,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTaskPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTasksSummaryPlace;
 import com.tasktop.c2c.server.tasks.domain.Task;
@@ -36,6 +36,7 @@ public class TasksSummaryView extends AbstractComposite {
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 	private String appId;
 	private Number productId;
 
@@ -75,7 +76,7 @@ public class TasksSummaryView extends AbstractComposite {
 
 			bodyBuilder.appendHtmlConstant("<div class=\"task-summary-card\">");
 
-			Anchor link = new Anchor("Task " + curTask.getId());
+			Anchor link = new Anchor(tasksMessages.taskWithId(curTask.getId()));
 			link.setHref(ProjectTaskPlace.createPlace(appId, curTask.getId()).getHref());
 
 			if (!curTask.getStatus().isOpen()) {
@@ -103,9 +104,8 @@ public class TasksSummaryView extends AbstractComposite {
 
 			// We have a title, so insert it at the beginning of the HTML.
 			headerBuilder.appendHtmlConstant("<h3 class=\"task-summary-header\">");
-			headerBuilder.appendHtmlConstant(link.toString());
-			headerBuilder.appendHtmlConstant(" (" + total + " tasks in total: " + numOpen + " open, " + numClosed
-					+ " closed)</h3>");
+			headerBuilder.appendEscaped(tasksMessages.taskSummaryHeader(link.toString(), total, numOpen, numClosed));
+			headerBuilder.appendHtmlConstant("</h3>");
 		}
 
 		// Now, add in the body after the header.

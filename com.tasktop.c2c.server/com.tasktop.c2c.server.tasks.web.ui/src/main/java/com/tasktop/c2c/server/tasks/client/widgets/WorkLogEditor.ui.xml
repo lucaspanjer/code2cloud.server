@@ -4,9 +4,11 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:d="urn:import:com.google.gwt.user.datepicker.client"
 	xmlns:t="urn:import:com.tasktop.c2c.server.common.web.client.widgets.time">
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 	<g:HTMLPanel>
-		Date <d:DateBox ui:field="date"/>
-		Hours <t:TimePeriodBox ui:field="hours"/>
-		Description	<g:TextBox ui:field="comment"/>
+		<ui:text from="{cpm.date}"/> <d:DateBox ui:field="date"/>
+		<ui:text from="{tm.hours}"/> <t:TimePeriodBox ui:field="hours"/>
+		<ui:text from="{tm.description}"/>	<g:TextBox ui:field="comment"/>
 	</g:HTMLPanel>
 </ui:UiBinder>

@@ -3,6 +3,8 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 			 xmlns:g="urn:import:com.google.gwt.user.client.ui"
 			 xmlns:person="urn:import:com.tasktop.c2c.server.common.web.client.widgets.chooser.person">
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 	<!--Missing Styles-->
 	<!--status-priority created comments-link-->
 	<g:HTMLPanel styleName="task-details">
@@ -13,9 +15,9 @@
 				</a>
 				<div class="clear"/>
 				<div class="small">
-					<div class="created left">Created by: <g:Label ui:field="reporter"/> <g:DateLabel ui:field="creationDate"/></div>
+					<div class="created left"><g:Label ui:field="reporter"/> <g:DateLabel ui:field="creationDate"/></div>
 					<div class="comments-link right">
-						<g:Anchor ui:field="commentsAnchor">comments</g:Anchor>
+						<g:Anchor ui:field="commentsAnchor"><ui:text from="{tm.commentsLc}"/></g:Anchor>
 					</div>
 				</div>
 				<div class="clear"/>
@@ -30,34 +32,34 @@
 			</div>
 			<p>
 				<g:Label ui:field="description"/>
-				<g:Anchor ui:field="moreDescriptionAnchor">more</g:Anchor>
+				<g:Anchor ui:field="moreDescriptionAnchor"><ui:text from="{tm.moreLc}"/></g:Anchor>
 			</p>
 			<fieldset>
-				<label>Product:</label>
+				<label><ui:text from="{tm.product}"/><ui:text from="{cpm.colon}"/></label>
 				<div><g:Label ui:field="productName"/></div>
 			</fieldset>
 			<fieldset>
-				<label>Component:</label>
+				<label><ui:text from="{tm.component}"/><ui:text from="{cpm.colon}"/></label>
 				<div><g:Label ui:field="componentName"/></div>
 			</fieldset>
 			<fieldset>
-				<label>Release:</label>
+				<label><ui:text from="{tm.release}"/><ui:text from="{cpm.colon}"/></label>
 				<div><g:Label ui:field="milestoneValue"/></div>
 			</fieldset>
 			<fieldset>
-				<label>Iteration:</label>
+				<label><ui:text from="{tm.iteration}"/><ui:text from="{cpm.colon}"/></label>
 				<div><g:Label ui:field="iteration"/></div>
 			</fieldset>
 			<fieldset>
-				<label>Estimate:</label>
+				<label><ui:text from="{tm.estimate}"/><ui:text from="{cpm.colon}"/></label>
 				<div><g:ValueLabel ui:field="estimatedTime"/></div>
 			</fieldset>
 			<fieldset>
-				<label>Tags:</label>
+				<label><ui:text from="{tm.tags}"/><ui:text from="{cpm.colon}"/></label>
 				<div><g:ValueLabel ui:field="keywords"/></div>
 			</fieldset>
 			<fieldset>
-				<label>Owner:</label>
+				<label><ui:text from="{tm.owner}"/><ui:text from="{cpm.colon}"/></label>
 				<g:Label ui:field="assignee" addStyleNames="task-details-owner"/>
 			</fieldset>
 	</g:HTMLPanel>

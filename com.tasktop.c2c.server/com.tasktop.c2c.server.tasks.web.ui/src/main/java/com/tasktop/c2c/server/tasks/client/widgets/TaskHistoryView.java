@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.tasks.client.widgets;
 
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -22,7 +21,9 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTaskPlace;
 import com.tasktop.c2c.server.tasks.client.presenters.TaskHistoryPresenter;
 import com.tasktop.c2c.server.tasks.domain.Task;
@@ -31,6 +32,8 @@ import com.tasktop.c2c.server.tasks.domain.TaskActivity;
 public class TaskHistoryView extends AbstractComposite implements TaskHistoryPresenter.Display {
 
 	private static TaskHistoryView instance = null;
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
 
 	public static TaskHistoryView getInstance() {
 		if (instance == null) {
@@ -61,7 +64,8 @@ public class TaskHistoryView extends AbstractComposite implements TaskHistoryPre
 		for (TaskActivity activity : activities) {
 			activityPanel.add(new TaskActivityView(activity));
 		}
-		taskLabel.setText(task.getTaskType() + " " + task.getId() + ": " + task.getShortDescription());
+		taskLabel.setText(tasksMessages.historyFor(task.getTaskType() + " " + task.getId()
+				+ commonProfileMessages.colon() + " " + task.getShortDescription()));
 		taskLink.setHref(ProjectTaskPlace.createPlace(projectId, task.getId()).getHref());
 	}
 }

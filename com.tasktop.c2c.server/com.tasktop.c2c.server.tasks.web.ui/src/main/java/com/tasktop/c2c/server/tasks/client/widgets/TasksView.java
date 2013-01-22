@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.tasks.client.widgets;
 
 import java.util.List;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -28,6 +27,7 @@ import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.presenters.ITaskListView;
 import com.tasktop.c2c.server.tasks.domain.PredefinedTaskQuery;
 import com.tasktop.c2c.server.tasks.domain.SavedTaskQuery;
@@ -38,6 +38,7 @@ public class TasksView extends AbstractComposite implements ITaskListView {
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	@UiField
 	public FlowPanel predefinedQueryMenuPanel;
@@ -61,7 +62,7 @@ public class TasksView extends AbstractComposite implements ITaskListView {
 	public TasksView() {
 		initWidget(uiBinder.createAndBindUi(this));
 
-		taskSearchTextBox.getElement().setAttribute("placeholder", "Search Tasks");
+		taskSearchTextBox.getElement().setAttribute("placeholder", tasksMessages.searchTasks());
 	}
 
 	public void addQueryMenuItem(final PredefinedTaskQuery query) {

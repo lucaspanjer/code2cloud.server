@@ -4,15 +4,16 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:w="urn:import:com.tasktop.c2c.server.tasks.client.widgets.wiki"
 	xmlns:a="urn:import:com.tasktop.c2c.server.common.web.client.widgets">
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 	<g:HTMLPanel styleName="task-history">
 		<div class="left">
 				<g:Anchor ui:field="taskLink" styleName="misc-icon prev">
-					<span></span> Back to Task
+					<span></span> <ui:text from="{tm.backToTask}"/>
 				</g:Anchor>
 		</div>
 		<div class="clear"/>
 		<h2>
-			History for <g:Label ui:field="taskLabel"/>
+			<g:Label ui:field="taskLabel"/>
 		</h2>
 		<div class="clear spacer"/>
 		<g:FlowPanel ui:field="activityPanel"/>

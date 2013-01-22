@@ -2,12 +2,13 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<g:HTMLPanel>
 		<li>
 			<g:Anchor ui:field="queryAnchor"></g:Anchor>
 			<div class="hover-edit">
-				<g:Anchor ui:field="editAnchor">Edit<span></span></g:Anchor>
-				<g:Anchor ui:field="deleteAnchor">Delete<span></span></g:Anchor>
+				<g:Anchor ui:field="editAnchor"><ui:text from="{cpm.edit}"/><span></span></g:Anchor>
+				<g:Anchor ui:field="deleteAnchor"><ui:text from="{cpm.delete}"/><span></span></g:Anchor>
 			</div>
 		</li>
 	</g:HTMLPanel>

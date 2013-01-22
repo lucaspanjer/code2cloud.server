@@ -6,16 +6,17 @@
 	xmlns:a="urn:import:com.tasktop.c2c.server.common.web.client.widgets"
 	xmlns:p="urn:import:com.tasktop.c2c.server.common.web.client.widgets.chooser.person" 
 	xmlns:h="urn:import:com.tasktop.c2c.server.common.web.client.widgets.hyperlink">
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 	<g:HTMLPanel ui:field="actionWrapper" styleName="project-action">
 		<a class="social-icon"></a>
 		<div class="open">
 			<span class="date"><g:Label ui:field="dateLabel"/></span>
 			<g:Label ui:field="changeType"/>
-			by 
+			<ui:text from="{tm.byLc}"/> 
 			<p:PersonLabel ui:field="personLabel"/>
 			<br/>
 			<div ui:field="timeDiv">
-				Time: <g:Label ui:field="timeLabel"/>.
+				<g:Label ui:field="timeLabel"/>
 			</div>
 			<div style="float: left;">
 				<h:HyperlinkingLabel ui:field="descriptionLabel" />

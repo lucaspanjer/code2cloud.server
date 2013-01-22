@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTasksSummaryListPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTasksSummaryPlace;
 import com.tasktop.c2c.server.tasks.domain.Component;
@@ -36,6 +37,7 @@ public class TasksSummaryListView extends AbstractComposite {
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 	private String appId;
 
 	@UiField
@@ -69,7 +71,6 @@ public class TasksSummaryListView extends AbstractComposite {
 	private void createProductSegment(Product product) {
 
 		createProductHeader(product);
-		// createComponentSegment("Components", product.getComponents(), product.getId());
 		createMilestoneSegment(null, product.getMilestones(), product.getId());
 	}
 
@@ -77,8 +78,8 @@ public class TasksSummaryListView extends AbstractComposite {
 
 		SafeHtmlBuilder sb = new SafeHtmlBuilder();
 
-		sb.appendHtmlConstant("<h2 class=\"task-summary-product-header\">Product: ");
-		sb.appendEscaped(product.getName());
+		sb.appendHtmlConstant("<h2 class=\"task-summary-product-header\">");
+		sb.appendEscaped(tasksMessages.productWithName(product.getName()));
 		sb.appendHtmlConstant("</h2>");
 
 		taskSummaryPanel.add(new HTML(sb.toSafeHtml()));
@@ -121,7 +122,6 @@ public class TasksSummaryListView extends AbstractComposite {
 	}
 
 	public void renderProduct(Product findProduct) {
-		// createComponentSegment("Components", findProduct.getComponents(), findProduct.getId());
 		createMilestoneSegment(null, findProduct.getMilestones(), findProduct.getId());
 	}
 

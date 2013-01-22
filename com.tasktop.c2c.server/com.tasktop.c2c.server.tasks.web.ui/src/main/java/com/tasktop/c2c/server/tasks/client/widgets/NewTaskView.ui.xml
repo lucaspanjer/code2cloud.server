@@ -5,6 +5,8 @@
 	xmlns:t="urn:import:com.tasktop.c2c.server.tasks.client.widgets"
 	xmlns:c="urn:import:com.tasktop.c2c.server.common.web.client.widgets.chooser"
 	xmlns:tw="urn:import:com.tasktop.c2c.server.tasks.client.widgets.wiki">
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 	<g:HTMLPanel styleName="project-detail-container">
 		<!-- New Task Form starts -->
 		<div id="new-task" class="task-form">
@@ -12,8 +14,8 @@
 				<div class="deployment-heading">
 					<h2>
 						<g:Label ui:field="newTaskHeader"/>
-						<g:Button ui:field="cancelButton2" addStyleNames="button right marginleft">Cancel</g:Button>
-						<g:Button ui:field="saveTaskButton2" addStyleNames="button special right">Create Task</g:Button>
+						<g:Button ui:field="cancelButton2" addStyleNames="button right marginleft"><ui:text from="{cpm.cancel}"/></g:Button>
+						<g:Button ui:field="saveTaskButton2" addStyleNames="button special right"><ui:text from="{tm.createTask}"/></g:Button>
 					</h2>
 					<div class="clear"></div>
 				</div>
@@ -21,47 +23,47 @@
 					<h3></h3>
 					<fieldset>
 						<div class="item">
-							<label>Type</label>
+							<label><ui:text from="{cpm.type}"/></label>
 							<g:ValueListBox ui:field="taskType" styleName="left" />
 							<div class="clear"></div>
 						</div>
 						<div class="item">
-							<label>Summary</label>
+							<label><ui:text from="{tm.summary}"/></label>
 							<g:TextBox ui:field="shortDescription" styleName="input summary left" />
 							<div class="clear"></div>
 						</div>
 						<div class="item">
-							<label>Status</label>
+							<label><ui:text from="{cpm.status}"/></label>
 							<t:StatusEditorView ui:field="statusEditor" />
 						</div>
 						<div class="item">
-							<label>Priority</label>
+							<label><ui:text from="{tm.priority}"/></label>
 							<g:ValueListBox ui:field="priority" />
 						</div>
 						<div class="item">
-							<label>Severity</label>
+							<label><ui:text from="{tm.severity}"/></label>
 							<g:ValueListBox ui:field="severity" />
 						</div>
 						<div class="item">
-							<label><g:Label ui:field="tagsLabel">Tags</g:Label></label>
+							<label><g:Label ui:field="tagsLabel"><ui:text from="{tm.tags}"/></g:Label></label>
 							<c:MultiValueChooser ui:field="keywords" styleName="text long date left"/>
 						</div>
 					</fieldset>
 				</div>
 				<div class="details edit">
-					<h3>Details</h3>
+					<h3><ui:text from="{tm.details}"/></h3>
 					<fieldset>
 						<g:VerticalPanel ui:field="detailsContainer" />
 					</fieldset>
 				</div>
 				<div class="people edit">
-					<h3>People</h3>
+					<h3><ui:text from="{tm.people}"/></h3>
 					<fieldset>
 						<g:HTMLPanel>
 							<table class="taskPeople">
 								<tr>
 									<th>
-										<g:Label ui:field="taskOwnerLabel">Owner</g:Label>
+										<g:Label ui:field="taskOwnerLabel"><ui:text from="{tm.owner}"/></g:Label>
 									</th>
 									<td>
 										<t:SingleTaskProfileChooser ui:field="assignee" styleName="text long date left"/>
@@ -69,7 +71,7 @@
 								</tr>
 								<tr>
 									<th>
-										<g:Label ui:field="watcherLabel">CC</g:Label>
+										<g:Label ui:field="watcherLabel"><ui:text from="{tm.carbonCopy}"/></g:Label>
 									</th>
 									<td>
 										<t:MultipleTaskProfileChooser ui:field="watchers" styleName="text long date left"/>
@@ -80,15 +82,15 @@
 					</fieldset>
 				</div>
 				<div class="description edit">
-					<h3>Description</h3>
+					<h3><ui:text from="{tm.description}"/></h3>
 					<fieldset>
 						<tw:EditWikiPanel ui:field="description"
 							visibleLines="7" />
 					</fieldset>
 				</div>
 				<div class="save right top-margin">
-					<g:Button addStyleNames="button right marginleft" ui:field="cancelButton">Cancel</g:Button>
-					<g:Button addStyleNames="button special right" ui:field="saveTaskButton">Create Task</g:Button>
+					<g:Button addStyleNames="button right marginleft" ui:field="cancelButton"><ui:text from="{cpm.cancel}"/></g:Button>
+					<g:Button addStyleNames="button special right" ui:field="saveTaskButton"><ui:text from="{tm.createTask}"/></g:Button>
 				</div>
 			</div>
 		</div>

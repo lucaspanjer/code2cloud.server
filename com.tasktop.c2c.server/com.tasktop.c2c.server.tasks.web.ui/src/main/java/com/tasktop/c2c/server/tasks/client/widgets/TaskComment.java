@@ -33,6 +33,7 @@ import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonDetailPopupPanel;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.widgets.presenter.person.PersonUtil;
 import com.tasktop.c2c.server.tasks.client.widgets.wiki.WikiHTMLPanel;
 import com.tasktop.c2c.server.tasks.domain.Attachment;
@@ -52,6 +53,7 @@ public class TaskComment extends Composite {
 
 	public static class TextBoxReplyHandler implements ReplyHandler {
 		private TextBoxBase textBox;
+		private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 		public TextBoxReplyHandler(TextBoxBase textBox) {
 			this.textBox = textBox;
@@ -62,9 +64,9 @@ public class TaskComment extends Composite {
 			if (existingText == null) {
 				existingText = "";
 			}
-			String replyText = "(In reply to comment #" + commentNumber + ")\n";
-			replyText += RegExp.compile("^", "gm").replace(StringUtils.chopLongLinesAtSpaces(80, comment.getCommentText()),
-					"> ");
+			String replyText = tasksMessages.inReplyToComment(commentNumber) + "\n";
+			replyText += RegExp.compile("^", "gm").replace(
+					StringUtils.chopLongLinesAtSpaces(80, comment.getCommentText()), "> ");
 
 			String newText;
 			int cursorPosition = getCommentCursorPosition();
@@ -118,12 +120,13 @@ public class TaskComment extends Composite {
 
 	@UiField
 	protected Image avatarImage;
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public TaskComment(final Task task, final Comment comment, final int commentNumber, Person self, Person reporter,
 			final ReplyHandler replyHandler, final boolean showWikiRenderedText) {
 		initWidget(uiBinder.createAndBindUi(this));
 
-		this.commentNumber.setText("Comment #" + String.valueOf(commentNumber));
+		this.commentNumber.setText(tasksMessages.commentNumber(commentNumber));
 		commentHeaderAnchor.setText(comment.getAuthor().getRealname());
 		commentDate.setText(stringValueDateTime(comment.getCreationDate()));
 		commentHeaderAnchor.addClickHandler(new ClickHandler() {
@@ -144,8 +147,8 @@ public class TaskComment extends Composite {
 				attachment.setId(Integer.valueOf(comment.getExtraData()));
 				List<Attachment> attachments = task.getAttachments();
 				attachment = attachments.get(attachments.indexOf(attachment));
-				commentTextString += "Created attachment " + attachment.getId() + "\n" + attachment.getDescription()
-						+ "\n";
+				commentTextString += tasksMessages.createdAttachmentId(attachment.getId()) + "\n"
+						+ attachment.getDescription() + "\n";
 			}
 			commentTextString += comment.getCommentText();
 			commentText.setWikiHTML(commentTextString);

@@ -57,6 +57,9 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Dashboard")
 	String dashboard();
 
+	@DefaultMessage("Date")
+	String date();
+
 	@DefaultMessage("Deployments")
 	String deployments();
 
@@ -108,6 +111,9 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Enabled")
 	String enabled();
 
+	@DefaultMessage("End")
+	String end();
+
 	@DefaultMessage("Error")
 	String error();
 
@@ -126,8 +132,14 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Name")
 	String name();
 
+	@DefaultMessage("New")
+	String _new();
+
 	@DefaultMessage("No")
 	String no();
+
+	@DefaultMessage("None")
+	String none();
 
 	@DefaultMessage("You do not have permissions to visit the page")
 	String noPermissionsToVisitPage();
@@ -140,6 +152,9 @@ public interface CommonProfileMessages extends Messages {
 
 	@DefaultMessage("Organization \"{0}\" not found.")
 	String organizationNotFound(String organizationId);
+
+	@DefaultMessage("Other")
+	String other();
 
 	@DefaultMessage("Want to participate in a project you see, or create your own public or private project? "
 			+ "Code2Cloud is currently in beta and is accepting requests to join. "

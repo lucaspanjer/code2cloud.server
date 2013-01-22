@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -28,6 +27,7 @@ import com.tasktop.c2c.server.common.web.client.widgets.Format;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonLabel;
 import com.tasktop.c2c.server.common.web.client.widgets.time.TimePeriodRenderer;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity.Type;
 
@@ -41,6 +41,7 @@ public class TaskActivityView extends Composite {
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	@UiField
 	HTMLPanel actionWrapper;
@@ -71,10 +72,10 @@ public class TaskActivityView extends Composite {
 		descriptionLabel.setText(taskActivity.getDescription());
 		setStyleFromActivityType(taskActivity.getActivityType());
 
-		if (taskActivity.getActivityType().equals(
-				com.tasktop.c2c.server.tasks.domain.TaskActivity.Type.LOGGED_TIME)) {
+		if (taskActivity.getActivityType().equals(com.tasktop.c2c.server.tasks.domain.TaskActivity.Type.LOGGED_TIME)) {
 			UIObject.setVisible(timeDiv, true);
-			timeLabel.setText(TimePeriodRenderer.HOUR_RENDERER.render(taskActivity.getWorkLog().getHoursWorked()));
+			timeLabel.setText(tasksMessages.timeLabel(TimePeriodRenderer.HOUR_RENDERER.render(taskActivity.getWorkLog()
+					.getHoursWorked())));
 		} else {
 			UIObject.setVisible(timeDiv, false);
 		}

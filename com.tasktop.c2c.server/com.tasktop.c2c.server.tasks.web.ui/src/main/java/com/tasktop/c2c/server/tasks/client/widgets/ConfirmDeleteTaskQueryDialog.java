@@ -39,7 +39,7 @@ public class ConfirmDeleteTaskQueryDialog extends DialogBox implements ITaskList
 	}
 
 	@UiField
-	Label queryName;
+	Label queryDeleteConfirmationMessage;
 	@UiField
 	Button deleteButton;
 	@UiField
@@ -98,7 +98,7 @@ public class ConfirmDeleteTaskQueryDialog extends DialogBox implements ITaskList
 	 */
 	public void setQuery(SavedTaskQuery query) {
 		this.query = query;
-		this.queryName.setText(query.getName());
+		this.queryDeleteConfirmationMessage.setText(tasksMessages.deleteQueryConfirmationMessage(query.getName()));
 	}
 
 }

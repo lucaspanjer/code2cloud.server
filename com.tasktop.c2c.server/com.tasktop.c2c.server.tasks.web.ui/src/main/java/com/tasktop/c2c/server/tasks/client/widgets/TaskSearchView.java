@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.widgets.DynamicFormPanel;
@@ -41,6 +42,7 @@ import com.tasktop.c2c.server.common.web.client.widgets.chooser.MultiValueChoose
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonCompositeFactory;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonSuggestOracle;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.widgets.chooser.keywords.KeywordCompositeFactory;
 import com.tasktop.c2c.server.tasks.client.widgets.chooser.keywords.KeywordSuggestOracle;
 import com.tasktop.c2c.server.tasks.client.widgets.presenter.person.KeywordSuggestService;
@@ -60,6 +62,8 @@ public class TaskSearchView extends AbstractComposite implements TaskSearchDispl
 	}
 
 	private static TaskSearchViewUiBinder uiBinder = GWT.create(TaskSearchViewUiBinder.class);
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	protected ProjectPersonService personService;
 	protected KeywordSuggestService keywordService;
@@ -212,38 +216,43 @@ public class TaskSearchView extends AbstractComposite implements TaskSearchDispl
 		adjustVisibleItemCount(type);
 		adjustVisibleItemCount(iteration);
 
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.SEVERITY_FIELD, "Severity",
+		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.SEVERITY_FIELD, tasksMessages.severity(),
 				FieldType.SINGLE_SELECT), severity);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.PRODUCT_NAME_FIELD, "Product",
+		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.PRODUCT_NAME_FIELD, tasksMessages.product(),
 				FieldType.SINGLE_SELECT), product);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.COMPONENT_NAME_FIELD, "Component",
-				FieldType.SINGLE_SELECT), component);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.MILESTONE_FIELD, "Release",
-				FieldType.SINGLE_SELECT), milestone);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.PRIORITY_FIELD, "Priority",
-				FieldType.SINGLE_SELECT), priority);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.STATUS_FIELD, "Status",
-				FieldType.SINGLE_SELECT), status);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.RESOLUTION_FIELD, "Resolution",
-				FieldType.SINGLE_SELECT), resolution);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.TASK_TYPE_FIELD, "Type",
-				FieldType.SINGLE_SELECT), type);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.ITERATION_FIELD, "Iteration",
-				FieldType.SINGLE_SELECT), iteration);
-		fieldDescriptorToWidget.put(new FieldDescriptor("summaryDescriptionComments", "Summary", FieldType.TEXT),
-				summaryDescriptionComment);
 		fieldDescriptorToWidget.put(
-				new FieldDescriptor(TaskFieldConstants.ASSIGNEE_FIELD, "Owner", FieldType.CHECKBOX), assignee);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.REPORTER_FIELD, "Creator",
+				new FieldDescriptor(TaskFieldConstants.COMPONENT_NAME_FIELD, tasksMessages.component(),
+						FieldType.SINGLE_SELECT), component);
+		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.MILESTONE_FIELD, tasksMessages.release(),
+				FieldType.SINGLE_SELECT), milestone);
+		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.PRIORITY_FIELD, tasksMessages.priority(),
+				FieldType.SINGLE_SELECT), priority);
+		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.STATUS_FIELD,
+				commonProfileMessages.status(), FieldType.SINGLE_SELECT), status);
+		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.RESOLUTION_FIELD,
+				tasksMessages.resolution(), FieldType.SINGLE_SELECT), resolution);
+		fieldDescriptorToWidget.put(
+				new FieldDescriptor(TaskFieldConstants.TASK_TYPE_FIELD, commonProfileMessages.type(),
+						FieldType.SINGLE_SELECT), type);
+		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.ITERATION_FIELD, tasksMessages.iteration(),
+				FieldType.SINGLE_SELECT), iteration);
+		fieldDescriptorToWidget.put(new FieldDescriptor("summaryDescriptionComments", tasksMessages.summary(),
+				FieldType.TEXT), summaryDescriptionComment);
+		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.ASSIGNEE_FIELD, tasksMessages.owner(),
+				FieldType.CHECKBOX), assignee);
+		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.REPORTER_FIELD, tasksMessages.creator(),
 				FieldType.CHECKBOX), creator);
 		fieldDescriptorToWidget
 				.put(new FieldDescriptor(TaskFieldConstants.WATCHER_FIELD, "CC", FieldType.CHECKBOX), cc);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.COMMENT_AUTHOR_FIELD, "Commenter",
-				FieldType.CHECKBOX), commenter);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.SUMMARY_FIELD, "Summary Checkbox",
-				FieldType.CHECKBOX), summary);
-		fieldDescriptorToWidget.put(new FieldDescriptor(TaskFieldConstants.DESCRIPTION_FIELD, "Description Checkbox",
-				FieldType.CHECKBOX), description);
+		fieldDescriptorToWidget.put(
+				new FieldDescriptor(TaskFieldConstants.COMMENT_AUTHOR_FIELD, tasksMessages.commenter(),
+						FieldType.CHECKBOX), commenter);
+		fieldDescriptorToWidget.put(
+				new FieldDescriptor(TaskFieldConstants.SUMMARY_FIELD, tasksMessages.summaryCheckbox(),
+						FieldType.CHECKBOX), summary);
+		fieldDescriptorToWidget.put(
+				new FieldDescriptor(TaskFieldConstants.DESCRIPTION_FIELD, tasksMessages.descriptionCheckbox(),
+						FieldType.CHECKBOX), description);
 
 		MultiValueChooser<Person> personChooser = new MultiValueChooser<Person>(new PersonSuggestOracle(personService));
 		personChooser.setSelf(self);
@@ -253,11 +262,15 @@ public class TaskSearchView extends AbstractComposite implements TaskSearchDispl
 		peoplePanel.clear();
 		personChooser.setValueCompositeFactory(new PersonCompositeFactory());
 		peoplePanel.add(personChooser);
-		fieldDescriptorToWidget.put(new FieldDescriptor("person", "Person", FieldType.TEXT), personChooser);
+		fieldDescriptorToWidget.put(new FieldDescriptor("person", tasksMessages.person(), FieldType.TEXT),
+				personChooser);
 
-		fieldDescriptorToWidget.put(new FieldDescriptor("dateType", "Date Type", FieldType.SINGLE_SELECT), dateType);
-		fieldDescriptorToWidget.put(new FieldDescriptor("startDate", "Start Date", FieldType.TIMESTAMP), dateStart);
-		fieldDescriptorToWidget.put(new FieldDescriptor("endDate", "End Date", FieldType.TIMESTAMP), dateEnd);
+		fieldDescriptorToWidget.put(new FieldDescriptor("dateType", tasksMessages.dateType(), FieldType.SINGLE_SELECT),
+				dateType);
+		fieldDescriptorToWidget.put(new FieldDescriptor("startDate", tasksMessages.startDate(), FieldType.TIMESTAMP),
+				dateStart);
+		fieldDescriptorToWidget.put(new FieldDescriptor("endDate", tasksMessages.endDate(), FieldType.TIMESTAMP),
+				dateEnd);
 
 		tagsPanel.clear();
 		MultiValueChooser<Keyword> tagChooser = new MultiValueChooser<Keyword>(new KeywordSuggestOracle(keywordService,
@@ -267,7 +280,7 @@ public class TaskSearchView extends AbstractComposite implements TaskSearchDispl
 		tagChooser.addLabel(tagsLabel);
 		tagsPanel.add(tagChooser);
 
-		fieldDescriptorToWidget.put(new FieldDescriptor("tags", "Tags", FieldType.TEXT), tagChooser);
+		fieldDescriptorToWidget.put(new FieldDescriptor("tags", tasksMessages.tags(), FieldType.TEXT), tagChooser);
 
 		DynamicFormPanel detailsPanel = new DynamicFormPanel();
 
@@ -380,7 +393,7 @@ public class TaskSearchView extends AbstractComposite implements TaskSearchDispl
 	@Override
 	public void setEditQuery(SavedTaskQuery editQuery) {
 		setEditMode(editQuery != null);
-		pageLabel.setText(editQuery == null ? "Advanced Search" : "Edit Saved Search");
+		pageLabel.setText(editQuery == null ? tasksMessages.advancedSearch() : tasksMessages.editSavedSearch());
 	}
 
 	@Override

@@ -3,6 +3,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:w="urn:import:com.tasktop.c2c.server.tasks.client.widgets.wiki"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 	<g:HTMLPanel>
 		<li class="comment">
   			<div class="avatar small left"><g:Image ui:field="avatarImage" /></div>
@@ -14,7 +15,7 @@
   				<span class="comment-timestamp"><g:Label ui:field="commentDate" /></span>
   				<g:HTMLPanel ui:field="replyPanel" addStyleNames="comment-reply">
   				-
-	  				<g:Anchor ui:field="commentReply">Reply</g:Anchor>
+	  				<g:Anchor ui:field="commentReply"><ui:text from="{tm.reply}"/></g:Anchor>
 				</g:HTMLPanel>
   				</div>
   				<p>

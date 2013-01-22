@@ -9,6 +9,8 @@
 	xmlns:tm='urn:import:com.tasktop.c2c.server.common.web.client.widgets.time'
 	xmlns:gd='urn:import:com.google.gwt.user.datepicker.client'>
 	
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 	<ui:with field='res' type='com.tasktop.c2c.server.tasks.client.TaskResources'/>
 	
 	<g:HTMLPanel debugId="task-view-form">
@@ -41,7 +43,7 @@
 					<div class="clear"/>
 				<div class="date-info">
 					<div class="created left">
-						<span>Created by</span>
+						<span><ui:text from="{tm.createdBy}"/></span>
 						<span class="username">
 						<span class="avatar micro name-include">
 							<g:Image ui:field="createdByImage"/>
@@ -51,7 +53,7 @@
 						</span>
 					</div>
 					<div class="changed right">
-						<span>Updated on <g:Label ui:field="updateDate"/></span>
+						<span><g:Label ui:field="updateDate"/></span>
 					</div>
 					<div class="clear"/>
 				</div>
@@ -60,22 +62,22 @@
 		<div class="project-detail-container">
 			<div class="menu left">
 				<g:Anchor ui:field="taskListLink" debugId="taskListLink" styleName="misc-icon prev">
-					<span></span> Back to List
+					<span></span> <ui:text from="{tm.backToList}"/>
 				</g:Anchor>
 				<g:Anchor ui:field="taskHistoryLink" debugId="taskHistoryLink" styleName="misc-icon next">
-					<span></span> View History
+					<span></span> <ui:text from="{tm.viewHistory}"/>
 				</g:Anchor>
 				<g:Anchor ui:field="newSubTaskLink">
 					<span ui:field="newSubTaskSpan">
-					</span> New Subtask
+					</span> <ui:text from="{tm.newSubtask}"/>
 				</g:Anchor>
 				
 				<div class="clear"></div>
 				<ul class="task-properties">
-					<li><h3>Status</h3></li>
+					<li><h3><ui:text from="{cpm.status}"/></h3></li>
 					<li>
 						<fieldset>
-							<label>Priority</label>
+							<label><ui:text from="{tm.priority}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor debugId="editPriorityAnchor" ui:field="editPriorityAnchor"/>
 							</div>
@@ -85,12 +87,12 @@
 							</div>
 							<!--  This Div will float around based on the field being edited  -->
 							<div ui:field="editControlsDiv" class="{res.style.editControls}">
-								<g:Button ui:field="cancelButton" addStyleNames="button right">Cancel</g:Button>
-								<g:Button ui:field="saveButton" addStyleNames="button special right">Save</g:Button>
+								<g:Button ui:field="cancelButton" addStyleNames="button right"><ui:text from="{cpm.cancel}"/></g:Button>
+								<g:Button ui:field="saveButton" addStyleNames="button special right"><ui:text from="{cpm.save}"/></g:Button>
 							</div>
 						</fieldset>
 						<fieldset>
-							<label>Severity</label>
+							<label><ui:text from="{tm.severity}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor debugId="editSeverityAnchor" ui:field="editSeverityAnchor"/>
 							</div>
@@ -100,7 +102,7 @@
 							</div>
 						</fieldset>
 						<fieldset>
-							<label>Status</label>
+							<label><ui:text from="{cpm.status}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor debugId="editStatusAnchor" ui:field="editStatusAnchor" />
 							</div>
@@ -111,10 +113,10 @@
 							<g:HTMLPanel debugId="statusPanel" ui:field="statusPanel" />
 						</fieldset>
 					</li>
-					<li><h3>Properties</h3></li>
+					<li><h3><ui:text from="{tm.properties}"/></h3></li>
 					<li>
 						<fieldset>
-							<label>Estimate</label>
+							<label><ui:text from="{tm.estimate}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor debugId="editEstimateAnchor" ui:field="editEstimateAnchor" />
 							</div>
@@ -125,7 +127,7 @@
 							
 						</fieldset>
 						<fieldset>
-							<label>Time Spent</label>
+							<label><ui:text from="{tm.timeSpent}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor debugId="timeSpent" ui:field="editTimeSpentAnchor" />
 							</div>
@@ -136,7 +138,7 @@
 							
 						</fieldset>
 						<fieldset>
-							<label>Due Date</label>
+							<label><ui:text from="{tm.dueDate}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor ui:field="editDueDateAnchor" />
 							</div>
@@ -147,7 +149,7 @@
 							
 						</fieldset>
 						<fieldset>
-							<label>Product</label>
+							<label><ui:text from="{tm.product}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor ui:field="editProductAnchor" />
 							</div>
@@ -157,7 +159,7 @@
 							</div>
 						</fieldset>
 						<fieldset>
-							<label>Component</label>
+							<label><ui:text from="{tm.component}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor ui:field="editComponentAnchor" />
 							</div>
@@ -167,7 +169,7 @@
 							</div>	
 						</fieldset>
 						<fieldset>
-							<label>Found In</label>
+							<label><ui:text from="{tm.foundIn}"/></label>
 								<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor ui:field="editFoundInAnchor" />
 							</div>
@@ -177,7 +179,7 @@
 							</div>
 						</fieldset>
 						<fieldset>
-							<label>Release</label>
+							<label><ui:text from="{tm.release}"/></label>
 								<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor ui:field="editReleaseAnchor" />
 							</div>
@@ -187,7 +189,7 @@
 							</div>
 						</fieldset>
 						<fieldset>
-							<label>Iteration</label>
+							<label><ui:text from="{tm.iteration}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor debugId="editIterationAnchor" ui:field="editIterationAnchor" />
 							</div>
@@ -197,7 +199,7 @@
 							</div>							
 						</fieldset>
 						<fieldset>
-							<label>Tags</label>
+							<label><ui:text from="{tm.tags}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor debugId="editTagsAnchor" ui:field="editTagsAnchor" />
 							</div>
@@ -208,14 +210,14 @@
 						</fieldset>
 						<g:FlowPanel ui:field="customFieldsPanel"/>
 					</li>
-					<li><h3>Files</h3></li>
+					<li><h3><ui:text from="{tm.files}"/></h3></li>
 					<li>
 						<g:HTMLPanel debugId='attachmentsPanel' ui:field='attachmentsPanel'></g:HTMLPanel>
 					</li>
-					<li><h3>Associations</h3></li>
+					<li><h3><ui:text from="{tm.associations}"/></h3></li>
 					<li>
 						<fieldset>
-							<label>Parent</label>
+							<label><ui:text from="{tm.parent}"/></label>
 							<g:FlowPanel ui:field="parentTasksPanel">
 								<g:Anchor ui:field="editParentAnchor"/>
 							</g:FlowPanel>
@@ -226,7 +228,7 @@
 					</li>
 					<li>
 						<fieldset>
-							<label>Subtasks</label>
+							<label><ui:text from="{tm.subtasks}"/></label>
 								<g:FlowPanel ui:field="subTasksPanel">
 									<g:Anchor ui:field="editSubtasksAnchor"/>
 								</g:FlowPanel>
@@ -237,26 +239,26 @@
 					</li>
 					<li>
 						<fieldset ui:field='duplicatesElement'>
-							<label>Duplicates</label>
+							<label><ui:text from="{tm.duplicates}"/></label>
 							<g:FlowPanel ui:field="duplicates" />
 						</fieldset>
 					</li>
 					<li>
 						<fieldset ui:field='commitsElement'>
-							<label>Commits</label>
+							<label><ui:text from="{tm.commits}"/></label>
 							<g:FlowPanel ui:field="commits" />
 						</fieldset>
 					</li>
  					<li>
 						<fieldset ui:field='externalDepsElement'>
-							<label>External</label>
+							<label><ui:text from="{tm.external}"/></label>
 							<g:FlowPanel debugId="externalTaskRelations" ui:field="externalTaskRelations" />
 						</fieldset>
 					</li>
- 					<li><h3>People</h3></li>
+ 					<li><h3><ui:text from="{tm.people}"/></h3></li>
 					<li>
 						<fieldset>
-							<label>Owner</label>
+							<label><ui:text from="{tm.owner}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor debugId="editOwnerAnchor" ui:field="editOwnerAnchor"/>
 							</div>
@@ -266,7 +268,7 @@
 							</div>
 						</fieldset>
 						<fieldset>
-							<label>CC</label>
+							<label><ui:text from="{tm.carbonCopy}"/></label>
 							<div class="{res.style.inlineEditTrigger}">
 								<g:Anchor debugId="editCCAnchor" ui:field="editCCAnchor"/>
 							</div>
@@ -281,7 +283,7 @@
 			<div class="content right">
 				<div class="profile-div view-task-container left">
 					<div class="credentials advance-search task-section">
-						<div class="description-heading">Description</div>
+						<div class="description-heading"><ui:text from="{tm.description}"/></div>
 						<div>
 							<w:WikiHTMLPanel ui:field="readOnlyDescription" addStyleNames="wikiContent"/>
 							<w:EditWikiPanel ui:field="description" visibleLines="7"/>

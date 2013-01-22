@@ -8,6 +8,7 @@
 	xmlns:w="urn:import:com.tasktop.c2c.server.common.web.client.widgets"
 	xmlns:tw="urn:import:com.tasktop.c2c.server.tasks.client.widgets.wiki"
 	xmlns:c="urn:import:com.tasktop.c2c.server.common.web.client.widgets.chooser">
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 		
 	<g:HTMLPanel >
 	
@@ -23,7 +24,7 @@
 		  	<li class="comment" ui:field="commentEditPanel">
 				<form class="post-comment" action="" method="post">
 						<tw:EditWikiPanel debugId="comment" ui:field="comment" />
-						<g:Button debugId="postComment" addStyleNames="button special right" ui:field="postComment">Post Comment</g:Button>
+						<g:Button debugId="postComment" addStyleNames="button special right" ui:field="postComment"><ui:text from="{tm.postComment}"/></g:Button>
 						<div class="clear"/>
 				</form>			
 			</li>

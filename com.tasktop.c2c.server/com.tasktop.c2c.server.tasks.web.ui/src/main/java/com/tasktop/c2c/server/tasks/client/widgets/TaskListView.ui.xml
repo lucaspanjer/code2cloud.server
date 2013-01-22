@@ -3,18 +3,20 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:c="urn:import:com.tasktop.c2c.server.common.web.client.widgets">
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 	<g:HTMLPanel>
 		<g:VerticalPanel>
 			<g:HTMLPanel styleName="filter">
 				<div class="left">
 				<div class="search-results-for">
 					<g:Label ui:field="queryInfoLabel"/>
-					<g:Anchor ui:field="saveQueryAnchor">Save</g:Anchor>
-					<g:Anchor ui:field="editQueryAnchor">Edit</g:Anchor>
+					<g:Anchor ui:field="saveQueryAnchor"><ui:text from="{cpm.save}"/></g:Anchor>
+					<g:Anchor ui:field="editQueryAnchor"><ui:text from="{cpm.edit}"/></g:Anchor>
 				</div>
 				</div>
 				<div class="right">
-					<g:Button ui:field="newTask" addStyleNames="button special">New Task</g:Button>
+					<g:Button ui:field="newTask" addStyleNames="button special"><ui:text from="{tm.newTask}"/></g:Button>
 				</div>
 				<div class="clear"></div>
 			</g:HTMLPanel>
@@ -22,7 +24,7 @@
 	
 			<g:HTMLPanel styleName="pagination">
 				<div class="export left">
-					Export: <g:Anchor ui:field="exportCsvAnchor">CSV</g:Anchor> | <g:Anchor ui:field="exportJsonAnchor">JSON</g:Anchor> 
+					<ui:text from="{tm.export}"/><ui:text from="{cpm.colon}"/> <g:Anchor ui:field="exportCsvAnchor">CSV</g:Anchor> | <g:Anchor ui:field="exportJsonAnchor">JSON</g:Anchor> 
 				</div>
 				<c:Pager ui:field="pager"/>
 				<div class="clear"></div>

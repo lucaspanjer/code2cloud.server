@@ -61,6 +61,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.presenter.person.ProjectPersonService;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
@@ -76,6 +77,7 @@ import com.tasktop.c2c.server.common.web.client.widgets.time.TimePeriodBox;
 import com.tasktop.c2c.server.common.web.client.widgets.time.TimePeriodRenderer;
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.tasks.client.TaskResources;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.place.ProjectEditTaskPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectNewTaskPlace;
 import com.tasktop.c2c.server.tasks.client.place.ProjectTaskHistoryPlace;
@@ -107,7 +109,7 @@ import com.tasktop.c2c.server.tasks.domain.WorkLog;
 
 public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<Task> {
 
-	private static final String NOT_SET = "Not set";
+	private static final String NOT_SET = ((TasksMessages) GWT.create(TasksMessages.class)).notSet();
 	private static TaskViewImpl instance = null;
 
 	public static TaskViewImpl getInstance() {
@@ -121,6 +123,8 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	abstract class InlineEditableField<T> {
 		private final HTML readOnlyField; // for anon users
@@ -151,7 +155,6 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			return ((Widget) editableField).getElement();
 		}
 
-		@SuppressWarnings("unchecked")
 		public T getEditableFieldValue() {
 			if (editableField instanceof TakesValue<?>) {
 				return ((TakesValue<T>) editableField).getValue();
@@ -159,7 +162,6 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			return null;
 		}
 
-		@SuppressWarnings("unchecked")
 		public void setEditableFieldValue(T value) {
 			if (editableField instanceof TakesValue<?>) {
 				((TakesValue<T>) editableField).setValue(value);
@@ -281,7 +283,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		@Override
 		public String render(Integer object) {
-			return object + ": ";
+			return object + commonProfileMessages.colon() + " ";
 		}
 
 	});
@@ -592,7 +594,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		foundInRelease.setValueCompositeFactory(new StringValueCompositeFactory());
 		subTasks.setValueCompositeFactory(new TaskCompositeFactory());
 		blocksTasks.setValueCompositeFactory(new TaskCompositeFactory());
-		editTaskAnchor.setHTML(template.iconText("Edit"));
+		editTaskAnchor.setHTML(template.iconText(commonProfileMessages.edit()));
 	}
 
 	private void initEditFields() {
@@ -661,7 +663,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 						buf.append(task.getResolution().toString());
 
 						if (task.getResolution().isDuplicate() && task.getDuplicateOf() != null) {
-							buf.append(" of ");
+							buf.append(" ").append(tasksMessages.ofLc()).append(" ");
 							Label label = new Label(buf.toString());
 							statusPanel.add(label);
 
@@ -913,14 +915,14 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 					for (int i = 0; i < subTaskList.size(); i++) {
 						subTasksPanel.add(createTaskAnchor(subTaskList.get(i)));
 						if (i < (subTaskList.size() - 1)) {
-							subTasksPanel.add(new Label(", "));
+							subTasksPanel.add(new Label(commonProfileMessages.comma() + " "));
 						}
 					}
 					subTasksPanel.add(editSubtasksAnchor);
 					return null;
 				} else {
 					subTasksPanel.add(editSubtasksAnchor);
-					return SafeHtmlUtils.fromTrustedString("None");
+					return SafeHtmlUtils.fromTrustedString(commonProfileMessages.none());
 				}
 
 			}
@@ -941,14 +943,14 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 					for (int i = 0; i < task.getBlocksTasks().size(); i++) {
 						parentTasksPanel.add(createTaskAnchor(task.getBlocksTasks().get(i)));
 						if (i < (t.getBlocksTasks().size() - 1)) {
-							parentTasksPanel.add(new Label(", "));
+							parentTasksPanel.add(new Label(commonProfileMessages.comma() + " "));
 						}
 					}
 					parentTasksPanel.add(editParentAnchor);
 					return null;
 				} else {
 					parentTasksPanel.add(editParentAnchor);
-					return SafeHtmlUtils.fromTrustedString("None");
+					return SafeHtmlUtils.fromTrustedString(commonProfileMessages.none());
 				}
 
 			}
@@ -1025,16 +1027,17 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	}
 
 	private static SafeHtml formatThisAndSubtaskTime(BigDecimal thisTime, BigDecimal subTasksTime) {
+		TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 		if (thisTime == null && subTasksTime.signum() == 0) {
 			return SafeHtmlUtils.fromTrustedString(NOT_SET);
 		} else if (subTasksTime.signum() == 0) {
 			return SafeHtmlUtils.fromTrustedString(TimePeriodRenderer.HOUR_RENDERER.render(thisTime));
 		} else if (thisTime == null) {
-			return SafeHtmlUtils
-					.fromTrustedString("Subtasks: " + TimePeriodRenderer.HOUR_RENDERER.render(subTasksTime));
+			return SafeHtmlUtils.fromTrustedString(tasksMessages.subtasksTime(TimePeriodRenderer.HOUR_RENDERER
+					.render(subTasksTime)));
 		} else {
 			BigDecimal totalTime = thisTime == null ? subTasksTime : subTasksTime.add(thisTime);
-			return template.timeBreakdown(TimePeriodRenderer.HOUR_RENDERER.render(totalTime),
+			return tasksMessages.timeBreakdown(TimePeriodRenderer.HOUR_RENDERER.render(totalTime),
 					TimePeriodRenderer.HOUR_RENDERER.render(thisTime),
 					TimePeriodRenderer.HOUR_RENDERER.render(subTasksTime));
 		}
@@ -1043,9 +1046,6 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	private static HtmlTemplates template = GWT.create(HtmlTemplates.class);
 
 	static interface HtmlTemplates extends SafeHtmlTemplates {
-		@Template("Total: {0} <br> This: {1} <br> Subtasks: {2}")
-		SafeHtml timeBreakdown(String totalTime, String thisTaskTime, String subTaskTime);
-
 		@Template("<div>{0}<img src=\"{1}\"/></div>")
 		SafeHtml editTriggerHtml(SafeHtml safeHtml, SafeUri imageUri);
 
@@ -1054,10 +1054,6 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		@Template("<span></span>{0}")
 		SafeHtml iconText(String text);
-		//
-		// @Template("{0}{1}<div class=\"date-info\"><div class=\"created left\"><span>Created by</span><span class=\"username\"><span class=\"avatar micro name-include\"><img src=\"{2}\"/>{3}</span><span>on {4}</span></span></div><div class=\"changed right\"><span>Updated on {5}</span></div><div class=\"clear\"></div>")
-		// SafeHtml titleHtml(SafeHtml anchorHtml, String titleLabel, String avatarUrl, String reporterName,
-		// String createDate, String modifyDate);
 	}
 
 	public void setProjectIdentifier(String projectIdentifier) {
@@ -1109,7 +1105,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		createdByImage.setUrl(Avatar.computeAvatarUrl(task.getReporter().getGravatarHash(), Avatar.Size.MICRO));
 		createdBy.setText(task.getReporter().getLoginName());
 		creationDate.setText(Format.stringValueDateTime(task.getCreationDate()));
-		updateDate.setText(Format.stringValueDateTime(task.getModificationDate()));
+		updateDate.setText(tasksMessages.updatedOnDate(Format.stringValueDateTime(task.getModificationDate())));
 
 		newSubTaskLink.setHref(ProjectNewTaskPlace.createNewSubtaskPlace(projectIdentifier, task.getId()).getHref());
 
@@ -1131,7 +1127,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		UIObject.setVisible(duplicatesElement, !task.getDuplicates().isEmpty());
 		for (int i = 0; i < task.getDuplicates().size(); i++) {
 			if (i != 0) {
-				duplicates.add(new Label(", "));
+				duplicates.add(new Label(commonProfileMessages.comma() + " "));
 			}
 			duplicates.add(createTaskAnchor(task.getDuplicates().get(i)));
 		}
@@ -1143,7 +1139,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		for (int i = 0; i < externalList.size(); i++) {
 			externalTaskRelations.add(new Anchor(externalList.get(i).getUri(), externalList.get(i).getUri(), "new"));
 			if (i < (externalList.size() - 1)) {
-				externalTaskRelations.add(new Label(", "));
+				externalTaskRelations.add(new Label(commonProfileMessages.comma() + " "));
 			}
 		}
 
@@ -1153,7 +1149,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			String url = task.getCommits().get(i);
 
 			if (i > 0) {
-				commits.add(new Label(", "));
+				commits.add(new Label(commonProfileMessages.comma() + " "));
 			}
 			if (url.startsWith("http")) {
 				String id = url;
@@ -1172,8 +1168,6 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		// attachments
 		setAttachments(task.getAttachments());
-
-		// updateCommentView(task);
 
 		taskHistoryLink.setHref(ProjectTaskHistoryPlace.createPlace(projectIdentifier, task.getId()).getHref());
 
@@ -1278,7 +1272,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 
 		// Check if we ended up with a blank string - if we did, send back a default
 		if (strings.size() == 0) {
-			shb.appendEscaped("None");
+			shb.appendEscaped(commonProfileMessages.none());
 		}
 
 		return shb.toSafeHtml();
@@ -1301,7 +1295,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 	private void setAttachments(List<Attachment> attachments) {
 		attachmentsPanel.clear();
 		if (attachments.size() <= 0) {
-			attachmentsPanel.add(new Label("None"));
+			attachmentsPanel.add(new Label(commonProfileMessages.none()));
 			return;
 		}
 
@@ -1311,14 +1305,9 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 			attachmentPanel.setStyleName("file-uploaded");
 			attachmentPanel.add(new HTML("<span class=\"file-icon\"/>"));
 			attachmentPanel.add(new Anchor(attachment.getFilename(), attachment.getUrl()));
-			// table.setHTML(i, 1, attachment.getDescription());
-			attachmentPanel.add(new Label("   ("
-					+ String.valueOf(Math.round(Float.valueOf(attachment.getByteSize()) / 1024)) + " KB)"));
-			// PersonLabel personLabel = new PersonLabel();
-			// personLabel.setPerson(toPerson(attachment.getSubmitter()));
-			// personLabel.setAsSelf(toPerson(attachment.getSubmitter()).equals(currenUser));
-			// table.setWidget(i, 2, personLabel);
-			// table.setHTML(i, 3, stringValueDateTime(attachment.getCreationDate()));
+			attachmentPanel.add(new Label("   "
+					+ commonProfileMessages.parentheses(String.valueOf(Math.round(Float.valueOf(attachment
+							.getByteSize()) / 1024)) + " KB")));
 			attachmentsPanel.add(attachmentPanel);
 		}
 	}
@@ -1345,7 +1334,7 @@ public class TaskViewImpl extends AbstractComposite implements TaskView, Editor<
 		for (InlineEditableField<?> inEditField : editingFields) {
 			if (driver.isDirty() || customFieldDriver.isDirty()) {
 				// FIXME how to handle this?
-				Window.alert("Save or cancel current edit first.");
+				Window.alert(tasksMessages.saveOrCancelCurrentEdit());
 				return;
 			}
 			inEditField.cancelEdit();
