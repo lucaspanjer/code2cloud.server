@@ -12,18 +12,15 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets;
 
-
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.safehtml.client.SafeHtmlTemplates;
-import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
-import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.Task;
 
 public class PriorityCell extends AbstractCell<Task> {
 
-	private static Template template = GWT.create(Template.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public PriorityCell() {
 	}
@@ -33,40 +30,23 @@ public class PriorityCell extends AbstractCell<Task> {
 		Integer id = task.getPriority().getId();
 		switch (id) {
 		case 1:
-			sb.append(template.highest());
+			sb.append(tasksMessages.highestP5Div());
 			break;
 		case 2:
-			sb.append(template.high());
+			sb.append(tasksMessages.highP4Div());
 			break;
 		case 3:
-			sb.append(template.normal());
+			sb.append(tasksMessages.normalP3Div());
 			break;
 		case 4:
-			sb.append(template.low());
+			sb.append(tasksMessages.lowP2Div());
 			break;
 		case 5:
-			sb.append(template.lowest());
+			sb.append(tasksMessages.lowestP1Div());
 			break;
 		default:
-			sb.append(template.normal());
+			sb.append(tasksMessages.normalP3Div());
 			break;
 		}
-	}
-
-	static interface Template extends SafeHtmlTemplates {
-		@Template("<div class=\"priority one\" title=\"Lowest\">")
-		SafeHtml lowest();
-
-		@Template("<div class=\"priority two\" title=\"Low\">")
-		SafeHtml low();
-
-		@Template("<div class=\"priority three\" title=\"Normal\">")
-		SafeHtml normal();
-
-		@Template("<div class=\"priority four\" title=\"High\">")
-		SafeHtml high();
-
-		@Template("<div class=\"priority five\" title=\"Highest\">")
-		SafeHtml highest();
 	}
 }

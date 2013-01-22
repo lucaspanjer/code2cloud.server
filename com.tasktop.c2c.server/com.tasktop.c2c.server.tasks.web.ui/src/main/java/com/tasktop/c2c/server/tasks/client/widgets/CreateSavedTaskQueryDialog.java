@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -38,9 +39,11 @@ public class CreateSavedTaskQueryDialog extends DialogBox {
 	@UiField
 	Button saveButton;
 
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
+
 	public CreateSavedTaskQueryDialog() {
 		super(true, true);
-		super.setText("Save Query");
+		super.setText(tasksMessages.saveQuery());
 		super.setAnimationEnabled(true);
 		super.setGlassEnabled(false);
 		super.setWidget(uiBinder.createAndBindUi(this));

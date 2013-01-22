@@ -57,6 +57,7 @@ import com.tasktop.c2c.server.common.web.client.widgets.chooser.StringValueCompo
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonSuggestOracle;
 import com.tasktop.c2c.server.common.web.client.widgets.time.TimePeriodBox;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.widgets.chooser.keywords.KeywordCompositeFactory;
 import com.tasktop.c2c.server.tasks.client.widgets.chooser.keywords.KeywordSuggestOracle;
 import com.tasktop.c2c.server.tasks.client.widgets.presenter.person.KeywordSuggestService;
@@ -141,6 +142,8 @@ public class AbstractEditTaskView extends AbstractComposite implements AbstractE
 		}
 	});
 
+	protected TasksMessages tasksMessages = GWT.create(TasksMessages.class);
+
 	@UiField
 	@Ignore
 	protected Label tagsLabel;
@@ -151,7 +154,7 @@ public class AbstractEditTaskView extends AbstractComposite implements AbstractE
 	@Ignore
 	protected Label watcherLabel;
 	@Ignore
-	protected Label foundInReleaseLabel = new Label("Found In");
+	protected Label foundInReleaseLabel = new Label(tasksMessages.foundIn());
 
 	protected ValueListBox<Product> product = new ValueListBox<Product>(new AbstractRenderer<Product>() {
 
@@ -329,15 +332,15 @@ public class AbstractEditTaskView extends AbstractComposite implements AbstractE
 		int offset = 0;
 		int columnCount = 3;
 		detailsPanel = new DynamicFormPanel();
-		detailsPanel.add("Product", product);
-		detailsPanel.add("Component", component);
-		detailsPanel.add("Release", milestone);
+		detailsPanel.add(tasksMessages.product(), product);
+		detailsPanel.add(tasksMessages.component(), component);
+		detailsPanel.add(tasksMessages.release(), milestone);
 		detailsPanel.newLine();
 		detailsPanel.add(foundInReleaseLabel, foundInRelease);
-		detailsPanel.add("Iteration", iteration);
+		detailsPanel.add(tasksMessages.iteration(), iteration);
 		detailsPanel.newLine();
-		detailsPanel.add("Due Date", deadline);
-		detailsPanel.add("Estimate", estimatedTime);
+		detailsPanel.add(tasksMessages.dueDate(), deadline);
+		detailsPanel.add(tasksMessages.estimate(), estimatedTime);
 		detailsPanel.newLine();
 
 		detailsPanel.newLine();

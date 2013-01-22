@@ -27,7 +27,9 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskComment.ReplyHandler;
 import com.tasktop.c2c.server.tasks.client.widgets.presenter.person.PersonUtil;
 import com.tasktop.c2c.server.tasks.client.widgets.wiki.EditWikiPanel;
@@ -62,11 +64,13 @@ public class CommentsPanel extends Composite {
 
 	private ReplyHandler commentReplyHandler;
 	private Person self;
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public CommentsPanel() {
 		super.initWidget(uiBinder.createAndBindUi(this));
 		this.commentReplyHandler = new TaskComment.TextBoxReplyHandler(comment.getTextArea());
-		comment.getTextArea().getElement().setAttribute("placeholder", "Post a comment...");
+		comment.getTextArea().getElement().setAttribute("placeholder", tasksMessages.postAComment());
 	}
 
 	public void setValue(Task task) {
@@ -82,10 +86,10 @@ public class CommentsPanel extends Composite {
 		int MAX_COMMENTERS = 5;
 
 		commentsHeading.addStyleName("left");
-		commentsHeading.setHTML("Comments <span> (" + task.getComments().size() + ")</span>");
+		commentsHeading.setHTML(tasksMessages.commentsWithTotal(task.getComments().size()));
 
 		if (task.getComments().size() > MAX_COMMENTERS) {
-			commentersMore.setText("...");
+			commentersMore.setText(commonProfileMessages.ellipsis());
 		} else {
 			commentersMore.setText("");
 		}

@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -25,6 +24,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.presenters.ITaskListView;
 import com.tasktop.c2c.server.tasks.domain.SavedTaskQuery;
 
@@ -47,6 +47,7 @@ public class ConfirmDeleteTaskQueryDialog extends DialogBox implements ITaskList
 
 	private Presenter presenter;
 	private SavedTaskQuery query;
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	private static ConfirmDeleteTaskQueryDialog instance;
 
@@ -61,7 +62,7 @@ public class ConfirmDeleteTaskQueryDialog extends DialogBox implements ITaskList
 
 	private ConfirmDeleteTaskQueryDialog() {
 		super(false, true);
-		setText("Confirm Delete");
+		setText(tasksMessages.confirmDelete());
 		setWidget(uiBinder.createAndBindUi(this));
 		setAnimationEnabled(true); // Why not?
 		setGlassEnabled(true);

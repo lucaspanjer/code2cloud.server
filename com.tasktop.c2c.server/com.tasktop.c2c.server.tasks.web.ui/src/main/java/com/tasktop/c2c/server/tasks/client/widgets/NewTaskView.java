@@ -21,6 +21,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.FieldDescriptor;
 import com.tasktop.c2c.server.tasks.domain.Task;
 
@@ -40,6 +41,8 @@ public class NewTaskView extends AbstractEditTaskView implements NewTaskDisplay 
 	@Ignore
 	protected Label newTaskHeader;
 
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
+
 	public NewTaskView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		driver.initialize(this);
@@ -52,11 +55,11 @@ public class NewTaskView extends AbstractEditTaskView implements NewTaskDisplay 
 		driver.edit(task);
 		if (task.getSubTasks() != null && !task.getSubTasks().isEmpty()) {
 			Task subtask = task.getSubTasks().get(0);
-			newTaskHeader.setText("New Parent Task of " + subtask.getId());
+			newTaskHeader.setText(tasksMessages.newParentTaskOf(subtask.getId()));
 		} else if (task.getParentTask() != null) {
-			newTaskHeader.setText("New Subtask of " + task.getParentTask().getId());
+			newTaskHeader.setText(tasksMessages.newSubtaskOf(task.getParentTask().getId()));
 		} else {
-			newTaskHeader.setText("New Task");
+			newTaskHeader.setText(tasksMessages.newTask());
 		}
 
 	}

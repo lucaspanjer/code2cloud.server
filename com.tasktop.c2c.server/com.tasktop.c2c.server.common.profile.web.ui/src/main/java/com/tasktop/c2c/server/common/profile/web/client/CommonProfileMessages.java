@@ -99,6 +99,9 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Editing")
 	String editing();
 
+	@DefaultMessage("...")
+	String ellipsis();
+
 	@DefaultMessage("Enable")
 	String enable();
 

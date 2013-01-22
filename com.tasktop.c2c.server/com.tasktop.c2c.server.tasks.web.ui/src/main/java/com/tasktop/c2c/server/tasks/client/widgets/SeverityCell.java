@@ -12,18 +12,16 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets;
 
-
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.safehtml.client.SafeHtmlTemplates;
-import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.Task;
 
 public class SeverityCell extends AbstractCell<Task> {
 
-	private static Template template = GWT.create(Template.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	private final SafeHtml[] htmlBySeverity;
 
@@ -31,8 +29,9 @@ public class SeverityCell extends AbstractCell<Task> {
 		super();
 		htmlBySeverity = new SafeHtml[] {
 				null, // no 0
-				template.critical(), template.critical(), template.major(), template.normal(), template.trivial(),
-				template.trivial(), template.enhancement() };
+				tasksMessages.criticalS5Div(), tasksMessages.criticalS5Div(), tasksMessages.majorS4Div(),
+				tasksMessages.normalS3Div(), tasksMessages.trivialS2Div(), tasksMessages.trivialS2Div(),
+				tasksMessages.enhancementS1Div() };
 	}
 
 	@Override
@@ -42,22 +41,4 @@ public class SeverityCell extends AbstractCell<Task> {
 			sb.append(htmlBySeverity[id]);
 		}
 	}
-
-	static interface Template extends SafeHtmlTemplates {
-		@Template("<div class=\"severity five\" title=\"Critical\">")
-		SafeHtml critical();
-
-		@Template("<div class=\"severity four\" title=\"Major\">")
-		SafeHtml major();
-
-		@Template("<div class=\"severity three\" title=\"Normal\">")
-		SafeHtml normal();
-
-		@Template("<div class=\"severity two\" title=\"Trivial\">")
-		SafeHtml trivial();
-
-		@Template("<div class=\"severity one\" title=\"Enhancement\">")
-		SafeHtml enhancement();
-	}
-
 }

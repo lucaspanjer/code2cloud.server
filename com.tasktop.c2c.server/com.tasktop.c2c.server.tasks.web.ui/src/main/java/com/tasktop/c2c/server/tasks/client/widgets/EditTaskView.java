@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.tasks.client.widgets;
 
 import java.math.BigDecimal;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -25,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.MultiValueChooser;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.time.TimePeriodRenderer;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.presenters.EditTaskPresenter;
 import com.tasktop.c2c.server.tasks.client.widgets.chooser.task.ExternalTaskRelationChooser;
 import com.tasktop.c2c.server.tasks.client.widgets.chooser.task.ExternalTaskRelationFactory;
@@ -85,7 +85,7 @@ public class EditTaskView extends AbstractEditTaskView implements EditTaskDispla
 	protected Label editHeader;
 
 	private Driver driver = GWT.create(Driver.class);
-	private boolean isEditing = false;
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public EditTaskView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -125,8 +125,7 @@ public class EditTaskView extends AbstractEditTaskView implements EditTaskDispla
 	protected void setTask(Task task) {
 		super.setTask(task);
 		driver.edit(task);
-		isEditing = true;
-		editHeader.setText("Edit Task " + task.getId().toString());
+		editHeader.setText(tasksMessages.editTaskWithId(task.getId().toString()));
 
 		blocksTasks.setOrigin(null);
 		blocksTasks.setUnremovableValues(null);
@@ -166,7 +165,6 @@ public class EditTaskView extends AbstractEditTaskView implements EditTaskDispla
 			}
 		}
 		driver.flush();
-		isEditing = false;
 	}
 
 	@Override
