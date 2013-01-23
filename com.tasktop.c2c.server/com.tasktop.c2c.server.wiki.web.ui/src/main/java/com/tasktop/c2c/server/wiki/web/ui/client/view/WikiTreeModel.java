@@ -36,6 +36,7 @@ import com.tasktop.c2c.server.wiki.domain.Page;
 import com.tasktop.c2c.server.wiki.domain.PageOutlineItem;
 import com.tasktop.c2c.server.wiki.domain.WikiTree;
 import com.tasktop.c2c.server.wiki.domain.WikiTree.Type;
+import com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages;
 import com.tasktop.c2c.server.wiki.web.ui.client.place.ProjectWikiViewPagePlace;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.RetrievePageOutlineAction;
 import com.tasktop.c2c.server.wiki.web.ui.shared.action.RetrievePageOutlineResult;
@@ -91,6 +92,7 @@ public class WikiTreeModel implements TreeViewModel {
 	}
 
 	private static Template template = GWT.create(Template.class);
+	private WikiMessages wikiMessages = GWT.create(WikiMessages.class);
 
 	static interface Template extends SafeHtmlTemplates {
 		@Template("<div class=\" clear\">{0} ({1} items)</div> <div style=\"border-top: 2px solid #EDEEED;\"></div>")
@@ -99,8 +101,8 @@ public class WikiTreeModel implements TreeViewModel {
 		@Template("<div class=\"clear\">" + //
 				"<a href=\"{1}\">{0}</a>" + //
 				"<div class=\"date-info right\" style=\"width: 60%\">" + //
-				"<div class=\"created left\">Created: {2}</div>" + //
-				"<div class=\"changed right\">Changed: {3}</div>" + //
+				"<div class=\"created left\">{2}</div>" + //
+				"<div class=\"changed right\">{3}</div>" + //
 				"</div></div><div style=\"border-top: 2px solid #EDEEED;\"></div>")
 		SafeHtml wikiPageHeader(String path, String url, String createdString, String updatedString);
 
@@ -110,8 +112,8 @@ public class WikiTreeModel implements TreeViewModel {
 		@Template("<a href=\"{1}\">{0}</a>")
 		SafeHtml wikiPageOutlineItem(String label, String url);
 
-		@Template("No outline available <a href=\"{0}\">Goto page</a>")
-		SafeHtml wikiPageNoOutline(String url);
+		@Template("{0} <a href=\"{1}\">{2}</a>")
+		SafeHtml wikiPageNoOutline(String noOutlineLabel, String url, String urlLabel);
 
 	}
 
@@ -134,9 +136,10 @@ public class WikiTreeModel implements TreeViewModel {
 				if (parentRelativePath.isEmpty()) {
 					parentRelativePath = "<root>";
 				}
-				sb.append(template.wikiPageHeader(parentRelativePath, url,
-						Format.stringValueDate(page.getCreationDate()) + " by " + page.getOriginalAuthor().getName(),
-						Format.stringValueDate(page.getModificationDate()) + " by " + page.getLastAuthor().getName()));
+				sb.append(template.wikiPageHeader(parentRelativePath, url, wikiMessages.createdBy(
+						Format.stringValueDate(page.getCreationDate()), page.getOriginalAuthor().getName()),
+						wikiMessages.changedBy(Format.stringValueDate(page.getModificationDate()), page.getLastAuthor()
+								.getName())));
 				break;
 			case PAGE_OUTLINE_ITEM:
 				String itemUrl = ProjectWikiViewPagePlace.createPlaceForPageAnchor(projectId,
@@ -147,7 +150,7 @@ public class WikiTreeModel implements TreeViewModel {
 
 			case NO_OUTLINE:
 				url = ProjectWikiViewPagePlace.createPlaceForPage(projectId, value.getPage().getPath()).getHref();
-				sb.append(template.wikiPageNoOutline(url));
+				sb.append(template.wikiPageNoOutline(wikiMessages.outlineNotAvailable(), url, wikiMessages.goToPage()));
 				break;
 
 			}

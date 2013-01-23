@@ -53,7 +53,6 @@ import com.tasktop.c2c.server.wiki.web.ui.shared.action.UpdatePageResult;
 public class EditWikiPagePresenter extends AbstractWikiPresenter implements SplittableActivity {
 	private final EditWikiPageDisplay view;
 
-	private String path;
 	private Page page;
 	boolean isUser;
 	boolean isAdmin;
@@ -178,13 +177,11 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 	}
 
 	public void setPath(String path) {
-		this.path = path;
 		this.page = null;
 	}
 
 	public void setPage(Page page) {
 		this.page = page;
-		this.path = page == null ? null : page.getPath();
 	}
 
 	@Override
@@ -210,13 +207,14 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 					.instance()
 					.getNotifier()
 					.displayMessage(
-							Message.createSuccessMessage("Attachment \"" + view.getAttachmentFileName() + "\" uploaded"));
+							Message.createSuccessMessage(super.wikiMessages.attachmentUploaded(view
+									.getAttachmentFileName())));
 			getEventBus().fireEvent(new ClearCacheEvent());
 			view.clearAttachementForm();
 			// Ideally we would simply update with the results for the json content.
 			fetchAttachments();
 		} else {
-			String message = "Error: Unexpected server response";
+			String message = super.commonProfileMessages.unexpectedServerResponse();
 			JSONValue errorValue = value.isObject().get("error");
 			JSONObject errorObject = errorValue == null ? null : errorValue.isObject();
 			if (errorObject != null) {
@@ -252,14 +250,14 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 		if (page.getId() == null) {
 			getDispatchService().execute(
 					new CreatePageAction(getProjectIdentifier(), page),
-					new AsyncCallbackSupport<CreatePageResult>(new OperationMessage("Creating Page..."), null, view
-							.getSaveHasEnabled()) {
+					new AsyncCallbackSupport<CreatePageResult>(new OperationMessage(super.wikiMessages.creatingPage()),
+							null, view.getSaveHasEnabled()) {
 						@Override
 						protected void success(CreatePageResult result) {
 							Page savedPage = result.get();
 							ProjectWikiViewPagePlace place = ProjectWikiViewPagePlace.createPlaceForPage(
 									getProjectIdentifier(), savedPage.getPath());
-							place.displayOnArrival(Message.createSuccessMessage("Page Created"));
+							place.displayOnArrival(Message.createSuccessMessage(wikiMessages.pageCreated()));
 							place.go();
 
 						}
@@ -267,14 +265,14 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 		} else {
 			getDispatchService().execute(
 					new UpdatePageAction(getProjectIdentifier(), page),
-					new AsyncCallbackSupport<UpdatePageResult>(new OperationMessage("Saving Page..."), null, view
-							.getSaveHasEnabled()) {
+					new AsyncCallbackSupport<UpdatePageResult>(new OperationMessage(super.wikiMessages.savingPage()),
+							null, view.getSaveHasEnabled()) {
 						@Override
 						protected void success(UpdatePageResult result) {
 							Page savedPage = result.get();
 							ProjectWikiViewPagePlace place = ProjectWikiViewPagePlace.createPlaceForPage(
 									getProjectIdentifier(), savedPage.getPath());
-							place.displayOnArrival(Message.createSuccessMessage("Page Saved"));
+							place.displayOnArrival(Message.createSuccessMessage(wikiMessages.pageSaved()));
 							place.go();
 						}
 					});
@@ -284,13 +282,13 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 	protected void doChangeMarkup(Page page) {
 		page.setMarkupLanguage(view.getMarkupPreference());
 		getDispatchService().execute(new UpdatePageAction(getProjectIdentifier(), page),
-				new AsyncCallbackSupport<UpdatePageResult>(new OperationMessage("Updating Page...")) {
+				new AsyncCallbackSupport<UpdatePageResult>(new OperationMessage(super.wikiMessages.updatingPage())) {
 					@Override
 					protected void success(UpdatePageResult result) {
 						Page savedPage = result.get();
 						ProjectWikiViewPagePlace place = ProjectWikiViewPagePlace.createPlaceForPage(
 								getProjectIdentifier(), savedPage.getPath());
-						place.displayOnArrival(Message.createSuccessMessage("Page updated"));
+						place.displayOnArrival(Message.createSuccessMessage(wikiMessages.pageUpdated()));
 						place.go();
 
 					}
@@ -317,8 +315,7 @@ public class EditWikiPagePresenter extends AbstractWikiPresenter implements Spli
 	@Override
 	public String mayStop() {
 		if (view.isDirty()) {
-			return "There are unsaved changes. Are you sure you want to navigate away? "
-					+ "Press OK to navigate away and lose unsaved changes, or Cancel to stay on the current page.";
+			return super.wikiMessages.unsavedChangesMessage();
 		}
 		return null;
 	}

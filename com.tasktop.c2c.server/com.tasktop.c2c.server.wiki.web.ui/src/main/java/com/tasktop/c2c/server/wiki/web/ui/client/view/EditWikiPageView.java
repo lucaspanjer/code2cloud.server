@@ -34,12 +34,14 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.view.CompositeClickHandlers;
 import com.tasktop.c2c.server.common.web.client.view.CompositeHasEnabled;
 import com.tasktop.c2c.server.wiki.domain.Attachment;
 import com.tasktop.c2c.server.wiki.domain.Page;
 import com.tasktop.c2c.server.wiki.domain.Page.GroupAccess;
+import com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages;
 import com.tasktop.c2c.server.wiki.web.ui.client.presenter.EditWikiPagePresenter.EditWikiPageDisplay;
 
 public class EditWikiPageView extends AbstractComposite implements EditWikiPageDisplay, Editor<Page> {
@@ -53,6 +55,7 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 	}
 
 	private static Driver driver = GWT.create(Driver.class);
+	private WikiMessages wikiMessages = GWT.create(WikiMessages.class);
 
 	@UiField
 	@Ignore
@@ -104,7 +107,7 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 		@Override
 		public String render(GroupAccess object) {
 			if (object == null) {
-				return "None";
+				return ((CommonProfileMessages) GWT.create(CommonProfileMessages.class)).none();
 			}
 			return object.getFriendlyName();
 		}
@@ -161,10 +164,10 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 		this.page = page;
 		// null page or new page obj
 		if (page == null || page.getId() == null) {
-			pageTitle.setText("New Page");
+			pageTitle.setText(wikiMessages.newPage());
 			attachmentsPanel.setVisible(false);
 		} else {
-			pageTitle.setText("Edit Page");
+			pageTitle.setText(wikiMessages.editPage());
 			attachmentsPanel.setVisible(true);
 			attachmentForm.setAction(page.getAttachmentsUrl());
 			// If the delete value is already beyond our permissions, then we can't edit it, so dont' display it.

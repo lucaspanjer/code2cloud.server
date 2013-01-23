@@ -248,6 +248,12 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Type")
 	String type();
 
+	@DefaultMessage("Undo")
+	String undo();
+
+	@DefaultMessage("Error: Unexpected server response")
+	String unexpectedServerResponse();
+
 	@DefaultMessage("Updating")
 	String updating();
 

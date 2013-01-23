@@ -12,10 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.wiki.web.ui.client.place;
 
-import java.util.List;
-
-import net.customware.gwt.dispatch.shared.Action;
-
+import com.google.gwt.core.client.GWT;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.place.AbstractBatchFetchingPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.BreadcrumbPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.HasProjectPlace;
@@ -26,6 +24,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectResult;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -36,6 +35,8 @@ public abstract class AbstractProjectWikiPlace extends AbstractBatchFetchingPlac
 
 	protected String projectId;
 	protected Project project;
+	protected CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	protected WikiMessages wikiMessages = GWT.create(WikiMessages.class);
 
 	/**
 	 * @param roles
@@ -71,7 +72,6 @@ public abstract class AbstractProjectWikiPlace extends AbstractBatchFetchingPlac
 	public Section getSection() {
 		return Section.WIKI;
 	}
-
 
 	@Override
 	protected void addActions() {

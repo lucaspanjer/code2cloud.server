@@ -133,15 +133,15 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ProjectWikiHomePlace.createDefaultPlace(projectId).getHref(), "Wiki"));
+		breadcrumbs.add(new Breadcrumb(ProjectWikiHomePlace.createDefaultPlace(projectId).getHref(),
+				super.commonProfileMessages.wiki()));
 
 		if (!isNew) {
 			breadcrumbs.add(new Breadcrumb(ProjectWikiViewPagePlace.createPlaceForPage(projectId, pagePath).getHref(),
 					pagePath));
-			breadcrumbs.add(new Breadcrumb(getHref(), "Edit"));
+			breadcrumbs.add(new Breadcrumb(getHref(), super.commonProfileMessages.edit()));
 		} else {
-			breadcrumbs.add(new Breadcrumb(getHref(), "New Page"));
-
+			breadcrumbs.add(new Breadcrumb(getHref(), super.wikiMessages.newPage()));
 		}
 	}
 
@@ -159,9 +159,9 @@ public class ProjectWikiEditPagePlace extends AbstractProjectWikiPlace implement
 	@Override
 	public String getWindowTitle() {
 		if (pagePath != null) {
-			return "Edit Wiki - " + pagePath + " - " + project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
+			return super.wikiMessages.editWikiWindowTitle(pagePath, project.getName(), WindowTitleBuilder.PRODUCT_NAME);
 		} else {
-			return "New Wiki - " + project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
+			return super.wikiMessages.newWikiWindowTitle(project.getName(), WindowTitleBuilder.PRODUCT_NAME);
 		}
 	}
 

@@ -26,6 +26,7 @@ import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.widgets.Format;
 import com.tasktop.c2c.server.tasks.client.widgets.wiki.WikiHTMLPanel;
 import com.tasktop.c2c.server.wiki.domain.Page;
+import com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages;
 import com.tasktop.c2c.server.wiki.web.ui.client.place.ProjectWikiEditPagePlace;
 import com.tasktop.c2c.server.wiki.web.ui.client.presenter.WikiPageContentPresenter.RenderedWikiPageDisplay;
 
@@ -35,6 +36,7 @@ public class WikiPageContentView extends AbstractComposite implements RenderedWi
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
+	private WikiMessages wikiMessages = GWT.create(WikiMessages.class);
 
 	@UiField
 	WikiHTMLPanel contentPanel;
@@ -78,9 +80,9 @@ public class WikiPageContentView extends AbstractComposite implements RenderedWi
 
 				String createdDateText = Format.stringValueDateTime(page.getCreationDate());
 				String modifiedDateText = Format.stringValueDateTime(page.getModificationDate());
-				createdMetadata.setText("Created: " + createdDateText + " by " + page.getOriginalAuthor());
+				createdMetadata.setText(wikiMessages.createdBy(createdDateText, page.getOriginalAuthor().toString()));
 				if (!createdDateText.equals(modifiedDateText) || !page.getOriginalAuthor().equals(page.getLastAuthor())) {
-					modifiedMetadata.setText("Changed: " + modifiedDateText + " by " + page.getLastAuthor());
+					modifiedMetadata.setText(wikiMessages.changedBy(modifiedDateText, page.getLastAuthor().toString()));
 				}
 			}
 			editButton.setHref(ProjectWikiEditPagePlace.createPlaceForPath(projectId, page.getPath()).getHref());
@@ -140,7 +142,7 @@ public class WikiPageContentView extends AbstractComposite implements RenderedWi
 
 	@Override
 	public void setPageNotFound(String path) {
-		pageLabel.setText("Page \"" + path + "\" not found.");
+		pageLabel.setText(wikiMessages.pageNotFound(path));
 		contentPanel.clear();
 		createdMetadata.setText(null);
 		modifiedMetadata.setText(null);

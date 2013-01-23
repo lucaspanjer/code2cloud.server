@@ -123,12 +123,12 @@ public class ProjectWikiHomePlace extends AbstractProjectWikiPlace implements He
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(getHref(), "Wiki"));
+		breadcrumbs.add(new Breadcrumb(getHref(), super.commonProfileMessages.wiki()));
 	}
 
 	@Override
 	public String getWindowTitle() {
-		return "Wiki - " + project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
+		return super.wikiMessages.homeWindowTitle(project.getName(), WindowTitleBuilder.PRODUCT_NAME);
 	}
 
 	public Boolean isTreeView() {

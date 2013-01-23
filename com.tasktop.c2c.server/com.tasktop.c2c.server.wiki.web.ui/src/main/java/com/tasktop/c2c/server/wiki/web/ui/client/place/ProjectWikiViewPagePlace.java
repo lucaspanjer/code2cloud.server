@@ -141,7 +141,8 @@ public class ProjectWikiViewPagePlace extends AbstractProjectWikiPlace implement
 
 	private void createBreadcrumbs(Project project) {
 		breadcrumbs = Breadcrumb.getProjectSpecficBreadcrumbs(project);
-		breadcrumbs.add(new Breadcrumb(ProjectWikiHomePlace.createDefaultPlace(projectId).getHref(), "Wiki"));
+		breadcrumbs.add(new Breadcrumb(ProjectWikiHomePlace.createDefaultPlace(projectId).getHref(),
+				super.commonProfileMessages.wiki()));
 		breadcrumbs.add(new Breadcrumb(getHref(), pagePath));
 	}
 
@@ -165,7 +166,7 @@ public class ProjectWikiViewPagePlace extends AbstractProjectWikiPlace implement
 
 	@Override
 	public String getWindowTitle() {
-		return "Wiki - " + pagePath + " - " + project.getName() + " - " + WindowTitleBuilder.PRODUCT_NAME;
+		return super.wikiMessages.viewWikiWindowTitle(pagePath, project.getName(), WindowTitleBuilder.PRODUCT_NAME);
 	}
 
 	/**

@@ -230,7 +230,7 @@ public class WikiPageContentPresenter extends AbstractWikiPresenter implements S
 				new AsyncCallbackSupport<DeletePageResult>(null, null, view.getDeleteButton()) {
 					@Override
 					protected void success(DeletePageResult result) {
-						Action undo = new Action("Undo",
+						Action undo = new Action(commonProfileMessages.undo(),
 
 						new Runnable() {
 
@@ -241,7 +241,7 @@ public class WikiPageContentPresenter extends AbstractWikiPresenter implements S
 							}
 						});
 						ProjectWikiHomePlace place = ProjectWikiHomePlace.createDefaultPlace(getProjectIdentifier());
-						place.displayOnArrival(Message.createSuccessWithActionMessage("Page deleted", undo));
+						place.displayOnArrival(Message.createSuccessWithActionMessage(wikiMessages.pageDeleted(), undo));
 						place.go();
 					}
 				});
@@ -258,7 +258,7 @@ public class WikiPageContentPresenter extends AbstractWikiPresenter implements S
 					protected void success(RestorePageResult result) {
 						ProjectWikiViewPagePlace place = ProjectWikiViewPagePlace.createPlaceForPage(
 								getProjectIdentifier(), pageToRestore.getPath());
-						place.displayOnArrival(Message.createSuccessMessage("Page restored"));
+						place.displayOnArrival(Message.createSuccessMessage(wikiMessages.pageRestored()));
 						place.go();
 					}
 				});

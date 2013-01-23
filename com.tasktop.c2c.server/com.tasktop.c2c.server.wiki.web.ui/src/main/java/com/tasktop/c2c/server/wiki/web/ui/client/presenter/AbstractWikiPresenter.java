@@ -14,10 +14,12 @@ package com.tasktop.c2c.server.wiki.web.ui.client.presenter;
 
 import net.customware.gwt.dispatch.client.DispatchAsync;
 
-
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.web.client.presenter.AbstractPresenter;
 import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
+import com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -26,6 +28,8 @@ import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 public abstract class AbstractWikiPresenter extends AbstractPresenter {
 
 	protected String projectIdentifier;
+	protected CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	protected WikiMessages wikiMessages = GWT.create(WikiMessages.class);
 
 	/**
 	 * @param view

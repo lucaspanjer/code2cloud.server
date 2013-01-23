@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.wiki.web.ui.client.view;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -24,6 +23,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
+import com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages;
 import com.tasktop.c2c.server.wiki.web.ui.client.presenter.WikiSearchPresenter.WikiSearchDisplay;
 
 public class WikiSearchView extends AbstractComposite implements WikiSearchDisplay {
@@ -32,8 +32,7 @@ public class WikiSearchView extends AbstractComposite implements WikiSearchDispl
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
-
-	private static final String PLACEHOLDER_TEXT = "Search Wiki...";
+	private WikiMessages wikiMessages = GWT.create(WikiMessages.class);
 
 	@UiField
 	HTMLPanel searchPanel;
@@ -46,7 +45,7 @@ public class WikiSearchView extends AbstractComposite implements WikiSearchDispl
 
 	public WikiSearchView() {
 		initWidget(uiBinder.createAndBindUi(this));
-		DOM.setElementAttribute(searchText.getElement(), "placeholder", PLACEHOLDER_TEXT);
+		DOM.setElementAttribute(searchText.getElement(), "placeholder", wikiMessages.searchWiki());
 		hookDefaultButton(searchButton);
 	}
 
