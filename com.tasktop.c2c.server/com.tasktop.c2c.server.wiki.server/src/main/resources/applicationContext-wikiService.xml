@@ -63,6 +63,8 @@
 	/>
 	
 	<bean id="wikiConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
+		<property name="serviceType" value="WIKI"/>
+		
 		<property name="configurators">
 			<list>
 				<ref bean="wikiDatabaseConfigurator"/>

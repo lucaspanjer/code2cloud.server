@@ -278,15 +278,19 @@ public class AjpProtocol {
 
 		final Object socketKey = new AjpPoolableConnectionFactory.Key(proxyHost, proxyPort);
 		Socket connection;
+
 		try {
 			connection = allocateSocket(socketKey);
 			debug("allocated", connection);
-
+		} catch (IOException e) {
+			throw e;
 		} catch (Exception e) {
-			LOG.error(String.format("Cannot connect to %s:%s", proxyHost, proxyPort), e);
-			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-			return;
+			if (e instanceof RuntimeException) {
+				throw (RuntimeException) e;
+			}
+			throw new RuntimeException(e);
 		}
+
 		boolean invalidate = true;
 		try {
 			OutputStream outputStream = connection.getOutputStream();

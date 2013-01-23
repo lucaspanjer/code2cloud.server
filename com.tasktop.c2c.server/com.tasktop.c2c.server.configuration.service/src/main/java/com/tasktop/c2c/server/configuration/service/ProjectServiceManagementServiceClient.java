@@ -13,16 +13,16 @@
 package com.tasktop.c2c.server.configuration.service;
 
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
-import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
 
-public class ProjectServiceMangementServiceClient extends AbstractRestServiceClient implements
+public class ProjectServiceManagementServiceClient extends AbstractRestServiceClient implements
 		ProjectServiceManagementService {
 
 	@SuppressWarnings("unused")
 	// All of the setters in this method are used programmatically by the JSON serializer.
 	private static class ServiceCallResult {
 		private ProjectServiceStatus projectServiceStatus;
+		private ServiceHostStatus serviceHostStatus;
 
 		public ProjectServiceStatus getProjectServiceStatus() {
 			return projectServiceStatus;
@@ -30,6 +30,14 @@ public class ProjectServiceMangementServiceClient extends AbstractRestServiceCli
 
 		public void setProjectServiceStatus(ProjectServiceStatus projectServiceStatus) {
 			this.projectServiceStatus = projectServiceStatus;
+		}
+
+		public ServiceHostStatus getServiceHostStatus() {
+			return serviceHostStatus;
+		}
+
+		public void setServiceHostStatus(ServiceHostStatus serviceHostStatus) {
+			this.serviceHostStatus = serviceHostStatus;
 		}
 	}
 
@@ -39,9 +47,9 @@ public class ProjectServiceMangementServiceClient extends AbstractRestServiceCli
 	}
 
 	@Override
-	public ProjectServiceStatus retrieveServiceStatus(String projectIdentifer, ServiceType serviceType) {
-		return template.getForObject(computeUrl("status/{projectId}/{serviceType}"), ServiceCallResult.class,
-				projectIdentifer, serviceType).getProjectServiceStatus();
+	public ProjectServiceStatus retrieveServiceStatus(String projectIdentifer) {
+		return template.getForObject(computeUrl("status/{projectId}"), ServiceCallResult.class, projectIdentifer)
+				.getProjectServiceStatus();
 	}
 
 	/**
@@ -49,5 +57,10 @@ public class ProjectServiceMangementServiceClient extends AbstractRestServiceCli
 	 */
 	public void deprovisionService(ProjectServiceConfiguration configuration) {
 		template.postForObject(computeUrl("deprovision"), configuration, Void.class);
+	}
+
+	@Override
+	public ServiceHostStatus retrieveServiceHostStaus() {
+		return template.getForObject(computeUrl("status"), ServiceCallResult.class).getServiceHostStatus();
 	}
 }

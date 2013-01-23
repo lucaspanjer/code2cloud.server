@@ -15,7 +15,6 @@ package com.tasktop.c2c.server.web.proxy;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -25,6 +24,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
@@ -40,6 +40,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.TraceMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -75,6 +76,8 @@ public class HttpProxy extends WebProxy {
 		httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
 		httpClient.getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
 		httpClient.getHttpConnectionManager().getParams().setSoTimeout(60 * 1000);
+		httpClient.getParams()
+				.setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(0, false));
 		headerFilter = new CookieHeaderFilter();
 		ExcludeHeaderFilter excludeHeaders = new ExcludeHeaderFilter();
 		excludeHeaders.getExcludedRequestHeaders().addAll(Arrays.asList("Connection", "Accept-Encoding"));
@@ -91,24 +94,18 @@ public class HttpProxy extends WebProxy {
 	protected void proxy(String targetUrl, final HttpServletRequest request, final HttpServletResponse response)
 			throws IOException {
 
-		try {
-			final HttpMethod proxyRequest = createProxyRequest(targetUrl, request);
+		final HttpMethod proxyRequest = createProxyRequest(targetUrl, request);
 
-			if (proxyRequest instanceof EntityEnclosingMethod) {
-				EntityEnclosingMethod entityEnclosingMethod = (EntityEnclosingMethod) proxyRequest;
-				RequestEntity requestEntity = new InputStreamRequestEntity(request.getInputStream(),
-						request.getContentLength(), request.getContentType());
-				entityEnclosingMethod.setRequestEntity(requestEntity);
-			}
-			int code = httpClient.executeMethod(proxyRequest);
-			response.setStatus(code);
-			copyProxyReponse(proxyRequest, response);
-
-		} catch (ConnectException e) {
-			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Internal connection issue");
-			return;
-
+		if (proxyRequest instanceof EntityEnclosingMethod) {
+			EntityEnclosingMethod entityEnclosingMethod = (EntityEnclosingMethod) proxyRequest;
+			RequestEntity requestEntity = new InputStreamRequestEntity(request.getInputStream(),
+					request.getContentLength(), request.getContentType());
+			entityEnclosingMethod.setRequestEntity(requestEntity);
 		}
+		int code = httpClient.executeMethod(proxyRequest);
+		response.setStatus(code);
+		copyProxyReponse(proxyRequest, response);
+
 	}
 
 	private String uriEncode(String url) {

@@ -23,9 +23,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
-import com.tasktop.c2c.server.auth.service.AuthenticationToken;
-import com.tasktop.c2c.server.auth.service.proxy.ProxyPreAuthClientInvocationHandler;
 import com.tasktop.c2c.server.common.tests.util.TestResourceUtil;
 import com.tasktop.c2c.server.common.tests.util.WebApplicationContainerBean;
 import com.tasktop.c2c.server.wiki.server.tests.util.TestContextHolderStrategy;
@@ -67,14 +64,8 @@ public class WikiServiceWebTest extends HsqlWikiServiceTest {
 		}
 		wikiServiceClient.setRestTemplate(restTemplate);
 		wikiServiceClient.setBaseUrl(container.getBaseUrl() + "wiki");
-		super.wikiService = ProxyPreAuthClientInvocationHandler.wrap(wikiServiceClient,
-				new ProxyPreAuthClientInvocationHandler() {
-					@Override
-					public AuthenticationToken getAuthenticationToken() {
-						AuthenticationServiceUser user = AuthenticationServiceUser.getCurrent();
-						return user == null ? null : user.getToken();
-					}
-				});
+		super.wikiService = wikiServiceClient;
+
 		super.before();
 	}
 

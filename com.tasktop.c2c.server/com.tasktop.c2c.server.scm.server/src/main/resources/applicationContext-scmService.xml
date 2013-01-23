@@ -38,6 +38,8 @@
 	/>
 
 	<bean id="gitConfigurationService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
+		<property name="serviceType" value="SCM"/>
+	
 		<property name="configurators">
 			<list> 
 				<ref bean="gitRepositoryConfigurator"/>

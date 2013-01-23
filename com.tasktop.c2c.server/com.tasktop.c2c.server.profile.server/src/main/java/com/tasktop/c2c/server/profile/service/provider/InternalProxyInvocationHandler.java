@@ -10,32 +10,35 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.auth.service.proxy;
+package com.tasktop.c2c.server.profile.service.provider;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
+import com.tasktop.c2c.server.auth.service.proxy.ProxyClient;
+import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
+import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 
-
-public class ProxyPreAuthClientInvocationHandler implements InvocationHandler {
-
-	private AuthenticationToken authenticationToken;
-	private Object implementation;
+public class InternalProxyInvocationHandler implements InvocationHandler {
 
 	@SuppressWarnings("unchecked")
-	public static <T> T wrapWithAuthenticationToken(T service, AuthenticationToken token) {
-		final ProxyPreAuthClientInvocationHandler handler = new ProxyPreAuthClientInvocationHandler(service);
+	public static <T> T wrap(T service, AuthenticationToken token, ProjectServiceService projectServiceService,
+			ProjectService projectService) {
+		final InternalProxyInvocationHandler handler = new InternalProxyInvocationHandler(service);
 		handler.setAuthenticationToken(token);
+		handler.setProjectServiceService(projectServiceService);
+		handler.setProjectService(projectService);
 		return (T) Proxy.newProxyInstance(service.getClass().getClassLoader(), computeInterfaces(service), handler);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T wrap(T service, ProxyPreAuthClientInvocationHandler handler) {
+	public static <T> T wrap(T service, InternalProxyInvocationHandler handler) {
 		handler.implementation = service;
 		return (T) Proxy.newProxyInstance(service.getClass().getClassLoader(), computeInterfaces(service), handler);
 	}
@@ -52,10 +55,15 @@ public class ProxyPreAuthClientInvocationHandler implements InvocationHandler {
 		return allInterfaces.toArray(new Class<?>[allInterfaces.size()]);
 	}
 
-	public ProxyPreAuthClientInvocationHandler() {
+	private AuthenticationToken authenticationToken;
+	private ProjectService projectService;
+	private ProjectServiceService projectServiceService;
+	private Object implementation;
+
+	public InternalProxyInvocationHandler() {
 	}
 
-	public ProxyPreAuthClientInvocationHandler(Object implementation) {
+	public InternalProxyInvocationHandler(Object implementation) {
 		this.implementation = implementation;
 	}
 
@@ -65,10 +73,17 @@ public class ProxyPreAuthClientInvocationHandler implements InvocationHandler {
 		try {
 			return method.invoke(implementation, args);
 		} catch (InvocationTargetException e) {
+			if (isConnectionFailure(e.getCause())) {
+				projectServiceService.handleConnectFailure(projectService);
+			}
 			throw e.getCause();
 		} finally {
 			ProxyClient.setAuthenticationToken(null);
 		}
+	}
+
+	private boolean isConnectionFailure(Throwable e) {
+		return e instanceof SocketException || (e.getCause() != null && isConnectionFailure(e.getCause()));
 	}
 
 	public AuthenticationToken getAuthenticationToken() {
@@ -77,5 +92,13 @@ public class ProxyPreAuthClientInvocationHandler implements InvocationHandler {
 
 	public void setAuthenticationToken(AuthenticationToken authenticationToken) {
 		this.authenticationToken = authenticationToken;
+	}
+
+	public void setProjectServiceService(ProjectServiceService projectServiceService) {
+		this.projectServiceService = projectServiceService;
+	}
+
+	public void setProjectService(ProjectService projectService) {
+		this.projectService = projectService;
 	}
 }

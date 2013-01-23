@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
-import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.doc.Documentation;
 import com.tasktop.c2c.server.common.service.doc.Title;
 import com.tasktop.c2c.server.common.service.web.AbstractBuildInfoRestService;
@@ -45,10 +44,14 @@ public class ProjectServiceManagementServiceController extends AbstractBuildInfo
 		projectServiceManagementService.deprovisionService(configuration);
 	}
 
-	@RequestMapping(value = "/status/{projectIdentifier}/{serviceType}", method = RequestMethod.GET)
-	public ProjectServiceStatus retrieveServiceStatus(@PathVariable("projectIdentifier") String projectIdentifer,
-			@PathVariable("serviceType") ServiceType serviceType) {
-		return projectServiceManagementService.retrieveServiceStatus(projectIdentifer, serviceType);
+	@RequestMapping(value = "/status/{projectIdentifier}", method = RequestMethod.GET)
+	public ProjectServiceStatus retrieveServiceStatus(@PathVariable("projectIdentifier") String projectIdentifer) {
+		return projectServiceManagementService.retrieveServiceStatus(projectIdentifer);
+	}
+
+	@RequestMapping(value = "/status", method = RequestMethod.GET)
+	public ServiceHostStatus retrieveServiceHostStatus() {
+		return projectServiceManagementService.retrieveServiceHostStaus();
 	}
 
 }

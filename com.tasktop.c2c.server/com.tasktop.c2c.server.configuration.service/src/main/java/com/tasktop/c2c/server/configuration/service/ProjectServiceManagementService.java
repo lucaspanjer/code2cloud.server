@@ -13,7 +13,6 @@
 package com.tasktop.c2c.server.configuration.service;
 
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
-import com.tasktop.c2c.server.cloud.domain.ServiceType;
 
 /**
  * Internal service exposed to manage a project's service from the hub. Intended to be a general interface that each
@@ -23,6 +22,13 @@ import com.tasktop.c2c.server.cloud.domain.ServiceType;
  * 
  */
 public interface ProjectServiceManagementService {
+
+	/**
+	 * Check the status of the management service. Useful to check the status of service hosts.
+	 * 
+	 * @return
+	 */
+	ServiceHostStatus retrieveServiceHostStaus();
 
 	/**
 	 * Provision a new project service.
@@ -36,10 +42,9 @@ public interface ProjectServiceManagementService {
 	 * not). FIXME
 	 * 
 	 * @param projectIdentifer
-	 * @param serviceType
 	 * @return
 	 */
-	ProjectServiceStatus retrieveServiceStatus(String projectIdentifer, ServiceType serviceType);
+	ProjectServiceStatus retrieveServiceStatus(String projectIdentifer);
 
 	/**
 	 * De-provision (delete) a project service.

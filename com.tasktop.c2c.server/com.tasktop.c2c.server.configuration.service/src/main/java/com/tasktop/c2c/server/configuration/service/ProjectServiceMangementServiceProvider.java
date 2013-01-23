@@ -28,8 +28,12 @@ public class ProjectServiceMangementServiceProvider {
 	@Resource
 	private Map<ServiceType, String> configPathsByServiceType;
 
-	public ProjectServiceMangementServiceClient getNewService(String internalNetworkAddress, ServiceType type) {
-		ProjectServiceMangementServiceClient service = new ProjectServiceMangementServiceClient();
+	public ProjectServiceManagementServiceClient getNewService(String internalNetworkAddress, ServiceType type) {
+		if (!configPathsByServiceType.containsKey(type)) {
+			throw new IllegalStateException("Unknown service type config path: " + type);
+		}
+
+		ProjectServiceManagementServiceClient service = new ProjectServiceManagementServiceClient();
 		service.setRestTemplate(template);
 
 		String baseUrl = "http://" + internalNetworkAddress + ":" + ALM_HTTP_PORT + "/"

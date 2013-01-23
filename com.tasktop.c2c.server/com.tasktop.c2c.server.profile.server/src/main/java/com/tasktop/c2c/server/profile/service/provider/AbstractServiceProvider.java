@@ -27,12 +27,12 @@ public abstract class AbstractServiceProvider<T> implements ServiceProvider<T> {
 	protected RestTemplate restTemplate;
 
 	@Autowired
-	private ProjectServiceService projectServiceService;
+	protected ProjectServiceService projectServiceService;
 
 	@Autowired
 	private ServiceAwareTenancyManager tenancyManager;
 
-	private final String serviceUri;
+	protected final String serviceUri;
 
 	protected AbstractServiceProvider(String serviceUri) {
 		this.serviceUri = serviceUri;

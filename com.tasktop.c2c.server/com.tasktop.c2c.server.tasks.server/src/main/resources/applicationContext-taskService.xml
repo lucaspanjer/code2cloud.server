@@ -71,6 +71,8 @@
 	/>
 
 	<bean id="taskServiceManagementService" class="com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean">
+		<property name="serviceType" value="TASKS"/>
+	
 		<property name="configurators">
 			<list> 
 				<bean class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 

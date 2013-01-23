@@ -89,4 +89,9 @@ public interface ProjectServiceService {
 
 	List<PoolStatus> computePoolStatus();
 
+	/**
+	 * @param service
+	 */
+	public void handleConnectFailure(ProjectService service);
+
 }

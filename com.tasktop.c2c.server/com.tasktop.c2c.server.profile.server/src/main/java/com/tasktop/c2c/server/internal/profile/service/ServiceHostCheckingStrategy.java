@@ -1,0 +1,31 @@
+/*******************************************************************************
+ * Copyright (c) 2010, 2013 Tasktop Technologies
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Tasktop Technologies - initial API and implementation
+ ******************************************************************************/
+package com.tasktop.c2c.server.internal.profile.service;
+
+import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
+
+/**
+ * @author clint (Tasktop Technologies Inc.)
+ * 
+ */
+public interface ServiceHostCheckingStrategy {
+
+	boolean canCheckServiceHost(ServiceHost serviceHost);
+
+	/**
+	 * Check if a service host is back up and ready to work.
+	 * 
+	 * @param serviceHost
+	 * @return true if the host is back up
+	 */
+	boolean checkServiceHost(ServiceHost serviceHost);
+}

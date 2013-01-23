@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.profile.web.proxy;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -41,6 +42,7 @@ import com.tasktop.c2c.server.internal.profile.service.ServiceAwareTenancyManage
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.InternalAuthenticationService;
+import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 import com.tasktop.c2c.server.web.proxy.WebProxy;
 
 /**
@@ -75,6 +77,9 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 
 	@Value("${alm.proxy.disableAjp}")
 	private boolean disableAjp = false;
+
+	@Autowired
+	private ProjectServiceService projectServiceService;
 
 	@Override
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
@@ -139,20 +144,30 @@ public class ApplicationServiceProxy implements HttpRequestHandler {
 
 		LOG.info("Proxying service [" + service.getType() + "] to url [" + targetUrl + "]");
 
-		boolean handlerFound = false;
+		WebProxy webProxy = getProxy(targetUrl, proxyRequest);
+
+		try {
+			webProxy.proxyRequest(targetUrl, proxyRequest, response);
+		} catch (SocketException e) {
+			projectServiceService.handleConnectFailure(service);
+			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Internal connection issue");
+			return;
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	private WebProxy getProxy(String targetUrl, ProxyHttpServletRequest proxyRequest) {
 		for (WebProxy webProxy : proxies) {
 			if (webProxy.canProxyRequest(targetUrl, proxyRequest)) {
-
-				webProxy.proxyRequest(targetUrl, proxyRequest, response);
-
-				handlerFound = true;
-				break;
+				return webProxy;
 			}
 		}
-		if (!handlerFound) {
-			throw new IllegalStateException("Cannot find a proxy handler for " + targetUrl);
-		}
-
+		throw new IllegalStateException("Cannot find a proxy handler for " + targetUrl);
 	}
 
 	private String constructTargetUrl(ProjectService service, String uri, HttpServletRequest request) {

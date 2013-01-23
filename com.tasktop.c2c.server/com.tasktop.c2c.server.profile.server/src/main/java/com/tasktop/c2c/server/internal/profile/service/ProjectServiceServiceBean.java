@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -47,7 +48,7 @@ import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementService;
-import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceClient;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceClient;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceProvider;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
@@ -62,6 +63,8 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		InternalProjectServiceService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProjectServiceServiceBean.class.getSimpleName());
+
+	private static final long DOWN_SERVICE_RECHECK_DELAY = 10 * 1000l;
 
 	@Autowired
 	private ProfileServiceConfiguration configuration;
@@ -80,6 +83,9 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 	@Autowired
 	private HudsonSlavePoolServiceInternal hudsonSlavePoolServiceInternal;
+
+	@Autowired
+	private List<ServiceHostCheckingStrategy> serviceHostCheckingStrategies;
 
 	private boolean updateServiceTemplateOnStart = true;
 
@@ -166,7 +172,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		}
 
 		// Now configure the host for the new project.
-		ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
+		ProjectServiceManagementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
 				.getNewService(domainServiceHost.getInternalNetworkAddress(), type);
 
 		try {
@@ -372,8 +378,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 					ProjectServiceManagementService serviceMangementService = projectServiceMangementServiceProvider
 							.getNewService(service.getServiceHost().getInternalNetworkAddress(), service.getType());
 
-					result.add(serviceMangementService.retrieveServiceStatus(managedProject.getIdentifier(),
-							service.getType()));
+					result.add(serviceMangementService.retrieveServiceStatus(managedProject.getIdentifier()));
 				}
 			} catch (Exception e) {
 				LOGGER.warn("Caught exception trying to contact service", e);
@@ -428,7 +433,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 			tenancyManager.establishTenancyContextFromProjectIdentifier(projectService.getProjectServiceProfile()
 					.getProject().getIdentifier());
 
-			ProjectServiceMangementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
+			ProjectServiceManagementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
 					.getNewService(projectService.getServiceHost().getInternalNetworkAddress(),
 							projectService.getType());
 
@@ -455,5 +460,60 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 			result.add(nps.getStatus());
 		}
 		return result;
+	}
+
+	@Override
+	public void handleConnectFailure(ProjectService service) {
+		ServiceHost failedHost = entityManager.find(ServiceHost.class, service.getServiceHost().getId());
+		entityManager.lock(failedHost, LockModeType.PESSIMISTIC_WRITE);
+		entityManager.refresh(failedHost);
+
+		if (!failedHost.isAvailable()) {
+			LOGGER.warn(String.format(
+					"Host [%s] is already marked as un-available. Not handling connection failure here.",
+					failedHost.getInternalNetworkAddress()));
+			return;
+		}
+
+		failedHost.setAvailable(false);
+		CheckServiceHostStatusJob job = new CheckServiceHostStatusJob(failedHost.getId());
+		job.setDeliveryDelayInMilliseconds(DOWN_SERVICE_RECHECK_DELAY);
+		jobService.schedule(job);
+	}
+
+	@Override
+	public void checkServiceHostStatus(Long servicHostId) {
+		ServiceHost serviceHost = entityManager.find(ServiceHost.class, servicHostId);
+
+		if (serviceHost.isAvailable()) {
+			LOGGER.info(String.format("Service host [%s] has been marked as back up",
+					serviceHost.getInternalNetworkAddress()));
+			return;
+		}
+
+		boolean allServicesUp = false;
+		boolean foundChecker = false;
+		for (ServiceHostCheckingStrategy checker : serviceHostCheckingStrategies) {
+			if (checker.canCheckServiceHost(serviceHost)) {
+				foundChecker = true;
+				allServicesUp = checker.checkServiceHost(serviceHost);
+				break;
+			}
+		}
+
+		if (!foundChecker) {
+			LOGGER.warn(String.format("Could not find service host checking strategy for host id:[%s] ip:[%s]. "
+					+ "Service will stay marked as un-available", serviceHost.getId(),
+					serviceHost.getInternalNetworkAddress()));
+		} else if (allServicesUp) {
+			LOGGER.info(String.format("Service host [%s] is back up. Marking as available",
+					serviceHost.getInternalNetworkAddress()));
+			serviceHost.setAvailable(true);
+		} else {
+			CheckServiceHostStatusJob job = new CheckServiceHostStatusJob(servicHostId);
+			job.setDeliveryDelayInMilliseconds(DOWN_SERVICE_RECHECK_DELAY);
+			jobService.schedule(job);
+		}
+
 	}
 }

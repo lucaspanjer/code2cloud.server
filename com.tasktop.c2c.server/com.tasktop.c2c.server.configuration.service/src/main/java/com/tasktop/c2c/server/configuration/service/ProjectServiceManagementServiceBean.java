@@ -19,6 +19,7 @@ import java.util.List;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
+import com.tasktop.c2c.server.configuration.service.ServiceHostStatus.State;
 
 public class ProjectServiceManagementServiceBean implements ProjectServiceManagementService {
 
@@ -34,6 +35,7 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 		void deprovision(ProjectServiceConfiguration configuration);
 	}
 
+	private ServiceType serviceType;
 	private List<Configurator> configurators;
 	private List<MetricCollector> metricCollectors = Collections.emptyList();
 	private List<Deprovisioner> deprovisioners = Collections.emptyList();
@@ -67,10 +69,10 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 	}
 
 	@Override
-	public ProjectServiceStatus retrieveServiceStatus(String projectIdentifer, ServiceType serviceType) {
+	public ProjectServiceStatus retrieveServiceStatus(String projectIdentifer) {
 		ProjectServiceStatus result = new ProjectServiceStatus();
 		result.setProjectIdentifier(projectIdentifer);
-		result.setServiceType(serviceType);
+		result.setServiceType(this.serviceType);
 		result.setMetrics(new HashMap<String, String>());
 		result.setServiceState(ServiceState.UNKNOWN);
 
@@ -89,6 +91,14 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 		}
 	}
 
+	@Override
+	public ServiceHostStatus retrieveServiceHostStaus() {
+		ServiceHostStatus status = new ServiceHostStatus();
+		status.setServiceType(this.serviceType);
+		status.setState(State.RUNNING);
+		return status;
+	}
+
 	public void setConfigurators(List<Configurator> configurators) {
 		this.configurators = configurators;
 	}
@@ -99,6 +109,10 @@ public class ProjectServiceManagementServiceBean implements ProjectServiceManage
 
 	public void setDeprovisioners(List<Deprovisioner> deprovisioners) {
 		this.deprovisioners = deprovisioners;
+	}
+
+	public void setServiceType(ServiceType serviceType) {
+		this.serviceType = serviceType;
 	}
 
 }

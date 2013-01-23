@@ -24,4 +24,5 @@ public interface InternalProjectServiceService {
 
 	public void doDeprovisionService(Long projectServiceId) throws EntityNotFoundException;
 
+	void checkServiceHostStatus(Long projectServiceId);
 }

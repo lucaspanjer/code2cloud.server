@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +36,8 @@ import com.meterware.httpunit.GetMethodWebRequest;
 import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebRequest;
 import com.meterware.httpunit.WebResponse;
-import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.auth.service.proxy.AuthenticationTokenSerializer;
-import com.tasktop.c2c.server.auth.service.proxy.ProxyPreAuthClientInvocationHandler;
 import com.tasktop.c2c.server.auth.service.proxy.RequestHeaders;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
@@ -82,14 +81,7 @@ public class TaskServiceClientTest extends TaskServiceTest {
 
 		doInitialSetup();
 
-		super.taskService = ProxyPreAuthClientInvocationHandler.wrap(taskServiceClient,
-				new ProxyPreAuthClientInvocationHandler() {
-					@Override
-					public AuthenticationToken getAuthenticationToken() {
-						AuthenticationServiceUser user = AuthenticationServiceUser.getCurrent();
-						return user == null ? null : user.getToken();
-					}
-				});
+		super.taskService = taskServiceClient;
 	}
 
 	private static boolean isSetup = false;
@@ -109,6 +101,7 @@ public class TaskServiceClientTest extends TaskServiceTest {
 		taskServiceClient.setBaseUrl(container.getBaseUrl() + "tasks");
 		taskServiceConfiguration.setWebHost(container.getBaseUrl().replace("http://", ""));
 
+		SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_GLOBAL);
 		// Copy the reference to our static variable so we can clean this up at the end.
 		staticContainer = container;
 	}

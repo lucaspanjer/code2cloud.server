@@ -14,7 +14,7 @@ package com.tasktop.c2c.server.auth.service.proxy;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 
-class ProxyClient {
+public class ProxyClient {
 	private static ThreadLocal<AuthenticationToken> clientCredentials = new ThreadLocal<AuthenticationToken>();
 
 	public static AuthenticationToken getAuthenticationToken() {
