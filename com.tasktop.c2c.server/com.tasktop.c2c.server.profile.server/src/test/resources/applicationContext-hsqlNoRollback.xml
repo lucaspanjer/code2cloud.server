@@ -14,7 +14,10 @@
 
 	<context:property-placeholder location="classpath*:/database/hsql/database-test.properties, classpath*:/config/*.properties, classpath*:/META-INF/spring/*.properties, classpath*:/*-test.properties, file:///opt/code2cloud-test/etc/*.properties"/>
 
+	<context:annotation-config/>
+	
   	<import resource="classpath:applicationContext-profileTest.xml"/>	
+  	<import resource="classpath:applicationContext-jms.xml"/>	
 
 	<bean id="entityManagerFactory" depends-on="liquibase" 
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -28,7 +31,9 @@
 	  <!--  don't need to dropFirst here. it's a new schema every time. -->
 	</bean>
 	
-	<bean id="jobService" class="com.tasktop.c2c.server.common.service.job.ExecutorJobService" autowire="byType">
+	<bean id="jobService" class="com.tasktop.c2c.server.internal.profile.service.jms.JobServiceBean" />
+	
+	<bean id="executorJobService" class="com.tasktop.c2c.server.common.service.job.ExecutorJobService" autowire="byType">
 		<qualifier value="executor"/>
 		<property name="executor">
 			<bean factory-method="newFixedThreadPool"  class="java.util.concurrent.Executors">

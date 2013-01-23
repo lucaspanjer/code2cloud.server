@@ -21,8 +21,10 @@
 		init-method="start"
 		destroy-method="stop"
 		p:brokerName="broker"
-		p:useJmx="true">
-		<property name="schedulerSupport" value="false"/> <!--  WORKAROUND for task-880 -->
+		p:useJmx="true"
+		p:schedulerSupport="true"
+		p:dataDirectory="${alm.activeMQ.dataDir}/broker"
+		>
 		<property name="persistenceAdapter">
 			<bean class="org.apache.activemq.store.kahadb.KahaDBStore"
 				p:directory="${alm.activeMQ.dataDir}">

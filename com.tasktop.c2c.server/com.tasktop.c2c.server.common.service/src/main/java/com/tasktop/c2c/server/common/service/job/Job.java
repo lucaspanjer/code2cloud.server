@@ -38,6 +38,7 @@ public abstract class Job implements Serializable {
 	};
 
 	private Type type;
+	private Long deliveryDelayInMilliseconds = 0l;
 
 	public Job() {
 		this(Type.DEFAULT);
@@ -60,5 +61,13 @@ public abstract class Job implements Serializable {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public Long getDeliveryDelayInMilliseconds() {
+		return deliveryDelayInMilliseconds;
+	}
+
+	public void setDeliveryDelayInMilliseconds(Long deliveryDelayInMilliseconds) {
+		this.deliveryDelayInMilliseconds = deliveryDelayInMilliseconds;
 	}
 }

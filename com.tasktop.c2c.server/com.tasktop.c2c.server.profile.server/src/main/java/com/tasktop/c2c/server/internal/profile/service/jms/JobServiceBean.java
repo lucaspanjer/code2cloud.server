@@ -16,6 +16,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
+import org.apache.activemq.ScheduledMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -25,12 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tasktop.c2c.server.common.service.job.Job;
 import com.tasktop.c2c.server.common.service.job.JobService;
 
-
 @Service("jobService")
 @Transactional
 public class JobServiceBean implements JobService {
 
 	public static final String JOB_TYPE_PROPERTY = "Type";
+	public static final String JOB_DELAY_PROPERTY = ScheduledMessage.AMQ_SCHEDULED_DELAY;
 
 	@Autowired
 	private JmsTemplate template;
@@ -43,6 +44,9 @@ public class JobServiceBean implements JobService {
 			public Message createMessage(Session session) throws JMSException {
 				Message message = session.createObjectMessage(job);
 				message.setStringProperty(JOB_TYPE_PROPERTY, job.getType().name());
+				if (job.getDeliveryDelayInMilliseconds() > 0) {
+					message.setLongProperty(JOB_DELAY_PROPERTY, job.getDeliveryDelayInMilliseconds());
+				}
 				return message;
 			}
 		});

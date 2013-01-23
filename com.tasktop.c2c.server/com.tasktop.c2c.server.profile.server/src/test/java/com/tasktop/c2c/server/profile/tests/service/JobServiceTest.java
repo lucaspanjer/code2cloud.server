@@ -35,9 +35,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.tasktop.c2c.server.common.service.job.Job;
 import com.tasktop.c2c.server.common.service.job.JobService;
 
-@Ignore("Turned off to avoid build hangs on the CI server caused by a JMS broker issue")
+//@Ignore("Turned off to avoid build hangs on the CI server caused by a JMS broker issue")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/applicationContext-testNoRollback.xml", "/applicationContext-hsql.xml" })
+@ContextConfiguration({ "/applicationContext-hsqlNoRollback.xml" })
 public class JobServiceTest {
 
 	@PersistenceContext
@@ -181,5 +181,17 @@ public class JobServiceTest {
 		Assert.assertTrue(numTestJobExecutions > 0);
 		Assert.assertTrue(numFailures > 0);
 		// XXX where does this setup live?
+	}
+
+	@Test
+	public void testSchuduleDelay() throws InterruptedException {
+		TestJob job = new TestJob();
+		job.setDeliveryDelayInMilliseconds(10 * 1000l);
+		Assert.assertEquals(0, numTestJobExecutions);
+		scheduleJobInTransaction(job);
+		Thread.sleep(6 * 1000);
+		Assert.assertEquals(0, numTestJobExecutions);
+		Thread.sleep(6 * 1000);
+		Assert.assertEquals(1, numTestJobExecutions);
 	}
 }
