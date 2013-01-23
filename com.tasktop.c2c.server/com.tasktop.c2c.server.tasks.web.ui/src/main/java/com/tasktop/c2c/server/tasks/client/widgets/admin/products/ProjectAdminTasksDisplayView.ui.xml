@@ -1,37 +1,39 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 	<g:HTMLPanel>
 
 		<div class="deployment">
 			<div class="deployment-details">
-				<h3>Product Details
-					<g:Anchor addStyleNames="right delete misc-icon" ui:field="deleteProduct"><span/>Delete
+				<h3><ui:text from="{tm.productDetails}"/>
+					<g:Anchor addStyleNames="right delete misc-icon" ui:field="deleteProduct"><span/><ui:text from="{cpm.delete}"/>
 					</g:Anchor>
-					<g:Anchor addStyleNames="right edit misc-icon" ui:field="editProduct"><span/>Edit
+					<g:Anchor addStyleNames="right edit misc-icon" ui:field="editProduct"><span/><ui:text from="{cpm.edit}"/>
 					</g:Anchor>
 				</h3>
 				<fieldset>
-					<label>Name:</label>
+					<label><ui:text from="{cpm.name}"/><ui:text from="{cpm.colon}"/></label>
 					<g:Label ui:field="productName"/>
 				</fieldset>
 				<fieldset>
-					<label>Description:</label>
+					<label><ui:text from="{tm.description}"/><ui:text from="{cpm.colon}"/></label>
 					<div class="description">
 						<g:Label ui:field="productDescription"/>
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Default Release:</label>
+					<label><ui:text from="{tm.defaultRelease}"/><ui:text from="{cpm.colon}"/></label>
 					<g:Label ui:field="productDefaultRelease"/>
 				</fieldset>
 			</div>
 			<div class="components">
-				<h3>Components</h3>
+				<h3><ui:text from="{tm.components}"/></h3>
 				<div class="clear"/>
 				<g:HTML ui:field="components"/>
 			</div>
 			<div class="releases">
-				<h3>Releases</h3>
+				<h3><ui:text from="{tm.releases}"/></h3>
 				<div class="clear"/>
 				<g:HTML ui:field="releases"/>
 			</div>

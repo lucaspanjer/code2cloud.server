@@ -2,6 +2,8 @@
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'
 			 xmlns:cellview="urn:import:com.google.gwt.user.cellview.client"
 			 xmlns:tt="urn:import:com.tasktop.c2c.server.common.profile.web.client">
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 
 	<ui:style field="local">
 		.gwt-Button-Local {
@@ -13,10 +15,10 @@
 
 		<div class="deployment">
 			<div class="deployment-heading">
-				<h2 class="left">Product Details</h2>
+				<h2 class="left"><ui:text from="{tm.productDetails}"/></h2>
 				<div class="save">
-					<g:Button addStyleNames="right button marginleft {local.gwt-Button-Local}" ui:field="upperCancelButton">Cancel</g:Button>
-					<g:Button addStyleNames="right button special {local.gwt-Button-Local}" ui:field="upperSaveButton">Save</g:Button>
+					<g:Button addStyleNames="right button marginleft {local.gwt-Button-Local}" ui:field="upperCancelButton"><ui:text from="{cpm.cancel}"/></g:Button>
+					<g:Button addStyleNames="right button special {local.gwt-Button-Local}" ui:field="upperSaveButton"><ui:text from="{cpm.save}"/></g:Button>
 				</div>
 				<div class="clear"/>
 			</div>
@@ -25,20 +27,20 @@
 				<h3/>
 				<div class="clear"/>
 				<fieldset>
-					<label>Name:</label>
+					<label><ui:text from="{cpm.name}"/><ui:text from="{cpm.colon}"/></label>
 					<div>
 						<tt:ValidatingTextBox fieldName="name" text="Product Name" ui:field="productName"/>
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Description:</label>
+					<label><ui:text from="{tm.description}"/><ui:text from="{cpm.colon}"/></label>
 					<div class="description">
 						<g:TextArea ui:field="productDescription" styleName="text"/>
 					</div>
 				</fieldset>
 				<g:HTMLPanel ui:field="defaultReleaseSection">
 					<fieldset>
-						<label>Default Release:</label>
+						<label><ui:text from="{tm.defaultRelease}"/><ui:text from="{cpm.colon}"/></label>
 						<div>
 							<g:ValueListBox ui:field="productDefaultRelease"/>
 						</div>
@@ -47,7 +49,7 @@
 				<div class="clear"/>
 			</div>
 			<g:HTMLPanel ui:field="componentsSection" addStyleNames="components edit">
-				<h3>Components</h3>
+				<h3><ui:text from="{tm.components}"/></h3>
 				<fieldset>
 					<div>
 						<cellview:CellTable ui:field="componentsTable"/>
@@ -56,7 +58,7 @@
 				<div class="clear"/>
 			</g:HTMLPanel>
 			<g:HTMLPanel ui:field="releasesSection" addStyleNames="releases edit">
-				<h3>Releases</h3>
+				<h3><ui:text from="{tm.releases}"/></h3>
 				<fieldset>
 					<div>
 						<cellview:CellTable ui:field="milestoneTable"/>
@@ -65,8 +67,8 @@
 				<div class="clear"/>
 			</g:HTMLPanel>
 			<div class="save">
-				<g:Button addStyleNames="right button marginleft {local.gwt-Button-Local}" ui:field="lowerCancelButton">Cancel</g:Button>
-				<g:Button addStyleNames="right button special {local.gwt-Button-Local}" ui:field="lowerSaveButton">Save</g:Button>
+				<g:Button addStyleNames="right button marginleft {local.gwt-Button-Local}" ui:field="lowerCancelButton"><ui:text from="{cpm.cancel}"/></g:Button>
+				<g:Button addStyleNames="right button special {local.gwt-Button-Local}" ui:field="lowerSaveButton"><ui:text from="{cpm.save}"/></g:Button>
 				<div class="clear"/>
 			</div>
 		</div>

@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets.admin.products;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
@@ -26,6 +25,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.tasks.domain.Component;
 import com.tasktop.c2c.server.tasks.domain.Milestone;
 
@@ -65,6 +65,7 @@ public class ProjectAdminTasksDisplayView extends Composite implements
 	HTML releases;
 
 	private ProjectAdminTasksTemplate template = GWT.create(ProjectAdminTasksTemplate.class);
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
 
 	public void setPresenter(ProjectAdminTasksDisplayPresenter presenter) {
 		this.presenter = presenter;
@@ -81,8 +82,8 @@ public class ProjectAdminTasksDisplayView extends Composite implements
 			String owner = "";
 
 			if (component.getInitialOwner() != null) {
-				owner = component.getInitialOwner().getRealname() == null ? "" : "("
-						+ component.getInitialOwner().getRealname() + ")";
+				owner = component.getInitialOwner().getRealname() == null ? "" : commonProfileMessages
+						.parentheses(component.getInitialOwner().getRealname());
 			}
 			sb.append(template.component(name, description, owner));
 		}

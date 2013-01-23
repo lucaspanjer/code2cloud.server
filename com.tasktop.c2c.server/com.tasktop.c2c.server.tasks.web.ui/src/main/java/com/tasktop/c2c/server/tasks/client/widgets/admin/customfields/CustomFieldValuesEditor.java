@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextInputCell;
@@ -45,8 +44,6 @@ public class CustomFieldValuesEditor extends Composite implements LeafValueEdito
 	private CellTable<CustomFieldValue> cellTable = new CellTable<CustomFieldValue>(1000, resources);
 	private ListDataProvider<CustomFieldValue> dataProvider = new ListDataProvider<CustomFieldValue>();
 
-	// protected ListEditor<CustomFieldValue, CustomFieldValueEditor> customFieldsEditor;
-
 	public CustomFieldValuesEditor() {
 		initWidget(cellTable);
 		initTableColumns();
@@ -57,24 +54,23 @@ public class CustomFieldValuesEditor extends Composite implements LeafValueEdito
 
 	private void initTableColumns() {
 
-		DelegateCell<String> moveUpCell = new DelegateCell<String>(
-				new DelegateCell.RenderDelegate<String>() {
-					@Override
-					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
-						return SafeHtmlUtils.fromSafeConstant("<span class=\"order-control\"><a class=\"up\"/></span>");
-					}
-				}, new DelegateCell.ActionDelegate<String>() {
-					@Override
-					public void execute(Cell.Context object) {
-						int index = object.getIndex();
-						if (index > 0) {
-							dataProvider.getList().get(index).setSortkey((short) (index - 1));
-							dataProvider.getList().get(index - 1).setSortkey((short) index);
-							Collections.sort(dataProvider.getList());
-							refreshDisplays();
-						}
-					}
-				});
+		DelegateCell<String> moveUpCell = new DelegateCell<String>(new DelegateCell.RenderDelegate<String>() {
+			@Override
+			public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
+				return SafeHtmlUtils.fromSafeConstant("<span class=\"order-control\"><a class=\"up\"/></span>");
+			}
+		}, new DelegateCell.ActionDelegate<String>() {
+			@Override
+			public void execute(Cell.Context object) {
+				int index = object.getIndex();
+				if (index > 0) {
+					dataProvider.getList().get(index).setSortkey((short) (index - 1));
+					dataProvider.getList().get(index - 1).setSortkey((short) index);
+					Collections.sort(dataProvider.getList());
+					refreshDisplays();
+				}
+			}
+		});
 
 		Column<CustomFieldValue, String> moveUpColumn = new Column<CustomFieldValue, String>(moveUpCell) {
 
@@ -93,24 +89,23 @@ public class CustomFieldValuesEditor extends Composite implements LeafValueEdito
 		cellTable.addColumn(moveUpColumn);
 		cellTable.setColumnWidth(moveUpColumn, 22, Unit.PX);
 
-		DelegateCell<String> moveDownCell = new DelegateCell<String>(
-				new DelegateCell.RenderDelegate<String>() {
-					@Override
-					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
-						return SafeHtmlUtils.fromSafeConstant("<span class=\"order-control\"><a class=\"down\"/></span>");
-					}
-				}, new DelegateCell.ActionDelegate<String>() {
-					@Override
-					public void execute(Cell.Context object) {
-						Short index = (short) object.getIndex();
-						if (index < dataProvider.getList().size() - 1) {
-							dataProvider.getList().get(index).setSortkey((short) (index + 1));
-							dataProvider.getList().get(index + 1).setSortkey((short) index);
-							Collections.sort(dataProvider.getList());
-							refreshDisplays();
-						}
-					}
-				});
+		DelegateCell<String> moveDownCell = new DelegateCell<String>(new DelegateCell.RenderDelegate<String>() {
+			@Override
+			public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
+				return SafeHtmlUtils.fromSafeConstant("<span class=\"order-control\"><a class=\"down\"/></span>");
+			}
+		}, new DelegateCell.ActionDelegate<String>() {
+			@Override
+			public void execute(Cell.Context object) {
+				Short index = (short) object.getIndex();
+				if (index < dataProvider.getList().size() - 1) {
+					dataProvider.getList().get(index).setSortkey((short) (index + 1));
+					dataProvider.getList().get(index + 1).setSortkey((short) index);
+					Collections.sort(dataProvider.getList());
+					refreshDisplays();
+				}
+			}
+		});
 
 		Column<CustomFieldValue, String> moveDownColumn = new Column<CustomFieldValue, String>(moveDownCell) {
 
@@ -146,47 +141,29 @@ public class CustomFieldValuesEditor extends Composite implements LeafValueEdito
 		});
 		cellTable.addColumn(nameColumn);
 
-		// Column<CustomFieldValue, Boolean> activeColumn = new Column<CustomFieldValue, Boolean>(new CheckboxCell()) {
-		//
-		// @Override
-		// public Boolean getValue(CustomFieldValue value) {
-		// return value.getIsActive();
-		// }
-		// };
-		// activeColumn.setFieldUpdater(new FieldUpdater<CustomFieldValue, Boolean>() {
-		//
-		// @Override
-		// public void update(int index, CustomFieldValue customFieldValue, Boolean value) {
-		// customFieldValue.setIsActive(value);
-		// }
-		// });
-		//
-		// cellTable.addColumn(activeColumn, "Active");
+		DelegateCell<String> removeCell = new DelegateCell<String>(new DelegateCell.RenderDelegate<String>() {
+			@Override
+			public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
+				final CustomFieldValue referenced = dataProvider.getList().get(context.getIndex());
+				if (referenced != null && "---".equals(referenced.getValue())) {
+					return SafeHtmlUtils.fromSafeConstant("<a class=\"delete-disabled\"><span/></a>");
+				}
+				return SafeHtmlUtils.fromSafeConstant("<a class=\"misc-icon cancel\"><span/></a>");
+			}
+		}, new DelegateCell.ActionDelegate<String>() {
+			@Override
+			public void execute(final Cell.Context object) {
+				final CustomFieldValue toRemove = dataProvider.getList().get(object.getIndex());
+				if (toRemove == null) {
+					return;
+				}
+				if ("---".equals(toRemove.getValue())) {
+					return;
+				}
+				dataProvider.getList().remove(toRemove);
 
-		DelegateCell<String> removeCell = new DelegateCell<String>(
-				new DelegateCell.RenderDelegate<String>() {
-					@Override
-					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
-						final CustomFieldValue referenced = dataProvider.getList().get(context.getIndex());
-						if (referenced != null && "---".equals(referenced.getValue())) {
-							return SafeHtmlUtils.fromSafeConstant("<a class=\"delete-disabled\"><span/></a>");
-						}
-						return SafeHtmlUtils.fromSafeConstant("<a class=\"misc-icon cancel\"><span/></a>");
-					}
-				}, new DelegateCell.ActionDelegate<String>() {
-					@Override
-					public void execute(final Cell.Context object) {
-						final CustomFieldValue toRemove = dataProvider.getList().get(object.getIndex());
-						if (toRemove == null) {
-							return;
-						}
-						if ("---".equals(toRemove.getValue())) {
-							return;
-						}
-						dataProvider.getList().remove(toRemove);
-
-					}
-				});
+			}
+		});
 		Column<CustomFieldValue, String> removeColumn = new Column<CustomFieldValue, String>(removeCell) {
 
 			@Override
@@ -206,18 +183,17 @@ public class CustomFieldValuesEditor extends Composite implements LeafValueEdito
 		cellTable.addColumn(removeColumn);
 		cellTable.setColumnWidth(removeColumn, 30, Unit.PX);
 
-		DelegateCell<String> addCell = new DelegateCell<String>(
-				new DelegateCell.RenderDelegate<String>() {
-					@Override
-					public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
-						return SafeHtmlUtils.fromSafeConstant("<a class=\"misc-icon add right\"><span/></a>");
-					}
-				}, new DelegateCell.ActionDelegate<String>() {
-					@Override
-					public void execute(Cell.Context object) {
-						addNewValue();
-					}
-				});
+		DelegateCell<String> addCell = new DelegateCell<String>(new DelegateCell.RenderDelegate<String>() {
+			@Override
+			public SafeHtml render(Cell.Context context, String value, SafeHtmlBuilder sb) {
+				return SafeHtmlUtils.fromSafeConstant("<a class=\"misc-icon add right\"><span/></a>");
+			}
+		}, new DelegateCell.ActionDelegate<String>() {
+			@Override
+			public void execute(Cell.Context object) {
+				addNewValue();
+			}
+		});
 		Column<CustomFieldValue, String> addColumn = new Column<CustomFieldValue, String>(addCell) {
 			@Override
 			public String getValue(CustomFieldValue object) {

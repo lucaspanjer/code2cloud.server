@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets.admin.iterations;
 
-
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -28,6 +27,8 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.view.client.ListDataProvider;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.Iteration;
 
 /**
@@ -56,6 +57,8 @@ public class IterationsAdminView extends Composite implements IIterationsAdminVi
 	protected CellTable<Iteration> cellTable = new CellTable<Iteration>();
 	private ListDataProvider<Iteration> dataProvider = new ListDataProvider<Iteration>();
 	protected Binder binder = GWT.create(Binder.class);
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 	private Presenter presenter;
 
 	private IterationsAdminView() {
@@ -86,7 +89,7 @@ public class IterationsAdminView extends Composite implements IIterationsAdminVi
 
 			}
 		});
-		cellTable.addColumn(nameColumn, "Name");
+		cellTable.addColumn(nameColumn, commonProfileMessages.name());
 
 		Column<Iteration, Boolean> activeColumn = new Column<Iteration, Boolean>(new CheckboxCell()) {
 
@@ -106,7 +109,7 @@ public class IterationsAdminView extends Composite implements IIterationsAdminVi
 				presenter.saveIteration(iteration);
 			}
 		});
-		cellTable.addColumn(activeColumn, "Active");
+		cellTable.addColumn(activeColumn, tasksMessages.active());
 	}
 
 	@Override

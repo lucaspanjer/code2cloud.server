@@ -1,12 +1,13 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'
 			 xmlns:cellview="urn:import:com.google.gwt.user.cellview.client">
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 
 	<g:HTMLPanel>
 		<div class="clear"/>
 		<div class="menu-items">
 			<div class="top">
-				<h5>Fields
+				<h5><ui:text from="{tm.fields}"/>
 					<g:Anchor addStyleNames="right action add-deployment" ui:field="newField">+</g:Anchor>
 				</h5>
 			</div>

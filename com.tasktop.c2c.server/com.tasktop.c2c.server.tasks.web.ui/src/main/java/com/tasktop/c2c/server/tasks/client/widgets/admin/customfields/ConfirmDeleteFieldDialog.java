@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets.admin.customfields;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -22,6 +21,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.widgets.admin.customfields.ICustomFieldsAdminView.Presenter;
 import com.tasktop.c2c.server.tasks.domain.FieldDescriptor;
 
@@ -31,6 +31,7 @@ import com.tasktop.c2c.server.tasks.domain.FieldDescriptor;
 public class ConfirmDeleteFieldDialog extends DialogBox {
 
 	private static Binder uiBinder = GWT.create(Binder.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	interface Binder extends UiBinder<Widget, ConfirmDeleteFieldDialog> {
 	}
@@ -47,15 +48,12 @@ public class ConfirmDeleteFieldDialog extends DialogBox {
 		return instance;
 	}
 
-	// @UiField
-	// protected Label fieldName;
-
 	private FieldDescriptor customField;
 	private Presenter presenter;
 
 	private ConfirmDeleteFieldDialog() {
 		super(false, true);
-		setText("Confirm Delete");
+		setText(tasksMessages.confirmDelete());
 		setWidget(uiBinder.createAndBindUi(this));
 		setAnimationEnabled(true); // Why not?
 		setGlassEnabled(true);
@@ -70,7 +68,6 @@ public class ConfirmDeleteFieldDialog extends DialogBox {
 	}
 
 	private void setCustomField(FieldDescriptor customField) {
-		// fieldName.setText(customField.getName());
 		this.customField = customField;
 	}
 

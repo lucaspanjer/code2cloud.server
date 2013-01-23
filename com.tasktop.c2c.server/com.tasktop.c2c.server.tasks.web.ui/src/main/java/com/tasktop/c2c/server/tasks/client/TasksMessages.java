@@ -20,6 +20,12 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 @Generate(format = "com.google.gwt.i18n.rebind.format.PropertiesFormat")
 public interface TasksMessages extends Messages {
 
+	@DefaultMessage("Active")
+	String active();
+
+	@DefaultMessage("Add Iteration")
+	String addIteration();
+
 	@DefaultMessage("Tasks Admin - {0} - {1}")
 	String adminWindowTitle(String projectName, String productName);
 
@@ -34,6 +40,9 @@ public interface TasksMessages extends Messages {
 
 	@DefaultMessage("Attachments ({0})")
 	String attachmentsHeader(int attachmentCount);
+
+	@DefaultMessage("Available For New Tasks")
+	String availableForNewTasks();
 
 	@DefaultMessage("Back to List")
 	String backToList();
@@ -80,6 +89,9 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Component Deleted.")
 	String componentDeleted();
 
+	@DefaultMessage("Components")
+	String components();
+
 	@DefaultMessage("Confirm Delete")
 	String confirmDelete();
 
@@ -113,8 +125,17 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("<div class=\"severity five\" title=\"Critical\">")
 	SafeHtml criticalS5Div();
 
+	@DefaultMessage("This will permanently remove the custom field and its values for all tasks. This operation cannot be undone.")
+	String customFieldDeleteWarning();
+
+	@DefaultMessage("Custom Fields")
+	String customFields();
+
 	@DefaultMessage("Date Type")
 	String dateType();
+
+	@DefaultMessage("Default Release")
+	String defaultRelease();
 
 	@DefaultMessage("Are you sure you want to delete the query: {0}? This operation cannot be undone.")
 	String deleteQueryConfirmationMessage(String queryName);
@@ -177,6 +198,15 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Field Deleted.")
 	String fieldDeleted();
 
+	@DefaultMessage("Field Details")
+	String fieldDetails();
+
+	@DefaultMessage("Fields")
+	String fields();
+
+	@DefaultMessage("Field Values")
+	String fieldValues();
+
 	@DefaultMessage("Field Updated.")
 	String fieldUpdated();
 
@@ -188,6 +218,12 @@ public interface TasksMessages extends Messages {
 
 	@DefaultMessage("Found In")
 	String foundIn();
+
+	@DefaultMessage("General")
+	String general();
+
+	@DefaultMessage("Hide Inactive")
+	String hideInactive();
 
 	@DefaultMessage("<div class=\"priority four\" title=\"High\">")
 	SafeHtml highP4Div();
@@ -216,8 +252,14 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Iteration")
 	String iteration();
 
+	@DefaultMessage("Iterations")
+	String iterations();
+
 	@DefaultMessage("Iteration Saved.")
 	String iterationSaved();
+
+	@DefaultMessage("Label")
+	String label();
 
 	@DefaultMessage("<div class=\"priority two\" title=\"Low\">")
 	SafeHtml lowP2Div();
@@ -258,6 +300,9 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Product Saved.")
 	String productSaved();
 
+	@DefaultMessage("New Custom Field")
+	String newCustomField();
+
 	@DefaultMessage("New Parent Task of {0}")
 	String newParentTaskOf(Integer subtaskId);
 
@@ -287,6 +332,9 @@ public interface TasksMessages extends Messages {
 
 	@DefaultMessage("{0} comments")
 	String numberOfComments(Integer commentsSize);
+
+	@DefaultMessage("Obsolete (hidden)")
+	String obsoleteHidden();
 
 	@DefaultMessage("of")
 	String ofLc();
@@ -327,8 +375,14 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Product: {0}, Component: {1}, Release: {2}")
 	String productComponentReleaseHeader(String productName, String componentName, String milestone);
 
+	@DefaultMessage("Product Details")
+	String productDetails();
+
 	@DefaultMessage("Product: {0}, Release: {1}")
 	String productReleaseHeader(String productName, String milestone);
+
+	@DefaultMessage("Products")
+	String products();
 
 	@DefaultMessage("Product: {0}")
 	String productWithName(String productName);
@@ -344,6 +398,12 @@ public interface TasksMessages extends Messages {
 
 	@DefaultMessage("Release")
 	String release();
+
+	@DefaultMessage("Releases")
+	String releases();
+
+	@DefaultMessage("Release Version")
+	String releaseVersion();
 
 	@DefaultMessage("Are you sure you want to delete this release? This operation cannot be undone.")
 	String releaseDeleteConfirmation();
@@ -407,6 +467,9 @@ public interface TasksMessages extends Messages {
 
 	@DefaultMessage("Tag Deleted.")
 	String tagDeleted();
+
+	@DefaultMessage("Tag Details")
+	String tagDetails();
 
 	@DefaultMessage("Tags")
 	String tags();

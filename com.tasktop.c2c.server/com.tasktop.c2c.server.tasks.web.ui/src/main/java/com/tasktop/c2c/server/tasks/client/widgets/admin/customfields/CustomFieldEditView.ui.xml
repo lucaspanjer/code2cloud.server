@@ -1,14 +1,16 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'
 			 xmlns:c='urn:import:com.tasktop.c2c.server.tasks.client.widgets.admin.customfields'>
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="tm" type="com.tasktop.c2c.server.tasks.client.TasksMessages"/>
 	<g:HTMLPanel>
 				<div class="deployment">
 			<div class="deployment-heading">
-				<h2 class="left">Field Details</h2>
+				<h2 class="left"><ui:text from="{tm.fieldDetails}"/></h2>
 				<div class="save">
-					<g:Anchor addStyleNames="left remove" ui:field="deleteButton">Remove</g:Anchor>
-					<g:Button addStyleNames="right button marginleft" ui:field="cancelButton">Cancel</g:Button>
-					<g:Button addStyleNames="right button special" ui:field="saveButton">Save</g:Button>
+					<g:Anchor addStyleNames="left remove" ui:field="deleteButton"><ui:text from="{cpm.remove}"/></g:Anchor>
+					<g:Button addStyleNames="right button marginleft" ui:field="cancelButton"><ui:text from="{cpm.cancel}"/></g:Button>
+					<g:Button addStyleNames="right button special" ui:field="saveButton"><ui:text from="{cpm.save}"/></g:Button>
 				</div>
 				<div class="clear"/>
 			</div>
@@ -16,37 +18,37 @@
 				<h3/>
 				<div class="clear"/>
 				<fieldset>
-					<label>Name:</label>
+					<label><ui:text from="{cpm.name}"/><ui:text from="{cpm.colon}"/></label>
 					<div>
 						<g:Label ui:field="name"/>
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Label:</label>
+					<label><ui:text from="{tm.label}"/><ui:text from="{cpm.colon}"/></label>
 					<div>
 						<g:TextBox ui:field="description"/>
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Type:</label>
+					<label><ui:text from="{cpm.type}"/><ui:text from="{cpm.colon}"/></label>
 					<div>
 						<g:ValueLabel ui:field="fieldType"/>
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Available For New Tasks:</label>
+					<label><ui:text from="{tm.availableForNewTasks}"/><ui:text from="{cpm.colon}"/></label>
 					<div>
 						<g:CheckBox ui:field="availableForNewTasks"/>
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Obsolete (hidden):</label>
+					<label><ui:text from="{tm.obsoleteHidden}"/><ui:text from="{cpm.colon}"/></label>
 					<div>
 						<g:CheckBox ui:field="obsolete"/>
 					</div>
 				</fieldset>
 				<fieldset ui:field="fieldValuesContainer">
-					<label>FieldValues:</label>
+					<label><ui:text from="{tm.fieldValues}"/><ui:text from="{cpm.colon}"/></label>
 					<div>
 						<c:CustomFieldValuesEditor ui:field="values"/>
 					</div>
