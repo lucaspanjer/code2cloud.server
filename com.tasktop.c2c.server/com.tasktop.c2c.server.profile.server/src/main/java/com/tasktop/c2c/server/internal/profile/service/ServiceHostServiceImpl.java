@@ -131,20 +131,29 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 	}
 
 	@Override
-	public List<com.tasktop.c2c.server.cloud.domain.ServiceHost> findHostsBelowCapacity(Set<ServiceType> type,
+	public List<com.tasktop.c2c.server.cloud.domain.ServiceHost> findHostsBelowCapacity(Set<ServiceType> types,
 			int capacity) {
-		ServiceHostConfiguration config = findSupportedConfiguration(type);
-		if (config == null) {
-			return Collections.emptyList();
+
+		String typeQueryString = "";
+		List<ServiceType> typeList = new ArrayList<ServiceType>(types);
+		for (int i = 0; i < types.size(); i++) {
+			if (i > 0) {
+				typeQueryString += " AND ";
+			}
+			typeQueryString += ":type" + i + " MEMBER OF host.serviceHostConfiguration.supportedServices";
 		}
 
+		Query query = entityManager.createQuery("SELECT host FROM " + ServiceHost.class.getSimpleName()
+				+ " host WHERE host.available = true AND " + typeQueryString
+				+ " AND SIZE(host.projectServices) < :maxCapacity ORDER BY SIZE(host.projectServices) ASC");
+
+		for (int i = 0; i < types.size(); i++) {
+			query.setParameter("type" + i, typeList.get(i));
+		}
+		query.setParameter("maxCapacity", capacity);
+
 		@SuppressWarnings("unchecked")
-		List<ServiceHost> managedResults = entityManager
-				.createQuery(
-						"SELECT host FROM "
-								+ ServiceHost.class.getSimpleName()
-								+ " host WHERE  host.serviceHostConfiguration = :config AND host.available = true AND SIZE(host.projectServices) < :maxCapacity ORDER BY SIZE(host.projectServices) ASC")
-				.setParameter("config", config).setParameter("maxCapacity", capacity).getResultList();
+		List<ServiceHost> managedResults = query.getResultList();
 
 		List<com.tasktop.c2c.server.cloud.domain.ServiceHost> publicNodes = new ArrayList<com.tasktop.c2c.server.cloud.domain.ServiceHost>(
 				managedResults.size());
