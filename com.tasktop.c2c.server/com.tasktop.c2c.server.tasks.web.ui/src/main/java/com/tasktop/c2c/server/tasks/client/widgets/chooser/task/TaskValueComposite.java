@@ -12,9 +12,10 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets.chooser.task;
 
-
+import com.google.gwt.core.client.GWT;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.AbstractValueChooser;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.AbstractValueComposite;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.Task;
 
 /**
@@ -23,6 +24,8 @@ import com.tasktop.c2c.server.tasks.domain.Task;
  */
 public class TaskValueComposite extends AbstractValueComposite<Task> {
 
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
+
 	public TaskValueComposite(AbstractValueChooser<Task> chooser) {
 		super(chooser);
 	}
@@ -30,7 +33,7 @@ public class TaskValueComposite extends AbstractValueComposite<Task> {
 	@Override
 	protected String computeValueLabel() {
 		// TODO use task type?
-		return "Task " + value.getId() + ": " + value.getShortDescription();
+		return tasksMessages.taskWithIdAndShortDescription(value.getId(), value.getShortDescription());
 	}
 
 	@Override

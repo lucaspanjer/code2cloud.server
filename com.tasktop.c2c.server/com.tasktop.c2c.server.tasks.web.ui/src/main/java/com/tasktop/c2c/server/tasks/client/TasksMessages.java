@@ -59,6 +59,9 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("CC")
 	String carbonCopy();
 
+	@DefaultMessage("Changed")
+	String changed();
+
 	@DefaultMessage("Commenter")
 	String commenter();
 
@@ -79,6 +82,9 @@ public interface TasksMessages extends Messages {
 
 	@DefaultMessage("Commits")
 	String commits();
+
+	@DefaultMessage("Comp")
+	String comp();
 
 	@DefaultMessage("Are you sure you want to delete this component? This operation cannot be undone.")
 	String componentDeleteConfirmation();
@@ -357,6 +363,9 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Post Comment")
 	String postComment();
 
+	@DefaultMessage("Pri")
+	String pri();
+
 	@DefaultMessage("Priority")
 	String priority();
 
@@ -435,6 +444,9 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Search Tasks")
 	String searchTasks();
 
+	@DefaultMessage("Sev")
+	String sev();
+
 	@DefaultMessage("Severity")
 	String severity();
 
@@ -480,6 +492,9 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Task Created.")
 	String taskCreated();
 
+	@DefaultMessage("Task with id \"{0}\" not found.")
+	String taskNotFound(Integer taskId);
+
 	@DefaultMessage("Task Saved.")
 	String taskSaved();
 
@@ -494,6 +509,9 @@ public interface TasksMessages extends Messages {
 
 	@DefaultMessage("Task {0}")
 	String taskWithId(Integer taskId);
+
+	@DefaultMessage("Task {0}: {1}")
+	String taskWithIdAndShortDescription(Integer taskId, String taskShortDescription);
 
 	@DefaultMessage("{0} {1} - {2} - {3} - {4}")
 	String taskWindowTitle(String taskType, Integer taskId, String taskShortDescription, String projectName,

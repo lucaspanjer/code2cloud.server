@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets.tasklist;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
@@ -21,19 +20,19 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.Header;
 import com.google.gwt.user.cellview.client.IdentityColumn;
 import com.google.gwt.user.cellview.client.SafeHtmlHeader;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.client.widgets.SeverityCell;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
 
 public class SeverityColumn extends TaskColumnDescriptor {
 
-	private static final String LABEL = "Severity";
-
 	private static Template template = GWT.create(Template.class);
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	@Override
 	public String getLabel() {
-		return LABEL;
+		return tasksMessages.severity();
 	}
 
 	@Override
@@ -42,8 +41,8 @@ public class SeverityColumn extends TaskColumnDescriptor {
 	}
 
 	static interface Template extends SafeHtmlTemplates {
-		@Template("<div class=\"severity-head\" title=\"Severity\">Sev</div>")
-		SafeHtml header();
+		@Template("<div class=\"severity-head\" title=\"{0}\">{1}</div>")
+		SafeHtml header(String severity, String sev);
 	}
 
 	@Override
@@ -53,7 +52,7 @@ public class SeverityColumn extends TaskColumnDescriptor {
 
 	@Override
 	public Header<?> getHeader() {
-		return new SafeHtmlHeader(template.header());
+		return new SafeHtmlHeader(template.header(tasksMessages.severity(), tasksMessages.sev()));
 	}
 
 }

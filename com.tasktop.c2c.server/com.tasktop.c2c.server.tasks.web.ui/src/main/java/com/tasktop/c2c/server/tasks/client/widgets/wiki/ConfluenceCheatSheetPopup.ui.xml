@@ -1,56 +1,57 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-
+	<ui:with field="wm" type="com.tasktop.c2c.server.tasks.client.widgets.wiki.WikiMarkupMessages"/>
 	<g:HTMLPanel >
 		<div class="wikiContent" >
-		<h3 id="ConfluenceMarkupCheatSheet">Confluence Markup Cheat Sheet</h3>
+		<h3 id="ConfluenceMarkupCheatSheet">Confluence <ui:text from="{wm.markupCheatSheet}"/></h3>
 		
-		<h4 id="PhraseModifiers">Phrase Modifiers</h4>
+		<h4 id="PhraseModifiers"><ui:text from="{wm.phraseModifiers}"/></h4>
 		<table><tbody>
-		<tr><td>_emphasis_ </td><td><em>emphasis</em> </td></tr>
-		<tr><td>*strong* </td><td><strong>strong</strong> </td></tr>
-		<tr><td>??citation?? </td><td><cite>citation</cite> </td></tr>
-		<tr><td>-deleted text- </td><td><del>deleted text</del> </td></tr>
-		<tr><td>+inserted text+ </td><td><ins>inserted text</ins> </td></tr>
-		<tr><td>^superscript^ </td><td><sup>superscript</sup> </td></tr>
-		<tr><td>^subscript^ </td><td><sub>subscript</sub> </td></tr>
-		<tr><td>{{monospace}} </td><td><tt>monospace</tt></td></tr>
+		<tr><td>_<ui:text from="{wm.emphasis}"/>_ </td><td><em><ui:text from="{wm.emphasis}"/></em> </td></tr>
+		<tr><td>*<ui:text from="{wm.strong}"/>* </td><td><strong><ui:text from="{wm.strong}"/></strong> </td></tr>
+		<tr><td>??<ui:text from="{wm.citation}"/>?? </td><td><cite><ui:text from="{wm.citation}"/></cite> </td></tr>
+		<tr><td>-<ui:text from="{wm.deletedText}"/>- </td><td><del><ui:text from="{wm.deletedText}"/></del> </td></tr>
+		<tr><td>+<ui:text from="{wm.insertedText}"/>+ </td><td><ins><ui:text from="{wm.insertedText}"/></ins> </td></tr>
+		<tr><td>^<ui:text from="{wm.superscript}"/>^ </td><td><sup><ui:text from="{wm.superscript}"/></sup> </td></tr>
+		<tr><td>^<ui:text from="{wm.subscript}"/>^ </td><td><sub><ui:text from="{wm.subscript}"/></sub> </td></tr>
+		<tr><td>{{<ui:text from="{wm.monospace}"/>}} </td><td><tt><ui:text from="{wm.monospace}"/></tt></td></tr>
 		</tbody></table>
 		
-		<h4 id="Block Modifiers">Block Modifiers</h4>
+		<h4 id="Block Modifiers"><ui:text from="{wm.blockModifiers}"/></h4>
 		<table><tbody>
-		<tr><td>hn.</td><td><em>Heading (where n is some digit, for example h1)</em> </td></tr>
-		<tr><td>bq.</td><td><em>Block quote (single paragraph)</em> </td></tr>
-		<tr><td>{quote}</td><td><em>Block quote (multiple paragraphs)</em> </td></tr> 
-		<tr><td>{code}</td><td><em>Block code</em> </td></tr>
-		<tr><td>{note:title=Note}</td><td><em>A simple note</em> </td></tr>
-		<tr><td>{warning:title=Caution}</td><td><em>A warning note</em> </td></tr>
-		<tr><td>{info:title=Useful Information}</td><td><em>Informational note</em> </td></tr>
-		<tr><td>{tip:title=Tip}</td><td><em>A help tip</em> </td></tr>
-		<tr><td>{noformat}</td><td><em>Pre-formatted block</em> </td></tr>
-		<tr><td>#</td><td><em>Numeric list</em> </td></tr>
-		<tr><td>*</td><td><em>Bulleted list</em> </td></tr>
+		<tr><td>hn.</td><td><em><ui:text from="{wm.headingDescription}"/></em> </td></tr>
+		<tr><td>bq.</td><td><em><ui:text from="{wm.blockQuoteSingle}"/></em> </td></tr>
+		<tr><td>{quote}</td><td><em><ui:text from="{wm.blockQuoteMultiple}"/></em> </td></tr> 
+		<tr><td>{code}</td><td><em><ui:text from="{wm.blockCode}"/></em> </td></tr>
+		<tr><td>{note:title=<ui:text from="{wm.note}"/>}</td><td><em><ui:text from="{wm.simpleNote}"/></em> </td></tr>
+		<tr><td>{warning:title=<ui:text from="{wm.caution}"/>}</td><td><em><ui:text from="{wm.warningNote}"/></em> </td></tr>
+		<tr><td>{info:title=<ui:text from="{wm.usefulInformation}"/>}</td><td><em><ui:text from="{wm.informationalNote}"/></em> </td></tr>
+		<tr><td>{tip:title=<ui:text from="{wm.tip}"/>}</td><td><em><ui:text from="{wm.helpTip}"/></em> </td></tr>
+		<tr><td>{noformat}</td><td><em><ui:text from="{wm.preFormattedBlock}"/></em> </td></tr>
+		<tr><td>#</td><td><em><ui:text from="{wm.numericList}"/></em> </td></tr>
+		<tr><td>*</td><td><em><ui:text from="{wm.bulletedList}"/></em> </td></tr>
 		</tbody></table>
 		
-		<h4 id="Links">Links</h4><p>[Title|http://www.example.com]<br/>
-		[Title|http://www.example.com|tip]</p>
+		<h4 id="Links"><ui:text from="{wm.links}"/></h4>
+		<p>[<ui:text from="{wm.title}"/>|http://www.example.com]<br/>
+		[<ui:text from="{wm.title}"/>|http://www.example.com|<ui:text from="{wm.tipLc}"/>]</p>
 		
-		<h4 id="Anchors">Anchors</h4>
+		<h4 id="Anchors"><ui:text from="{wm.anchors}"/></h4>
 		<table><tbody>
-		<tr><td>{anchor:anchorname}</td><td><em>Creates anchor 'anchorname'</em> </td></tr>
-		<tr><td>[Title|#anchorname]</td><td><em>Links to anchor 'anchorname'</em> </td></tr>
+		<tr><td>{anchor:<ui:text from="{wm.anchorName}"/>}</td><td><em><ui:text from="{wm.anchorDescription}"/></em> </td></tr>
+		<tr><td>[<ui:text from="{wm.title}"/>|#<ui:text from="{wm.anchorName}"/>]</td><td><em><ui:text from="{wm.anchorLinkDescription}"/></em> </td></tr>
 		</tbody></table>
 
-		<h4 id="Tables">Tables</h4>
-		<p>||heading 1||heading 2||heading 3||<br/>|col A1|col A2|col A3|<br/>|col B1|col B2|col B3|</p>
+		<h4 id="Tables"><ui:text from="{wm.tables}"/></h4>
+		<p>||<ui:text from="{wm.headingLc}"/> 1||<ui:text from="{wm.headingLc}"/> 2||<ui:text from="{wm.headingLc}"/> 3||<br/>|<ui:text from="{wm.col}"/> A1|<ui:text from="{wm.col}"/> A2|<ui:text from="{wm.col}"/> A3|<br/>|<ui:text from="{wm.col}"/> B1|<ui:text from="{wm.col}"/> B2|<ui:text from="{wm.col}"/> B3|</p>
 		
-		<h4 id="Text Breaks">Text Breaks</h4>
+		<h4 id="Text Breaks"><ui:text from="{wm.textBreaks}"/></h4>
 		<table><tbody>
-		<tr><td>(empty line)</td><td><em>produces a new paragraph</em> </td></tr>
-		<tr><td>----</td><td><em>horizontal rule</em> </td></tr>
-		<tr><td>---</td><td><em>— symbol (emdash)</em> </td></tr>
-		<tr><td>--</td><td><em>– symbol (endash)</em> </td></tr>
+		<tr><td><ui:text from="{wm.emptyLine}"/></td><td><em><ui:text from="{wm.emptyLineDescription}"/></em> </td></tr>
+		<tr><td>----</td><td><em><ui:text from="{wm.horizontalRule}"/></em> </td></tr>
+		<tr><td>---</td><td><em><ui:text from="{wm.emDashSymbol}"/></em> </td></tr>
+		<tr><td>--</td><td><em><ui:text from="{wm.enDashSymbol}"/></em> </td></tr>
 		</tbody></table>
 		</div>
 	</g:HTMLPanel>

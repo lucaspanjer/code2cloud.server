@@ -15,9 +15,11 @@ package com.tasktop.c2c.server.tasks.shared.action;
 import net.customware.gwt.dispatch.shared.Action;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
+import com.google.gwt.core.client.GWT;
 import com.tasktop.c2c.server.common.web.client.util.ExceptionsUtil;
 import com.tasktop.c2c.server.common.web.shared.CachableReadAction;
 import com.tasktop.c2c.server.common.web.shared.KnowsErrorMessageAction;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -27,6 +29,7 @@ public class GetTaskAction implements Action<GetTaskResult>, CachableReadAction,
 
 	private String projectId;
 	private Integer taskId;
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public GetTaskAction(String projectId, Integer taskId) {
 		this.projectId = projectId;
@@ -54,7 +57,7 @@ public class GetTaskAction implements Action<GetTaskResult>, CachableReadAction,
 	@Override
 	public String getErrorMessage(DispatchException e) {
 		if (ExceptionsUtil.isEntityNotFound(e)) {
-			return "Task with id \"" + taskId + "\" not found.";
+			return tasksMessages.taskNotFound(taskId);
 		}
 		return null;
 	}

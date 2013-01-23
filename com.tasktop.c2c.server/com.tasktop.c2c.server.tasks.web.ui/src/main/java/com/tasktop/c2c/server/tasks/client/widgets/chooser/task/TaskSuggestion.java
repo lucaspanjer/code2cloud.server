@@ -12,11 +12,14 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets.chooser.task;
 
-
+import com.google.gwt.core.client.GWT;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.AbstractValueSuggestion;
 import com.tasktop.c2c.server.tasks.domain.Task;
 
 public class TaskSuggestion extends AbstractValueSuggestion<Task> {
+
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
 
 	public TaskSuggestion(Task task) {
 		super(task);
@@ -24,6 +27,6 @@ public class TaskSuggestion extends AbstractValueSuggestion<Task> {
 
 	@Override
 	public String getDisplayString() {
-		return getValue().getId().toString() + ": " + getValue().getShortDescription();
+		return getValue().getId().toString() + commonProfileMessages.colon() + " " + getValue().getShortDescription();
 	}
 }

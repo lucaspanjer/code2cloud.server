@@ -1,76 +1,112 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field="wm" type="com.tasktop.c2c.server.tasks.client.widgets.wiki.WikiMarkupMessages"/>
 
 	<g:HTMLPanel >
 		<div class="wikiContent" >
-		<h3 id="TextileMarkupCheatSheet">Textile Markup Cheat Sheet</h3>
+		<h3 id="TextileMarkupCheatSheet">Textile <ui:text from="{wm.markupCheatSheet}"/></h3>
 		
-		<h4 id="PhraseModifiers">Phrase Modifiers</h4>
-		<table><tbody><tr><td>_emphasis_ </td><td><em>emphasis</em> 
-		</td></tr><tr><td>*strong* </td><td><strong>strong</strong> 
-		</td></tr><tr><td>__italic__ </td><td><i>italic</i> 
-		</td></tr><tr><td>**bold** </td><td><b>bold</b> 
-		</td></tr><tr><td>??citation?? </td><td><cite>citation</cite> </td></tr><tr>
-		<td>-deleted text- </td><td><del>deleted text</del> </td></tr><tr><td>+inserted text+ </td>
-		<td><ins>inserted text</ins> </td></tr><tr><td>^superscript^ </td><td><sup>superscript</sup> </td></tr><tr>
-		<td>~subscript~ </td><td><sub>subscript</sub> </td></tr><tr><td>%span% </td>
-		<td><span>span</span> </td></tr><tr><td>@code@ </td>
-		<td><code>code</code> </td></tr></tbody></table><h4 id="BlockModifiers">Block Modifiers</h4><table><tbody><tr>
-		<td>hn. </td><td>Heading </td></tr><tr><td>bq. </td><td>Block quote </td></tr><tr><td>fnn. </td>
-		<td>Footnote </td></tr><tr><td>p. </td><td>Paragraph (optional) </td></tr><tr><td>bc. </td>
-		<td>Block code </td></tr><tr><td>pre. </td><td>Pre-formatted </td></tr><tr><td># </td>
-		<td>Numeric list </td></tr><tr><td>* </td><td>Bulleted list </td></tr></tbody></table>
+		<h4 id="PhraseModifiers"><ui:text from="{wm.phraseModifiers}"/></h4>
+		<table><tbody>
+		<tr><td>_<ui:text from="{wm.emphasis}"/>_ </td><td><em><ui:text from="{wm.emphasis}"/></em></td></tr>
+		<tr><td>*<ui:text from="{wm.strong}"/>* </td><td><strong><ui:text from="{wm.strong}"/></strong></td></tr>
+		<tr><td>__<ui:text from="{wm.italic}"/>__ </td><td><i><ui:text from="{wm.italic}"/></i></td></tr>
+		<tr><td>**<ui:text from="{wm.bold}"/>** </td><td><b><ui:text from="{wm.bold}"/></b></td></tr>
+		<tr><td>??<ui:text from="{wm.citation}"/>?? </td><td><cite><ui:text from="{wm.citation}"/></cite></td></tr>
+		<tr><td>-<ui:text from="{wm.deletedText}"/>- </td><td><del><ui:text from="{wm.deletedText}"/></del></td></tr>
+		<tr><td>+<ui:text from="{wm.insertedText}"/>+ </td><td><ins><ui:text from="{wm.insertedText}"/></ins></td></tr>
+		<tr><td>^<ui:text from="{wm.superscript}"/>^ </td><td><sup><ui:text from="{wm.superscript}"/></sup></td></tr>
+		<tr><td>~<ui:text from="{wm.subscript}"/>~ </td><td><sub><ui:text from="{wm.subscript}"/></sub></td></tr>
+		<tr><td>%<ui:text from="{wm.span}"/>% </td><td><span><ui:text from="{wm.span}"/></span></td></tr>
+		<tr><td>@<ui:text from="{wm.code}"/>@ </td><td><code><ui:text from="{wm.code}"/></code></td></tr>
+		</tbody></table>
 		
-		<h4 id="Links">Links</h4><p>"title":http://www.example.com<br/>
+		<h4 id="BlockModifiers"><ui:text from="{wm.blockModifiers}"/></h4>
+		<table><tbody>
+		<tr><td>hn. </td><td><ui:text from="{wm.heading}"/></td></tr>
+		<tr><td>bq. </td><td><ui:text from="{wm.blockQuote}"/></td></tr>
+		<tr><td>fnn. </td><td><ui:text from="{wm.footnote}"/></td></tr>
+		<tr><td>p. </td><td><ui:text from="{wm.paragraphOptional}"/></td></tr>
+		<tr><td>bc. </td><td><ui:text from="{wm.blockCode}"/></td></tr>
+		<tr><td>pre. </td><td><ui:text from="{wm.preFormatted}"/></td></tr>
+		<tr><td># </td><td><ui:text from="{wm.numericList}"/></td></tr>
+		<tr><td>* </td><td><ui:text from="{wm.bulletedList}"/></td></tr>
+		</tbody></table>
+		
+		<h4 id="Links"><ui:text from="{wm.links}"/></h4>
+		<p>"<ui:text from="{wm.titleLc}"/>":http://www.example.com<br/>
 		!images/logo.png!:http://www.example.com</p>
 		
-		<h4 id="Images">Images</h4><p>!images/logo.png!</p>
+		<h4 id="Images"><ui:text from="{wm.images}"/></h4>
+		<p>!images/logo.png!</p>
 		
-		<h4 id="Punctuation">Punctuation</h4>
-		<table><tbody><tr><td>"quotes" </td><td>“quotes” </td></tr><tr><td>'quotes' </td><td>‘quotes’ </td></tr><tr>
-		<td>it's </td><td>it’s </td></tr><tr><td>em -- dash </td><td>em — dash </td></tr><tr><td>en - dash </td>
-		<td>en – dash </td></tr><tr><td>2 x 4 </td><td>2 × 4 </td></tr><tr><td>foo(tm) </td><td>foo™ </td></tr><tr>
-		<td>foo(r) </td><td>foo® </td></tr></tbody></table>
+		<h4 id="Punctuation"><ui:text from="{wm.punctuation}"/></h4>
+		<table><tbody>
+		<tr><td>"<ui:text from="{wm.quotes}"/>" </td><td>“<ui:text from="{wm.quotes}"/>” </td></tr>
+		<tr><td>'<ui:text from="{wm.quotes}"/>' </td><td>‘<ui:text from="{wm.quotes}"/>’ </td></tr>
+		<tr><td>it's </td><td>it’s </td></tr>
+		<tr><td>em -- dash </td><td><ui:text from="{wm.emDashSymbol}"/></td></tr>
+		<tr><td>en - dash </td><td><ui:text from="{wm.enDashSymbol}"/></td></tr>
+		<tr><td>2 x 4 </td><td>2 × 4 </td></tr>
+		<tr><td>foo(tm) </td><td>foo™ </td></tr>
+		<tr><td>foo(r) </td><td>foo® </td></tr>
+		</tbody></table>
 		
-		<h4 id="Lists">Lists</h4><h5 id="BulletedLists">Bulleted Lists</h5>
+		<h4 id="Lists"><ui:text from="{wm.lists}"/></h4>
+		<h5 id="BulletedLists"><ui:text from="{wm.bulletedLists}"/></h5>
 <pre>
-* one
-** one.one 
-** one.two 
-* two 
+* <ui:text from="{wm.one}"/>
+** <ui:text from="{wm.one}"/>.<ui:text from="{wm.one}"/> 
+** <ui:text from="{wm.one}"/>.<ui:text from="{wm.two}"/> 
+* <ui:text from="{wm.two}"/> 
 </pre>
-		<ul><li>one<ul><li>one.one</li><li>one.two</li></ul></li><li>two</li></ul>
+		<ul><li><ui:text from="{wm.one}"/><ul><li><ui:text from="{wm.one}"/>.<ui:text from="{wm.one}"/></li><li><ui:text from="{wm.one}"/>.<ui:text from="{wm.two}"/></li></ul></li><li><ui:text from="{wm.two}"/></li></ul>
 		
 		<h5 id="NumericLists">Numeric Lists</h5>
 <pre>
-# one
-## one.one
-## one.two
-# two
+# <ui:text from="{wm.one}"/>
+## <ui:text from="{wm.one}"/>.<ui:text from="{wm.one}"/>
+## <ui:text from="{wm.one}"/>.<ui:text from="{wm.two}"/>
+# <ui:text from="{wm.two}"/>
 </pre>
-		<ol><li>one<ol><li>one.one</li><li>one.two</li></ol></li><li>two</li></ol>
+		<ol><li><ui:text from="{wm.one}"/><ol><li><ui:text from="{wm.one}"/>.<ui:text from="{wm.one}"/></li><li><ui:text from="{wm.one}"/>.<ui:text from="{wm.two}"/></li></ol></li><li><ui:text from="{wm.two}"/></li></ol>
 		
-		<h4 id="Tables">Tables</h4><p>|_. a|_. table|_. header|<br/>|a|table|row|<br/>|a|table|row|</p>
+		<h4 id="Tables"><ui:text from="{wm.tables}"/></h4>
+		<p>|_. <ui:text from="{wm.headingLc}"/> 1|_. <ui:text from="{wm.headingLc}"/> 2|_. <ui:text from="{wm.headingLc}"/> 3|<br/>|<ui:text from="{wm.col}"/> A1|<ui:text from="{wm.col}"/> A2|<ui:text from="{wm.col}"/> A3|<br/>|<ui:text from="{wm.col}"/> B1|<ui:text from="{wm.col}"/> B2|<ui:text from="{wm.col}"/> B3|</p>
 		
-		<h4 id="AlignmentandPadding">Alignment and Padding</h4><table><tbody><tr><td>&lt; </td>
-		<td>left text alignment </td><td>eg: p&lt;. </td></tr><tr><td>&gt; </td><td>right text alignment </td>
-		<td>eg: p&gt;. </td></tr><tr><td>&lt;&gt; </td><td>justify text </td><td>eg: p&lt;&gt;. </td></tr><tr>
-		<td>= </td><td>center text </td><td>eg: p=. </td></tr><tr><td>( </td><td>pad left </td>
-		<td>eg: p(. </td></tr><tr><td>) </td><td>pad right </td><td>eg: p). </td></tr><tr><td>() </td>
-		<td>pad left and right </td></tr></tbody></table><h4 id="Attributes">Attributes</h4><table><tbody>
-		<tr><td>(class) </td><td>eg: h1(foo). </td></tr><tr><td>(#id) </td><td>eg: h1(foo). </td></tr>
-		<tr><td>{style} </td><td>eg: h1{color:red}. </td></tr><tr><td>[language] </td><td>eg: h1[en]. </td></tr></tbody></table>
-		<p>example:</p><p>h1(main-heading){color: red}. header text</p>
+		<h4 id="AlignmentandPadding"><ui:text from="{wm.alignmentAndPadding}"/></h4>
+		<table><tbody>
+		<tr><td>&lt; </td><td><ui:text from="{wm.textAlignLeft}"/></td><td><ui:text from="{wm.exampleAbbrevLc}"/> p&lt;. </td></tr>
+		<tr><td>&gt; </td><td><ui:text from="{wm.textAlignRight}"/></td><td><ui:text from="{wm.exampleAbbrevLc}"/> p&gt;. </td></tr>
+		<tr><td>&lt;&gt; </td><td><ui:text from="{wm.textAlignJustify}"/></td><td><ui:text from="{wm.exampleAbbrevLc}"/> p&lt;&gt;. </td></tr>
+		<tr><td>= </td><td><ui:text from="{wm.textAlignCenter}"/></td><td><ui:text from="{wm.exampleAbbrevLc}"/> p=. </td></tr>
+		<tr><td>( </td><td><ui:text from="{wm.padLeft}"/></td><td><ui:text from="{wm.exampleAbbrevLc}"/> p(. </td></tr><tr><td>) </td><td>pad right </td><td><ui:text from="{wm.exampleAbbrevLc}"/> p). </td></tr>
+		<tr><td>() </td><td><ui:text from="{wm.padLeftRight}"/></td></tr>
+		</tbody></table>
 		
-		<h4 id="Acronyms">Acronyms</h4><p>ABW(A Better Way)</p>
+		<h4 id="Attributes"><ui:text from="{wm.attributes}"/></h4>
+		<table><tbody>
+		<tr><td>(class) </td><td><ui:text from="{wm.exampleAbbrevLc}"/> h1(foo). </td></tr>
+		<tr><td>(#id) </td><td><ui:text from="{wm.exampleAbbrevLc}"/> h1(foo). </td></tr>
+		<tr><td>{style} </td><td><ui:text from="{wm.exampleAbbrevLc}"/> h1{color:red}. </td></tr>
+		<tr><td>[<ui:text from="{wm.language}"/>] </td><td><ui:text from="{wm.exampleAbbrevLc}"/> h1[en]. </td></tr>
+		</tbody></table>
 		
-		<h4 id="Footnotes">Footnotes</h4><p>reference[1]<br/>fn1. footnote text</p>
+		<p><ui:text from="{wm.exampleAbbrev}"/></p><p>h1(main-heading){color: red}. <ui:text from="{wm.headerText}"/></p>
 		
-		<h4 id="ExtendedBlocks">Extended Blocks</h4><p>bc..<br/>bq..<br/>pre..</p>
+		<h4 id="Acronyms"><ui:text from="{wm.acronyms}"/></h4>
+		<p>ABW(A Better Way)</p>
 		
-		<h4 id="GeneratedContent">Generated Content</h4><p>{toc} Generates a table of contents.  Eg: {toc} or {toc:style=disc|maxLevel=3}
-		<br/>{glossary} Generates a glossary based on acronyms in the document.  Eg: {glossary} or {glossary:style=disc}</p></div>
+		<h4 id="Footnotes"><ui:text from="{wm.footnotes}"/></h4>
+		<p><ui:text from="{wm.reference}"/>[1]<br/>fn1. <ui:text from="{wm.footnoteText}"/></p>
+		
+		<h4 id="ExtendedBlocks"><ui:text from="{wm.extendedBlocks}"/></h4>
+		<p>bc..<br/>bq..<br/>pre..</p>
+		
+		<h4 id="GeneratedContent"><ui:text from="{wm.generatedContent}"/></h4>
+		<p>{toc} <ui:text from="{wm.tocDetails}"/> <ui:text from="{wm.exampleAbbrev}"/> {toc} <ui:text from="{wm.or}"/> {toc:style=disc|maxLevel=3}
+		<br/>{glossary} <ui:text from="{wm.glossaryDetails}"/> <ui:text from="{wm.exampleAbbrev}"/> {glossary} <ui:text from="{wm.or}"/> {glossary:style=disc}</p></div>
 
 	</g:HTMLPanel>
 </ui:UiBinder>

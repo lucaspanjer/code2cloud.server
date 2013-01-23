@@ -14,7 +14,6 @@ package com.tasktop.c2c.server.tasks.client.widgets.tasklist;
 
 import static com.tasktop.c2c.server.common.web.client.widgets.Format.stringValue;
 
-
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
@@ -23,6 +22,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.IdentityColumn;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
 
@@ -38,12 +38,11 @@ public class StatusColumn extends TaskColumnDescriptor {
 	}
 
 	private static Template template = GWT.create(Template.class);
-
-	public static final String LABEL = "Status";
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
 
 	@Override
 	public String getLabel() {
-		return LABEL;
+		return commonProfileMessages.status();
 	}
 
 	@Override

@@ -14,19 +14,20 @@ package com.tasktop.c2c.server.tasks.client.widgets.tasklist;
 
 import static com.tasktop.c2c.server.common.web.client.widgets.Format.stringValue;
 
-
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
 
 public class OwnerColumn extends TaskColumnDescriptor {
 
-	public static final String LABEL = "Owner";
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	@Override
 	public String getLabel() {
-		return LABEL;
+		return tasksMessages.owner();
 	}
 
 	@Override

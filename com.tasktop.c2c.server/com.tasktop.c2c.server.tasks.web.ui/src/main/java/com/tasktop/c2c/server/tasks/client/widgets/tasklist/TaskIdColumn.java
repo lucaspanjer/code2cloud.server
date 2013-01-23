@@ -12,21 +12,22 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets.tasklist;
 
-
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.Column;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.tasks.client.widgets.AbstractHoverCell;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
 
 public class TaskIdColumn extends TaskColumnDescriptor {
 
-	private static final String LABEL = "ID";
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
 
 	@Override
 	public String getLabel() {
-		return LABEL;
+		return commonProfileMessages.id();
 	}
 
 	@Override

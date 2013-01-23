@@ -14,21 +14,22 @@ package com.tasktop.c2c.server.tasks.client.widgets.tasklist;
 
 import static com.tasktop.c2c.server.common.web.client.widgets.Format.stringValue;
 
-
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.Column;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.Task;
 import com.tasktop.c2c.server.tasks.domain.TaskFieldConstants;
 
 public class SummaryColumn extends TaskColumnDescriptor {
 
-	private static final String LABEL = "Summary";
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	@Override
 	public String getLabel() {
-		return LABEL;
+		return tasksMessages.summary();
 	}
 
 	@Override

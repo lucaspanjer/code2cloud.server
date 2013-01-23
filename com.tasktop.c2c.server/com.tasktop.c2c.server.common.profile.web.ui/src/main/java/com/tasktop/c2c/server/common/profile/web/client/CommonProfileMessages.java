@@ -126,6 +126,9 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Home")
 	String home();
 
+	@DefaultMessage("ID")
+	String id();
+
 	@DefaultMessage("Legal Agreements")
 	String legalAgreements();
 
