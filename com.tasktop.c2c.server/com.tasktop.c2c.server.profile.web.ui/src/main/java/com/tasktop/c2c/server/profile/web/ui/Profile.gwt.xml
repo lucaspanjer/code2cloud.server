@@ -35,21 +35,7 @@
 	<inherits name="com.google.gwt.inject.Inject"/>
 	<inherits name="net.customware.gwt.dispatch.Dispatch"/>
 	<inherits name="com.google.gwt.logging.Logging"/>
-	
-	<!-- Set our supported languages -->
-	<extend-property name="locale" values="en"/>
-	<!--  
-	<extend-property name="locale" values="pt_BR"/>
-	<extend-property name="locale" values="zh_CN"/>
-	<extend-property name="locale" values="zh_TW"/>
-	<extend-property name="locale" values="fr"/>
-	<extend-property name="locale" values="de"/>
-	<extend-property name="locale" values="it"/>
-	<extend-property name="locale" values="ja"/>
-	<extend-property name="locale" values="ko"/>
-	<extend-property name="locale" values="es"/>
-	-->
-	
+		
 	<!-- Define a cookie for the user's preferred language -->
 	<set-configuration-property name="locale.cookie" value="gwtLocale"/>
 
