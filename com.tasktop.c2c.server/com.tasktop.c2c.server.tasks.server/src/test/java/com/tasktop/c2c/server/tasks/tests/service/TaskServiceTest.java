@@ -4184,7 +4184,12 @@ public class TaskServiceTest {
 		Keyword newKeyword = new Keyword("name", "description");
 		Keyword createdKeyword = taskService.createKeyword(newKeyword);
 		List<Keyword> allKeywords = taskService.getRepositoryContext().getKeywords();
-		assertTrue(allKeywords.get(allKeywords.size() - 1).equals(createdKeyword));
+		boolean foundKeywordInRepository = false;
+		for (Keyword keyword : allKeywords) {
+			if (keyword.equals(createdKeyword))
+				foundKeywordInRepository = true;
+		}
+		assertTrue(foundKeywordInRepository);
 
 		createdKeyword.setName("name2");
 		Keyword updateKeyword = taskService.updateKeyword(createdKeyword);
