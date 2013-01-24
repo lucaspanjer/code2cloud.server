@@ -92,7 +92,7 @@ public final class InputPipe implements Callable<Void> {
 		}
 
 		try {
-			log.info("Starting pipe: " + description);
+			log.debug("Starting pipe: " + description);
 			for (;;) {
 				synchronized (this) {
 					if (cancelled) {
@@ -120,11 +120,11 @@ public final class InputPipe implements Callable<Void> {
 					}
 				}
 				if (bytesRead == -1) {
-					log.info(description + ": EOF");
+					log.debug(description + ": EOF");
 					eof = true;
 					break;
 				} else if (bytesRead > 0) {
-					log.info(description + ": bytes read: " + bytesRead);
+					log.debug(description + ": bytes read: " + bytesRead);
 					output.write(buffer, 0, bytesRead);
 					if (flush) {
 						output.flush();
@@ -144,7 +144,7 @@ public final class InputPipe implements Callable<Void> {
 					interruptThread.interrupt();
 				}
 			}
-			log.info(description + ": pipe closed");
+			log.debug(description + ": pipe closed");
 		}
 		return null;
 	}
@@ -157,7 +157,7 @@ public final class InputPipe implements Callable<Void> {
 			interruptThread = null;
 			cancelled = true;
 			if (callableThread != null) {
-				log.info(description + ": cancel initiated");
+				log.debug(description + ": cancel initiated");
 				if (reading) {
 					callableThread.interrupt();
 				}
