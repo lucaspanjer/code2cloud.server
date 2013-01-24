@@ -55,28 +55,25 @@ public class ManagementServiceServiceHostCheckingStrategy implements ServiceHost
 
 	@Override
 	public boolean checkServiceHost(ServiceHost serviceHost) {
-		boolean allServicesUp = false;
+		boolean allServicesUp = true;
 		for (ServiceType typeToCheck : serviceHost.getServiceHostConfiguration().getSupportedServices()) {
 
 			ProjectServiceManagementService serviceMangementService = projectServiceMangementServiceProvider
 					.getNewService(serviceHost.getInternalNetworkAddress(), typeToCheck);
 
-			boolean serviceIsBackUp;
+			boolean serviceIsBackUp = false;
 			try {
 				ServiceHostStatus status = serviceMangementService.retrieveServiceHostStaus();
 
 				switch (status.getState()) {
 				case RUNNING:
 					serviceIsBackUp = true;
-					break;
 				default:
-					serviceIsBackUp = false;
 				}
 
 			} catch (Exception e) {
 				LOGGER.info(String.format("Exception trying to retrieve service host [%s]'s [%s] service status",
 						serviceHost.getInternalNetworkAddress(), typeToCheck), e);
-				serviceIsBackUp = false;
 			}
 
 			if (!serviceIsBackUp) {
@@ -87,7 +84,6 @@ public class ManagementServiceServiceHostCheckingStrategy implements ServiceHost
 		}
 
 		return allServicesUp;
-
 	}
 
 }

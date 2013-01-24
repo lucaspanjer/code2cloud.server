@@ -44,6 +44,7 @@ import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolServiceInternal;
 import com.tasktop.c2c.server.cloud.service.NodeProvisioningService;
 import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
@@ -85,7 +86,13 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	private HudsonSlavePoolServiceInternal hudsonSlavePoolServiceInternal;
 
 	@Autowired
-	private List<ServiceHostCheckingStrategy> serviceHostCheckingStrategies;
+	private ServiceHostCheckingStrategy serviceHostCheckingStrategy;
+
+	@Autowired
+	private ProjectServiceMigrationStrategy projectServiceMigrationStrategy;
+
+	@Autowired
+	private ServiceHostBalancingStrategy serviceHostBalancingStrategy;
 
 	private boolean updateServiceTemplateOnStart = true;
 
@@ -137,7 +144,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 	@Override
 	public void doProvisionServices(Long projectId, ServiceType type) throws EntityNotFoundException,
-			ProvisioningException {
+			ProvisioningException, NoNodeAvailableException {
 		Project project = entityManager.find(Project.class, projectId);
 		if (project == null) {
 			throw new EntityNotFoundException();
@@ -212,7 +219,8 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		return config;
 	}
 
-	private ServiceHost convertToInternal(com.tasktop.c2c.server.cloud.domain.ServiceHost serviceHost) {
+	@Override
+	public ServiceHost convertToInternal(com.tasktop.c2c.server.cloud.domain.ServiceHost serviceHost) {
 		return entityManager.find(ServiceHost.class, serviceHost.getId());
 	}
 
@@ -479,6 +487,45 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		CheckServiceHostStatusJob job = new CheckServiceHostStatusJob(failedHost.getId());
 		job.setDeliveryDelayInMilliseconds(DOWN_SERVICE_RECHECK_DELAY);
 		jobService.schedule(job);
+		jobService.schedule(new HandleServiceHostFailureJob(failedHost.getId()));
+	}
+
+	@Override
+	public void handleServiceHostFailure(Long serviceHostId) {
+		ServiceHost host = entityManager.find(ServiceHost.class, serviceHostId);
+
+		// Attempt to migrate services off the failed host
+		for (ProjectService service : new ArrayList<ProjectService>(host.getProjectServices())) {
+			try {
+				ServiceHost newHost = convertToInternal(nodeProvisioningServiceByType.get(service.getType())
+						.provisionNode());
+				tryMigrateService(service, newHost);
+			} catch (NoNodeAvailableException e) {
+				// continue
+			}
+		}
+	}
+
+	private void tryMigrateService(ProjectService service, ServiceHost newHost) {
+		if (projectServiceMigrationStrategy.canMigrate(service)) {
+			projectServiceMigrationStrategy.migrate(service, newHost);
+		}
+	}
+
+	protected void balanceProjectServicesOntoHost(ServiceHost host) {
+		if (!host.isAvailable()) {
+			throw new IllegalStateException("Asked to migrate to down host");
+		}
+
+		// Only consider other hosts with the exact same config
+		@SuppressWarnings("unchecked")
+		List<ServiceHost> otherHosts = entityManager
+				.createQuery(
+						"SELECT host FROM " + ServiceHost.class.getSimpleName()
+								+ " host WHERE host.serviceHostConfiguration = :config AND host != :host")
+				.setParameter("config", host.getServiceHostConfiguration()).setParameter("host", host).getResultList();
+
+		serviceHostBalancingStrategy.balance(host, otherHosts);
 	}
 
 	@Override
@@ -491,29 +538,23 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 			return;
 		}
 
-		boolean allServicesUp = false;
-		boolean foundChecker = false;
-		for (ServiceHostCheckingStrategy checker : serviceHostCheckingStrategies) {
-			if (checker.canCheckServiceHost(serviceHost)) {
-				foundChecker = true;
-				allServicesUp = checker.checkServiceHost(serviceHost);
-				break;
+		if (serviceHostCheckingStrategy.canCheckServiceHost(serviceHost)) {
+			final boolean allServicesUp = serviceHostCheckingStrategy.checkServiceHost(serviceHost);
+
+			if (allServicesUp) {
+				LOGGER.info(String.format("Service host [%s] is back up. Marking as available",
+						serviceHost.getInternalNetworkAddress()));
+				serviceHost.setAvailable(true);
+				balanceProjectServicesOntoHost(serviceHost);
+			} else {
+				CheckServiceHostStatusJob job = new CheckServiceHostStatusJob(servicHostId);
+				job.setDeliveryDelayInMilliseconds(DOWN_SERVICE_RECHECK_DELAY);
+				jobService.schedule(job);
 			}
-		}
-
-		if (!foundChecker) {
-			LOGGER.warn(String.format("Could not find service host checking strategy for host id:[%s] ip:[%s]. "
-					+ "Service will stay marked as un-available", serviceHost.getId(),
-					serviceHost.getInternalNetworkAddress()));
-		} else if (allServicesUp) {
-			LOGGER.info(String.format("Service host [%s] is back up. Marking as available",
-					serviceHost.getInternalNetworkAddress()));
-			serviceHost.setAvailable(true);
 		} else {
-			CheckServiceHostStatusJob job = new CheckServiceHostStatusJob(servicHostId);
-			job.setDeliveryDelayInMilliseconds(DOWN_SERVICE_RECHECK_DELAY);
-			jobService.schedule(job);
+			LOGGER.warn(String.format("Could not check host availability for host id:[%s] ip:[%s]. "
+					+ "Host will stay marked as un-available.", serviceHost.getId(),
+					serviceHost.getInternalNetworkAddress()));
 		}
-
 	}
 }

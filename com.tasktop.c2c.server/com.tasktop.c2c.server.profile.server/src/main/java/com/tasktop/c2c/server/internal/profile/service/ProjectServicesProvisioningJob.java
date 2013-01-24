@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.common.service.job.Job;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 
@@ -40,6 +41,8 @@ public class ProjectServicesProvisioningJob extends Job {
 			throw new IllegalStateException(e);
 		} catch (ProvisioningException e) {
 			throw new IllegalStateException(e);
+		} catch (NoNodeAvailableException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

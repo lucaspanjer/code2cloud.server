@@ -61,6 +61,7 @@ import com.tasktop.c2c.server.cloud.service.NodeWithExtraDiskCreationService;
 import com.tasktop.c2c.server.cloud.service.PoolingNodeProvisioningService;
 import com.tasktop.c2c.server.cloud.service.ServiceHostService;
 import com.tasktop.c2c.server.cloud.service.Template;
+import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.common.service.job.JobService;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 
@@ -275,7 +276,12 @@ public class PoolingNodeProvisioningServiceTest {
 
 			@Override
 			public ServiceHost doInTransaction(TransactionStatus status) {
-				ServiceHost host = poolingNodeProvisioningService.provisionNode();
+				ServiceHost host;
+				try {
+					host = poolingNodeProvisioningService.provisionNode();
+				} catch (NoNodeAvailableException e) {
+					throw new RuntimeException(e);
+				}
 				ProjectService randomService = new ProjectService();
 				randomService.setServiceHost(entityManager.find(
 						com.tasktop.c2c.server.profile.domain.internal.ServiceHost.class, host.getId()));

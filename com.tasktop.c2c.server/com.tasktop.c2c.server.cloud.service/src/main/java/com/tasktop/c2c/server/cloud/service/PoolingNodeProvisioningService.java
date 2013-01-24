@@ -23,13 +23,8 @@ public class PoolingNodeProvisioningService extends BasePoolService implements N
 	}
 
 	@Override
-	public ServiceHost provisionNode() {
-		try {
-			return super.retrieveNodeWithMinimalAllocation();
-		} catch (NoNodeAvailableException e) {
-			throw new RuntimeException(e);
-		}
-
+	public ServiceHost provisionNode() throws NoNodeAvailableException {
+		return super.retrieveNodeWithMinimalAllocation();
 	}
 
 	/**

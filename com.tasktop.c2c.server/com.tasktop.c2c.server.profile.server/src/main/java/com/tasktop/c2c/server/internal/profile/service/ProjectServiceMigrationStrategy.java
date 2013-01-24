@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2012 Tasktop Technologies
- * Copyright (c) 2010, 2011 SpringSource, a division of VMware
+ * Copyright (c) 2010, 2013 Tasktop Technologies
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,15 +9,17 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.cloud.service;
+package com.tasktop.c2c.server.internal.profile.service;
 
-import com.tasktop.c2c.server.cloud.domain.PoolStatus;
-import com.tasktop.c2c.server.cloud.domain.ServiceHost;
-import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
+import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
+import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
 
-public interface NodeProvisioningService {
+/**
+ * @author clint (Tasktop Technologies Inc.)
+ * 
+ */
+public interface ProjectServiceMigrationStrategy {
+	boolean canMigrate(ProjectService projectService);
 
-	ServiceHost provisionNode() throws NoNodeAvailableException;
-
-	PoolStatus getStatus();
+	void migrate(ProjectService service, ServiceHost newServiceHost);
 }
