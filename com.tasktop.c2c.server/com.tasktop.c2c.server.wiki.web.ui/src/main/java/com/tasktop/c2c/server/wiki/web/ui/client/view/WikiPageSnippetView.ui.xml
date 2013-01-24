@@ -10,10 +10,10 @@
 	<p><g:Label ui:field="snippet"/></p>
 	<div class="date-info">
 		<div class="created left">
-			Created: <g:Label ui:field="createdDate"/> by <g:Label ui:field="createdAuthor"/>
+			<g:Label ui:field="createdLabel"/>
 		</div>
 		<div class="changed right">
-			Changed: <g:Label ui:field="modifiedDate"/> by <g:Label ui:field="modifiedAuthor"/>
+			<g:Label ui:field="modifiedLabel"/>
 		</div>
 		<div class="clear"></div>
 	</div>

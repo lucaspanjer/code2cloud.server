@@ -9,11 +9,12 @@
 	xmlns:c="urn:import:com.tasktop.c2c.server.common.web.client.widgets.chooser">
 	
 	<ui:with field='res' type='com.tasktop.c2c.server.tasks.client.TaskResources'/>
+	<ui:with field="wm" type="com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages"/>
 	
 	<g:HTMLPanel styleName="{res.style.wikiEdit}">
 
 	<div class="{res.style.wikiControl}" >
-		<g:Anchor ui:field="helpAnchor" styleName="{res.style.small}" >Wiki Help</g:Anchor>
+		<g:Anchor ui:field="helpAnchor" styleName="{res.style.small}" ><ui:text from="{wm.wikiHelp}"/></g:Anchor>
 		<g:ToggleButton ui:field="toggleButton" title="Toggle Edit"/>
 	</div>
 	<div class="clear"/>

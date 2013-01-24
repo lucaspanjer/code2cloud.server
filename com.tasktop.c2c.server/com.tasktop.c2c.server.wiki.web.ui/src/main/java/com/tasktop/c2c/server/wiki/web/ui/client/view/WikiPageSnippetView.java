@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.wiki.web.ui.client.view;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -22,6 +21,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.web.client.widgets.Format;
 import com.tasktop.c2c.server.wiki.domain.Page;
+import com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages;
 import com.tasktop.c2c.server.wiki.web.ui.client.place.ProjectWikiViewPagePlace;
 
 public class WikiPageSnippetView extends Composite {
@@ -30,19 +30,16 @@ public class WikiPageSnippetView extends Composite {
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
+	private WikiMessages wikiMessages = GWT.create(WikiMessages.class);
 
 	@UiField
 	Anchor title;
 	@UiField
 	Label snippet;
 	@UiField
-	Label createdAuthor;
+	Label createdLabel;
 	@UiField
-	Label createdDate;
-	@UiField
-	Label modifiedAuthor;
-	@UiField
-	Label modifiedDate;
+	Label modifiedLabel;
 
 	public WikiPageSnippetView(String projectIdentifier, Page page) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -54,9 +51,9 @@ public class WikiPageSnippetView extends Composite {
 			length = 250;
 		}
 		snippet.setText(page.getContent().substring(0, length));
-		createdAuthor.setText(page.getOriginalAuthor().getName());
-		createdDate.setText(Format.stringValueDateTime(page.getCreationDate()));
-		modifiedAuthor.setText(page.getLastAuthor().getName());
-		modifiedDate.setText(Format.stringValueDateTime(page.getModificationDate()));
+		createdLabel.setText(wikiMessages.createdBy(Format.stringValueDateTime(page.getCreationDate()), page
+				.getOriginalAuthor().getName()));
+		modifiedLabel.setText(wikiMessages.changedBy(Format.stringValueDateTime(page.getModificationDate()), page
+				.getLastAuthor().getName()));
 	}
 }

@@ -4,17 +4,19 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:a="urn:import:com.tasktop.c2c.server.common.web.client.widgets"
 	xmlns:w="urn:import:com.tasktop.c2c.server.wiki.web.ui.client.view">
+	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
+	<ui:with field="wm" type="com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages"/>
 	<g:HTMLPanel styleName="add-edit-project deployment">
 		<div class="deployment-heading">
 			<h2>
 				<g:Label ui:field="pageTitle" styleName="left"></g:Label>
-				<g:Button ui:field="cancelButton2" addStyleNames="button right marginleft">Cancel</g:Button>
-				<g:Button ui:field="saveButton2" addStyleNames="button special right">Save</g:Button>
+				<g:Button ui:field="cancelButton2" addStyleNames="button right marginleft"><ui:text from="{cpm.cancel}"/></g:Button>
+				<g:Button ui:field="saveButton2" addStyleNames="button special right"><ui:text from="{cpm.save}"/></g:Button>
 			</h2>
 			<div class="clear"></div>
 		</div>
 		<div class="document-name edit">
-			<h3>Title</h3>
+			<h3><ui:text from="{wm.title}"/></h3>
 			<fieldset>
 				<div class="left">
 					<g:TextBox ui:field="path" styleName="input edit-title-input"></g:TextBox>
@@ -23,20 +25,20 @@
 			</fieldset>
 		</div>
 		<div class="document-text edit">
-			<h3>Text (Markup: <g:Label ui:field="markupLanguage"></g:Label>)</h3>
+			<h3><g:Label ui:field="markupLanguageLabel"></g:Label></h3>
 			<fieldset>
 				<w:EditWikiPanel ui:field="content" visibleLines="30" />
 			</fieldset>
 		</div>
 		<g:HTMLPanel ui:field="attachmentsPanel" styleName="attachments edit">
-			<h3>Attachments</h3>
+			<h3><ui:text from="{wm.attachments}"/></h3>
 			<g:FlowPanel ui:field='attachmentsListPanel'></g:FlowPanel>
 			<g:FormPanel ui:field='attachmentForm' addStyleNames="wikiAttachments">
 				<g:HTMLPanel>
 					<fieldset>
 						<div>
 							<g:FileUpload ui:field='attachment' name="attachment"></g:FileUpload>
-							<g:Button ui:field='attachmentSubmit' addStyleNames="button special">Attach File</g:Button>
+							<g:Button ui:field='attachmentSubmit' addStyleNames="button special"><ui:text from="{wm.attachFile}"/></g:Button>
 						</div>
 					</fieldset>
 				</g:HTMLPanel>
@@ -44,16 +46,16 @@
 			<div class="clear"></div>
 		</g:HTMLPanel>
 	  <div class="attachments edit">
- 						<h3>Access Controls</h3>
+ 						<h3><ui:text from="{wm.accessControls}"/></h3>
  						<fieldset>
- 						  <label>Edit:</label>
+ 						  <label><ui:text from="{cpm.edit}"/><ui:text from="{cpm.colon}"/></label>
  							<div>
 								<g:ValueListBox ui:field='editAccess' />
  							</div>
  						</fieldset>
  						<g:HTMLPanel ui:field="deleteAccessPanel">
  						<fieldset>
- 						  <label>Delete:</label>
+ 						  <label><ui:text from="{cpm.delete}"/><ui:text from="{cpm.colon}"/></label>
  							<div>
 								<g:ValueListBox ui:field='deleteAccess' />
  							</div>
@@ -63,15 +65,15 @@
    	  </div>
    	  	 <div class="attachments edit">
  						<g:HTMLPanel ui:field="changeMarkupPanel">
- 						<h3>Change wiki markup to current language preference (<g:Label ui:field="currentLangPref" />)</h3>
+ 						<h3><g:Label ui:field="currentLangPrefLabel" /></h3>
 						<fieldset>
-							<g:Button ui:field='changeMarkup' addStyleNames="button special">Change</g:Button>  </fieldset>
+							<g:Button ui:field='changeMarkup' addStyleNames="button special"><ui:text from="{wm.change}"/></g:Button>  </fieldset>
  						</g:HTMLPanel>
 	<div class="clear"></div>
    	  </div>
 		<div class="save top-margin">
-			<g:Button ui:field="cancelButton" addStyleNames="button right marginleft">Cancel</g:Button>
-			<g:Button ui:field="saveButton" addStyleNames="button special right">Save</g:Button>
+			<g:Button ui:field="cancelButton" addStyleNames="button right marginleft"><ui:text from="{cpm.cancel}"/></g:Button>
+			<g:Button ui:field="saveButton" addStyleNames="button special right"><ui:text from="{cpm.save}"/></g:Button>
 			<div class="clear"></div>
 		</div>
 	</g:HTMLPanel>

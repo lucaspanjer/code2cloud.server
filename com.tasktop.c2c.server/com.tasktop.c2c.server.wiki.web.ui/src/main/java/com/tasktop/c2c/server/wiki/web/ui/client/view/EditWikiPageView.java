@@ -71,7 +71,8 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 	@UiField
 	TextBox path;
 	@UiField
-	Label markupLanguage;
+	@Ignore
+	Label markupLanguageLabel;
 	@UiField
 	EditWikiPanel content;
 
@@ -92,7 +93,7 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 	Button changeMarkup;
 	@UiField
 	@Ignore
-	Label currentLangPref;
+	Label currentLangPrefLabel;
 
 	private Collection<GroupAccess> availableAccessSettings;
 
@@ -150,7 +151,7 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 			}
 		});
 
-		markupLanguage.setText(content.getMarkupLanguage());
+		markupLanguageLabel.setText(wikiMessages.textWithMarkupLanguage(content.getMarkupLanguage()));
 		driver.initialize(this);
 	}
 
@@ -208,7 +209,7 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 
 	@Override
 	public void setCurrentMarkupPreference(String markupLanguage) {
-		currentLangPref.setText(markupLanguage);
+		currentLangPrefLabel.setText(wikiMessages.changeWikiMarkup(markupLanguage));
 	}
 
 	public Page getPage() {
@@ -280,7 +281,7 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 
 	@Override
 	public String getMarkupPreference() {
-		return currentLangPref.getText();
+		return currentLangPrefLabel.getText();
 	}
 
 	private boolean isEditing;

@@ -2,6 +2,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with field="wm" type="com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages"/>
 	<g:HTMLPanel styleName="project-detail-container">
 		<h2><g:Label ui:field="title"/></h2>
 		<div class="menu left">
@@ -12,7 +13,7 @@
 		      		<li><a class="selected" href="#">My Contributions</a></li>
 		      		<li><a href="#">Recently Changed</a></li>
 		      		-->
-		      		<li><g:Anchor ui:field="allSearchLink">All Pages</g:Anchor></li>
+		      		<li><g:Anchor ui:field="allSearchLink"><ui:text from="{wm.allPages}"/></g:Anchor></li>
 		    	</ul>
 		    	<div class="bottom"></div>
 		  	</div>
@@ -21,7 +22,7 @@
 		<div class="content right">
 			<div class="filter">
 				<div class="left">
-	 				<g:Button ui:field='newPageButton' addStyleNames="button special">New Page</g:Button>
+	 				<g:Button ui:field='newPageButton' addStyleNames="button special"><ui:text from="{wm.newPage}"/></g:Button>
 				</div>
 				<div class="right">
 				<!--

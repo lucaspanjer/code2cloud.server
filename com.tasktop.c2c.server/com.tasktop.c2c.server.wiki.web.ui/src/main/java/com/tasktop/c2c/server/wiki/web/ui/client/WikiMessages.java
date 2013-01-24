@@ -19,11 +19,29 @@ import com.google.gwt.i18n.client.Messages;
  */
 public interface WikiMessages extends Messages {
 
+	@DefaultMessage("Access Controls")
+	String accessControls();
+
+	@DefaultMessage("All Pages")
+	String allPages();
+
+	@DefaultMessage("Attach File")
+	String attachFile();
+
+	@DefaultMessage("Attachments")
+	String attachments();
+
 	@DefaultMessage("Attachment \"{0}\" uploaded")
 	String attachmentUploaded(String attachmentFileName);
 
+	@DefaultMessage("Change")
+	String change();
+
 	@DefaultMessage("Changed: {0} by {1}")
 	String changedBy(String modifiedDate, String author);
+
+	@DefaultMessage("Change wiki markup to current language preference ({0})")
+	String changeWikiMarkup(String markupLanguage);
 
 	@DefaultMessage("Created: {0} by {1}")
 	String createdBy(String createdDate, String author);
@@ -58,6 +76,9 @@ public interface WikiMessages extends Messages {
 	@DefaultMessage("Page Deleted.")
 	String pageDeleted();
 
+	@DefaultMessage("This page has been deleted.")
+	String pageDeletedMessage();
+
 	@DefaultMessage("Page \"{0}\" not found.")
 	String pageNotFound(String pagePath);
 
@@ -70,11 +91,20 @@ public interface WikiMessages extends Messages {
 	@DefaultMessage("Page Updated.")
 	String pageUpdated();
 
+	@DefaultMessage("Restore")
+	String restore();
+
 	@DefaultMessage("Saving Page...")
 	String savingPage();
 
 	@DefaultMessage("Search Wiki...")
 	String searchWiki();
+
+	@DefaultMessage("Text (Markup: {0})")
+	String textWithMarkupLanguage(String markupLanguage);
+
+	@DefaultMessage("Title")
+	String title();
 
 	@DefaultMessage("There are unsaved changes. Are you sure you want to navigate away? "
 			+ "Press OK to navigate away and lose unsaved changes, or Cancel to stay on the current page.")
@@ -85,4 +115,7 @@ public interface WikiMessages extends Messages {
 
 	@DefaultMessage("Wiki - {0} - {1} - {2}")
 	String viewWikiWindowTitle(String pagePath, String projectName, String productName);
+
+	@DefaultMessage("Wiki Help")
+	String wikiHelp();
 }
