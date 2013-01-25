@@ -29,7 +29,6 @@ public class GetTaskAction implements Action<GetTaskResult>, CachableReadAction,
 
 	private String projectId;
 	private Integer taskId;
-	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public GetTaskAction(String projectId, Integer taskId) {
 		this.projectId = projectId;
@@ -57,7 +56,7 @@ public class GetTaskAction implements Action<GetTaskResult>, CachableReadAction,
 	@Override
 	public String getErrorMessage(DispatchException e) {
 		if (ExceptionsUtil.isEntityNotFound(e)) {
-			return tasksMessages.taskNotFound(taskId);
+			return ((TasksMessages) GWT.create(TasksMessages.class)).taskNotFound(taskId);
 		}
 		return null;
 	}
