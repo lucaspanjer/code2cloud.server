@@ -131,8 +131,9 @@ public class NotificationServiceImpl extends AbstractJpaServiceBean implements N
 			return;
 		}
 
-		String subject = String.format("[%s %s] %s%s", task.getTaskType(), task.getId(), isCreateActivity ? "New: "
-				: "", task.getShortDescription());
+		String messageKey = isCreateActivity ? "email.subject.task.new" : "email.subject.task";
+		String subject = super.messageSource.getMessage(messageKey, new Object[] { task.getTaskType(), task.getId(),
+				task.getShortDescription() }, AuthenticationServiceUser.getCurrentUserLocale());
 		String body = generateEmailHeader(isCreateActivity, task);
 
 		// guarantee the order we call these for the body email

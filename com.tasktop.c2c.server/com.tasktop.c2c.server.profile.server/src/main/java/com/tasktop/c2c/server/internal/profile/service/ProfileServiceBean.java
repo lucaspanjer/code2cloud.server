@@ -303,9 +303,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		model.put("AppName", configuration.getAppName());
 		model.put("AppBaseUrl", configuration.getProfileBaseUrl());
 
+		String subject = super.messageSource.getMessage("email.subject.welcome",
+				new Object[] { configuration.getAppName() }, AuthenticationServiceUser.getCurrentUserLocale());
 		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, profileCreatedTemplate, model,
 				AuthenticationServiceUser.getCurrentUserLanguage());
-		Email email = new Email(profile.getEmail(), "Welcome to " + configuration.getAppName(), bodyText, "text/plain");
+		Email email = new Email(profile.getEmail(), subject, bodyText, "text/plain");
 		emailService.schedule(email);
 	}
 
@@ -815,7 +817,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, passwordResetTemplate, model,
 				AuthenticationServiceUser.getCurrentUserLanguage());
-		Email email = new Email(profile.getEmail(), "Password Reset", bodyText, "text/plain");
+		String subject = super.messageSource.getMessage("email.subject.password.reset", null,
+				AuthenticationServiceUser.getCurrentUserLocale());
+		Email email = new Email(profile.getEmail(), subject, bodyText, "text/plain");
 		emailService.schedule(email);
 	}
 
@@ -902,8 +906,10 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, projectInvitationTemplate, model,
 				AuthenticationServiceUser.getCurrentUserLanguage());
-		Email email = new Email(token.getEmail(), token.getIssuingProfile().getFirstName()
-				+ " has invited you to a project on " + configuration.getAppName(), bodyText, "text/plain");
+		String subject = super.messageSource.getMessage("email.subject.project.invitation", new Object[] {
+				token.getIssuingProfile().getFirstName(), configuration.getAppName() },
+				AuthenticationServiceUser.getCurrentUserLocale());
+		Email email = new Email(token.getEmail(), subject, bodyText, "text/plain");
 		emailService.schedule(email);
 	}
 
@@ -990,10 +996,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		model.put("AppName", configuration.getAppName());
 		model.put("AppBaseUrl", configuration.getProfileBaseUrl());
 		model.put("URL", configuration.getEmailVerificationURL(token.getToken()));
+		String subject = super.messageSource.getMessage("email.subject.verification",
+				new Object[] { configuration.getAppName() }, AuthenticationServiceUser.getCurrentUserLocale());
 		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, emailVerificationTemplate, model,
 				AuthenticationServiceUser.getCurrentUserLanguage());
-		Email email = new Email(token.getEmail(), "Verify your " + configuration.getAppName() + " email", bodyText,
-				"text/plain");
+		Email email = new Email(token.getEmail(), subject, bodyText, "text/plain");
 		emailService.schedule(email);
 	}
 
@@ -1499,18 +1506,20 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		model.put("UpdateSite", configuration.getUpdateSiteUrl());
 		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, signUpInvitationTemplate, model,
 				AuthenticationServiceUser.getCurrentUserLanguage());
-		Email email = new Email(token.getEmail(), "You have been invited to join " + configuration.getAppName(),
-				bodyText, "text/plain");
+		String subject = super.messageSource.getMessage("email.subject.sign.up.invitation",
+				new Object[] { configuration.getAppName() }, AuthenticationServiceUser.getCurrentUserLocale());
+		Email email = new Email(token.getEmail(), subject, bodyText, "text/plain");
 		emailService.schedule(email);
 
 		// Task 2376: send an invite to info@code.cloudfoundry.com on system invite, containing invite info
 		String notificationEmailAddress = configuration.getSignupNotificationEmail();
 		if (notificationEmailAddress != null && !notificationEmailAddress.isEmpty()) {
-			String secondBodyText = String.format(
-					"first name: %s\nlast name: %s\n email: %s\n token: %s\n\nSent by: %s", token.getFirstname(),
-					token.getLastname(), token.getEmail(), token.getToken(), getCurrentUserProfile().getFullName());
-			Email secondEmail = new Email(notificationEmailAddress, "System invitation to " + token.getEmail()
-					+ " sent for " + configuration.getWebHost(), secondBodyText, "text/plain");
+			String secondSubject = super.messageSource.getMessage("email.subject.system.invitation", new Object[] {
+					token.getEmail(), configuration.getWebHost() }, AuthenticationServiceUser.getCurrentUserLocale());
+			String secondBodyText = super.messageSource.getMessage("email.body.system.invitation",
+					new Object[] { token.getFirstname(), token.getLastname(), token.getEmail(), token.getToken(),
+							getCurrentUserProfile().getFullName() }, AuthenticationServiceUser.getCurrentUserLocale());
+			Email secondEmail = new Email(notificationEmailAddress, secondSubject, secondBodyText, "text/plain");
 			emailService.schedule(secondEmail);
 		}
 	}
