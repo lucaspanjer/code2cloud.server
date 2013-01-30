@@ -1755,7 +1755,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 		// if there are, throw a ValidationException.
 		if (numTasks > 0) {
-			String defaultErrorMsg = "Cannot delete product because tasks still refer to it";
+			String defaultErrorMsg = super.messageSource.getMessage("product.referencedByTasks", null,
+					AuthenticationServiceUser.getCurrentUserLocale());
 			Errors allErrors = new MapBindingResult(new HashMap<String, String>(), String.valueOf(productId));
 			allErrors.reject("product.referencedByTasks", defaultErrorMsg);
 			throw new ValidationException(defaultErrorMsg, allErrors);
@@ -1844,7 +1845,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 		// if there are, throw a ValidationException.
 		if (numTasks > 0) {
-			String defaultErrorMsg = "Cannot delete component because tasks still refer to it";
+			String defaultErrorMsg = super.messageSource.getMessage("component.referencedByTasks", null,
+					AuthenticationServiceUser.getCurrentUserLocale());
 			Errors allErrors = new MapBindingResult(new HashMap<String, String>(), String.valueOf(componentId));
 			allErrors.reject("component.referencedByTasks", defaultErrorMsg);
 			throw new ValidationException(defaultErrorMsg, allErrors);
@@ -1868,9 +1870,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 		// if there are, throw a ValidationException.
 		if (numTasks > 0) {
-			String defaultErrorMsg = "Cannot delete release because tasks still refer to it";
-			// HashMap<String, String> binderMap = new HashMap<String, String>();
-			// Errors allErrors = new MapBindingResult(binderMap, String.valueOf(milestoneId));
+			String defaultErrorMsg = super.messageSource.getMessage("milestone.referencedByTasks", null,
+					AuthenticationServiceUser.getCurrentUserLocale());
 			delMilestone.setProduct(null);
 			Errors allErrors = new BeanPropertyBindingResult(delMilestone, String.valueOf(milestoneId));
 			allErrors.reject("milestone.referencedByTasks", defaultErrorMsg);
@@ -1880,7 +1881,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 		// Then, check if we're the default milestone for the product
 		if (delMilestone.getValue().equals(delMilestone.getProduct().getDefaultmilestone())) {
-			String defaultErrorMsg = "Cannot delete release because it is the default release for a product";
+			String defaultErrorMsg = super.messageSource.getMessage("milestone.defaultForProduct", null,
+					AuthenticationServiceUser.getCurrentUserLocale());
 			HashMap<String, String> binderMap = new HashMap<String, String>();
 			Errors allErrors = new MapBindingResult(binderMap, String.valueOf(milestoneId));
 			allErrors.reject("milestone.defaultForProduct", defaultErrorMsg);

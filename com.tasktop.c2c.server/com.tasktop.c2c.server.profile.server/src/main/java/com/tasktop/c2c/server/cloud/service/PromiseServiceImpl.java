@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.profile.domain.internal.PromiseToken;
@@ -74,14 +75,18 @@ public class PromiseServiceImpl extends AbstractJpaServiceBean implements Promis
 									+ " t WHERE t.token = :token AND t.expiryDate > :now AND t.dateUsed IS NULL")
 					.setParameter("now", now).setParameter("token", token).getSingleResult();
 		} catch (NoResultException e) {
-			throw new ValidationException("No such promise", null);
+			String message = super.messageSource.getMessage("no.such.promise", null,
+					AuthenticationServiceUser.getCurrentUserLocale());
+			throw new ValidationException(message, null);
 		}
 	}
 
 	@Override
 	public void redeem(String promiseToken) throws ValidationException {
 		if (!isNextPromise(promiseToken)) {
-			throw new ValidationException("Not the next promise", null);
+			String message = super.messageSource.getMessage("not.next.promise", null,
+					AuthenticationServiceUser.getCurrentUserLocale());
+			throw new ValidationException(message, null);
 		}
 		retrieve(promiseToken).setDateUsed(new Date());
 		// REVIEW Or we could delete it?

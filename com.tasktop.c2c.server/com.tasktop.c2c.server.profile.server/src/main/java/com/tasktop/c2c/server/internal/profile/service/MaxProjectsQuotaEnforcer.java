@@ -12,11 +12,13 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.profile.service;
 
-
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
+import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.Quota;
@@ -38,6 +40,9 @@ public class MaxProjectsQuotaEnforcer implements QuotaEnforcer<Project> {
 
 	@Inject
 	private ProfileService profileService;
+
+	@Autowired
+	protected MessageSource messageSource;
 
 	@Override
 	public String getQuotaName() {
@@ -69,8 +74,9 @@ public class MaxProjectsQuotaEnforcer implements QuotaEnforcer<Project> {
 		Integer maxProjects = Integer.parseInt(quota.getValue());
 
 		if (org.getProjects().size() >= maxProjects) {
-			throw new ValidationException("Maximum number of Projects (" + quota.getValue() + ") already reached.",
-					null); // TODO Internationalize this
+			String message = messageSource.getMessage("max.projects.reached", new Object[] { quota.getValue() },
+					AuthenticationServiceUser.getCurrentUserLocale());
+			throw new ValidationException(message, null);
 		}
 	}
 }

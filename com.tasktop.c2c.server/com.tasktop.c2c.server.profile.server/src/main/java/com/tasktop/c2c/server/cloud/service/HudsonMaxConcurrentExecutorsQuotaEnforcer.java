@@ -16,8 +16,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
+import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.ValidationException;
@@ -34,6 +36,9 @@ public class HudsonMaxConcurrentExecutorsQuotaEnforcer implements QuotaEnforcer<
 
 	@Autowired
 	protected ServiceHostService serviceHostService;
+
+	@Autowired
+	protected MessageSource messageSource;
 
 	@Override
 	public String getQuotaName() {
@@ -52,8 +57,9 @@ public class HudsonMaxConcurrentExecutorsQuotaEnforcer implements QuotaEnforcer<
 		List<ServiceHost> currentSlaves = serviceHostService.findHostsByTypeAndProject(
 				EnumSet.of(ServiceType.BUILD_SLAVE), projectIdentifier);
 		if (currentSlaves.size() >= maxSlaves) {
-			throw new ValidationException("Maximum number of concurrent build executors (" + quota.getValue()
-					+ ") already reached.", null); // TODO Internationalize this
+			String message = messageSource.getMessage("hudson.quota.reached", new Object[] { quota.getValue() },
+					AuthenticationServiceUser.getCurrentUserLocale());
+			throw new ValidationException(message, null);
 		}
 	}
 

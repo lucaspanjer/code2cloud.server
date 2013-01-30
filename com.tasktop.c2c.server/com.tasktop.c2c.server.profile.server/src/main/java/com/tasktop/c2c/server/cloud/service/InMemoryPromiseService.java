@@ -18,8 +18,11 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
+import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.common.service.ValidationException;
 
 /**
@@ -30,6 +33,9 @@ import com.tasktop.c2c.server.common.service.ValidationException;
  */
 @Component
 public class InMemoryPromiseService implements PromiseService {
+
+	@Autowired
+	protected MessageSource messageSource;
 
 	class Promise {
 		private String token;
@@ -112,7 +118,9 @@ public class InMemoryPromiseService implements PromiseService {
 				return;
 			}
 		}
-		throw new ValidationException("No such promise", null);
+		String message = messageSource.getMessage("no.such.promise", null,
+				AuthenticationServiceUser.getCurrentUserLocale());
+		throw new ValidationException(message, null);
 	}
 
 	/**
@@ -129,7 +137,9 @@ public class InMemoryPromiseService implements PromiseService {
 				return;
 			}
 		}
-		throw new ValidationException("No such promise", null);
+		String message = messageSource.getMessage("no.such.promise", null,
+				AuthenticationServiceUser.getCurrentUserLocale());
+		throw new ValidationException(message, null);
 	}
 
 	/**
@@ -144,7 +154,9 @@ public class InMemoryPromiseService implements PromiseService {
 				return;
 			}
 		}
-		throw new ValidationException("No such promise", null);
+		String message = messageSource.getMessage("no.such.promise", null,
+				AuthenticationServiceUser.getCurrentUserLocale());
+		throw new ValidationException(message, null);
 	}
 
 	@Override
