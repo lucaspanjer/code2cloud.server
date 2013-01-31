@@ -12,8 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.account.profile;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.FieldSetElement;
@@ -94,14 +94,16 @@ public class AccountProfileEditView extends AbstractAccountProfileView implement
 		initWidget(ourUiBinder.createAndBindUi(this));
 		String[] localeNames = LocaleInfo.getAvailableLocaleNames();
 		// sort the locale names and filter out the "default" value
-		Set<String> filteredLocaleNames = new TreeSet<String>();
+		List<String> filteredLocaleNames = new ArrayList<String>();
 		for (String name : localeNames) {
 			if (!"default".equals(name)) {
 				filteredLocaleNames.add(name);
 			}
 		}
-		languageField.setValue(filteredLocaleNames.iterator().next());
-		languageField.setAcceptableValues(filteredLocaleNames);
+		if (!filteredLocaleNames.isEmpty()) {
+			languageField.setValue(filteredLocaleNames.get(0));
+			languageField.setAcceptableValues(filteredLocaleNames);
+		}
 		if (filteredLocaleNames.size() < 2) {
 			UIObject.setVisible(languageFieldSet, false);
 		}
