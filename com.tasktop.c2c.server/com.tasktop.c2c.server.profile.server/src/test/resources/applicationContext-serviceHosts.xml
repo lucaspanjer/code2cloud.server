@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+		<bean id="serviceHostStartupBeans" class="java.util.ArrayList">
+			<constructor-arg>
+				<list>
+					<bean class="com.tasktop.c2c.server.cloud.domain.ServiceHost"
+						p:internalNetworkAddress="127.0.0.1"
+						p:available="true">
+						<property name="supportedServices">
+							<set value-type="com.tasktop.c2c.server.cloud.domain.ServiceType">
+								<value>TASKS</value>
+								<value>WIKI</value>
+							</set>
+						</property>
+					</bean>
+					<bean class="com.tasktop.c2c.server.cloud.domain.ServiceHost"
+						p:internalNetworkAddress="127.0.0.2"
+						p:available="true">
+						<property name="supportedServices">
+							<set value-type="com.tasktop.c2c.server.cloud.domain.ServiceType">
+								<value>TASKS</value>
+								<value>WIKI</value>
+							</set>
+						</property>
+					</bean>
+				</list>
+			</constructor-arg>
+		</bean>
+</beans>

@@ -126,5 +126,9 @@
 	<bean id="proxySetup" class="com.tasktop.c2c.server.common.service.HttpProxySetup"
 		p:dontProxyToProfile="true" p:profileConfiguration-ref="psConfig"
 	/>
-
+	
+	<bean id="serviceHostStartupProcessor" class="com.tasktop.c2c.server.internal.profile.service.ServiceHostStartupProcessor" 
+		p:configFile="/opt/code2cloud/etc/applicationContext-serviceHosts.xml">
+		<property name="serviceHostService" ref="serviceHostService"/> 
+	</bean>
 </beans>
