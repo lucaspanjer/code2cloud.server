@@ -18,19 +18,7 @@ import java.util.Date;
 public class Page extends PageHandle {
 
 	public enum GroupAccess {
-		ALL("Allow all users"), MEMBER_AND_OWNERS("Members + Owners"), OWNERS("Owners");
-		private String friendlyName;
-
-		private GroupAccess(String friendlyName) {
-			this.friendlyName = friendlyName;
-		}
-
-		/**
-		 * @return the friendlyName
-		 */
-		public String getFriendlyName() {
-			return friendlyName;
-		}
+		ALL, MEMBER_AND_OWNERS, OWNERS;
 	}
 
 	private String path;

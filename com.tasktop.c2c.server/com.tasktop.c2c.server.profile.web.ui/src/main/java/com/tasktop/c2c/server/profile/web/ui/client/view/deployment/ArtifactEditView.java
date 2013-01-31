@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
+import com.tasktop.c2c.server.common.profile.web.client.util.enums.BuildResultMessageSelector;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentType;
 import com.tasktop.c2c.server.profile.domain.build.BuildArtifact;
@@ -79,7 +80,6 @@ public class ArtifactEditView extends Composite {
 
 		private final String nullText;
 		private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
-		private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 		public BuildRenderer(String nullText) {
 			this.nullText = nullText;
@@ -93,7 +93,9 @@ public class ArtifactEditView extends Composite {
 			if (object.getResult() == null) {
 				return object.getNumber() + "";
 			}
-			return object.getNumber() + " " + commonProfileMessages.parentheses(object.getResult().getFriendlyName());
+			String buildResult = new BuildResultMessageSelector().getInternationalizedMessage(object.getResult(),
+					commonProfileMessages);
+			return object.getNumber() + " " + commonProfileMessages.parentheses(buildResult);
 		}
 
 	}

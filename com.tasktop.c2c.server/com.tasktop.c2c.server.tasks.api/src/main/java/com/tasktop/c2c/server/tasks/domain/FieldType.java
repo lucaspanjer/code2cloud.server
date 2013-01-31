@@ -16,42 +16,30 @@ public enum FieldType {
 	/**
 	 * a single-line text field
 	 */
-	TEXT("Single line text input"),
+	TEXT,
 	/**
 	 * a single-select field
 	 */
-	SINGLE_SELECT("Single selection"),
+	SINGLE_SELECT,
 	/**
 	 * multi-select
 	 */
-	MULTI_SELECT("Multiple selection"),
+	MULTI_SELECT,
 	/**
 	 * long text
 	 */
-	LONG_TEXT("Long text input"),
+	LONG_TEXT,
 	/**
 	 * for date/time
 	 */
-	TIMESTAMP("Time and date"),
+	TIMESTAMP,
 	/**
 	 * a reference to a task (ie: it's id)
 	 */
-	TASK_REFERENCE("Task reference"),
+	TASK_REFERENCE,
 	/**
 	 * a checkbox field
 	 */
-	CHECKBOX("Checkbox");
+	CHECKBOX;
 
-	private String friendlyName;
-
-	private FieldType(String friendlyName) {
-		this.friendlyName = friendlyName;
-	}
-
-	/**
-	 * @return the friendlyName
-	 */
-	public String getFriendlyName() {
-		return friendlyName;
-	}
 }

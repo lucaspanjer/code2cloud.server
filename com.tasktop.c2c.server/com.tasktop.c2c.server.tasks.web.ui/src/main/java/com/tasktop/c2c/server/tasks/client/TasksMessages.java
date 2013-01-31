@@ -210,6 +210,27 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Fields")
 	String fields();
 
+	@DefaultMessage("Checkbox")
+	String fieldTypeCheckbox();
+
+	@DefaultMessage("Long text input")
+	String fieldTypeLongText();
+
+	@DefaultMessage("Multiple selection")
+	String fieldTypeMultiSelect();
+
+	@DefaultMessage("Single selection")
+	String fieldTypeSingleSelect();
+
+	@DefaultMessage("Task reference")
+	String fieldTypeTaskReference();
+
+	@DefaultMessage("Single line text input")
+	String fieldTypeText();
+
+	@DefaultMessage("Time and date")
+	String fieldTypeTimestamp();
+
 	@DefaultMessage("Field Values")
 	String fieldValues();
 

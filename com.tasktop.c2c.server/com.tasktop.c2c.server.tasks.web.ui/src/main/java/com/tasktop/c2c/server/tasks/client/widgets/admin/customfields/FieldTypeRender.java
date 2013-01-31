@@ -12,8 +12,10 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets.admin.customfields;
 
-
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.text.shared.AbstractRenderer;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
+import com.tasktop.c2c.server.tasks.client.util.enums.FieldTypeMessageSelector;
 import com.tasktop.c2c.server.tasks.domain.FieldType;
 
 /**
@@ -31,10 +33,11 @@ public final class FieldTypeRender extends AbstractRenderer<FieldType> {
 	}
 
 	@Override
-	public String render(FieldType object) {
-		if (object == null) {
+	public String render(FieldType fieldType) {
+		if (fieldType == null) {
 			return "";
 		}
-		return object.getFriendlyName();
+		TasksMessages tasksMessages = GWT.create(TasksMessages.class);
+		return new FieldTypeMessageSelector().getInternationalizedMessage(fieldType, tasksMessages);
 	}
 }

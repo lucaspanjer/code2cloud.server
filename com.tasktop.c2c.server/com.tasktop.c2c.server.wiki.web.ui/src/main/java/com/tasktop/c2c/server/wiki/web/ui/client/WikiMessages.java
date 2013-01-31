@@ -22,6 +22,9 @@ public interface WikiMessages extends Messages {
 	@DefaultMessage("Access Controls")
 	String accessControls();
 
+	@DefaultMessage("Allow all users")
+	String allowAllUsers();
+
 	@DefaultMessage("All Pages")
 	String allPages();
 
@@ -61,6 +64,9 @@ public interface WikiMessages extends Messages {
 	@DefaultMessage("Wiki - {0} - {1}")
 	String homeWindowTitle(String projectName, String productName);
 
+	@DefaultMessage("Members + Owners")
+	String membersAndOwners();
+
 	@DefaultMessage("New Page")
 	String newPage();
 
@@ -69,6 +75,9 @@ public interface WikiMessages extends Messages {
 
 	@DefaultMessage("No outline available")
 	String outlineNotAvailable();
+
+	@DefaultMessage("Owners")
+	String owners();
 
 	@DefaultMessage("Page Created.")
 	String pageCreated();

@@ -27,6 +27,9 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Your account has been disabled")
 	String accountDisabled();
 
+	@DefaultMessage("Aborted")
+	String aborted();
+
 	@DefaultMessage("Admin")
 	String admin();
 
@@ -117,6 +120,9 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Error")
 	String error();
 
+	@DefaultMessage("Failure")
+	String failure();
+
 	@DefaultMessage("Help")
 	String help();
 
@@ -146,6 +152,9 @@ public interface CommonProfileMessages extends Messages {
 
 	@DefaultMessage("You do not have permissions to visit the page")
 	String noPermissionsToVisitPage();
+
+	@DefaultMessage("Not built yet")
+	String notBuiltYet();
 
 	@DefaultMessage("OK")
 	String ok();
@@ -253,6 +262,9 @@ public interface CommonProfileMessages extends Messages {
 
 	@DefaultMessage("Error: Unexpected server response")
 	String unexpectedServerResponse();
+
+	@DefaultMessage("Unstable")
+	String unstable();
 
 	@DefaultMessage("Updating")
 	String updating();

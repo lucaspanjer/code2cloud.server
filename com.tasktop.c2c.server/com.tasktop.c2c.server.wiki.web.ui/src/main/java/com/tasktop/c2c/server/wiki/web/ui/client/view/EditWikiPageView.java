@@ -43,6 +43,7 @@ import com.tasktop.c2c.server.wiki.domain.Page;
 import com.tasktop.c2c.server.wiki.domain.Page.GroupAccess;
 import com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages;
 import com.tasktop.c2c.server.wiki.web.ui.client.presenter.EditWikiPagePresenter.EditWikiPageDisplay;
+import com.tasktop.c2c.server.wiki.web.ui.client.util.enums.GroupAccessMessageSelector;
 
 public class EditWikiPageView extends AbstractComposite implements EditWikiPageDisplay, Editor<Page> {
 
@@ -106,17 +107,20 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 		}
 
 		@Override
-		public String render(GroupAccess object) {
-			if (object == null) {
+		public String render(GroupAccess groupAccess) {
+			if (groupAccess == null) {
 				return ((CommonProfileMessages) GWT.create(CommonProfileMessages.class)).none();
 			}
-			return object.getFriendlyName();
+			WikiMessages wikiMessages = GWT.create(WikiMessages.class);
+			return new GroupAccessMessageSelector().getInternationalizedMessage(groupAccess, wikiMessages);
 		}
 
 		@Override
-		public void render(GroupAccess object, Appendable appendable) throws IOException {
-			if (object != null) {
-				appendable.append(object.getFriendlyName());
+		public void render(GroupAccess groupAccess, Appendable appendable) throws IOException {
+			if (groupAccess != null) {
+				WikiMessages wikiMessages = GWT.create(WikiMessages.class);
+				appendable.append(new GroupAccessMessageSelector().getInternationalizedMessage(groupAccess,
+						wikiMessages));
 			}
 		}
 

@@ -23,21 +23,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 public class BuildDetails implements Serializable {
 
 	public enum BuildResult {
-
-		SUCCESS("Success"), UNSTABLE("Unstable"), FAILURE("Failure"), NOT_BUILT("Not built yet"), ABORTED("Aborted");
-
-		private final String friendlyName;
-
-		private BuildResult(String friendlyName) {
-			this.friendlyName = friendlyName;
-		}
-
-		/**
-		 * @return the friendlyName
-		 */
-		public String getFriendlyName() {
-			return friendlyName;
-		}
+		SUCCESS, UNSTABLE, FAILURE, NOT_BUILT, ABORTED;
 	}
 
 	private String url;
