@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.profile.web.ui.client.view.components.account.profile;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -101,6 +102,7 @@ public class AccountProfileEditView extends AbstractAccountProfileView implement
 			}
 		}
 		if (!filteredLocaleNames.isEmpty()) {
+			Collections.sort(filteredLocaleNames);
 			languageField.setValue(filteredLocaleNames.get(0));
 			languageField.setAcceptableValues(filteredLocaleNames);
 		}
