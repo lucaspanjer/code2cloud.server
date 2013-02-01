@@ -24,6 +24,8 @@ import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonLabel;
 import com.tasktop.c2c.server.profile.domain.activity.WikiActivity;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
+import com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages;
+import com.tasktop.c2c.server.wiki.web.ui.client.util.enums.WikiActivityTypeMessageSelector;
 
 public class WikiActivityRow extends Composite {
 	interface Binder extends UiBinder<Widget, WikiActivityRow> {
@@ -52,7 +54,9 @@ public class WikiActivityRow extends Composite {
 		personLabel.setAsSelf(self != null && person.getIdentity().equals(self.getIdentity()));
 		personLabel.setPerson(person);
 		dateLabel.setText(Format.stringValueTime(activity.getActivityDate()));
-		changeType.setText(activity.getActivity().getActivityType().getLabel());
+		WikiMessages wikiMessages = GWT.create(WikiMessages.class);
+		changeType.setText(new WikiActivityTypeMessageSelector().getInternationalizedMessage(activity.getActivity()
+				.getActivityType(), wikiMessages));
 		pageAnchor.setText(activity.getActivity().getPage().getPath());
 		pageAnchor.setHref(activity.getActivity().getPage().getUrl());
 	}

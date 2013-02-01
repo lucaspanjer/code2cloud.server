@@ -28,6 +28,7 @@ import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.PersonLabel;
 import com.tasktop.c2c.server.common.web.client.widgets.time.TimePeriodRenderer;
 import com.tasktop.c2c.server.tasks.client.TasksMessages;
+import com.tasktop.c2c.server.tasks.client.util.enums.TaskActivityTypeMessageSelector;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity.Type;
 
@@ -67,7 +68,8 @@ public class TaskActivityView extends Composite {
 		personLabel.setAsSelf(self != null && person.getIdentity().equals(self.getIdentity()));
 		personLabel.setPerson(person);
 		dateLabel.setText(Format.stringValueDateTime(taskActivity.getActivityDate()));
-		changeType.setText(taskActivity.getActivityType().getPrettyName());
+		changeType.setText(new TaskActivityTypeMessageSelector().getInternationalizedMessage(
+				taskActivity.getActivityType(), tasksMessages));
 
 		descriptionLabel.setText(taskActivity.getDescription());
 		setStyleFromActivityType(taskActivity.getActivityType());

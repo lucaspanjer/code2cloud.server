@@ -20,18 +20,7 @@ import java.util.List;
 public class TaskActivity implements Serializable {
 
 	public enum Type {
-		CREATED("Created"), COMMENTED("Commented on"), LOGGED_TIME("Logged time on"), ATTACHED("Attached to"), UPDATED(
-				"Updated");
-
-		private final String prettyName;
-
-		Type(String prettyName) {
-			this.prettyName = prettyName;
-		}
-
-		public String getPrettyName() {
-			return prettyName;
-		}
+		CREATED, COMMENTED, LOGGED_TIME, ATTACHED, UPDATED;
 	}
 
 	public static class FieldUpdate implements Serializable {

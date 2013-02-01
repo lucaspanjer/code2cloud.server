@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
+import com.tasktop.c2c.server.common.profile.web.client.util.enums.ProjectRoleMessageSelector;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRole;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTeamMember;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
@@ -83,10 +84,13 @@ public class ProjectTeamAdminMemberView extends Composite {
 	 */
 	private String getRole(Set<ProjectRole> roles) {
 		String highestRole = null;
+		CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+		ProjectRoleMessageSelector projectRoleMessageSelector = new ProjectRoleMessageSelector();
 		for (ProjectRole role : roles) {
+			String label = projectRoleMessageSelector.getInternationalizedMessage(role, commonProfileMessages);
 			if (highestRole == null) {
-				highestRole = role.getLabel();
-			} else if (role.getLabel().equals(profileMessages.owner())) {
+				highestRole = label;
+			} else if (label.equals(profileMessages.owner())) {
 				highestRole = profileMessages.ownerAndMember();
 			}
 		}

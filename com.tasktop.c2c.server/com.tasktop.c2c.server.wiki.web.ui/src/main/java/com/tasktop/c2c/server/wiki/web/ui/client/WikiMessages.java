@@ -49,8 +49,14 @@ public interface WikiMessages extends Messages {
 	@DefaultMessage("Created: {0} by {1}")
 	String createdBy(String createdDate, String author);
 
+	@DefaultMessage("Created Page")
+	String createdPage();
+
 	@DefaultMessage("Creating Page...")
 	String creatingPage();
+
+	@DefaultMessage("Deleted Page")
+	String deletedPage();
 
 	@DefaultMessage("Edit Page")
 	String editPage();
@@ -118,6 +124,9 @@ public interface WikiMessages extends Messages {
 	@DefaultMessage("There are unsaved changes. Are you sure you want to navigate away? "
 			+ "Press OK to navigate away and lose unsaved changes, or Cancel to stay on the current page.")
 	String unsavedChangesMessage();
+
+	@DefaultMessage("Updated Page")
+	String updatedPage();
 
 	@DefaultMessage("Updating Page...")
 	String updatingPage();

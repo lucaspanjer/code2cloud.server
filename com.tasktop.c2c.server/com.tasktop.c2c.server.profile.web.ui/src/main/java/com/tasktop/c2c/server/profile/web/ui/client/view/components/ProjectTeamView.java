@@ -31,6 +31,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.NoSelectionModel;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
+import com.tasktop.c2c.server.common.profile.web.client.util.enums.ProjectRoleMessageSelector;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.common.web.client.view.Avatar;
@@ -96,8 +98,10 @@ public class ProjectTeamView extends AbstractComposite {
 			SafeHtml safeLast = SafeHtmlUtils.fromString(value.getProfile().getLastName());
 			SafeHtml safeUsername = SafeHtmlUtils.fromString(value.getProfile().getUsername());
 			List<String> roles = new ArrayList<String>();
+			CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+			ProjectRoleMessageSelector projectRoleMessageSelector = new ProjectRoleMessageSelector();
 			for (ProjectRole role : value.getRoles()) {
-				roles.add(role.getLabel());
+				roles.add(projectRoleMessageSelector.getInternationalizedMessage(role, commonProfileMessages));
 			}
 			Collections.sort(roles);
 			StringBuilder rolesLabel = new StringBuilder();

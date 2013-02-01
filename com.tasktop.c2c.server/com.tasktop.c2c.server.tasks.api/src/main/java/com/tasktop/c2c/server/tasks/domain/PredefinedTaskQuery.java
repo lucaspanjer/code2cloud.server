@@ -17,16 +17,13 @@ package com.tasktop.c2c.server.tasks.domain;
  * 
  */
 public enum PredefinedTaskQuery {
-	MINE("Assigned to me", true), RELATED("Related to me", true), RECENT("Recently changed", false), OPEN("Open tasks",
-			false), ALL("All tasks", false);
+	MINE(true), RELATED(true), RECENT(false), OPEN(false), ALL(false);
 
 	public static final PredefinedTaskQuery DEFAULT = RECENT;
 
-	private final String label;
 	private final boolean userRequired;
 
-	private PredefinedTaskQuery(String label, boolean userRequired) {
-		this.label = label;
+	private PredefinedTaskQuery(boolean userRequired) {
 		this.userRequired = userRequired;
 	}
 
@@ -48,10 +45,6 @@ public enum PredefinedTaskQuery {
 		throw new IllegalArgumentException();
 	}
 
-	public String getLabel() {
-		return label;
-	}
-
 	public boolean isUserRequired() {
 		return userRequired;
 	}
@@ -59,8 +52,6 @@ public enum PredefinedTaskQuery {
 	/**
 	 * Provide a nice representation of this value, suitable for use in an URI. Typically it's just the lower-case
 	 * representation of the enum constant name.
-	 * 
-	 * @see #getLabel()
 	 */
 	@Override
 	public String toString() {

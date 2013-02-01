@@ -12,10 +12,11 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.widgets;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Widget;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
+import com.tasktop.c2c.server.tasks.client.util.enums.PredefinedTaskQueryMessageSelector;
 import com.tasktop.c2c.server.tasks.domain.PredefinedTaskQuery;
 
 /**
@@ -33,7 +34,8 @@ public class PredefinedTaskQueryRowView extends BaseTaskQueryRowView {
 	public PredefinedTaskQueryRowView(PredefinedTaskQuery query) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.query = query;
-		queryAnchor.setText(query.getLabel());
+		TasksMessages tasksMessages = GWT.create(TasksMessages.class);
+		queryAnchor.setText(new PredefinedTaskQueryMessageSelector().getInternationalizedMessage(query, tasksMessages));
 	}
 
 	/**

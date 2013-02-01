@@ -12,7 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -21,7 +21,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
 import com.tasktop.c2c.server.common.profile.web.client.presenter.person.PersonUtil;
+import com.tasktop.c2c.server.common.profile.web.client.util.enums.ProjectRoleMessageSelector;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.People;
 import com.tasktop.c2c.server.common.web.client.widgets.chooser.person.Person;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRole;
@@ -33,19 +35,17 @@ import com.tasktop.c2c.server.tasks.client.widgets.WidgetUtil;
 public class TeamMemberPresenter extends AbstractProfilePresenter implements ClickHandler {
 
 	private TeamMemberView view;
-	private String projectIdentifier;
 	private final ProjectTeamMember member;
 	private boolean self;
 	private final boolean enableEditingAsOwner;
-	private final ProjectTeamPresenter teamPresenter;
+	private CommonProfileMessages commonProfileMessages = GWT.create(CommonProfileMessages.class);
+	private ProjectRoleMessageSelector projectRoleMessageSelector = new ProjectRoleMessageSelector();
 
 	public TeamMemberPresenter(ProjectTeamPresenter teamPresenter, TeamMemberView view, ProjectTeamMember member,
 			String projectIdentifier, boolean enableEditingAsOwner) {
 		super(view);
-		this.teamPresenter = teamPresenter;
 		this.view = view;
 		this.member = member;
-		this.projectIdentifier = projectIdentifier;
 		this.enableEditingAsOwner = enableEditingAsOwner;
 	}
 
@@ -82,7 +82,7 @@ public class TeamMemberPresenter extends AbstractProfilePresenter implements Cli
 			if (rolesText.length() > 0) {
 				rolesText += ", ";
 			}
-			rolesText += role.getLabel();
+			rolesText += projectRoleMessageSelector.getInternationalizedMessage(role, commonProfileMessages);
 		}
 
 		view.rolesAnchor.setText(rolesText);
@@ -101,7 +101,8 @@ public class TeamMemberPresenter extends AbstractProfilePresenter implements Cli
 			panel.addAutoHidePartner(view.rolesAnchor.getElement());
 			VerticalPanel content = new VerticalPanel();
 			for (final ProjectRole role : ProjectRole.values()) {
-				CheckBox checkbox = new CheckBox(role.getLabel());
+				CheckBox checkbox = new CheckBox(projectRoleMessageSelector.getInternationalizedMessage(role,
+						commonProfileMessages));
 				checkbox.setValue(member.getRoles().contains(role));
 				boolean enableChanges = true;
 				if (role.equals(ProjectRole.MEMBER) || (role.equals(ProjectRole.OWNER) && self)) {

@@ -18,17 +18,7 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class WikiActivity implements Serializable {
 	public enum Type {
-		CREATED("Created Page"), UPDATED("Updated Page"), DELETED("Deleted Page");
-
-		private final String label;
-
-		private Type(String label) {
-			this.label = label;
-		}
-
-		public String getLabel() {
-			return label;
-		}
+		CREATED, UPDATED, DELETED;
 	}
 
 	private Date activityDate;

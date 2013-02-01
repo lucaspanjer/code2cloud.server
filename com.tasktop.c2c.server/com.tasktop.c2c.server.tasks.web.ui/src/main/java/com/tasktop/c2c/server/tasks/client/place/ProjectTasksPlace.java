@@ -42,6 +42,7 @@ import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.util.StringUtils;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.tasks.client.TasksMessages;
+import com.tasktop.c2c.server.tasks.client.util.enums.PredefinedTaskQueryMessageSelector;
 import com.tasktop.c2c.server.tasks.domain.PredefinedTaskQuery;
 import com.tasktop.c2c.server.tasks.domain.RepositoryConfiguration;
 import com.tasktop.c2c.server.tasks.domain.SavedTaskQuery;
@@ -370,7 +371,9 @@ public class ProjectTasksPlace extends AbstractProjectTaskBatchingPlace implemen
 			querySummary = tasksMessages.advancedSearch() + " - ";
 			break;
 		case Predefined:
-			querySummary = queryState.getPredefinedQuery().getLabel() + " - ";
+			querySummary = new PredefinedTaskQueryMessageSelector().getInternationalizedMessage(
+					queryState.getPredefinedQuery(), tasksMessages)
+					+ " - ";
 			break;
 		case Saved:
 			querySummary = queryState.getSavedQuery().getName() + " - ";

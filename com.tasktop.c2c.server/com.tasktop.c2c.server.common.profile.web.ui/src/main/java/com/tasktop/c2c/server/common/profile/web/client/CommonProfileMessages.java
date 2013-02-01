@@ -138,6 +138,9 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Legal Agreements")
 	String legalAgreements();
 
+	@DefaultMessage("Member")
+	String member();
+
 	@DefaultMessage("Name")
 	String name();
 
@@ -167,6 +170,9 @@ public interface CommonProfileMessages extends Messages {
 
 	@DefaultMessage("Other")
 	String other();
+
+	@DefaultMessage("Owner")
+	String owner();
 
 	@DefaultMessage("Want to participate in a project you see, or create your own public or private project? "
 			+ "Code2Cloud is currently in beta and is accepting requests to join. "

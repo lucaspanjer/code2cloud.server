@@ -29,6 +29,8 @@ import com.tasktop.c2c.server.profile.domain.activity.TaskActivity;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
+import com.tasktop.c2c.server.tasks.client.TasksMessages;
+import com.tasktop.c2c.server.tasks.client.util.enums.TaskActivityTypeMessageSelector;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskAnchor;
 import com.tasktop.c2c.server.tasks.client.widgets.TaskAnchorManager;
 import com.tasktop.c2c.server.tasks.domain.Task;
@@ -56,6 +58,7 @@ public class TaskActivityRow extends HasExpandingTextPanel {
 	Label timeLabel;
 
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
+	private TasksMessages tasksMessages = GWT.create(TasksMessages.class);
 
 	public TaskActivityRow(TaskActivity taskActivity) {
 		// Create our TaskAnchor now, before we bind (since we've marked it as provided)
@@ -81,7 +84,8 @@ public class TaskActivityRow extends HasExpandingTextPanel {
 		personLabel.setAsSelf(self != null && person.getIdentity().equals(self.getIdentity()));
 		personLabel.setPerson(person);
 		dateLabel.setText(Format.stringValueTime(taskActivity.getActivityDate()));
-		changeType.setText(taskActivity.getActivityType().getPrettyName());
+		changeType.setText(new TaskActivityTypeMessageSelector().getInternationalizedMessage(
+				taskActivity.getActivityType(), tasksMessages));
 
 		if (taskActivity.getActivityType().equals(com.tasktop.c2c.server.tasks.domain.TaskActivity.Type.LOGGED_TIME)) {
 			UIObject.setVisible(timeDiv, true);

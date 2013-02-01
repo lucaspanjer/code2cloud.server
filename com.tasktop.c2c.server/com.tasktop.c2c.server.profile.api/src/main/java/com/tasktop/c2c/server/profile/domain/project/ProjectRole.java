@@ -16,16 +16,5 @@ import java.io.Serializable;
 
 public enum ProjectRole implements Serializable {
 
-	MEMBER("Member"), OWNER("Owner");
-
-	private final String label;
-
-	private ProjectRole(String label) {
-		this.label = label;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
+	MEMBER, OWNER;
 }

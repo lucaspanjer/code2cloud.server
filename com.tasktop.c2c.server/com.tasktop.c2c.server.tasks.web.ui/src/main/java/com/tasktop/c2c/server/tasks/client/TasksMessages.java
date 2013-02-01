@@ -32,8 +32,17 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Advanced Search")
 	String advancedSearch();
 
+	@DefaultMessage("All tasks")
+	String allTasks();
+
+	@DefaultMessage("Assigned to me")
+	String assignedToMe();
+
 	@DefaultMessage("Associations")
 	String associations();
+
+	@DefaultMessage("Attached to")
+	String attachedTo();
 
 	@DefaultMessage("Attachments")
 	String attachments();
@@ -61,6 +70,9 @@ public interface TasksMessages extends Messages {
 
 	@DefaultMessage("Changed")
 	String changed();
+
+	@DefaultMessage("Commented on")
+	String commentedOn();
 
 	@DefaultMessage("Commenter")
 	String commenter();
@@ -288,6 +300,9 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Label")
 	String label();
 
+	@DefaultMessage("Logged time on")
+	String loggedTimeOn();
+
 	@DefaultMessage("<div class=\"priority two\" title=\"Low\">")
 	SafeHtml lowP2Div();
 
@@ -366,6 +381,9 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("of")
 	String ofLc();
 
+	@DefaultMessage("Open tasks")
+	String openTasks();
+
 	@DefaultMessage("Owner")
 	String owner();
 
@@ -425,6 +443,12 @@ public interface TasksMessages extends Messages {
 
 	@DefaultMessage("Query Saved")
 	String querySaved();
+
+	@DefaultMessage("Recently changed")
+	String recentlyChanged();
+
+	@DefaultMessage("Related to me")
+	String relatedToMe();
 
 	@DefaultMessage("Release")
 	String release();

@@ -162,7 +162,7 @@ public class TasksPresenter extends AbstractTaskPresenter implements ITaskListVi
 
 			@Override
 			public int compare(PredefinedTaskQuery o1, PredefinedTaskQuery o2) {
-				return o1.getLabel().compareToIgnoreCase(o2.getLabel());
+				return o1.name().compareToIgnoreCase(o2.name());
 			}
 		});
 
