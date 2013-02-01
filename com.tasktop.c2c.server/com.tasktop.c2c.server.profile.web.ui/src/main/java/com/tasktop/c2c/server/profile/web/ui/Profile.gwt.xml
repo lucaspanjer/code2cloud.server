@@ -58,6 +58,9 @@
 	<replace-with class="com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.team.MemberInviteWidget">
 		<when-type-is class="com.tasktop.c2c.server.profile.web.ui.client.view.components.project.admin.team.IMemberAddWidget"/> 
 	</replace-with>
+	<replace-with class="com.tasktop.c2c.server.profile.web.ui.client.view.deployment.NewDeploymentView">
+		<when-type-is class="com.tasktop.c2c.server.profile.web.ui.client.view.deployment.INewDeploymentView"/>
+	</replace-with>
 	
 
 </module>

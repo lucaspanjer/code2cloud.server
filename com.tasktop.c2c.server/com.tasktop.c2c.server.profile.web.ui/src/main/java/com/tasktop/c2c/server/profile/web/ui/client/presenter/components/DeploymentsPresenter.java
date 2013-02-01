@@ -14,8 +14,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
@@ -44,14 +42,13 @@ import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuil
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.UpdateDeploymentAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.ValidateDeploymentAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.ValidateDeploymentResult;
-import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.ArtifactEditView.JobNameChangedHandler;
-import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentEditView.EditStartHandler;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentsView;
+import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.IDeploymentsView;
 
 public class DeploymentsPresenter extends AbstractProfilePresenter implements SplittableActivity,
-		DeploymentsView.Presenter {
+		IDeploymentsView.Presenter {
 
-	private final DeploymentsView view;
+	private final IDeploymentsView view;
 	private String projectIdentifier;
 	private List<DeploymentConfiguration> deploymentConfigurations;
 	private GetProjectBuildsResult buildInformation;
@@ -59,87 +56,17 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
-	public DeploymentsPresenter(DeploymentsView view) {
+	public DeploymentsPresenter(IDeploymentsView view) {
 		super(view);
 		this.view = view;
-
-		view.deploymentEditView.setBuildJobChangedHandler(new JobNameChangedHandler() {
-
-			@Override
-			public void jobNameChanged(final String jobName) {
-				getDispatchService().execute(new GetProjectBuildsAction(projectIdentifier, jobName),
-
-				new AsyncCallbackSupport<GetProjectBuildsResult>() {
-
-					@Override
-					protected void success(GetProjectBuildsResult result) {
-						DeploymentsPresenter.this.view.deploymentEditView.setBuilds(jobName, result.getBuilds());
-					}
-
-				});
-
-			}
-		});
-
-		view.newDeploymentView.addValidatePasswordClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				getDispatchService().execute(
-						new ValidateDeploymentAction(projectIdentifier,
-								DeploymentsPresenter.this.view.newDeploymentView.getValue()),
-						new AsyncCallbackSupport<ValidateDeploymentResult>() {
-							@Override
-							protected void success(ValidateDeploymentResult result) {
-								DeploymentsPresenter.this.view.newDeploymentView.setCredentialsValid(result.get());
-							}
-						});
-			}
-		});
-
-		view.deploymentEditView.addValidatePasswordClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				getDispatchService().execute(
-						new ValidateDeploymentAction(projectIdentifier,
-								DeploymentsPresenter.this.view.newDeploymentView.getValue()),
-						new AsyncCallbackSupport<ValidateDeploymentResult>() {
-							@Override
-							protected void success(ValidateDeploymentResult result) {
-								DeploymentsPresenter.this.view.deploymentEditView.setCredentialsValid(result.get());
-							}
-						});
-
-			}
-		});
-
-		view.deploymentEditView.setEditStartHandler(new EditStartHandler() {
-
-			@Override
-			public void editStarted(final DeploymentConfiguration config) {
-				getDispatchService().execute(new GetDeploymentConfigOptionsAction(projectIdentifier, config),
-						new AsyncCallbackSupport<DeploymentConfigOptionsResult>() {
-
-							@Override
-							protected void success(DeploymentConfigOptionsResult result) {
-
-								DeploymentsPresenter.this.view.deploymentEditView.setMemoryValues(result
-										.getAvailableMemories());
-								DeploymentsPresenter.this.view.deploymentEditView.setServices(result
-										.getAvailableServices());
-								DeploymentsPresenter.this.view.deploymentEditView.setServiceConfigurations(result
-										.getAvailableServiceConfigurations());
-							}
-						});
-
-			}
-		});
-
 	}
 
 	public DeploymentsPresenter() {
 		this(new DeploymentsView());
+	}
+
+	protected IDeploymentsView getView() {
+		return view;
 	}
 
 	public void setPlace(Place place) {
@@ -162,7 +89,7 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 		if (!deploymentConfigurations.isEmpty()) {
 			view.setSelectedConfig(deploymentConfigurations.get(0));
 		}
-		view.deploymentEditView.setJobNames(buildInformation.getBuildJobNames());
+		view.setJobNames(buildInformation.getBuildJobNames());
 	}
 
 	@Override
@@ -178,7 +105,7 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 	private void doOperation(String opMessage, String successMessage, Action type) {
 		OperationMessage message = new OperationMessage(opMessage);
 		message.setSuccessText(successMessage);
-		final DeploymentConfiguration configuration = view.deploymentReadOnlyView.getOriginalValue();
+		final DeploymentConfiguration configuration = view.getOriginalValue();
 		getDispatchService().execute(new ControlDeploymentAction(projectIdentifier, configuration, type),
 				new AsyncCallbackSupport<DeploymentStatusResult>(message) {
 
@@ -203,7 +130,7 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 	@Override
 	public void save() {
 		OperationMessage message = new OperationMessage(commonProfileMessages.saving());
-		getDispatchService().execute(new CreateDeploymentAction(projectIdentifier, view.newDeploymentView.getValue()),
+		getDispatchService().execute(new CreateDeploymentAction(projectIdentifier, view.getNewValue()),
 
 		new AsyncCallbackSupport<DeploymentResult>(message) {
 
@@ -223,7 +150,7 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 
 	@Override
 	public void update() {
-		getDispatchService().execute(new UpdateDeploymentAction(projectIdentifier, view.deploymentEditView.getValue()),
+		getDispatchService().execute(new UpdateDeploymentAction(projectIdentifier, view.getEditValue()),
 				new AsyncCallbackSupport<DeploymentResult>(new OperationMessage(commonProfileMessages.saving())) {
 
 					@Override
@@ -251,6 +178,50 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 						view.deleted(config);
 					}
 				});
+
+	}
+
+	@Override
+	public void jobNameChanged(final String jobName) {
+		getDispatchService().execute(new GetProjectBuildsAction(projectIdentifier, jobName),
+
+		new AsyncCallbackSupport<GetProjectBuildsResult>() {
+
+			@Override
+			protected void success(GetProjectBuildsResult result) {
+				view.setBuilds(jobName, result.getBuilds());
+			}
+
+		});
+	}
+
+	@Override
+	public void validateCredentials() {
+		getDispatchService().execute(new ValidateDeploymentAction(projectIdentifier, view.getValue()),
+				new AsyncCallbackSupport<ValidateDeploymentResult>() {
+					@Override
+					protected void success(ValidateDeploymentResult result) {
+						view.setCredentialsValid(result.get());
+					}
+				});
+	}
+
+	@Override
+	public void editStarted(DeploymentConfiguration config) {
+		getDispatchService().execute(new GetDeploymentConfigOptionsAction(projectIdentifier, config),
+				new AsyncCallbackSupport<DeploymentConfigOptionsResult>() {
+
+					@Override
+					protected void success(DeploymentConfigOptionsResult result) {
+
+						view.setConfigOptions(result);
+					}
+				});
+
+	}
+
+	@Override
+	public void newDeployment() {
 
 	}
 

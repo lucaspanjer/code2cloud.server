@@ -87,6 +87,9 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	@Autowired
 	private SecurityPolicy securityPolicy;
 
+	@Autowired
+	private DeploymentDomain deploymentDomain;
+
 	private Map<DeploymentServiceType, DeploymentServiceFactory> deploymentServiceFactoriesByType = new HashMap<DeploymentServiceType, DeploymentServiceFactory>();
 
 	private String getProjectIdentifier() {
@@ -115,7 +118,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 		for (com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration : internalResultList) {
 			securityPolicy.retrieve(internalDeploymentConfiguration);
-			DeploymentConfiguration config = DeploymentDomain.convertToPublic(internalDeploymentConfiguration);
+			DeploymentConfiguration config = deploymentDomain.convertToPublic(internalDeploymentConfiguration);
 			try {
 				populateDeploymentConfiguration(config);
 			} catch (ServiceException e) {
@@ -139,6 +142,9 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			throws ValidationException {
 		validate(deploymentConfiguration);
 		DeploymentService deploymentService = null;
+
+		deploymentDomain.prepareForCreate(deploymentConfiguration);
+
 		try {
 			deploymentService = createDeploymentService(deploymentConfiguration);
 			updateTokenIfNeeded(deploymentConfiguration, deploymentService);
@@ -150,7 +156,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		}
 
 		try {
-			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration = DeploymentDomain
+			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration = deploymentDomain
 					.convertToInternal(deploymentConfiguration);
 			internalDeploymentConfiguration.setProject(getProject());
 
@@ -270,7 +276,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		}
 
 		// Update the fields in the managed object
-		DeploymentDomain.updateInternal(deploymentConfiguration, internalDeploymentConfiguration);
+		deploymentDomain.updateInternal(deploymentConfiguration, internalDeploymentConfiguration);
 
 		return deploymentConfiguration;
 	}
@@ -489,7 +495,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 				ProjectArtifact artifact = new ProjectArtifact();
 				artifact.setUrl(toDeploy.getUrl()); // All thats needed now
 				projectArtifactService.downloadProjectArtifact(getProjectIdentifier(), tempWarFile, artifact);
-				DeploymentConfiguration deploymentConfig = DeploymentDomain.convertToPublic(dc);
+				DeploymentConfiguration deploymentConfig = deploymentDomain.convertToPublic(dc);
 				deployWar(deploymentConfig, createDeploymentService(deploymentConfig), tempWarFile);
 				dc.setLastDeploymentDate(new Date());
 				dc.setBuildJobNumber(buildDetails.getNumber() + "");

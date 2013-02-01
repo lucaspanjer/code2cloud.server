@@ -17,6 +17,8 @@
 	
 	<context:component-scan base-package="com.tasktop.c2c.server.internal.deployment"> 
 	</context:component-scan>
+	
+	<bean id="deploymentDomain" class="com.tasktop.c2c.server.internal.deployment.service.DeploymentDomain"/>
 
 	<bean id="deploymentConfigurationService" class="com.tasktop.c2c.server.internal.deployment.service.DeploymentConfigurationServiceImpl">
 		<property name="deploymentServiceFactoriesByType">

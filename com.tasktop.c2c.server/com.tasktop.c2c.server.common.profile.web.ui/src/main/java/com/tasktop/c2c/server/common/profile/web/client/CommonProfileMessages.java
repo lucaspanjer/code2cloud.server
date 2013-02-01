@@ -233,7 +233,7 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Start")
 	String start();
 
-	@DefaultMessage("Started.")
+	@DefaultMessage("Started")
 	String started();
 
 	@DefaultMessage("Starting...")
@@ -245,7 +245,7 @@ public interface CommonProfileMessages extends Messages {
 	@DefaultMessage("Stop")
 	String stop();
 
-	@DefaultMessage("Stopped.")
+	@DefaultMessage("Stopped")
 	String stopped();
 
 	@DefaultMessage("Stopping...")

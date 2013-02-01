@@ -23,9 +23,9 @@ import com.tasktop.c2c.server.deployment.domain.DeploymentServiceTypes;
  */
 public class DeploymentDomain {
 
-	public static DeploymentConfiguration convertToPublic(
+	public DeploymentConfiguration convertToPublic(
 			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration source) {
-		DeploymentConfiguration result = new DeploymentConfiguration();
+		DeploymentConfiguration result = newPublicDO(source);
 		result.setId(source.getId());
 		result.setApiToken(source.getApiToken());
 		result.setApiBaseUrl(source.getApiBaseUrl());
@@ -45,15 +45,25 @@ public class DeploymentDomain {
 		return result;
 	}
 
-	public static com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration convertToInternal(
+	protected DeploymentConfiguration newPublicDO(
+			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration source) {
+		return new DeploymentConfiguration();
+	}
+
+	public com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration convertToInternal(
 			DeploymentConfiguration source) {
-		com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration result = new com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration();
+		com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration result = newInternalDO(source);
 		updateInternal(source, result);
 
 		return result;
 	}
 
-	public static void updateInternal(DeploymentConfiguration source,
+	protected com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration newInternalDO(
+			DeploymentConfiguration source) {
+		return new com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration();
+	}
+
+	public void updateInternal(DeploymentConfiguration source,
 			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration target) {
 		target.setApiToken(source.getApiToken());
 		target.setApiBaseUrl(source.getApiBaseUrl());
@@ -68,4 +78,9 @@ public class DeploymentDomain {
 		target.setDeployUnstableBuilds(source.isDeployUnstableBuilds());
 		target.setLastDeploymentDate(source.getLastDeploymentDate());
 	}
+
+	public void prepareForCreate(DeploymentConfiguration deploymentConfiguration) {
+
+	}
+
 }

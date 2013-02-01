@@ -39,16 +39,13 @@ import com.tasktop.c2c.server.profile.domain.build.BuildArtifact;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
+import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.IDeploymentsView.Presenter;
 
 public class ArtifactEditView extends Composite {
 	interface Binder extends UiBinder<Widget, ArtifactEditView> {
 	}
 
 	private static Binder uiBinder = GWT.create(Binder.class);
-
-	public static interface JobNameChangedHandler {
-		void jobNameChanged(String newJobName);
-	}
 
 	public static interface JobNumberChangedHandler {
 		void jobNumberChanged(String jobName, String jobNumber);
@@ -140,7 +137,7 @@ public class ArtifactEditView extends Composite {
 	@UiField
 	Label infoMessage;
 
-	private JobNameChangedHandler jobNameChangedHandler;
+	private Presenter presenter;
 
 	public ArtifactEditView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -171,6 +168,18 @@ public class ArtifactEditView extends Composite {
 			@Override
 			public void onValueChange(ValueChangeEvent<BuildDetails> event) {
 				setArtifactOptions(event.getValue());
+				updateDeploymentInfoMessages();
+			}
+		});
+		jobNameListBox.addValueChangeHandler(new ValueChangeHandler<String>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event) {
+				presenter.jobNameChanged(jobNameListBox.getValue());
+				artifactListBox.setValue(null);
+				artifactListBox.setAcceptableValues(Collections.EMPTY_LIST);
+				buildsListBox.setValue(null);
+				buildsListBox.setAcceptableValues(Collections.EMPTY_LIST);
 				updateDeploymentInfoMessages();
 			}
 		});
@@ -252,7 +261,7 @@ public class ArtifactEditView extends Composite {
 		buildsListBox.setAcceptableValues(Collections.EMPTY_LIST); // New values will come in afterward
 		artifactListBox.setValue(originalValue.getBuildArtifactPath());
 		artifactListBox.setAcceptableValues(Collections.EMPTY_LIST); // New values will come in afterward
-		jobNameChangedHandler.jobNameChanged(originalValue.getBuildJobName()); // Trigger RPC to calculate new values.
+		presenter.jobNameChanged(originalValue.getBuildJobName()); // Trigger RPC to calculate new values.
 
 		// If we have no URL right now, use a default.
 		String origArtifactPath = originalValue.getBuildArtifactPath();
@@ -313,24 +322,8 @@ public class ArtifactEditView extends Composite {
 		return result;
 	}
 
-	/**
-	 * @param jobNameSelectionChangedHandler
-	 *            the jobNameSelectionChangedHandler to set
-	 */
-	public void setJobNameChangedHandler(JobNameChangedHandler jobNameChangedHandler) {
-		this.jobNameChangedHandler = jobNameChangedHandler;
-		jobNameListBox.addValueChangeHandler(new ValueChangeHandler<String>() {
-
-			@Override
-			public void onValueChange(ValueChangeEvent<String> event) {
-				ArtifactEditView.this.jobNameChangedHandler.jobNameChanged(jobNameListBox.getValue());
-				artifactListBox.setValue(null);
-				artifactListBox.setAcceptableValues(Collections.EMPTY_LIST);
-				buildsListBox.setValue(null);
-				buildsListBox.setAcceptableValues(Collections.EMPTY_LIST);
-				updateDeploymentInfoMessages();
-			}
-		});
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
 	}
 
 }

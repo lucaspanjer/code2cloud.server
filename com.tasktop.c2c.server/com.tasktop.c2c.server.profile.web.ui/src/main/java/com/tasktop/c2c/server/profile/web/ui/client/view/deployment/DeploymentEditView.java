@@ -34,15 +34,10 @@ import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.ArtifactEditView.IsDirtyHandler;
-import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.ArtifactEditView.JobNameChangedHandler;
-import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentsView.Presenter;
+import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.IDeploymentsView.Presenter;
 
 public class DeploymentEditView extends Composite {
 	interface Binder extends UiBinder<Widget, DeploymentEditView> {
-	}
-
-	public interface EditStartHandler {
-		void editStarted(DeploymentConfiguration config);
 	}
 
 	private CommonProfileMessages commonProfileMessages = AppGinjector.get.instance().getCommonProfileMessages();
@@ -82,7 +77,6 @@ public class DeploymentEditView extends Composite {
 	protected DivElement credentialsDiv;
 
 	private DeploymentConfiguration originalValue;
-	private EditStartHandler editStartHandler;
 	private Presenter presenter;
 
 	public DeploymentEditView() {
@@ -148,7 +142,7 @@ public class DeploymentEditView extends Composite {
 		artifactEditView.setValue(deployment);
 
 		setSaveButtonText(DEFAULT_SAVE_TEXT);
-		editStartHandler.editStarted(deployment);
+		presenter.editStarted(deployment);
 
 		UIObject.setVisible(credentialsDiv, deployment.getServiceType().isSupportsCredentials());
 		UIObject.setVisible(settingsDiv, deployment.getServiceType().isSupportsSettings());
@@ -163,10 +157,6 @@ public class DeploymentEditView extends Composite {
 	public void addCancelClickHandler(ClickHandler handler) {
 		cancelButton1.addClickHandler(handler);
 		cancelButton2.addClickHandler(handler);
-	}
-
-	public void addValidatePasswordClickHandler(ClickHandler handler) {
-		credentialsEditView.validatePasswordButton.addClickHandler(handler);
 	}
 
 	public void setMemoryValues(List<Integer> memoryValues) {
@@ -186,30 +176,15 @@ public class DeploymentEditView extends Composite {
 	}
 
 	/**
-	 * @param jobNameChangedHandler
-	 */
-	public void setBuildJobChangedHandler(JobNameChangedHandler jobNameChangedHandler) {
-		artifactEditView.setJobNameChangedHandler(jobNameChangedHandler);
-
-	}
-
-	/**
 	 * @param availableServiceConfigurations
 	 */
 	public void setServiceConfigurations(List<DeploymentServiceConfiguration> availableServiceConfigurations) {
 		servicesEditView.setServiceConfigurations(availableServiceConfigurations);
 	}
 
-	/**
-	 * @param editStartHandler
-	 *            the editStartHandler to set
-	 */
-	public void setEditStartHandler(EditStartHandler editStartHandler) {
-		this.editStartHandler = editStartHandler;
-	}
-
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+		this.artifactEditView.setPresenter(presenter);
 	}
 
 }

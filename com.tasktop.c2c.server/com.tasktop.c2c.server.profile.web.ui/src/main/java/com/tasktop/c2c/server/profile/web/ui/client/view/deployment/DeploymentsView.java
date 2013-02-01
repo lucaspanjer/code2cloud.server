@@ -19,7 +19,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
@@ -29,22 +29,10 @@ import com.tasktop.c2c.server.common.web.client.view.AbstractComposite;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
+import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeploymentConfigOptionsResult;
 
-public class DeploymentsView extends AbstractComposite {
-
-	public interface Presenter {
-		void save();
-
-		void update();
-
-		void delete(final DeploymentConfiguration config, boolean alsoDeleteFromCF);
-
-		void doStart();
-
-		void doStop();
-
-		void doRestart();
-	}
+public class DeploymentsView extends AbstractComposite implements IDeploymentsView {
 
 	interface DeploymentsViewUiBinder extends UiBinder<Widget, DeploymentsView> {
 	}
@@ -58,16 +46,16 @@ public class DeploymentsView extends AbstractComposite {
 	public DeploymentReadOnlyView deploymentReadOnlyView;
 	@UiField
 	public DeploymentEditView deploymentEditView;
+	@UiField(provided = true)
+	public INewDeploymentView newDeploymentView = GWT.create(INewDeploymentView.class);
 	@UiField
-	public NewDeploymentView newDeploymentView;
-	@UiField
-	public Anchor newButton;
+	public Widget newButton;
 	@UiField
 	public Panel noDeploymentsMessagePanel;
 	@UiField
-	Label errorLabel;
+	public Label errorLabel;
 	@UiField
-	Panel deploymentErrorPanel;
+	public Panel deploymentErrorPanel;
 
 	public static DeploymentResources resources = GWT.create(DeploymentResources.class);
 
@@ -76,26 +64,11 @@ public class DeploymentsView extends AbstractComposite {
 	private Presenter presenter;
 
 	public DeploymentsView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		bindUI();
 		deploymentEditView.setVisible(false);
 		deploymentReadOnlyView.setVisible(false);
-		newDeploymentView.setVisible(false);
+		newDeploymentView.asWidget().setVisible(false);
 		deploymentErrorPanel.setVisible(false);
-		newButton.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				newDeployment();
-			}
-		});
-		newDeploymentView.cancelButton.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				newDeploymentView.setVisible(false);
-
-			}
-		});
 
 		deploymentReadOnlyView.editButton.addClickHandler(new ClickHandler() {
 
@@ -115,6 +88,10 @@ public class DeploymentsView extends AbstractComposite {
 				deploymentEditView.setVisible(false);
 			}
 		});
+	}
+
+	protected void bindUI() {
+		initWidget(uiBinder.createAndBindUi(this));
 	}
 
 	public void setDeploymentConfigurations(List<DeploymentConfiguration> result) {
@@ -152,7 +129,7 @@ public class DeploymentsView extends AbstractComposite {
 
 		updateSelection(selectedObject);
 		deploymentEditView.setVisible(false);
-		newDeploymentView.setVisible(false);
+		newDeploymentView.asWidget().setVisible(false);
 		deploymentReadOnlyView.setVisible(true);
 		deploymentReadOnlyView.setValue(selectedObject);
 		updateError(selectedObject);
@@ -165,14 +142,16 @@ public class DeploymentsView extends AbstractComposite {
 		}
 	}
 
-	private void newDeployment() {
+	@UiHandler("newButton")
+	public void newDeployment(ClickEvent ce) {
+		presenter.newDeployment();
 		updateSelection(null);
 		newDeploymentView.clear();
 		updateError(null);
 		noDeploymentsMessagePanel.setVisible(false);
 		deploymentReadOnlyView.setVisible(false);
 		deploymentEditView.setVisible(false);
-		newDeploymentView.setVisible(true);
+		newDeploymentView.asWidget().setVisible(true);
 	}
 
 	/**
@@ -259,6 +238,54 @@ public class DeploymentsView extends AbstractComposite {
 		deploymentReadOnlyView.setPresenter(presenter);
 		deploymentEditView.setPresenter(presenter);
 		newDeploymentView.setPresenter(presenter);
+	}
 
+	public void setConfigOptions(DeploymentConfigOptionsResult result) {
+		deploymentEditView.setMemoryValues(result.getAvailableMemories());
+		deploymentEditView.setServices(result.getAvailableServices());
+		deploymentEditView.setServiceConfigurations(result.getAvailableServiceConfigurations());
+
+	}
+
+	@Override
+	public void setBuilds(String jobName, List<BuildDetails> builds) {
+		deploymentEditView.artifactEditView.setBuilds(jobName, builds);
+	}
+
+	@Override
+	public DeploymentConfiguration getNewValue() {
+		return newDeploymentView.getValue();
+	}
+
+	@Override
+	public void setCredentialsValid(Boolean valid) {
+		deploymentEditView.credentialsEditView.setCredentialsValid(valid);
+		newDeploymentView.setCredentialsValid(valid);
+
+	}
+
+	@Override
+	public DeploymentConfiguration getEditValue() {
+		return deploymentEditView.getValue();
+	}
+
+	@Override
+	public DeploymentConfiguration getOriginalValue() {
+		return deploymentReadOnlyView.getOriginalValue();
+	}
+
+	@Override
+	public void setJobNames(List<String> buildJobNames) {
+		deploymentEditView.artifactEditView.setJobNames(buildJobNames);
+	}
+
+	@Override
+	public DeploymentConfiguration getValue() {
+		if (newDeploymentView.asWidget().isVisible()) {
+			return newDeploymentView.getValue();
+		} else if (deploymentEditView.isVisible()) {
+			return deploymentEditView.getValue();
+		}
+		return null;
 	}
 }

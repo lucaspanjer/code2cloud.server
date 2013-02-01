@@ -31,7 +31,7 @@
 			</div>
 			<d:DeploymentReadOnlyView ui:field="deploymentReadOnlyView"/>
 			<d:DeploymentEditView ui:field="deploymentEditView"/>
-			<d:NewDeploymentView ui:field="newDeploymentView"/>
+			<d:INewDeploymentView ui:field="newDeploymentView"/>
 			<g:HTMLPanel ui:field="noDeploymentsMessagePanel"  visible="false">
 				<div class="clear"></div>
 				<div>

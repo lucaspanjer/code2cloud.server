@@ -17,7 +17,6 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -32,9 +31,9 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
-import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentsView.Presenter;
+import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.IDeploymentsView.Presenter;
 
-public class NewDeploymentView extends Composite {
+public class NewDeploymentView extends Composite implements INewDeploymentView {
 	interface Binder extends UiBinder<Widget, NewDeploymentView> {
 	}
 
@@ -60,8 +59,6 @@ public class NewDeploymentView extends Composite {
 	protected CredentialsEditView credentialsEditView;
 	@UiField
 	protected Button saveButton;
-	@UiField
-	protected Button cancelButton;
 
 	private Presenter presenter;
 
@@ -95,10 +92,6 @@ public class NewDeploymentView extends Composite {
 	public void setCredentialsValid(boolean valid) {
 		credentialsEditView.setCredentialsValid(valid);
 		setSaveEnabled(valid);
-	}
-
-	public void addValidatePasswordClickHandler(ClickHandler handler) {
-		credentialsEditView.validatePasswordButton.addClickHandler(handler);
 	}
 
 	/**
@@ -139,6 +132,17 @@ public class NewDeploymentView extends Composite {
 	 */
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+		this.credentialsEditView.setPresenter(presenter);
+	}
+
+	@UiHandler("cancelButton")
+	public void onCancel(ClickEvent ce) {
+		setVisible(false);
+	}
+
+	@Override
+	public void setCredentialsValid(Boolean valid) {
+		credentialsEditView.setCredentialsValid(valid);
 	}
 
 }

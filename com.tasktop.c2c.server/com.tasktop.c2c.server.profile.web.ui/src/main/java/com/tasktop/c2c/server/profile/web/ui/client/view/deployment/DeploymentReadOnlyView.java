@@ -30,7 +30,7 @@ import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
-import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.DeploymentsView.Presenter;
+import com.tasktop.c2c.server.profile.web.ui.client.view.deployment.IDeploymentsView.Presenter;
 
 public class DeploymentReadOnlyView extends Composite {
 	interface Binder extends UiBinder<Widget, DeploymentReadOnlyView> {
