@@ -14,23 +14,15 @@ package com.tasktop.c2c.server.common.web.client.view.errors;
 
 public enum ErrorType {
 
-	ERROR404("four-oh-four", "File Not Found"),
-	ERROR500("five-hundred", "An application error occurred"),
-	ERROR503("five-oh-three", "We're currently performing maintenance");
+	ERROR404("four-oh-four"), ERROR500("five-hundred"), ERROR503("five-oh-three");
 
 	private String errorImageClass;
-	private String errorDescription;
 
-	ErrorType(String errorImageClass, String errorDescription) {
+	ErrorType(String errorImageClass) {
 		this.errorImageClass = errorImageClass;
-		this.errorDescription = errorDescription;
 	}
 
 	public String getErrorImageClass() {
 		return errorImageClass;
-	}
-
-	public String getErrorDescription() {
-		return errorDescription;
 	}
 }

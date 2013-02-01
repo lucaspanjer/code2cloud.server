@@ -9,7 +9,7 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.common.profile.web.client.util.enums;
+package com.tasktop.c2c.server.common.web.client.util.enums;
 
 import com.google.gwt.i18n.client.Messages;
 

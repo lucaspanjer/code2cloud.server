@@ -11,7 +11,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.tasks.client.util.enums;
 
-import com.tasktop.c2c.server.common.profile.web.client.util.enums.EnumClientMessageSelector;
+import com.tasktop.c2c.server.common.web.client.util.enums.EnumClientMessageSelector;
 import com.tasktop.c2c.server.tasks.client.TasksMessages;
 import com.tasktop.c2c.server.tasks.domain.FieldType;
 

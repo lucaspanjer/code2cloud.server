@@ -9,29 +9,29 @@
  * Contributors:
  *     Tasktop Technologies - initial API and implementation
  ******************************************************************************/
-package com.tasktop.c2c.server.wiki.web.ui.client.util.enums;
+package com.tasktop.c2c.server.common.web.client.util.enums;
 
-import com.tasktop.c2c.server.common.web.client.util.enums.EnumClientMessageSelector;
-import com.tasktop.c2c.server.wiki.domain.Page.GroupAccess;
-import com.tasktop.c2c.server.wiki.web.ui.client.WikiMessages;
+import com.tasktop.c2c.server.common.web.client.CommonMessages;
+import com.tasktop.c2c.server.common.web.client.view.errors.ErrorType;
 
 /**
  * @author michaelnelson (Tasktop Technologies Inc.)
  * 
  */
-public class GroupAccessMessageSelector implements EnumClientMessageSelector<GroupAccess, WikiMessages> {
+public class ErrorTypeMessageSelector implements EnumClientMessageSelector<ErrorType, CommonMessages> {
 
 	@Override
-	public String getInternationalizedMessage(GroupAccess enumeration, WikiMessages messages) {
-		switch (enumeration) {
-		case ALL:
-			return messages.allowAllUsers();
-		case MEMBER_AND_OWNERS:
-			return messages.membersAndOwners();
-		case OWNERS:
-			return messages.owners();
+	public String getInternationalizedMessage(ErrorType errorType, CommonMessages commonMessages) {
+		switch (errorType) {
+		case ERROR404:
+			return commonMessages.errorFileNotFound();
+		case ERROR500:
+			return commonMessages.errorApplicationError();
+		case ERROR503:
+			return commonMessages.errorPerformingMaintenance();
 		default:
 			return "";
 		}
 	}
+
 }

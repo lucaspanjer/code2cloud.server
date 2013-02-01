@@ -12,6 +12,7 @@
 package com.tasktop.c2c.server.common.profile.web.client.util.enums;
 
 import com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages;
+import com.tasktop.c2c.server.common.web.client.util.enums.EnumClientMessageSelector;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails.BuildResult;
 
 /**

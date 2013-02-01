@@ -20,9 +20,12 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.tasktop.c2c.server.common.web.client.CommonMessages;
+import com.tasktop.c2c.server.common.web.client.util.enums.ErrorTypeMessageSelector;
 
-public class ErrorView extends Composite{
-	interface ErrorViewUiBinder extends UiBinder<HTMLPanel, ErrorView> {}
+public class ErrorView extends Composite {
+	interface ErrorViewUiBinder extends UiBinder<HTMLPanel, ErrorView> {
+	}
 
 	private static ErrorView instance;
 
@@ -69,7 +72,8 @@ public class ErrorView extends Composite{
 			errorImage.removeClassName(this.errorType.getErrorImageClass());
 		}
 		errorImage.addClassName(errorType.getErrorImageClass());
-		errorDescription.setText(errorType.getErrorDescription());
+		CommonMessages commonMessages = GWT.create(CommonMessages.class);
+		errorDescription.setText(new ErrorTypeMessageSelector().getInternationalizedMessage(errorType, commonMessages));
 		this.errorType = errorType;
 	}
 }
