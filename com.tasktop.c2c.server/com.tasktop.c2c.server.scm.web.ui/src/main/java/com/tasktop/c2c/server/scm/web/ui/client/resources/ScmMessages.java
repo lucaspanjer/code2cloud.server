@@ -58,6 +58,9 @@ public interface ScmMessages extends Messages {
 	@DefaultMessage("Repository not found")
 	String repoNotFound();
 
+	@DefaultMessage("Branch not found")
+	String branchNotFound();
+
 	@DefaultMessage("Commits of {0} - {1} - {2}")
 	String repoTitle(String repositoryName, String projectName, String productName);
 

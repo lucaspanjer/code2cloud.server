@@ -36,7 +36,7 @@ public class ScmServiceConfiguration extends BaseProfileConfiguration {
 	 * @return
 	 */
 	public String getWebUrlForCommit(String projectIdentifer, Commit result) {
-		return String.format("%s/%s/%s/scm/%s/%s", getProfileBaseUrl(), PROJECTS_WEB_PATH, projectIdentifer,
+		return String.format("%s/%s/%s/scm/%s/commit/%s", getProfileBaseUrl(), PROJECTS_WEB_PATH, projectIdentifer,
 				result.getRepository(), result.getCommitId());
 	}
 }

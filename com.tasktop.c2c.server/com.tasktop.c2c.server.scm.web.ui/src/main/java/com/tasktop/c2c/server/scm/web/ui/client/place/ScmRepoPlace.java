@@ -43,9 +43,12 @@ import com.tasktop.c2c.server.scm.web.ui.client.resources.ScmMessages;
  */
 public class ScmRepoPlace extends AbstractBatchFetchingPlace implements HeadingPlace, HasProjectPlace, BreadcrumbPlace,
 		SectionPlace, WindowTitlePlace {
-	public static String REPO_ARG = "repo";
+	private static String REPO_ARG = "repo";
+	private static String BRANCH_ARG = "branch";
+
 	public static PageMapping SCM_LOG = new PageMapping(new Tokenizer(), Path.PROJECT_BASE + "/{" + Path.PROJECT_ID
-			+ "}/scm/{" + REPO_ARG + "}");
+			+ "}/scm/{" + REPO_ARG + "}/commits", Path.PROJECT_BASE + "/{" + Path.PROJECT_ID + "}/scm/{" + REPO_ARG
+			+ "}/commits/{" + BRANCH_ARG + "}");
 
 	private static class Tokenizer extends AbstractPlaceTokenizer<ScmRepoPlace> {
 
@@ -53,22 +56,29 @@ public class ScmRepoPlace extends AbstractBatchFetchingPlace implements HeadingP
 		public ScmRepoPlace getPlace(String token) {
 			Args pathArgs = getPathArgsForUrl(token);
 
-			return createPlace(pathArgs.getString(Path.PROJECT_ID), pathArgs.getString(REPO_ARG));
+			return createPlace(pathArgs.getString(Path.PROJECT_ID), pathArgs.getString(REPO_ARG),
+					pathArgs.getString(BRANCH_ARG));
 		}
 
 	}
 
 	public static ScmRepoPlace createPlace(String projectId, String repoName) {
-		return new ScmRepoPlace(projectId, repoName);
+		return new ScmRepoPlace(projectId, repoName, null);
 	}
 
-	private ScmRepoPlace(String projectId, String repoName) {
+	public static ScmRepoPlace createPlace(String projectId, String repoName, String branchName) {
+		return new ScmRepoPlace(projectId, repoName, branchName);
+	}
+
+	private ScmRepoPlace(String projectId, String repoName, String branchName) {
 		this.projectId = projectId;
 		this.repositoryName = repoName;
+		this.branchName = branchName;
 	}
 
 	private String repositoryName;
 	protected String projectId;
+	private String branchName;
 	protected Project project;
 	private ScmRepository repository;
 	private ScmMessages scmMessages = GWT.create(ScmMessages.class);
@@ -134,6 +144,9 @@ public class ScmRepoPlace extends AbstractBatchFetchingPlace implements HeadingP
 
 		tokenMap.put(Path.PROJECT_ID, projectId);
 		tokenMap.put(REPO_ARG, repositoryName);
+		if (branchName != null) {
+			tokenMap.put(BRANCH_ARG, branchName);
+		}
 
 		return SCM_LOG.getUrlForNamedArgs(tokenMap);
 	}
@@ -144,6 +157,10 @@ public class ScmRepoPlace extends AbstractBatchFetchingPlace implements HeadingP
 
 	public ScmRepository getRepository() {
 		return repository;
+	}
+
+	public String getBranchName() {
+		return branchName;
 	}
 
 }

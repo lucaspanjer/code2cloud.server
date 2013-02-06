@@ -13,6 +13,7 @@ package com.tasktop.c2c.server.scm.web.ui.client.presenter;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.History;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
@@ -111,13 +112,27 @@ public class ScmRepoPresenter extends AbstractPresenter implements IScmRepoView.
 					.displayMessage(Message.createErrorMessage(scmMessages.repoNotFound()));
 			return;
 		}
-		if (place.getRepository().getBranches().contains("master")) {
-			this.currentBranch = "master";
-		} else if (!place.getRepository().getBranches().isEmpty()) {
-			this.currentBranch = place.getRepository().getBranches().get(0);
-		} else {
-			this.currentBranch = null;
+
+		if (place.getBranchName() != null && !place.getRepository().getBranches().contains(currentBranch)) {
+			ProfileGinjector.get.instance().getNotifier()
+					.displayMessage(Message.createErrorMessage(scmMessages.branchNotFound()));
+			return;
 		}
+
+		String branchName;
+		String defaultBranchName = "master";
+		if (place.getBranchName() != null) {
+			branchName = place.getBranchName();
+		} else {
+			if (place.getRepository().getBranches().contains(defaultBranchName)) {
+				branchName = defaultBranchName;
+			} else if (place.getRepository().getBranches().isEmpty()) {
+				branchName = null;
+			} else {
+				branchName = place.getRepository().getBranches().get(0);
+			}
+		}
+		this.currentBranch = branchName;
 
 		view.setPresenter(this);
 		view.setProjectId(place.getProjectId());
@@ -128,12 +143,16 @@ public class ScmRepoPresenter extends AbstractPresenter implements IScmRepoView.
 
 	private boolean isCurrentPlace(ScmRepoPlace place) {
 		return this.repoName != null && this.repoName.equals(place.getRepositoryName()) && this.projectId != null
-				&& this.projectId.equals(place.getProjectId());
+				&& this.projectId.equals(place.getProjectId()) && this.currentBranch != null
+				&& this.currentBranch.equals(place.getBranchName());
 	}
 
 	@Override
 	public void branchSelected(String value) {
 		this.currentBranch = value;
+		String newToken = ScmRepoPlace.createPlace(projectId, repoName, currentBranch).getHistoryToken();
+		History.newItem(newToken, false);
+
 		this.region = new Region(0, PAGE_SIZE);
 		updateDisplay();
 

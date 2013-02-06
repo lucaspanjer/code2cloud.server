@@ -58,7 +58,7 @@ public class ProfilePageMappings extends PageMappings {
 				ResetPasswordPlace.ResetPassword, ProjectInvitationPlace.ProjectInvitation,
 				InvitationCreatorPlace.InvitationCreator, AdminProfilePlace.AdminProfiles,
 				ProjectAdminSettingsPlace.ProjectAdminSettings, OrganizationAdminPlace.OrgAdminPlace,
-				ScmCommitPlace.SCM_COMMIT, ScmRepoPlace.SCM_LOG, ScmPlace.SCM_PLACE);
+				ScmRepoPlace.SCM_LOG, ScmCommitPlace.SCM_COMMIT, ScmPlace.SCM_PLACE);
 	}
 
 }

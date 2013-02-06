@@ -36,6 +36,7 @@ import com.tasktop.c2c.server.common.web.client.notification.Message.MessageType
 import com.tasktop.c2c.server.common.web.client.notification.Notifier;
 import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
+import com.tasktop.c2c.server.scm.web.ui.client.place.ScmCommitPlace;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -94,6 +95,7 @@ public class NavigationTest {
 	public void testAllPageMappingsParse() {
 		for (PageMapping pageMapping : registry.getRegisteredMappings()) {
 			Place lastPlace = null;
+			String pathFromLastPlace = null;
 			for (PathMapping pathMapping : pageMapping.getPathMappings()) {
 				String[] args = new String[pathMapping.getPath().getArgumentCount()];
 				for (int i = 0; i < args.length; i++) {
@@ -119,9 +121,16 @@ public class NavigationTest {
 				}
 
 				String pathFromPlace = historyMapper.getToken(place);
-				Assert.assertEquals(path, pathFromPlace);
+
+				if (place instanceof ScmCommitPlace && pathFromLastPlace != null) {
+					// Second path should return first path
+					Assert.assertEquals(pathFromPlace, pathFromLastPlace);
+				} else {
+					Assert.assertEquals(path, pathFromPlace);
+				}
 
 				lastPlace = place;
+				pathFromLastPlace = pathFromPlace;
 			}
 		}
 	}
