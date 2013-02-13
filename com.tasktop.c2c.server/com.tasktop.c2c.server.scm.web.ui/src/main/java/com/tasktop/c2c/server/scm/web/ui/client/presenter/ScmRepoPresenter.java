@@ -113,7 +113,7 @@ public class ScmRepoPresenter extends AbstractPresenter implements IScmRepoView.
 			return;
 		}
 
-		if (place.getBranchName() != null && !place.getRepository().getBranches().contains(currentBranch)) {
+		if (place.getBranchName() != null && !place.getRepository().getBranches().contains(place.getBranchName())) {
 			ProfileGinjector.get.instance().getNotifier()
 					.displayMessage(Message.createErrorMessage(scmMessages.branchNotFound()));
 			return;
