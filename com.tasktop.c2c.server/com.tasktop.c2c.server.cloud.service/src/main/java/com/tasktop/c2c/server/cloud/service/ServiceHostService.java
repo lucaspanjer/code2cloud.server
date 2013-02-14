@@ -107,4 +107,12 @@ public interface ServiceHostService {
 	 * @return
 	 */
 	List<ServiceHost> findHostsByTypeAndOrganization(Set<ServiceType> type, String orgIdentifier);
+
+	/**
+	 * Find all of the service hosts for an organization.
+	 * 
+	 * @param orgIdentifier
+	 * @return
+	 */
+	public List<ServiceHost> findHostsByOrganization(String orgIdentifier);
 }

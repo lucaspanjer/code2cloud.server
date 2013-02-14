@@ -384,6 +384,30 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 		return findHosts(type, null, orgIdentifier);
 	}
 
+	@Override
+	public List<com.tasktop.c2c.server.cloud.domain.ServiceHost> findHostsByOrganization(String orgIdentifier) {
+		if (orgIdentifier == null || orgIdentifier.trim().equals("")) {
+			return Collections.EMPTY_LIST;
+		}
+		String queryString = "SELECT DISTINCT host FROM " + ServiceHost.class.getSimpleName() + " host, "
+				+ ProjectServiceProfile.class.getSimpleName() + " projectServiceProfile, "
+				+ ProjectService.class.getSimpleName() + " projectService "
+				+ "WHERE projectService MEMBER projectServiceProfile.projectServices "
+				+ "AND projectService.serviceHost = host "
+				+ "AND projectServiceProfile.project.organization.identifier = :orgId ";
+
+		Query query = entityManager.createQuery(queryString);
+		query.setParameter("orgId", orgIdentifier);
+
+		List<ServiceHost> managedResults = query.getResultList();
+		List<com.tasktop.c2c.server.cloud.domain.ServiceHost> publicNodes = new ArrayList<com.tasktop.c2c.server.cloud.domain.ServiceHost>(
+				managedResults.size());
+		for (ServiceHost node : managedResults) {
+			publicNodes.add(convertToPublic(node));
+		}
+		return publicNodes;
+	}
+
 	// REVIEW this query could be simplified by just querying on the ProjectSerivce table
 	@Override
 	public List<com.tasktop.c2c.server.cloud.domain.ServiceHost> findHostsByTypeAndProject(Set<ServiceType> type,
