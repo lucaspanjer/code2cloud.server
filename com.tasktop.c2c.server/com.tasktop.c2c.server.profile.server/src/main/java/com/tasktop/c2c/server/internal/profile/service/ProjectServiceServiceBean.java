@@ -438,8 +438,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	private void deprovisionServiceViaServiceManageService(ProjectService projectService) {
 
 		try {
-			tenancyManager.establishTenancyContextFromProjectIdentifier(projectService.getProjectServiceProfile()
-					.getProject().getIdentifier());
+			tenancyManager.establishTenancyContext(projectService);
 
 			ProjectServiceManagementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
 					.getNewService(projectService.getServiceHost().getInternalNetworkAddress(),
