@@ -382,7 +382,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 				if (service.getServiceHost() == null || !service.getServiceHost().isAvailable()) {
 					result.add(createFailureProjectServiceStatus(service));
 				} else {
-
+					tenancyManager.establishTenancyContext(service);
 					ProjectServiceManagementService serviceMangementService = projectServiceMangementServiceProvider
 							.getNewService(service.getServiceHost().getInternalNetworkAddress(), service.getType());
 
