@@ -32,7 +32,6 @@ public class FileSystemMetricCollector implements MetricCollector {
 	public static final String PROJECT_ID_VAR = "{projectIdentifier}";
 
 	private String path;
-	private String metricName;
 
 	@Override
 	public void collect(ProjectServiceStatus status) {
@@ -54,8 +53,9 @@ public class FileSystemMetricCollector implements MetricCollector {
 		try {
 			totalByteSize = com.tasktop.c2c.server.configuration.service.FileUtils.size(directory);
 			status.setServiceState(ServiceState.RUNNING);
-			status.getMetrics().put(metricName, totalByteSize + "");
-			status.getMetrics().put(metricName + "_humanReadable", FileUtils.byteCountToDisplaySize(totalByteSize));
+			status.getMetrics().put(ProjectServiceStatus.DISK_USAGE_METRICS_KEY, totalByteSize + "");
+			status.getMetrics().put(ProjectServiceStatus.DISK_USAGE_HR_METRICS_KEY,
+					FileUtils.byteCountToDisplaySize(totalByteSize));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -65,9 +65,4 @@ public class FileSystemMetricCollector implements MetricCollector {
 	public void setPath(String path) {
 		this.path = path;
 	}
-
-	public void setMetricName(String metricName) {
-		this.metricName = metricName;
-	}
-
 }

@@ -41,7 +41,6 @@ public class DatabaseMetricCollector implements MetricCollector {
 
 	public static final String DATABSE_NAME_VAR = "{databaseName}";
 
-	private String metricName;
 	private DataSource dataSource;
 	private String sqlSizeQuery;
 	private DatabaseNamingStrategy databaseNamingStrategy;
@@ -63,8 +62,9 @@ public class DatabaseMetricCollector implements MetricCollector {
 			if (resultSet.next()) {
 				int totalByteSize = resultSet.getInt(1);
 				status.setServiceState(ServiceState.RUNNING);
-				status.getMetrics().put(metricName, totalByteSize + "");
-				status.getMetrics().put(metricName + "_humanReadable", FileUtils.byteCountToDisplaySize(totalByteSize));
+				status.getMetrics().put(ProjectServiceStatus.DISK_USAGE_METRICS_KEY, totalByteSize + "");
+				status.getMetrics().put(ProjectServiceStatus.DISK_USAGE_HR_METRICS_KEY,
+						FileUtils.byteCountToDisplaySize(totalByteSize));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -80,10 +80,6 @@ public class DatabaseMetricCollector implements MetricCollector {
 			}
 		}
 
-	}
-
-	public void setMetricName(String metricName) {
-		this.metricName = metricName;
 	}
 
 	public void setSqlSizeQuery(String sqlSizeQuery) {

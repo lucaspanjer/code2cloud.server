@@ -37,7 +37,7 @@
 		<property name="metricCollectors">
 			<list>
 				<bean class="com.tasktop.c2c.server.configuration.service.FileSystemMetricCollector" 
-					p:metricName="diskUsage" p:path="${alm.dataDir}/hudson-homes/{projectIdentifier}"/>
+					p:path="${alm.dataDir}/hudson-homes/{projectIdentifier}"/>
 			</list>
 		</property>
 		

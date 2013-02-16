@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.cloud.domain;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,6 +21,9 @@ import java.util.Map;
  */
 public class ProjectServiceStatus {
 
+	public static final String DISK_USAGE_METRICS_KEY = "diskUsage";
+	public static final String DISK_USAGE_HR_METRICS_KEY = DISK_USAGE_METRICS_KEY + "_humanReadable";
+
 	public enum ServiceState {
 		UNKNOWN, RUNNING, STOPPED, PROVISIONING, UNAVAILABLE;
 	}
@@ -27,7 +31,7 @@ public class ProjectServiceStatus {
 	private ServiceState serviceState;
 	private String projectIdentifier;
 	private ServiceType serviceType;
-	private Map<String, String> metrics;
+	private Map<String, String> metrics = new HashMap<String, String>();
 
 	public String getProjectIdentifier() {
 		return projectIdentifier;

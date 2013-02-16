@@ -49,7 +49,7 @@
 		<property name="metricCollectors">
 			<list>
 				<bean class="com.tasktop.c2c.server.configuration.service.FileSystemMetricCollector" 
-					p:metricName="diskUsage" p:path="${git.root}/{projectIdentifier}"/>
+					p:path="${git.root}/{projectIdentifier}"/>
 			</list>
 		</property>
 		

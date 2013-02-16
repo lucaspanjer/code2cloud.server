@@ -84,7 +84,7 @@
 		<property name="metricCollectors">
 			<list>
 				<bean class="com.tasktop.c2c.server.configuration.service.DatabaseMetricCollector" 
-					p:metricName="diskUsage" p:dataSource-ref="rawDataSource" 
+					p:dataSource-ref="rawDataSource" 
 					p:sqlSizeQuery="${task.database.sizeQuery}" p:databaseNamingStrategy-ref="databaseNamingStrategy"/>
 			</list>
 		</property>
