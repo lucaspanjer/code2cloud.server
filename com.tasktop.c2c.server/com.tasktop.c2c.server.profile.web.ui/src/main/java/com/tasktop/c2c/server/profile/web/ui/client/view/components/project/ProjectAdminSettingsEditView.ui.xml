@@ -47,6 +47,10 @@
 					<g:ValueListBox ui:field="wikiLanguageListBox"/>
 				</div>
 			</fieldset>
+			<fieldset>
+				<label><ui:text from="{pm.templateProject}"/><ui:text from="{cpm.colon}"/></label>
+				<g:CheckBox ui:field="isTemplate"/>
+			</fieldset>
 			<div class="clear"/>
 			<fieldset>
 				<label>&#160;</label>

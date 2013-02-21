@@ -40,4 +40,13 @@ public interface HudsonService {
 	 * @throws URISyntaxException
 	 */
 	void downloadBuildArtifact(String artifactUrl, File saveLocation) throws IOException, URISyntaxException;
+
+	String getJobConfigXml(String jobName);
+
+	void createNewJob(String jobName, String configXml);
+
+	/**
+	 * @return
+	 */
+	boolean isHudsonReady();
 }

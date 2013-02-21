@@ -185,19 +185,6 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 	}
 
 	@Override
-	public String createProject(Project project) throws ValidationFailedException, NoSuchEntityException {
-		try {
-			return profileWebService.createProject(project).getIdentifier();
-		} catch (ValidationException e) {
-			handle(e);
-			throw new IllegalStateException();
-		} catch (EntityNotFoundException e) {
-			handle(e);
-			throw new IllegalStateException();
-		}
-	}
-
-	@Override
 	public Boolean updateTeamMemberRoles(String projectIdentifier, ProjectTeamMember member)
 			throws NoSuchEntityException, ValidationFailedException {
 		setTenancyContext(projectIdentifier);

@@ -15,17 +15,29 @@ package com.tasktop.c2c.server.internal.profile.service;
 import java.util.List;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
+import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
+import com.tasktop.c2c.server.profile.service.ProfileService;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public interface InternalProfileService {
+public interface InternalProfileService extends ProfileService {
 	void doDeleteProjectIfReady(String projectIdentifier) throws EntityNotFoundException;
 
 	List<ProjectProfile> findAccessibleProjectsForProfile(Profile profile);
 
 	void doDeleteProject(String projectIdentifier) throws EntityNotFoundException;
+
+	/**
+	 * @param query
+	 * @param additionalJpaWhereClauseOrNull
+	 *            . Can reference the project with "project"
+	 * @return
+	 */
+	QueryResult<Project> findProjects(ProjectsQuery query, String additionalJpaWhereClauseOrNull);
 }

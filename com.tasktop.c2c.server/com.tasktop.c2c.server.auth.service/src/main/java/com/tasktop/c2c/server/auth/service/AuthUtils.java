@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.auth.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,6 +58,51 @@ public final class AuthUtils {
 
 		// Push this into the Spring Security context.
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+
+	public static void addRolesToAuth(String... roles) {
+		Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (currentAuth == null) {
+			throw new IllegalStateException("No current auth");
+		}
+
+		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(currentAuth.getAuthorities());
+		authorities.addAll(toGrantedAuthorities(Arrays.asList(roles)));
+
+		// Create a new authToken for this information
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+				currentAuth.getPrincipal(), currentAuth.getCredentials(), authorities);
+
+		if (currentAuth.getDetails() instanceof AuthenticationToken) {
+			// Dump these updated roles into our token.
+			((AuthenticationToken) currentAuth.getDetails()).setAuthorities(authorities);
+		}
+		if (currentAuth.getPrincipal() instanceof AuthenticationServiceUser) {
+			((AuthenticationServiceUser) currentAuth.getPrincipal()).getToken().setAuthorities(authorities);
+		}
+
+		authentication.setDetails(currentAuth.getDetails());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+
+	/**
+	 * @return
+	 */
+	public static AuthenticationToken getAuthToken() {
+		Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (currentAuth == null) {
+			throw new IllegalStateException("No current auth");
+		}
+
+		if (currentAuth.getDetails() instanceof AuthenticationToken) {
+			return (AuthenticationToken) currentAuth.getDetails();
+		}
+		if (currentAuth.getPrincipal() instanceof AuthenticationServiceUser) {
+			return ((AuthenticationServiceUser) currentAuth.getPrincipal()).getToken();
+		}
+		return null;
 	}
 
 	public static List<GrantedAuthority> toGrantedAuthorities(Collection<String> roles) {
@@ -200,4 +247,5 @@ public final class AuthUtils {
 		SecurityContextHolder.createEmptyContext();
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
+
 }

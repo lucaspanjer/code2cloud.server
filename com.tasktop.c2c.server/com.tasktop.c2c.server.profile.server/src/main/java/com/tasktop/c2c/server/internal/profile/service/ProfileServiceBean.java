@@ -630,6 +630,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			throw new RuntimeException(e); // FIXME
 		}
 
+		// Add roles to current security ctx to authorize subsequent calls in same request
+		String userRole = AuthUtils.toCompoundProjectRole(Role.User, project.getIdentifier());
+		String adminRole = AuthUtils.toCompoundProjectRole(Role.Admin, project.getIdentifier());
+		AuthUtils.addRolesToAuth(userRole, adminRole);
+
 		return project;
 	}
 
@@ -720,6 +725,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			managedProject.setDescription(project.getDescription());
 			managedProject.setAccessibility(project.getAccessibility());
 			managedProject.getProjectPreferences().setWikiLanguage(project.getProjectPreferences().getWikiLanguage());
+			managedProject.setIsTemplate(project.isTemplate());
 		}
 
 		return managedProject;
@@ -1309,7 +1315,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	@SuppressWarnings("unchecked")
-	private QueryResult<Project> findProjects(String queryText, String orgIdentifierOrNull, QueryRequest queryRequest) {
+	private QueryResult<Project> findProjects(String queryText, String orgIdentifierOrNull, QueryRequest queryRequest,
+			String additionalClauseOrNull) {
 		SortInfo sortInfo = queryRequest == null ? null : queryRequest.getSortInfo();
 		Region region = queryRequest == null ? null : queryRequest.getPageInfo();
 
@@ -1339,6 +1346,10 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		if (orgIdentifierOrNull != null) {
 			coreQuery += " AND project.organization.identifier =  :orgId";
+		}
+
+		if (additionalClauseOrNull != null) {
+			coreQuery += " AND " + additionalClauseOrNull;
 		}
 
 		Query query = entityManager.createQuery("SELECT distinct project " + coreQuery + " "
@@ -1677,7 +1688,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	private QueryResult<Project> findProjects(ProjectRelationship projectRelationship, String orgIdentifierOrNull,
-			QueryRequest queryRequest) {
+			QueryRequest queryRequest, String additionalWhereClauseOrNull) {
 
 		Profile profile;
 		try {
@@ -1764,6 +1775,10 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 		if (orgIdentifierOrNull != null) {
 			whereStringBldr.append(" AND project.organization.identifier = :orgId ");
+		}
+
+		if (additionalWhereClauseOrNull != null) {
+			whereStringBldr.append("AND " + additionalWhereClauseOrNull + " ");
 		}
 
 		Query totalResultQuery = entityManager.createQuery("SELECT count(DISTINCT project) " + fromString
@@ -1889,11 +1904,17 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 	@Override
 	public QueryResult<Project> findProjects(ProjectsQuery query) {
+		return findProjects(query, null);
+	}
+
+	@Override
+	public QueryResult<Project> findProjects(ProjectsQuery query, String additionalJpaWhereClauseOrNull) {
 		if (query.getQueryString() != null) {
-			return findProjects(query.getQueryString(), query.getOrganizationIdentifier(), query.getQueryRequest());
+			return findProjects(query.getQueryString(), query.getOrganizationIdentifier(), query.getQueryRequest(),
+					additionalJpaWhereClauseOrNull);
 		} else if (query.getProjectRelationship() != null) {
 			return findProjects(query.getProjectRelationship(), query.getOrganizationIdentifier(),
-					query.getQueryRequest());
+					query.getQueryRequest(), additionalJpaWhereClauseOrNull);
 		} else {
 			throw new IllegalArgumentException();
 		}

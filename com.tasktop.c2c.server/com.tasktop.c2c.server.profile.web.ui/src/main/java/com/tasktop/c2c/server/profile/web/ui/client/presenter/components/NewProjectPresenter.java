@@ -15,6 +15,8 @@ package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 import com.google.gwt.place.shared.Place;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectHomePlace;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.CreateProjectAction;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.CreateProjectResult;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
 import com.tasktop.c2c.server.common.web.client.notification.OperationMessage;
 import com.tasktop.c2c.server.common.web.client.presenter.AsyncCallbackSupport;
@@ -23,6 +25,7 @@ import com.tasktop.c2c.server.profile.domain.project.Organization;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 import com.tasktop.c2c.server.profile.domain.project.ProjectPreferences;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplate;
 import com.tasktop.c2c.server.profile.domain.project.WikiMarkupLanguage;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.place.NewProjectPlace;
@@ -53,15 +56,15 @@ public class NewProjectPresenter extends AbstractProfilePresenter implements Pre
 	}
 
 	@Override
-	public void createProject(Project project) {
-		getProfileService().createProject(
-				project,
-				new AsyncCallbackSupport<String>(new OperationMessage(profileMessages.creatingProject()), null, view
-						.getCreateButton()) {
+	public void createProject(Project project, ProjectTemplate template) {
+		getDispatchService().execute(
+				new CreateProjectAction(project, template),
+				new AsyncCallbackSupport<CreateProjectResult>(new OperationMessage(profileMessages.creatingProject()),
+						null, view.getCreateButton()) {
 					@Override
-					protected void success(final String projectIdentifier) {
+					protected void success(final CreateProjectResult result) {
 						ProjectHomePlace
-								.createPlace(projectIdentifier)
+								.createPlace(result.get().getIdentifier())
 								.displayOnArrival(
 										Message.createSuccessMessage(profileMessages.projectCreatedAndProvisioning()))
 								.go();
@@ -95,6 +98,13 @@ public class NewProjectPresenter extends AbstractProfilePresenter implements Pre
 		// Set the createAvailable flag on our view
 		view.displayMaxProjectsMessage(!(place.isCreateAvailable()));
 
+		view.setProjectTemplates(place.getProjectTemplates());
+
+	}
+
+	@Override
+	public void createProject(Project project) {
+		createProject(project, null);
 	}
 
 }

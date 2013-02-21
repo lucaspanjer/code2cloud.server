@@ -76,6 +76,7 @@ public class WebServiceDomain {
 		p.setAccessibility(project.getAccessibility());
 		p.setNumWatchers(project.getNumWatchers());
 		p.setNumCommiters(project.getNumCommitters());
+		p.setTemplate(project.isTemplate());
 		if (!shallow) {
 			p.setOrganization(copy(project.getOrganization()));
 			p.setProjectPreferences(copy(project.getProjectPreferences()));
@@ -136,6 +137,7 @@ public class WebServiceDomain {
 		project.setAccessibility(p.getAccessibility());
 		project.setOrganization(copy(p.getOrganization()));
 		project.setProjectPreferences(copy(p.getProjectPreferences()));
+		project.setIsTemplate(p.isTemplate());
 
 		return project;
 	}

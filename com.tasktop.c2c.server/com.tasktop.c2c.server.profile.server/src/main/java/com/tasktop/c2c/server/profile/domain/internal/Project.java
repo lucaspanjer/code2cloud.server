@@ -43,6 +43,7 @@ public class Project extends BaseEntity {
 	private ProjectAccessibility accessibility;
 	private ProjectPreferences projectPreferences;
 	private Boolean deleted = false;
+	private Boolean template = false;
 
 	private List<ProjectProfile> projectProfiles = new ArrayList<ProjectProfile>();
 	private List<DeploymentConfiguration> deploymentConfigurations = new ArrayList<DeploymentConfiguration>();
@@ -240,5 +241,15 @@ public class Project extends BaseEntity {
 
 	public String getShortIdentifier() {
 		return Long.toString(getId(), Character.MAX_RADIX);
+	}
+
+	@Basic
+	@Column
+	public Boolean isTemplate() {
+		return template;
+	}
+
+	public void setIsTemplate(Boolean isTemplate) {
+		this.template = isTemplate;
 	}
 }

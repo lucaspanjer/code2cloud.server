@@ -85,11 +85,19 @@ public class BaseProfileConfiguration {
 	}
 
 	public String getServiceUrlPrefix(String projectIdentifier) {
-		return getProfileBaseUrl() + getServiceProxyPath() + "/" + projectIdentifier + "/";
+		return getProfileBaseUrl() + getServiceProxyUrlPath(projectIdentifier);
 	}
 
 	public String getHostedScmUrlPrefix(String projectId) {
-		return getServiceUrlPrefix(projectId) + "scm/";
+		return getProfileBaseUrl() + getHostedScmUrlPath(projectId);
+	}
+
+	public String getHostedScmUrlPath(String projectId) {
+		return getServiceProxyUrlPath(projectId) + "scm/";
+	}
+
+	public String getServiceProxyUrlPath(String projectIdentifier) {
+		return getServiceProxyPath() + "/" + projectIdentifier + "/";
 	}
 
 	public boolean isPrefixHostnameWithOrgId() {

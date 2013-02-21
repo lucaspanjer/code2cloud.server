@@ -56,6 +56,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.github.api.GitHub;
+import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.test.annotation.ExpectedException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -165,6 +166,7 @@ public abstract class BaseProfileServiceTest {
 	public void after() {
 		jobService.getScheduledJobs().clear();
 		clearCredentials();
+		TenancyContextHolder.clearContext();
 	}
 
 	private void clearCredentials() {
@@ -406,8 +408,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testCreateProject() throws ValidationException, EntityNotFoundException {
-		Profile profile = createMockProfile(entityManager);
-		entityManager.flush();
+		Profile profile = setupProfile(false);
 
 		Project project = MockProjectFactory.create(null);
 
@@ -442,7 +443,8 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testCreateProjectNonAsciiCharacters() throws ValidationException, EntityNotFoundException {
-		Profile profile = createMockProfile(entityManager);
+		Profile profile = setupProfile(false);
+
 		Project project = MockProjectFactory.create(null);
 		project.setName("Project Name With Non-Ascii\u00E4");
 		project.setDescription("a description with non-ascii\u00E4");
@@ -503,8 +505,7 @@ public abstract class BaseProfileServiceTest {
 		entityManager.persist(org);
 		TenancyUtil.setOrganizationTenancyContext(orgId);
 
-		Profile profile = createMockProfile(entityManager);
-		entityManager.flush();
+		Profile profile = setupProfile(false);
 
 		Project project = MockProjectFactory.create(null);
 		Long id = profileService.createProject(profile.getId(), project).getId();
@@ -555,7 +556,8 @@ public abstract class BaseProfileServiceTest {
 	@Test
 	public void testUpdateProject() throws ValidationException, EntityNotFoundException {
 
-		Profile profile = createMockProfile(entityManager);
+		Profile profile = setupProfile(false);
+
 		Project project = MockProjectFactory.create(null);
 
 		project = profileService.createProject(profile.getId(), project);
@@ -581,7 +583,7 @@ public abstract class BaseProfileServiceTest {
 	@Test
 	public void testUpdateProjectWikiLanguage() throws ValidationException, EntityNotFoundException {
 
-		Profile profile = createMockProfile(entityManager);
+		Profile profile = setupProfile(false);
 		Project project = MockProjectFactory.create(null);
 
 		project = profileService.createProject(profile.getId(), project);
@@ -600,7 +602,7 @@ public abstract class BaseProfileServiceTest {
 	// task 1824
 	@Test(expected = ValidationException.class)
 	public void testUpdateProject_DescriptionTooLong() throws EntityNotFoundException, ValidationException {
-		Profile profile = createMockProfile(entityManager);
+		Profile profile = setupProfile(true);
 		Project project = MockProjectFactory.create(null);
 
 		project = profileService.createProject(profile.getId(), project);
@@ -614,7 +616,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = EntityNotFoundException.class)
 	public void testUpdateProject_ProjectNotFound() throws ValidationException, EntityNotFoundException {
-		Profile profile = createMockProfile(entityManager);
+		Profile profile = setupProfile(false);
 		Project project = MockProjectFactory.create(null);
 
 		project = profileService.createProject(profile.getId(), project);
@@ -1153,7 +1155,7 @@ public abstract class BaseProfileServiceTest {
 	@Test
 	public void testFindOrgPrivateProjectsForOrgUserNotBelongingToProjectWithOrgId() throws Exception {
 		Organization org = setupOrganization();
-		Profile projectOwner = createMockProfile(entityManager);
+		Profile projectOwner = setupProfile(false);
 		OrganizationProfile orgToOwner = new OrganizationProfile();
 		orgToOwner.setOrganization(org);
 		orgToOwner.setProfile(projectOwner);
@@ -1187,7 +1189,7 @@ public abstract class BaseProfileServiceTest {
 	@Test
 	public void testFindAllProjectsForOrgUser() throws Exception {
 		Organization org = setupOrganization();
-		Profile projectOwner = createMockProfile(entityManager);
+		Profile projectOwner = setupProfile(false);
 		OrganizationProfile orgToOwner = new OrganizationProfile();
 		orgToOwner.setOrganization(org);
 		orgToOwner.setProfile(projectOwner);
@@ -1809,7 +1811,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test
 	public void testDoDeleteProject() throws ValidationException, EntityNotFoundException {
-		Profile profile = createMockProfile(entityManager);
+		Profile profile = setupProfile(false);
 		Project project = MockProjectFactory.create(null);
 
 		Long id = profileService.createProject(profile.getId(), project).getId();
@@ -1908,7 +1910,7 @@ public abstract class BaseProfileServiceTest {
 	}
 
 	private Project changeDeletedProject() throws EntityNotFoundException, ValidationException {
-		Profile profile = createMockProfile(entityManager);
+		Profile profile = setupProfile(false);
 		Project project = MockProjectFactory.create(null);
 
 		project = profileService.createProject(profile.getId(), project);
@@ -2005,7 +2007,7 @@ public abstract class BaseProfileServiceTest {
 
 	@Test(expected = EntityNotFoundException.class)
 	public void testGetDeletedProjectForInvitationToken() throws ValidationException, EntityNotFoundException {
-		Profile profile = createMockProfile(entityManager);
+		Profile profile = setupProfile(false);
 		Project project = MockProjectFactory.create(null);
 		Long id = profileService.createProject(profile.getId(), project).getId();
 		Project created = entityManager.find(Project.class, id);

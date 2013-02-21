@@ -21,6 +21,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -60,6 +61,10 @@ public class ProjectAdminSettingsEditView extends AbstractProjectView implements
 	@UiField
 	@Path("name")
 	TextBox projectName;
+	@UiField
+	@Path("template")
+	CheckBox isTemplate;
+
 	@UiField
 	Button cancelEditButton;
 	@UiField

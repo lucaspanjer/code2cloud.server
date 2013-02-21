@@ -686,5 +686,13 @@
 			<column name="LANGUAGE" type="VARCHAR(5)" defaultValue="en"/>
 		</addColumn>
 	</changeSet>
+	
+	<changeSet id="addTemplateColumn-task5170" author="cmorgan">
+		<addColumn tableName="PROJECT">
+			<column name="TEMPLATE" type="BOOLEAN" defaultValueBoolean="false">
+			</column>
+		</addColumn>
+	</changeSet>
+	
 
 </databaseChangeLog>

@@ -37,6 +37,10 @@
 				<label><ui:text from="{pm.wikiMarkup}"/><ui:text from="{cpm.colon}"/></label>
 				<g:ValueListBox ui:field="wikiLanguageListBox" />
 			</fieldset>
+			<fieldset>
+				<label><ui:text from="{pm.templateProject}"/><ui:text from="{cpm.colon}"/></label>
+				<g:CheckBox ui:field='isTemplate' enabled="false" />
+			</fieldset>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

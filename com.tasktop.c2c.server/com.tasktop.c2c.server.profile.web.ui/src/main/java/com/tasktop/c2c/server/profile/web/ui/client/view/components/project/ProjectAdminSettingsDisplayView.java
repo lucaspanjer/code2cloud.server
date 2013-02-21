@@ -21,6 +21,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.tasktop.c2c.server.profile.domain.project.Project;
@@ -55,9 +56,11 @@ public class ProjectAdminSettingsDisplayView extends AbstractProjectView impleme
 	Label name;
 	@UiField
 	Label description;
-
 	@UiField
 	Anchor editButton;
+	@UiField
+	@Path("template")
+	CheckBox isTemplate;
 
 	private Presenter presenter;
 

@@ -29,6 +29,7 @@ public class Project extends AbstractEntity {
 	private Integer numWatchers;
 	private Integer numCommiters;
 	private Organization organization;
+	private Boolean isTemplate;
 
 	public Project() {
 		// Default constructor, does nothing.
@@ -136,6 +137,14 @@ public class Project extends AbstractEntity {
 	 */
 	public void setProjectPreferences(ProjectPreferences projectPreferences) {
 		this.projectPreferences = projectPreferences;
+	}
+
+	public Boolean isTemplate() {
+		return isTemplate;
+	}
+
+	public void setTemplate(Boolean isTemplate) {
+		this.isTemplate = isTemplate;
 	}
 
 }

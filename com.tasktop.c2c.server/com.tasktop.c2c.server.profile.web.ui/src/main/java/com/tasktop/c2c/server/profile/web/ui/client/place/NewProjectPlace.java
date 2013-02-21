@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.place;
 
+import java.util.List;
+
 import com.tasktop.c2c.server.common.profile.web.client.navigation.AbstractPlaceTokenizer;
 import com.tasktop.c2c.server.common.profile.web.client.navigation.PageMapping;
 import com.tasktop.c2c.server.common.profile.web.client.place.HeadingPlace;
@@ -20,6 +22,9 @@ import com.tasktop.c2c.server.common.profile.web.client.place.WindowTitlePlace;
 import com.tasktop.c2c.server.common.profile.web.client.util.WindowTitleBuilder;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectCreateAvailableAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectCreateAvailableResult;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectTemplatesAction;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectTemplatesResult;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplate;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
@@ -32,6 +37,7 @@ public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, Wind
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	private boolean createAvailable = false;
+	private List<ProjectTemplate> projectTemplates;
 
 	public static PageMapping NewProject = new PageMapping(new NewProjectPlace.Tokenizer(), "newProject");
 
@@ -74,12 +80,18 @@ public class NewProjectPlace extends LoggedInPlace implements HeadingPlace, Wind
 	protected void addActions() {
 		super.addActions();
 		addAction(new GetProjectCreateAvailableAction());
+		addAction(new GetProjectTemplatesAction());
 	}
 
 	@Override
 	protected void handleBatchResults() {
 		super.handleBatchResults();
 		createAvailable = getResult(GetProjectCreateAvailableResult.class).get();
+		projectTemplates = getResult(GetProjectTemplatesResult.class).get();
 		onPlaceDataFetched();
+	}
+
+	public List<ProjectTemplate> getProjectTemplates() {
+		return projectTemplates;
 	}
 }

@@ -43,8 +43,6 @@ public abstract class AbstractPreAuthServiceProvider<T> extends AbstractServiceP
 	@Autowired
 	private ProfileService profileService;
 
-	private AuthenticationToken systemAuthToken;
-
 	@Override
 	public T getService(String projectIdentifier) {
 		T service = super.getService(projectIdentifier);
@@ -60,9 +58,6 @@ public abstract class AbstractPreAuthServiceProvider<T> extends AbstractServiceP
 	}
 
 	private AuthenticationToken computeAuthenticationToken(String projectIdentifier) {
-		if (systemAuthToken != null) {
-			return systemAuthToken;
-		}
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		AuthenticationToken authenticationToken = null;
 		if (authentication != null) {
@@ -91,7 +86,4 @@ public abstract class AbstractPreAuthServiceProvider<T> extends AbstractServiceP
 		}
 	}
 
-	public void setSystemAuthToken(AuthenticationToken systemAuthToken) {
-		this.systemAuthToken = systemAuthToken;
-	}
 }

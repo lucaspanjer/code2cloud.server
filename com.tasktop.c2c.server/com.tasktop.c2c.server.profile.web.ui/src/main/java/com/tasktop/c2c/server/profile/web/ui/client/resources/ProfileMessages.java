@@ -84,11 +84,11 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Automatic")
 	String automatic();
 
-	@DefaultMessage("Build {0}")
-	String buildNumber(Integer number);
-
 	@DefaultMessage("{0} Build took {1}.")
 	String buildDuration(String description, String duration);
+
+	@DefaultMessage("Build {0}")
+	String buildNumber(Integer number);
 
 	@DefaultMessage("resulted in {0}.")
 	String buildResult(String result);
@@ -146,6 +146,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Create Deployment")
 	String createDeployment();
+
+	@DefaultMessage("Create from template")
+	String createFromTemplate();
 
 	@DefaultMessage("Create Invitations")
 	String createInvitations();
@@ -240,9 +243,6 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Your email address has been verified.")
 	String emailVerified();
 
-	@DefaultMessage("The referenced entity cannot be found or no longer exists.")
-	String entityNotFound();
-
 	@DefaultMessage("Please enter an email.")
 	String enterEmail();
 
@@ -252,17 +252,20 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Please enter a valid email.")
 	String enterValidEmail();
 
+	@DefaultMessage("The referenced entity cannot be found or no longer exists.")
+	String entityNotFound();
+
 	@DefaultMessage("Error while saving")
 	String errorWhileSaving();
 
 	@DefaultMessage("External Source Repositories")
 	String externalSourceRepositories();
 
-	@DefaultMessage("First Name")
-	String firstName();
-
 	@DefaultMessage("First, Last, email@example.com")
 	String firstLastEmailExample();
+
+	@DefaultMessage("First Name")
+	String firstName();
 
 	@DefaultMessage("Enter your email address and your login information will be sent to you.")
 	String forgotPasswordEnterEmail();
@@ -325,6 +328,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Invitation Creator")
 	String invitationCreator();
 
+	@DefaultMessage("Invitation email sent to {0}")
+	String invitationEmailSentTo(String recipient);
+
 	@DefaultMessage("{0} is currently invitation only.")
 	String invitationOnly(String code2Cloud);
 
@@ -336,9 +342,6 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Invitations created. See below for details:")
 	String invitationsCreatedSeeBelow();
-
-	@DefaultMessage("Invitation email sent to {0}")
-	String invitationEmailSentTo(String recipient);
 
 	@DefaultMessage("Invitation sent to")
 	String invitationSentTo();
@@ -364,11 +367,11 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Key")
 	String key();
 
-	@DefaultMessage("Last Deployment")
-	String lastDeployment();
-
 	@DefaultMessage("Language")
 	String language();
+
+	@DefaultMessage("Last Deployment")
+	String lastDeployment();
 
 	@DefaultMessage("Last Name")
 	String lastName();
@@ -454,6 +457,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Open Tasks")
 	String openTasks();
 
+	@DefaultMessage("Organization Private")
+	String organizationPrivate();
+
 	@DefaultMessage("Organization Shared")
 	String organizationShared();
 
@@ -478,6 +484,9 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Password")
 	String password();
 
+	@DefaultMessage("Password and Confirm Password must be the same.")
+	String passwordAndConfirmationMustMatch();
+
 	@DefaultMessage("Change your Password")
 	String passwordChange();
 
@@ -490,11 +499,23 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("New Password")
 	String passwordNew();
 
+	@DefaultMessage("New Password and Confirm Password must be the same.")
+	String passwordNewAndConfirmationMustMatch();
+
 	@DefaultMessage("Old Password")
 	String passwordOld();
 
-	@DefaultMessage("Your password must:")
-	String passwordRulesLabel();
+	@DefaultMessage("Please provide a password.")
+	String passwordProvide();
+
+	@DefaultMessage("Password Reset")
+	String passwordReset();
+
+	@DefaultMessage("Password reset instructions have been sent to your email.")
+	String passwordResetInstructionsSent();
+
+	@DefaultMessage("Please choose a new password.")
+	String passwordResetNewPassword();
 
 	@DefaultMessage("have at least one digit character")
 	String passwordRulesIncludeDigit();
@@ -502,32 +523,14 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("have at least one lowercase character")
 	String passwordRulesIncludeLc();
 
+	@DefaultMessage("Your password must:")
+	String passwordRulesLabel();
+
 	@DefaultMessage("be at least 8 characters in length")
 	String passwordRulesMinLength();
 
 	@DefaultMessage("not include your username")
 	String passwordRulesNotIncludeUsername();
-
-	@DefaultMessage("Organization Private")
-	String organizationPrivate();
-
-	@DefaultMessage("Password Reset")
-	String passwordReset();
-
-	@DefaultMessage("Password and Confirm Password must be the same.")
-	String passwordAndConfirmationMustMatch();
-
-	@DefaultMessage("New Password and Confirm Password must be the same.")
-	String passwordNewAndConfirmationMustMatch();
-
-	@DefaultMessage("Please provide a password.")
-	String passwordProvide();
-
-	@DefaultMessage("Please choose a new password.")
-	String passwordResetNewPassword();
-
-	@DefaultMessage("Password reset instructions have been sent to your email.")
-	String passwordResetInstructionsSent();
 
 	@DefaultMessage("Password updated.")
 	String passwordUpdated();
@@ -658,11 +661,14 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("Select a Job...")
 	String selectAJob();
 
+	@DefaultMessage("Select an Artifact...")
+	String selectAnArtifact();
+
 	@DefaultMessage("Select a Service...")
 	String selectAService();
 
-	@DefaultMessage("Select an Artifact...")
-	String selectAnArtifact();
+	@DefaultMessage("Select a template")
+	String selectATemplate();
 
 	@DefaultMessage("Please select a user first.")
 	String selectUserFirst();
@@ -729,6 +735,9 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Team member updated.")
 	String teamMemberUpdated();
+
+	@DefaultMessage("Use as template")
+	String templateProject();
 
 	@DefaultMessage("Time: {0}.")
 	String timeLabel(String timeValue);
@@ -800,4 +809,5 @@ public interface ProfileMessages extends Messages {
 
 	@DefaultMessage("Wiki Markup")
 	String wikiMarkup();
+
 }
