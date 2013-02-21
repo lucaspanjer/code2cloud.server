@@ -18,10 +18,14 @@ import java.util.Map;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.Region;
+import com.tasktop.c2c.server.scm.domain.Blame;
+import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
+import com.tasktop.c2c.server.scm.domain.Trees;
 
 /**
  * Interface for interacting with the {@link ScmRepository}s for a given project.
@@ -79,6 +83,8 @@ public interface ScmService {
 	Commit getCommit(String repoName, String commitId) throws EntityNotFoundException;
 
 	/**
+	 * XXX probably could be deleted and handled by getLog
+	 * 
 	 * @param repoName
 	 * @param region
 	 * @return
@@ -87,6 +93,8 @@ public interface ScmService {
 	List<Commit> getLog(String repoName, Region region) throws EntityNotFoundException;
 
 	/**
+	 * XXX probably could be deleted and handled by getLog
+	 * 
 	 * @param repoName
 	 * @param branchName
 	 * @param region
@@ -94,6 +102,84 @@ public interface ScmService {
 	 * @throws EntityNotFoundException
 	 */
 	List<Commit> getLogForBranch(String repoName, String branchName, Region region) throws EntityNotFoundException;
+
+	/**
+	 * @param repoName
+	 * @param revision
+	 * @param path
+	 * @param region
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	List<Commit> getLog(String repoName, String revision, String path, Region region) throws EntityNotFoundException;
+
+	/**
+	 * Creates branch in given repository.
+	 * 
+	 * @param repoName
+	 * @param branchName
+	 * @return Name of the branch created
+	 */
+	String createBranch(String repoName, String branchName) throws EntityNotFoundException;
+
+	/**
+	 * Deletes branch in given repository.
+	 * 
+	 * @param repoName
+	 * @param branchName
+	 * @return Name of the branch created
+	 */
+	void deleteBranch(String repoName, String branchName) throws EntityNotFoundException;
+
+	/**
+	 * Lists a folder on given path and ref.
+	 * 
+	 * @param repoName
+	 * @param revision
+	 * @param path
+	 * @param history
+	 *            Should latest commit be included for every entry.
+	 * @param recursion
+	 *            Depth of recursion currently only -2 is recognized, which is good for skipping folders which only
+	 *            contain one subfolder.
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	Trees getTrees(String repoName, String revision, String path, boolean history, int recursion)
+			throws EntityNotFoundException;
+
+	/**
+	 * Gets annotated source for blob at given path and ref.
+	 * 
+	 * @param repository
+	 * @param revision
+	 * @param path
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	Blame getBlame(String repository, String revision, String path) throws EntityNotFoundException;
+
+	/**
+	 * Gets Blob at given path and ref.
+	 * 
+	 * @param repository
+	 * @param revision
+	 * @param path
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	Blob getBlob(String repository, String revision, String path) throws EntityNotFoundException;
+
+	/**
+	 * Tries to resolve the item ie finds out the type of it and its SHA-1.
+	 * 
+	 * @param repository
+	 * @param revision
+	 * @param path
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	Item getItem(String repository, String revision, String path) throws EntityNotFoundException;
 
 	String getPublicSshKey();
 }

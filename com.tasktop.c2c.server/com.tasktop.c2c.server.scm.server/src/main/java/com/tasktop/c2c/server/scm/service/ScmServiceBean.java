@@ -29,12 +29,16 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+import com.tasktop.c2c.server.scm.domain.Blame;
+import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmLocation;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
 import com.tasktop.c2c.server.scm.domain.ScmType;
+import com.tasktop.c2c.server.scm.domain.Trees;
 
 @Service("scmService")
 @Qualifier("main")
@@ -170,9 +174,46 @@ public class ScmServiceBean extends AbstactServiceBean implements ScmService {
 	}
 
 	@Override
+	public List<Commit> getLog(String repoName, String revision, String path, Region region)
+			throws EntityNotFoundException {
+		return gitService.getLog(repoName, revision, path, region);
+	}
+
+	@Override
 	public List<Commit> getLogForBranch(String repoName, String branchName, Region region)
 			throws EntityNotFoundException {
 		return gitService.getLogForBranch(repoName, branchName, region);
+	}
+
+	@Override
+	public String createBranch(String repoName, String branchName) throws EntityNotFoundException {
+		return gitService.createBranch(repoName, branchName);
+	}
+
+	@Override
+	public void deleteBranch(String repoName, String branchName) throws EntityNotFoundException {
+		gitService.deleteBranch(repoName, branchName);
+	}
+
+	@Override
+	public Trees getTrees(String repoName, String revision, String path, boolean history, int recursion)
+			throws EntityNotFoundException {
+		return gitService.getTrees(repoName, revision, path, history, recursion);
+	}
+
+	@Override
+	public Blob getBlob(String repoName, String revision, String path) throws EntityNotFoundException {
+		return gitService.getBlob(repoName, revision, path);
+	}
+
+	@Override
+	public Blame getBlame(String repoName, String revision, String path) throws EntityNotFoundException {
+		return gitService.getBlame(repoName, revision, path);
+	}
+
+	@Override
+	public Item getItem(String repoName, String revision, String path) throws EntityNotFoundException {
+		return gitService.getItem(repoName, revision, path);
 	}
 
 	@Override

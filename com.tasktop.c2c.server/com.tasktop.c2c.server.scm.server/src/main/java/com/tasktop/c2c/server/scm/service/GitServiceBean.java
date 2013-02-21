@@ -1,5 +1,5 @@
 /*******************************************************************************
-S * Copyright (c) 2010, 2012 Tasktop Technologies
+ * Copyright (c) 2010, 2012 Tasktop Technologies
  * Copyright (c) 2010, 2011 SpringSource, a division of VMware
  * 
  * All rights reserved. This program and the accompanying materials
@@ -32,11 +32,14 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
+import org.eclipse.jgit.api.CreateBranchCommand;
+import org.eclipse.jgit.api.DeleteBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
@@ -62,12 +65,16 @@ import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.query.QueryUtil;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+import com.tasktop.c2c.server.scm.domain.Blame;
+import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmLocation;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
 import com.tasktop.c2c.server.scm.domain.ScmType;
+import com.tasktop.c2c.server.scm.domain.Trees;
 
 @Component
 public class GitServiceBean implements GitService, InitializingBean {
@@ -263,6 +270,25 @@ public class GitServiceBean implements GitService, InitializingBean {
 		QueryUtil.applyRegionToList(result, region);
 
 		return result;
+	}
+
+	@Secured({ Role.Observer, Role.User })
+	@Override
+	public List<Commit> getLog(String repoName, String revision, String path, Region region)
+			throws EntityNotFoundException {
+		try {
+			Repository r = findRepositoryByName(repoName);
+			List<Commit> commits = GitBrowseUtil.getLog(r, revision, path, region);
+			r.close();
+			return commits;
+		} catch (AmbiguousObjectException ex) {
+			throw new EntityNotFoundException();
+		} catch (IOException ex) {
+			throw new EntityNotFoundException();
+		} catch (URISyntaxException ex) {
+			throw new EntityNotFoundException();
+		}
+
 	}
 
 	@Secured({ Role.Observer, Role.User })
@@ -682,13 +708,129 @@ public class GitServiceBean implements GitService, InitializingBean {
 			diffFormatter.flush();
 
 			result.setChanges(new ArrayList<com.tasktop.c2c.server.scm.domain.DiffEntry>());
-
 			String theDiff = new String(output.toByteArray());
 			result.setDiffText(theDiff);
 			result.setChanges(new PatchParser().parsePatch(theDiff));
 		}
 
 		return result;
+	}
+
+	@Secured({ Role.User })
+	@Override
+	public String createBranch(String repoName, String branchName) throws EntityNotFoundException {
+		try {
+			Repository r = findRepositoryByName(repoName);
+			Git git = Git.wrap(r);
+			CreateBranchCommand command = git.branchCreate();
+			command.setName(branchName);
+
+			/*
+			 * command.setStartPoint(getStartPoint().name()); if (upstreamMode != null)
+			 * command.setUpstreamMode(upstreamMode); command.call();
+			 */
+
+			command.call();
+			r.close();
+			return branchName;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (GitAPIException e) {
+			throw new RuntimeException(e);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Secured({ Role.User })
+	@Override
+	public void deleteBranch(String repoName, String branchName) throws EntityNotFoundException {
+		try {
+			Repository r = findRepositoryByName(repoName);
+			Git git = Git.wrap(r);
+			DeleteBranchCommand command = git.branchDelete();
+			command.setBranchNames(branchName);
+			command.setForce(true);
+			command.call();
+			r.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (GitAPIException e) {
+			throw new RuntimeException(e);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Secured({ Role.Observer, Role.User })
+	@Override
+	public Trees getTrees(String repoName, String revision, String path, boolean history, int recursion)
+			throws EntityNotFoundException {
+		try {
+			Repository r = findRepositoryByName(repoName);
+			Trees trees = GitBrowseUtil.getTrees(r, revision, path, history, recursion);
+			r.close();
+			return trees;
+		} catch (AmbiguousObjectException ex) {
+			throw new EntityNotFoundException();
+		} catch (IOException ex) {
+			throw new EntityNotFoundException();
+		} catch (URISyntaxException ex) {
+			throw new EntityNotFoundException();
+		} catch (GitAPIException ex) {
+			throw new EntityNotFoundException();
+		}
+	}
+
+	@Secured({ Role.Observer, Role.User })
+	@Override
+	public Blob getBlob(String repoName, String revision, String path) throws EntityNotFoundException {
+		try {
+			Repository r = findRepositoryByName(repoName);
+			Blob b = GitBrowseUtil.getBlob(r, revision, path);
+			r.close();
+			return b;
+		} catch (AmbiguousObjectException ex) {
+			throw new EntityNotFoundException();
+		} catch (IOException ex) {
+			throw new EntityNotFoundException();
+		} catch (URISyntaxException ex) {
+			throw new EntityNotFoundException();
+		}
+	}
+
+	@Secured({ Role.Observer, Role.User })
+	@Override
+	public Blame getBlame(String repoName, String revision, String path) throws EntityNotFoundException {
+		try {
+			Repository r = findRepositoryByName(repoName);
+			Blame b = GitBrowseUtil.getBlame(r, revision, path);
+			r.close();
+			return b;
+		} catch (AmbiguousObjectException ex) {
+			throw new EntityNotFoundException();
+		} catch (IOException ex) {
+			throw new EntityNotFoundException();
+		} catch (URISyntaxException ex) {
+			throw new EntityNotFoundException();
+		}
+	}
+
+	@Secured({ Role.Observer, Role.User })
+	@Override
+	public Item getItem(String repoName, String revision, String path) throws EntityNotFoundException {
+		try {
+			Repository r = findRepositoryByName(repoName);
+			Item i = GitBrowseUtil.getItem(r, revision, path);
+			r.close();
+			return i;
+		} catch (AmbiguousObjectException ex) {
+			throw new EntityNotFoundException();
+		} catch (IOException ex) {
+			throw new EntityNotFoundException();
+		} catch (URISyntaxException ex) {
+			throw new EntityNotFoundException();
+		}
 	}
 
 	@Override

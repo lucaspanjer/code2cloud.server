@@ -23,10 +23,14 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.WrappedCheckedException;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.web.AbstractVersionedRestServiceClient;
+import com.tasktop.c2c.server.scm.domain.Blame;
+import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
+import com.tasktop.c2c.server.scm.domain.Trees;
 
 /**
  * A client to communicate to the SCM REST service.
@@ -69,6 +73,10 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 		private List<ScmSummary> scmSummaryList;
 		private Commit commit;
 		private String string;
+		private Trees trees;
+		private Blob blob;
+		private Blame blame;
+		private Item item;
 
 		public List<Commit> getCommitList() {
 			return commitList;
@@ -125,6 +133,39 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 		public void setString(String string) {
 			this.string = string;
 		}
+
+		public Trees getTrees() {
+			return trees;
+		}
+
+		public void setTrees(Trees trees) {
+			this.trees = trees;
+		}
+
+		public Blob getBlob() {
+			return blob;
+		}
+
+		public void setBlob(Blob blob) {
+			this.blob = blob;
+		}
+
+		public Blame getBlame() {
+			return blame;
+		}
+
+		public void setBlame(Blame blame) {
+			this.blame = blame;
+		}
+
+		public Item getItem() {
+			return item;
+		}
+
+		public void setItem(Item item) {
+			this.item = item;
+		}
+
 	}
 
 	private abstract class GetCall<T> {
@@ -305,6 +346,24 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 		}.doCall(url, repoName);
 	}
 
+	public static final String GET_LOG_FOR_PATH_URL = "repository/{repo}/commits/{revision}";
+
+	public List<Commit> getLog(String repoName, String revision, String path, Region region)
+			throws EntityNotFoundException {
+		// Calculate the correct URL now.
+		String url = GET_LOG_FOR_PATH_URL;
+		if (region != null) {
+			url = String.format("%s/%s?%s=%s&%s=%s", url, path, OFFSET_URL_PARAM, region.getOffset(),
+					PAGESIZE_URL_PARAM, region.getSize());
+		}
+
+		return new GetCall<List<Commit>>() {
+			public List<Commit> getValue(ServiceCallResult result) {
+				return result.getCommitList();
+			}
+		}.doCall(url, repoName, revision);
+	}
+
 	public static final String BRANCH_PARAM = "branch";
 	public static final String GET_LOG_FOR_BRANCH_URL = "repository/{repo}/branchlog";
 
@@ -323,6 +382,40 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 		}.doCall(url, repoName);
 	}
 
+	public static final String CREATE_BRANCH_URL = "branch/{repoName}/{branchName}";
+
+	/** @Override in fact it does override, but ... */
+	public String createBranch(String repoName, String branchName) throws EntityNotFoundException {
+		try {
+			return new PostCall<String>() {
+				public String getValue(ServiceCallResult result) {
+					return result.getString();
+				}
+			}.doCall(CREATE_BRANCH_URL, repoName, branchName);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+			// convertValidationException(e);
+			throw e;
+		}
+	}
+
+	public static final String DELETE_BRANCH_URL = "unbranch/{repoName}/{branchName}";
+
+	/** @Override in fact it does override, but ... */
+	public void deleteBranch(String repoName, String branchName) throws EntityNotFoundException {
+		try {
+			new PostCall<Void>() {
+				public Void getValue(ServiceCallResult result) {
+					return null;
+				}
+			}.doCall(DELETE_BRANCH_URL, repoName, branchName);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+			// convertValidationException(e);
+			throw e;
+		}
+	}
+
 	public static final String PUBILC_SSH_KEY_URL = "sshkey";
 
 	public String getPublicSshKey() {
@@ -335,5 +428,76 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 
 	public String getClientVersion() {
 		return ScmService.VERSION;
+	}
+
+	public static final String REVISION_PARAM = "revision";
+
+	/*
+	 * This does not work. sadly public static final String GET_TREES_URL =
+	 * "repository/{repo}/trees/{revision}/{filePath:[.*]/*}";
+	 */
+	public static final String GET_TREES_URL = "repository/{repo}/trees/{revision}";
+
+	/** @Override in fact it does override, but ... */
+	public Trees getTrees(String repo, String revision, String path, boolean history, int recursion)
+			throws EntityNotFoundException {
+		// Calculate the correct URL now.
+		String url = GET_TREES_URL;
+
+		url = String.format("%s/%s?%s=%b&%s=%d", url, path, "history", history, "recursion", recursion);
+
+		return new GetCall<Trees>() {
+			public Trees getValue(ServiceCallResult result) {
+				return result.getTrees();
+			}
+		}.doCall(url, repo, revision);
+	}
+
+	public static final String GET_BLOB_URL = "repository/{repo}/blob/{revision}";
+
+	/** @Override in fact it does override, but ... */
+	public Blob getBlob(String repository, String revision, String path) throws EntityNotFoundException {
+
+		String url = GET_BLOB_URL;
+
+		url = String.format("%s/%s", url, path);
+
+		return new GetCall<Blob>() {
+			public Blob getValue(ServiceCallResult result) {
+				return result.getBlob();
+			}
+		}.doCall(url, repository, revision);
+	}
+
+	public static final String GET_BLAME_URL = "repository/{repo}/blame/{revision}";
+
+	/** @Override in fact it does override, but ... */
+	public Blame getBlame(String repository, String revision, String path) throws EntityNotFoundException {
+
+		String url = GET_BLAME_URL;
+
+		url = String.format("%s/%s", url, path);
+
+		return new GetCall<Blame>() {
+			public Blame getValue(ServiceCallResult result) {
+				return result.getBlame();
+			}
+		}.doCall(url, repository, revision);
+	}
+
+	public static final String GET_ITEM_URL = "repository/{repo}/item/{revision}";
+
+	/** @Override in fact it does override, but ... */
+	public Item getItem(String repository, String revision, String path) throws EntityNotFoundException {
+
+		String url = GET_ITEM_URL;
+
+		url = String.format("%s/%s", url, path);
+
+		return new GetCall<Item>() {
+			public Item getValue(ServiceCallResult result) {
+				return result.getItem();
+			}
+		}.doCall(url, repository, revision);
 	}
 }

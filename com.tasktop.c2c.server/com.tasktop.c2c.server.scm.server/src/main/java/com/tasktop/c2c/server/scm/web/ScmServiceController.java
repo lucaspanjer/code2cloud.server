@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,10 +34,14 @@ import com.tasktop.c2c.server.common.service.doc.Documentation;
 import com.tasktop.c2c.server.common.service.doc.Title;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.web.AbstractBuildInfoRestService;
+import com.tasktop.c2c.server.scm.domain.Blame;
+import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
+import com.tasktop.c2c.server.scm.domain.Trees;
 import com.tasktop.c2c.server.scm.service.ScmService;
 import com.tasktop.c2c.server.scm.service.ScmServiceClient;
 import com.tasktop.c2c.server.scm.service.ScmServiceClient.CommitsForAuthor;
@@ -157,6 +162,23 @@ public class ScmServiceController extends AbstractBuildInfoRestService implement
 		return this.getLogForBranch(repoName, branchName, createRegion(offset, pageSize));
 	}
 
+	@RequestMapping(value = ScmServiceClient.GET_LOG_FOR_PATH_URL + "/**", method = RequestMethod.GET)
+	public List<Commit> getLogForPath(@PathVariable("repo") String repoName, @PathVariable("revision") String revision,
+	/* @PathVariable("filePath") String filePath, */
+	@RequestParam(required = false, value = ScmServiceClient.PAGESIZE_URL_PARAM) Integer pageSize,
+			@RequestParam(required = false, value = ScmServiceClient.OFFSET_URL_PARAM) Integer offset,
+			HttpServletRequest request) throws EntityNotFoundException {
+
+		return this.getLog(repoName, revision, getFilePath(request, repoName, "commits", revision),
+				createRegion(offset, pageSize));
+	}
+
+	@Override
+	public List<Commit> getLog(String repoName, String revision, String path, Region region)
+			throws EntityNotFoundException {
+		return scmService.getLog(repoName, revision, path, region);
+	}
+
 	@Override
 	public List<Commit> getLogForBranch(String repoName, String branchName, Region region)
 			throws EntityNotFoundException {
@@ -166,6 +188,26 @@ public class ScmServiceController extends AbstractBuildInfoRestService implement
 	@RequestMapping(value = ScmServiceClient.PUBILC_SSH_KEY_URL, method = RequestMethod.GET)
 	public Map<String, String> getPublicSshKeyReq() {
 		return Collections.singletonMap("string", scmService.getPublicSshKey());
+	}
+
+	@RequestMapping(value = ScmServiceClient.CREATE_BRANCH_URL, method = RequestMethod.POST)
+	public Map<String, String> createBranchReq(@PathVariable("repoName") String repoName,
+			@PathVariable("branchName") String branchName) throws EntityNotFoundException {
+
+		return Collections.singletonMap("branch", createBranch(repoName, branchName));
+	}
+
+	@Override
+	public String createBranch(String repoName, String branchName) throws EntityNotFoundException {
+		return scmService.createBranch(repoName, branchName);
+	}
+
+	@Override
+	@RequestMapping(value = ScmServiceClient.DELETE_BRANCH_URL, method = RequestMethod.POST)
+	public void deleteBranch(@PathVariable("repoName") String repoName, @PathVariable("branchName") String branchName)
+			throws EntityNotFoundException {
+
+		scmService.deleteBranch(repoName, branchName);
 	}
 
 	@Override
@@ -178,4 +220,69 @@ public class ScmServiceController extends AbstractBuildInfoRestService implement
 	public Map<String, String> getServiceVersion() {
 		return Collections.singletonMap("version", ScmService.VERSION);
 	}
+
+	@RequestMapping(value = ScmServiceClient.GET_TREES_URL + "/**", method = RequestMethod.GET)
+	public Trees getTreesRequest(@PathVariable("repo") String repoName, @PathVariable("revision") String revision,
+	/* @PathVariable("filePath") String filePath, */
+	@RequestParam(required = false, value = "history", defaultValue = "true") Boolean history,
+			@RequestParam(required = false, value = "recursion", defaultValue = "0") Integer recursion,
+			HttpServletRequest request) throws EntityNotFoundException {
+
+		return getTrees(repoName, revision, getFilePath(request, repoName, "trees", revision), history, recursion);
+	}
+
+	@Override
+	public Trees getTrees(String repoName, String revision, String path, boolean history, int recursion)
+			throws EntityNotFoundException {
+		return scmService.getTrees(repoName, revision, path, history, recursion);
+	}
+
+	@RequestMapping(value = ScmServiceClient.GET_BLOB_URL + "/**", method = RequestMethod.GET)
+	public Blob getBlobRequest(@PathVariable("repo") String repoName, @PathVariable("revision") String revision,
+	/* @PathVariable("filePath") String filePath, */
+	HttpServletRequest request) throws EntityNotFoundException {
+
+		return getBlob(repoName, revision, getFilePath(request, repoName, "blob", revision));
+	}
+
+	@Override
+	public Blob getBlob(String repoName, String revision, String path) throws EntityNotFoundException {
+		return scmService.getBlob(repoName, revision, path);
+	}
+
+	@RequestMapping(value = ScmServiceClient.GET_BLAME_URL + "/**", method = RequestMethod.GET)
+	public Blame getBlameRequest(@PathVariable("repo") String repoName, @PathVariable("revision") String revision,
+	/* @PathVariable("filePath") String filePath, */
+	HttpServletRequest request) throws EntityNotFoundException {
+		return getBlame(repoName, revision, getFilePath(request, repoName, "blame", revision));
+	}
+
+	@Override
+	public Blame getBlame(String repoName, String revision, String path) throws EntityNotFoundException {
+		return scmService.getBlame(repoName, revision, path);
+	}
+
+	@RequestMapping(value = ScmServiceClient.GET_ITEM_URL + "/**", method = RequestMethod.GET)
+	public Item getItemRequest(@PathVariable("repo") String repoName, @PathVariable("revision") String revision,
+	/* @PathVariable("filePath") String filePath, */
+	HttpServletRequest request) throws EntityNotFoundException {
+		return getItem(repoName, revision, getFilePath(request, repoName, "item", revision));
+	}
+
+	@Override
+	public Item getItem(String repoName, String revision, String path) throws EntityNotFoundException {
+		return scmService.getItem(repoName, revision, path);
+	}
+
+	/*
+	 * This is extremely ugly and fragile. Using some decent REST server/client framework such as Jersey would solve it
+	 * ... And it would also make the *ServiceCient.ServiceCallResult pattern go.
+	 */
+	private String getFilePath(HttpServletRequest request, String repoName, String type, String revision) {
+		String filePath = request.getPathInfo();
+		// api/repository/{repo}/trees/{revision}/ HUH
+		return filePath.substring("api/repository/".length() + repoName.length() + type.length() + 2 + // e.g. "/tree/"
+				revision.length() + 1);
+	}
+
 }

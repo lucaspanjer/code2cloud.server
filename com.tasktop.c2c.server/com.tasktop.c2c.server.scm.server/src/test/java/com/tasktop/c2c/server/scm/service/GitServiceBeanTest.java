@@ -11,28 +11,19 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.scm.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
-import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.scm.domain.Commit;
 
 /**
@@ -42,62 +33,12 @@ import com.tasktop.c2c.server.scm.domain.Commit;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/applicationContext-test.xml" })
-public class GitServiceBeanTest {
-
-	@Value("${git.root}")
-	private String gitRoot;
-
-	@Value("${temp.dir}")
-	private String tempDir;
-
-	@Resource
-	private GitService gitService;
-
-	private String projId = "projid";
-
-	@Before
-	public void setup() throws IOException {
-		ensureDirExistsAndIsEmpty(gitRoot);
-		ensureDirExistsAndIsEmpty(tempDir);
-
-		TenancyContextHolder.createEmptyContext();
-		TenancyUtil.setProjectTenancyContext(projId);
-	}
-
-	private void ensureDirExistsAndIsEmpty(String dir) throws IOException {
-		File file = new File(dir);
-		if (!file.exists()) {
-			file.mkdirs();
-		} else {
-			FileUtils.deleteDirectory(file);
-		}
-	}
-
-	static int testNum = 1;
-
-	private String newName() {
-		return "test" + testNum++ + ".git";
-	}
-
-	private Git createAndCloneRepo(String name) throws IOException {
-		gitService.createEmptyRepository(name);
-
-		File gitDir = new File(gitRoot + "/" + projId + "/" + GitConstants.HOSTED_GIT_DIR + "/" + name);
-		Git git = Git.cloneRepository().setURI(gitDir.getAbsolutePath()).setDirectory(new File(tempDir)).call();
-		return git;
-	}
+public class GitServiceBeanTest extends GitServiceTestBase {
 
 	static int nextDummyFile = 1;
 
 	private void dummyCommitAndPush(Git git) throws GitAPIException, JGitInternalException, IOException {
-		File dummy = new File(git.getRepository().getDirectory().getParentFile(), "dummy" + nextDummyFile++ + ".txt");
-		FileOutputStream writer = new FileOutputStream(dummy);
-		writer.write("TEST".getBytes());
-		writer.close();
-		git.add().addFilepattern(dummy.getName()).call();
-		git.commit().setMessage("message").call();
-		git.push().call();
-
+		commitAndPushFile(git, "dummy" + nextDummyFile++ + ".txt", "TEST", "message");
 	}
 
 	@Test

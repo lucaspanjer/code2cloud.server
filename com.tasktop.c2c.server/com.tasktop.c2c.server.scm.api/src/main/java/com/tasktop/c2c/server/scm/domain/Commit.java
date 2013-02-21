@@ -12,15 +12,13 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.scm.domain;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class Commit implements Serializable {
+public class Commit extends Item {
 	private String url;
 	private String repository;
-	private String commitId;
 	private Profile author;
 	private Date date;
 	private Profile committer; // may be null
@@ -36,18 +34,20 @@ public class Commit implements Serializable {
 	}
 
 	public Commit(String number, Profile author, Date date, String comment) {
-		this.commitId = number;
+		super(number, Item.Type.COMMIT);
 		this.author = author;
 		this.date = date;
 		this.comment = comment;
 	}
 
+	/** Same as setSha(). */
 	public void setCommitId(String number) {
-		this.commitId = number;
+		setSha(number);
 	}
 
+	/** Same as getSha(). */
 	public String getCommitId() {
-		return commitId;
+		return getSha();
 	}
 
 	public void setDate(Date date) {
@@ -107,7 +107,7 @@ public class Commit implements Serializable {
 	}
 
 	public String getMinimizedCommitId() {
-		return minimizeCommitId(commitId);
+		return minimizeCommitId(getSha());
 	}
 
 	public Profile getCommitter() {
