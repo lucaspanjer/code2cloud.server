@@ -97,7 +97,8 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		} catch (EntityNotFoundException e) {
 			// expected, this is good
 		}
-		Person author = getCurrentPerson();
+		Person author = getAppropriateProfile(apiPersonToEntityPerson(wikiPage.getOriginalAuthor()),
+				getCurrentPerson(), "author");
 		com.tasktop.c2c.server.internal.wiki.server.domain.Page managedPage = new com.tasktop.c2c.server.internal.wiki.server.domain.Page();
 		managedPage.setOriginalAuthor(author);
 		managedPage.setPath(wikiPage.getPath());
@@ -123,6 +124,21 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		return (Page) domainConverter.convert(managedPage, new DomainConversionContext(entityManager));
 	}
 
+	private Person getAppropriateProfile(Person providedPerson, Person loggedInPerson, String property) {
+		Person retVal = providedPerson;
+		// If not set, use the logged in user Profile
+		if (providedPerson == null || providedPerson.getIdentity() == null) {
+			retVal = loggedInPerson;
+		} else if (Security.hasRole(Role.Admin)) {
+			retVal = providedPerson;
+		} else if (!providedPerson.getIdentity().equals(loggedInPerson.getIdentity())) {
+			throw new InsufficientPermissionsException(String.format(
+					"The %s cannot be set to a person other than the logged in person.", property));
+		}
+
+		return retVal;
+	}
+
 	public Person getCurrentPerson() {
 		AuthenticationServiceUser serviceUser = AuthenticationServiceUser.getCurrent();
 		return serviceUser == null ? null : createOrUpdatePerson(personFromAuthenticationToken(serviceUser.getToken()));
@@ -136,6 +152,9 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 	}
 
 	private Person apiPersonToEntityPerson(com.tasktop.c2c.server.wiki.domain.Person apiPerson) {
+		if (apiPerson == null) {
+			return null;
+		}
 		Person person = new Person();
 		person.setId(apiPerson.getId() == null ? null : Long.valueOf(apiPerson.getId()));
 		person.setIdentity(apiPerson.getLoginName());

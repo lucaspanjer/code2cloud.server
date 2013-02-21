@@ -8,19 +8,4 @@
        
     <s:global-method-security secured-annotations="enabled" />
 
-	<bean id="authenticationServiceServiceProvider"
-		class="com.tasktop.c2c.server.auth.service.AuthenticationServiceAuthenticationProvider"
-		autowire="byType"
-		p:authenticationService-ref="authenticationService"
-	/>
-
-	<s:http use-expressions="true" realm="Code2Cloud">
-		<s:intercept-url pattern="/**" access="isAuthenticated()" />
-		<s:http-basic />
-	</s:http>
-
-	<s:authentication-manager>
-		<s:authentication-provider ref="authenticationServiceServiceProvider"/>
-	</s:authentication-manager>
-
 </beans>

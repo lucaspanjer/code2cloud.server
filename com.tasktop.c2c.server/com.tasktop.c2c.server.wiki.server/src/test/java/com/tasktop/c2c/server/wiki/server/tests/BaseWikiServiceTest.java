@@ -32,6 +32,7 @@ import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -44,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.common.service.MockJobService;
 import com.tasktop.c2c.server.common.service.ReplicationScope;
 import com.tasktop.c2c.server.common.service.ValidationException;
@@ -88,6 +90,11 @@ public abstract class BaseWikiServiceTest {
 	private Person person2;
 
 	private boolean tenantSet;
+
+	@BeforeClass
+	public static void useGlobalSecurityContext() {
+		SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_GLOBAL);
+	}
 
 	@Before
 	public void before() {
@@ -802,5 +809,33 @@ public abstract class BaseWikiServiceTest {
 		com.tasktop.c2c.server.internal.wiki.server.domain.Person updatedAuthor = (com.tasktop.c2c.server.internal.wiki.server.domain.Person) query
 				.getSingleResult();
 		assertEquals(newName, updatedAuthor.getName());
+	}
+
+	@Test
+	public void testImpersonation() throws Exception {
+		logon(author);
+
+		Person otherPerson = new Person();
+		otherPerson.setName("Other Person");
+		otherPerson.setLoginName("otherlogin");
+
+		Page wikiPage = new Page();
+		wikiPage.setContent("abc 123\n456 ");
+		wikiPage.setCreationDate(null);
+		wikiPage.setPath("Foo Bar");
+		wikiPage.setOriginalAuthor(otherPerson);
+
+		try {
+			wikiService.createPage(wikiPage);
+			Assert.fail("Expect auth exception");
+		} catch (InsufficientPermissionsException e) {
+			// expected
+		}
+
+		logonAsAdmin(author);
+
+		Page created = wikiService.createPage(wikiPage);
+		Assert.assertEquals(otherPerson.getLoginName(), created.getOriginalAuthor().getLoginName());
+
 	}
 }
