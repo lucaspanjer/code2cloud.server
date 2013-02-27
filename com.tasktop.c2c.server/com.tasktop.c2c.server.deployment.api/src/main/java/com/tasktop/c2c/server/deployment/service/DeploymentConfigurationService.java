@@ -44,6 +44,15 @@ public interface DeploymentConfigurationService {
 	List<DeploymentConfiguration> listDeployments(Region region);
 
 	/**
+	 * List the current deployment configurations. The underlying deployment service will not be queried, so status
+	 * information will not be populated.
+	 * 
+	 * @param region
+	 * @return
+	 */
+	List<DeploymentConfiguration> listDeploymentsWithoutServiceQuery(Region region);
+
+	/**
 	 * Check if credentials are valid.
 	 * 
 	 * @param url

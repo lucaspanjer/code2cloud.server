@@ -106,6 +106,10 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 	@Override
 	public List<DeploymentConfiguration> listDeployments(Region region) {
+		return listDeploymentsWithoutServiceQuery(region, true);
+	}
+
+	private List<DeploymentConfiguration> listDeploymentsWithoutServiceQuery(Region region, boolean populate) {
 		// TODO paging params
 		List<com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration> internalResultList = entityManager
 				.createQuery(
@@ -119,15 +123,22 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		for (com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration : internalResultList) {
 			securityPolicy.retrieve(internalDeploymentConfiguration);
 			DeploymentConfiguration config = deploymentDomain.convertToPublic(internalDeploymentConfiguration);
-			try {
-				populateDeploymentConfiguration(config);
-			} catch (ServiceException e) {
-				config.setErrorString(e.getMessage());
+			if (populate) {
+				try {
+					populateDeploymentConfiguration(config);
+				} catch (ServiceException e) {
+					config.setErrorString(e.getMessage());
+				}
 			}
 			result.add(config);
 		}
 
 		return result;
+	}
+
+	@Override
+	public List<DeploymentConfiguration> listDeploymentsWithoutServiceQuery(Region region) {
+		return listDeploymentsWithoutServiceQuery(region, false);
 	}
 
 	private void populateDeploymentConfiguration(DeploymentConfiguration deploymentConfiguration)
@@ -532,4 +543,5 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			Map<DeploymentServiceType, DeploymentServiceFactory> deploymentServiceFactoriesByType) {
 		this.deploymentServiceFactoriesByType = deploymentServiceFactoriesByType;
 	}
+
 }
