@@ -28,6 +28,7 @@ import com.tasktop.c2c.server.internal.profile.service.SecurityPolicy;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplate;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateOptions;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.service.ProjectTemplateService;
 
@@ -36,6 +37,7 @@ import com.tasktop.c2c.server.profile.service.ProjectTemplateService;
  * 
  */
 @Service
+@Qualifier("main")
 public class ProjectTemplateServiceImpl extends AbstractJpaServiceBean implements ProjectTemplateService,
 		InternalProjectTemplateService {
 
@@ -70,12 +72,13 @@ public class ProjectTemplateServiceImpl extends AbstractJpaServiceBean implement
 	}
 
 	@Override
-	public void applyTemplateToProject(String targetProjectId, ProjectTemplate template) throws EntityNotFoundException {
+	public void applyTemplateToProject(ProjectTemplateOptions options) throws EntityNotFoundException {
 
-		Project targetProject = profileService.getProjectByIdentifier(targetProjectId);
+		Project targetProject = profileService.getProjectByIdentifier(options.getTargetProjectIdentifier());
 		securityPolicy.modify(targetProject);
 
-		Project sourceTemplate = profileService.getProjectByIdentifier(template.getProjectId());
+		Project sourceTemplate = profileService.getProjectByIdentifier(options.getTemplate().getProjectId());
+
 		if (!sourceTemplate.isTemplate()) {
 			throw new IllegalArgumentException("Project is not a template");
 		}

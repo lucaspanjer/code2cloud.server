@@ -16,6 +16,7 @@ import net.customware.gwt.dispatch.server.ExecutionContext;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetProjectTemplatesAction;
@@ -33,6 +34,7 @@ public class GetProjectTemplatesActionHandler extends
 		AbstractProfileActionHandler<GetProjectTemplatesAction, GetProjectTemplatesResult> {
 
 	@Autowired
+	@Qualifier("main")
 	private ProjectTemplateService projectTemplateService;
 
 	@Override

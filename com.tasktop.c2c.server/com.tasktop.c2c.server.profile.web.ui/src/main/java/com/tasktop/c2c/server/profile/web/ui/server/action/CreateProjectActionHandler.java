@@ -17,6 +17,7 @@ import net.customware.gwt.dispatch.shared.ActionException;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.common.profile.web.shared.actions.CreateProjectAction;
@@ -24,6 +25,7 @@ import com.tasktop.c2c.server.common.profile.web.shared.actions.CreateProjectRes
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateOptions;
 import com.tasktop.c2c.server.profile.service.ProjectTemplateService;
 
 /**
@@ -34,6 +36,7 @@ import com.tasktop.c2c.server.profile.service.ProjectTemplateService;
 public class CreateProjectActionHandler extends AbstractProfileActionHandler<CreateProjectAction, CreateProjectResult> {
 
 	@Autowired
+	@Qualifier("main")
 	private ProjectTemplateService projectTemplateService;
 
 	@Override
@@ -41,7 +44,10 @@ public class CreateProjectActionHandler extends AbstractProfileActionHandler<Cre
 		try {
 			Project created = profileWebService.createProject(action.getProject());
 			if (action.getProjectTemplate() != null) {
-				projectTemplateService.applyTemplateToProject(created.getIdentifier(), action.getProjectTemplate());
+				ProjectTemplateOptions options = new ProjectTemplateOptions();
+				options.setTargetProjectIdentifier(created.getIdentifier());
+				options.setTemplate(action.getProjectTemplate());
+				projectTemplateService.applyTemplateToProject(options);
 			}
 			return new CreateProjectResult(created);
 		} catch (EntityNotFoundException e) {

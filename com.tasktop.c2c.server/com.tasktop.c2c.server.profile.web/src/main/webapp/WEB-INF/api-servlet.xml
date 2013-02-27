@@ -45,6 +45,8 @@
 	/>
 
 	<bean id="avatarImageController" class="com.tasktop.c2c.server.common.web.server.AvatarImageController"/>
+	
+	<bean id="projectTemplateServiceController" class="com.tasktop.c2c.server.profile.web.ui.server.ProjectTemplateServiceController" />
 
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
@@ -56,6 +58,7 @@
 				/signin/**=externalSigninController 
 				/event/**=eventServiceController
 				/image/**=avatarImageController
+				/project-templates/**=projectTemplateServiceController
 				/**=profileWebServiceController
 			</value>
 		</property>
