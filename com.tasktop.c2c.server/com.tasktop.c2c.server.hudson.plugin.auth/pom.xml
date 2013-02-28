@@ -15,43 +15,18 @@
   <dependencies>
     <dependency>
       <groupId>com.tasktop.c2c.server</groupId>
-      <artifactId>auth.service.spring2</artifactId>
+      <artifactId>auth.service</artifactId>
       <version>1.1.0-SNAPSHOT</version>
-<!--       <exclusions>
-      	<exclusion>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-      	</exclusion>
-      </exclusions>
- -->    </dependency>
-    <!-- I must explicitly set this transitive dep version otherwise we get old version from hudson. -->
- 	<dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-beans</artifactId>
-		<version>2.5.6</version>
-	</dependency>
- 	<dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-core</artifactId>
-		<version>2.5.6</version>
-	</dependency>
- 	<dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-context</artifactId>
-		<version>2.5.6</version>
-	</dependency>
-	
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-war</artifactId>
-      <type>war</type>
-      <version>3.0.0-M2</version>
-      <scope>test</scope>
     </dependency>
+  <dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>3.1.1.RELEASE</version>
+	</dependency>
     <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
+      <groupId>org.eclipse.hudson</groupId>
       <artifactId>hudson-core</artifactId>
-      <version>3.0.0-M2</version>
+      <version>3.0.1-code2cloud-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
       	<exclusion>
@@ -69,9 +44,9 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
+      <groupId>org.eclipse.hudson</groupId>
       <artifactId>hudson-test-framework</artifactId>
-      <version>3.0.0-M2</version>
+      <version>3.0.1-code2cloud-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     

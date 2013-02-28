@@ -24,12 +24,12 @@ import javax.servlet.FilterConfig;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.Authentication;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.AuthenticationManager;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public class AlmPreauthenticationSecurityRealm extends SecurityRealm implements UserDetailsService,
 		AuthenticationManager {
@@ -46,7 +46,6 @@ public class AlmPreauthenticationSecurityRealm extends SecurityRealm implements 
 	}
 
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
-		// TODO Auto-generated method stub
 		return auth;
 	}
 

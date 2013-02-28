@@ -2,7 +2,7 @@
   <name>com.tasktop.c2c.server.hudson.plugin.auth</name>
   <comment>Hudson Continuous Integration Server. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects>
-    <project>com.tasktop.c2c.server.auth.service.spring2</project>
+    <project>com.tasktop.c2c.server.auth.service</project>
     <project>com.tasktop.c2c.server.common.api</project>
     <project>com.tasktop.c2c.server.common.service</project>
   </projects>

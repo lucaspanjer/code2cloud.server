@@ -1,10 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.eclipse.hudson.main</groupId>
-    <artifactId>hudson</artifactId>
-    <relativePath>../pom.xml</relativePath>
-    <version>3.0.0-M2</version>
+    <groupId>org.eclipse.hudson</groupId>
+    <artifactId>hudson-parent</artifactId>
+    <version>3.0.0</version>
   </parent>
   
   <groupId>com.tasktop.c2c.server</groupId>
@@ -17,7 +16,7 @@
   </description>
   
   <properties>
-  	<c2c.hudson.version>3.0.0-M2-code2cloud-SNAPSHOT</c2c.hudson.version>
+  	<c2c.hudson.version>3.0.1-code2cloud-SNAPSHOT</c2c.hudson.version>
   	<hudson.shared.libs>hudson-shared-libs</hudson.shared.libs>
   	<spring.version>3.1.1.RELEASE</spring.version>
   </properties>
@@ -33,7 +32,7 @@
   <dependencies>
   	<!--  The war we are repackaging -->
     <dependency>
-    	<groupId>org.eclipse.hudson.main</groupId>
+    	<groupId>org.eclipse.hudson</groupId>
     	<artifactId>hudson-war</artifactId>
         <version>${c2c.hudson.version}</version>
         <type>war</type>
@@ -78,9 +77,14 @@
     <!--  FIXME what is the 3.x corresponding to spring-dao -->
     <!--  Customized Hudson Core -->
     <dependency>
-    	<groupId>org.eclipse.hudson.main</groupId>
+    	<groupId>org.eclipse.hudson</groupId>
     	<artifactId>hudson-core</artifactId>
         <version>${c2c.hudson.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.tasktop.c2c.server</groupId>
+    	<artifactId>common.service</artifactId>
+        <version>${project.version}</version>
     </dependency>
     <!--  Hudson Plugin deps. These are just to enforce proper build order, hence the provided scope (see below for their inclusion setup) -->
     <dependency>
@@ -89,6 +93,12 @@
         <version>${project.version}</version>
         <type>hpi</type>
         <scope>provided</scope>
+    </dependency>
+    <dependency>
+    	<groupId>com.tasktop.c2c.server</groupId>
+    	<artifactId>hudson.plugin.auth</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
     </dependency>
     <dependency>
     	<groupId>com.tasktop.c2c.server</groupId>
@@ -154,19 +164,12 @@
           <!--  Remove stock plugins that we do not want -->
           <overlays>
 	      <overlay>
-	         <groupId>org.eclipse.hudson.main</groupId>
+	         <groupId>org.eclipse.hudson</groupId>
 	         <artifactId>hudson-war</artifactId>
 	              <excludes>
 	                <exclude>META-INF/*</exclude> <!--  This has some signing stuff going on that breaks -->
 	                <exlcude>WEB-INF/lib/spring-*</exlcude> <!--  Want to use our own spring -->
 	                <exclude>WEB-INF/lib/hudson-core-*</exclude> <!--  Want to use our own hudson-core -->
-	                <exclude>WEB-INF/plugins/cvs.hpi</exclude>
-	                <exclude>WEB-INF/plugins/goovy-support-plugin.hpi</exclude>
-	                <exclude>WEB-INF/plugins/subversion.hpi</exclude>
-	                <exclude>WEB-INF/plugins/ssh-slaves.hpi</exclude>
-	                <exclude>WEB-INF/plugins/windows-slaves-plugin.hpi</exclude>
-	                <exclude>WEB-INF/plugins/birt-charts.hpi</exclude>
-	                <exclude>WEB-INF/plugins/legacy-maven-plugin.hpi</exclude>
 	              </excludes>
 	      </overlay>
           </overlays>
@@ -205,7 +208,9 @@
 
                 <!-- bundled plugins -->
 <!--                 <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="cobertura" version="1.1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/cobertura-plugin.hpi" /> -->
-                <resolveArtifact type="hpi" groupId="org.eclipse.hudson.main" artifactId="maven3-plugin" version="3.0.1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-plugin.hpi" />
+                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="maven3-plugin" version="3.0.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-plugin.hpi" />
+                <resolveArtifact type="hpi" groupId="org.jvnet.hudson.main" artifactId="rest-plugin" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/rest-plugin.hpi" />
+                
                 <resolveArtifact type="hpi" groupId="org.eclipse.hudson.plugins" artifactId="git" version="3.0.1-code2cloud-SNAPSHOT" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/git.hpi" />
                 <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="build-timeout" version="1.6" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/build-timeout.hpi" />
 <!--                 <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="disk-usage" version="0.12" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/disk-usage.hpi" /> -->
@@ -213,9 +218,13 @@
  <!-- ADD BACK?               <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="grails" version="1.4" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/grails-plugin.hpi" /> -->
                 <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.auth" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-auth.hpi" />
                 <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.cloud" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-cloud.hpi" />
-<!--                 <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.buildlistener" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-buildlistener.hpi" /> -->
+                <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.buildlistener" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-buildlistener.hpi" />
                 <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.ui" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-ui.hpi" />
 <!--                <resolveArtifact type="hpi" groupId="com.tasktop.c2c.server" artifactId="hudson.plugin.configuration" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/code2cloud-configuration.hpi" />-->
+                <!-- Mandatory or compatibility plugins -->
+                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="jna-native-support-plugin" version="3.0.1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/jna-native-support-plugin.hpi" />
+                <resolveArtifact type="hpi" groupId="org.hudsonci.xpath" artifactId="xpath-provider" version="1.0.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/xpath-provider.hpi" />
+                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="jfreechart-plugin" version="1.4" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/jfreechart-plugin.hpi" />
               </tasks>
             </configuration>
           </execution>

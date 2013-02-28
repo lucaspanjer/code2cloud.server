@@ -15,7 +15,6 @@
 		<module>web-parent</module>
 		<module>hudson-plugin-parent</module>
 		<module>../com.tasktop.c2c.server.auth.service</module>
-		<module>../com.tasktop.c2c.server.auth.service.spring2</module>
 		<module>../com.tasktop.c2c.server.cloud.api</module>
 		<module>../com.tasktop.c2c.server.cloud.service</module>
 		<module>../com.tasktop.c2c.server.cloud.terremark</module>

@@ -15,9 +15,11 @@ package com.tasktop.c2c.server.hudson.plugin.ui;
 import hudson.Extension;
 import hudson.model.PageDecorator;
 
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
+import java.util.Collection;
+
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * @author Lucas Panjer (Tasktop Technologies Inc.)
@@ -44,7 +46,8 @@ public class Code2CloudPageDecorator extends PageDecorator {
 			return true;
 		}
 		// Currently we have an anon role too
-		GrantedAuthority[] auths = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		Collection<? extends GrantedAuthority> auths = SecurityContextHolder.getContext().getAuthentication()
+				.getAuthorities();
 		for (GrantedAuthority auth : auths) {
 			if (auth.getAuthority().equals("ROLE_ANONYMOUS")) {
 				return true;

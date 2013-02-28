@@ -626,11 +626,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.tasktop.c2c.server</groupId>
-				<artifactId>auth.service.spring2</artifactId>
-				<version>${com.tasktop.c2c.server.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.tasktop.c2c.server</groupId>
 				<artifactId>profile.api</artifactId>
 				<version>${com.tasktop.c2c.server.version}</version>
 			</dependency>

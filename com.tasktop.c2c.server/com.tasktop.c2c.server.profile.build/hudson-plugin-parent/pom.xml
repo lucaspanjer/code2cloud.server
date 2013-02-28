@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.eclipse.hudson.plugins</groupId>
-		<artifactId>hudson-plugin-parent</artifactId>
-		<version>3.0.0-M2</version>
-	</parent>
+        <parent>
+            <groupId>org.eclipse.hudson</groupId>
+            <artifactId>hudson-parent</artifactId>
+            <version>3.0.1-code2cloud-SNAPSHOT</version>
+        </parent>
 
 	<groupId>com.tasktop.c2c.server</groupId>
 	<artifactId>hudson-plugin-parent</artifactId>
@@ -25,26 +25,34 @@
 			<url>dav:https://q.tasktop.com/alm/s/c2c/maven/</url>
 		</snapshotRepository>
 	</distributionManagement>
+	
+	<repositories>
+		<repository>
+			<id>code2cloud-internal</id>
+			<name>Code2Cloud internal repo</name>
+			<url>https://q.tasktop.com/alm/s/c2c/maven</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.eclipse.hudson.main</groupId>
+			<groupId>org.eclipse.hudson</groupId>
 			<artifactId>hudson-war</artifactId>
 			<type>war</type>
-			<version>3.0.0-M2</version>
+			<version>3.0.1-code2cloud-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.hudson.main</groupId>
+			<groupId>org.eclipse.hudson</groupId>
 			<artifactId>hudson-core</artifactId>
-			<version>3.0.0-M2</version>
+			<version>3.0.1-code2cloud-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.hudson.main</groupId>
+			<groupId>org.eclipse.hudson</groupId>
 			<artifactId>hudson-test-framework</artifactId>
-			<version>3.0.0-M2</version>
+			<version>3.0.1-code2cloud-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 

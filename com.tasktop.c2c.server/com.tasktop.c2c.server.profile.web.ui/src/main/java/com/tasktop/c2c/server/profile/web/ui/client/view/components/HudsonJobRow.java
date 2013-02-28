@@ -61,7 +61,7 @@ public class HudsonJobRow extends Composite {
 	}
 
 	private Widget getWidgetFromColour(String color) {
-		if (color.equals("blue")) {
+		if (color.equals("blue") || color.equals("green")) {
 			return new Image(buildResources.stableBuild());
 		} else if (color.equals("red")) {
 			return new Image(buildResources.failedBuild());
