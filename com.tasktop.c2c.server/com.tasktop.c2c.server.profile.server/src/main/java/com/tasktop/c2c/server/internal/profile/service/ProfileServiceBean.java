@@ -1711,6 +1711,17 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		boolean needPubParam = false;
 		boolean needPrivParam = false;
 		whereStringBldr.append("WHERE project.deleted = false AND ");
+
+		if (additionalWhereClauseOrNull != null) {
+			whereStringBldr.append(additionalWhereClauseOrNull + " AND ");
+		}
+
+		if (orgIdentifierOrNull != null) {
+			whereStringBldr.append("project.organization.identifier = :orgId AND ");
+		}
+
+		whereStringBldr.append("(");
+
 		switch (projectRelationship) {
 		case ALL:
 			// include projects with org private accessibility and current user is a member of an org associated with
@@ -1773,13 +1784,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			throw new IllegalStateException();
 		}
 
-		if (orgIdentifierOrNull != null) {
-			whereStringBldr.append(" AND project.organization.identifier = :orgId ");
-		}
-
-		if (additionalWhereClauseOrNull != null) {
-			whereStringBldr.append("AND " + additionalWhereClauseOrNull + " ");
-		}
+		whereStringBldr.append(")");
 
 		Query totalResultQuery = entityManager.createQuery("SELECT count(DISTINCT project) " + fromString
 				+ whereStringBldr.toString());
