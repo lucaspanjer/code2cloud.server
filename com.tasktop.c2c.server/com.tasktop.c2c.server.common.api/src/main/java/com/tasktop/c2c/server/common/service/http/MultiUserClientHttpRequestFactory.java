@@ -80,7 +80,7 @@ public class MultiUserClientHttpRequestFactory implements ClientHttpRequestFacto
 		CommonsClientHttpRequestFactory requestFactory = computeRequestFactory(user);
 		synchronized (requestFactory) {
 			if (user.length() > 0) {
-				updateCredentials(requestFactory, user);
+				updateCredentials(requestFactory);
 			}
 			return requestFactory.createRequest(uri, httpMethod);
 		}
@@ -101,6 +101,12 @@ public class MultiUserClientHttpRequestFactory implements ClientHttpRequestFacto
 		return requestFactory;
 	}
 
+	public HttpClient getClient() {
+		CommonsClientHttpRequestFactory requestFactory = computeRequestFactory(Security.getCurrentUser());
+		updateCredentials(requestFactory);
+		return requestFactory.getHttpClient();
+	}
+
 	private CommonsClientHttpRequestFactory createClientHttpRequestFactory() {
 		HttpClient httpClient = new HttpClient(connectionManager);
 		return clientHttpRequestFactorySource.newInstance(httpClient);
@@ -116,7 +122,7 @@ public class MultiUserClientHttpRequestFactory implements ClientHttpRequestFacto
 		}
 	}
 
-	protected void updateCredentials(CommonsClientHttpRequestFactory requestFactory, String user) {
+	protected void updateCredentials(CommonsClientHttpRequestFactory requestFactory) {
 		HttpClient httpClient = requestFactory.getHttpClient();
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

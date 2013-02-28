@@ -32,7 +32,7 @@ public class ProxyPreAuthHttpRequestFactory extends CommonsClientHttpRequestFact
 	private InternalTenancyContextHttpHeaderProvider tenancySerializer;
 
 	@Override
-	protected void postProcessCommonsHttpMethod(final HttpMethodBase httpMethod) {
+	public void postProcessCommonsHttpMethod(final HttpMethodBase httpMethod) {
 		final AuthenticationToken authenticationToken = ProxyClient.getAuthenticationToken();
 		if (authenticationToken != null) {
 			tokenSerializer.serialize(new RequestHeaders() {
