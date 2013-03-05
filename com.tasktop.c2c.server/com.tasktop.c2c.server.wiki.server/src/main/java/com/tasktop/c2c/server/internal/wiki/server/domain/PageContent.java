@@ -51,6 +51,9 @@ public class PageContent extends BaseEntity {
 
 	@Column(nullable = false, length = 16777215)
 	public String getContent() {
+		if (content == null) {
+			return "";
+		}
 		return content;
 	}
 
