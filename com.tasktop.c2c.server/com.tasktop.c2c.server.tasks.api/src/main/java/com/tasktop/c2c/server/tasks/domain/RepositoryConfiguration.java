@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.tasktop.c2c.server.tasks.service.TaskService;
 
 /**
@@ -172,6 +174,7 @@ public class RepositoryConfiguration implements Serializable {
 		this.iterations = iterations;
 	}
 
+	@JsonIgnore
 	public List<Iteration> getActiveIterations() {
 		if (iterations == null) {
 			return null;
