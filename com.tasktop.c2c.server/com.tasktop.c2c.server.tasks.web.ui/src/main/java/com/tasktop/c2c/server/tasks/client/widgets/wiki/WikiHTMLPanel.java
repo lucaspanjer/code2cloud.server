@@ -115,6 +115,12 @@ public class WikiHTMLPanel extends HTMLPanel {
 		// Now, do some checking to see if this is a Task path - task paths look like /projects/[projId]/task/[taskId]
 		if (info.parts.length == 4 && (Path.PROJECT_BASE.equals(info.parts[0]) && "task".equals(info.parts[2]))) {
 
+			try {
+				Integer.parseInt(info.parts[3]);
+			} catch (NumberFormatException e) {
+				return null;
+			}
+
 			// Store our project ID and our task ID in our return array.
 			retArray = new String[2];
 			retArray[0] = info.parts[1];
