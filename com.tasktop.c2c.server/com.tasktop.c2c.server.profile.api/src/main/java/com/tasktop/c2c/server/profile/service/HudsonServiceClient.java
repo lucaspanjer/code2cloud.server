@@ -26,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.client.ResourceAccessException;
 
 import com.tasktop.c2c.server.common.service.HttpStatusCodeException;
 import com.tasktop.c2c.server.common.service.web.AbstractRestServiceClient;
@@ -126,6 +127,8 @@ public class HudsonServiceClient extends AbstractRestServiceClient implements Hu
 				return false;
 			}
 			throw e;
+		} catch (ResourceAccessException e) {
+			return false;
 		}
 	}
 
