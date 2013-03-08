@@ -22,15 +22,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.doc.Documentation;
+import com.tasktop.c2c.server.common.service.doc.Title;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplate;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateOptions;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.service.ProjectTemplateService;
 
-@Documentation("A service for managing a users profile, consisting of identity, projects and project teams.\n"
-		+ "The profile service methods are available by appending the URI to the base URL\n"
-		+ "https://{hostname}/{prefix}/api + URI, for example: https://example.com/api/profile")
+@Documentation("A service listing project templates and applying them to projects"
+		+ "The template service methods are available by appending the URI to the base URL\n"
+		+ "https://{hostname}/{prefix}/api/project-templates/ + URI")
 @Controller
 public class ProjectTemplateServiceController implements ProjectTemplateService {
 
@@ -38,18 +39,24 @@ public class ProjectTemplateServiceController implements ProjectTemplateService 
 	@Qualifier("main")
 	private ProjectTemplateService projectTemplateService;
 
+	@Title("List templates given a project query")
+	@Documentation("find project templates matching a project query.")
 	@RequestMapping(value = "list", method = RequestMethod.POST)
 	@Override
 	public List<ProjectTemplate> listTemplates(@RequestBody ProjectsQuery projectsQuery) {
 		return projectTemplateService.listTemplates(projectsQuery);
 	}
 
+	@Title("List all templates")
+	@Documentation("find all project templates a user has access to.")
 	// Convenience GET method
 	@RequestMapping(value = "list", method = RequestMethod.GET)
 	public List<ProjectTemplate> listTemplates() {
 		return projectTemplateService.listTemplates(new ProjectsQuery(ProjectRelationship.ALL, null));
 	}
 
+	@Title("Apply template")
+	@Documentation("Apply a template to an existing project.")
 	@RequestMapping(value = "apply", method = RequestMethod.POST)
 	@Override
 	public void applyTemplateToProject(@RequestBody ProjectTemplateOptions templateOptions)

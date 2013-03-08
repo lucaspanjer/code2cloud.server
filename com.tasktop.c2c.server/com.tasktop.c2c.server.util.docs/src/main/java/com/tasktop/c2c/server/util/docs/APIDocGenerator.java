@@ -76,10 +76,15 @@ import com.tasktop.c2c.server.profile.domain.project.AgreementProfile;
 import com.tasktop.c2c.server.profile.domain.project.Profile;
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
+import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplate;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateOptions;
+import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.web.ui.server.ActivityServiceController;
 import com.tasktop.c2c.server.profile.web.ui.server.ProfileWebServiceController;
+import com.tasktop.c2c.server.profile.web.ui.server.ProjectTemplateServiceController;
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.domain.ScmLocation;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
@@ -179,6 +184,7 @@ public class APIDocGenerator {
 		apiClasses.add(EventServiceController.class);
 		apiClasses.add(ProjectServiceManagementServiceController.class);
 		apiClasses.add(ActivityServiceController.class);
+		apiClasses.add(ProjectTemplateServiceController.class);
 
 		for (Class<?> apiClass : apiClasses) {
 			generateDocs(apiClass);
@@ -413,8 +419,42 @@ public class APIDocGenerator {
 			return createPSConfig();
 		} else if (classType == ProjectServiceStatus.class) {
 			return createProjectServiceStatus();
+		} else if (classType == ProjectTemplate.class) {
+			return createProjectTemplate();
+		} else if (classType == ProjectTemplateOptions.class) {
+			return createPrjectTemplateOptions();
+		} else if (classType == ProjectsQuery.class) {
+			return createProjectsQuery();
 		}
 		return classType.newInstance();
+	}
+
+	/**
+	 * @return
+	 */
+	private Object createProjectsQuery() {
+		QueryRequest queryRequest = new QueryRequest();
+		queryRequest.setPageInfo(new Region(0, 10));
+
+		ProjectsQuery result = new ProjectsQuery(ProjectRelationship.ALL, queryRequest);
+		return result;
+	}
+
+	private Object createPrjectTemplateOptions() {
+		ProjectTemplateOptions result = new ProjectTemplateOptions();
+
+		result.setTargetProjectIdentifier("new-project");
+		result.setTemplate(createProjectTemplate());
+
+		return result;
+	}
+
+	private ProjectTemplate createProjectTemplate() {
+		ProjectTemplate result = new ProjectTemplate();
+		result.setDescription("template project");
+		result.setProjectId("template-project");
+		result.setName("Simple tempalate");
+		return result;
 	}
 
 	private Object createProjectServiceStatus() {
@@ -989,7 +1029,7 @@ public class APIDocGenerator {
 		return person;
 	}
 
-	private Project createProject(boolean asReturnValue, boolean thin) {
+	protected Project createProject(boolean asReturnValue, boolean thin) {
 		Project project = new Project();
 		project.setName("Pet Clinic");
 		project.setDescription("project description");
