@@ -310,13 +310,23 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			if (artifact == null) {
 				throw new ServiceException("Could not find artifact to deploy");
 			} else {
-				File tempWarFile = File.createTempFile("deploy", ".war");
+				File tempWarFile = File.createTempFile("deploy", getExtension(artifact));
 				projectArtifactService.downloadProjectArtifact(projectId, tempWarFile, artifact);
 				deployWar(deploymentConfiguration, deploymentService, tempWarFile);
 				deploymentConfiguration.setLastDeploymentDate(new Date());
 			}
 		}
 		deploymentService.populate(deploymentConfiguration);
+	}
+
+	private String getExtension(ProjectArtifact artifact) {
+		String extension;
+
+		int lastDot = artifact.getPath().lastIndexOf(".");
+		if (lastDot == -1) {
+			return ".war";
+		}
+		return artifact.getPath().substring(lastDot);
 	}
 
 	/**

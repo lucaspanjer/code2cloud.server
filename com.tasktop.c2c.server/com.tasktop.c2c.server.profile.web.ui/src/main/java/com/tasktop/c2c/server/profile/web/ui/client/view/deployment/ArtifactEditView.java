@@ -185,11 +185,15 @@ public class ArtifactEditView extends Composite {
 		});
 	}
 
+	protected boolean isValidDeploymentArtifact(BuildArtifact a) {
+		return a.getRelativePath().endsWith("war") || a.getRelativePath().endsWith("ear");
+	}
+
 	private void setArtifactOptions(BuildDetails details) {
 		artifactListBox.setValue(null);
 		List<String> artifactPaths = new ArrayList<String>(details.getArtifacts().size());
 		for (BuildArtifact artifact : details.getArtifacts()) {
-			if (artifact.getRelativePath().endsWith("war")) {
+			if (isValidDeploymentArtifact(artifact)) {
 				artifactPaths.add(artifact.getRelativePath());
 			}
 		}
