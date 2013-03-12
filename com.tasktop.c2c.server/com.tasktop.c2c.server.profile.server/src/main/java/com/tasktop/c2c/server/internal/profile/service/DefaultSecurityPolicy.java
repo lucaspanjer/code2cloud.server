@@ -239,6 +239,7 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean, 
 				assertAuthenticated();
 				return;
 			case MODIFY:
+			case DELETE:
 				assertMember(org);
 				assertOwner(org);
 				return;
