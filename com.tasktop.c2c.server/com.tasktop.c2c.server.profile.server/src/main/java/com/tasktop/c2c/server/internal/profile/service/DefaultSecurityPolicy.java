@@ -30,7 +30,6 @@ import com.tasktop.c2c.server.profile.domain.internal.Organization;
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectProfile;
-import com.tasktop.c2c.server.profile.domain.project.ProjectAccessibility;
 
 /**
  * implements data-level security policies
@@ -227,9 +226,7 @@ public class DefaultSecurityPolicy implements SecurityPolicy, InitializingBean, 
 				assertMember(deployment.getProject());
 				return;
 			case RETRIEVE:
-				if (!ProjectAccessibility.PUBLIC.equals(deployment.getProject().getAccessibility())) {
-					assertMember(deployment.getProject());
-				}
+				verify(Operation.RETRIEVE, deployment.getProject(), null, null);
 				return;
 			}
 		} else if (target instanceof Organization) {
