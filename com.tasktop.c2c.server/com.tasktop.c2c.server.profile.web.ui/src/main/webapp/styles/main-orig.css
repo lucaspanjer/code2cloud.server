@@ -52,23 +52,6 @@
 }
 
 /* Sign in */
-/*
-#login-left, #login-right {
-	margin:45px 0;
-	padding:0 0 15px 75px;
-	width:386px;
-}
-
-#login-left {
-	float:left;
-}
-
-#login-right {
-	border-left:1px solid #CCCCCC;
-	float:right;
-}
-*/
-
 .signInForm {
 	width:300px;
 }
@@ -84,14 +67,6 @@
 
 
 /* Header */
-/* .header-wrapper {
-	background:url("../images/header_back.gif") repeat-x scroll left top #E4E4E4;
-	display:block;
-	height:96px;
-	width:100%;
-}
-*/
-
 .header-inner {
 	margin:auto;
 	width:951px;
@@ -155,31 +130,6 @@ a.logo img {
 	margin:20px auto auto;
 	width:1000px;
 }
-
-/*
-.content-outer {
-	background:url("../images/content_outer_back.gif") no-repeat scroll center top #FFFFFF;
-	clear:both;
-	padding:6px 0 0;
-}
-
-
-.content-inner {
-	background:url("../images/content_inner_back.gif") no-repeat scroll center bottom #FFFFFF;
-	padding:0 0 5px;
-}
-
-.content-container {
-	background:url("../images/content_container_back.gif") repeat-y scroll 0 0 #FFFFFF;
-	padding:0 2px;
-	margin-top: 0px!important;
-}
-
-.content-main {
-	background:url("../images/content_background.gif") no-repeat scroll right top #FFFFFF;
-	padding:10px;
-}
-*/
 
 /* Content Header */
 #title-wrapper {
@@ -640,16 +590,10 @@ div.sort div.link {
 
 .message {
 	color: #417b2c;
-/*	background-color: #cff7c1;
-	padding: 5px 10px;
-	border: 1px solid #417b2c; */
 }
 
 .error {
 	color: #b44d4d;
-/*	background-color: #fbdcdc;
-	padding: 5px 10px;
-	border: 1px solid #b44d4d; */
 }
 
 /* Tasks Search Menu Panel */
@@ -714,22 +658,6 @@ table.formLayout {
 	float: right;
 }
 
-/*
-table.formLayout > tbody > tr > td > .gwt-TextBox,
-table.formLayout > tbody > tr > td > .gwt-TextArea,
-table.formLayout > tbody > tr > td > .gwt-SuggestBox {
-	width: 100%;
-}
-*/
-
-/*
-.gwt-TextArea {
-	border: 1px solid grey;
-	font-family: Arial,sans-serif;
-	font-size: small;
-}
-*/
-
 .formLayout th .gwt-Label,
 .formLayout td.th .gwtLabel {
 	text-align: right;
@@ -788,10 +716,6 @@ div.horizontalPanel > * {
 	float: left;
     width: 90px;
 }
-
-/* .peopleChooser .gwt-SuggestBox {
-    width: 80px;
-}*/
 
 .personPanel {
 	margin:  5px 0 5px 0;
@@ -923,20 +847,6 @@ a.parentTaskLink {
 	background-color: #fff !important;
 }
 
-/* .gwt-Button {
-	background-color:#f5f5f5;
-	-moz-border-radius:3px;
-	border-radius: 3px;
-	border:1px solid #ddd;
-	margin: 0 3px 0 0;
-	padding: 4px 5px 3px 5px;
-	text-decoration:none;
-	text-transform: uppercase;
-	font-size: 10px;
-	color: #0065cb;
-}
-*/
-
 .errorLabelWrapper {
 	background-color: #b55;
 	border-color: #b55;
@@ -957,21 +867,10 @@ a.parentTaskLink {
 }
 
 /* Wiki */
-/* 
-table.wikiIndex {
-	width: 800px;
-}
-*/
-
 .wikiIndexButtons {
 	margin-top: 6px;
 }
 
-/*
-.wikiContentExtras {
-	float: right;
-}
-*/
 .wikiContentControls {
 	padding-left: 10px;
 }
@@ -992,67 +891,6 @@ table.wikiIndex {
 .wikiButtons.top {
 	float:right;
 }
-
-/* Wiki Content */
-/*
-div.wikiContent  {
-	width: 920px;
-}
-.wikiContent pre {
-	margin: 20px;
-	overflow-x: scroll;
-	background: #FEFFEF;
-	padding: 10px;
-	border: 1px solid lightgray;
-}
-
-.wikiContent ul {
-	list-style-type: disc;
-}
-
-.wikiContent ul ul,
-.wikiContent ol ul {
-    list-style-type: circle 
-} 
-
-.wikiContent ol ol ul,
-.wikiContent ol ul ul,
-.wikiContent ul ol ul,
-.wikiContent ul ul ul {
-    list-style-type: square 
-} 
-.wikiAttachmentsList td {
-	padding-left: 10px;
-}
-
-.wikiContent h1,
-.wikiContent h2,
-.wikiContent h3,
-.wikiContent h4 {
-	border-bottom: 1px solid #AAAAAA;
-}
-
-.wikiContent h1 {
-	font-size:20px;
-}
-.wikiContent h2 {
-	font-size:16px;
-}
-.wikiContent h3 {
-	font-size:14px;
-}
-.wikiContent h4 {
-	font-size:12px;
-}
-.wikiContent h5 {
-	font-size:12px;
-	font-style: italic;
-}
-.wikiContent h6 {
-	font-size:12px;
-	font-style: italic;
-}
-*/
 
 /* Deployments  */
 .deployments-list {

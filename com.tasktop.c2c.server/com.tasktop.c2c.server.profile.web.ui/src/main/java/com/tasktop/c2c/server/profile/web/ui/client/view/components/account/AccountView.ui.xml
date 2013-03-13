@@ -1,8 +1,9 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+	<ui:with field='res' type='com.tasktop.c2c.server.common.profile.web.client.AppResources'/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
-		<ul class="inline-tabs">
+		<ul class="{res.appCss.inlineTabs}">
 			<li>
 				<g:Anchor ui:field="profileSelector" addStyleNames="button"><ui:text from="{pm.profile}"/></g:Anchor>
 			</li>

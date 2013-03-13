@@ -54,4 +54,15 @@ public interface AppCssResource extends CssResource {
 
 	String push();
 
+	/* BEGIN styles integrated from main-sb.css */
+
+	String projectFilter();
+
+	String first();
+
+	String last();
+
+	String inlineTabs();
+
+	/* END styles integrated from main-sb.css */
 }

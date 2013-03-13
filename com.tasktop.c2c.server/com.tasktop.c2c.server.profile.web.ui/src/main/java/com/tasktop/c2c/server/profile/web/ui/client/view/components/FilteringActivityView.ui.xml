@@ -2,11 +2,12 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with field='res' type='com.tasktop.c2c.server.common.profile.web.client.AppResources'/>
 	<ui:with field="cpm" type="com.tasktop.c2c.server.common.profile.web.client.CommonProfileMessages"/>
 	<ui:with field="pm" type="com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages"/>
 	<g:HTMLPanel>
 	
-					<div class="project-filter">
+					<div class="{res.appCss.projectFilter}">
 						<ul class="right filter-activity ">
 						  <li><ui:text from="{cpm.show}"/><ui:text from="{cpm.colon}"/></li>
 						  	<li><g:CheckBox ui:field="buildToggleButton" text="{cpm.build}" /></li>
