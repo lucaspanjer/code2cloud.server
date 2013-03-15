@@ -14,21 +14,17 @@ package com.tasktop.c2c.server.internal.profile.service;
 
 import org.springframework.context.ApplicationContext;
 
-import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.common.service.job.Job;
-import com.tasktop.c2c.server.profile.domain.internal.Project;
 
 @SuppressWarnings("serial")
 public class ProjectServicesProvisioningJob extends Job {
 
-	private Long projectId;
-	private ServiceType serviceType;
+	private Long projectServiceId;
 
-	public ProjectServicesProvisioningJob(Project project, ServiceType serviceType) {
-		this.projectId = project.getId();
-		this.serviceType = serviceType;
+	public ProjectServicesProvisioningJob(Long projectServiceId) {
+		this.projectServiceId = projectServiceId;
 	}
 
 	@Override
@@ -36,7 +32,7 @@ public class ProjectServicesProvisioningJob extends Job {
 		InternalProjectServiceService service = applicationContext.getBean("projectServiceService",
 				InternalProjectServiceService.class);
 		try {
-			service.doProvisionServices(projectId, serviceType);
+			service.doProvisionServices(projectServiceId);
 		} catch (EntityNotFoundException e) {
 			throw new IllegalStateException(e);
 		} catch (ProvisioningException e) {

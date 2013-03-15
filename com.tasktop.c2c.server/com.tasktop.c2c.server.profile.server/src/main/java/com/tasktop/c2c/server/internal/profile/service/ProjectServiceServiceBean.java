@@ -28,28 +28,24 @@ import javax.persistence.criteria.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.tenancy.context.TenancyContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.cloud.domain.PoolStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
-import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolServiceInternal;
 import com.tasktop.c2c.server.cloud.service.NodeProvisioningService;
 import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
-import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementService;
-import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceClient;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceProvider;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
@@ -83,9 +79,6 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	private ProjectServiceMangementServiceProvider projectServiceMangementServiceProvider;
 
 	@Autowired
-	private HudsonSlavePoolServiceInternal hudsonSlavePoolServiceInternal;
-
-	@Autowired
 	private ServiceHostCheckingStrategy serviceHostCheckingStrategy;
 
 	@Autowired
@@ -93,6 +86,10 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 	@Autowired
 	private ServiceHostBalancingStrategy serviceHostBalancingStrategy;
+
+	@Autowired
+	@Qualifier("projectServiceManagementStrategyList")
+	private ProjectServiceManagementStrategy projectServiceManagementStrategy;
 
 	private boolean updateServiceTemplateOnStart = true;
 
@@ -113,12 +110,12 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		serviceProfile.setProject(project);
 		project.setProjectServiceProfile(serviceProfile);
 
-		updateTemplateServiceConfiguration(project);
 		entityManager.persist(serviceProfile);
+		entityManager.flush(); // To get the id's of the services
 
 		// Schedule the jobs
 		for (ProjectService service : serviceProfile.getProjectServices()) {
-			jobService.schedule(new ProjectServicesProvisioningJob(project, service.getType()));
+			jobService.schedule(new ProjectServicesProvisioningJob(service.getId()));
 		}
 
 	}
@@ -143,80 +140,24 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	}
 
 	@Override
-	public void doProvisionServices(Long projectId, ServiceType type) throws EntityNotFoundException,
-			ProvisioningException, NoNodeAvailableException {
-		Project project = entityManager.find(Project.class, projectId);
-		if (project == null) {
-			throw new EntityNotFoundException();
-		}
+	public void doProvisionServices(Long projectServiceId) throws EntityNotFoundException, ProvisioningException,
+			NoNodeAvailableException {
+		ProjectService serviceToProvision = entityManager.find(ProjectService.class, projectServiceId);
 
-		AuthUtils.assumeSystemIdentity(project.getIdentifier());
-
-		NodeProvisioningService nodeProvisioningService = nodeProvisioningServiceByType.get(type);
-		if (nodeProvisioningService == null) {
-			LOGGER.info("Not seting up service " + type + " no node provisionService available");
+		if (serviceToProvision == null) {
+			LOGGER.error(String.format("Asked to provision missing service of [%s]", projectServiceId));
 			return;
 		}
 
-		LOGGER.info("provisioning node for " + type);
-		com.tasktop.c2c.server.cloud.domain.ServiceHost domainServiceHost = nodeProvisioningService.provisionNode();
-		ServiceHost serviceHost = convertToInternal(domainServiceHost);
-		LOGGER.info("provisioned to " + serviceHost.getInternalNetworkAddress());
-
-		ProjectService provisionedProjectService = null;
-		for (ProjectService service : project.getProjectServiceProfile().getProjectServices()) {
-			if (service.getType().equals(type)) {
-				provisionedProjectService = service;
-				if (projectServiceProvisionerList != null) {
-					for (ProjectServiceProvisioner projectServiceProvisioner : projectServiceProvisionerList) {
-						if (projectServiceProvisioner.supports(service)) {
-							projectServiceProvisioner.provision(service);
-						}
-					}
-				}
-				service.setServiceHost(serviceHost);
-			}
+		if (!projectServiceManagementStrategy.isReadyToProvision(serviceToProvision)) {
+			ProjectServicesProvisioningJob retryJob = new ProjectServicesProvisioningJob(projectServiceId);
+			retryJob.setDeliveryDelayInMilliseconds(30 * 1000l);
+			jobService.schedule(retryJob);
+			return;
 		}
 
-		// Now configure the host for the new project.
-		ProjectServiceManagementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
-				.getNewService(domainServiceHost.getInternalNetworkAddress(), type);
+		projectServiceManagementStrategy.provisionService(serviceToProvision);
 
-		try {
-			tenancyManager.establishTenancyContext(provisionedProjectService);
-			LOGGER.info("configuring node for " + type);
-			ProjectServiceConfiguration config = createProjectServiceConfiguration(project);
-			nodeConfigurationService.provisionService(config);
-			LOGGER.info("configuring done");
-		} catch (Exception e) {
-			throw new ProvisioningException("Caught exception while configuring node", e);
-		} finally {
-			TenancyContextHolder.clearContext();
-		}
-	}
-
-	/**
-	 * @param project
-	 * @return
-	 */
-	private ProjectServiceConfiguration createProjectServiceConfiguration(Project project) {
-		ProjectServiceConfiguration config = new ProjectServiceConfiguration();
-		config.setProjectIdentifier(project.getIdentifier());
-		if (project.getOrganization() != null) {
-			config.setOrganizationIdentifier(project.getOrganization().getIdentifier());
-		}
-		config.setShortProjectIdentifer(project.getShortIdentifier());
-		config.setProperty(ProjectServiceConfiguration.PROFILE_HOSTNAME, configuration.getBaseWebHost());
-		config.setProperty(ProjectServiceConfiguration.ORG_PROFILE_HOSTNAME, configuration.getWebHost());
-		config.setProperty(ProjectServiceConfiguration.PROFILE_PROTOCOL, configuration.getProfileApplicationProtocol());
-		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_URL, configuration.getProfileBaseUrl());
-		config.setProperty(ProjectServiceConfiguration.PROFILE_BASE_SERVICE_URL,
-				configuration.getServiceUrlPrefix(project.getIdentifier()));
-		config.setProperty(ProjectServiceConfiguration.MARKUP_LANGUAGE, project.getProjectPreferences()
-				.getWikiLanguage().toString());
-		config.setProperty(ProjectServiceConfiguration.UNIQUE_IDENTIFER,
-				project.getIdentifier() + "_" + project.getId());
-		return config;
 	}
 
 	@Override
@@ -224,18 +165,8 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		return entityManager.find(ServiceHost.class, serviceHost.getId());
 	}
 
-	private void updateTemplateServiceConfiguration(Project project) {
-		for (ProjectService service : project.getProjectServiceProfile().getProjectServices()) {
-			switch (service.getType()) {
-			case BUILD:
-				// Replace our marker string with the actual project identifier
-				service.setInternalUriPrefix(service.getInternalUriPrefix().replace("APPID", project.getIdentifier()));
-				break;
-			}
-		}
-	}
-
 	protected void verifyCanProvision(Project project) throws ProvisioningException {
+		// REVIEW, how would this happen?
 		if (project.getProjectServiceProfile() != null) {
 			// can't provision services if they're already provisioned.
 			throw new ProvisioningException("Can't provision services: they're already provisioned");
@@ -377,6 +308,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 		List<ProjectServiceStatus> result = new ArrayList<ProjectServiceStatus>();
 
+		// REVIEW what happens with builds slave here.
 		for (ProjectService service : managedProject.getProjectServiceProfile().getProjectServices()) {
 			try {
 				if (service.getServiceHost() == null || !service.getServiceHost().isAvailable()) {
@@ -409,54 +341,18 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	public void doDeprovisionService(Long projectServiceId) throws EntityNotFoundException {
 
 		ProjectService projectService = entityManager.find(ProjectService.class, projectServiceId);
-
+		String hostAddress = "<No Host>";
 		if (projectService.getServiceHost() != null) {
-			LOGGER.info(String.format("deprovisioning service [%s] on node [%s]", projectService.getType(),
-					projectService.getServiceHost().getInternalNetworkAddress()));
-
-			switch (projectService.getType()) {
-			case BUILD:
-			case MAVEN:
-			case SCM:
-			case TASKS:
-			case WIKI:
-			default:
-				deprovisionServiceViaServiceManageService(projectService);
-				break;
-			case BUILD_SLAVE:
-
-				hudsonSlavePoolServiceInternal.doReleaseSlave(projectService.getProjectServiceProfile().getProject()
-						.getIdentifier(), projectService.getServiceHost().getId());
-				break;
-			}
-			LOGGER.info("deprovisioning done");
-
+			hostAddress = projectService.getServiceHost().getInternalNetworkAddress();
 		}
-
+		LOGGER.info(String.format("deprovisioning service [%s] on node [%s]", projectService.getType(), hostAddress));
+		projectServiceManagementStrategy.deprovisionService(projectService);
+		LOGGER.info("deprovisioning done");
 	}
 
-	private void deprovisionServiceViaServiceManageService(ProjectService projectService) {
-
-		try {
-			tenancyManager.establishTenancyContext(projectService);
-
-			ProjectServiceManagementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
-					.getNewService(projectService.getServiceHost().getInternalNetworkAddress(),
-							projectService.getType());
-
-			ProjectServiceConfiguration config = createProjectServiceConfiguration(projectService
-					.getProjectServiceProfile().getProject());
-
-			nodeConfigurationService.deprovisionService(config);
-
-			projectService.getProjectServiceProfile().getProjectServices().remove(projectService);
-			if (projectService.getServiceHost() != null) {
-				projectService.getServiceHost().getProjectServices().remove(projectService);
-			}
-			entityManager.remove(projectService);
-		} finally {
-			TenancyContextHolder.clearContext();
-		}
+	@Override
+	public void removeProjectService(ProjectService service) {
+		entityManager.remove(service);
 	}
 
 	@Secured(Role.Admin)
