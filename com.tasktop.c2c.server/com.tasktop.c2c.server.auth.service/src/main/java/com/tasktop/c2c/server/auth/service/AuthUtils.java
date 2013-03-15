@@ -64,7 +64,7 @@ public final class AuthUtils {
 		Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (currentAuth == null) {
-			throw new IllegalStateException("No current auth");
+			return;
 		}
 
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(currentAuth.getAuthorities());
