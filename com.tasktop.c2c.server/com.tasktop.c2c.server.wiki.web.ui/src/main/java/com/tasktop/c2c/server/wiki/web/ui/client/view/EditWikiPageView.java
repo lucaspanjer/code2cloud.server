@@ -155,7 +155,6 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 			}
 		});
 
-		markupLanguageLabel.setText(wikiMessages.textWithMarkupLanguage(content.getMarkupLanguage()));
 		driver.initialize(this);
 	}
 
@@ -209,6 +208,7 @@ public class EditWikiPageView extends AbstractComposite implements EditWikiPageD
 	@Override
 	public void setMarkupLanguage(String markupLanguage) {
 		content.setMarkLanguage(markupLanguage);
+		markupLanguageLabel.setText(wikiMessages.textWithMarkupLanguage(markupLanguage));
 	}
 
 	@Override
