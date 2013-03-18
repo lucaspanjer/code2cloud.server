@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.build.JobSummary;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
@@ -34,10 +35,10 @@ import com.tasktop.c2c.server.profile.service.provider.HudsonServiceProvider;
 public class HudsonBuildServiceCloner extends BaseProjectServiceCloner {
 
 	@Autowired
-	private HudsonServiceProvider hudsonServiceProvider;
+	protected HudsonServiceProvider hudsonServiceProvider;
 
 	@Autowired
-	private ProfileServiceConfiguration profileServiceConfiguration;
+	protected ProfileServiceConfiguration profileServiceConfiguration;
 
 	/**
 	 * @param serviceType
@@ -87,10 +88,25 @@ public class HudsonBuildServiceCloner extends BaseProjectServiceCloner {
 
 	}
 
-	private String rewriteConfig(String configXml, Project templateProject, Project targetProject) {
+	protected String rewriteConfig(String configXml, Project templateProject, Project targetProject) {
 		String templateScmUrlPath = profileServiceConfiguration.getHostedScmUrlPath(templateProject.getIdentifier());
 		String targetScmUrlPath = profileServiceConfiguration.getHostedScmUrlPath(targetProject.getIdentifier());
-		return configXml.replace(templateScmUrlPath, targetScmUrlPath);
+		configXml = configXml.replace(templateScmUrlPath, targetScmUrlPath);
+
+		if (profileServiceConfiguration.isPrefixHostnameWithOrgId()) {
+			String origninalOrgTenant = TenancyUtil.getCurrentTenantOrganizationIdentifer();
+			try {
+				TenancyUtil.setOrganizationTenancyContext(templateProject.getOrganization().getIdentifier());
+				String templateHostName = profileServiceConfiguration.getWebHost();
+				TenancyUtil.setOrganizationTenancyContext(targetProject.getOrganization().getIdentifier());
+				String targetHostName = profileServiceConfiguration.getWebHost();
+				configXml = configXml.replace(templateHostName, targetHostName);
+			} finally {
+				TenancyUtil.setOrganizationTenancyContext(origninalOrgTenant);
+			}
+		}
+
+		return configXml;
 	}
 
 }
