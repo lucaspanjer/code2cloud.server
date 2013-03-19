@@ -18,21 +18,6 @@
  *
  **********/
 
-html, body {
-	margin: 0;
-	padding: 0;
-	height: 100%;
-}
-
-body, table, form, input, td, th, p, textarea, select, td.dialogTopCenter, td.dialogMiddleCenter, td.dialogBottomCenter {
-  font: 13px/1.5 Helvetica, sans-serif;
-  color: #313131;
-}
-
-body {
-	background: #fff;
-}
-
 .outer-wrapper {
 	min-height: 100%;
   position: relative;

@@ -1,5 +1,22 @@
 @external .external-nav, .internal-nav, .prefix, .header, .footer, .search, .search-button, .headerNav, .button, .special, .selected, .disabled, .discover-project, .spacer, .small, .watch; 
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  direction: ltr;
+}
+
+body {
+  background: #fff;
+  border: 0px;
+}
+
+body, table, form, input, td, th, p, textarea, select, button {
+  font: 13px/1.5 Helvetica, Arial, sans-serif;
+  color: #313131;
+}
+
 a {
   color: #062A55;
   text-decoration: none;
