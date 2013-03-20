@@ -116,7 +116,7 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Created")
 	String created();
 
-	@DefaultMessage("Created attachment {0}")
+	@DefaultMessage("Created attachment {0,number,#}")
 	String createdAttachmentId(Integer attachmentId);
 
 	@DefaultMessage("Created by")
@@ -191,7 +191,7 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("Edit Task {0}")
 	String editTaskWithId(String taskId);
 
-	@DefaultMessage("Edit {0} {1} - {2} - {3} - {4}")
+	@DefaultMessage("Edit {0} {1,number,#} - {2} - {3} - {4}")
 	String editTaskWindowTitle(String taskType, Integer taskId, String taskShortDescription, String projectName,
 			String productName);
 
@@ -276,7 +276,7 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("History for {0}")
 	String historyFor(String task);
 
-	@DefaultMessage("History of {0} {1} - {2} - {3}")
+	@DefaultMessage("History of {0} {1,number,#} - {2} - {3}")
 	String historyWindowTitle(String taskType, Integer taskId, String projectName, String productName);
 
 	@DefaultMessage("Hours")
@@ -345,7 +345,7 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("New Custom Field")
 	String newCustomField();
 
-	@DefaultMessage("New Parent Task of {0}")
+	@DefaultMessage("New Parent Task of {0,number,#}")
 	String newParentTaskOf(Integer subtaskId);
 
 	@DefaultMessage("New Product")
@@ -354,7 +354,7 @@ public interface TasksMessages extends Messages {
 	@DefaultMessage("New Subtask")
 	String newSubtask();
 
-	@DefaultMessage("New Subtask of {0}")
+	@DefaultMessage("New Subtask of {0,number,#}")
 	String newSubtaskOf(Integer parentTaskId);
 
 	@DefaultMessage("New Task")

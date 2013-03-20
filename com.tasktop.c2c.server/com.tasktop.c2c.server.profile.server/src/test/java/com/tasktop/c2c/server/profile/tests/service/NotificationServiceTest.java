@@ -122,7 +122,7 @@ public class NotificationServiceTest {
 		task = new Task();
 		task.setUrl("http:foo.bar/task/1");
 		task.setShortDescription("Short Desc");
-		task.setId(1);
+		task.setId(123456);
 		task.setWatchers(Arrays.asList(taskUser));
 		task.setTaskType("Task");
 		task.setReporter(taskUser);
