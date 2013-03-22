@@ -46,7 +46,6 @@ public class DeploymentConfiguration extends AbstractEntity {
 	private String buildJobName;
 	private String buildJobNumber;
 	private String buildArtifactPath; // if deploymentType is AUTOMATIC
-	private String artifactUrl; // if deploymentType is MANUAL
 	private Date lastDeploymentDate;
 	private boolean deployUnstableBuilds; // if deploymentType is AUTOMATIC. If true the we deploy even if tests fail.
 
@@ -191,21 +190,6 @@ public class DeploymentConfiguration extends AbstractEntity {
 
 	public boolean hasError() {
 		return this.errorString != null && this.errorString.length() > 0;
-	}
-
-	/**
-	 * @return the artifactUrl
-	 */
-	public String getArtifactUrl() {
-		return artifactUrl;
-	}
-
-	/**
-	 * @param artifactUrl
-	 *            the artifactUrl to set
-	 */
-	public void setArtifactUrl(String artifactUrl) {
-		this.artifactUrl = artifactUrl;
 	}
 
 	/**
