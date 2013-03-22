@@ -19,8 +19,9 @@ import com.tasktop.c2c.server.scm.domain.Commit;
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class CommitEvent extends Event {
+public class PushEvent extends Event {
 	private List<Commit> commits;
+	private String refName;
 
 	public List<Commit> getCommits() {
 		return commits;
@@ -28,5 +29,13 @@ public class CommitEvent extends Event {
 
 	public void setCommits(List<Commit> commits) {
 		this.commits = commits;
+	}
+
+	public String getRefName() {
+		return refName;
+	}
+
+	public void setRefName(String refName) {
+		this.refName = refName;
 	}
 }

@@ -67,7 +67,7 @@ import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
 import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceController;
-import com.tasktop.c2c.server.event.domain.CommitEvent;
+import com.tasktop.c2c.server.event.domain.PushEvent;
 import com.tasktop.c2c.server.event.domain.Event;
 import com.tasktop.c2c.server.event.service.EventServiceController;
 import com.tasktop.c2c.server.internal.wiki.server.WikiServiceController;
@@ -474,7 +474,7 @@ public class APIDocGenerator {
 	}
 
 	private Event createEvent() {
-		CommitEvent result = new CommitEvent();
+		PushEvent result = new PushEvent();
 
 		result.setCommits(Arrays.asList(createCommit()));
 		result.setProjectId("my-project");

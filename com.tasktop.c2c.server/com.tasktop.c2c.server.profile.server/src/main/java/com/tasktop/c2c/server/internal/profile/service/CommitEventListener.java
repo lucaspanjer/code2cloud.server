@@ -15,7 +15,7 @@ package com.tasktop.c2c.server.internal.profile.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.tasktop.c2c.server.event.domain.CommitEvent;
+import com.tasktop.c2c.server.event.domain.PushEvent;
 import com.tasktop.c2c.server.event.domain.Event;
 import com.tasktop.c2c.server.event.service.EventListener;
 import com.tasktop.c2c.server.profile.service.provider.TaskServiceProvider;
@@ -33,10 +33,10 @@ public class CommitEventListener implements EventListener {
 
 	@Override
 	public void onEvent(Event event) {
-		if (!(event instanceof CommitEvent)) {
+		if (!(event instanceof PushEvent)) {
 			return;
 		}
-		CommitEvent commitEvent = (CommitEvent) event;
+		PushEvent commitEvent = (PushEvent) event;
 
 		TaskService taskService = taskServiceProvider.getTaskService(event.getProjectId());
 		CommitToTaskLinker taskLinker = new CommitToTaskLinker(event.getProjectId(), taskService);

@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
-import com.tasktop.c2c.server.event.domain.CommitEvent;
+import com.tasktop.c2c.server.event.domain.PushEvent;
 import com.tasktop.c2c.server.event.service.EventService;
 import com.tasktop.c2c.server.scm.domain.Commit;
 
@@ -95,11 +95,12 @@ public class EventGeneratingPostRecieveHook implements PostReceiveHook {
 			eventCommits.add(commit);
 		}
 
-		CommitEvent event = new CommitEvent();
+		PushEvent event = new PushEvent();
 		event.setUserId(Security.getCurrentUser());
 		event.setCommits(eventCommits);
 		event.setProjectId(TenancyUtil.getCurrentTenantProjectIdentifer());
 		event.setTimestamp(new Date());
+		event.setRefName(refName);
 		eventService.publishEvent(event);
 
 	}
