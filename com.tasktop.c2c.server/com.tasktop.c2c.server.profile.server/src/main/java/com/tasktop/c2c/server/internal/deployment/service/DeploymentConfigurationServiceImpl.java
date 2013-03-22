@@ -120,14 +120,18 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 		List<DeploymentConfiguration> result = new ArrayList<DeploymentConfiguration>(internalResultList.size());
 
+		boolean tryPopulate = true;
 		for (com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration : internalResultList) {
 			securityPolicy.retrieve(internalDeploymentConfiguration);
 			DeploymentConfiguration config = deploymentDomain.convertToPublic(internalDeploymentConfiguration);
-			if (populate) {
+			if (populate && tryPopulate) {
 				try {
 					populateDeploymentConfiguration(config);
 				} catch (ServiceException e) {
 					config.setErrorString(e.getMessage());
+				} catch (Exception e) {
+					LOGGER.error("Exception while poulating deployment configuration.", e);
+					tryPopulate = false;
 				}
 			}
 			result.add(config);
@@ -454,8 +458,18 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 	private DeploymentService createDeploymentService(DeploymentConfiguration deploymentConfiguration)
 			throws ServiceException {
-		DeploymentServiceFactory factory = deploymentServiceFactoriesByType.get(deploymentConfiguration
-				.getServiceType());
+
+		DeploymentServiceFactory factory = null;
+		if (deploymentConfiguration.getServiceType() == null) {
+			if (deploymentServiceFactoriesByType.size() == 1) {
+				deploymentConfiguration.setServiceType(deploymentServiceFactoriesByType.keySet().iterator().next());
+				factory = deploymentServiceFactoriesByType.values().iterator().next();
+			} else {
+				throw new ServiceException("No deployment type specified, and there are multiple types", null);
+			}
+		} else {
+			factory = deploymentServiceFactoriesByType.get(deploymentConfiguration.getServiceType());
+		}
 		if (factory == null) {
 			throw new ServiceException(String.format("No such deployment type [%s]",
 					deploymentConfiguration.getServiceType()), null);

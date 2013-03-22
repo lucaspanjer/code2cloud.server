@@ -33,8 +33,6 @@ import com.tasktop.c2c.server.common.web.client.navigation.Path;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
 import com.tasktop.c2c.server.profile.domain.project.Project;
-import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
-import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetDeploymentServiceTypesAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetDeploymentServiceTypesResult;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsAction;
@@ -66,7 +64,6 @@ public class ProjectDeploymentPlace extends AbstractBatchFetchingPlace implement
 	private List<DeploymentConfiguration> deploymentConfigurations;
 	private GetProjectBuildsResult buildInformation;
 	private List<DeploymentServiceType> serviceTypes;
-	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
 
 	public Project getProject() {
 		return project;

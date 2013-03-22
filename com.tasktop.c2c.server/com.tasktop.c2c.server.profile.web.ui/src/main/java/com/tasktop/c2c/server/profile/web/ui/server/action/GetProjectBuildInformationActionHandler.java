@@ -46,12 +46,10 @@ public class GetProjectBuildInformationActionHandler extends
 		List<String> buildJobNames = null;
 		List<BuildDetails> builds = null;
 
-		if (action.getJobName() == null) {
-			HudsonStatus status = hudsonServiceProvider.getHudsonService(action.getProjectId()).getStatus();
-			buildJobNames = new ArrayList<String>(status.getJobs().size());
-			for (JobSummary job : status.getJobs()) {
-				buildJobNames.add(job.getName());
-			}
+		HudsonStatus status = hudsonServiceProvider.getHudsonService(action.getProjectId()).getStatus();
+		buildJobNames = new ArrayList<String>(status.getJobs().size());
+		for (JobSummary job : status.getJobs()) {
+			buildJobNames.add(job.getName());
 		}
 
 		if (action.getJobName() != null) {
