@@ -47,20 +47,6 @@ public class HudsonBuildServiceCloner extends BaseProjectServiceCloner {
 		super(ServiceType.BUILD);
 	}
 
-	/* Hudson is not initially ready to serve requests. */
-	@Override
-	public boolean isReadyToClone(ProjectService sourceService, ProjectService targetProjectService) {
-		if (!super.isReadyToClone(sourceService, targetProjectService)) {
-			return false;
-		}
-
-		AuthUtils.assumeSystemIdentity(targetProjectService.getProjectServiceProfile().getProject().getIdentifier());
-		HudsonService targetHudsonService = hudsonServiceProvider.getHudsonService(targetProjectService
-				.getProjectServiceProfile().getProject().getIdentifier());
-
-		return targetHudsonService.isHudsonReady();
-	}
-
 	@Override
 	public void doClone(ProjectService templateService, ProjectService targetProjectService) {
 

@@ -21,7 +21,9 @@ import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServi
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
+import com.tasktop.c2c.server.profile.service.HudsonService;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
+import com.tasktop.c2c.server.profile.service.provider.HudsonServiceProvider;
 
 /**
  * Implements standard way to manage project services. Uses the NodeProvisioningService to get an available node. And
@@ -102,20 +104,67 @@ public class StandardProjectServiceManagementStrategy implements ProjectServiceM
 		ProjectServiceManagementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
 				.getNewService(domainServiceHost.getInternalNetworkAddress(), service.getType());
 
+		updateTemplateServiceConfiguration(service);
+
 		try {
 			tenancyManager.establishTenancyContext(service);
 			LOGGER.debug("configuring node for " + service.getType());
 			ProjectServiceConfiguration config = createProjectServiceConfiguration(service.getProjectServiceProfile()
 					.getProject());
 			nodeConfigurationService.provisionService(config);
+			waitForServiceToComeUp(service);
 			LOGGER.debug("configuring done");
 		} catch (Exception e) {
 			throw new ProvisioningException("Caught exception while configuring node", e);
 		} finally {
 			TenancyContextHolder.clearContext();
 		}
-		updateTemplateServiceConfiguration(service);
 
+	}
+
+	@Autowired
+	private HudsonServiceProvider hudsonServiceProvider;
+
+	private void waitForServiceToComeUp(ProjectService service) {
+		switch (service.getType()) {
+		case BUILD:
+			waitForHudson(service);
+			break;
+
+		default:
+			// nothing to do
+			break;
+		}
+
+	}
+
+	/**
+	 * @param service
+	 */
+	protected void waitForHudson(ProjectService service) {
+		HudsonService hudsonService = hudsonServiceProvider.getHudsonService(service.getProjectServiceProfile()
+				.getProject().getIdentifier());
+		int sleepAmount = 1000;
+		boolean ready = false;
+		for (int i = 0; i < 10; i++) {
+			if (hudsonService.isHudsonReady()) {
+				ready = true;
+				break;
+			} else {
+				LOGGER.debug("Hudson not ready yet, sleeping for [%d]ms", sleepAmount);
+				try {
+					Thread.sleep(sleepAmount);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+				sleepAmount = sleepAmount * 2;
+			}
+		}
+		if (!ready) {
+			LOGGER.warn(String.format("Hudson never came up for project [%s].", service.getProjectServiceProfile()
+					.getProject().getIdentifier()));
+			// Continue here and let the job commit
+		}
 	}
 
 	private void updateTemplateServiceConfiguration(ProjectService service) {

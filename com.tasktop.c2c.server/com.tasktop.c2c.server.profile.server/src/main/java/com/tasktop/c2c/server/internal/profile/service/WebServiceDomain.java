@@ -21,6 +21,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.internal.profile.crypto.OpenSSHPublicKeyReader;
 import com.tasktop.c2c.server.profile.domain.internal.OrganizationProfile;
 import com.tasktop.c2c.server.profile.domain.internal.PasswordResetToken;
@@ -114,18 +115,42 @@ public class WebServiceDomain {
 
 		result.setServiceType(internalService.getType());
 		result.setId(internalService.getId());
-		if (internalService.getServiceHost() != null) {
-			result.setAvailable(internalService.getServiceHost().isAvailable());
-		} else if (internalService.getExternalUrl() != null) {
-			result.setAvailable(true);
-		} else {
-			result.setAvailable(false);
-		}
-
+		result.setAvailable(calculateServiceAvailability(internalService));
 		result.setUrl(configuration.getMainUrlForService(internalService));
 		result.setWebUrl(configuration.getWebUrlForService(internalService));
 
 		return result;
+	}
+
+	protected boolean calculateServiceAvailability(
+			com.tasktop.c2c.server.profile.domain.internal.ProjectService internalService) {
+		switch (internalService.getType()) {
+		case DEPLOYMENT:
+			com.tasktop.c2c.server.profile.domain.internal.ProjectService buildService = getProjectServiceOfType(
+					ServiceType.BUILD, internalService.getProjectServiceProfile().getProjectServices());
+			if (buildService == null) {
+				return false;
+			} else {
+				return calculateServiceAvailability(buildService);
+			}
+
+		default:
+			if (internalService.getServiceHost() != null) {
+				return internalService.getServiceHost().isAvailable();
+			} else {
+				return false;
+			}
+		}
+	}
+
+	private com.tasktop.c2c.server.profile.domain.internal.ProjectService getProjectServiceOfType(ServiceType type,
+			List<com.tasktop.c2c.server.profile.domain.internal.ProjectService> services) {
+		for (com.tasktop.c2c.server.profile.domain.internal.ProjectService service : services) {
+			if (service.getType().equals(type)) {
+				return service;
+			}
+		}
+		return null;
 	}
 
 	public com.tasktop.c2c.server.profile.domain.internal.Project copy(Project p) {
