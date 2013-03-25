@@ -189,6 +189,7 @@ input.search {
 	background: url("i/search-button.png") no-repeat;
 	text-indent: -9999px;
 	cursor: pointer;
+	font-size: 10px;
 }
 
 input.tasks-search, input.wiki-search {
