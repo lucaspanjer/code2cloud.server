@@ -258,11 +258,12 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 	@Override
 	public void allocateHostToProject(ServiceType type, com.tasktop.c2c.server.cloud.domain.ServiceHost host,
 			String projectIdentifier) throws EntityNotFoundException {
-		ServiceHost managed = entityManager.find(ServiceHost.class, host.getId(), LockModeType.PESSIMISTIC_WRITE);
+		ServiceHost managed = entityManager.find(ServiceHost.class, host.getId(),
+				LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 		if (managed == null) {
 			throw new IllegalStateException();
 		}
-		entityManager.lock(managed, LockModeType.PESSIMISTIC_WRITE);
+		entityManager.lock(managed, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 		Project project = profileService.getProjectByIdentifier(projectIdentifier);
 		ProjectService service = new ProjectService();
 		service.setProjectServiceProfile(project.getProjectServiceProfile());

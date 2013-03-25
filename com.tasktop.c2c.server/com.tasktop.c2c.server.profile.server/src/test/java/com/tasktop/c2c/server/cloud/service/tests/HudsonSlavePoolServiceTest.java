@@ -19,8 +19,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
+import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceContext;
 
 import junit.framework.Assert;
@@ -273,6 +278,61 @@ public class HudsonSlavePoolServiceTest {
 		// hudsonSlavePoolService.setPoolSizeStrategy(new FixedPoolSizeStrategy(POOL_SIZE - 1, POOL_SIZE - 1));
 
 		context.assertIsSatisfied();
+	}
+
+	@Test
+	public void testWithFixedSizePool_threadSafe() throws Exception {
+		hudsonSlavePoolServiceImpl.initialize(); // Kick off threads;
+
+		final List<String> provisionedIps = Collections.synchronizedList(new ArrayList<String>());
+		waitForAllocations();
+		Assert.assertEquals(POOL_SIZE, hudsonSlavePoolService.getStatus().getTotalNodes());
+		Assert.assertEquals(POOL_SIZE, hudsonSlavePoolService.getStatus().getFreeNodes());
+		Assert.assertEquals(0, hudsonSlavePoolService.getStatus().getFullNodes());
+
+		int numThreads = 10;
+		ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
+
+		for (int i = 0; i < numThreads; i++) {
+			executorService.submit(new Callable<Object>() {
+
+				@Override
+				public Object call() throws Exception {
+					SecurityContextHolder.getContext().setAuthentication(
+							new UsernamePasswordAuthenticationToken("user", "pwd", Arrays
+									.asList(new SimpleGrantedAuthority(Role.User + "/" + APPID))));
+
+					while (true) {
+						try {
+							RequestBuildSlaveResult result = hudsonSlavePoolServiceImpl.acquireSlave(APPID, null);
+							if (result.getType().equals((RequestBuildSlaveResult.Type.SLAVE))) {
+								provisionedIps.add(result.getSlaveIp());
+							}
+							break;
+
+						} catch (OptimisticLockException e) {
+							// Expected, continue and try again
+						} catch (Throwable t) {
+							t.printStackTrace();
+						}
+					}
+					return null;
+				}
+			});
+		}
+		executorService.shutdown();
+		executorService.awaitTermination(10, TimeUnit.SECONDS);
+		Set<String> provisionedIpsSet = new HashSet<String>(provisionedIps);
+		Assert.assertEquals("Some Ips were given out twice", provisionedIps.size(), provisionedIpsSet.size());
+		Assert.assertEquals(POOL_SIZE, provisionedIps.size());
+
+		// Fill it back up
+		for (String ip : provisionedIps) {
+			hudsonSlavePoolService.releaseSlave(APPID, ip);
+		}
+
+		context.assertIsSatisfied();
+
 	}
 
 	private static final int MAX_TOTAL_NODES = 10;
