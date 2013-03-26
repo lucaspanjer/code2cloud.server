@@ -155,33 +155,19 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	@Override
 	public DeploymentConfiguration createDeployment(DeploymentConfiguration deploymentConfiguration)
 			throws ValidationException {
-		validate(deploymentConfiguration);
-		DeploymentService deploymentService = null;
-
 		deploymentDomain.prepareForCreate(deploymentConfiguration);
 
 		try {
-			deploymentService = createDeploymentService(deploymentConfiguration);
+			DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
 			updateTokenIfNeeded(deploymentConfiguration, deploymentService);
-		} catch (ServiceException e) {
-			throw new RuntimeException(e);
-			// Errors errors = createErrors(deploymentConfiguration);
-			// errors.reject("deployment.credentials.invalid");
-			// throw new ValidationException(errors);
-		}
 
-		try {
 			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration = deploymentDomain
 					.convertToInternal(deploymentConfiguration);
 			internalDeploymentConfiguration.setProject(getProject());
 
 			securityPolicy.create(internalDeploymentConfiguration);
 
-			if (findDeploymetByName(internalDeploymentConfiguration.getName()) != null) {
-				Errors errors = createErrors(deploymentConfiguration);
-				errors.reject("deployment.name.notUnique");
-				throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
-			}
+			validateBeforeCreate(deploymentConfiguration, internalDeploymentConfiguration);
 
 			entityManager.persist(internalDeploymentConfiguration);
 			entityManager.flush(); // Need the Id;
@@ -191,15 +177,9 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 			if (exists) {
 				deploymentService.populate(deploymentConfiguration);
-				return deploymentConfiguration;
 			} else {
-				try {
-					deploymentService.create(deploymentConfiguration);
-					deploymentService.populate(deploymentConfiguration);
-
-				} catch (Exception e) {
-					setStatusErrorMessage(deploymentConfiguration, e.getMessage());
-				}
+				deploymentService.create(deploymentConfiguration);
+				deploymentService.populate(deploymentConfiguration);
 			}
 		} catch (ServiceException e) {
 			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
@@ -207,6 +187,17 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		}
 
 		return deploymentConfiguration;
+	}
+
+	protected void validateBeforeCreate(DeploymentConfiguration publicDeploymentConfiguration,
+			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration)
+			throws ValidationException {
+		super.validate(publicDeploymentConfiguration);
+		if (findDeploymetByName(internalDeploymentConfiguration.getName()) != null) {
+			Errors errors = createErrors(publicDeploymentConfiguration);
+			errors.rejectValue("name", "deployment.name.notUnique");
+			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+		}
 	}
 
 	private com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration findDeploymetByName(String name) {

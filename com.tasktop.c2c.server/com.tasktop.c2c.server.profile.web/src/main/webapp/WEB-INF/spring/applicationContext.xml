@@ -61,18 +61,7 @@
 		p:from="${alm.mailSender.from}"
 	/>
 	
-	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-    	<property name="basenames">
-    		<array>
-	    		<value>classpath:com/tasktop/code/server/profile/messages</value>
-	    	 	<value>classpath:com/tasktop/code/server/profile/domain/validation/messages</value>
-	    	 	<value>classpath:com/tasktop/code/server/internal/profile/service/messages</value>
-	    	 	<value>classpath:com/tasktop/code/server/tasks/domain/validation/messages</value>
-	    		<value>classpath:messages</value>
-    		</array>
-    	</property>
-	</bean>
-
+	
 	<!--  AOP Logging -->
 	<bean id="aopLogger" class="com.tasktop.c2c.server.common.service.ServiceLoggingAdvice"/>
 

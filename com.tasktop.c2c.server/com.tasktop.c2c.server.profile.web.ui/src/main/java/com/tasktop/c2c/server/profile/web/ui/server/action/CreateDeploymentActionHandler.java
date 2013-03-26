@@ -12,7 +12,6 @@
 package com.tasktop.c2c.server.profile.web.ui.server.action;
 
 import net.customware.gwt.dispatch.server.ExecutionContext;
-import net.customware.gwt.dispatch.shared.ActionException;
 import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.stereotype.Component;
@@ -36,7 +35,8 @@ public class CreateDeploymentActionHandler extends
 			return new DeploymentResult(deploymentConfigurationService.createDeployment(action
 					.getDeploymentConfiguration()));
 		} catch (ValidationException e) {
-			throw new ActionException(e);
+			handle(e);
+			throw new IllegalStateException();
 		}
 	}
 

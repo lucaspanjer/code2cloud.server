@@ -37,7 +37,8 @@ public class UpdateDeploymentActionHandler extends
 			return new DeploymentResult(deploymentConfigurationService.updateDeployment(action
 					.getDeploymentConfiguration()));
 		} catch (ValidationException e) {
-			throw new ActionException(e);
+			handle(e);
+			throw new IllegalArgumentException();
 		} catch (EntityNotFoundException e) {
 			throw new ActionException(e);
 		}
