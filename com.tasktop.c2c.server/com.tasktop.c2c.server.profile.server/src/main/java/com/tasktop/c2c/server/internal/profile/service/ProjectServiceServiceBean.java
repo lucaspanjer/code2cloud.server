@@ -149,6 +149,11 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 			return;
 		}
 
+		if (!projectServiceManagementStrategy.canHandle(serviceToProvision)) {
+			LOGGER.info(String.format("No strategy to provision service [%s]", serviceToProvision.getType()));
+			return;
+		}
+
 		if (!projectServiceManagementStrategy.isReadyToProvision(serviceToProvision)) {
 			ProjectServicesProvisioningJob retryJob = new ProjectServicesProvisioningJob(projectServiceId);
 			retryJob.setDeliveryDelayInMilliseconds(30 * 1000l);
@@ -345,6 +350,13 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 		if (projectService.getServiceHost() != null) {
 			hostAddress = projectService.getServiceHost().getInternalNetworkAddress();
 		}
+
+		if (!projectServiceManagementStrategy.canHandle(projectService)) {
+			LOGGER.info(String.format("No strategy to deprovision service [%s]", projectService.getType()));
+			removeProjectService(projectService);
+			return;
+		}
+
 		LOGGER.info(String.format("deprovisioning service [%s] on node [%s]", projectService.getType(), hostAddress));
 		projectServiceManagementStrategy.deprovisionService(projectService);
 		LOGGER.info("deprovisioning done");
@@ -352,6 +364,12 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 	@Override
 	public void removeProjectService(ProjectService service) {
+		if (service.getServiceHost() != null) {
+			service.getServiceHost().getProjectServices().remove(service);
+		}
+
+		service.getProjectServiceProfile().getProjectServices().remove(service);
+
 		entityManager.remove(service);
 	}
 

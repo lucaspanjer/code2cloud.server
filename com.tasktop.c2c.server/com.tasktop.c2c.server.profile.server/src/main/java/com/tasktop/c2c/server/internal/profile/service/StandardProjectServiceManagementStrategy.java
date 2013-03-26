@@ -214,10 +214,7 @@ public class StandardProjectServiceManagementStrategy implements ProjectServiceM
 						.getProjectServiceProfile().getProject());
 
 				nodeConfigurationService.deprovisionService(config);
-
-				projectService.getServiceHost().getProjectServices().remove(projectService);
 			}
-			projectService.getProjectServiceProfile().getProjectServices().remove(projectService);
 			internalProjectServiceService.removeProjectService(projectService);
 		} finally {
 			TenancyContextHolder.clearContext();
