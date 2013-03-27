@@ -30,14 +30,18 @@ public class DirectoryMovingDeprovisioner implements Deprovisioner {
 	private String fromBaseDir;
 	private String toBaseDir;
 	private String toDirName = "";
+	private boolean perOrg = false;
 
 	@Override
 	public void deprovision(ProjectServiceConfiguration configuration) {
-		String projectIdentifier = configuration.getProjectIdentifier();
-		String uniqueProjectIdentifier = configuration.getProperties()
-				.get(ProjectServiceConfiguration.UNIQUE_IDENTIFER);
-		File toBaseDirFile = new File(toBaseDir, uniqueProjectIdentifier);
-		File fromDir = new File(fromBaseDir + "/" + projectIdentifier);
+
+		String uniqueIdentifier = configuration.getProperties().get(ProjectServiceConfiguration.UNIQUE_IDENTIFER);
+		if (perOrg) {
+			uniqueIdentifier = configuration.getOrganizationIdentifier() + "-" + uniqueIdentifier;
+		}
+		File toBaseDirFile = new File(toBaseDir, uniqueIdentifier);
+		File fromDir = new File(fromBaseDir + "/"
+				+ (perOrg ? configuration.getOrganizationIdentifier() : configuration.getProjectIdentifier()));
 
 		File toDir = new File(toBaseDirFile, toDirName);
 
@@ -67,6 +71,10 @@ public class DirectoryMovingDeprovisioner implements Deprovisioner {
 
 	public void setToDirName(String toDirName) {
 		this.toDirName = toDirName;
+	}
+
+	public void setPerOrg(boolean perOrg) {
+		this.perOrg = perOrg;
 	}
 
 }

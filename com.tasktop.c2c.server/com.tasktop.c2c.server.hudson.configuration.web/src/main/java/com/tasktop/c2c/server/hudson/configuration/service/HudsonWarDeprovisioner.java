@@ -35,12 +35,14 @@ public class HudsonWarDeprovisioner implements Deprovisioner {
 
 	private String hudsonWebappsDir;
 	private String hudsonPath;
+	private boolean perOrg = false;
 
 	@Override
 	public void deprovision(ProjectServiceConfiguration configuration) {
 		try {
 			String deployedUrl = configuration.getProperties().get(ProjectServiceConfiguration.PROFILE_BASE_URL)
-					+ hudsonPath + configuration.getProperties().get(ProjectServiceConfiguration.PROJECT_ID)
+					+ hudsonPath
+					+ (perOrg ? configuration.getOrganizationIdentifier() : configuration.getProjectIdentifier())
 					+ "/hudson/";
 			deployedUrl.replace("//", "/");
 			URL deployedHudsonUrl = new URL(deployedUrl);
@@ -93,6 +95,10 @@ public class HudsonWarDeprovisioner implements Deprovisioner {
 	@Required
 	public void setHudsonPath(String hudsonPath) {
 		this.hudsonPath = hudsonPath;
+	}
+
+	public void setPerOrg(boolean perOrg) {
+		this.perOrg = perOrg;
 	}
 
 }

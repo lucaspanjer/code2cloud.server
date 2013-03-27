@@ -38,22 +38,22 @@ public class StandardProjectServiceManagementStrategy implements ProjectServiceM
 	private static final Logger LOGGER = LoggerFactory.getLogger(StandardProjectServiceManagementStrategy.class);
 
 	@Resource
-	private Map<ServiceType, NodeProvisioningService> nodeProvisioningServiceByType;
+	protected Map<ServiceType, NodeProvisioningService> nodeProvisioningServiceByType;
 
 	@Autowired(required = false)
-	private List<ProjectServiceProvisioner> projectServiceProvisionerList;
+	protected List<ProjectServiceProvisioner> projectServiceProvisionerList;
 
 	@Autowired
-	private ProjectServiceMangementServiceProvider projectServiceMangementServiceProvider;
+	protected ProjectServiceMangementServiceProvider projectServiceMangementServiceProvider;
 
 	@Autowired
-	private ServiceAwareTenancyManager tenancyManager;
+	protected ServiceAwareTenancyManager tenancyManager;
 
 	@Autowired
-	private ProfileServiceConfiguration configuration;
+	protected ProfileServiceConfiguration configuration;
 
 	@Autowired
-	private InternalProjectServiceService internalProjectServiceService;
+	protected InternalProjectServiceService internalProjectServiceService;
 
 	@Override
 	public boolean canHandle(ProjectService service) {
@@ -167,7 +167,7 @@ public class StandardProjectServiceManagementStrategy implements ProjectServiceM
 		}
 	}
 
-	private void updateTemplateServiceConfiguration(ProjectService service) {
+	protected void updateTemplateServiceConfiguration(ProjectService service) {
 		switch (service.getType()) {
 		case BUILD:
 			// Replace our marker string with the actual project identifier

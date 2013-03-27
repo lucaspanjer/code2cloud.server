@@ -104,6 +104,7 @@ public class HudsonServiceConfiguratorTest {
 			m.put(ProjectServiceConfiguration.PROJECT_ID, "test");
 			m.put(ProjectServiceConfiguration.PROFILE_BASE_URL, "https://qcode.cloudfoundry.com");
 			config.setProperties(m);
+			config.setProjectIdentifier("test");
 
 			// Now, run it against our test setup
 			configurator.configure(config);

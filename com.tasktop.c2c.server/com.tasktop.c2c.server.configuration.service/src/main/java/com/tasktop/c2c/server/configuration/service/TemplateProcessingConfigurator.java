@@ -39,11 +39,13 @@ public class TemplateProcessingConfigurator implements ProjectServiceManagementS
 
 	private String templateBaseLocation;
 	private String targetBaseLocation;
+	private boolean perOrg = false;
 
 	@Override
 	public void configure(ProjectServiceConfiguration configuration) {
 
-		File hudsonHomeDir = new File(targetBaseLocation, configuration.getProjectIdentifier());
+		File hudsonHomeDir = new File(targetBaseLocation, (perOrg ? configuration.getOrganizationIdentifier()
+				: configuration.getProjectIdentifier()));
 
 		if (hudsonHomeDir.exists()) {
 			LOG.warn("Hudson home already apears to exist: " + hudsonHomeDir.getAbsolutePath());
@@ -113,7 +115,8 @@ public class TemplateProcessingConfigurator implements ProjectServiceManagementS
 
 		String fullTargetBaseLocation = targetBaseLocation;
 		if (configuration.getProjectIdentifier() != null) {
-			fullTargetBaseLocation = fullTargetBaseLocation.concat("/" + configuration.getProjectIdentifier());
+			fullTargetBaseLocation = fullTargetBaseLocation.concat("/"
+					+ (perOrg ? configuration.getOrganizationIdentifier() : configuration.getProjectIdentifier()));
 		}
 		String filename = fullTargetBaseLocation + templateFilePath.substring(templateBaseLocation.length());
 		return new File(filename);
@@ -125,5 +128,9 @@ public class TemplateProcessingConfigurator implements ProjectServiceManagementS
 
 	public void setTargetBaseLocation(String targetBaseLocation) {
 		this.targetBaseLocation = targetBaseLocation;
+	}
+
+	public void setPerOrg(boolean perOrg) {
+		this.perOrg = perOrg;
 	}
 }

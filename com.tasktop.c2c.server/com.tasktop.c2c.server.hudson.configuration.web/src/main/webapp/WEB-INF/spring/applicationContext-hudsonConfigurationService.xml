@@ -21,6 +21,7 @@
 				<bean class="com.tasktop.c2c.server.configuration.service.TemplateProcessingConfigurator"
 					p:templateBaseLocation="${alm.rootDir}/configuration/template/hudson-home"
 					p:targetBaseLocation="${alm.dataDir}/hudson-homes"
+					p:perOrg="${alm.hudson.perOrg}"
 				/>
 
 				<!-- process the web.xml file in place -->
@@ -30,6 +31,7 @@
 					p:targetHudsonHomeBaseDir="${alm.dataDir}/hudson-homes"
 					p:targetWebappsDir="${alm.hudson.webappsDir}"
 					p:hudsonPath="${alm.hudson.path}"
+					p:perOrg="${alm.hudson.perOrg}"
 				/>			
 			</list>
 		</property>
@@ -44,9 +46,9 @@
 		<property name="deprovisioners">
 			<list>
 				<bean class="com.tasktop.c2c.server.hudson.configuration.service.HudsonWarDeprovisioner"
-					p:hudsonWebappsDir="${alm.hudson.webappsDir}" p:hudsonPath="${alm.hudson.path}"/>
+					p:hudsonWebappsDir="${alm.hudson.webappsDir}" p:hudsonPath="${alm.hudson.path}" p:perOrg="${alm.hudson.perOrg}"/>
 				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisioner"
-					p:fromBaseDir="${alm.dataDir}/hudson-homes" p:toBaseDir="${alm.dataDir}/deleted" p:toDirName="hudson-home"/>
+					p:fromBaseDir="${alm.dataDir}/hudson-homes" p:toBaseDir="${alm.dataDir}/deleted" p:toDirName="hudson-home" p:perOrg="${alm.hudson.perOrg}"/>
 			</list>
 		</property>
 		

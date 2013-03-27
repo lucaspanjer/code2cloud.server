@@ -55,6 +55,7 @@ public class HudsonServiceConfigurator implements Configurator {
 	private String targetHudsonHomeBaseDir;
 	private String targetWebappsDir;
 	private String hudsonPath;
+	private boolean perOrg = false;
 
 	@Override
 	public void configure(ProjectServiceConfiguration configuration) {
@@ -117,9 +118,10 @@ public class HudsonServiceConfigurator implements Configurator {
 			// Clean up our resources.
 			jarOutStream.close();
 
+			String pathProperty = perOrg ? configuration.getOrganizationIdentifier() : configuration
+					.getProjectIdentifier();
 			String deployedUrl = configuration.getProperties().get(ProjectServiceConfiguration.PROFILE_BASE_URL)
-					+ hudsonPath + configuration.getProperties().get(ProjectServiceConfiguration.PROJECT_ID)
-					+ "/hudson/";
+					+ hudsonPath + pathProperty + "/hudson/";
 			deployedUrl.replace("//", "/");
 			URL deployedHudsonUrl = new URL(deployedUrl);
 			String webappName = deployedHudsonUrl.getPath();
@@ -161,7 +163,8 @@ public class HudsonServiceConfigurator implements Configurator {
 	private String applyDirectoryToWebXml(String targetContents, ProjectServiceConfiguration configuration) {
 
 		// Do our string processing now.
-		String hudsonHomeDir = targetHudsonHomeBaseDir + "/" + configuration.getProjectIdentifier();
+		String hudsonHomeDir = targetHudsonHomeBaseDir + "/"
+				+ (perOrg ? configuration.getOrganizationIdentifier() : configuration.getProjectIdentifier());
 
 		return targetContents.replace("<env-entry-value></env-entry-value>", "<env-entry-value>" + hudsonHomeDir
 				+ "</env-entry-value>");
@@ -193,5 +196,9 @@ public class HudsonServiceConfigurator implements Configurator {
 	@Required
 	public void setHudsonPath(String hudsonPath) {
 		this.hudsonPath = hudsonPath;
+	}
+
+	public void setPerOrg(boolean perOrg) {
+		this.perOrg = perOrg;
 	}
 }
