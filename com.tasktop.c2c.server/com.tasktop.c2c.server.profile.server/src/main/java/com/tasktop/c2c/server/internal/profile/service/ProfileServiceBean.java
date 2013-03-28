@@ -1942,9 +1942,20 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	@Override
-	public void doDeleteProjectIfReady(String projectIdentifier) throws EntityNotFoundException {
+	public void doDeleteProjectIfReady(String projectIdentifier) {
 
-		Project project = getProjectByIdentifierInternal(projectIdentifier);
+		Project project;
+		try {
+			project = getProjectByIdentifierInternal(projectIdentifier);
+		} catch (EntityNotFoundException e) {
+			LOG.debug(String.format("Project [%s] not found. Likely already been deleted.", projectIdentifier));
+			return;
+		}
+
+		if (!project.isDeleted()) {
+			throw new IllegalStateException("Project is expected to be marked as deleted");
+		}
+
 		boolean readyToDelete = true;
 		for (ProjectService projectService : project.getProjectServiceProfile().getProjectServices()) {
 			if (projectService.getServiceHost() != null) {
@@ -1957,7 +1968,11 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 				.getProjectServiceProfile().getProjectServices().size(), projectIdentifier, readyToDelete ? "are"
 				: "are not"));
 		if (readyToDelete) {
-			doDeleteProject(projectIdentifier);
+			try {
+				doDeleteProject(projectIdentifier);
+			} catch (EntityNotFoundException e) {
+				throw new IllegalStateException(e);
+			}
 		}
 	}
 

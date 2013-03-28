@@ -27,7 +27,7 @@ import com.tasktop.c2c.server.profile.service.ProfileService;
  * 
  */
 public interface InternalProfileService extends ProfileService {
-	void doDeleteProjectIfReady(String projectIdentifier) throws EntityNotFoundException;
+	void doDeleteProjectIfReady(String projectIdentifier);
 
 	List<ProjectProfile> findAccessibleProjectsForProfile(Profile profile);
 
