@@ -38,6 +38,7 @@ import org.jmock.api.Invocation;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -281,6 +282,7 @@ public class HudsonSlavePoolServiceTest {
 	}
 
 	@Test
+	@Ignore
 	public void testWithFixedSizePool_threadSafe() throws Exception {
 		hudsonSlavePoolServiceImpl.initialize(); // Kick off threads;
 
