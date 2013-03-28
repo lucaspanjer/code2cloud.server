@@ -189,7 +189,7 @@ public interface ProfileMessages extends Messages {
 	@DefaultMessage("I understand that my project will be permanently deleted.")
 	String deleteProjectIUnderstand();
 
-	@DefaultMessage("This will permanently delete the project including all associated services and thier data. This operation cannot be undone.")
+	@DefaultMessage("This will permanently delete the project including all associated services and their data. This operation cannot be undone.")
 	String deleteProjectWarning();
 
 	@DefaultMessage("Delete SSH Key")
