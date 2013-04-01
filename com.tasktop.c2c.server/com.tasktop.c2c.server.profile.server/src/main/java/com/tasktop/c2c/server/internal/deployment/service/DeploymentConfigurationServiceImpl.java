@@ -173,20 +173,33 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			entityManager.flush(); // Need the Id;
 			deploymentConfiguration.setId(internalDeploymentConfiguration.getId());
 
-			boolean exists = deploymentService.exists(deploymentConfiguration);
+			deploymentService.create(deploymentConfiguration);
 
-			if (exists) {
-				deploymentService.populate(deploymentConfiguration);
-			} else {
-				deploymentService.create(deploymentConfiguration);
-				deploymentService.populate(deploymentConfiguration);
+			boolean shouldDeploy = shouldDeployOnCreate(deploymentConfiguration);
+			if (shouldDeploy) {
+				String projectId = internalDeploymentConfiguration.getProject().getIdentifier();
+				deployLatestArtifact(deploymentConfiguration, deploymentService, projectId);
 			}
+
 		} catch (ServiceException e) {
 			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
-
+		} catch (IOException e) {
+			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
 		}
 
 		return deploymentConfiguration;
+	}
+
+	private boolean shouldDeployOnCreate(DeploymentConfiguration deploymentConfiguration) {
+		if (deploymentConfiguration.getDeploymentType() == null
+				|| !deploymentConfiguration.getDeploymentType().equals(DeploymentType.MANUAL)) {
+			return false;
+		} else if (deploymentConfiguration.getBuildJobName() == null
+				|| deploymentConfiguration.getBuildJobNumber() == null
+				|| deploymentConfiguration.getBuildArtifactPath() == null) {
+			return false;
+		}
+		return true;
 	}
 
 	protected void validateBeforeCreate(DeploymentConfiguration publicDeploymentConfiguration,
@@ -252,7 +265,6 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		}
 		securityPolicy.modify(internalDeploymentConfiguration);
 
-		boolean shouldDeploy = shouldDeployOnUpdate(deploymentConfiguration, internalDeploymentConfiguration);
 		DeploymentService deploymentService = null;
 		try {
 
@@ -261,22 +273,15 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			updateTokenIfNeeded(deploymentConfiguration, deploymentService);
 
 			deploymentService.update(deploymentConfiguration);
-			String projectId = internalDeploymentConfiguration.getProject().getIdentifier();
 
+			boolean shouldDeploy = shouldDeployOnUpdate(deploymentConfiguration, internalDeploymentConfiguration);
 			if (shouldDeploy) {
+				String projectId = internalDeploymentConfiguration.getProject().getIdentifier();
 				deployLatestArtifact(deploymentConfiguration, deploymentService, projectId);
 			}
 
 		} catch (ServiceException e) {
 			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
-			if (deploymentService != null) {
-				try {
-					deploymentService.populate(deploymentConfiguration);
-				} catch (ServiceException e1) {
-					// ignore
-				}
-			}
-
 		} catch (IOException e) {
 			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
 		}

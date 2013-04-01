@@ -112,13 +112,19 @@ public class CloudFoundryServiceImpl implements DeploymentService {
 	 */
 	@Override
 	public void create(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
-		try {
-			client.createApplication(deploymentConfiguration.getName(), CloudApplication.SPRING,
-					deploymentConfiguration.getMemory(), deploymentConfiguration.getMappedUrls(),
-					getServiceNames(deploymentConfiguration));
-		} catch (CloudFoundryException e) {
-			wrapInServiceException(e);
+
+		boolean exists = exists(deploymentConfiguration);
+
+		if (!exists) {
+			try {
+				client.createApplication(deploymentConfiguration.getName(), CloudApplication.SPRING,
+						deploymentConfiguration.getMemory(), deploymentConfiguration.getMappedUrls(),
+						getServiceNames(deploymentConfiguration));
+			} catch (CloudFoundryException e) {
+				wrapInServiceException(e);
+			}
 		}
+		populate(deploymentConfiguration);
 	}
 
 	private List<String> getServiceNames(DeploymentConfiguration deploymentConfiguration) {
