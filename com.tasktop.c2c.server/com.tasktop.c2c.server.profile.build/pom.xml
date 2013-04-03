@@ -60,13 +60,13 @@
 		 -->
 		<module>../com.tasktop.c2c.server.deployment.api</module>
 		
+		<module>../com.tasktop.c2c.server.hudson.management</module>
         <module>../com.tasktop.c2c.server.hudson.web</module>
         <module>../com.tasktop.c2c.server.hudson.plugin.auth</module>
         <module>../com.tasktop.c2c.server.hudson.plugin.buildlistener</module>
         <module>../com.tasktop.c2c.server.hudson.plugin.cloud</module>
         <module>../com.tasktop.c2c.server.hudson.plugin.configuration</module>
         <module>../com.tasktop.c2c.server.hudson.plugin.ui</module>
-        <module>../com.tasktop.c2c.server.hudson.configuration.web</module>
 
         <module>../com.tasktop.c2c.server.util.docs</module>
 <!--        <module>../com.tasktop.c2c.server.developer.support</module> -->

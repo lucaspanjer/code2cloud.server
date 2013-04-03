@@ -14,13 +14,19 @@ package com.tasktop.c2c.server.hudson.plugin.auth;
 
 import hudson.Extension;
 import hudson.model.Descriptor;
+import hudson.model.Hudson;
 import hudson.security.GroupDetails;
 import hudson.security.UserMayOrMayNotExistException;
 import hudson.security.SecurityRealm;
 
+import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 
+import org.eclipse.hudson.security.team.Team;
+import org.eclipse.hudson.security.team.TeamAwareSecurityRealm;
+import org.eclipse.hudson.security.team.TeamManager;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
@@ -31,7 +37,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public class AlmPreauthenticationSecurityRealm extends SecurityRealm implements UserDetailsService,
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
+
+public class AlmPreauthenticationSecurityRealm extends TeamAwareSecurityRealm implements UserDetailsService,
 		AuthenticationManager {
 
 	@DataBoundConstructor
@@ -87,6 +95,26 @@ public class AlmPreauthenticationSecurityRealm extends SecurityRealm implements 
 		context.refresh();
 		Filter securityFilter = (Filter) context.getBean("springSecurityFilterChain");
 		return securityFilter;
+	}
+
+	@Override
+	public Team GetCurrentUserTeam() {
+		// Specify which project (and corresponding Hudson team) this pre authenticated user belongs to
+		String dcsProjectName = TenancyUtil.getCurrentTenantProjectIdentifer();
+		if (dcsProjectName == null) {
+			return null;
+		}
+		TeamManager teamManager = Hudson.getInstance().getTeamManager();
+		try {
+			return teamManager.findTeam(dcsProjectName);
+		} catch (TeamManager.TeamNotFoundException ex) {
+			// The team does not exist. Just create and return it
+			try {
+				return teamManager.createTeam(dcsProjectName);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	public static final class DescriptorImpl extends Descriptor<SecurityRealm> {

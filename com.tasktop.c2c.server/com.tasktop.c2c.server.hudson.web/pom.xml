@@ -17,7 +17,6 @@
   
   <properties>
   	<c2c.hudson.version>3.0.1-code2cloud-SNAPSHOT</c2c.hudson.version>
-  	<hudson.shared.libs>hudson-shared-libs</hudson.shared.libs>
   	<spring.version>3.1.1.RELEASE</spring.version>
   </properties>
   
@@ -30,6 +29,12 @@
   </repositories>
 
   <dependencies>
+     <dependency>
+       <groupId>javax.servlet</groupId>
+       <artifactId>servlet-api</artifactId>
+       <scope>provided</scope>
+   </dependency>
+
   	<!--  The war we are repackaging -->
     <dependency>
     	<groupId>org.eclipse.hudson</groupId>
@@ -86,6 +91,29 @@
     	<artifactId>common.service</artifactId>
         <version>${project.version}</version>
     </dependency>
+<!--     Config deps -->
+    	<dependency>
+			<groupId>com.tasktop.c2c.server</groupId>
+			<artifactId>hudson.management</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>apache-log4j-extras</artifactId>
+			<version>1.1</version>
+			<scope>runtime</scope>
+		</dependency>
+	
     <!--  Hudson Plugin deps. These are just to enforce proper build order, hence the provided scope (see below for their inclusion setup) -->
     <dependency>
     	<groupId>com.tasktop.c2c.server</groupId>
@@ -231,70 +259,13 @@
         </executions>
       </plugin>
       
-      <!-- Segregate the shared libs into a zip and repackage the hudson.war without the shared libs -->
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.6</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <configuration>
-            
-              <target>
-              	<!-- segregate the libs to be shared -->
-		    	<mkdir dir="target/${hudson.shared.libs}"/>
-		    	<move todir="target/${hudson.shared.libs}">
-		    	    <fileset dir="target/hudson/WEB-INF/lib/">
-						<exclude name="**"/>
-		    	      	<!-- TODO: add shared libs here, e.g., --> 
-			    	  	<!-- <include name="spring-*.jar"/> -->
-		    	    </fileset>
-		    	</move>
-		    	
-		    	<!-- zip them for publishing as an artifact -->
-		    	<zip destfile="target/${hudson.shared.libs}.zip" basedir="target/${hudson.shared.libs}/" whenempty="create"/>
-
-				<!-- keep the raw hudson.war -->
-				<move file="target/hudson.war" tofile="target/hudson-with-all-libs.war"/>
-				
-				<!--  rewrites a war, excluding some paths along the way -->
-				<zip destfile="target/hudson.war">
-					<zipfileset src="target/hudson-with-all-libs.war">
-						<include name="**"/>
-		    	    	<!-- TODO: add shared libs here, e.g., --> 
-	     		    	<!--  <exclude name="WEB-INF/lib/spring-*.jar"/> -->
-				  	</zipfileset>
-				</zip>
-              </target>
-              
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+   
       
-      <!--  Publish the hudson-shared-libs zip to the local repository -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-install-plugin</artifactId>
         <version>2.3.1</version>
         <executions>
-        	<execution>
-        	<id>install-shared-libs</id>
-        	<phase>install</phase>
-        	<goals>
-	        	<goal>install-file</goal>
-        	</goals>
-	   		<configuration>
-	   			<file>target/${hudson.shared.libs}.zip</file>
-	   			<artifactId>${hudson.shared.libs}</artifactId>
-	   			<groupId>${project.groupId}</groupId>
-	   			<version>${project.version}</version>
-	   			<packaging>zip</packaging>
-	   		</configuration>
-        	</execution>
         	<execution>
         	<id>install-slave-jar</id>
         	<phase>install</phase>

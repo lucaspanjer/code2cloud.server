@@ -6,7 +6,9 @@
     <project>com.tasktop.c2c.server.cloud.api</project>
     <project>com.tasktop.c2c.server.common.api</project>
     <project>com.tasktop.c2c.server.common.service</project>
+    <project>com.tasktop.c2c.server.configuration.service</project>
     <project>com.tasktop.c2c.server.event.api</project>
+    <project>com.tasktop.c2c.server.hudson.management</project>
     <project>com.tasktop.c2c.server.hudson.plugin.auth</project>
     <project>com.tasktop.c2c.server.hudson.plugin.buildlistener</project>
     <project>com.tasktop.c2c.server.hudson.plugin.cloud</project>

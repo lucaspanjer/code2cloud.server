@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.hudson.plugin.cloud;
 
+import hudson.model.BuildableItem;
+import hudson.model.Queue;
 import hudson.model.TaskListener;
 import hudson.model.Computer;
 import hudson.model.Descriptor.FormException;
@@ -22,18 +24,16 @@ import hudson.slaves.Cloud;
 import hudson.slaves.NodeProvisioner.PlannedNode;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Callable;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import org.eclipse.hudson.security.team.Team;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.xml.DefaultNamespaceHandlerResolver;
@@ -55,7 +55,6 @@ public class C2CSlaveCloud extends Cloud {
 	private String slavePoolServiceBaseUrl = "http://localhost:8888/hudson";
 	private String sshUser;
 	private String sshKeyFilePath;
-	private String projectIdentifier;
 	private String javaOptions = "";
 
 	private String remoteFS = "/home/c2c/hudson";
@@ -88,16 +87,56 @@ public class C2CSlaveCloud extends Cloud {
 		return hudsonSlavePoolService;
 	}
 
+	private List<String> getExistingSlaveProjectIds() {
+		List<String> result = new ArrayList<String>();
+		for (Node n : Hudson.getInstance().getNodes()) {
+			if (n instanceof C2CSlave) {
+				result.add(((C2CSlave) n).getProjectId());
+			}
+		}
+		return result;
+	}
+
 	@Override
-	public Collection<PlannedNode> provision(final Label label, int excessWorkload) {
-		LOGGER.debug("Provisioning ");
+	public synchronized Collection<PlannedNode> provision(final Label label, int excessWorkload) {
+		List<String> existingSlaveProjectIds = getExistingSlaveProjectIds();
+		LinkedList<String> projectIds = new LinkedList<String>();
+		for (Queue.BuildableItem buildable : Hudson.getInstance().getQueue().getBuildableItems()) {
+			if (buildable.getTask() instanceof BuildableItem) {
+				BuildableItem buildableItem = (BuildableItem) buildable.getTask();
+				String jobId = buildableItem.getId();
+				Team t = Hudson.getInstance().getTeamManager().findJobOwnerTeam(jobId);
+				if (t == null) {
+					LOGGER.warn("No team assocaited with jobId: " + jobId);
+					continue;
+				}
+				String projectId = t.getName();
+				if (existingSlaveProjectIds.contains(projectId)) {
+					projectIds.addLast(projectId);
+				} else {
+					projectIds.add(projectId);
+				}
+
+			} else {
+				LOGGER.warn("Unexpected task in executor queue: " + buildable.getTask().getClass().getName());
+			}
+		}
+
 		List<PlannedNode> r = new ArrayList<PlannedNode>();
+
+		if (projectIds.isEmpty()) {
+			return r;
+		}
+
+		// XXX we could really provision multiple
+		final String projectId = projectIds.getFirst();
+		LOGGER.debug("Provisioning ");
 
 		for (int i = 0; i < excessWorkload; i++) {
 			r.add(new PlannedNode("build slave", Computer.threadPoolForRemoting.submit(new Callable<Node>() {
 				public Node call() throws Exception {
 					// TODO: record the output somewhere
-					C2CSlave s = provisionNewNode();
+					C2CSlave s = provisionNewNode(projectId);
 					Hudson.getInstance().addNode(s);
 					// Make sure we can connect.
 					s.toComputer().connect(false).get();
@@ -110,10 +149,10 @@ public class C2CSlaveCloud extends Cloud {
 		return r;
 	}
 
-	private C2CSlave provisionNewNode() {
+	private C2CSlave provisionNewNode(String projectId) {
 		C2CSlave slave = null;
 		try {
-			slave = new C2CSlave("Builder " + nextSlaveNum++, this, remoteFS);
+			slave = new C2CSlave("Builder " + nextSlaveNum++, projectId, this, remoteFS);
 		} catch (FormException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -124,7 +163,7 @@ public class C2CSlaveCloud extends Cloud {
 		RequestBuildSlaveResult requestSlaveResult;
 
 		retryLoop: while (true) {
-			requestSlaveResult = requestSlaveWithRetry(promiseToken);
+			requestSlaveResult = requestSlaveWithRetry(projectId, promiseToken);
 			switch (requestSlaveResult.getType()) {
 			case PROMISE:
 				promiseToken = requestSlaveResult.getPromiseToken();
@@ -148,13 +187,13 @@ public class C2CSlaveCloud extends Cloud {
 		}
 	}
 
-	private RequestBuildSlaveResult requestSlaveWithRetry(String promiseOrNull) {
+	private RequestBuildSlaveResult requestSlaveWithRetry(String projectId, String promiseOrNull) {
 		int numFailures = 0;
 		int maxFailures = 5;
 
 		while (true) {
 			try {
-				return getSlavePoolService().acquireSlave(getProjectIdentifier(), promiseOrNull);
+				return getSlavePoolService().acquireSlave(projectId, promiseOrNull);
 			} catch (Exception e) {
 				promiseOrNull = null;
 				numFailures++;
@@ -194,7 +233,7 @@ public class C2CSlaveCloud extends Cloud {
 	 */
 	private Date renewSlaveLeaase(C2CSlave c2cSlave) {
 		try {
-			RequestBuildSlaveResult result = getSlavePoolService().renewSlave(getProjectIdentifier(),
+			RequestBuildSlaveResult result = getSlavePoolService().renewSlave(c2cSlave.getProjectId(),
 					c2cSlave.getAddress());
 			if (result.getType().equals(RequestBuildSlaveResult.Type.SLAVE)) {
 				return result.getSlaveDueDate();
@@ -243,13 +282,13 @@ public class C2CSlaveCloud extends Cloud {
 		int maxWait = 30 * 1000;
 		while (true) {
 			try {
-				getSlavePoolService().releaseSlave(getProjectIdentifier(), c2cSlave.getAddress());
-				LOGGER.debug("[" + getProjectIdentifier() + "] released build slave [" + c2cSlave.getAddress() + "].");
+				getSlavePoolService().releaseSlave(c2cSlave.getProjectId(), c2cSlave.getAddress());
+				LOGGER.debug("[" + c2cSlave.getProjectId() + "] released build slave [" + c2cSlave.getAddress() + "].");
 				break;
 			} catch (InsufficientPermissionsException e) {
 				// We had lost ownership of this slave. (build timeout, manual
 				// reclamiation..)
-				LOGGER.debug("[" + getProjectIdentifier() + "] released build slave [" + c2cSlave.getAddress()
+				LOGGER.debug("[" + c2cSlave.getProjectId() + "] released build slave [" + c2cSlave.getAddress()
 						+ "] due to IPE (we did not own it).");
 				return;
 			} catch (RuntimeException e) { // Client side will throw for
@@ -258,14 +297,14 @@ public class C2CSlaveCloud extends Cloud {
 				// Failure
 				numFailures++;
 				if (numFailures > maxFailures) {
-					LOGGER.info("[" + getProjectIdentifier() + "] release of slave failed. Giving up.", e);
+					LOGGER.info("[" + c2cSlave.getProjectId() + "] release of slave failed. Giving up.", e);
 					return;
 				}
 				long sleepTime = (long) Math.pow(10, numFailures + 1);
 				if (sleepTime > maxWait) {
 					sleepTime = maxWait;
 				}
-				LOGGER.info("[" + getProjectIdentifier() + "] release of slave failed. Sleeping [" + sleepTime
+				LOGGER.info("[" + c2cSlave.getProjectId() + "] release of slave failed. Sleeping [" + sleepTime
 						+ "] before retrying.", e);
 				try {
 					Thread.sleep(sleepTime);
@@ -276,7 +315,7 @@ public class C2CSlaveCloud extends Cloud {
 		}
 
 		listener.getLogger().append(
-				"[" + getProjectIdentifier() + "] released build slave [" + c2cSlave.getAddress() + "].");
+				"[" + c2cSlave.getProjectId() + "] released build slave [" + c2cSlave.getAddress() + "].");
 	}
 
 	public String getSlavePoolServiceBaseUrl() {
@@ -312,27 +351,6 @@ public class C2CSlaveCloud extends Cloud {
 
 	public void setJavaOptions(String javaOptions) {
 		this.javaOptions = javaOptions;
-	}
-
-	public String getProjectIdentifier() {
-		if (projectIdentifier == null) {
-			// Try to parse out the projectIdentifier from the hudson url
-			try {
-				URI rootUri = new URI(Hudson.getInstance().getRootUrl());
-				Matcher m = Pattern.compile("/s/([^/]+)/hudson/").matcher(rootUri.getPath());
-				if (m.matches()) {
-					projectIdentifier = m.group(1);
-				}
-
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-		}
-		return projectIdentifier;
-	}
-
-	public void setProjectIdentifier(String projectIdentifier) {
-		this.projectIdentifier = projectIdentifier;
 	}
 
 	public String getRemoteFS() {

@@ -11,9 +11,9 @@
 
 	<bean id="http403ForbiddenEntryPoint" class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
 
-	<security:http entry-point-ref="http403ForbiddenEntryPoint" create-session="never">
+	<security:http entry-point-ref="http403ForbiddenEntryPoint" create-session="never" use-expressions="true">
 		<security:custom-filter ref="proxyPreAuthenticatedProcessingFilter" before="PRE_AUTH_FILTER"/>
-		<security:intercept-url pattern="/**" access="ROLE_USER,ROLE_COMMUNITY,ROLE_OBSERVER" />
+		<security:intercept-url pattern="/**" access="permitAll" />
 	</security:http>
 	
 </beans>

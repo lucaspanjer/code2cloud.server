@@ -3,7 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-	<include file="data/liquibase-profile-db-schema-1.0.xml" />
-	<include file="data/liquibase-profile-db-initial-data-1.0.xml" />
-	<include file="data/liquibase-profile-db-migrations-1.0.xml" />
-</databaseChangeLog> 
+	<changeSet author="cmorgan" id="migrationSTHudsonsToMTHudson-task5339" >
+	<update tableName="PROJECTSERVICE">
+		<column name="INTERNALURIPREFIX" value="/hudson"/>
+		<where>TYPE = 'BUILD'</where>
+	</update>
+	</changeSet>
+	
+</databaseChangeLog>

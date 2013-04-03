@@ -16,39 +16,20 @@
 		<property name="serviceType" value="BUILD"/>
 		
 		<property name="configurators">
-			<list> <!--  Order is important -->
-				<!-- copies over the hudson-home default config (applies an applicationId to the targetBaseLocation based on the configuration parameter) -->
-				<bean class="com.tasktop.c2c.server.configuration.service.TemplateProcessingConfigurator"
-					p:templateBaseLocation="${alm.rootDir}/configuration/template/hudson-home"
-					p:targetBaseLocation="${alm.dataDir}/hudson-homes"
-					p:perOrg="${alm.hudson.perOrg}"
-				/>
-
-				<!-- process the web.xml file in place -->
-				<bean class="com.tasktop.c2c.server.hudson.configuration.service.HudsonServiceConfigurator"
-					p:tempDir="${alm.dataDir}/temp"
-					p:warTemplateFile="${alm.rootDir}/configuration/template/hudson-war/hudson.war"
-					p:targetHudsonHomeBaseDir="${alm.dataDir}/hudson-homes"
-					p:targetWebappsDir="${alm.hudson.webappsDir}"
-					p:hudsonPath="${alm.hudson.path}"
-					p:perOrg="${alm.hudson.perOrg}"
-				/>			
+			<list>  
+	<!--  Currently nothing to do -->
 			</list>
 		</property>
 		
 		<property name="metricCollectors">
 			<list>
-				<bean class="com.tasktop.c2c.server.configuration.service.FileSystemMetricCollector" 
-					p:path="${alm.dataDir}/hudson-homes/{projectIdentifier}"/>
+				<bean class="com.tasktop.c2c.server.hudson.configuration.service.HudsonMetricCollector" />
 			</list>
 		</property>
 		
 		<property name="deprovisioners">
 			<list>
-				<bean class="com.tasktop.c2c.server.hudson.configuration.service.HudsonWarDeprovisioner"
-					p:hudsonWebappsDir="${alm.hudson.webappsDir}" p:hudsonPath="${alm.hudson.path}" p:perOrg="${alm.hudson.perOrg}"/>
-				<bean class="com.tasktop.c2c.server.configuration.service.DirectoryMovingDeprovisioner"
-					p:fromBaseDir="${alm.dataDir}/hudson-homes" p:toBaseDir="${alm.dataDir}/deleted" p:toDirName="hudson-home" p:perOrg="${alm.hudson.perOrg}"/>
+				<bean class="com.tasktop.c2c.server.hudson.configuration.service.HudsonServiceDeprovisioner"/>
 			</list>
 		</property>
 		

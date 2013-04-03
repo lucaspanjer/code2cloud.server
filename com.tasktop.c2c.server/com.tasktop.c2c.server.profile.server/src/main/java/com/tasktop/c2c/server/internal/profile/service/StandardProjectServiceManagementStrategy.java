@@ -105,7 +105,7 @@ public class StandardProjectServiceManagementStrategy implements ProjectServiceM
 
 		// Now configure the host for the new project.
 		ProjectServiceManagementServiceClient nodeConfigurationService = projectServiceMangementServiceProvider
-				.getNewService(domainServiceHost.getInternalNetworkAddress(), service.getType());
+				.getNewService(serviceHost.getInternalNetworkAddress(), service.getType());
 
 		updateTemplateServiceConfiguration(service);
 
@@ -131,7 +131,7 @@ public class StandardProjectServiceManagementStrategy implements ProjectServiceM
 	private void waitForServiceToComeUp(ProjectService service) {
 		switch (service.getType()) {
 		case BUILD:
-			waitForHudson(service);
+			waitForHudson(service); // XXX This is not really needed for a MT hudson
 			break;
 
 		default:
@@ -145,8 +145,7 @@ public class StandardProjectServiceManagementStrategy implements ProjectServiceM
 	 * @param service
 	 */
 	protected void waitForHudson(ProjectService service) {
-		HudsonService hudsonService = hudsonServiceProvider.getHudsonService(service.getProjectServiceProfile()
-				.getProject().getIdentifier());
+		HudsonService hudsonService = hudsonServiceProvider.getHudsonService(service);
 		int sleepAmount = 1000;
 		boolean ready = false;
 		for (int i = 0; i < 7; i++) { // 1s, 2s, 4s, 8s, 16s, 32s, 1m
@@ -171,19 +170,10 @@ public class StandardProjectServiceManagementStrategy implements ProjectServiceM
 	}
 
 	protected void updateTemplateServiceConfiguration(ProjectService service) {
-		switch (service.getType()) {
-		case BUILD:
-			// Replace our marker string with the actual project identifier
-			service.setInternalUriPrefix(service.getInternalUriPrefix().replace("APPID",
-					service.getProjectServiceProfile().getProject().getIdentifier()));
-			break;
-		default:
-			// Nothing to do
-			break;
-		}
+		// Nothing to do
 	}
 
-	private ProjectServiceConfiguration createProjectServiceConfiguration(Project project) {
+	protected ProjectServiceConfiguration createProjectServiceConfiguration(Project project) {
 		ProjectServiceConfiguration config = new ProjectServiceConfiguration();
 		config.setProjectIdentifier(project.getIdentifier());
 		if (project.getOrganization() != null) {

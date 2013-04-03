@@ -23,7 +23,7 @@ import com.tasktop.c2c.server.cloud.domain.ServiceType;
 public class ProjectServiceMangementServiceProvider {
 	private RestTemplate template;
 
-	private static final int ALM_HTTP_PORT = 8080;
+	public static final int ALM_HTTP_PORT = 8080;
 
 	@Resource
 	private Map<ServiceType, String> configPathsByServiceType;
@@ -49,6 +49,10 @@ public class ProjectServiceMangementServiceProvider {
 
 	public void setConfigPathsByServiceType(Map<ServiceType, String> configPathsByServiceType) {
 		this.configPathsByServiceType = configPathsByServiceType;
+	}
+
+	public RestTemplate getRestTemplate() {
+		return template;
 	}
 
 }

@@ -130,7 +130,7 @@
 		<entry key="WIKI" value="wiki/config"/>
 		<entry key="SCM" value="services/config/git"/>
 		<entry key="MAVEN" value="services/config/maven"/>
-		<entry key="BUILD" value="hudson-config/config"/>
+		<entry key="BUILD" value="${alm.hudson.configPath}"/>
 	</util:map>
 	
 	<bean id="hudsonSlaveNodeCleaningService" class="com.tasktop.c2c.server.cloud.service.SshNodeCleaningService">

@@ -784,6 +784,11 @@
 				<version>${com.tasktop.c2c.server.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.tasktop.c2c.server</groupId>
+				<artifactId>hudson.management</artifactId>
+				<version>${com.tasktop.c2c.server.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>net.sourceforge.winstone</groupId>
 				<artifactId>winstone</artifactId>
 				<version>0.9.10</version>

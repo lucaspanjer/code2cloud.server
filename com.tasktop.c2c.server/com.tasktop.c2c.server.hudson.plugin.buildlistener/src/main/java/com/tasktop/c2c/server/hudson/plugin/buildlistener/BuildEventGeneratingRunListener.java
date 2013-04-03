@@ -23,11 +23,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.hudson.security.team.Team;
 import org.springframework.beans.factory.xml.DefaultNamespaceHandlerResolver;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-
+import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.event.domain.BuildEvent;
 import com.tasktop.c2c.server.event.service.EventService;
 import com.tasktop.c2c.server.event.service.EventServiceClient;
@@ -51,7 +52,15 @@ public class BuildEventGeneratingRunListener extends RunListener<Run> {
 	@Override
 	public void onCompleted(Run run, TaskListener taskListener) {
 		BuildEvent buildEvent = new BuildEvent();
-		buildEvent.setProjectId(config.getProjectIdentifier());
+		Team team = Hudson.getInstance().getTeamManager().findJobOwnerTeam(run.getParent().getId());
+		if (team == null) {
+			return;
+		}
+		String projectId = team.getName();
+
+		TenancyUtil.setProjectTenancyContext(projectId); // Required for event service client header setting.
+		buildEvent.setProjectId(projectId);
+
 		buildEvent.setTimestamp(new Date());
 		buildEvent.setJobName(run.getParent().getName());
 		BuildDetails buildDetails = new BuildDetails();
@@ -95,7 +104,6 @@ public class BuildEventGeneratingRunListener extends RunListener<Run> {
 			EventServiceClient eventServiceClient = (EventServiceClient) context.getBean("eventServiceClient");
 
 			eventServiceClient.setBaseUrl(config.getBaseEventUrl());
-			eventServiceClient.setProjectId(config.getProjectIdentifier());
 			this.eventService = eventServiceClient;
 		}
 		return eventService;

@@ -24,14 +24,18 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.tasktop.c2c.server.common.service.web.HasBaseUrl;
+import com.tasktop.c2c.server.cloud.domain.ServiceType;
+import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.profile.domain.build.BuildArtifact;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
 import com.tasktop.c2c.server.profile.domain.build.HudsonStatus;
 import com.tasktop.c2c.server.profile.domain.build.JobSummary;
+import com.tasktop.c2c.server.profile.domain.internal.Project;
+import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.project.ProjectArtifact;
 import com.tasktop.c2c.server.profile.domain.project.ProjectArtifacts;
 import com.tasktop.c2c.server.profile.domain.project.ProjectArtifacts.Type;
@@ -43,6 +47,12 @@ public class ProjectArtifactServiceImpl implements ProjectArtifactService {
 
 	@Resource(name = "hudsonServiceProvider")
 	private ServiceProvider<HudsonService> hudsonServiceProvider;
+
+	@Autowired
+	private ProfileService profileService;
+
+	@Autowired
+	private ProfileServiceConfiguration configuration;
 
 	public void setHudsonServiceProvider(ServiceProvider<HudsonService> hudsonServiceProvider) {
 		this.hudsonServiceProvider = hudsonServiceProvider;
@@ -165,50 +175,52 @@ public class ProjectArtifactServiceImpl implements ProjectArtifactService {
 	 */
 	@Override
 	public void downloadProjectArtifact(String projectId, File file, ProjectArtifact artifact) throws IOException {
-		try {
-			HudsonService hudsonService = hudsonServiceProvider.getService(projectId);
 
-			// Maybe Rewrite the url so that it goes to the internal node
+		try {
+			Project project = profileService.getProjectByIdentifier(projectId);
+			ProjectService hudsonProjectService = getHudsonService(project);
+			if (hudsonProjectService == null) {
+				throw new IllegalStateException("no hudson service");
+			}
+
+			// Rewrite the url so that it goes to the internal node
 			String url = artifact.getUrl();
 			boolean shouldReriteToLocal = true; // url.startsWith(profileServiceConfiguration.getProfileBaseURL())
 			if (shouldReriteToLocal) {
 				// url : https://q.tasktop.com/alm/s/code2cloud/hudson/jobs/Server/1/artifacts/target/profile.war
 				// profileBaseUrl : https://q.tasktop.com/alm/
 				// serviceBaseUrl : http://10.0.0.1:8080/alm/s/code2cloud/hudson
-				URL serviceBaseUrl = new URL(((HasBaseUrl) hudsonService).getBaseUrl());
+				URL serviceBaseUrl = new URL(hudsonProjectService.computeInternalProxyBaseUri(false));
 				URL artifactUrl = new URL(url);
+				String uri = artifactUrl.getPath(); // /alm/s/code2cloud/hudson/jobs/Server
+				String expectedPath = new URL(configuration.getWebUrlForService(hudsonProjectService)).getPath(); // /alm/s/code2coud/hudson/
+				if (uri.startsWith(expectedPath)) {
+					uri = uri.substring(expectedPath.length()); // jobs/Server
+				}
+
+				String internalUri = hudsonProjectService.getInternalUriPrefix() + "/" + uri;
+
 				url = serviceBaseUrl.getProtocol() + "://" + serviceBaseUrl.getHost() + ":" + serviceBaseUrl.getPort()
-						+ artifactUrl.getPath();
+						+ internalUri;
 			}
 
+			HudsonService hudsonService = hudsonServiceProvider.getService(projectId);
 			hudsonService.downloadBuildArtifact(url, file);
+
+		} catch (EntityNotFoundException e) {
+			throw new RuntimeException(e);
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	// @Override
-	// public Long createProjectArtifacts(ProjectArtifacts release) {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
-	//
-	// @Override
-	// public void updateProjectArtifacts(ProjectArtifacts release) {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	//
-	// @Override
-	// public void removeProjectArtifacts(ProjectArtifacts release) {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	//
-	// @Override
-	// public void retrieveProjectArtifacts(Long artifactsId) {
-	// // TODO Auto-generated method stub
-	//
-	// }
+	private ProjectService getHudsonService(Project project) {
+		for (ProjectService ps : project.getProjectServiceProfile().getProjectServices()) {
+			if (ps.getType().equals(ServiceType.BUILD)) {
+				return ps;
+			}
+		}
+		return null;
+	}
 
 }

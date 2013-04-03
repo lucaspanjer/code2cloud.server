@@ -103,7 +103,7 @@
 		</bean>
 		<bean class="com.tasktop.c2c.server.profile.domain.internal.ProjectService">
 			<property name="type" value="BUILD"/>
-			<property name="internalUriPrefix" value="${profile.prefix.path}/s/APPID/hudson/"/>
+			<property name="internalUriPrefix" value="/hudson"/>
 			<property name="uriPattern" value="/hudson(.*)"/>
 			<property name="internalPort" value="8080"/>
 			<property name="ajpPort" value="8009"/>
