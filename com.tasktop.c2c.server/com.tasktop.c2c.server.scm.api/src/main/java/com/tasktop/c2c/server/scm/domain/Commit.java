@@ -27,7 +27,6 @@ public class Commit extends Item {
 	private List<String> parents;
 
 	private List<DiffEntry> changes;
-	private String diffText;
 
 	public Commit() {
 
@@ -88,14 +87,6 @@ public class Commit extends Item {
 
 	public void setParents(List<String> parents) {
 		this.parents = parents;
-	}
-
-	public String getDiffText() {
-		return diffText;
-	}
-
-	public void setDiffText(String diffText) {
-		this.diffText = diffText;
 	}
 
 	public List<DiffEntry> getChanges() {

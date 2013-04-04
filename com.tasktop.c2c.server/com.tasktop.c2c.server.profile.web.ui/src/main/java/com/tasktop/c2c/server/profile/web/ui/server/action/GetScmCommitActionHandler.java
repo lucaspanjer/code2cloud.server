@@ -41,7 +41,7 @@ public class GetScmCommitActionHandler extends AbstractProfileActionHandler<GetS
 		try {
 			setTenancyContext(action.getProjectId());
 			ScmService scmService = scmServiceProvider.getService(action.getProjectId());
-			return new GetScmCommitResult(scmService.getCommit(action.getRepoName(), action.getCommitId()));
+			return new GetScmCommitResult(scmService.getCommit(action.getRepoName(), action.getCommitId(), null));
 		} catch (EntityNotFoundException e) {
 			throw new ActionException(e);
 		}

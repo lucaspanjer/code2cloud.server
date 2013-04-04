@@ -44,8 +44,18 @@ import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.scm.domain.Blame;
 import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
+//import com.tasktop.c2c.server.scm.domain.DiffEntry.Content;
+import com.tasktop.c2c.server.scm.domain.DiffEntry;
+import com.tasktop.c2c.server.scm.domain.DiffEntry.Hunk;
 import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Trees;
+import java.io.OutputStream;
+import java.util.LinkedList;
+import java.util.Stack;
+import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.errors.CorruptObjectException;
+import org.eclipse.jgit.patch.FileHeader;
+import org.eclipse.jgit.util.io.NullOutputStream;
 
 class GitBrowseUtil {
 
@@ -366,6 +376,94 @@ class GitBrowseUtil {
 			Commit commit = GitDomain.createCommit(revCommit);
 			tree.setLatestCommit(commit);
 			break;
+		}
+
+	}
+
+	public static DiffEntry getDiffEntry(org.eclipse.jgit.diff.DiffEntry de, Repository repo, Integer context)
+			throws IOException {
+		return new StructuredDiffEntryFormatter(de, repo, context).getDiffEntry();
+	}
+
+	private static class StructuredDiffEntryFormatter extends DiffFormatter {
+
+		private final org.eclipse.jgit.diff.DiffEntry de;
+
+		private Stack<Hunk> hunks = new Stack<Hunk>();
+
+		private boolean binary = false;
+		private int linesAdded = 0;
+		private int linesRemoved = 0;
+
+		public StructuredDiffEntryFormatter(org.eclipse.jgit.diff.DiffEntry de, Repository repo, Integer context) {
+			super(NullOutputStream.INSTANCE);
+			this.de = de;
+			setRepository(repo);
+			if (context != null && context >= 0) {
+				setContext(context);
+			}
+		}
+
+		public DiffEntry getDiffEntry() throws IOException {
+
+			format(de);
+
+			DiffEntry result = new DiffEntry();
+
+			result.setChangeType(convertChangeType(de.getChangeType()));
+			result.setNewPath(de.getNewPath());
+			result.setOldPath(de.getOldPath());
+			result.setHunks(hunks);
+			result.setLinesAdded(linesAdded);
+			result.setLinesRemoved(linesRemoved);
+			result.setBinary(binary);
+
+			return result;
+		}
+
+		@Override
+		public void format(FileHeader head, RawText a, RawText b) throws IOException {
+			binary = head.getPatchType() != FileHeader.PatchType.UNIFIED;
+			super.format(head, a, b); // To change body of generated methods, choose Tools | Templates.
+		}
+
+		@Override
+		protected void writeHunkHeader(int aStartLine, int aEndLine, int bStartLine, int bEndLine) throws IOException {
+			hunks.push(new Hunk(aStartLine, aEndLine, bStartLine, bEndLine));
+		}
+
+		@Override
+		protected void writeContextLine(RawText text, int line) throws IOException {
+			hunks.peek().getLineChanges().add(new Hunk.LineChange(Hunk.LineChange.Type.CONTEXT, text.getString(line)));
+		}
+
+		@Override
+		protected void writeAddedLine(RawText text, int line) throws IOException {
+			linesAdded++;
+			hunks.peek().getLineChanges().add(new Hunk.LineChange(Hunk.LineChange.Type.ADDED, text.getString(line)));
+		}
+
+		@Override
+		protected void writeRemovedLine(RawText text, int line) throws IOException {
+			linesRemoved++;
+			hunks.peek().getLineChanges().add(new Hunk.LineChange(Hunk.LineChange.Type.REMOVED, text.getString(line)));
+		}
+
+		private static DiffEntry.ChangeType convertChangeType(org.eclipse.jgit.diff.DiffEntry.ChangeType ct) {
+			switch (ct) {
+			case ADD:
+				return DiffEntry.ChangeType.ADD;
+			case COPY:
+				return DiffEntry.ChangeType.COPY;
+			case DELETE:
+				return DiffEntry.ChangeType.DELETE;
+			case MODIFY:
+				return DiffEntry.ChangeType.MODIFY;
+			case RENAME:
+				return DiffEntry.ChangeType.RENAME;
+			default:
+				return null;
+			}
 		}
 
 	}

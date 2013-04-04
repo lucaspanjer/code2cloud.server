@@ -46,7 +46,7 @@ import com.tasktop.c2c.server.common.web.client.widgets.Format;
 import com.tasktop.c2c.server.common.web.client.widgets.hyperlink.HyperlinkingLabel;
 import com.tasktop.c2c.server.scm.domain.Commit;
 import com.tasktop.c2c.server.scm.domain.DiffEntry;
-import com.tasktop.c2c.server.scm.domain.DiffEntry.Content;
+import com.tasktop.c2c.server.scm.domain.DiffEntry.Hunk;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmCommitPlace;
 import com.tasktop.c2c.server.scm.web.ui.client.place.ScmRepoPlace;
 import com.tasktop.c2c.server.scm.web.ui.client.resources.ScmMessages;
@@ -220,6 +220,12 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 		@Template("<pre class=\"prettyprint {0}\">{1}</pre>")
 		SafeHtml content(String style, String content);
 
+		@Template("<pre class=\"prettyprint {0}\">@@ -{1},{2} +{3},{4} @@</pre>")
+		SafeHtml hunk(String style, int aS, int aE, int bS, int bE);
+
+		@Template("<pre class=\"prettyprint {0}\">Binary files differ</pre>")
+		SafeHtml binary(String style);
+
 	}
 
 	private static Template template = GWT.create(Template.class);
@@ -253,18 +259,49 @@ public class ScmCommitView extends Composite implements Editor<Commit> {
 
 			htmlBuilder.append(template.addFileChange(ScmResources.get.style().contentFileHeader(), elId, fileName));
 
-			for (Content content : diff.getContent()) {
-				String style = "";
-				switch (content.getType()) {
-				case ADDED:
-					style = ScmResources.get.style().contentAdded();
-					break;
-				case REMOVED:
-					style = ScmResources.get.style().contentRemoved();
-					break;
-				}
+			if (diff.isBinary()) {
+				htmlBuilder.append(template.binary(""));
+			} else {
+				for (Hunk hunk : diff.getHunks()) {
+					htmlBuilder.append(template.hunk("", hunk.getAStartLine(), hunk.getAEndLine(),
+							hunk.getBStartLine(), hunk.getBEndLine()));
 
-				htmlBuilder.append(template.content(style, content.getContent()));
+					String style = null;
+					char prefix = ' ';
+					StringBuilder content = null;
+					Hunk.LineChange.Type lt = null;
+
+					for (Hunk.LineChange lc : hunk.getLineChanges()) {
+
+						if (lc.getType() != lt) {
+
+							if (content != null) {
+								htmlBuilder.append(template.content(style, content.toString()));
+							}
+
+							content = new StringBuilder();
+							lt = lc.getType();
+							switch (lc.getType()) {
+							case ADDED:
+								style = ScmResources.get.style().contentAdded();
+								prefix = '+';
+								break;
+							case REMOVED:
+								prefix = '-';
+								style = ScmResources.get.style().contentRemoved();
+								break;
+							default:
+								prefix = ' ';
+								style = "";
+							}
+						}
+
+						content.append(prefix + lc.getText() + "\n");
+					}
+
+					htmlBuilder.append(template.content(style, content.toString()));
+
+				}
 			}
 
 		}

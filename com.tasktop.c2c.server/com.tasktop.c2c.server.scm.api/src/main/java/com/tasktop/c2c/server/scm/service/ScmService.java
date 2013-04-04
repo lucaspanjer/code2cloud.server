@@ -80,7 +80,19 @@ public interface ScmService {
 
 	Map<Profile, Integer> getNumCommitsByAuthor(int numDays);
 
-	Commit getCommit(String repoName, String commitId) throws EntityNotFoundException;
+	/**
+	 * Reads a commit from the repository.
+	 * 
+	 * @param repoName
+	 *            Name of the repository.
+	 * @param commitId
+	 *            Id of the commit.
+	 * @param numContextLines
+	 *            Generate diffs with <code>n</code> lines of context. Null for default.
+	 * @return Commit including diff.
+	 * @throws EntityNotFoundException
+	 */
+	Commit getCommit(String repoName, String commitId, Integer numContextLines) throws EntityNotFoundException;
 
 	/**
 	 * XXX probably could be deleted and handled by getLog

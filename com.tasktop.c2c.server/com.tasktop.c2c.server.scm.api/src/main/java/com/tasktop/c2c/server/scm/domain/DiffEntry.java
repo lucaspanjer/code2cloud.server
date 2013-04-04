@@ -13,6 +13,7 @@
 package com.tasktop.c2c.server.scm.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,51 +40,106 @@ public class DiffEntry implements Serializable {
 		COPY;
 	}
 
-	public static class Content implements Serializable {
-		public static enum Type {
-			CONTEXT, ADDED, REMOVED, BINARY;
+	public static class Hunk implements Serializable {
+
+		public static final int NO_CONTEXT = -1;
+		public static final int ALL_CONTEXT = -2;
+
+		public static class LineChange implements Serializable {
+
+			public static enum Type {
+				CONTEXT, ADDED, REMOVED, BINARY;
+			}
+
+			private Type type;
+
+			private String text;
+
+			public LineChange() {
+			}; // To support GWT serialization
+
+			public LineChange(Type type, String text) {
+				this.type = type;
+				this.text = text;
+			}
+
+			public Type getType() {
+				return type;
+			}
+
+			public void setType(Type type) {
+				this.type = type;
+			}
+
+			public String getText() {
+				return text;
+			}
+
+			public void setText(String text) {
+				this.text = text;
+			}
+
 		}
 
-		public Content() {
+		private int aStartLine;
 
+		private int aEndLine;
+
+		private int bStartLine;
+
+		private int bEndLine;
+
+		private List<LineChange> lineChanges;
+
+		public Hunk() {
+		}; // To support GWT serialization
+
+		public Hunk(int aStartLine, int aEndLine, int bStartLine, int bEndLine) {
+			this.aStartLine = aStartLine;
+			this.aEndLine = aEndLine;
+			this.bStartLine = bStartLine;
+			this.bEndLine = bEndLine;
+			this.lineChanges = new ArrayList<LineChange>();
 		}
 
-		public Content(Type type, String content) {
-			this.type = type;
-			this.content = content;
+		public int getAStartLine() {
+			return aStartLine;
 		}
 
-		private Type type;
-		private String content;
-
-		/**
-		 * @return the type
-		 */
-		public Type getType() {
-			return type;
+		public void setAStartLine(int aStartLine) {
+			this.aStartLine = aStartLine;
 		}
 
-		/**
-		 * @param type
-		 *            the type to set
-		 */
-		public void setType(Type type) {
-			this.type = type;
+		public int getAEndLine() {
+			return aEndLine;
 		}
 
-		/**
-		 * @return the content
-		 */
-		public String getContent() {
-			return content;
+		public void setAEndLine(int aEndLine) {
+			this.aEndLine = aEndLine;
 		}
 
-		/**
-		 * @param content
-		 *            the content to set
-		 */
-		public void setContent(String content) {
-			this.content = content;
+		public int getBStartLine() {
+			return bStartLine;
+		}
+
+		public void setBStartLine(int bStartLine) {
+			this.bStartLine = bStartLine;
+		}
+
+		public int getBEndLine() {
+			return bEndLine;
+		}
+
+		public void setBEndLine(int bEndLine) {
+			this.bEndLine = bEndLine;
+		}
+
+		public List<LineChange> getLineChanges() {
+			return lineChanges;
+		}
+
+		public void setLineChanges(List<LineChange> lineChanges) {
+			this.lineChanges = lineChanges;
 		}
 
 	}
@@ -93,7 +149,8 @@ public class DiffEntry implements Serializable {
 	private ChangeType changeType;
 	private int linesAdded = 0;
 	private int linesRemoved = 0;
-	private List<Content> content;
+	private boolean binary;
+	private List<Hunk> hunks;
 
 	public String getOldPath() {
 		return oldPath;
@@ -135,19 +192,20 @@ public class DiffEntry implements Serializable {
 		this.linesRemoved = linesRemoved;
 	}
 
-	/**
-	 * @return the content
-	 */
-	public List<Content> getContent() {
-		return content;
+	public List<Hunk> getHunks() {
+		return hunks;
 	}
 
-	/**
-	 * @param content
-	 *            the content to set
-	 */
-	public void setContent(List<Content> content) {
-		this.content = content;
+	public void setHunks(List<Hunk> hunks) {
+		this.hunks = hunks;
+	}
+
+	public boolean isBinary() {
+		return binary;
+	}
+
+	public void setBinary(boolean binary) {
+		this.binary = binary;
 	}
 
 }

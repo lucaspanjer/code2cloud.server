@@ -81,7 +81,7 @@ public interface GitService {
 	 * @return
 	 * @throws EntityNotFoundException
 	 */
-	Commit getCommitWithDiff(String repositoryName, String commitId) throws EntityNotFoundException;
+	Commit getCommitWithDiff(String repositoryName, String commitId, Integer context) throws EntityNotFoundException;
 
 	/**
 	 * @param repoName

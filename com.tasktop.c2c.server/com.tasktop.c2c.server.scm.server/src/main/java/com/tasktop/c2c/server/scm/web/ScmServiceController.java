@@ -134,9 +134,9 @@ public class ScmServiceController extends AbstractBuildInfoRestService implement
 
 	@Override
 	@RequestMapping(value = ScmServiceClient.GET_COMMIT_URL, method = RequestMethod.GET)
-	public Commit getCommit(@PathVariable("repoName") String repoName, @PathVariable("commitId") String commitId)
-			throws EntityNotFoundException {
-		return scmService.getCommit(repoName, commitId);
+	public Commit getCommit(@PathVariable("repoName") String repoName, @PathVariable("commitId") String commitId,
+			@RequestParam(required = false, value = "context") Integer context) throws EntityNotFoundException {
+		return scmService.getCommit(repoName, commitId, context);
 	}
 
 	@RequestMapping(value = ScmServiceClient.GET_LOG_FOR_REPO_URL, method = RequestMethod.GET)

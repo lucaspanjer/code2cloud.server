@@ -80,9 +80,10 @@ public class GitServiceBeanTest extends GitServiceTestBase {
 		List<Commit> log = gitService.getLog(name, null);
 		Assert.assertEquals(1, log.size());
 		Commit c = log.get(0);
-		c = gitService.getCommitWithDiff(name, c.getCommitId());
-		Assert.assertNotNull(c.getDiffText());
-
+		c = gitService.getCommitWithDiff(name, c.getCommitId(), null);
+		Assert.assertNotNull( c.getChanges() );
+                Assert.assertTrue( c.getChanges().size() > 0  );
+                Assert.assertTrue( c.getChanges().get(0).getHunks().size() > 0  );
 	}
 
 }

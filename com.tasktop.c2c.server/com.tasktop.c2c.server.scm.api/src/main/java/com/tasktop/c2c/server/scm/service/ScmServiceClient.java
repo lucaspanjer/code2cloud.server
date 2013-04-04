@@ -314,7 +314,7 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 
 	public static final String GET_COMMIT_URL = "commit/{repoName}/{commitId}";
 
-	public Commit getCommit(String repoName, String commitId) throws EntityNotFoundException {
+	public Commit getCommit(String repoName, String commitId, Integer context) throws EntityNotFoundException {
 
 		try {
 			return new GetCall<Commit>() {

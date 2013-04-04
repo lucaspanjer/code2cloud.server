@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.scm.service;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -54,6 +53,7 @@ import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.FileUtils;
+import org.eclipse.jgit.util.io.NullOutputStream;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -652,10 +652,11 @@ public class GitServiceBean implements GitService, InitializingBean {
 	}
 
 	@Override
-	public Commit getCommitWithDiff(String repositoryName, String commitId) throws EntityNotFoundException {
+	public Commit getCommitWithDiff(String repositoryName, String commitId, Integer context)
+			throws EntityNotFoundException {
 		try {
 			Repository jgitRepo = findRepositoryByName(repositoryName);
-			return getCommitInternal(repositoryName, jgitRepo, commitId);
+			return getCommitInternal(repositoryName, jgitRepo, commitId, context);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} catch (GitAPIException e) {
@@ -665,8 +666,8 @@ public class GitServiceBean implements GitService, InitializingBean {
 		}
 	}
 
-	private Commit getCommitInternal(String repositoryName, Repository repo, String commitId) throws IOException,
-			GitAPIException, EntityNotFoundException {
+	private Commit getCommitInternal(String repositoryName, Repository repo, String commitId, Integer context)
+			throws IOException, GitAPIException, EntityNotFoundException {
 
 		ObjectId thisC = repo.resolve(commitId);
 
@@ -684,9 +685,9 @@ public class GitServiceBean implements GitService, InitializingBean {
 
 		// FIXME how to handle merges? there can be real diffs there
 		if (theCommit.getParentCount() <= 1) {
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			// ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-			DiffFormatter diffFormatter = new DiffFormatter(output);
+			DiffFormatter diffFormatter = new DiffFormatter(NullOutputStream.INSTANCE); // new DiffFormatter(output);
 			diffFormatter.setRepository(repo);
 			diffFormatter.setPathFilter(TreeFilter.ALL);
 
@@ -703,14 +704,16 @@ public class GitServiceBean implements GitService, InitializingBean {
 			}
 
 			diffFormatter.setDetectRenames(true);
-			List<DiffEntry> diffEntries = diffFormatter.scan(parentTreeParser, thisTreeParser);
-			diffFormatter.format(diffEntries);
-			diffFormatter.flush();
 
-			result.setChanges(new ArrayList<com.tasktop.c2c.server.scm.domain.DiffEntry>());
-			String theDiff = new String(output.toByteArray());
-			result.setDiffText(theDiff);
-			result.setChanges(new PatchParser().parsePatch(theDiff));
+			List<DiffEntry> diffEntries = diffFormatter.scan(parentTreeParser, thisTreeParser);
+			List<com.tasktop.c2c.server.scm.domain.DiffEntry> rde = new ArrayList<com.tasktop.c2c.server.scm.domain.DiffEntry>();
+
+			for (DiffEntry de : diffEntries) {
+				rde.add(GitBrowseUtil.getDiffEntry(de, repo, context));
+			}
+
+			result.setChanges(rde);
+
 		}
 
 		return result;
