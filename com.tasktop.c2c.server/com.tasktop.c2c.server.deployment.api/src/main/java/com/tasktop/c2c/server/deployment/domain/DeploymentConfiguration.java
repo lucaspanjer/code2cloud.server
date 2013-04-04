@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.deployment.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -51,6 +52,9 @@ public class DeploymentConfiguration extends AbstractEntity {
 
 	// Status
 	private DeploymentStatus status;
+
+	// history of deployment activity
+	private List<DeploymentActivity> deploymentActivities = new ArrayList<DeploymentActivity>();
 
 	public String getName() {
 		return name;
@@ -215,4 +219,15 @@ public class DeploymentConfiguration extends AbstractEntity {
 		this.serviceType = type;
 	}
 
+	public List<DeploymentActivity> getDeploymentActivities() {
+		return deploymentActivities;
+	}
+
+	public void setDeploymentActivities(List<DeploymentActivity> deploymentActivities) {
+		this.deploymentActivities = deploymentActivities;
+	}
+
+	public synchronized void addDeploymentActivity(DeploymentActivity deploymentActivity) {
+		this.deploymentActivities.add(deploymentActivity);
+	}
 }

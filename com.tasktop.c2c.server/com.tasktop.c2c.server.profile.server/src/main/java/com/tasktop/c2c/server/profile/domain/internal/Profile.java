@@ -19,12 +19,14 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import com.tasktop.c2c.server.common.service.identity.Gravatar;
+import com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity;
 
 /**
  * A profile identifies a user and serves as the entrypoint for all user-related data.
@@ -42,6 +44,7 @@ public class Profile extends BaseEntity {
 	private List<PasswordResetToken> passwordResetTokens = new ArrayList<PasswordResetToken>();
 	private List<AgreementProfile> agreementProfiles = new ArrayList<AgreementProfile>();
 	private List<SshPublicKey> sshPublicKeys = new ArrayList<SshPublicKey>();
+	private List<DeploymentActivity> deploymentActivities = new ArrayList<DeploymentActivity>();
 	private Boolean admin = false;
 	private NotificationSettings notificationSettings;
 	private Boolean sentWelcomeEmail = false;
@@ -289,5 +292,14 @@ public class Profile extends BaseEntity {
 
 	public void setOrganizationProfiles(List<OrganizationProfile> organizationProfiles) {
 		this.organizationProfiles = organizationProfiles;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE }, mappedBy = "profile")
+	public List<DeploymentActivity> getDeploymentActivities() {
+		return deploymentActivities;
+	}
+
+	public void setDeploymentActivities(List<DeploymentActivity> deploymentActivities) {
+		this.deploymentActivities = deploymentActivities;
 	}
 }

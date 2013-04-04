@@ -12,8 +12,15 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.deployment.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.tasktop.c2c.server.deployment.domain.DeploymentActivity;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceTypes;
+import com.tasktop.c2c.server.internal.profile.service.WebServiceDomain;
 
 /**
  * Helper class for translating between public and internal data-storage objects.
@@ -22,6 +29,9 @@ import com.tasktop.c2c.server.deployment.domain.DeploymentServiceTypes;
  * 
  */
 public class DeploymentDomain {
+
+	@Autowired
+	WebServiceDomain webServiceDomain;
 
 	public DeploymentConfiguration convertToPublic(
 			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration source) {
@@ -39,15 +49,39 @@ public class DeploymentDomain {
 		result.setBuildArtifactPath(source.getBuildArtifactPath());
 		result.setDeployUnstableBuilds(source.isDeployUnstableBuilds());
 		result.setLastDeploymentDate(source.getLastDeploymentDate());
+		List<DeploymentActivity> deploymentActivities = new ArrayList<DeploymentActivity>();
+		for (com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity deploymentActivity : source
+				.getDeploymentActivities()) {
+			deploymentActivities.add(convertToPublic(deploymentActivity));
+		}
+		result.setDeploymentActivities(deploymentActivities);
 		// TODO: result.setDescription(description)
 
 		// TODO -- other fields
 		return result;
 	}
 
+	public DeploymentActivity convertToPublic(
+			com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity source) {
+		DeploymentActivity result = newPublicDO(source);
+		result.setId(source.getId());
+		result.setStatus(source.getStatus());
+		result.setTime(source.getTime());
+		result.setType(source.getType());
+		result.setProfile(source.getProfile() != null ? webServiceDomain.copy(source.getProfile()) : null);
+		result.setBuildArtifactPath(source.getBuildArtifactPath());
+		result.setBuildJobName(source.getBuildJobName());
+		result.setBuildJobNumber(source.getBuildJobNumber());
+		return result;
+	}
+
 	protected DeploymentConfiguration newPublicDO(
 			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration source) {
 		return new DeploymentConfiguration();
+	}
+
+	protected DeploymentActivity newPublicDO(com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity source) {
+		return new DeploymentActivity();
 	}
 
 	public com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration convertToInternal(

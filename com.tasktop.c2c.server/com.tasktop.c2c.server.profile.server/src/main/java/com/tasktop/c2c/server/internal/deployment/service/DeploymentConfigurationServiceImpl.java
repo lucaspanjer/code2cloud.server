@@ -39,6 +39,8 @@ import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
+import com.tasktop.c2c.server.deployment.domain.DeploymentActivityStatus;
+import com.tasktop.c2c.server.deployment.domain.DeploymentActivityType;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
@@ -168,6 +170,10 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			securityPolicy.create(internalDeploymentConfiguration);
 
 			validateBeforeCreate(deploymentConfiguration, internalDeploymentConfiguration);
+			com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity createdActivity = new com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity(
+					DeploymentActivityType.CREATED, DeploymentActivityStatus.SUCCEEDED,
+					internalDeploymentConfiguration, profileService.getCurrentUserProfile());
+			internalDeploymentConfiguration.addDeploymentActivity(createdActivity);
 
 			entityManager.persist(internalDeploymentConfiguration);
 			entityManager.flush(); // Need the Id;
@@ -184,6 +190,8 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		} catch (ServiceException e) {
 			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
 		} catch (IOException e) {
+			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
+		} catch (EntityNotFoundException e) {
 			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
 		}
 
@@ -206,14 +214,14 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration)
 			throws ValidationException {
 		super.validate(publicDeploymentConfiguration);
-		if (findDeploymetByName(internalDeploymentConfiguration.getName()) != null) {
+		if (findDeploymentByName(internalDeploymentConfiguration.getName()) != null) {
 			Errors errors = createErrors(publicDeploymentConfiguration);
 			errors.rejectValue("name", "deployment.name.notUnique");
 			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
 		}
 	}
 
-	private com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration findDeploymetByName(String name) {
+	private com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration findDeploymentByName(String name) {
 		try {
 			return (com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration) entityManager
 					.createQuery(
@@ -245,7 +253,6 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			File warFile) throws ServiceException {
 		try {
 			deploymentSerivce.uploadApplication(deploymentConfiguration, warFile);
-
 		} catch (MalformedURLException e) {
 			throw new ServiceException("Failed to deploy war file " + warFile.getName(), e);
 		} catch (IOException e) {
@@ -274,6 +281,13 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 			deploymentService.update(deploymentConfiguration);
 
+			// save a record of the update activity
+			com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity updateActivity = new com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity(
+					DeploymentActivityType.UPDATED, DeploymentActivityStatus.SUCCEEDED,
+					internalDeploymentConfiguration, profileService.getCurrentUserProfile());
+			internalDeploymentConfiguration.addDeploymentActivity(updateActivity);
+			entityManager.flush();
+
 			boolean shouldDeploy = shouldDeployOnUpdate(deploymentConfiguration, internalDeploymentConfiguration);
 			if (shouldDeploy) {
 				String projectId = internalDeploymentConfiguration.getProject().getIdentifier();
@@ -294,7 +308,8 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 	@Override
 	public void deployLatestArtifact(DeploymentConfiguration deploymentConfiguration,
-			DeploymentService deploymentService, String projectId) throws IOException, ServiceException {
+			DeploymentService deploymentService, String projectId) throws IOException, ServiceException,
+			EntityNotFoundException {
 		ProjectArtifacts artifacts = projectArtifactService.findBuildArtifacts(projectId,
 				deploymentConfiguration.getBuildJobName(), deploymentConfiguration.getBuildJobNumber());
 		ProjectArtifact artifact = null;
@@ -312,7 +327,15 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			} else {
 				File tempWarFile = File.createTempFile("deploy", getExtension(artifact));
 				projectArtifactService.downloadProjectArtifact(projectId, tempWarFile, artifact);
-				deployWar(deploymentConfiguration, deploymentService, tempWarFile);
+				try {
+					deployWar(deploymentConfiguration, deploymentService, tempWarFile);
+				} catch (ServiceException e) {
+					addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(),
+							DeploymentActivityType.DEPLOYED, DeploymentActivityStatus.FAILED);
+					throw e;
+				}
+				addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(),
+						DeploymentActivityType.DEPLOYED, DeploymentActivityStatus.SUCCEEDED);
 				deploymentConfiguration.setLastDeploymentDate(new Date());
 			}
 		}
@@ -373,13 +396,39 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	}
 
 	@Override
-	public DeploymentStatus startDeployment(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
+	public DeploymentStatus startDeployment(DeploymentConfiguration deploymentConfiguration)
+			throws EntityNotFoundException, ServiceException {
 		checkUpdatePermissions(deploymentConfiguration);
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
-		deploymentService.startApplication(deploymentConfiguration);
-		deploymentService.populate(deploymentConfiguration);
+		DeploymentActivityStatus deploymentActivityStatus = DeploymentActivityStatus.SUCCEEDED;
+		try {
+			deploymentService.startApplication(deploymentConfiguration);
+			deploymentService.populate(deploymentConfiguration);
+		} catch (ServiceException se) {
+			deploymentActivityStatus = DeploymentActivityStatus.FAILED;
+			throw se;
+		}
 
+		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.STARTED,
+				deploymentActivityStatus);
 		return deploymentConfiguration.getStatus();
+	}
+
+	private void addDeploymentActivityInternalAndPersist(Long deploymentConfigurationId,
+			DeploymentActivityType deploymentActivityType, DeploymentActivityStatus deploymentActivityStatus)
+			throws EntityNotFoundException {
+		com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration = entityManager
+				.find(com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration.class,
+						deploymentConfigurationId);
+		if (internalDeploymentConfiguration == null) {
+			throw new EntityNotFoundException("No DC with id: " + deploymentConfigurationId);
+		}
+		com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity internalDeploymentActivity = new com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity(
+				deploymentActivityType, deploymentActivityStatus, internalDeploymentConfiguration,
+				profileService.getCurrentUserProfile());
+		internalDeploymentConfiguration.addDeploymentActivity(internalDeploymentActivity);
+		entityManager.persist(internalDeploymentConfiguration);
+		entityManager.flush();
 	}
 
 	/**
@@ -393,24 +442,42 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	}
 
 	@Override
-	public DeploymentStatus stopDeployment(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
+	public DeploymentStatus stopDeployment(DeploymentConfiguration deploymentConfiguration)
+			throws EntityNotFoundException, ServiceException {
 		checkUpdatePermissions(deploymentConfiguration);
 
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
-		deploymentService.stopApplication(deploymentConfiguration);
-		deploymentService.populate(deploymentConfiguration);
+		DeploymentActivityStatus deploymentActivityStatus = DeploymentActivityStatus.SUCCEEDED;
+		try {
+			deploymentService.stopApplication(deploymentConfiguration);
+			deploymentService.populate(deploymentConfiguration);
+		} catch (ServiceException se) {
+			deploymentActivityStatus = DeploymentActivityStatus.FAILED;
+			throw se;
+		}
 
+		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.STOPPED,
+				deploymentActivityStatus);
 		return deploymentConfiguration.getStatus();
 	}
 
 	@Override
-	public DeploymentStatus restartDeployment(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
+	public DeploymentStatus restartDeployment(DeploymentConfiguration deploymentConfiguration)
+			throws EntityNotFoundException, ServiceException {
 		checkUpdatePermissions(deploymentConfiguration);
 
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
-		deploymentService.restartApplication(deploymentConfiguration);
-		deploymentService.populate(deploymentConfiguration);
+		DeploymentActivityStatus deploymentActivityStatus = DeploymentActivityStatus.SUCCEEDED;
+		try {
+			deploymentService.restartApplication(deploymentConfiguration);
+			deploymentService.populate(deploymentConfiguration);
+		} catch (ServiceException se) {
+			deploymentActivityStatus = DeploymentActivityStatus.FAILED;
+			throw se;
+		}
 
+		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.RESTARTED,
+				deploymentActivityStatus);
 		return deploymentConfiguration.getStatus();
 	}
 
@@ -521,6 +588,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 				continue;
 			}
 
+			DeploymentActivityStatus deploymentActivityStatus = DeploymentActivityStatus.SUCCEEDED;
 			try {
 				File tempWarFile = File.createTempFile("deploy", "war");
 				ProjectArtifact artifact = new ProjectArtifact();
@@ -532,10 +600,14 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 				dc.setBuildJobNumber(buildDetails.getNumber() + "");
 			} catch (IOException e) {
 				LOGGER.warn("exception durring auto deployment", e);
+				deploymentActivityStatus = DeploymentActivityStatus.FAILED;
 			} catch (ServiceException e) {
 				LOGGER.warn("exception durring auto deployment", e);
+				deploymentActivityStatus = DeploymentActivityStatus.FAILED;
 			}
-
+			dc.addDeploymentActivity(new com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity(
+					DeploymentActivityType.DEPLOYED, deploymentActivityStatus, dc, profileService
+							.getCurrentUserProfile()));
 		}
 
 	}

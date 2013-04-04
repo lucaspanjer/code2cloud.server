@@ -18,7 +18,6 @@ import net.customware.gwt.dispatch.shared.DispatchException;
 import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
-import com.tasktop.c2c.server.deployment.service.ServiceException;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.ControlDeploymentAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeploymentStatusResult;
 
@@ -48,7 +47,7 @@ public class ControlDeploymentActionHandler extends
 				break;
 			}
 			return new DeploymentStatusResult(status);
-		} catch (ServiceException e) {
+		} catch (Exception e) {
 			throw new ActionException(e);
 		}
 	}

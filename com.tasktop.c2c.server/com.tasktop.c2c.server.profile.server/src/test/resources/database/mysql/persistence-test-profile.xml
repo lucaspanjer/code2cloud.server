@@ -21,6 +21,7 @@
         <class>com.tasktop.c2c.server.profile.domain.internal.ServiceHostConfiguration</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.SignUpToken</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.EmailVerificationToken</class>
+        <class>com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity</class>
         <class>com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.SshPublicKey</class>
         <class>com.tasktop.c2c.server.profile.domain.internal.NotificationSettings</class>

@@ -694,5 +694,26 @@
 		</addColumn>
 	</changeSet>
 	
-
+	<changeSet author="mnelson" id="createDeploymentActivityTable-task5276">
+		<createTable tableName="DEPLOYMENTACTIVITY">
+			<column name="ID" type="BIGINT" autoIncrement="true">
+				<constraints nullable="false" primaryKey="true"/>
+			</column>
+			<column name="VERSION" type="INT"/>
+			<column name="DEPLOYMENTCONFIGURATION_ID" type="BIGINT"/>
+			<column name="TIME" type="DATETIME"/>
+			<column name="TYPE" type="VARCHAR(255)"/>
+			<column name="STATUS" type="VARCHAR(255)"/>
+			<column name="PROFILE_ID" type="BIGINT" />
+			<column name="BUILDARTIFACTPATH" type="VARCHAR(255)" />
+			<column name="BUILDJOBNAME" type="VARCHAR(255)" />
+			<column name="BUILDJOBNUMBER" type="VARCHAR(255)" />
+		</createTable>
+		<addForeignKeyConstraint baseColumnNames="DEPLOYMENTCONFIGURATION_ID"
+			baseTableName="DEPLOYMENTACTIVITY" constraintName="FK_DPLACTIVITY_DPLCONFIG"
+			referencedColumnNames="ID" referencedTableName="DEPLOYMENTCONFIGURATION"/>
+		<addForeignKeyConstraint baseColumnNames="PROFILE_ID"
+			baseTableName="DEPLOYMENTACTIVITY" constraintName="FK_DEPLOYMENTACTIVITY_PROFILE"
+			referencedColumnNames="ID" referencedTableName="PROFILE"/>
+	</changeSet>
 </databaseChangeLog>

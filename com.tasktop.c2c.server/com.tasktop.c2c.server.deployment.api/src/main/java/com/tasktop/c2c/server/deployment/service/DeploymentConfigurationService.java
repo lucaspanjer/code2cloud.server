@@ -96,11 +96,14 @@ public interface DeploymentConfigurationService {
 	void deleteDeployment(DeploymentConfiguration deploymentConfiguration, boolean alsoDeleteFromCloudFoundry)
 			throws EntityNotFoundException, ServiceException;
 
-	DeploymentStatus startDeployment(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
+	DeploymentStatus startDeployment(DeploymentConfiguration deploymentConfiguration) throws EntityNotFoundException,
+			ServiceException;
 
-	DeploymentStatus stopDeployment(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
+	DeploymentStatus stopDeployment(DeploymentConfiguration deploymentConfiguration) throws EntityNotFoundException,
+			ServiceException;
 
-	DeploymentStatus restartDeployment(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
+	DeploymentStatus restartDeployment(DeploymentConfiguration deploymentConfiguration) throws EntityNotFoundException,
+			ServiceException;
 
 	List<CloudService> getAvailableServices(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
 

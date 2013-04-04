@@ -33,13 +33,20 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tasktop.c2c.server.common.service.EntityNotFoundException;
+import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
+import com.tasktop.c2c.server.deployment.domain.DeploymentActivity;
+import com.tasktop.c2c.server.deployment.domain.DeploymentActivityStatus;
+import com.tasktop.c2c.server.deployment.domain.DeploymentActivityType;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceTypes;
@@ -50,6 +57,7 @@ import com.tasktop.c2c.server.internal.deployment.service.DeploymentServiceFacto
 import com.tasktop.c2c.server.profile.domain.build.BuildArtifact;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails.BuildResult;
+import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.service.ProfileService;
 import com.tasktop.c2c.server.profile.service.ProjectArtifactService;
@@ -155,7 +163,9 @@ public class DeploymentServiceTest {
 	}
 
 	@Test
-	public void testCreateAndList() throws ValidationException, ServiceException {
+	public void testCreateAndList() throws ValidationException, ServiceException, EntityNotFoundException {
+		Profile profile = setupProfile();
+
 		List<DeploymentConfiguration> configs = deploymentConfigurationService.listDeployments(null);
 		Assert.assertEquals(0, configs.size());
 
@@ -171,13 +181,16 @@ public class DeploymentServiceTest {
 		config.setName("name");
 		config.setServiceType(DeploymentServiceTypes.CLOUD_FOUNDRY);
 		config.setDeploymentType(DeploymentType.AUTOMATED);
+		config.setBuildArtifactPath("buildArtifactPath");
+		config.setBuildJobName("buildJobName");
+		config.setBuildJobNumber("buildJobNumber");
 		deploymentConfigurationService.createDeployment(config);
 
 		configs = deploymentConfigurationService.listDeployments(null);
 		Assert.assertEquals(1, configs.size());
 
 		config = configs.get(0);
-		Assert.assertEquals("name", configs.get(0).getName());
+		Assert.assertEquals("name", config.getName());
 
 		List<String> urls = config.getMappedUrls();
 		Assert.assertEquals(1, urls.size());
@@ -185,6 +198,15 @@ public class DeploymentServiceTest {
 
 		Assert.assertEquals(512, config.getMemory());
 		Assert.assertEquals(1, config.getNumInstances());
+
+		Assert.assertEquals(1, config.getDeploymentActivities().size());
+		DeploymentActivity deploymentActivity = config.getDeploymentActivities().get(0);
+		Assert.assertEquals(DeploymentActivityType.CREATED, deploymentActivity.getType());
+		Assert.assertEquals(DeploymentActivityStatus.SUCCEEDED, deploymentActivity.getStatus());
+		Assert.assertEquals(profile.getUsername(), deploymentActivity.getProfile().getUsername());
+		Assert.assertEquals(config.getBuildArtifactPath(), deploymentActivity.getBuildArtifactPath());
+		Assert.assertEquals(config.getBuildJobName(), deploymentActivity.getBuildJobName());
+		Assert.assertEquals(config.getBuildJobNumber(), deploymentActivity.getBuildJobNumber());
 
 		config = new DeploymentConfiguration();
 		config.setServiceType(DeploymentServiceTypes.CLOUD_FOUNDRY);
@@ -201,7 +223,7 @@ public class DeploymentServiceTest {
 	}
 
 	@Test
-	public void testCreateServiceAndList() throws ValidationException, ServiceException {
+	public void testCreateServiceAndList() throws ValidationException, ServiceException, EntityNotFoundException {
 		DeploymentConfiguration config = new DeploymentConfiguration();
 		config.setName("name");
 		config.setServiceType(DeploymentServiceTypes.CLOUD_FOUNDRY);
@@ -240,7 +262,7 @@ public class DeploymentServiceTest {
 	}
 
 	@Test
-	public void testAutoDeployment() throws ValidationException {
+	public void testAutoDeployment() throws ValidationException, EntityNotFoundException {
 		DeploymentConfiguration config = new DeploymentConfiguration();
 
 		try {
@@ -282,4 +304,93 @@ public class DeploymentServiceTest {
 		Assert.assertNotNull(config.getLastDeploymentDate());
 
 	}
+
+	@Test
+	public void testUpdate() throws Exception {
+		DeploymentConfiguration config = new DeploymentConfiguration();
+		config.setName("name");
+		config.setServiceType(DeploymentServiceTypes.CLOUD_FOUNDRY);
+		config.setDeploymentType(DeploymentType.AUTOMATED);
+		deploymentConfigurationService.createDeployment(config);
+
+		List<DeploymentConfiguration> configs = deploymentConfigurationService.listDeployments(null);
+		Assert.assertEquals(1, configs.size());
+
+		config = configs.get(0);
+		config.setDeploymentType(DeploymentType.MANUAL);
+		deploymentConfigurationService.updateDeployment(config);
+
+		configs = deploymentConfigurationService.listDeployments(null);
+		Assert.assertEquals(1, configs.size());
+
+		config = configs.get(0);
+		Assert.assertEquals(DeploymentType.MANUAL, config.getDeploymentType());
+		Assert.assertTrue(config.getDeploymentActivities().size() > 0);
+		boolean foundUpdatedActivity = false;
+		for (DeploymentActivity da : config.getDeploymentActivities()) {
+			if (DeploymentActivityType.UPDATED.equals(da.getType())) {
+				foundUpdatedActivity = true;
+			}
+		}
+		Assert.assertTrue(foundUpdatedActivity);
+	}
+
+	@Test
+	public void testStartStopAndRestart() throws Exception {
+		DeploymentConfiguration config = new DeploymentConfiguration();
+		config.setName("name");
+		config.setServiceType(DeploymentServiceTypes.CLOUD_FOUNDRY);
+		config.setDeploymentType(DeploymentType.MANUAL);
+		deploymentConfigurationService.createDeployment(config);
+
+		List<DeploymentConfiguration> configs = deploymentConfigurationService.listDeployments(null);
+		Assert.assertEquals(1, configs.size());
+		config = configs.get(0);
+
+		deploymentConfigurationService.startDeployment(config);
+		configs = deploymentConfigurationService.listDeployments(null);
+		config = configs.get(0);
+		Assert.assertEquals(2, config.getDeploymentActivities().size()); // created, started
+		Assert.assertTrue(foundMatchingType(config.getDeploymentActivities(), DeploymentActivityType.STARTED));
+
+		deploymentConfigurationService.stopDeployment(config);
+		configs = deploymentConfigurationService.listDeployments(null);
+		config = configs.get(0);
+		Assert.assertEquals(3, config.getDeploymentActivities().size()); // created, started, stopped
+		Assert.assertTrue(foundMatchingType(config.getDeploymentActivities(), DeploymentActivityType.STOPPED));
+
+		deploymentConfigurationService.restartDeployment(config);
+		configs = deploymentConfigurationService.listDeployments(null);
+		config = configs.get(0);
+		Assert.assertEquals(4, config.getDeploymentActivities().size()); // created, started, stopped, restarted
+		Assert.assertTrue(foundMatchingType(config.getDeploymentActivities(), DeploymentActivityType.RESTARTED));
+	}
+
+	private boolean foundMatchingType(List<DeploymentActivity> deploymentActivities,
+			DeploymentActivityType deploymentActivityType) {
+		for (DeploymentActivity da : deploymentActivities) {
+			if (deploymentActivityType.equals(da.getType())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Profile setupProfile() throws ValidationException {
+		Profile internalProfile = new Profile();
+		internalProfile.setEmail("email@profile.com");
+		internalProfile.setFirstName("First");
+		internalProfile.setLastName("Last");
+		internalProfile.setUsername(internalProfile.getEmail());
+		internalProfile.setPassword("passa1word");
+		internalProfile.setLanguage("en_US");
+		profileService.createProfile(internalProfile);
+
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(internalProfile.getUsername(), internalProfile.getPassword()));
+		String currentUser = Security.getCurrentUser();
+
+		return internalProfile;
+	}
+
 }

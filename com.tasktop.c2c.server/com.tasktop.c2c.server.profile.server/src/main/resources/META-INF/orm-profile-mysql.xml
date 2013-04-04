@@ -38,6 +38,15 @@
 		</attributes>
 	</entity>
 	<entity
+		class="com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity">
+		<table name="DEPLOYMENTACTIVITY" />
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity
 		class="com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration">
 		<table name="DEPLOYMENTCONFIGURATION" />
 		<attributes>

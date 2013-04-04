@@ -12,13 +12,18 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.deployment.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -50,6 +55,9 @@ public class DeploymentConfiguration extends BaseEntity {
 	private String buildArtifactPath; // if deploymentType is AUTOMATIC, then this can be a wildcard (ant-style)
 	private Date lastDeploymentDate;
 	private boolean deployUnstableBuilds; // if deploymentType is AUTOMATIC. If true the we deploy even if tests fail.
+
+	// history of deployment activity
+	private List<DeploymentActivity> deploymentActivities = new ArrayList<DeploymentActivity>();
 
 	@ManyToOne
 	public Project getProject() {
@@ -174,4 +182,16 @@ public class DeploymentConfiguration extends BaseEntity {
 		this.serviceType = type;
 	}
 
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, mappedBy = "deploymentConfiguration")
+	public List<DeploymentActivity> getDeploymentActivities() {
+		return deploymentActivities;
+	}
+
+	public void setDeploymentActivities(List<DeploymentActivity> deploymentActivities) {
+		this.deploymentActivities = deploymentActivities;
+	}
+
+	public synchronized void addDeploymentActivity(DeploymentActivity deploymentActivity) {
+		this.deploymentActivities.add(deploymentActivity);
+	}
 }

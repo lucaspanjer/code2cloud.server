@@ -13,6 +13,7 @@ package com.tasktop.c2c.server.internal.deployment.service;
 
 import java.io.IOException;
 
+import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService;
 import com.tasktop.c2c.server.deployment.service.ServiceException;
@@ -31,6 +32,6 @@ public interface DeploymentConfigurationServiceInternal extends DeploymentConfig
 	 * @throws ServiceException
 	 */
 	void deployLatestArtifact(DeploymentConfiguration deploymentConfiguration, DeploymentService deploymentService,
-			String projectId) throws IOException, ServiceException;
+			String projectId) throws IOException, ServiceException, EntityNotFoundException;
 
 }
