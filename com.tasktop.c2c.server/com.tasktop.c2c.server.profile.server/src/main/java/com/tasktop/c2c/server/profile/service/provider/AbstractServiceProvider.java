@@ -44,28 +44,33 @@ public abstract class AbstractServiceProvider<T> implements ServiceProvider<T> {
 	@Override
 	public T getService(String projectIdentifier) {
 
-		AbstractRestServiceClient service = getNewService();
-		service.setRestTemplate(restTemplate);
-
 		try {
 			ProjectService appService = projectServiceService.findServiceByUri(projectIdentifier, serviceUri);
 			if (appService == null) {
 				throw new IllegalStateException("No services found for project " + projectIdentifier);
 			}
-			String baseUri = appService.getInternalBaseUri();
-			if (appService.getServiceHost() == null || appService.getServiceHost().getInternalNetworkAddress() == null
-					|| !appService.getServiceHost().isAvailable()) {
-				throw new IllegalStateException("Service is not avaialable");
-			}
 
-			service.setBaseUrl(computeBaseUrl(baseUri));
-
-			establishTenancyContext(appService);
-			return (T) service;
-
+			return getService(appService);
 		} catch (EntityNotFoundException e) {
 			throw new IllegalStateException();
 		}
+	}
+
+	protected T getService(ProjectService appService) {
+		AbstractRestServiceClient service = getNewService();
+		service.setRestTemplate(restTemplate);
+
+		String baseUri = appService.getInternalBaseUri();
+		if (appService.getServiceHost() == null || appService.getServiceHost().getInternalNetworkAddress() == null
+				|| !appService.getServiceHost().isAvailable()) {
+			throw new IllegalStateException("Service is not avaialable");
+		}
+
+		service.setBaseUrl(computeBaseUrl(baseUri));
+
+		establishTenancyContext(appService);
+		return (T) service;
+
 	}
 
 	private void establishTenancyContext(ProjectService projectService) {

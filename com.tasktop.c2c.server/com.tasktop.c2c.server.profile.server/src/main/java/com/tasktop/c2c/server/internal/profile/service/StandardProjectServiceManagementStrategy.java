@@ -123,7 +123,7 @@ public class StandardProjectServiceManagementStrategy implements ProjectServiceM
 	}
 
 	@Autowired
-	private HudsonServiceProvider hudsonServiceProvider;
+	protected HudsonServiceProvider hudsonServiceProvider;
 
 	private void waitForServiceToComeUp(ProjectService service) {
 		switch (service.getType()) {

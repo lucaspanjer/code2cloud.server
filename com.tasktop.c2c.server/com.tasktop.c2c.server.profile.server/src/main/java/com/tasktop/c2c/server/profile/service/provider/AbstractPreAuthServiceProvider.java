@@ -21,7 +21,6 @@ import com.tasktop.c2c.server.auth.service.AuthenticationService;
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
 import com.tasktop.c2c.server.common.service.AuthenticationException;
-import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.InsufficientPermissionsException;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
@@ -44,20 +43,14 @@ public abstract class AbstractPreAuthServiceProvider<T> extends AbstractServiceP
 	private ProfileService profileService;
 
 	@Override
-	public T getService(String projectIdentifier) {
-		T service = super.getService(projectIdentifier);
-		ProjectService projectService;
-		try {
-			projectService = projectServiceService.findServiceByUri(projectIdentifier, serviceUri);
-		} catch (EntityNotFoundException e) {
-			throw new IllegalStateException(e);
-		}
+	protected T getService(ProjectService projectService) {
+		T service = super.getService(projectService);
 
-		return InternalProxyInvocationHandler.wrap(service, computeAuthenticationToken(projectIdentifier),
-				projectServiceService, projectService);
+		return InternalProxyInvocationHandler.wrap(service, computeAuthenticationToken(projectService
+				.getProjectServiceProfile().getProject()), projectServiceService, projectService);
 	}
 
-	private AuthenticationToken computeAuthenticationToken(String projectIdentifier) {
+	private AuthenticationToken computeAuthenticationToken(Project project) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		AuthenticationToken authenticationToken = null;
 		if (authentication != null) {
@@ -76,14 +69,8 @@ public abstract class AbstractPreAuthServiceProvider<T> extends AbstractServiceP
 				}
 			}
 		}
-		try {
-			Project project = profileService.getProjectByIdentifier(projectIdentifier);
 
-			return internalAuthenticationService.specializeAuthenticationToken(authenticationToken, project);
-
-		} catch (EntityNotFoundException e) {
-			throw new IllegalStateException(e);
-		}
+		return internalAuthenticationService.specializeAuthenticationToken(authenticationToken, project);
 	}
 
 }

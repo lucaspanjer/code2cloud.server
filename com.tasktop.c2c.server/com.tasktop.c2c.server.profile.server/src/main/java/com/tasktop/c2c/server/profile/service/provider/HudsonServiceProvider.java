@@ -14,6 +14,7 @@ package com.tasktop.c2c.server.profile.service.provider;
 
 import org.springframework.stereotype.Service;
 
+import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.HudsonService;
 import com.tasktop.c2c.server.profile.service.HudsonServiceClient;
 
@@ -32,6 +33,10 @@ public class HudsonServiceProvider extends AbstractPreAuthServiceProvider<Hudson
 
 	public HudsonService getHudsonService(String projectIdentifier) {
 		return getService(projectIdentifier);
+	}
+
+	public HudsonService getHudsonService(ProjectService service) {
+		return getService(service);
 	}
 
 }
