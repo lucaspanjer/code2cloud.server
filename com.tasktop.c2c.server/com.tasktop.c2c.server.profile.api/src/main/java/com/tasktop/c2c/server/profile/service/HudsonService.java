@@ -45,6 +45,8 @@ public interface HudsonService {
 
 	void createNewJob(String jobName, String configXml);
 
+	void deleteJob(String jobName);
+
 	/**
 	 * @return
 	 */

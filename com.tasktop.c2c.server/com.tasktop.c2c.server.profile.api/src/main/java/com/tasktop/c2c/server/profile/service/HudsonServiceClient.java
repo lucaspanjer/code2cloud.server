@@ -142,7 +142,6 @@ public class HudsonServiceClient extends AbstractRestServiceClient implements Hu
 			FileCopyUtils.copy(configXml.getBytes(), request.getBody());
 			ClientHttpResponse response = request.execute();
 			if (response.getStatusCode() != HttpStatus.OK) {
-				String body = getReponseBodyAsString(response);
 				throw new IOException("Unexpected return code [" + response.getStatusCode() + "] when getting [" + url
 						+ "]");
 			}
@@ -153,6 +152,25 @@ public class HudsonServiceClient extends AbstractRestServiceClient implements Hu
 			throw new RuntimeException(e);
 		}
 
+	}
+
+	public void deleteJob(String jobName) {
+		String encodedJobName = jobName.replace(" ", "%20");
+		String url = computeUrl("job/" + encodedJobName + "/doDelete");
+
+		try {
+			ClientHttpRequest request = template.getRequestFactory().createRequest(new URI(url), HttpMethod.POST);
+			ClientHttpResponse response = request.execute();
+			if (response.getStatusCode() != HttpStatus.FOUND && response.getStatusCode() != HttpStatus.OK) {
+				throw new IOException("Unexpected return code [" + response.getStatusCode() + "] when getting [" + url
+						+ "]");
+			}
+
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
