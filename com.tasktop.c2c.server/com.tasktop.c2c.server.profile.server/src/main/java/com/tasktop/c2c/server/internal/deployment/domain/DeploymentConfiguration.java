@@ -24,6 +24,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -183,6 +184,7 @@ public class DeploymentConfiguration extends BaseEntity {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, mappedBy = "deploymentConfiguration")
+	@OrderBy("time DESC")
 	public List<DeploymentActivity> getDeploymentActivities() {
 		return deploymentActivities;
 	}
