@@ -29,8 +29,10 @@ public class InternalEventServiceClient extends EventServiceClient implements In
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		super.afterPropertiesSet();
-		String url = "http://" + configuration.getBaseWebHost() + configuration.getBaseContextPath() + "/api/event";
-		setBaseUrl(url);
+		if (configuration != null) {
+			String url = "http://" + configuration.getBaseWebHost() + configuration.getBaseContextPath() + "/api/event";
+			setBaseUrl(url);
+		}
 	}
 
 }
