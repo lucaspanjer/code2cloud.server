@@ -14,5 +14,5 @@ package com.tasktop.c2c.server.common.profile.web.client.place;
 
 // TODO drop enum, make it 
 public enum Section {
-	HOME, DASHBOARD, TASKS, BUILDS, DEPLOYMENTS, TEAM, WIKI, ADMIN, SCM
+	HOME, DASHBOARD, TASKS, BUILDS, DEPLOYMENTS, TEAM, WIKI, ADMIN, SCM, REVIEWS
 }
