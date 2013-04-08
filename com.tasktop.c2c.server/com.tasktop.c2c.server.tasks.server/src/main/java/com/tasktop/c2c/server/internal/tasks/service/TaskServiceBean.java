@@ -134,6 +134,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	private Validator internalValidator;
 	@Autowired
 	private EventService eventService;
+	@Autowired
+	private TaskDomain taskDomain;
 
 	private static final String DEFAULT_MILESTONE = "---";
 
@@ -152,7 +154,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 						+ " e order by e.sortkey").getResultList();
 		for (com.tasktop.c2c.server.internal.tasks.domain.TaskSeverity severity : severities) {
 			TaskSummaryItem summaryItem = new TaskSummaryItem();
-			summaryItem.setSeverity(TaskDomain.createDomain(severity));
+			summaryItem.setSeverity(taskDomain.createDomain(severity));
 			itemBySeverityValue.put(severity.getValue(), summaryItem);
 			summary.getItems().add(summaryItem);
 		}
@@ -198,7 +200,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 			for (com.tasktop.c2c.server.internal.tasks.domain.TaskSeverity severity : severities) {
 				TaskSummaryItem summaryItem = new TaskSummaryItem();
-				summaryItem.setSeverity(TaskDomain.createDomain(severity));
+				summaryItem.setSeverity(taskDomain.createDomain(severity));
 				summary.getItems().add(summaryItem);
 			}
 		}
@@ -469,7 +471,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			verifyWorkflow(managedTask, task);
 		}
 
-		com.tasktop.c2c.server.internal.tasks.domain.Task internalTask = TaskDomain.createManaged(task);
+		com.tasktop.c2c.server.internal.tasks.domain.Task internalTask = taskDomain.createManaged(task);
 
 		setDefaultAssigneeIfAppropriate(internalTask);
 
@@ -513,7 +515,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			com.tasktop.c2c.server.internal.tasks.domain.Task sourceTask, Task domainSourceTask,
 			List<TaskActivity> updateActivities) throws ValidationException, EntityNotFoundException {
 
-		TaskDomain.fillManaged(managedTargetTask, sourceTask);
+		taskDomain.fillManaged(managedTargetTask, sourceTask);
 
 		cascadePersistForUpdate(managedTargetTask);
 
@@ -579,7 +581,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 		internalTask.setDeltaTs(new Date());
 		internalTask.setCreationTs(internalTask.getDeltaTs());
-		TaskDomain.makeDescriptionTheEarliestComment(internalTask);
+		taskDomain.makeDescriptionTheEarliestComment(internalTask);
 		fillManagedObjects(internalTask);
 		entityManager.persist(internalTask);
 		entityManager.flush(); // This is needed to set the bugId.
@@ -590,7 +592,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		entityManager.detach(internalTask);
 
 		// Now, get a copy of this object back from the persistence context - we do this so that we can effectively map
-		// in all of our changes using TaskDomain.fillManaged().
+		// in all of our changes using taskDomain.fillManaged().
 		com.tasktop.c2c.server.internal.tasks.domain.Task managedTask = find(
 				com.tasktop.c2c.server.internal.tasks.domain.Task.class, internalTask.getId());
 
@@ -678,10 +680,10 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	}
 
 	private void insertDependentObjectTree(Task sourceTask, com.tasktop.c2c.server.internal.tasks.domain.Task targetTask) {
-		TaskDomain.insertParentAndBlocks(sourceTask, targetTask);
-		TaskDomain.insertSubTasks(sourceTask, targetTask);
-		TaskDomain.insertCcs(sourceTask, targetTask);
-		TaskDomain.insertDuplicateOf(sourceTask, targetTask);
+		taskDomain.insertParentAndBlocks(sourceTask, targetTask);
+		taskDomain.insertSubTasks(sourceTask, targetTask);
+		taskDomain.insertCcs(sourceTask, targetTask);
+		taskDomain.insertDuplicateOf(sourceTask, targetTask);
 	}
 
 	private void lookupProfiles(Task task) throws EntityNotFoundException {
@@ -1238,7 +1240,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<StateTransition> computeStateTransitions() {
+	protected List<StateTransition> computeStateTransitions() {
 		Query query = entityManager.createQuery("select e.oldStatus, e.newStatus, e.id.requireComment from "
 				+ StatusWorkflow.class.getSimpleName() + " e");
 		List<StateTransition> transitions = new ArrayList<StateTransition>();
@@ -1253,7 +1255,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Keyword> findAllKeywords() {
+	protected List<Keyword> findAllKeywords() {
 		Query query = entityManager.createQuery("select e from " + Keyworddef.class.getSimpleName() + " e");
 		List<Keyword> keywords = new ArrayList<Keyword>();
 
@@ -1261,25 +1263,25 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return keywords;
 	}
 
-	private Product computeDefaultProduct(List<Product> products) {
+	protected Product computeDefaultProduct(List<Product> products) {
 		if (products.isEmpty()) {
 			return null;
 		}
 		return products.get(0); // Better way?
 	}
 
-	private TaskSeverity computeDefaultSeverity(List<TaskSeverity> severities) {
+	protected TaskSeverity computeDefaultSeverity(List<TaskSeverity> severities) {
 		return computeDefaultValue(severities);
 	}
 
-	private TaskStatus computeDefaultStatus(List<TaskStatus> statuses) {
+	protected TaskStatus computeDefaultStatus(List<TaskStatus> statuses) {
 		if (statuses.isEmpty()) {
 			return null;
 		}
 		return statuses.get(0);
 	}
 
-	private TaskResolution computeDefaultResolution(List<TaskResolution> resolutions) {
+	protected TaskResolution computeDefaultResolution(List<TaskResolution> resolutions) {
 		if (resolutions.isEmpty()) {
 			return null;
 		}
@@ -1291,7 +1293,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return resolutions.get(0);
 	}
 
-	private <ReferenceType extends AbstractReferenceValue> ReferenceType computeDefaultValue(List<ReferenceType> values) {
+	protected <ReferenceType extends AbstractReferenceValue> ReferenceType computeDefaultValue(
+			List<ReferenceType> values) {
 		if (values.isEmpty()) {
 			return null;
 		}
@@ -1309,71 +1312,71 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return candidateValues.get(median);
 	}
 
-	private Priority computeDefaultPriority(List<Priority> priorities) {
+	protected Priority computeDefaultPriority(List<Priority> priorities) {
 		return computeDefaultValue(priorities);
 	}
 
-	private List<Milestone> getMilestones() {
+	protected List<Milestone> getMilestones() {
 		Query query = entityManager.createQuery("select milestone from "
 				+ com.tasktop.c2c.server.internal.tasks.domain.Milestone.class.getSimpleName()
 				+ " milestone order by milestone.sortkey");
 		List<Milestone> results = new ArrayList<Milestone>();
 		for (Object queryResult : query.getResultList()) {
 			com.tasktop.c2c.server.internal.tasks.domain.Milestone milestone = (com.tasktop.c2c.server.internal.tasks.domain.Milestone) queryResult;
-			results.add(TaskDomain.createDomain(milestone));
+			results.add(taskDomain.createDomain(milestone));
 		}
 		return results;
 	}
 
-	private List<Priority> getPriorities() {
+	protected List<Priority> getPriorities() {
 		Query query = entityManager.createQuery("select priority from "
 				+ com.tasktop.c2c.server.internal.tasks.domain.Priority.class.getSimpleName() + " priority "
 				+ " order by priority.sortkey");
 		List<Priority> results = new ArrayList<Priority>();
 		for (Object queryResult : query.getResultList()) {
 			com.tasktop.c2c.server.internal.tasks.domain.Priority priority = (com.tasktop.c2c.server.internal.tasks.domain.Priority) queryResult;
-			results.add(TaskDomain.createDomain(priority));
+			results.add(taskDomain.createDomain(priority));
 		}
 		return results;
 	}
 
-	private List<TaskSeverity> getSeverities() {
+	protected List<TaskSeverity> getSeverities() {
 		Query query = entityManager.createQuery("select severity from "
 				+ com.tasktop.c2c.server.internal.tasks.domain.TaskSeverity.class.getSimpleName() + " severity "
 				+ " order by severity.sortkey");
 		List<TaskSeverity> results = new ArrayList<TaskSeverity>();
 		for (Object queryResult : query.getResultList()) {
 			com.tasktop.c2c.server.internal.tasks.domain.TaskSeverity severity = (com.tasktop.c2c.server.internal.tasks.domain.TaskSeverity) queryResult;
-			results.add(TaskDomain.createDomain(severity));
+			results.add(taskDomain.createDomain(severity));
 		}
 		return results;
 	}
 
-	private List<TaskResolution> getResolutions() {
+	protected List<TaskResolution> getResolutions() {
 		Query query = entityManager.createQuery("select resolution from "
 				+ com.tasktop.c2c.server.internal.tasks.domain.Resolution.class.getSimpleName() + " resolution "
 				+ " WHERE resolution.isactive = true order by resolution.sortkey");
 		List<TaskResolution> results = new ArrayList<TaskResolution>();
 		for (Object queryResult : query.getResultList()) {
 			com.tasktop.c2c.server.internal.tasks.domain.Resolution resolution = (com.tasktop.c2c.server.internal.tasks.domain.Resolution) queryResult;
-			results.add(TaskDomain.createDomain(resolution));
+			results.add(taskDomain.createDomain(resolution));
 		}
 		return results;
 	}
 
-	private List<TaskStatus> getStatuses() {
+	protected List<TaskStatus> getStatuses() {
 		Query query = entityManager.createQuery("select status from "
 				+ com.tasktop.c2c.server.internal.tasks.domain.TaskStatus.class.getSimpleName() + " status "
 				+ " order by status.sortkey");
 		List<TaskStatus> results = new ArrayList<TaskStatus>();
 		for (Object queryResult : query.getResultList()) {
 			com.tasktop.c2c.server.internal.tasks.domain.TaskStatus status = (com.tasktop.c2c.server.internal.tasks.domain.TaskStatus) queryResult;
-			results.add(TaskDomain.createDomain(status));
+			results.add(taskDomain.createDomain(status));
 		}
 		return results;
 	}
 
-	private Map<String, String> getConfigurationProperties() {
+	protected Map<String, String> getConfigurationProperties() {
 		Query query = entityManager.createQuery("select configurationproperty from "
 				+ com.tasktop.c2c.server.internal.tasks.domain.ConfigurationProperty.class.getSimpleName()
 				+ " configurationproperty");
@@ -1448,7 +1451,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		if (comment != null) {
 			comment.setAuthor(getAppropriateProfile(comment.getAuthor(), loggedInUser, "Comment Author"));
 			validate(comment);
-			Comment internalComment = TaskDomain.createManagedComment(comment);
+			Comment internalComment = taskDomain.createManagedComment(comment);
 			internalComment.setTask(managedTask);
 			managedTask.getComments().add(internalComment);
 		}
@@ -1473,7 +1476,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 		validate(attachment);
 		attachment.setSubmitter(getAppropriateProfile(attachment.getSubmitter(), loggedInUser, "Attachment Submitter"));
-		com.tasktop.c2c.server.internal.tasks.domain.Attachment internalAttachment = TaskDomain
+		com.tasktop.c2c.server.internal.tasks.domain.Attachment internalAttachment = taskDomain
 				.createManaged(attachment);
 		internalAttachment.setBugs(managedTask);
 		entityManager.persist(internalAttachment);
@@ -1509,7 +1512,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	public Product createProduct(Product product) throws ValidationException {
 		validate(product);
 
-		com.tasktop.c2c.server.internal.tasks.domain.Product internalProduct = TaskDomain.createManaged(product);
+		com.tasktop.c2c.server.internal.tasks.domain.Product internalProduct = taskDomain.createManaged(product);
 		internalProduct.setAllowsUnconfirmed(true);
 		internalProduct.setDefaultmilestone(DEFAULT_MILESTONE);
 		internalProduct.setMaxvotesperbug((short) 10000);
@@ -1552,7 +1555,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 		com.tasktop.c2c.server.internal.tasks.domain.Product managedProduct = find(
 				com.tasktop.c2c.server.internal.tasks.domain.Product.class, product.getId().shortValue());
-		TaskDomain.fillManaged(managedProduct, product);
+		taskDomain.fillManaged(managedProduct, product);
 
 		// validate the product internal DO
 		internalValidate(managedProduct);
@@ -1664,7 +1667,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		// Now, perform our save of our product and each component.
 		com.tasktop.c2c.server.internal.tasks.domain.Product managedProduct = find(
 				com.tasktop.c2c.server.internal.tasks.domain.Product.class, product.getId().shortValue());
-		TaskDomain.fillManaged(managedProduct, product);
+		taskDomain.fillManaged(managedProduct, product);
 
 		for (Component curComponent : product.getComponents()) {
 
@@ -1672,7 +1675,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 			if (curComponent.getId() == null) {
 				// This is a new component - create one now.
-				managedComponent = TaskDomain.createManaged(curComponent);
+				managedComponent = taskDomain.createManaged(curComponent);
 				managedComponent.setProduct(managedProduct);
 				entityManager.persist(managedComponent);
 				managedProduct.getComponents().add(managedComponent);
@@ -1681,7 +1684,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 						.getId().shortValue());
 			}
 
-			TaskDomain.fillManaged(managedComponent, curComponent, entityManager);
+			taskDomain.fillManaged(managedComponent, curComponent, entityManager);
 
 		}
 
@@ -1691,7 +1694,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 			if (curMilestone.getId() == null) {
 				// This is a new component - create one now.
-				managedMilestone = TaskDomain.createManaged(curMilestone);
+				managedMilestone = taskDomain.createManaged(curMilestone);
 				managedMilestone.setProduct(managedProduct);
 				entityManager.persist(managedMilestone);
 				managedProduct.getMilestones().add(managedMilestone);
@@ -1703,7 +1706,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 				handleMilestoneValueChanged(managedProduct.getId(), curMilestone.getValue(),
 						managedMilestone.getValue());
 			}
-			TaskDomain.fillManaged(managedMilestone, curMilestone, entityManager);
+			taskDomain.fillManaged(managedMilestone, curMilestone, entityManager);
 
 		}
 
@@ -1772,7 +1775,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	public Component createComponent(Component newComponent) throws ValidationException {
 		validate(newComponent);
 
-		com.tasktop.c2c.server.internal.tasks.domain.Component internalComponent = TaskDomain
+		com.tasktop.c2c.server.internal.tasks.domain.Component internalComponent = taskDomain
 				.createManaged(newComponent);
 
 		// Push this out to the database, and then turn around and reload it to
@@ -1785,8 +1788,8 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		return (Component) domainConverter.convert(internalComponent, createSimpleConversionContext());
 	}
 
-	private DomainConversionContext createSimpleConversionContext() {
-		return new DomainConversionContext(entityManager);
+	protected final DomainConversionContext createSimpleConversionContext() {
+		return new DomainConversionContext(entityManager, taskDomain);
 	}
 
 	private DomainConversionContext createTaskConversionContext() {
@@ -1819,7 +1822,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		com.tasktop.c2c.server.internal.tasks.domain.Component managedComponent = find(
 				com.tasktop.c2c.server.internal.tasks.domain.Component.class, domainComponent.getId().shortValue());
 
-		TaskDomain.fillManaged(managedComponent, domainComponent, entityManager);
+		taskDomain.fillManaged(managedComponent, domainComponent, entityManager);
 
 		entityManager.flush();
 		entityManager.refresh(managedComponent);
@@ -1980,7 +1983,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	public SavedTaskQuery createQuery(SavedTaskQuery query) throws ValidationException {
 		validate(query);
 		verifyQueryNameUnique(query);
-		com.tasktop.c2c.server.internal.tasks.domain.SavedTaskQuery managedQuery = TaskDomain.createManaged(query);
+		com.tasktop.c2c.server.internal.tasks.domain.SavedTaskQuery managedQuery = taskDomain.createManaged(query);
 		managedQuery.setProfile(getLoggedInDomainProfile());
 		entityManager.persist(managedQuery);
 		entityManager.flush();
@@ -2021,7 +2024,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		if (!managedQuery.getProfile().equals(getLoggedInDomainProfile())) {
 			throw new InsufficientPermissionsException("Can not update a query you do not own");
 		}
-		TaskDomain.fillManaged(managedQuery, query);
+		taskDomain.fillManaged(managedQuery, query);
 
 		return (SavedTaskQuery) domainConverter.convert(managedQuery, createSimpleConversionContext());
 	}

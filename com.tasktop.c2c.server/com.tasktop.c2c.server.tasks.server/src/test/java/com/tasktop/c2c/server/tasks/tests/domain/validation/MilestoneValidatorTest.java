@@ -27,6 +27,7 @@ import org.springframework.validation.Validator;
 import com.tasktop.c2c.server.common.tests.util.AbstractValidatorTest;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConversionContext;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConverter;
+import com.tasktop.c2c.server.internal.tasks.domain.conversion.TaskDomain;
 import com.tasktop.c2c.server.tasks.domain.Milestone;
 import com.tasktop.c2c.server.tasks.tests.domain.mock.MockMilestoneFactory;
 
@@ -45,10 +46,13 @@ public class MilestoneValidatorTest extends AbstractValidatorTest<Milestone> {
 	@Autowired
 	private DomainConverter domainConverter;
 
+	@Autowired
+	private TaskDomain taskDomain;
+
 	@Override
 	protected Milestone createMock() {
 		return (Milestone) domainConverter.convert(MockMilestoneFactory.create(entityManager),
-				new DomainConversionContext(entityManager));
+				new DomainConversionContext(entityManager, taskDomain));
 	}
 
 	@Test

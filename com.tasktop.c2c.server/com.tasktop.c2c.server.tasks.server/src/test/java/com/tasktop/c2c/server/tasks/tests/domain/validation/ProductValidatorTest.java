@@ -28,6 +28,7 @@ import org.springframework.validation.Validator;
 import com.tasktop.c2c.server.common.tests.util.AbstractValidatorTest;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConversionContext;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConverter;
+import com.tasktop.c2c.server.internal.tasks.domain.conversion.TaskDomain;
 import com.tasktop.c2c.server.tasks.domain.Product;
 import com.tasktop.c2c.server.tasks.tests.domain.mock.MockProductFactory;
 
@@ -46,13 +47,16 @@ public class ProductValidatorTest extends AbstractValidatorTest<Product> {
 	@Autowired
 	private DomainConverter domainConverter;
 
+	@Autowired
+	private TaskDomain taskDomain;
+
 	@Override
 	protected Product createMock() {
 		com.tasktop.c2c.server.internal.tasks.domain.Product mockProduct = MockProductFactory.create(entityManager);
 		entityManager.flush();
 		entityManager.refresh(mockProduct);
 
-		return (Product) domainConverter.convert(mockProduct, new DomainConversionContext(entityManager));
+		return (Product) domainConverter.convert(mockProduct, new DomainConversionContext(entityManager, taskDomain));
 	}
 
 	@Test

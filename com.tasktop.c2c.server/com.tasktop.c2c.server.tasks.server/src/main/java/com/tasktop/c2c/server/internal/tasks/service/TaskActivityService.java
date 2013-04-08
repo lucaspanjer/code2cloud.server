@@ -59,6 +59,7 @@ import com.tasktop.c2c.server.internal.tasks.domain.TaskActivity;
 import com.tasktop.c2c.server.internal.tasks.domain.TaskActivityId;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConversionContext;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConverter;
+import com.tasktop.c2c.server.internal.tasks.domain.conversion.TaskDomain;
 import com.tasktop.c2c.server.tasks.domain.Attachment;
 import com.tasktop.c2c.server.tasks.domain.Comment;
 import com.tasktop.c2c.server.tasks.domain.TaskActivity.FieldUpdate;
@@ -101,6 +102,9 @@ public class TaskActivityService {
 
 	@Autowired
 	private DomainConverter domainConverter;
+
+	@Autowired
+	private TaskDomain taskDomain;
 
 	/**
 	 * Record the changes made between the original and newTasks.
@@ -571,7 +575,7 @@ public class TaskActivityService {
 	}
 
 	private DomainConversionContext createDomainConversionContext() {
-		DomainConversionContext conversionContext = new DomainConversionContext(entityManager);
+		DomainConversionContext conversionContext = new DomainConversionContext(entityManager, taskDomain);
 		conversionContext.setThin(false); // Need the task comments and attachments.
 		conversionContext.fill(com.tasktop.c2c.server.internal.tasks.domain.TaskSeverity.class);
 		conversionContext.fill(com.tasktop.c2c.server.internal.tasks.domain.TaskStatus.class);

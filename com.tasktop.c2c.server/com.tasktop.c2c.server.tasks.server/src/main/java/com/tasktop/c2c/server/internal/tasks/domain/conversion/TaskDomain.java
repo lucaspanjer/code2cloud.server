@@ -51,7 +51,7 @@ import com.tasktop.c2c.server.tasks.domain.WorkLog;
  */
 public class TaskDomain {
 
-	public static com.tasktop.c2c.server.tasks.domain.TaskSeverity createDomain(TaskSeverity source) {
+	public com.tasktop.c2c.server.tasks.domain.TaskSeverity createDomain(TaskSeverity source) {
 		if (source == null) {
 			return null;
 		}
@@ -63,7 +63,7 @@ public class TaskDomain {
 	}
 
 	// TODO: Consider removing this and using a PriorityConverter
-	public static com.tasktop.c2c.server.tasks.domain.Priority createDomain(Priority source) {
+	public com.tasktop.c2c.server.tasks.domain.Priority createDomain(Priority source) {
 		if (source == null) {
 			return null;
 		}
@@ -75,7 +75,7 @@ public class TaskDomain {
 		return target;
 	}
 
-	public static com.tasktop.c2c.server.tasks.domain.TaskStatus createDomain(TaskStatus source) {
+	public com.tasktop.c2c.server.tasks.domain.TaskStatus createDomain(TaskStatus source) {
 		if (source == null) {
 			return null;
 		}
@@ -88,7 +88,7 @@ public class TaskDomain {
 		return target;
 	}
 
-	public static TaskResolution createDomain(Resolution source) {
+	public TaskResolution createDomain(Resolution source) {
 		if (source == null) {
 			return null;
 		}
@@ -99,7 +99,7 @@ public class TaskDomain {
 		return target;
 	}
 
-	public static Attachment createManaged(com.tasktop.c2c.server.tasks.domain.Attachment source) {
+	public Attachment createManaged(com.tasktop.c2c.server.tasks.domain.Attachment source) {
 		Attachment target = new Attachment();
 		target.setCreationTs(source.getCreationDate());
 		target.setDescription(source.getDescription());
@@ -110,11 +110,11 @@ public class TaskDomain {
 		return target;
 	}
 
-	public static Task createManaged(com.tasktop.c2c.server.tasks.domain.Task source) {
+	public Task createManaged(com.tasktop.c2c.server.tasks.domain.Task source) {
 		if (source == null) {
 			return null;
 		}
-		Task target = new Task();
+		Task target = createInternalTask(source);
 
 		target.setId(source.getId());
 		target.setCreationTs(source.getCreationDate());
@@ -134,10 +134,10 @@ public class TaskDomain {
 		target.setStatusWhiteboard("");
 		target.setOpSys("");
 		target.setVersion(source.getFoundInRelease() == null ? "" : source.getFoundInRelease());
-		target.setReporter(TaskDomain.createManaged(source.getReporter()));
-		target.setAssignee(TaskDomain.createManaged(source.getAssignee()));
-		target.setProduct(TaskDomain.createManaged(source.getProduct()));
-		target.setComponent(TaskDomain.createManaged(source.getComponent()));
+		target.setReporter(createManaged(source.getReporter()));
+		target.setAssignee(createManaged(source.getAssignee()));
+		target.setProduct(createManaged(source.getProduct()));
+		target.setComponent(createManaged(source.getComponent()));
 		target.setRepPlatform("");
 		target.setResolution(source.getResolution() == null ? "" : source.getResolution().getValue());
 		target.setEverconfirmed(false);
@@ -157,7 +157,11 @@ public class TaskDomain {
 		return target;
 	}
 
-	public static void makeDescriptionTheEarliestComment(com.tasktop.c2c.server.internal.tasks.domain.Task internalTask) {
+	protected Task createInternalTask(com.tasktop.c2c.server.tasks.domain.Task source) {
+		return new Task();
+	}
+
+	public void makeDescriptionTheEarliestComment(com.tasktop.c2c.server.internal.tasks.domain.Task internalTask) {
 		Date now = new Date();
 		Comment descriptionComment = internalTask.getComments().get(0);
 
@@ -180,7 +184,7 @@ public class TaskDomain {
 	 * @param externalTaskRelations
 	 * @return
 	 */
-	private static String generateExternalTaskRelationsString(List<ExternalTaskRelation> externalTaskRelations) {
+	private String generateExternalTaskRelationsString(List<ExternalTaskRelation> externalTaskRelations) {
 		String relString = null;
 		List<String> rels = new ArrayList<String>();
 		if (externalTaskRelations != null) {
@@ -193,11 +197,11 @@ public class TaskDomain {
 		return relString;
 	}
 
-	private static String generateCommitsString(List<String> commits) {
+	private String generateCommitsString(List<String> commits) {
 		return StringUtils.join(commits, ",");
 	}
 
-	private static String generateKeywordString(List<Keyword> keywords) {
+	private String generateKeywordString(List<Keyword> keywords) {
 		String keywordString = "";
 		if (keywords != null) {
 			for (int i = 0; i < keywords.size(); i++) {
@@ -210,7 +214,7 @@ public class TaskDomain {
 		return keywordString;
 	}
 
-	public static Component createManaged(com.tasktop.c2c.server.tasks.domain.Component source) {
+	public Component createManaged(com.tasktop.c2c.server.tasks.domain.Component source) {
 
 		if (source == null) {
 			return null;
@@ -222,12 +226,12 @@ public class TaskDomain {
 		target.setId(source.getId() == null ? null : source.getId().shortValue());
 		target.setDescription(source.getDescription());
 		target.setName(source.getName());
-		target.setProduct(TaskDomain.createManaged(source.getProduct()));
-		target.setInitialOwner(TaskDomain.createManaged(source.getInitialOwner()));
+		target.setProduct(createManaged(source.getProduct()));
+		target.setInitialOwner(createManaged(source.getInitialOwner()));
 		return target;
 	}
 
-	public static Milestone createManaged(com.tasktop.c2c.server.tasks.domain.Milestone source) {
+	public Milestone createManaged(com.tasktop.c2c.server.tasks.domain.Milestone source) {
 
 		if (source == null) {
 			return null;
@@ -238,15 +242,15 @@ public class TaskDomain {
 		// Make sure we have an ID set before we try and copy it. target.setId(source.getId());
 		target.setSortkey(source.getSortkey());
 		target.setValue(source.getValue());
-		target.setProduct(TaskDomain.createManaged(source.getProduct()));
+		target.setProduct(createManaged(source.getProduct()));
 		return target;
 	}
 
-	public static void insertCcs(com.tasktop.c2c.server.tasks.domain.Task source, Task target) {
+	public void insertCcs(com.tasktop.c2c.server.tasks.domain.Task source, Task target) {
 		target.setCcs(copyWatchers(target, source.getWatchers()));
 	}
 
-	public static void insertDuplicateOf(com.tasktop.c2c.server.tasks.domain.Task source, Task target) {
+	public void insertDuplicateOf(com.tasktop.c2c.server.tasks.domain.Task source, Task target) {
 		if (source.getDuplicateOf() != null) {
 			Duplicate dup = new Duplicate();
 			dup.setBugsByBugId(target);
@@ -260,7 +264,7 @@ public class TaskDomain {
 		}
 	}
 
-	private static List<Cc> copyWatchers(Task targetTask, List<TaskUserProfile> source) {
+	private List<Cc> copyWatchers(Task targetTask, List<TaskUserProfile> source) {
 		if (source == null) {
 			return null;
 		}
@@ -273,7 +277,7 @@ public class TaskDomain {
 		return target;
 	}
 
-	private static Cc copyCc(Task targetTask, TaskUserProfile sourceProfile) {
+	private Cc copyCc(Task targetTask, TaskUserProfile sourceProfile) {
 		Cc target = new Cc();
 		target.setProfiles(createManaged(sourceProfile));
 		target.setBugs(targetTask);
@@ -281,7 +285,7 @@ public class TaskDomain {
 		return target;
 	}
 
-	public static void insertParentAndBlocks(com.tasktop.c2c.server.tasks.domain.Task source, Task target) {
+	public void insertParentAndBlocks(com.tasktop.c2c.server.tasks.domain.Task source, Task target) {
 
 		if (source.getBlocksTasks() != null) {
 			for (com.tasktop.c2c.server.tasks.domain.Task blocks : source.getBlocksTasks()) {
@@ -296,7 +300,7 @@ public class TaskDomain {
 		}
 	}
 
-	public static void insertSubTasks(com.tasktop.c2c.server.tasks.domain.Task source, Task target) {
+	public void insertSubTasks(com.tasktop.c2c.server.tasks.domain.Task source, Task target) {
 
 		if (source.getSubTasks() != null) {
 			for (com.tasktop.c2c.server.tasks.domain.Task subTask : source.getSubTasks()) {
@@ -311,7 +315,7 @@ public class TaskDomain {
 		}
 	}
 
-	public static Product createManaged(com.tasktop.c2c.server.tasks.domain.Product source) {
+	public Product createManaged(com.tasktop.c2c.server.tasks.domain.Product source) {
 		if (source == null) {
 			return null;
 		}
@@ -323,7 +327,7 @@ public class TaskDomain {
 	}
 
 	// TODO: consider removing
-	public static com.tasktop.c2c.server.tasks.domain.Milestone createDomain(Milestone source) {
+	public com.tasktop.c2c.server.tasks.domain.Milestone createDomain(Milestone source) {
 		if (source == null) {
 			return null;
 		}
@@ -340,7 +344,7 @@ public class TaskDomain {
 		return target;
 	}
 
-	public static Profile createManaged(TaskUserProfile source) {
+	public Profile createManaged(TaskUserProfile source) {
 		if (source == null
 				|| ((source.getLoginName() == null || source.getLoginName().trim().length() == 0) && source.getId() == null)) {
 			return null;
@@ -354,8 +358,7 @@ public class TaskDomain {
 		return target;
 	}
 
-	private static List<Comment> copyCommentsAndWorkLogs(Task targetTask,
-			com.tasktop.c2c.server.tasks.domain.Task sourceTask) {
+	private List<Comment> copyCommentsAndWorkLogs(Task targetTask, com.tasktop.c2c.server.tasks.domain.Task sourceTask) {
 
 		final List<com.tasktop.c2c.server.tasks.domain.Comment> sourceComments = sourceTask.getComments();
 		final List<com.tasktop.c2c.server.tasks.domain.WorkLog> sourceWorkLogs = sourceTask.getWorkLogs();
@@ -389,7 +392,7 @@ public class TaskDomain {
 	 * @param sourceTask
 	 * @return
 	 */
-	private static Comment createDescriptionComment(com.tasktop.c2c.server.tasks.domain.Task sourceTask) {
+	private Comment createDescriptionComment(com.tasktop.c2c.server.tasks.domain.Task sourceTask) {
 		Comment descriptionComment = new Comment();
 
 		descriptionComment.setThetext(sourceTask.getDescription() == null ? "" : sourceTask.getDescription());
@@ -408,7 +411,7 @@ public class TaskDomain {
 	 * @param sourceComment
 	 * @return
 	 */
-	public static Comment createManagedComment(com.tasktop.c2c.server.tasks.domain.Comment sourceComment) {
+	public Comment createManagedComment(com.tasktop.c2c.server.tasks.domain.Comment sourceComment) {
 		if (sourceComment == null) {
 			return null;
 		}
@@ -431,7 +434,7 @@ public class TaskDomain {
 	 * @param workLog
 	 * @return
 	 */
-	private static Comment createManagedWorkLogComment(WorkLog workLog) {
+	private Comment createManagedWorkLogComment(WorkLog workLog) {
 		if (workLog == null) {
 			return null;
 		}
@@ -455,7 +458,7 @@ public class TaskDomain {
 		return targetComment;
 	}
 
-	public static void fillManaged(Task managedTarget, Task source) {
+	public void fillManaged(Task managedTarget, Task source) {
 
 		managedTarget.setVersion(source.getVersion());
 		managedTarget.setShortDesc(source.getShortDesc());
@@ -507,7 +510,7 @@ public class TaskDomain {
 		}
 	}
 
-	private static void updateDependencies(Task task, List<Dependency> dependencies, List<Dependency> newDependencies) {
+	private void updateDependencies(Task task, List<Dependency> dependencies, List<Dependency> newDependencies) {
 		int sizehint = Math.max(newDependencies.size(), dependencies.size());
 		if (sizehint == 0) {
 			return;
@@ -538,7 +541,7 @@ public class TaskDomain {
 		dependencies.addAll(newDependencies);
 	}
 
-	private static void fillComments(List<Comment> target, List<Comment> source) {
+	private void fillComments(List<Comment> target, List<Comment> source) {
 		// Handle the description
 		if (target.isEmpty()) {
 			// Can happen when updating task created from bugzilla.
@@ -562,15 +565,15 @@ public class TaskDomain {
 		}
 	}
 
-	public static void fillManaged(Product managedProduct, com.tasktop.c2c.server.tasks.domain.Product domainProduct) {
+	public void fillManaged(Product managedProduct, com.tasktop.c2c.server.tasks.domain.Product domainProduct) {
 		managedProduct.setName(domainProduct.getName());
 		managedProduct.setDescription(domainProduct.getDescription());
 		managedProduct.setIsactive(domainProduct.getIsActive());
 		managedProduct.setDefaultmilestone(domainProduct.getDefaultMilestone().getValue());
 	}
 
-	public static void fillManaged(Component managedComponent,
-			com.tasktop.c2c.server.tasks.domain.Component domainComponent, EntityManager entityManager) {
+	public void fillManaged(Component managedComponent, com.tasktop.c2c.server.tasks.domain.Component domainComponent,
+			EntityManager entityManager) {
 		// Fill in the modifiable fields from this domain object.
 		managedComponent.setName(domainComponent.getName());
 		managedComponent.setDescription(domainComponent.getDescription());
@@ -582,14 +585,14 @@ public class TaskDomain {
 		managedComponent.setInitialOwner(initialOwner);
 	}
 
-	public static void fillManaged(Milestone managedMilestone,
-			com.tasktop.c2c.server.tasks.domain.Milestone domainMilestone, EntityManager entityManager) {
+	public void fillManaged(Milestone managedMilestone, com.tasktop.c2c.server.tasks.domain.Milestone domainMilestone,
+			EntityManager entityManager) {
 		// Fill in the modifiable fields from this domain object.
 		managedMilestone.setValue(domainMilestone.getValue());
 		managedMilestone.setSortkey(domainMilestone.getSortkey());
 	}
 
-	public static SavedTaskQuery createManaged(com.tasktop.c2c.server.tasks.domain.SavedTaskQuery source) {
+	public SavedTaskQuery createManaged(com.tasktop.c2c.server.tasks.domain.SavedTaskQuery source) {
 		if (source == null) {
 			return null;
 		}
@@ -603,8 +606,7 @@ public class TaskDomain {
 		return query;
 	}
 
-	public static void fillManaged(SavedTaskQuery managedQuery,
-			com.tasktop.c2c.server.tasks.domain.SavedTaskQuery source) {
+	public void fillManaged(SavedTaskQuery managedQuery, com.tasktop.c2c.server.tasks.domain.SavedTaskQuery source) {
 
 		managedQuery.setName(source.getName());
 		managedQuery.setQueryString(source.getQueryString());

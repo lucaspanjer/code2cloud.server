@@ -99,6 +99,7 @@ import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConversionC
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.DomainConverter;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.ProductConverter;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.ProfileConverter;
+import com.tasktop.c2c.server.internal.tasks.domain.conversion.TaskDomain;
 import com.tasktop.c2c.server.internal.tasks.service.TaskCustomFieldService;
 import com.tasktop.c2c.server.internal.tasks.service.TaskServiceDependencies;
 import com.tasktop.c2c.server.internal.tasks.service.sql.SqlDialect;
@@ -159,6 +160,9 @@ public class TaskServiceTest {
 
 	@Autowired
 	protected TaskCustomFieldService customFieldService;
+
+	@Autowired
+	protected TaskDomain taskDomain;
 
 	@Autowired
 	SqlDialect sqlDialect;
@@ -3572,7 +3576,7 @@ public class TaskServiceTest {
 
 		// Perform our conversion now.
 		productConverter.copy(retProd, getCreatedMockProduct(), domainConverter, new DomainConversionContext(
-				entityManager));
+				entityManager, taskDomain));
 
 		return retProd;
 	}

@@ -34,29 +34,31 @@ public class DomainConversionContext {
 
 	private final Map<Object, Object> domainObjectByEntity;
 	private final Map<Object, Object> entityByKey;
+	private final TaskDomain taskDomain;
 
 	private String wikiMarkup;
 
-	public DomainConversionContext(EntityManager entityManager) {
+	public DomainConversionContext(EntityManager entityManager, TaskDomain taskDomain) {
 		this.entityManager = entityManager;
 		domainObjectByEntity = new HashMap<Object, Object>();
 		entityByKey = new HashMap<Object, Object>();
+		this.taskDomain = taskDomain;
 	}
 
-	private DomainConversionContext(EntityManager entityManager, Map<Object, Object> domainObjectByEntity,
-			Map<Object, Object> entityByKey, boolean thin, String wikiMarkup) {
-		this.entityManager = entityManager;
-		this.domainObjectByEntity = domainObjectByEntity;
-		this.entityByKey = entityByKey;
+	private DomainConversionContext(DomainConversionContext parent, boolean thin) {
+		this.entityManager = parent.entityManager;
+		this.domainObjectByEntity = parent.domainObjectByEntity;
+		this.entityByKey = parent.entityByKey;
 		this.thin = thin;
-		this.wikiMarkup = wikiMarkup;
+		this.wikiMarkup = parent.wikiMarkup;
+		this.taskDomain = parent.taskDomain;
 	}
 
 	/**
 	 * create a thin context that is a sub-context
 	 */
 	public DomainConversionContext subcontext() {
-		return new DomainConversionContext(entityManager, domainObjectByEntity, entityByKey, true, wikiMarkup);
+		return new DomainConversionContext(this, true);
 	}
 
 	public void put(AbstractReferenceEntity entity) {
@@ -133,7 +135,7 @@ public class DomainConversionContext {
 		}
 		TaskStatus object = (TaskStatus) domainObjectByEntity.get(entity);
 		if (object == null) {
-			object = TaskDomain.createDomain(entity);
+			object = taskDomain.createDomain(entity);
 			domainObjectByEntity.put(entity, object);
 		}
 		return object;
@@ -149,7 +151,7 @@ public class DomainConversionContext {
 		}
 		TaskSeverity object = (TaskSeverity) domainObjectByEntity.get(entity);
 		if (object == null) {
-			object = TaskDomain.createDomain(entity);
+			object = taskDomain.createDomain(entity);
 			domainObjectByEntity.put(entity, object);
 		}
 		return object;
@@ -165,7 +167,7 @@ public class DomainConversionContext {
 		}
 		TaskResolution object = (TaskResolution) domainObjectByEntity.get(entity);
 		if (object == null) {
-			object = TaskDomain.createDomain(entity);
+			object = taskDomain.createDomain(entity);
 			domainObjectByEntity.put(entity, object);
 		}
 		return object;
@@ -181,7 +183,7 @@ public class DomainConversionContext {
 		}
 		Priority object = (Priority) domainObjectByEntity.get(entity);
 		if (object == null) {
-			object = TaskDomain.createDomain(entity);
+			object = taskDomain.createDomain(entity);
 			domainObjectByEntity.put(entity, object);
 		}
 		return object;
@@ -217,7 +219,7 @@ public class DomainConversionContext {
 		}
 		Milestone object = (Milestone) domainObjectByEntity.get(entity);
 		if (object == null) {
-			object = TaskDomain.createDomain(entity);
+			object = taskDomain.createDomain(entity);
 			domainObjectByEntity.put(entity, object);
 		}
 		return object;
