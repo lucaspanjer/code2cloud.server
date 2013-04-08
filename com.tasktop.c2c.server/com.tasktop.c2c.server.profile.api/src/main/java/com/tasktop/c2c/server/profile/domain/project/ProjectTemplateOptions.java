@@ -11,6 +11,8 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.domain.project;
 
+import java.util.List;
+
 import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
 
 /**
@@ -23,6 +25,7 @@ import com.tasktop.c2c.server.common.service.domain.AbstractEntity;
 public class ProjectTemplateOptions extends AbstractEntity {
 	private ProjectTemplate template;
 	private String targetProjectIdentifier;
+	private List<ProjectTemplateProperty> properties;
 
 	public ProjectTemplate getTemplate() {
 		return template;
@@ -38,6 +41,14 @@ public class ProjectTemplateOptions extends AbstractEntity {
 
 	public void setTargetProjectIdentifier(String targetProjectIdentifier) {
 		this.targetProjectIdentifier = targetProjectIdentifier;
+	}
+
+	public List<ProjectTemplateProperty> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(List<ProjectTemplateProperty> properties) {
+		this.properties = properties;
 	}
 
 }

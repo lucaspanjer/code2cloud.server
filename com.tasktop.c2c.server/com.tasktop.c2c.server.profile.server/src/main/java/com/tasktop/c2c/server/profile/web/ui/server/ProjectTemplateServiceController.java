@@ -26,6 +26,7 @@ import com.tasktop.c2c.server.common.service.doc.Title;
 import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplate;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateOptions;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.service.ProjectTemplateService;
 
@@ -62,6 +63,15 @@ public class ProjectTemplateServiceController implements ProjectTemplateService 
 	public void applyTemplateToProject(@RequestBody ProjectTemplateOptions templateOptions)
 			throws EntityNotFoundException {
 		projectTemplateService.applyTemplateToProject(templateOptions);
+	}
+
+	@Title("Get template properties")
+	@Documentation("Get the properties for a template.")
+	@RequestMapping(value = "properties", method = RequestMethod.POST)
+	@Override
+	public List<ProjectTemplateProperty> getPropertiesForTemplate(@RequestBody ProjectTemplate template)
+			throws EntityNotFoundException {
+		return projectTemplateService.getPropertiesForTemplate(template);
 	}
 
 }

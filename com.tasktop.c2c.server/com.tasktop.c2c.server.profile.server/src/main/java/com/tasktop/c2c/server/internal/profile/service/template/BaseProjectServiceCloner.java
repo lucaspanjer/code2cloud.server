@@ -11,8 +11,12 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.profile.service.template;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 
 /**
  * @author clint (Tasktop Technologies Inc.)
@@ -32,11 +36,15 @@ public abstract class BaseProjectServiceCloner implements ProjectServiceCloner {
 	}
 
 	@Override
-	public boolean isReadyToClone(ProjectService sourceService, ProjectService targetProjectService) {
-		if (targetProjectService.getServiceHost() == null) {
+	public boolean isReadyToClone(CloneContext context) {
+		if (context.getTargetService().getServiceHost() == null) {
 			return false;
 		}
 		return true;
+	}
+
+	public List<ProjectTemplateProperty> getProperties(ProjectService sourceService) {
+		return Collections.emptyList();
 	}
 
 }

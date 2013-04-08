@@ -16,6 +16,7 @@ import java.util.List;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplate;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateOptions;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 
 /**
@@ -30,6 +31,8 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 public interface ProjectTemplateService {
 
 	List<ProjectTemplate> listTemplates(ProjectsQuery projectsQuery);
+
+	List<ProjectTemplateProperty> getPropertiesForTemplate(ProjectTemplate template) throws EntityNotFoundException;
 
 	void applyTemplateToProject(ProjectTemplateOptions options) throws EntityNotFoundException;
 }

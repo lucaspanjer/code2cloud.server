@@ -46,7 +46,9 @@ public class WikiServiceCloner extends BaseProjectServiceCloner {
 	}
 
 	@Override
-	public void doClone(ProjectService templateService, ProjectService targetProjectService) {
+	public void doClone(CloneContext context) {
+		ProjectService templateService = context.getTemplateService();
+		ProjectService targetService = context.getTargetService();
 		// Note there is non-obvious ordering deps here:
 		// * Can only get at one wS at a time (due to static tenancy context),
 		// * Security context is used at service provider time only
@@ -56,9 +58,9 @@ public class WikiServiceCloner extends BaseProjectServiceCloner {
 
 		QueryResult<Page> pages = templateWikiService.findPages(null, null);
 
-		AuthUtils.assumeSystemIdentity(targetProjectService.getProjectServiceProfile().getProject().getIdentifier());
-		WikiService targetWikiService = wikiServiceProvider.getWikiService(targetProjectService
-				.getProjectServiceProfile().getProject().getIdentifier());
+		AuthUtils.assumeSystemIdentity(targetService.getProjectServiceProfile().getProject().getIdentifier());
+		WikiService targetWikiService = wikiServiceProvider.getWikiService(targetService.getProjectServiceProfile()
+				.getProject().getIdentifier());
 
 		for (Page page : pages.getResultPage()) {
 			page.setId(null);

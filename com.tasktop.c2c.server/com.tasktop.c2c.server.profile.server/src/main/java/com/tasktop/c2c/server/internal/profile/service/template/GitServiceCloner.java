@@ -63,12 +63,13 @@ public class GitServiceCloner extends BaseProjectServiceCloner {
 	}
 
 	@Override
-	public void doClone(ProjectService templateService, ProjectService targetProjectService) {
-		List<ScmRepository> templateReposToClone = getTemplateRepositoriesToClone(templateService);
+	public void doClone(CloneContext context) {
+		List<ScmRepository> templateReposToClone = getTemplateRepositoriesToClone(context.getTemplateService());
 
-		AuthUtils.assumeSystemIdentity(targetProjectService.getProjectServiceProfile().getProject().getIdentifier());
-		ScmService targetScmService = scmServiceProvider.getService(targetProjectService.getProjectServiceProfile()
-				.getProject().getIdentifier());
+		AuthUtils.assumeSystemIdentity(context.getTargetService().getProjectServiceProfile().getProject()
+				.getIdentifier());
+		ScmService targetScmService = scmServiceProvider.getService(context.getTargetService()
+				.getProjectServiceProfile().getProject().getIdentifier());
 
 		List<ScmRepository> createdRepos = new ArrayList<ScmRepository>();
 		for (ScmRepository repo : templateReposToClone) {
@@ -76,23 +77,29 @@ public class GitServiceCloner extends BaseProjectServiceCloner {
 				ScmRepository created = targetScmService.createScmRepository(repo);
 				createdRepos.add(created);
 			} catch (EntityNotFoundException e) {
-				LOGGER.warn(String.format("Error creating repo [%s] from template project [%s] in project [%s]",
-						repo.getName(), templateService.getProjectServiceProfile().getProject().getIdentifier(),
-						targetProjectService.getProjectServiceProfile().getProject().getIdentifier()), e);
+				LOGGER.warn(
+						String.format("Error creating repo [%s] from template project [%s] in project [%s]",
+								repo.getName(), context.getTemplateService().getProjectServiceProfile().getProject()
+										.getIdentifier(), context.getTargetService().getProjectServiceProfile()
+										.getProject().getIdentifier()), e);
 			} catch (ValidationException e) {
-				LOGGER.warn(String.format("Error creating repo [%s] from template project [%s] in project [%s]",
-						repo.getName(), templateService.getProjectServiceProfile().getProject().getIdentifier(),
-						targetProjectService.getProjectServiceProfile().getProject().getIdentifier()), e);
+				LOGGER.warn(
+						String.format("Error creating repo [%s] from template project [%s] in project [%s]",
+								repo.getName(), context.getTemplateService().getProjectServiceProfile().getProject()
+										.getIdentifier(), context.getTargetService().getProjectServiceProfile()
+										.getProject().getIdentifier()), e);
 			}
 		}
 
 		for (ScmRepository repo : createdRepos) {
 			try {
-				copyRepo(repo, templateService, targetProjectService);
+				copyRepo(repo, context.getTemplateService(), context.getTargetService());
 			} catch (Exception e) {
-				LOGGER.warn(String.format("Error copying repo [%s] from template project [%s] in project [%s]",
-						repo.getName(), templateService.getProjectServiceProfile().getProject().getIdentifier(),
-						targetProjectService.getProjectServiceProfile().getProject().getIdentifier()), e);
+				LOGGER.warn(
+						String.format("Error copying repo [%s] from template project [%s] in project [%s]",
+								repo.getName(), context.getTemplateService().getProjectServiceProfile().getProject()
+										.getIdentifier(), context.getTargetService().getProjectServiceProfile()
+										.getProject().getIdentifier()), e);
 			}
 		}
 	}

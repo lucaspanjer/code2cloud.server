@@ -103,6 +103,18 @@ public class Security {
 	 * @throws Exception
 	 */
 	public static <T> T callWithRoles(Callable<T> callable, String... roles) throws Exception {
+		return callAsUserWithRoles(callable, "Run-as-user", roles);
+	}
+
+	/**
+	 * Allow to run code with additional roles for the duration of the call.
+	 * 
+	 * @param callable
+	 * @param roles
+	 * @return callable result
+	 * @throws Exception
+	 */
+	public static <T> T callAsUserWithRoles(Callable<T> callable, String username, String... roles) throws Exception {
 		SecurityContext securityCtxBefore = SecurityContextHolder.getContext();
 
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(roles.length);
@@ -110,7 +122,7 @@ public class Security {
 			authorities.add(new SimpleGrantedAuthority(role));
 
 		}
-		RunAsUserToken runAsAuth = new RunAsUserToken("unused", "Run as user", null, authorities, null);
+		RunAsUserToken runAsAuth = new RunAsUserToken("unused", username, null, authorities, null);
 
 		SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
 		SecurityContextHolder.getContext().setAuthentication(runAsAuth);

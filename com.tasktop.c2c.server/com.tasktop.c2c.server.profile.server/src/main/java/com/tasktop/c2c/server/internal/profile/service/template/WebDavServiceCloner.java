@@ -47,11 +47,11 @@ public class WebDavServiceCloner extends BaseProjectServiceCloner {
 	}
 
 	@Override
-	public void doClone(ProjectService templateService, ProjectService targetProjectService) {
+	public void doClone(CloneContext context) {
 
 		List<String> templateFiles;
 		try {
-			templateFiles = getClient(templateService).listAllFiles();
+			templateFiles = getClient(context.getTemplateService()).listAllFiles();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} catch (DavException e) {
@@ -60,8 +60,8 @@ public class WebDavServiceCloner extends BaseProjectServiceCloner {
 
 		for (String file : templateFiles) {
 			try {
-				InputStream content = getClient(templateService).getFileContent(file);
-				getClient(targetProjectService).writeFile(file, content);
+				InputStream content = getClient(context.getTemplateService()).getFileContent(file);
+				getClient(context.getTargetService()).writeFile(file, content);
 			} catch (IOException e) {
 				LOGGER.warn(String.format("Error tranfering [%s], will continue", file), e);
 			}

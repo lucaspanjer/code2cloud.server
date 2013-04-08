@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 
 /**
  * @author clint (Tasktop Technologies Inc.)
@@ -43,14 +44,19 @@ public class ProjectServiceClonerList implements ProjectServiceCloner {
 	}
 
 	@Override
-	public void doClone(ProjectService templateService, ProjectService targetProjectService) {
-		ProjectServiceCloner cloner = getCloner(templateService);
-		cloner.doClone(templateService, targetProjectService);
+	public void doClone(CloneContext context) {
+		ProjectServiceCloner cloner = getCloner(context.getTemplateService());
+		cloner.doClone(context);
 	}
 
 	@Override
-	public boolean isReadyToClone(ProjectService sourceService, ProjectService targetProjectService) {
-		return getCloner(sourceService).isReadyToClone(sourceService, targetProjectService);
+	public boolean isReadyToClone(CloneContext context) {
+		return getCloner(context.getTemplateService()).isReadyToClone(context);
+	}
+
+	@Override
+	public List<ProjectTemplateProperty> getProperties(ProjectService sourceService) {
+		return getCloner(sourceService).getProperties(sourceService);
 	}
 
 }

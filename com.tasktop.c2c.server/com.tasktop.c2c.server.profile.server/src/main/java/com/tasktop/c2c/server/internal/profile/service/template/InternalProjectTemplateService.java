@@ -11,16 +11,17 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.profile.service.template;
 
+import java.util.List;
+
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
+
 /**
  * @author clint (Tasktop Technologies Inc.)
  * 
  */
 public interface InternalProjectTemplateService {
 
-	/**
-	 * @param sourceProjectServiceId
-	 * @param targetProjectServiceId
-	 */
-	void doCloneProjectService(Long sourceProjectServiceId, Long targetProjectServiceId);
+	void doCloneProjectService(Long sourceProjectServiceId, Long targetProjectServiceId, Long userId,
+			List<ProjectTemplateProperty> properties);
 
 }

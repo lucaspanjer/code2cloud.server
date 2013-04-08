@@ -25,10 +25,13 @@ import com.tasktop.c2c.server.common.service.domain.QueryResult;
 import com.tasktop.c2c.server.common.service.job.JobService;
 import com.tasktop.c2c.server.internal.profile.service.InternalProfileService;
 import com.tasktop.c2c.server.internal.profile.service.SecurityPolicy;
+import com.tasktop.c2c.server.internal.profile.service.template.ProjectServiceCloner.CloneContext;
+import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplate;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateOptions;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.service.ProjectTemplateService;
 
@@ -83,15 +86,22 @@ public class ProjectTemplateServiceImpl extends AbstractJpaServiceBean implement
 			throw new IllegalArgumentException("Project is not a template");
 		}
 
+		Profile user = profileService.getCurrentUserProfile();
+
 		// Go through the source template and see what we can clone
 		for (ProjectService sourceService : sourceTemplate.getProjectServiceProfile().getProjectServices()) {
 			if (projectServiceCloner.canClone(sourceService)) {
 				ProjectService targetProjectService = findTargetService(sourceService, targetProject);
 
-				ProjectServiceCloneJob job = new ProjectServiceCloneJob(sourceService.getId(),
-						targetProjectService.getId());
+				CloneContext cloneContext = new CloneContext();
+				cloneContext.setTargetService(targetProjectService);
+				cloneContext.setTemplateService(sourceService);
+				cloneContext.setProperties(options.getProperties());
+				cloneContext.setUser(user);
 
-				if (!projectServiceCloner.isReadyToClone(sourceService, targetProjectService)) {
+				ProjectServiceCloneJob job = new ProjectServiceCloneJob(cloneContext);
+
+				if (!projectServiceCloner.isReadyToClone(cloneContext)) {
 					job.setDeliveryDelayInMilliseconds(10 * 1000l);
 				}
 				jobService.schedule(job);
@@ -100,11 +110,6 @@ public class ProjectTemplateServiceImpl extends AbstractJpaServiceBean implement
 		}
 	}
 
-	/**
-	 * @param sourceService
-	 * @param targetProject
-	 * @return
-	 */
 	private ProjectService findTargetService(ProjectService sourceService, Project targetProject) {
 		for (ProjectService service : targetProject.getProjectServiceProfile().getProjectServices()) {
 			if (service.getType().equals(sourceService.getType())) {
@@ -115,21 +120,48 @@ public class ProjectTemplateServiceImpl extends AbstractJpaServiceBean implement
 	}
 
 	@Override
-	public void doCloneProjectService(Long sourceProjectServiceId, Long targetProjectServiceId) {
+	public void doCloneProjectService(Long sourceProjectServiceId, Long targetProjectServiceId, Long userId,
+			List<ProjectTemplateProperty> properties) {
 		AuthUtils.assumeSystemIdentity(null);
 
-		ProjectService sourceProjectService = entityManager.find(ProjectService.class, sourceProjectServiceId);
-		ProjectService targetProjectService = entityManager.find(ProjectService.class, targetProjectServiceId);
+		ProjectService sourceService = entityManager.find(ProjectService.class, sourceProjectServiceId);
+		ProjectService targetService = entityManager.find(ProjectService.class, targetProjectServiceId);
+		Profile user = entityManager.find(Profile.class, userId);
 
-		if (!projectServiceCloner.isReadyToClone(sourceProjectService, targetProjectService)) {
-			ProjectServiceCloneJob job = new ProjectServiceCloneJob(sourceProjectService.getId(),
-					targetProjectService.getId());
+		CloneContext context = new CloneContext();
+		context.setTargetService(targetService);
+		context.setTemplateService(sourceService);
+		context.setUser(user);
+		context.setProperties(properties);
+
+		if (!projectServiceCloner.isReadyToClone(context)) {
+			ProjectServiceCloneJob job = new ProjectServiceCloneJob(context);
 
 			job.setDeliveryDelayInMilliseconds(10 * 1000l);
 			jobService.schedule(job);
 			return;
 		}
 
-		projectServiceCloner.doClone(sourceProjectService, targetProjectService);
+		projectServiceCloner.doClone(context);
+	}
+
+	@Override
+	public List<ProjectTemplateProperty> getPropertiesForTemplate(ProjectTemplate template)
+			throws EntityNotFoundException {
+		List<ProjectTemplateProperty> result = new ArrayList<ProjectTemplateProperty>();
+
+		Project sourceTemplate = profileService.getProjectByIdentifier(template.getProjectId());
+
+		if (!sourceTemplate.isTemplate()) {
+			throw new IllegalArgumentException("Project is not a template");
+		}
+
+		// Go through the source template and see what we can clone
+		for (ProjectService sourceService : sourceTemplate.getProjectServiceProfile().getProjectServices()) {
+			if (projectServiceCloner.canClone(sourceService)) {
+				result.addAll(projectServiceCloner.getProperties(sourceService));
+			}
+		}
+		return result;
 	}
 }

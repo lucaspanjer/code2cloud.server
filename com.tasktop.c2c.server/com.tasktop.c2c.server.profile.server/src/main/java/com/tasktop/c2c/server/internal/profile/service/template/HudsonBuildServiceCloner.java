@@ -48,7 +48,10 @@ public class HudsonBuildServiceCloner extends BaseProjectServiceCloner {
 	}
 
 	@Override
-	public void doClone(ProjectService templateService, ProjectService targetProjectService) {
+	public void doClone(CloneContext context) {
+
+		ProjectService templateService = context.getTemplateService();
+		ProjectService targetService = context.getTargetService();
 
 		AuthUtils.assumeSystemIdentity(templateService.getProjectServiceProfile().getProject().getIdentifier());
 		HudsonService templateHudsonService = hudsonServiceProvider.getHudsonService(templateService
@@ -60,12 +63,12 @@ public class HudsonBuildServiceCloner extends BaseProjectServiceCloner {
 		for (JobSummary job : jobs) {
 			String configXml = templateHudsonService.getJobConfigXml(job.getName());
 			String rewrittenConfigXml = rewriteConfig(configXml, templateService.getProjectServiceProfile()
-					.getProject(), targetProjectService.getProjectServiceProfile().getProject());
+					.getProject(), targetService.getProjectServiceProfile().getProject());
 			jobConfigXmls.add(rewrittenConfigXml);
 		}
 
-		AuthUtils.assumeSystemIdentity(targetProjectService.getProjectServiceProfile().getProject().getIdentifier());
-		HudsonService targetHudsonService = hudsonServiceProvider.getHudsonService(targetProjectService
+		AuthUtils.assumeSystemIdentity(targetService.getProjectServiceProfile().getProject().getIdentifier());
+		HudsonService targetHudsonService = hudsonServiceProvider.getHudsonService(targetService
 				.getProjectServiceProfile().getProject().getIdentifier());
 
 		for (int i = 0; i < jobs.size(); i++) {

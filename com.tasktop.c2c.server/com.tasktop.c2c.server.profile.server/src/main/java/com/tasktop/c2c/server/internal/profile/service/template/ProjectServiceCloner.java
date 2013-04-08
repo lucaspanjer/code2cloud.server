@@ -11,7 +11,11 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.profile.service.template;
 
+import java.util.List;
+
+import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 
 /**
  * Responsible for cloning elements from a project template's service into a target project's service
@@ -21,14 +25,63 @@ import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
  */
 public interface ProjectServiceCloner {
 
+	public class CloneContext {
+		private Profile user;
+		private ProjectService templateService;
+		private ProjectService targetService;
+		private List<ProjectTemplateProperty> properties;
+
+		public Profile getUser() {
+			return user;
+		}
+
+		public void setUser(Profile user) {
+			this.user = user;
+		}
+
+		public ProjectService getTemplateService() {
+			return templateService;
+		}
+
+		public void setTemplateService(ProjectService templateService) {
+			this.templateService = templateService;
+		}
+
+		public ProjectService getTargetService() {
+			return targetService;
+		}
+
+		public void setTargetService(ProjectService targetService) {
+			this.targetService = targetService;
+		}
+
+		public List<ProjectTemplateProperty> getProperties() {
+			return properties;
+		}
+
+		public void setProperties(List<ProjectTemplateProperty> properties) {
+			this.properties = properties;
+		}
+
+		public ProjectTemplateProperty getProperty(String propertyId) {
+			if (properties != null) {
+				for (ProjectTemplateProperty property : properties) {
+					if (property.getId().equals(propertyId)) {
+						return property;
+					}
+				}
+
+			}
+			return null;
+		}
+
+	}
+
 	boolean canClone(ProjectService service);
 
-	void doClone(ProjectService templateService, ProjectService targetProjectService);
+	void doClone(CloneContext context);
 
-	/**
-	 * @param sourceService
-	 * @param targetProjectService
-	 */
-	boolean isReadyToClone(ProjectService sourceService, ProjectService targetProjectService);
+	boolean isReadyToClone(CloneContext context);
 
+	List<ProjectTemplateProperty> getProperties(ProjectService sourceService);
 }

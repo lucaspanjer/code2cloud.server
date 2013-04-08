@@ -11,9 +11,13 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.profile.service.template;
 
+import java.util.List;
+
 import org.springframework.context.ApplicationContext;
 
 import com.tasktop.c2c.server.common.service.job.Job;
+import com.tasktop.c2c.server.internal.profile.service.template.ProjectServiceCloner.CloneContext;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 
 /**
  * @author clint (Tasktop Technologies Inc.)
@@ -21,22 +25,26 @@ import com.tasktop.c2c.server.common.service.job.Job;
  */
 public class ProjectServiceCloneJob extends Job {
 
+	private Long userId;
 	private Long sourceProjectServiceId;
 	private Long targetProjectServiceId;
+	private List<ProjectTemplateProperty> properties;
 
 	/**
 	 * @param sourceProjectServiceId
 	 * @param targetProjectServiceId
 	 */
-	public ProjectServiceCloneJob(Long sourceProjectServiceId, Long targetProjectServiceId) {
-		this.sourceProjectServiceId = sourceProjectServiceId;
-		this.targetProjectServiceId = targetProjectServiceId;
+	public ProjectServiceCloneJob(CloneContext context) {
+		this.sourceProjectServiceId = context.getTemplateService().getId();
+		this.targetProjectServiceId = context.getTargetService().getId();
+		this.userId = context.getUser().getId();
+		this.properties = context.getProperties();
 	}
 
 	@Override
 	public void execute(ApplicationContext applicationContext) {
 		applicationContext.getBean(InternalProjectTemplateService.class).doCloneProjectService(sourceProjectServiceId,
-				targetProjectServiceId);
+				targetProjectServiceId, userId, properties);
 	}
 
 }
