@@ -183,7 +183,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	private final class ProfileConstraintsCreateValidator implements Validator {
 		// FIXME: we could move this into a registered validator if we could
 		// figure out how to inject the entity manager (request scope)
-		@SuppressWarnings("unchecked")
 		@Override
 		public void validate(Object target, Errors errors) {
 			Profile profile = (Profile) target;
@@ -217,7 +216,6 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	private final class ProfileConstraintsUpdateValidator implements Validator {
 		// FIXME: we could move this into a registered validator if we could
 		// figure out how to inject the entity manager (request scope)
-		@SuppressWarnings("unchecked")
 		@Override
 		public void validate(Object target, Errors errors) {
 			Profile profile = (Profile) target;
@@ -400,6 +398,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 				"SELECT project FROM " + Project.class.getSimpleName()
 						+ " project WHERE project.accessibility = :public").setParameter("public",
 				ProjectAccessibility.PUBLIC);
+		@SuppressWarnings("unchecked")
 		List<Project> publicResults = publicQuery.getResultList();
 		for (Project project : publicResults) {
 			ProjectProfile pp = new ProjectProfile();
@@ -418,6 +417,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			Query orgPrivateQuery = entityManager.createQuery(queryBldr.toString());
 			orgPrivateQuery.setParameter("orgPrivate", ProjectAccessibility.ORGANIZATION_PRIVATE);
 			orgPrivateQuery.setParameter("orgIds", orgIdsForCurrentUser);
+			@SuppressWarnings("unchecked")
 			List<Project> orgPrivateResults = orgPrivateQuery.getResultList();
 			for (Project project : orgPrivateResults) {
 				ProjectProfile pp = new ProjectProfile();
@@ -784,6 +784,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (profile != null) {
 			securityPolicy.modify(profile);
 
+			@SuppressWarnings("unchecked")
 			List<Project> projects = (List<Project>) entityManager
 					.createQuery(
 							"SELECT DISTINCT project FROM "
@@ -1823,6 +1824,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			q.setMaxResults(queryRequest.getPageInfo().getSize());
 		}
 
+		@SuppressWarnings("unchecked")
 		List<Project> projects = q.getResultList();
 
 		for (Project project : projects) {
@@ -1986,6 +1988,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	@Override
 	public List<Organization> getOwnedOrganizations() {
 		List<Organization> orgs = new LinkedList<Organization>();
+		@SuppressWarnings("unchecked")
 		List<OrganizationProfile> orgProfiles = entityManager
 				.createQuery(
 						"select e from " + OrganizationProfile.class.getSimpleName()
