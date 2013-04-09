@@ -12,7 +12,6 @@
 package com.tasktop.c2c.server.event.service;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tasktop.c2c.server.common.service.BaseProfileConfiguration;
 
@@ -23,7 +22,7 @@ import com.tasktop.c2c.server.common.service.BaseProfileConfiguration;
  * 
  */
 public class InternalEventServiceClient extends EventServiceClient implements InitializingBean {
-	@Autowired
+
 	private BaseProfileConfiguration configuration;
 
 	@Override
@@ -33,6 +32,10 @@ public class InternalEventServiceClient extends EventServiceClient implements In
 			String url = "http://" + configuration.getBaseWebHost() + configuration.getBaseContextPath() + "/api/event";
 			setBaseUrl(url);
 		}
+	}
+
+	public void setConfiguration(BaseProfileConfiguration configuration) {
+		this.configuration = configuration;
 	}
 
 }
