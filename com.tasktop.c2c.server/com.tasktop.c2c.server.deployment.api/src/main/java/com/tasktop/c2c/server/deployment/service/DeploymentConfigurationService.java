@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2012 Tasktop Technologies
+ * Copyright (c) 2010, 2013 Tasktop Technologies
  * Copyright (c) 2010, 2011 SpringSource, a division of VMware
  * 
  * All rights reserved. This program and the accompanying materials
@@ -22,7 +22,6 @@ import com.tasktop.c2c.server.deployment.domain.CloudService;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
-import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
 import com.tasktop.c2c.server.profile.domain.build.BuildDetails;
 
 /**
@@ -96,14 +95,14 @@ public interface DeploymentConfigurationService {
 	void deleteDeployment(DeploymentConfiguration deploymentConfiguration, boolean alsoDeleteFromCloudFoundry)
 			throws EntityNotFoundException, ServiceException;
 
-	DeploymentStatus startDeployment(DeploymentConfiguration deploymentConfiguration) throws EntityNotFoundException,
-			ServiceException;
+	DeploymentConfiguration startDeployment(DeploymentConfiguration deploymentConfiguration)
+			throws EntityNotFoundException, ServiceException;
 
-	DeploymentStatus stopDeployment(DeploymentConfiguration deploymentConfiguration) throws EntityNotFoundException,
-			ServiceException;
+	DeploymentConfiguration stopDeployment(DeploymentConfiguration deploymentConfiguration)
+			throws EntityNotFoundException, ServiceException;
 
-	DeploymentStatus restartDeployment(DeploymentConfiguration deploymentConfiguration) throws EntityNotFoundException,
-			ServiceException;
+	DeploymentConfiguration restartDeployment(DeploymentConfiguration deploymentConfiguration)
+			throws EntityNotFoundException, ServiceException;
 
 	List<CloudService> getAvailableServices(DeploymentConfiguration deploymentConfiguration) throws ServiceException;
 

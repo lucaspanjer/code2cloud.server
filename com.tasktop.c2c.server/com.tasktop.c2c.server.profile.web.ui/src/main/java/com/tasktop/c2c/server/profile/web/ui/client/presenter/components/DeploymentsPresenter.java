@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2012 Tasktop Technologies
+ * Copyright (c) 2010, 2013 Tasktop Technologies
  * Copyright (c) 2010, 2011 SpringSource, a division of VMware
  * 
  * All rights reserved. This program and the accompanying materials
@@ -35,7 +35,6 @@ import com.tasktop.c2c.server.profile.web.ui.client.shared.action.CreateDeployme
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeleteDeploymentAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeploymentConfigOptionsResult;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeploymentResult;
-import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeploymentStatusResult;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetDeploymentConfigOptionsAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsAction;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.GetProjectBuildsResult;
@@ -107,11 +106,11 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 		message.setSuccessText(successMessage);
 		final DeploymentConfiguration configuration = view.getOriginalValue();
 		getDispatchService().execute(new ControlDeploymentAction(projectIdentifier, configuration, type),
-				new AsyncCallbackSupport<DeploymentStatusResult>(message) {
+				new AsyncCallbackSupport<DeploymentResult>(message) {
 
 					@Override
-					protected void success(DeploymentStatusResult result) {
-						view.updateStatus(configuration, result.get());
+					protected void success(DeploymentResult result) {
+						view.updateStatus(configuration, result.get().getStatus());
 
 					}
 				});

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2012 Tasktop Technologies
+ * Copyright (c) 2010, 2013 Tasktop Technologies
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,9 +17,9 @@ import net.customware.gwt.dispatch.shared.DispatchException;
 
 import org.springframework.stereotype.Component;
 
-import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
+import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.profile.web.ui.client.shared.action.ControlDeploymentAction;
-import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeploymentStatusResult;
+import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeploymentResult;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -27,26 +27,25 @@ import com.tasktop.c2c.server.profile.web.ui.client.shared.action.DeploymentStat
  */
 @Component
 public class ControlDeploymentActionHandler extends
-		AbstractDeploymentActionHandler<ControlDeploymentAction, DeploymentStatusResult> {
+		AbstractDeploymentActionHandler<ControlDeploymentAction, DeploymentResult> {
 
 	@Override
-	public DeploymentStatusResult execute(ControlDeploymentAction action, ExecutionContext context)
-			throws DispatchException {
+	public DeploymentResult execute(ControlDeploymentAction action, ExecutionContext context) throws DispatchException {
 		setTenancyContext(action.getProjectId());
 		try {
-			DeploymentStatus status = null;
+			DeploymentConfiguration result = null;
 			switch (action.getAction()) {
 			case RESTART:
-				status = deploymentConfigurationService.restartDeployment(action.getDeploymentConfiguration());
+				result = deploymentConfigurationService.restartDeployment(action.getDeploymentConfiguration());
 				break;
 			case START:
-				status = deploymentConfigurationService.startDeployment(action.getDeploymentConfiguration());
+				result = deploymentConfigurationService.startDeployment(action.getDeploymentConfiguration());
 				break;
 			case STOP:
-				status = deploymentConfigurationService.stopDeployment(action.getDeploymentConfiguration());
+				result = deploymentConfigurationService.stopDeployment(action.getDeploymentConfiguration());
 				break;
 			}
-			return new DeploymentStatusResult(status);
+			return new DeploymentResult(result);
 		} catch (Exception e) {
 			throw new ActionException(e);
 		}

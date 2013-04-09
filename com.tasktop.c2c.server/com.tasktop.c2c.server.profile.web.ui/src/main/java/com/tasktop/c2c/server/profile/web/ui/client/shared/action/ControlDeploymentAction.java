@@ -21,7 +21,7 @@ import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
  * @author cmorgan (Tasktop Technologies Inc.)
  * 
  */
-public class ControlDeploymentAction implements Action<DeploymentStatusResult>, WriteAction {
+public class ControlDeploymentAction implements Action<DeploymentResult>, WriteAction {
 	public enum Action {
 		START, STOP, RESTART;
 	}

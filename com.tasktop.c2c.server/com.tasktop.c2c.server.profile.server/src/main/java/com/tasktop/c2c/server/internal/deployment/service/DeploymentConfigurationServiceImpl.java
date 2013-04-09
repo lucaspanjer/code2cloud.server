@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2012 Tasktop Technologies
+ * Copyright (c) 2010, 2013 Tasktop Technologies
  * Copyright (c) 2010, 2011 SpringSource, a division of VMware
  * 
  * All rights reserved. This program and the accompanying materials
@@ -44,7 +44,6 @@ import com.tasktop.c2c.server.deployment.domain.DeploymentActivityType;
 import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceConfiguration;
 import com.tasktop.c2c.server.deployment.domain.DeploymentServiceType;
-import com.tasktop.c2c.server.deployment.domain.DeploymentStatus;
 import com.tasktop.c2c.server.deployment.domain.DeploymentType;
 import com.tasktop.c2c.server.deployment.service.DeploymentConfigurationService;
 import com.tasktop.c2c.server.deployment.service.ServiceException;
@@ -157,6 +156,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	@Override
 	public DeploymentConfiguration createDeployment(DeploymentConfiguration deploymentConfiguration)
 			throws ValidationException {
+		DeploymentConfiguration retVal = deploymentConfiguration;
 		deploymentDomain.prepareForCreate(deploymentConfiguration);
 
 		try {
@@ -187,6 +187,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 				deployLatestArtifact(deploymentConfiguration, deploymentService, projectId);
 			}
 
+			retVal = deploymentDomain.convertToPublic(internalDeploymentConfiguration);
 		} catch (ServiceException e) {
 			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
 		} catch (IOException e) {
@@ -194,8 +195,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		} catch (EntityNotFoundException e) {
 			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
 		}
-
-		return deploymentConfiguration;
+		return retVal;
 	}
 
 	private boolean shouldDeployOnCreate(DeploymentConfiguration deploymentConfiguration) {
@@ -303,7 +303,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		// Update the fields in the managed object
 		deploymentDomain.updateInternal(deploymentConfiguration, internalDeploymentConfiguration);
 
-		return deploymentConfiguration;
+		return deploymentDomain.convertToPublic(internalDeploymentConfiguration);
 	}
 
 	@Override
@@ -396,7 +396,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	}
 
 	@Override
-	public DeploymentStatus startDeployment(DeploymentConfiguration deploymentConfiguration)
+	public DeploymentConfiguration startDeployment(DeploymentConfiguration deploymentConfiguration)
 			throws EntityNotFoundException, ServiceException {
 		checkUpdatePermissions(deploymentConfiguration);
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
@@ -411,24 +411,30 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.STARTED,
 				deploymentActivityStatus);
-		return deploymentConfiguration.getStatus();
+		return deploymentDomain.convertToPublic(lookUpDeploymentConfiguration(deploymentConfiguration.getId()));
 	}
 
 	private void addDeploymentActivityInternalAndPersist(Long deploymentConfigurationId,
 			DeploymentActivityType deploymentActivityType, DeploymentActivityStatus deploymentActivityStatus)
 			throws EntityNotFoundException {
-		com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration = entityManager
-				.find(com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration.class,
-						deploymentConfigurationId);
-		if (internalDeploymentConfiguration == null) {
-			throw new EntityNotFoundException("No DC with id: " + deploymentConfigurationId);
-		}
+		com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration = lookUpDeploymentConfiguration(deploymentConfigurationId);
 		com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity internalDeploymentActivity = new com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity(
 				deploymentActivityType, deploymentActivityStatus, internalDeploymentConfiguration,
 				profileService.getCurrentUserProfile());
 		internalDeploymentConfiguration.addDeploymentActivity(internalDeploymentActivity);
 		entityManager.persist(internalDeploymentConfiguration);
 		entityManager.flush();
+	}
+
+	private com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration lookUpDeploymentConfiguration(
+			Long deploymentConfigurationId) throws EntityNotFoundException {
+		com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration = entityManager
+				.find(com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration.class,
+						deploymentConfigurationId);
+		if (internalDeploymentConfiguration == null) {
+			throw new EntityNotFoundException("No DC with id: " + deploymentConfigurationId);
+		}
+		return internalDeploymentConfiguration;
 	}
 
 	/**
@@ -442,7 +448,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	}
 
 	@Override
-	public DeploymentStatus stopDeployment(DeploymentConfiguration deploymentConfiguration)
+	public DeploymentConfiguration stopDeployment(DeploymentConfiguration deploymentConfiguration)
 			throws EntityNotFoundException, ServiceException {
 		checkUpdatePermissions(deploymentConfiguration);
 
@@ -458,11 +464,11 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.STOPPED,
 				deploymentActivityStatus);
-		return deploymentConfiguration.getStatus();
+		return deploymentDomain.convertToPublic(lookUpDeploymentConfiguration(deploymentConfiguration.getId()));
 	}
 
 	@Override
-	public DeploymentStatus restartDeployment(DeploymentConfiguration deploymentConfiguration)
+	public DeploymentConfiguration restartDeployment(DeploymentConfiguration deploymentConfiguration)
 			throws EntityNotFoundException, ServiceException {
 		checkUpdatePermissions(deploymentConfiguration);
 
@@ -478,7 +484,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.RESTARTED,
 				deploymentActivityStatus);
-		return deploymentConfiguration.getStatus();
+		return deploymentDomain.convertToPublic(lookUpDeploymentConfiguration(deploymentConfiguration.getId()));
 	}
 
 	@Override
