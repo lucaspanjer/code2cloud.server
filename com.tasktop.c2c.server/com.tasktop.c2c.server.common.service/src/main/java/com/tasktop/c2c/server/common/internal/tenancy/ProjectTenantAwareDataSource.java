@@ -12,11 +12,27 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.internal.tenancy;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
+
+import liquibase.exception.LiquibaseException;
+import liquibase.integration.spring.SpringLiquibase;
+
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.tenancy.datasource.TenantAwareDataSource;
 
-public class ProjectTenantAwareDataSource extends TenantAwareDataSource {
+public class ProjectTenantAwareDataSource extends TenantAwareDataSource implements ResourceLoaderAware {
 
 	private DatabaseNamingStrategy databaseNamingStrategy;
+
+	private Set<String> updatedDatabasenames = new HashSet<String>();
+
+	private String changelog = null;
+
+	private ResourceLoader resourceLoader;
 
 	@Override
 	protected String getDatabaseName() {
@@ -32,4 +48,59 @@ public class ProjectTenantAwareDataSource extends TenantAwareDataSource {
 		this.databaseNamingStrategy = databaseNamingStrategy;
 	}
 
+	@Override
+	public Connection getConnection() throws SQLException {
+		Connection connection = super.getConnection();
+
+		maybeRunLiquibaseUpdate(connection);
+
+		return connection;
+	}
+
+	private void maybeRunLiquibaseUpdate(Connection connection) throws SQLException {
+		if (changelog == null) {
+			return;
+		}
+
+		String dbName = getDatabaseName();
+		String dbType = connection.getMetaData().getDatabaseProductName();
+
+		synchronized (updatedDatabasenames) {
+			if (updatedDatabasenames.contains(dbName)) {
+				return;
+			}
+			updatedDatabasenames.add(dbName);
+		}
+
+		try {
+			SpringLiquibase schemaInstaller = new SpringLiquibase();
+			schemaInstaller.setResourceLoader(resourceLoader);
+			schemaInstaller.setDataSource(this);
+			schemaInstaller.setChangeLog(changelog);
+			if (dbType.toUpperCase().startsWith("HSQL") || dbType.toUpperCase().startsWith("ORACLE")) {
+				// HSQLDB will create the DB in upper case even if we specify lower case in the escaped create schema
+				// statement
+				schemaInstaller.setDefaultSchema(dbName.toUpperCase());
+			} else {
+				schemaInstaller.setDefaultSchema(dbName);
+			}
+			schemaInstaller.afterPropertiesSet();
+		} catch (LiquibaseException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	/**
+	 * @param changelog
+	 *            the changelog to use for schema creation
+	 */
+	public void setChangelog(String changelog) {
+		this.changelog = changelog;
+	}
+
+	@Override
+	public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.resourceLoader = resourceLoader;
+	}
 }

@@ -73,8 +73,7 @@
 	</bean>
 	
 	<bean id="taskTestDatabaseConfigurer" class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 
-					p:rawDatasource-ref="testDataSource" p:tenantAwareDataSource-ref="taskCreateTestDataSource" 
-					p:changelog="classpath:/data/liquibase-task-db-master.xml" p:databaseNamingStrategy-ref="databaseNamingStrategy"/>
+					p:rawDatasource-ref="testDataSource" p:databaseNamingStrategy-ref="databaseNamingStrategy"/>
 	<bean id="taskTestPreferencesConfigurator" class="com.tasktop.c2c.server.internal.tasks.service.ProjectServicePreferencesConfigurator"/>
 					
 

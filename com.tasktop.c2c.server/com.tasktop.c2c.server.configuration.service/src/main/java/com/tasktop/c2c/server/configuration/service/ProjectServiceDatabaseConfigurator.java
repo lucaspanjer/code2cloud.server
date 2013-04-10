@@ -18,12 +18,6 @@ import java.util.UUID;
 
 import javax.sql.DataSource;
 
-import liquibase.exception.LiquibaseException;
-import liquibase.integration.spring.SpringLiquibase;
-
-import org.springframework.context.ResourceLoaderAware;
-import org.springframework.core.io.ResourceLoader;
-
 import com.tasktop.c2c.server.common.internal.tenancy.DatabaseNamingStrategy;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
 
@@ -35,36 +29,23 @@ import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServ
  * @author Jennifer Hickey
  * 
  */
-public class ProjectServiceDatabaseConfigurator implements Configurator, ResourceLoaderAware {
+public class ProjectServiceDatabaseConfigurator implements Configurator {
 
 	private DatabaseNamingStrategy databaseNamingStrategy;
 
-	private String changelog;
-
-	private String changelogContexts;
-
 	private DataSource rawDatasource;
-
-	private DataSource tenantAwareDataSource;
-
-	private ResourceLoader resourceLoader;
 
 	private boolean needsDatabaseCreation = true;
 
 	private void initializeNewProject(ProjectServiceConfiguration config) throws SQLException {
 		String dbName = databaseNamingStrategy.getCurrentTenantDatabaseName();
 
-		String dbType;
 		if (needsDatabaseCreation) {
-			dbType = createDatabase(dbName);
-		} else {
-			dbType = rawDatasource.getConnection().getMetaData().getDatabaseProductName();
+			createDatabase(dbName);
 		}
-
-		installSchema(dbType, dbName);
 	}
 
-	private String createDatabase(String dbName) throws SQLException {
+	private void createDatabase(String dbName) throws SQLException {
 		java.sql.Connection dbConnection = rawDatasource.getConnection();
 		try {
 			Statement s = dbConnection.createStatement();
@@ -84,29 +65,8 @@ public class ProjectServiceDatabaseConfigurator implements Configurator, Resourc
 			if (!dbConnection.getAutoCommit()) {
 				dbConnection.commit();
 			}
-			return dbType;
 		} finally {
 			dbConnection.close();
-		}
-	}
-
-	private void installSchema(String dbType, String dbName) {
-		try {
-			SpringLiquibase schemaInstaller = new SpringLiquibase();
-			schemaInstaller.setResourceLoader(resourceLoader);
-			schemaInstaller.setDataSource(tenantAwareDataSource);
-			schemaInstaller.setChangeLog(changelog);
-			schemaInstaller.setContexts(changelogContexts);
-			if (dbType.toUpperCase().startsWith("HSQL") || dbType.toUpperCase().startsWith("ORACLE")) {
-				// HSQLDB will create the DB in upper case even if we specify lower case in the escaped create schema
-				// statement
-				schemaInstaller.setDefaultSchema(dbName.toUpperCase());
-			} else {
-				schemaInstaller.setDefaultSchema(dbName);
-			}
-			schemaInstaller.afterPropertiesSet();
-		} catch (LiquibaseException e) {
-			throw new RuntimeException(e);
 		}
 	}
 
@@ -126,40 +86,11 @@ public class ProjectServiceDatabaseConfigurator implements Configurator, Resourc
 	}
 
 	/**
-	 * @param changelog
-	 *            the changelog to use for schema creation
-	 */
-	public void setChangelog(String changelog) {
-		this.changelog = changelog;
-	}
-
-	/**
-	 * @param changelogContexts
-	 *            the changelogContexts to set
-	 */
-	public void setChangelogContexts(String changelogContexts) {
-		this.changelogContexts = changelogContexts;
-	}
-
-	/**
 	 * @param rawDatasource
 	 *            the rawDatasource to set
 	 */
 	public void setRawDatasource(DataSource rawDatasource) {
 		this.rawDatasource = rawDatasource;
-	}
-
-	/**
-	 * @param tenantAwareDataSource
-	 *            the tenantAwareDataSource to set
-	 */
-	public void setTenantAwareDataSource(DataSource tenantAwareDataSource) {
-		this.tenantAwareDataSource = tenantAwareDataSource;
-	}
-
-	@Override
-	public void setResourceLoader(ResourceLoader resourceLoader) {
-		this.resourceLoader = resourceLoader;
 	}
 
 	public void setDatabaseNamingStrategy(DatabaseNamingStrategy databaseNamingStrategy) {

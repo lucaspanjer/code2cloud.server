@@ -42,6 +42,7 @@
   <classpathentry kind="var" path="M2_REPO/org/eclipse/persistence/org.eclipse.persistence.jpa/2.3.2/org.eclipse.persistence.jpa-2.3.2.jar" sourcepath="M2_REPO/org/eclipse/persistence/org.eclipse.persistence.jpa/2.3.2/org.eclipse.persistence.jpa-2.3.2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/aspectj/aspectjrt/1.6.10/aspectjrt-1.6.10.jar" sourcepath="M2_REPO/org/aspectj/aspectjrt/1.6.10/aspectjrt-1.6.10-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/aspectj/aspectjweaver/1.6.10/aspectjweaver-1.6.10.jar" sourcepath="M2_REPO/org/aspectj/aspectjweaver/1.6.10/aspectjweaver-1.6.10-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/liquibase/liquibase-core/2.0.3-c2c/liquibase-core-2.0.3-c2c.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-jms/3.1.1.RELEASE/spring-jms-3.1.1.RELEASE.jar" sourcepath="M2_REPO/org/springframework/spring-jms/3.1.1.RELEASE/spring-jms-3.1.1.RELEASE-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.jar" sourcepath="M2_REPO/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-dbcp/7.0.32/tomcat-dbcp-7.0.32.jar" sourcepath="M2_REPO/org/apache/tomcat/tomcat-dbcp/7.0.32/tomcat-dbcp-7.0.32-sources.jar"/>
@@ -62,11 +63,10 @@
   <classpathentry kind="src" path="/com.tasktop.c2c.server.configuration.service"/>
   <classpathentry kind="src" path="/com.tasktop.c2c.server.cloud.api"/>
   <classpathentry kind="var" path="M2_REPO/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar" sourcepath="M2_REPO/commons-io/commons-io/2.0.1/commons-io-2.0.1-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/liquibase/liquibase-core/2.0.3-c2c/liquibase-core-2.0.3-c2c.jar"/>
   <classpathentry kind="var" path="M2_REPO/mysql/mysql-connector-java/5.1.12/mysql-connector-java-5.1.12.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-fileupload/commons-fileupload/1.2.1/commons-fileupload-1.2.1.jar" sourcepath="M2_REPO/commons-fileupload/commons-fileupload/1.2.1/commons-fileupload-1.2.1-sources.jar"/>
   <classpathentry kind="src" path="/com.tasktop.c2c.server.common.web"/>
-  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-servlet/2.5.0/gwt-servlet-2.5.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-servlet/2.5.0/gwt-servlet-2.5.0.jar" sourcepath="M2_REPO/com/google/gwt/gwt-servlet/2.5.0/gwt-servlet-2.5.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/net/customware/gwt/dispatch/gwt-dispatch/1.2.0/gwt-dispatch-1.2.0.jar" sourcepath="M2_REPO/net/customware/gwt/dispatch/gwt-dispatch/1.2.0/gwt-dispatch-1.2.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/gwt/inject/gin/1.5.0/gin-1.5.0.jar" sourcepath="M2_REPO/com/google/gwt/inject/gin/1.5.0/gin-1.5.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/inject/guice/3.0-rc2/guice-3.0-rc2.jar" sourcepath="M2_REPO/com/google/inject/guice/3.0-rc2/guice-3.0-rc2-sources.jar"/>
@@ -78,7 +78,8 @@
   <classpathentry kind="var" path="M2_REPO/httpunit/httpunit/1.7/httpunit-1.7.jar" sourcepath="M2_REPO/httpunit/httpunit/1.7/httpunit-1.7-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/jtidy/jtidy/4aug2000r7-dev/jtidy-4aug2000r7-dev.jar" sourcepath="M2_REPO/jtidy/jtidy/4aug2000r7-dev/jtidy-4aug2000r7-dev-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hsqldb/hsqldb/2.2.8/hsqldb-2.2.8.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-user/2.5.0/gwt-user-2.5.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-user/2.5.0/gwt-user-2.5.0.jar" sourcepath="M2_REPO/com/google/gwt/gwt-user/2.5.0/gwt-user-2.5.0-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/json/json/20090211/json-20090211.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jmock/jmock/2.5.1/jmock-2.5.1.jar" sourcepath="M2_REPO/org/jmock/jmock/2.5.1/jmock-2.5.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" sourcepath="M2_REPO/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-library/1.1/hamcrest-library-1.1.jar" sourcepath="M2_REPO/org/hamcrest/hamcrest-library/1.1/hamcrest-library-1.1-sources.jar"/>

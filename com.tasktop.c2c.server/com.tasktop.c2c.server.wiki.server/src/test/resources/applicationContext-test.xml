@@ -24,8 +24,7 @@
 	<bean class="com.tasktop.c2c.server.common.tests.util.WebApplicationContainerBean" id="webApplicationContainerBean"/>
 	
 	<bean id="wikiTestDatabaseConfigurator" class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 
-					p:databaseNamingStrategy-ref="databaseNamingStrategy" p:rawDatasource-ref="rawDataSource" p:tenantAwareDataSource-ref="wikiCreateTestDataSource" 
-					p:changelog="classpath:/data/liquibase-wiki-db-master.xml"/>
+					p:databaseNamingStrategy-ref="databaseNamingStrategy" p:rawDatasource-ref="rawDataSource"/>
 	<bean id="wikiTestPreferencesConfigurator" class="com.tasktop.c2c.server.internal.wiki.server.ProjectServicePreferencesConfigurator"/>
  	
 </beans>

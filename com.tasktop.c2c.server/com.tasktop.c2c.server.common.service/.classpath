@@ -40,6 +40,7 @@
   <classpathentry kind="var" path="M2_REPO/org/eclipse/persistence/org.eclipse.persistence.jpa/2.3.2/org.eclipse.persistence.jpa-2.3.2.jar" sourcepath="M2_REPO/org/eclipse/persistence/org.eclipse.persistence.jpa/2.3.2/org.eclipse.persistence.jpa-2.3.2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/aspectj/aspectjrt/1.6.10/aspectjrt-1.6.10.jar" sourcepath="M2_REPO/org/aspectj/aspectjrt/1.6.10/aspectjrt-1.6.10-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/aspectj/aspectjweaver/1.6.10/aspectjweaver-1.6.10.jar" sourcepath="M2_REPO/org/aspectj/aspectjweaver/1.6.10/aspectjweaver-1.6.10-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/liquibase/liquibase-core/2.0.3-c2c/liquibase-core-2.0.3-c2c.jar"/>
   <classpathentry kind="var" path="M2_REPO/net/sourceforge/winstone/winstone/0.9.10/winstone-0.9.10.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-test/3.1.1.RELEASE/spring-test-3.1.1.RELEASE.jar" sourcepath="M2_REPO/org/springframework/spring-test/3.1.1.RELEASE/spring-test-3.1.1.RELEASE-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jmock/jmock/2.5.1/jmock-2.5.1.jar" sourcepath="M2_REPO/org/jmock/jmock/2.5.1/jmock-2.5.1-sources.jar"/>
