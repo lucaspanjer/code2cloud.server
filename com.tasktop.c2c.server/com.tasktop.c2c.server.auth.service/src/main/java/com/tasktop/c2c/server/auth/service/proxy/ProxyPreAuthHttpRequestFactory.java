@@ -53,6 +53,5 @@ public class ProxyPreAuthHttpRequestFactory extends CommonsClientHttpRequestFact
 	public void afterPropertiesSet() throws Exception {
 		getHttpClient().getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
 				new DefaultHttpMethodRetryHandler(0, false));
-		getHttpClient().getHttpConnectionManager().getParams().setSoTimeout(30 * 1000);
 	}
 }
