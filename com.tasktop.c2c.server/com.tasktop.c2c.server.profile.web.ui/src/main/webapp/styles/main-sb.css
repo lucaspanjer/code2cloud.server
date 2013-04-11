@@ -3360,48 +3360,7 @@ a.red-link {
 }
 
 
-/*Styles for header not logged in*/
-
-.header .navigation li {
-	float: left;
-	margin-right: 10px;
-}
-
-.header .navigation li a {
-  display: block;
-  width: 117px;
-  height: 39px;
-  line-height: 33px;
-  background-image: url("i/header-button-states.png");
-  background-repeat: no-repeat;
-  text-align: center;
-  font-size: 20px;
-  color: #1282CC;
-  text-decoration: none;
-}
-
-.header .navigation li a.selected {
-  background-position: 0 -39px;
-  color: #062A55;
-}
-
-.header .navigation li a.first {
-  width: 85px;
-}
-
-.header .navigation li a.last {
-  width: 70px;
-}
-
-.header .navigation li a.first.selected {
-  background-position: 0 -78px;
-}
-
-.header .navigation li a.last.selected {
-  background-position: 0 -117px;
-}
-
-/* univarsal popup style*/
+/* universal popup style*/
 .popup {
 	position: absolute;
 	background: #ebf3f8;

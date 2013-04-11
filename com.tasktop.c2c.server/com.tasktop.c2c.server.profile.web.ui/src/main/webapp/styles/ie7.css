@@ -50,17 +50,6 @@ a.project-nav-item {
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient( startColorstr='#e9f4ff', endColorstr='#d2e0ee',GradientType=0 )"; /* IE6-9 */
 }
 
-.header {
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4d85b6', endColorstr='#2b5480',GradientType=0 ); /* IE6-9 */
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient( startColorstr='#4d85b6', endColorstr='#2b5480',GradientType=0 )"; /* IE6-9 */
-}
-
-.header .search-button,
-.search-tasks .search-button {
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f0f0', endColorstr='#cfcfcf',GradientType=0 ); /* IE6-9 */
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f0f0', endColorstr='#cfcfcf',GradientType=0 )"; /* IE6-9 */
-}
-
 .button {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */	
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#e5e5e5',GradientType=0 )"; /* IE6-9 */	
