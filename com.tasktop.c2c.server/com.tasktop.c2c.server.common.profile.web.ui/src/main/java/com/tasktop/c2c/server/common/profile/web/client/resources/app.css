@@ -1,4 +1,4 @@
-@external .external-nav, .internal-nav, .prefix, .footer, .search, .search-button, .headerNav, .button, .special, .selected, .disabled, .discover-project, .spacer, .small, .watch, .navigation; 
+@external .external-nav, .internal-nav, .prefix, .footer, .search, .search-button, .search-tasks, .headerNav, .button, .special, .selected, .disabled, .discover-project, .spacer, .small, .watch, .navigation; 
 
 html, body {
   margin: 0;
