@@ -32,15 +32,15 @@ public class DeploymentConfiguration extends AbstractEntity {
 	// Credentials
 	private String apiBaseUrl;
 	private String username;
-	private String password; // Not stored!
+	private String password; // transient
 	private String apiToken;
-	private String errorString;
+	private String errorString; // transient
 
 	// CF Configuration
-	private List<CloudService> services;
-	private List<String> mappedUrls;
-	private int numInstances;
-	private int memory;
+	private List<CloudService> services; // transient
+	private List<String> mappedUrls; // transient
+	private int numInstances; // transient
+	private int memory; // transient
 
 	// Common C2C Configuration
 	private DeploymentType deploymentType;
@@ -51,7 +51,7 @@ public class DeploymentConfiguration extends AbstractEntity {
 	private boolean deployUnstableBuilds; // if deploymentType is AUTOMATIC. If true the we deploy even if tests fail.
 
 	// Status
-	private DeploymentStatus status;
+	private DeploymentStatus status; // transient
 
 	// history of deployment activity
 	private List<DeploymentActivity> deploymentActivities = new ArrayList<DeploymentActivity>();
@@ -225,9 +225,5 @@ public class DeploymentConfiguration extends AbstractEntity {
 
 	public void setDeploymentActivities(List<DeploymentActivity> deploymentActivities) {
 		this.deploymentActivities = deploymentActivities;
-	}
-
-	public synchronized void addDeploymentActivity(DeploymentActivity deploymentActivity) {
-		this.deploymentActivities.add(deploymentActivity);
 	}
 }

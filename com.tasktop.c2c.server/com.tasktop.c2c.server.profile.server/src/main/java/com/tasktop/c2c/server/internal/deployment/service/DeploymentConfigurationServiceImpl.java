@@ -170,16 +170,13 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			securityPolicy.create(internalDeploymentConfiguration);
 
 			validateBeforeCreate(deploymentConfiguration, internalDeploymentConfiguration);
-			com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity createdActivity = new com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity(
-					DeploymentActivityType.CREATED, DeploymentActivityStatus.SUCCEEDED,
-					internalDeploymentConfiguration, profileService.getCurrentUserProfile());
-			internalDeploymentConfiguration.addDeploymentActivity(createdActivity);
-
 			entityManager.persist(internalDeploymentConfiguration);
 			entityManager.flush(); // Need the Id;
 			deploymentConfiguration.setId(internalDeploymentConfiguration.getId());
 
 			deploymentService.create(deploymentConfiguration);
+			addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.CREATED,
+					DeploymentActivityStatus.SUCCEEDED);
 
 			boolean shouldDeploy = shouldDeployOnCreate(deploymentConfiguration);
 			if (shouldDeploy) {
@@ -187,7 +184,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 				deployLatestArtifact(deploymentConfiguration, deploymentService, projectId);
 			}
 
-			retVal = deploymentDomain.convertToPublic(internalDeploymentConfiguration);
+			retVal = mergePersistedWithTransientValues(deploymentConfiguration);
 		} catch (ServiceException e) {
 			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
 		} catch (IOException e) {
@@ -281,12 +278,8 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 			deploymentService.update(deploymentConfiguration);
 
-			// save a record of the update activity
-			com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity updateActivity = new com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity(
-					DeploymentActivityType.UPDATED, DeploymentActivityStatus.SUCCEEDED,
-					internalDeploymentConfiguration, profileService.getCurrentUserProfile());
-			internalDeploymentConfiguration.addDeploymentActivity(updateActivity);
-			entityManager.flush();
+			addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.UPDATED,
+					DeploymentActivityStatus.SUCCEEDED);
 
 			boolean shouldDeploy = shouldDeployOnUpdate(deploymentConfiguration, internalDeploymentConfiguration);
 			if (shouldDeploy) {
@@ -299,11 +292,10 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		} catch (IOException e) {
 			setStatusErrorMessage(deploymentConfiguration, e.getMessage());
 		}
-
 		// Update the fields in the managed object
 		deploymentDomain.updateInternal(deploymentConfiguration, internalDeploymentConfiguration);
 
-		return deploymentDomain.convertToPublic(internalDeploymentConfiguration);
+		return mergePersistedWithTransientValues(deploymentConfiguration);
 	}
 
 	@Override
@@ -334,9 +326,15 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 							DeploymentActivityType.DEPLOYED, DeploymentActivityStatus.FAILED);
 					throw e;
 				}
+				deploymentConfiguration.setLastDeploymentDate(new Date());
+				// persist last deployment date
+				com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalDeploymentConfiguration = lookUpDeploymentConfiguration(deploymentConfiguration
+						.getId());
+				internalDeploymentConfiguration.setLastDeploymentDate(deploymentConfiguration.getLastDeploymentDate());
+				entityManager.persist(internalDeploymentConfiguration);
+
 				addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(),
 						DeploymentActivityType.DEPLOYED, DeploymentActivityStatus.SUCCEEDED);
-				deploymentConfiguration.setLastDeploymentDate(new Date());
 			}
 		}
 		deploymentService.populate(deploymentConfiguration);
@@ -411,7 +409,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.STARTED,
 				deploymentActivityStatus);
-		return deploymentDomain.convertToPublic(lookUpDeploymentConfiguration(deploymentConfiguration.getId()));
+		return mergePersistedWithTransientValues(deploymentConfiguration);
 	}
 
 	private void addDeploymentActivityInternalAndPersist(Long deploymentConfigurationId,
@@ -424,6 +422,13 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		internalDeploymentConfiguration.addDeploymentActivity(internalDeploymentActivity);
 		entityManager.persist(internalDeploymentConfiguration);
 		entityManager.flush();
+	}
+
+	private DeploymentConfiguration mergePersistedWithTransientValues(DeploymentConfiguration modifiedConfig)
+			throws EntityNotFoundException {
+		com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalConfig = lookUpDeploymentConfiguration(modifiedConfig
+				.getId());
+		return deploymentDomain.mergeInternalWithPublicTransientValues(internalConfig, modifiedConfig);
 	}
 
 	private com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration lookUpDeploymentConfiguration(
@@ -464,7 +469,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.STOPPED,
 				deploymentActivityStatus);
-		return deploymentDomain.convertToPublic(lookUpDeploymentConfiguration(deploymentConfiguration.getId()));
+		return mergePersistedWithTransientValues(deploymentConfiguration);
 	}
 
 	@Override
@@ -484,7 +489,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.RESTARTED,
 				deploymentActivityStatus);
-		return deploymentDomain.convertToPublic(lookUpDeploymentConfiguration(deploymentConfiguration.getId()));
+		return mergePersistedWithTransientValues(deploymentConfiguration);
 	}
 
 	@Override

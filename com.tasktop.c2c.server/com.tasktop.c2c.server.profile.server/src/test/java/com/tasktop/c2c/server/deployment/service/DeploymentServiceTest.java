@@ -326,6 +326,11 @@ public class DeploymentServiceTest {
 		config = configs.get(0);
 		Assert.assertEquals(DeploymentType.MANUAL, config.getDeploymentType());
 		Assert.assertTrue(config.getDeploymentActivities().size() > 0);
+
+		// ensure transient values are kept
+		Assert.assertEquals(Arrays.asList("http://example.com"), config.getMappedUrls());
+		Assert.assertEquals(512, config.getMemory());
+
 		boolean foundUpdatedActivity = false;
 		for (DeploymentActivity da : config.getDeploymentActivities()) {
 			if (DeploymentActivityType.UPDATED.equals(da.getType())) {

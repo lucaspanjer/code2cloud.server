@@ -194,6 +194,7 @@ public class DeploymentConfiguration extends BaseEntity {
 	}
 
 	public synchronized void addDeploymentActivity(DeploymentActivity deploymentActivity) {
-		this.deploymentActivities.add(deploymentActivity);
+		// since activities are sorted by date descending, add to the top of the list
+		this.deploymentActivities.add(0, deploymentActivity);
 	}
 }

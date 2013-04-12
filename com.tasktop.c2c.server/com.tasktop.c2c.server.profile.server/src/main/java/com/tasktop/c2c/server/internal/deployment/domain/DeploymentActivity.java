@@ -51,7 +51,7 @@ public class DeploymentActivity extends BaseEntity {
 	public DeploymentActivity(DeploymentActivityType type, DeploymentActivityStatus status,
 			DeploymentConfiguration deploymentConfiguration, Profile currentUser) {
 		this.deploymentConfiguration = deploymentConfiguration;
-		if (DeploymentActivityType.DEPLOYED.equals(type)) {
+		if (DeploymentActivityType.DEPLOYED.equals(type) && deploymentConfiguration.getLastDeploymentDate() != null) {
 			this.time = deploymentConfiguration.getLastDeploymentDate();
 		} else {
 			this.time = new Date();

@@ -61,6 +61,28 @@ public class DeploymentDomain {
 		return result;
 	}
 
+	/**
+	 * Given an internal DeploymentConfiguration and a public DeploymentConfiguration whose transient values have been
+	 * modified, merge the transient values into the persisted values and return a new public DeploymentConfiguration.
+	 * 
+	 * @param internalConfig
+	 * @param modifiedConfig
+	 * @return
+	 */
+	public DeploymentConfiguration mergeInternalWithPublicTransientValues(
+			com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration internalConfig,
+			DeploymentConfiguration modifiedConfig) {
+		DeploymentConfiguration mergedConfig = convertToPublic(internalConfig);
+		mergedConfig.setErrorString(modifiedConfig.getPassword());
+		mergedConfig.setPassword(modifiedConfig.getPassword());
+		mergedConfig.setServices(modifiedConfig.getServices());
+		mergedConfig.setMappedUrls(modifiedConfig.getMappedUrls());
+		mergedConfig.setNumInstances(modifiedConfig.getNumInstances());
+		mergedConfig.setMemory(modifiedConfig.getMemory());
+		mergedConfig.setStatus(modifiedConfig.getStatus());
+		return mergedConfig;
+	}
+
 	public DeploymentActivity convertToPublic(
 			com.tasktop.c2c.server.internal.deployment.domain.DeploymentActivity source) {
 		DeploymentActivity result = newPublicDO(source);
