@@ -239,7 +239,7 @@ public class TaskServiceTest {
 
 	private static final int MINIMUM_DATE_RESOLUTION = 1000;
 
-	private int count(Class<?> objToCount) {
+	protected int count(Class<?> objToCount) {
 
 		Query countQ = entityManager
 				.createQuery(String.format("SELECT count(o) FROM %s o", objToCount.getSimpleName()));
@@ -252,13 +252,19 @@ public class TaskServiceTest {
 	}
 
 	@SuppressWarnings("unchecked")
+	protected List<TaskStatus> getStatuses() {
+		List<TaskStatus> statuses = entityManager.createQuery(
+				"select e from " + TaskStatus.class.getSimpleName() + " e").getResultList();
+		return statuses;
+	}
+
+	@SuppressWarnings("unchecked")
 	private void setupTestData(int numberOfTasksToCreate) {
 		assertTrue(numberOfTasksToCreate > 0);
 
 		computeSeverities();
 		assertTrue(severities.size() > 3);
-		List<TaskStatus> statuses = entityManager.createQuery(
-				"select e from " + TaskStatus.class.getSimpleName() + " e").getResultList();
+		List<TaskStatus> statuses = getStatuses();
 		for (TaskStatus status : statuses) {
 			if (status.getIsOpen()) {
 				openStatus = status;
