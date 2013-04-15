@@ -13,12 +13,16 @@ package com.tasktop.c2c.server.internal.profile.service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.tasktop.c2c.server.cloud.domain.ServiceHost;
+import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.cloud.service.ServiceHostService;
 
 /**
@@ -49,12 +53,50 @@ public class ServiceHostStartupProcessor implements InitializingBean {
 			ApplicationContext appContext = new FileSystemXmlApplicationContext("file:" + configFile);
 			ArrayList<ServiceHost> serviceHostStartupBeans = (ArrayList<ServiceHost>) appContext
 					.getBean("serviceHostStartupBeans");
+
+			Set<String> newIPs = new HashSet<String>();
 			for (ServiceHost serviceHostBean : serviceHostStartupBeans) {
-				if (serviceHostService.findHostForIpAndType(serviceHostBean.getInternalNetworkAddress(),
-						serviceHostBean.getSupportedServices()) == null) {
+				List<ServiceHost> existingHostsForIP = serviceHostService.findHostsByIp(serviceHostBean
+						.getInternalNetworkAddress());
+				// if the IP is new, add the ServiceHost
+				if (existingHostsForIP == null || existingHostsForIP.isEmpty()
+						|| newIPs.contains(serviceHostBean.getInternalNetworkAddress())) {
 					serviceHostService.createServiceHost(serviceHostBean);
+					newIPs.add(serviceHostBean.getInternalNetworkAddress());
+					// if there's an exact match, do nothing
+				} else if (serviceHostService.findHostForIpAndType(serviceHostBean.getInternalNetworkAddress(),
+						serviceHostBean.getSupportedServices()) == null) {
+					// otherwise look for the best match by IP and type,
+					// and update the best match with the new types
+					ServiceHost bestMatch = findBestServiceHostMatch(serviceHostBean, existingHostsForIP);
+					bestMatch.setSupportedServices(serviceHostBean.getSupportedServices());
+					serviceHostService.updateServiceHost(bestMatch);
 				}
 			}
 		}
+	}
+
+	private ServiceHost findBestServiceHostMatch(ServiceHost serviceHostBean, List<ServiceHost> existingHostsForIP) {
+		int highestScore = 0;
+		ServiceHost bestMatch = null;
+		for (ServiceHost serviceHost : existingHostsForIP) {
+			int thisHostScore = 0;
+
+			// increase the score for each matching ServiceType
+			for (ServiceType type : serviceHost.getSupportedServices()) {
+				if (serviceHostBean.getSupportedServices().contains(type)) {
+					thisHostScore += 1;
+				}
+			}
+
+			// build slaves need their own configurations, but there's no need to affect the score here - an exact match
+			// will have been ignored in the calling method
+
+			if (thisHostScore >= highestScore) {
+				highestScore = thisHostScore;
+				bestMatch = serviceHost;
+			}
+		}
+		return bestMatch;
 	}
 }

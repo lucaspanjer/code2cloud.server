@@ -24,6 +24,7 @@
 								<value>WIKI</value>
 								<value>SCM</value>
 								<value>MAVEN</value>
+								<value>REVIEWS</value>
 							</set>
 						</property>
 					</bean>

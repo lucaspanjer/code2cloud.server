@@ -79,9 +79,9 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 		return result;
 	}
 
-	private static void updateManaged(com.tasktop.c2c.server.cloud.domain.ServiceHost publicNode, ServiceHost managed) {
+	private void updateManaged(com.tasktop.c2c.server.cloud.domain.ServiceHost publicNode, ServiceHost managed) {
 		managed.setInternalNetworkAddress(publicNode.getInternalNetworkAddress());
-		// managed.setType(publicNode.getType());
+		managed.getServiceHostConfiguration().setSupportedServices(publicNode.getSupportedServices());
 		managed.setAvailable(publicNode.isAvailable());
 	}
 
@@ -178,6 +178,25 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 								+ " host WHERE  host.serviceHostConfiguration = :config AND SIZE(host.projectServices) >= :maxCapacity")
 				.setParameter("config", config).setParameter("maxCapacity", capacity).getResultList();
 
+		List<com.tasktop.c2c.server.cloud.domain.ServiceHost> publicNodes = new ArrayList<com.tasktop.c2c.server.cloud.domain.ServiceHost>(
+				managedResults.size());
+		for (ServiceHost node : managedResults) {
+			publicNodes.add(convertToPublic(node));
+		}
+		return publicNodes;
+	}
+
+	@Override
+	public List<com.tasktop.c2c.server.cloud.domain.ServiceHost> findHostsByIp(String ip) {
+		@SuppressWarnings("unchecked")
+		List<ServiceHost> managedResults = entityManager
+				.createQuery(
+						"SELECT node FROM " + ServiceHost.class.getSimpleName()
+								+ " node WHERE node.internalNetworkAddress = :addr").setParameter("addr", ip)
+				.getResultList();
+		if (managedResults.isEmpty()) {
+			return null;
+		}
 		List<com.tasktop.c2c.server.cloud.domain.ServiceHost> publicNodes = new ArrayList<com.tasktop.c2c.server.cloud.domain.ServiceHost>(
 				managedResults.size());
 		for (ServiceHost node : managedResults) {

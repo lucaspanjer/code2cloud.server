@@ -11,50 +11,85 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.tests.service;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Test;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-import com.tasktop.c2c.server.cloud.domain.ServiceHost;
+import junit.framework.Assert;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.cloud.service.ServiceHostService;
 import com.tasktop.c2c.server.internal.profile.service.ServiceHostStartupProcessor;
+import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
 
 /**
  * @author michaelnelson (Tasktop Technologies Inc.)
  * 
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({ "/applicationContext-testDisableSecurity.xml", "/applicationContext-hsql.xml" })
+@Transactional
 public class ServiceHostStartupProcessorTest {
 
-	Mockery context = new Mockery();
-	final ServiceHostService mockServiceHostService = context.mock(ServiceHostService.class);
+	@Autowired
+	protected ServiceHostService serviceHostService;
 
-	private ServiceHostStartupProcessor processor = new ServiceHostStartupProcessor();
-
-	public ServiceHostStartupProcessorTest() {
-		// This is the test Spring configuration file; please ensure it
-		// is kept in sync with values we test with below
-		processor.setConfigFile(System.getProperty("user.dir")
-				+ "/src/test/resources/applicationContext-serviceHosts.xml");
-		processor.setServiceHostService(mockServiceHostService);
-	}
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	@Test
-	public void testCreateServiceHosts() throws Exception {
-		final Set<ServiceType> types = new HashSet<ServiceType>();
-		types.add(ServiceType.TASKS);
-		types.add(ServiceType.WIKI);
-		context.checking(new Expectations() {
-			{
-				oneOf(mockServiceHostService).findHostForIpAndType("127.0.0.1", types);
-				oneOf(mockServiceHostService).findHostForIpAndType("127.0.0.2", types);
-				exactly(2).of(mockServiceHostService).createServiceHost(with(any(ServiceHost.class)));
+	public void testInitialThenUpdatedSetup() throws Exception {
+		ServiceHostStartupProcessor serviceHostStartupProcessor = new ServiceHostStartupProcessor();
+		serviceHostStartupProcessor.setConfigFile(System.getProperty("user.dir")
+				+ "/src/test/resources/applicationContext-serviceHosts.xml");
+		serviceHostStartupProcessor.setServiceHostService(serviceHostService);
+		serviceHostStartupProcessor.afterPropertiesSet();
+		List<ServiceHost> serviceHosts = entityManager.createQuery("SELECT sh FROM ServiceHost sh", ServiceHost.class)
+				.getResultList();
+		Assert.assertEquals(2, serviceHosts.size());
+		boolean foundFirstExpectedHost = false;
+		boolean foundSecondExpectedHost = false;
+		for (ServiceHost host : serviceHosts) {
+			Set<ServiceType> supportedServices = host.getServiceHostConfiguration().getSupportedServices();
+			if (supportedServices.contains(ServiceType.BUILD) && supportedServices.contains(ServiceType.TASKS)
+					&& supportedServices.contains(ServiceType.WIKI) && supportedServices.contains(ServiceType.SCM)
+					&& supportedServices.contains(ServiceType.MAVEN)) {
+				foundFirstExpectedHost = true;
+			} else if (supportedServices.contains(ServiceType.BUILD_SLAVE)) {
+				foundSecondExpectedHost = true;
 			}
-		});
-		processor.afterPropertiesSet();
-		context.assertIsSatisfied();
+		}
+		Assert.assertTrue(foundFirstExpectedHost);
+		Assert.assertTrue(foundSecondExpectedHost);
+
+		// now we try an updated configuration
+		serviceHostStartupProcessor.setConfigFile(System.getProperty("user.dir")
+				+ "/src/test/resources/applicationContext-serviceHosts-updated.xml");
+		serviceHostStartupProcessor.afterPropertiesSet();
+		serviceHosts = entityManager.createQuery("SELECT sh FROM ServiceHost sh", ServiceHost.class).getResultList();
+		Assert.assertEquals(2, serviceHosts.size());
+		foundFirstExpectedHost = false;
+		foundSecondExpectedHost = false;
+		for (ServiceHost host : serviceHosts) {
+			Set<ServiceType> supportedServices = host.getServiceHostConfiguration().getSupportedServices();
+			if (supportedServices.contains(ServiceType.BUILD) && supportedServices.contains(ServiceType.TASKS)
+					&& supportedServices.contains(ServiceType.WIKI) && supportedServices.contains(ServiceType.SCM)
+					&& supportedServices.contains(ServiceType.MAVEN) && supportedServices.contains(ServiceType.REVIEWS)) {
+				foundFirstExpectedHost = true;
+			} else if (supportedServices.contains(ServiceType.BUILD_SLAVE)) {
+				foundSecondExpectedHost = true;
+			}
+		}
+		Assert.assertTrue(foundFirstExpectedHost);
+		Assert.assertTrue(foundSecondExpectedHost);
 	}
 }

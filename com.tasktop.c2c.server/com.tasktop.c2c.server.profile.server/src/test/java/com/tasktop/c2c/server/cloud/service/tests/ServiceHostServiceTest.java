@@ -133,6 +133,15 @@ public class ServiceHostServiceTest {
 	}
 
 	@Test
+	public void testFindHostsByIp() {
+		String ip = "10.0.0.1";
+		recordNodeAllocation(ip, type1);
+		recordNodeAllocation(ip, type2);
+		List<ServiceHost> serviceHosts = serviceHostService.findHostsByIp(ip);
+		Assert.assertEquals(2, serviceHosts.size());
+	}
+
+	@Test
 	public void testFindHostsByTypeAndProject() {
 		Project project = MockProjectFactory.create(entityManager);
 		ProjectServiceProfile projectServiceProfile = MockProjectServiceProfileFactory.create(entityManager);

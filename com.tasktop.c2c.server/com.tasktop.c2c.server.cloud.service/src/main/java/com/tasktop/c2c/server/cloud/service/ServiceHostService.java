@@ -56,6 +56,8 @@ public interface ServiceHostService {
 	 */
 	boolean isAtCapacity(ServiceHost host, int capacity);
 
+	List<ServiceHost> findHostsByIp(String ip);
+
 	ServiceHost findHostForIpAndType(String ip, Set<ServiceType> type);
 
 	ServiceHost createServiceHost(ServiceHost node);
