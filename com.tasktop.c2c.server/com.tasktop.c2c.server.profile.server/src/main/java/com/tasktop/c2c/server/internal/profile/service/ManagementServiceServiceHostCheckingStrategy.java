@@ -38,19 +38,25 @@ public class ManagementServiceServiceHostCheckingStrategy implements ServiceHost
 	@Override
 	public boolean canCheckServiceHost(ServiceHost serviceHost) {
 		for (ServiceType type : serviceHost.getServiceHostConfiguration().getSupportedServices()) {
-			switch (type) {
-			case BUILD:
-			case MAVEN:
-			case SCM:
-			case TASKS:
-			case WIKI:
-				continue;
-			default:
+			if (!canCheckService(type)) {
 				return false;
-
 			}
 		}
 		return true;
+	}
+
+	protected boolean canCheckService(ServiceType type) {
+		switch (type) {
+		case BUILD:
+		case MAVEN:
+		case SCM:
+		case TASKS:
+		case WIKI:
+			return true;
+		default:
+			return false;
+
+		}
 	}
 
 	@Override
@@ -58,19 +64,9 @@ public class ManagementServiceServiceHostCheckingStrategy implements ServiceHost
 		boolean allServicesUp = true;
 		for (ServiceType typeToCheck : serviceHost.getServiceHostConfiguration().getSupportedServices()) {
 
-			ProjectServiceManagementService serviceMangementService = projectServiceMangementServiceProvider
-					.getNewService(serviceHost.getInternalNetworkAddress(), typeToCheck);
-
 			boolean serviceIsBackUp = false;
 			try {
-				ServiceHostStatus status = serviceMangementService.retrieveServiceHostStaus();
-
-				switch (status.getState()) {
-				case RUNNING:
-					serviceIsBackUp = true;
-				default:
-				}
-
+				serviceIsBackUp = checkServiceHostService(serviceHost, typeToCheck);
 			} catch (Exception e) {
 				LOGGER.info(String.format("Exception trying to retrieve service host [%s]'s [%s] service status",
 						serviceHost.getInternalNetworkAddress(), typeToCheck), e);
@@ -80,10 +76,25 @@ public class ManagementServiceServiceHostCheckingStrategy implements ServiceHost
 				allServicesUp = false;
 				LOGGER.info(String.format("Service host [%s]'s [%s] service is still down",
 						serviceHost.getInternalNetworkAddress(), typeToCheck));
+				break;
 			}
 		}
 
 		return allServicesUp;
+	}
+
+	protected boolean checkServiceHostService(ServiceHost serviceHost, ServiceType type) {
+		ProjectServiceManagementService serviceMangementService = projectServiceMangementServiceProvider.getNewService(
+				serviceHost.getInternalNetworkAddress(), type);
+
+		ServiceHostStatus status = serviceMangementService.retrieveServiceHostStaus();
+
+		switch (status.getState()) {
+		case RUNNING:
+			return true;
+		default:
+		}
+		return false;
 	}
 
 }
