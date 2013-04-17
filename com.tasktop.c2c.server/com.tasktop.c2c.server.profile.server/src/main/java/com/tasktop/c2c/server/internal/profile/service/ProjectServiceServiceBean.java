@@ -91,6 +91,9 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	@Qualifier("projectServiceManagementStrategyList")
 	private ProjectServiceManagementStrategy projectServiceManagementStrategy;
 
+	@Value("${alm.hub.enableHA}")
+	private boolean enableHA = true;
+
 	private boolean updateServiceTemplateOnStart = true;
 
 	@Override
@@ -385,6 +388,9 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 	@Override
 	public void handleConnectFailure(ProjectService service) {
+		if (!enableHA) {
+			return;
+		}
 		ServiceHost failedHost = entityManager.find(ServiceHost.class, service.getServiceHost().getId());
 		entityManager.lock(failedHost, LockModeType.PESSIMISTIC_WRITE);
 		entityManager.refresh(failedHost);
