@@ -110,6 +110,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		return listDeploymentsWithoutServiceQuery(region, true);
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<DeploymentConfiguration> listDeploymentsWithoutServiceQuery(Region region, boolean populate) {
 		// TODO paging params
 		List<com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration> internalResultList = entityManager
@@ -341,8 +342,6 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	}
 
 	private String getExtension(ProjectArtifact artifact) {
-		String extension;
-
 		int lastDot = artifact.getPath().lastIndexOf(".");
 		if (lastDot == -1) {
 			return ".war";
@@ -394,8 +393,10 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	}
 
 	@Override
-	public DeploymentConfiguration startDeployment(DeploymentConfiguration deploymentConfiguration)
-			throws EntityNotFoundException, ServiceException {
+	public DeploymentConfiguration startDeployment(Long deploymentConfigurationId) throws EntityNotFoundException,
+			ServiceException {
+		DeploymentConfiguration deploymentConfiguration = deploymentDomain
+				.convertToPublic(lookUpDeploymentConfiguration(deploymentConfigurationId));
 		checkUpdatePermissions(deploymentConfiguration);
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
 		DeploymentActivityStatus deploymentActivityStatus = DeploymentActivityStatus.SUCCEEDED;
@@ -407,7 +408,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			throw se;
 		}
 
-		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.STARTED,
+		addDeploymentActivityInternalAndPersist(deploymentConfigurationId, DeploymentActivityType.STARTED,
 				deploymentActivityStatus);
 		return mergePersistedWithTransientValues(deploymentConfiguration);
 	}
@@ -453,8 +454,10 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 	}
 
 	@Override
-	public DeploymentConfiguration stopDeployment(DeploymentConfiguration deploymentConfiguration)
-			throws EntityNotFoundException, ServiceException {
+	public DeploymentConfiguration stopDeployment(Long deploymentConfigurationId) throws EntityNotFoundException,
+			ServiceException {
+		DeploymentConfiguration deploymentConfiguration = deploymentDomain
+				.convertToPublic(lookUpDeploymentConfiguration(deploymentConfigurationId));
 		checkUpdatePermissions(deploymentConfiguration);
 
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
@@ -467,14 +470,17 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			throw se;
 		}
 
-		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.STOPPED,
+		addDeploymentActivityInternalAndPersist(deploymentConfigurationId, DeploymentActivityType.STOPPED,
 				deploymentActivityStatus);
 		return mergePersistedWithTransientValues(deploymentConfiguration);
 	}
 
 	@Override
-	public DeploymentConfiguration restartDeployment(DeploymentConfiguration deploymentConfiguration)
-			throws EntityNotFoundException, ServiceException {
+	public DeploymentConfiguration restartDeployment(Long deploymentConfigurationId) throws EntityNotFoundException,
+			ServiceException {
+		DeploymentConfiguration deploymentConfiguration = deploymentDomain.convertToPublic(entityManager.find(
+				com.tasktop.c2c.server.internal.deployment.domain.DeploymentConfiguration.class,
+				deploymentConfigurationId));
 		checkUpdatePermissions(deploymentConfiguration);
 
 		DeploymentService deploymentService = createDeploymentService(deploymentConfiguration);
@@ -487,7 +493,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 			throw se;
 		}
 
-		addDeploymentActivityInternalAndPersist(deploymentConfiguration.getId(), DeploymentActivityType.RESTARTED,
+		addDeploymentActivityInternalAndPersist(deploymentConfigurationId, DeploymentActivityType.RESTARTED,
 				deploymentActivityStatus);
 		return mergePersistedWithTransientValues(deploymentConfiguration);
 	}
@@ -568,6 +574,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	// TODO explicit security check.
 	public void onBuildCompleted(String jobName, BuildDetails buildDetails) {

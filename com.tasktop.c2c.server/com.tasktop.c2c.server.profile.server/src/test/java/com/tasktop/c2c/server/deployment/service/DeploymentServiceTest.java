@@ -40,7 +40,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
-import com.tasktop.c2c.server.common.service.Security;
 import com.tasktop.c2c.server.common.service.ValidationException;
 import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.deployment.domain.CloudService;
@@ -352,19 +351,19 @@ public class DeploymentServiceTest {
 		Assert.assertEquals(1, configs.size());
 		config = configs.get(0);
 
-		deploymentConfigurationService.startDeployment(config);
+		deploymentConfigurationService.startDeployment(config.getId());
 		configs = deploymentConfigurationService.listDeployments(null);
 		config = configs.get(0);
 		Assert.assertEquals(2, config.getDeploymentActivities().size()); // created, started
 		Assert.assertTrue(foundMatchingType(config.getDeploymentActivities(), DeploymentActivityType.STARTED));
 
-		deploymentConfigurationService.stopDeployment(config);
+		deploymentConfigurationService.stopDeployment(config.getId());
 		configs = deploymentConfigurationService.listDeployments(null);
 		config = configs.get(0);
 		Assert.assertEquals(3, config.getDeploymentActivities().size()); // created, started, stopped
 		Assert.assertTrue(foundMatchingType(config.getDeploymentActivities(), DeploymentActivityType.STOPPED));
 
-		deploymentConfigurationService.restartDeployment(config);
+		deploymentConfigurationService.restartDeployment(config.getId());
 		configs = deploymentConfigurationService.listDeployments(null);
 		config = configs.get(0);
 		Assert.assertEquals(4, config.getDeploymentActivities().size()); // created, started, stopped, restarted
@@ -393,7 +392,6 @@ public class DeploymentServiceTest {
 
 		SecurityContextHolder.getContext().setAuthentication(
 				new UsernamePasswordAuthenticationToken(internalProfile.getUsername(), internalProfile.getPassword()));
-		String currentUser = Security.getCurrentUser();
 
 		return internalProfile;
 	}

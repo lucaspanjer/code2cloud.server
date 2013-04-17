@@ -104,13 +104,13 @@ public class DeploymentsPresenter extends AbstractProfilePresenter implements Sp
 	private void doOperation(String opMessage, String successMessage, Action type) {
 		OperationMessage message = new OperationMessage(opMessage);
 		message.setSuccessText(successMessage);
-		final DeploymentConfiguration configuration = view.getOriginalValue();
-		getDispatchService().execute(new ControlDeploymentAction(projectIdentifier, configuration, type),
+		getDispatchService().execute(
+				new ControlDeploymentAction(projectIdentifier, view.getOriginalValue().getId(), type),
 				new AsyncCallbackSupport<DeploymentResult>(message) {
 
 					@Override
 					protected void success(DeploymentResult result) {
-						view.updateStatus(configuration, result.get().getStatus());
+						view.updateStatus(result.get(), result.get().getStatus());
 
 					}
 				});

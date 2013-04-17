@@ -36,13 +36,13 @@ public class ControlDeploymentActionHandler extends
 			DeploymentConfiguration result = null;
 			switch (action.getAction()) {
 			case RESTART:
-				result = deploymentConfigurationService.restartDeployment(action.getDeploymentConfiguration());
+				result = deploymentConfigurationService.restartDeployment(action.getDeploymentConfigurationId());
 				break;
 			case START:
-				result = deploymentConfigurationService.startDeployment(action.getDeploymentConfiguration());
+				result = deploymentConfigurationService.startDeployment(action.getDeploymentConfigurationId());
 				break;
 			case STOP:
-				result = deploymentConfigurationService.stopDeployment(action.getDeploymentConfiguration());
+				result = deploymentConfigurationService.stopDeployment(action.getDeploymentConfigurationId());
 				break;
 			}
 			return new DeploymentResult(result);

@@ -15,7 +15,6 @@ package com.tasktop.c2c.server.profile.web.ui.client.shared.action;
 import net.customware.gwt.dispatch.shared.Action;
 
 import com.tasktop.c2c.server.common.web.shared.WriteAction;
-import com.tasktop.c2c.server.deployment.domain.DeploymentConfiguration;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -27,12 +26,12 @@ public class ControlDeploymentAction implements Action<DeploymentResult>, WriteA
 	}
 
 	private String projectId;
-	private DeploymentConfiguration deploymentConfiguration;
+	private Long deploymentConfigurationId;
 	private Action action;
 
-	public ControlDeploymentAction(String projectId, DeploymentConfiguration deploymentConfiguration, Action action) {
+	public ControlDeploymentAction(String projectId, Long deploymentConfigurationId, Action action) {
 		this.projectId = projectId;
-		this.deploymentConfiguration = deploymentConfiguration;
+		this.deploymentConfigurationId = deploymentConfigurationId;
 		this.action = action;
 	}
 
@@ -46,8 +45,8 @@ public class ControlDeploymentAction implements Action<DeploymentResult>, WriteA
 		return projectId;
 	}
 
-	public DeploymentConfiguration getDeploymentConfiguration() {
-		return deploymentConfiguration;
+	public Long getDeploymentConfigurationId() {
+		return deploymentConfigurationId;
 	}
 
 	public Action getAction() {
