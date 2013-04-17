@@ -21,6 +21,7 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
@@ -37,6 +38,7 @@ import com.tasktop.c2c.server.common.profile.web.client.place.Breadcrumb;
 import com.tasktop.c2c.server.common.profile.web.client.place.ProjectsPlace;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.profile.domain.project.Project;
+import com.tasktop.c2c.server.profile.web.ui.client.ProfileEntryPoint;
 import com.tasktop.c2c.server.profile.web.ui.client.gin.AppGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 
@@ -59,6 +61,10 @@ public class HeaderView extends BaseHeaderView implements Header {
 	public Label ownerBadge;
 	@UiField
 	public Panel breadcrumbNavigation;
+	@UiField(provided = true)
+	public Image avatarImage = AvatarHolder.avatarImage;
+	@UiField
+	public Anchor signIn;
 
 	protected UserMenuPopupPanel userMenuPopupPanel = null;
 
@@ -97,6 +103,7 @@ public class HeaderView extends BaseHeaderView implements Header {
 
 	private String initialBorderWidthProperty;
 
+	@UiHandler("userMenuClickArea")
 	public void showMenu(ClickEvent e) {
 		if (userMenuPopupPanel == null) {
 			userMenuPopupPanel = createUserMenu();
@@ -171,4 +178,20 @@ public class HeaderView extends BaseHeaderView implements Header {
 		}
 
 	}
+
+	protected void setAuthenticated(boolean isAuthenticated) {
+		super.setAuthenticated(isAuthenticated);
+		signIn.setVisible(!isAuthenticated);
+
+		if (isAuthenticated) {
+			String username = ProfileEntryPoint.getInstance().getAppState().getCredentials().getProfile().getUsername();
+			// Set the user's name as the title of the Gravatar image
+			avatarImage.setTitle(username);
+		} else {
+			// Blank out any existing text
+			avatarImage.setTitle("");
+			avatarImage.setAltText("");
+		}
+	}
+
 }
