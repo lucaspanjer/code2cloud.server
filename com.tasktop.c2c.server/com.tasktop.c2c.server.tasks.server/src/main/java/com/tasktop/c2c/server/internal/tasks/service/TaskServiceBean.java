@@ -823,7 +823,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	 * @param task
 	 * @throws ValidationException
 	 */
-	private void verifyWorkflow(com.tasktop.c2c.server.internal.tasks.domain.Task originalTask, Task task)
+	protected void verifyWorkflow(com.tasktop.c2c.server.internal.tasks.domain.Task originalTask, Task task)
 			throws ValidationException {
 		final String originalStatusValue = originalTask == null ? null : originalTask.getStatus();
 		final String newStatusValue = task.getStatus().getValue();
