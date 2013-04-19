@@ -28,6 +28,8 @@ public class Blob extends Item {
 	}
 
 	private List<String> lines;
+	private boolean large;
+	private boolean binary;
 
 	public List<String> getLines() {
 		return lines;
@@ -35,6 +37,22 @@ public class Blob extends Item {
 
 	public void setLines(List<String> lines) {
 		this.lines = lines;
+	}
+
+	public boolean isLarge() {
+		return large;
+	}
+
+	public void setLarge(boolean large) {
+		this.large = large;
+	}
+
+	public boolean isBinary() {
+		return binary;
+	}
+
+	public void setBinary(boolean binary) {
+		this.binary = binary;
 	}
 
 }

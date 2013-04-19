@@ -12,6 +12,7 @@
 package com.tasktop.c2c.server.scm.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,16 +109,39 @@ class GitBrowseUtil {
 		ObjectId objectId = ObjectId.fromString(id);
 
 		ObjectLoader loader = r.getObjectDatabase().open(objectId, Constants.OBJ_BLOB);
-		RawText rt = new RawText(loader.getBytes());
-
-		List<String> lines = new ArrayList<String>(rt.size());
-
-		for (int i = 0; i < rt.size(); i++) {
-			lines.add(rt.getString(i));
-		}
 
 		Blob b = new Blob(id);
-		b.setLines(lines);
+
+		if (loader.isLarge()) {
+			b.setLarge(true);
+			InputStream is = null;
+			IOException ioex = null;
+			try {
+				is = loader.openStream();
+				b.setBinary(RawText.isBinary(is));
+			} catch (IOException ex) {
+				ioex = ex;
+			} finally {
+				if (is != null) {
+					is.close();
+				}
+				if (ioex != null) {
+					throw ioex;
+				}
+			}
+
+		} else {
+			byte[] raw = loader.getBytes();
+			b.setBinary(RawText.isBinary(raw));
+			RawText rt = new RawText(raw);
+
+			List<String> lines = new ArrayList<String>(rt.size());
+			for (int i = 0; i < rt.size(); i++) {
+				lines.add(rt.getString(i));
+			}
+
+			b.setLines(lines);
+		}
 
 		return b;
 	}
