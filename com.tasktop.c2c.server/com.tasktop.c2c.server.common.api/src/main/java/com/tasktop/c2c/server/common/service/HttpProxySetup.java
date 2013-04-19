@@ -96,7 +96,7 @@ public class HttpProxySetup implements InitializingBean {
 			if (no_proxy == null) {
 				no_proxy = "";
 			} else {
-				no_proxy = no_proxy + ",";
+				no_proxy = no_proxy + "|";
 			}
 			no_proxy = no_proxy + profileConfiguration.getBaseWebHost() + "|*." + profileConfiguration.getBaseWebHost();
 		}
