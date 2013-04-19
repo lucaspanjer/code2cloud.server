@@ -67,8 +67,8 @@ import com.tasktop.c2c.server.common.service.domain.criteria.Criteria.Operator;
 import com.tasktop.c2c.server.common.service.domain.criteria.NaryCriteria;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceController;
-import com.tasktop.c2c.server.event.domain.PushEvent;
 import com.tasktop.c2c.server.event.domain.Event;
+import com.tasktop.c2c.server.event.domain.PushEvent;
 import com.tasktop.c2c.server.event.service.EventServiceController;
 import com.tasktop.c2c.server.internal.wiki.server.WikiServiceController;
 import com.tasktop.c2c.server.profile.domain.project.Agreement;
@@ -80,6 +80,8 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectRelationship;
 import com.tasktop.c2c.server.profile.domain.project.ProjectService;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplate;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateOptions;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty.PropertyType;
 import com.tasktop.c2c.server.profile.domain.project.ProjectsQuery;
 import com.tasktop.c2c.server.profile.domain.project.SignUpToken;
 import com.tasktop.c2c.server.profile.web.ui.server.ActivityServiceController;
@@ -425,8 +427,23 @@ public class APIDocGenerator {
 			return createPrjectTemplateOptions();
 		} else if (classType == ProjectsQuery.class) {
 			return createProjectsQuery();
+		} else if (classType == ProjectTemplateProperty.class) {
+			return createProjtectTempalteProperty();
 		}
 		return classType.newInstance();
+	}
+
+	private ProjectTemplateProperty createProjtectTempalteProperty() {
+		ProjectTemplateProperty result = new ProjectTemplateProperty();
+
+		result.setId("Deployments.JcsInstanceName");
+		result.setAvailableValues(Arrays.asList("java01", "java02"));
+		result.setName("Deployment service name");
+		result.setRequired(true);
+		result.setType(PropertyType.STRING);
+		result.setValue("java02");
+
+		return result;
 	}
 
 	/**
