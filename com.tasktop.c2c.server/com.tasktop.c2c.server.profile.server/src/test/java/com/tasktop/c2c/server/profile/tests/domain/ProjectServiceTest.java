@@ -20,7 +20,6 @@ import org.junit.Test;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
 
-
 /**
  * @author David Green (Tasktop Technologies Inc.)
  */
@@ -44,9 +43,11 @@ public class ProjectServiceTest {
 		projectService.setAjpPort(123);
 		projectService.setInternalPort(8080);
 		projectService.setInternalUriPrefix("/foo");
+		projectService.setUriPattern("/foo(/.*)");
 
 		String ajpProxyUri = projectService.computeInternalProxyBaseUri(true);
 		assertEquals("ajp://10.0.0.34:123/foo", ajpProxyUri);
+		assertEquals("/foo/bar", projectService.computeInternalProxyPath("/foo/bar"));
 
 		String httpProxyUri = projectService.computeInternalProxyBaseUri(false);
 		assertEquals("http://10.0.0.34:8080/foo", httpProxyUri);

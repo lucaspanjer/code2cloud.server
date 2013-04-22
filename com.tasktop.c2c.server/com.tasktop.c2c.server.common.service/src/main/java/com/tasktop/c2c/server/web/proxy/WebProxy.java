@@ -120,9 +120,10 @@ public abstract class WebProxy {
 
 	}
 
-	protected HeaderFilter headerFilter = new CookieHeaderFilter();
+	protected HeaderFilter headerFilter;
 
 	public WebProxy() {
+
 	}
 
 	public abstract boolean canProxyRequest(String targetUrl, HttpServletRequest request);

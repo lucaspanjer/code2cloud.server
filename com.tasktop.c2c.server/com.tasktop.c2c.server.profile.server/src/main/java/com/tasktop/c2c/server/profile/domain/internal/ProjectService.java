@@ -251,6 +251,34 @@ public class ProjectService extends BaseEntity {
 		return base + suffix;
 	}
 
+	/**
+	 * compute the internal proxy path part of the URI.
+	 * 
+	 * @param uri
+	 *            the {@link #matchesUri(String) matching} uri
+	 * @return the URI path, or null if it is unavailable or does not match the given uri
+	 */
+	public String computeInternalProxyPath(String uri) {
+		String path = "";
+
+		if (internalUriPrefix != null) {
+			path += internalUriPrefix;
+		}
+
+		Matcher matcher = Pattern.compile(uriPattern).matcher(uri);
+		if (!matcher.matches()) {
+			return null;
+		}
+		String suffix = uri;
+		if (matcher.groupCount() > 0) {
+			suffix = matcher.group(1);
+			path += suffix;
+		}
+
+		return path;
+
+	}
+
 	public String getExternalUrl() {
 		return externalUrl;
 	}

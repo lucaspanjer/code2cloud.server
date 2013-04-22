@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
 
@@ -78,11 +77,6 @@ public class HttpProxy extends WebProxy {
 		httpClient.getHttpConnectionManager().getParams().setSoTimeout(60 * 1000);
 		httpClient.getParams()
 				.setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(0, false));
-		headerFilter = new CookieHeaderFilter();
-		ExcludeHeaderFilter excludeHeaders = new ExcludeHeaderFilter();
-		excludeHeaders.getExcludedRequestHeaders().addAll(Arrays.asList("Connection", "Accept-Encoding"));
-		excludeHeaders.getExcludedResponseHeaders().addAll(Arrays.asList("Connection", "Transfer-Encoding"));
-		headerFilter.setNext(excludeHeaders);
 	}
 
 	@Override

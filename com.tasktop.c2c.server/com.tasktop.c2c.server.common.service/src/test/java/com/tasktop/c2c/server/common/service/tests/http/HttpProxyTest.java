@@ -17,6 +17,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +37,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import com.tasktop.c2c.server.web.proxy.CookieHeaderFilter;
+import com.tasktop.c2c.server.web.proxy.ExcludeHeaderFilter;
 import com.tasktop.c2c.server.web.proxy.HttpMethodProvider;
 import com.tasktop.c2c.server.web.proxy.HttpProxy;
 
@@ -58,6 +61,13 @@ public class HttpProxyTest {
 
 		proxy.setHttpClient(httpClient);
 		proxy.setHttpMethodProvider(httpMethodProvider);
+		proxy.setHeaderFilter(new CookieHeaderFilter());
+
+		ExcludeHeaderFilter excludeHeaders = new ExcludeHeaderFilter();
+		excludeHeaders.getExcludedRequestHeaders().addAll(Arrays.asList("Connection", "Accept-Encoding"));
+		excludeHeaders.getExcludedResponseHeaders().addAll(Arrays.asList("Connection", "Response-Encoding"));
+		proxy.getHeaderFilter().setNext(excludeHeaders);
+
 		final HttpMethod httpMethod = context.mock(HttpMethod.class);
 
 		context.checking(new Expectations() {
