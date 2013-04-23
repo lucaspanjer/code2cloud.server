@@ -146,7 +146,7 @@ public class StandardProjectServiceManagementStrategy implements ProjectServiceM
 				.getProject().getIdentifier());
 		int sleepAmount = 1000;
 		boolean ready = false;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 7; i++) { // 1s, 2s, 4s, 8s, 16s, 32s, 1m
 			if (hudsonService.isHudsonReady()) {
 				ready = true;
 				break;
