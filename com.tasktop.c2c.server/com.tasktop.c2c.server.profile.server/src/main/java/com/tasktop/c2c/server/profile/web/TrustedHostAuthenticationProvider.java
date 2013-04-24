@@ -165,7 +165,8 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 
 				// This happens for git cloning. The request should only be authorized for the specific project
 				if (projectId != null) {
-					addRolesForUserLevelProjectAccess(authorities, projectId);
+					addRolesForUserLevelProjectAccess(authorities, projectId); // For git polling, etc
+					authorities.add(new SimpleGrantedAuthority(Role.System)); // for event service
 				}
 			}
 
