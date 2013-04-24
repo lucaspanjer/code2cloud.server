@@ -243,7 +243,9 @@ public class AccountActivity extends AbstractActivity implements IAccountView.Ac
 											Message.createSuccessMessage(profileMessages.verificationEmailSent()));
 							originalEmail = profile.getEmail();
 						}
-						if (!result.getProfile().getLanguage().equals(LocaleInfo.getCurrentLocale().getLocaleName())) {
+						if (result.getProfile().getLanguage() != null
+								&& !result.getProfile().getLanguage()
+										.equals(LocaleInfo.getCurrentLocale().getLocaleName())) {
 							// We'd prefer to have the GwtLocaleCookieFilter be the only place where this cookie is set,
 							// but in this instance we find that when we refresh the page, the security context has not
 							// yet been updated by the AuthenticationRefreshFilter, so GwtLocaleCookieFilter uses the

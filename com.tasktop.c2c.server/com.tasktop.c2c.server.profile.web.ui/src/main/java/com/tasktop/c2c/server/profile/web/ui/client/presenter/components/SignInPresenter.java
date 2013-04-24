@@ -52,7 +52,9 @@ public class SignInPresenter extends AbstractProfilePresenter {
 					public void success(Credentials result) {
 						getEventBus().fireEvent(new LogonEvent(result));
 						AppGinjector.get.instance().getAppState().setCredentials(result);
-						if (!result.getProfile().getLanguage().equals(LocaleInfo.getCurrentLocale().getLocaleName())) {
+						if (result.getProfile().getLanguage() != null
+								&& !result.getProfile().getLanguage()
+										.equals(LocaleInfo.getCurrentLocale().getLocaleName())) {
 							Window.Location.assign(postActionPlace.getHref());
 							Window.Location.reload(); // reload with the new language
 						} else {

@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.Authentication;
@@ -119,6 +120,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	private static final Logger LOG = LoggerFactory.getLogger(ProfileServiceBean.class);
 
 	private static final int MAX_SIZE = 1000;
+
+	@Value("${profile.defaultLanguage}")
+	private String defaultLanguage;
 
 	@Autowired
 	private EmailService emailService;
@@ -282,6 +286,9 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			throw new IllegalArgumentException();
 		}
 		fixupCase(profile);
+		if (profile.getLanguage() == null) {
+			profile.setLanguage(defaultLanguage);
+		}
 
 		securityPolicy.create(profile);
 
@@ -369,7 +376,8 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		}
 
 		// update security context when language changes
-		if (!profile.getLanguage().equals(AuthenticationServiceUser.getCurrentUserLanguage())) {
+		if (profile.getLanguage() != null
+				&& !profile.getLanguage().equals(AuthenticationServiceUser.getCurrentUserLanguage())) {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			if (authentication != null) {
 				Object principal = authentication.getPrincipal();

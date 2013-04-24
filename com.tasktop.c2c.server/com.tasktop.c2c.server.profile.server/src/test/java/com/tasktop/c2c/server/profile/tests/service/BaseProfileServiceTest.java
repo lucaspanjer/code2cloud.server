@@ -48,6 +48,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -119,6 +120,9 @@ import com.tasktop.c2c.server.wiki.service.WikiService;
 public abstract class BaseProfileServiceTest {
 
 	public static final String NOTFOUND_SUFFIX = "notfound";
+
+	@Value("${profile.defaultLanguage}")
+	protected String defaultLanguage;
 
 	@Autowired
 	protected ProfileService profileService;
@@ -312,6 +316,16 @@ public abstract class BaseProfileServiceTest {
 				throw e;
 			}
 		}
+	}
+
+	@Test
+	public void testCreateProfileNullLanguage() throws ValidationException {
+		Profile arg = createMockProfile(null);
+		arg.setLanguage(null);
+		Long id = profileService.createProfile(arg);
+
+		Profile profile = entityManager.find(Profile.class, id);
+		assertEquals(defaultLanguage, profile.getLanguage());
 	}
 
 	@Test(expected = EntityNotFoundException.class)
