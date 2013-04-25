@@ -608,7 +608,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 
 			DeploymentActivityStatus deploymentActivityStatus = DeploymentActivityStatus.SUCCEEDED;
 			try {
-				File tempWarFile = File.createTempFile("deploy", "war");
+				File tempWarFile = File.createTempFile("deploy", getFileExtension(toDeploy.getFileName()));
 				ProjectArtifact artifact = new ProjectArtifact();
 				artifact.setUrl(toDeploy.getUrl()); // All thats needed now
 				projectArtifactService.downloadProjectArtifact(getProjectIdentifier(), tempWarFile, artifact);
@@ -628,6 +628,14 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 							.getCurrentUserProfile()));
 		}
 
+	}
+
+	private String getFileExtension(String filename) {
+		int lastDot = filename.lastIndexOf(".");
+		if (lastDot == -1) {
+			return "war";
+		}
+		return filename.substring(lastDot + 1);
 	}
 
 	private PathMatcher pathMatcher = new AntPathMatcher();

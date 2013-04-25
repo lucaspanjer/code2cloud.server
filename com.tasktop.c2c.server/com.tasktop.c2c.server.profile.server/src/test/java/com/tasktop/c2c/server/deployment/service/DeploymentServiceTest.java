@@ -287,8 +287,10 @@ public class DeploymentServiceTest {
 		buildDetails.setNumber(111);
 		BuildArtifact a1 = new BuildArtifact();
 		a1.setRelativePath("src/bar.txt");
+		a1.setFileName("bar.txt");
 		BuildArtifact a2 = new BuildArtifact();
 		a2.setRelativePath("target/bar.war");
+		a2.setFileName("bar.war");
 
 		buildDetails.setArtifacts(Arrays.asList(a1));
 		deploymentConfigurationService.onBuildCompleted(jobName, buildDetails);
