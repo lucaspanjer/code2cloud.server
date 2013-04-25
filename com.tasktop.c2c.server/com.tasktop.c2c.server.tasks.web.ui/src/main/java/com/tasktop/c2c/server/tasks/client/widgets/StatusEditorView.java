@@ -112,7 +112,7 @@ public class StatusEditorView extends Composite implements ValueAwareEditor<Task
 		String statusString = getSelectedStatus().getValue();
 		if (statusString.equalsIgnoreCase("RESOLVED")) {
 			resolution.setVisible(true);
-			if (resolution.getValue().isDuplicate()) {
+			if (resolution.getValue() != null && resolution.getValue().isDuplicate()) {
 				duplicateOf.setVisible(true);
 			} else {
 				duplicateOf.setVisible(false);
