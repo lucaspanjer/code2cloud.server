@@ -92,7 +92,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	private ProjectServiceManagementStrategy projectServiceManagementStrategy;
 
 	@Value("${alm.hub.enableHA}")
-	private boolean enableHA = true;
+	private boolean enableHA = false;
 
 	private boolean updateServiceTemplateOnStart = true;
 
