@@ -13,9 +13,9 @@
 package com.tasktop.c2c.server.webdav.server;
 
 import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Required;
 
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
@@ -39,7 +39,7 @@ public class MavenRepositoryConfigurator implements Configurator {
 		File mavenRepoRootFile = new File(mavenRoot, projectName);
 
 		if (mavenRepoRootFile.exists()) {
-			LOG.warn("Maven repository already apears to exist: " + mavenRepoRootFile.getAbsolutePath());
+			LOG.info("Maven repository already apears to exist: " + mavenRepoRootFile.getAbsolutePath());
 		} else {
 			// If we're here, the destination directory doesn't exist. Create it now.
 			LOG.info("Creating new Maven repository: " + mavenRepoRootFile.getAbsolutePath());

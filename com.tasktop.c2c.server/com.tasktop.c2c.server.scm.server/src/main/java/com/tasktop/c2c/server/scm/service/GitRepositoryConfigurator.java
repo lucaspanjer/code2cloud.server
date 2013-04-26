@@ -49,25 +49,40 @@ public class GitRepositoryConfigurator implements Configurator {
 
 	private void setupSshConfig(File projectRoot) {
 		File sshDir = new File(projectRoot, ".ssh");
-		sshDir.mkdirs();
+
+		if (!sshDir.exists()) {
+			sshDir.mkdirs();
+		}
 		try {
 
 			File config = new File(sshDir, "config");
-			FileWriter writer;
+			if (!config.exists()) {
+				FileWriter writer = null;
 
-			writer = new FileWriter(config);
+				try {
+					writer = new FileWriter(config);
 
-			writer.write("Host *\n");
-			writer.write("        StrictHostKeyChecking no");
-			writer.close();
+					writer.write("Host *\n");
+					writer.write("        StrictHostKeyChecking no");
+				} finally {
+					if (writer != null) {
+						writer.close();
+					}
+
+				}
+			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 		try {
 			KeyPair kp = KeyPair.genKeyPair(new JSch(), KeyPair.RSA);
-			kp.writePublicKey(sshDir.getAbsolutePath() + "/id_rsa.pub",
-					"Used for Code2Cloud fetching of external repos");
-			kp.writePrivateKey(sshDir.getAbsolutePath() + "/id_rsa");
+			if (!new File(sshDir, "id_rsa.pub").exists()) {
+				kp.writePublicKey(sshDir.getAbsolutePath() + "/id_rsa.pub",
+						"Used for Code2Cloud fetching of external repos");
+			}
+			if (!new File(sshDir, "id_rsa").exists()) {
+				kp.writePrivateKey(sshDir.getAbsolutePath() + "/id_rsa");
+			}
 		} catch (JSchException e) {
 			throw new RuntimeException(e);
 		} catch (FileNotFoundException e) {
@@ -87,7 +102,12 @@ public class GitRepositoryConfigurator implements Configurator {
 		}
 		AuthUtils.assumeSystemIdentity(null);
 
-		gitService.createEmptyRepository(gitRepositoryName);
+		File projectDir = new File(basePath, configuration.getProjectIdentifier());
+		File gitDir = new File(projectDir, GitConstants.HOSTED_GIT_DIR + "/" + gitRepositoryName);
+
+		if (!gitDir.exists()) {
+			gitService.createEmptyRepository(gitRepositoryName);
+		}
 	}
 
 }

@@ -150,7 +150,7 @@ public class HudsonServiceConfiguratorTest {
 		}
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void testUpdateZipfile_warAlreadyExists() throws Exception {
 
 		// First, set up our zipfile test.
@@ -203,7 +203,7 @@ public class HudsonServiceConfiguratorTest {
 			assertTrue(configuredWar.exists());
 
 			try {
-				// Now, try and create it a second time - this should blow up, since the WAR already exists
+				// Now, try and create it a second time - this should work, even though the war exists.
 				configurator.configure(config);
 			} finally {
 				// Clean up our test file.

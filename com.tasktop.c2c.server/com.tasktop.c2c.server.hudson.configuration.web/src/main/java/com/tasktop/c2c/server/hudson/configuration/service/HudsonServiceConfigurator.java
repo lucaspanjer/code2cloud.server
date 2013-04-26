@@ -15,6 +15,7 @@ package com.tasktop.c2c.server.hudson.configuration.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
@@ -70,6 +71,40 @@ public class HudsonServiceConfigurator implements Configurator {
 			throw new IllegalStateException(message);
 		}
 
+		String pathProperty = perOrg ? configuration.getOrganizationIdentifier() : configuration.getProjectIdentifier();
+
+		String deployedUrl = configuration.getProperties().get(ProjectServiceConfiguration.PROFILE_BASE_URL)
+				+ hudsonPath + pathProperty + "/hudson/";
+		deployedUrl.replace("//", "/");
+		URL deployedHudsonUrl;
+		try {
+			deployedHudsonUrl = new URL(deployedUrl);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+		String webappName = deployedHudsonUrl.getPath();
+		if (webappName.startsWith("/")) {
+			webappName = webappName.substring(1);
+		}
+		if (webappName.endsWith("/")) {
+			webappName = webappName.substring(0, webappName.length() - 1);
+		}
+		webappName = webappName.replace("/", "#");
+		webappName = webappName + ".war";
+
+		// Calculate our final filename.
+
+		String deployLocation = targetWebappsDir + webappName;
+
+		File hudsonDeployFile = new File(deployLocation);
+
+		if (hudsonDeployFile.exists()) {
+			String message = "When trying to deploy new WARfile [" + hudsonDeployFile.getAbsolutePath()
+					+ "] a file or directory with that name already existed! Continuing with provisioning.";
+			LOG.info(message);
+			return;
+		}
+
 		try {
 			// Get a reference to our template war
 			JarFile hudsonTemplateWarJar = new JarFile(hudsonTemplateWar);
@@ -117,39 +152,6 @@ public class HudsonServiceConfigurator implements Configurator {
 
 			// Clean up our resources.
 			jarOutStream.close();
-
-			String pathProperty = perOrg ? configuration.getOrganizationIdentifier() : configuration
-					.getProjectIdentifier();
-			String deployedUrl = configuration.getProperties().get(ProjectServiceConfiguration.PROFILE_BASE_URL)
-					+ hudsonPath + pathProperty + "/hudson/";
-			deployedUrl.replace("//", "/");
-			URL deployedHudsonUrl = new URL(deployedUrl);
-			String webappName = deployedHudsonUrl.getPath();
-			if (webappName.startsWith("/")) {
-				webappName = webappName.substring(1);
-			}
-			if (webappName.endsWith("/")) {
-				webappName = webappName.substring(0, webappName.length() - 1);
-			}
-			webappName = webappName.replace("/", "#");
-			webappName = webappName + ".war";
-
-			// Calculate our final filename.
-
-			String deployLocation = targetWebappsDir + webappName;
-
-			File hudsonDeployFile = new File(deployLocation);
-
-			if (hudsonDeployFile.exists()) {
-				String message = "When trying to deploy new WARfile [" + hudsonDeployFile.getAbsolutePath()
-						+ "] a file or directory with that name already existed!";
-				LOG.error(message);
-
-				// Delete the temporary warfile, to ensure we aren't cluttering up the disk on failure
-				updatedHudsonWar.delete();
-
-				throw new IllegalStateException(message);
-			}
 
 			// Move the war into it's deployment location so that it can be picked up and deployed by Tomcat.
 			FileUtils.moveFile(updatedHudsonWar, hudsonDeployFile);

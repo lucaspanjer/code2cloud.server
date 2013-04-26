@@ -37,12 +37,32 @@ public class ProjectServiceDatabaseConfigurator implements Configurator {
 
 	private boolean needsDatabaseCreation = true;
 
-	private void initializeNewProject(ProjectServiceConfiguration config) throws SQLException {
+	private void initializeNewProject(ProjectServiceConfiguration config) {
 		String dbName = databaseNamingStrategy.getCurrentTenantDatabaseName();
 
 		if (needsDatabaseCreation) {
-			createDatabase(dbName);
+			try {
+				createDatabase(dbName);
+			} catch (SQLException e) {
+				if (shouldIgnore(e)) {
+					return;
+				}
+				throw new RuntimeException(e);
+			}
 		}
+	}
+
+	private boolean shouldIgnore(SQLException e) {
+		// Mysql
+		if (e.getMessage().contains("database exists")) {
+			return true;
+		}
+		// OracleDB
+		if (e.getMessage().contains("ORA-01920")) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private void createDatabase(String dbName) throws SQLException {
@@ -78,11 +98,7 @@ public class ProjectServiceDatabaseConfigurator implements Configurator {
 	 */
 	@Override
 	public void configure(ProjectServiceConfiguration configuration) {
-		try {
-			initializeNewProject(configuration);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		initializeNewProject(configuration);
 	}
 
 	/**
