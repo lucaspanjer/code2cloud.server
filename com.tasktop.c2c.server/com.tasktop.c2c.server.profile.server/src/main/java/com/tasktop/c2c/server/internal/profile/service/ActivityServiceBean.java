@@ -24,6 +24,7 @@ import java.util.concurrent.Future;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -59,6 +60,8 @@ import com.tasktop.c2c.server.wiki.service.WikiService;
 @Service("activityService")
 @Qualifier("main")
 public class ActivityServiceBean implements ActivityService {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ActivityServiceBean.class);
 
 	@Resource(name = "hudsonServiceProvider")
 	private HudsonServiceProvider hudsonServiceProvider;
@@ -168,7 +171,7 @@ public class ActivityServiceBean implements ActivityService {
 				try {
 					results.addAll(future.get());
 				} catch (Exception e) {
-					LoggerFactory.getLogger(ActivityServiceBean.class).warn("Activity service failure", e.getCause());
+					LOGGER.debug("Activity service failure", e.getCause());
 				}
 			}
 		} catch (InterruptedException e) {
