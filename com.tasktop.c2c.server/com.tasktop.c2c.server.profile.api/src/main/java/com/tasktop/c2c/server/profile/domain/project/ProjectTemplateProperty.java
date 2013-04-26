@@ -11,9 +11,11 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.domain.project;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ProjectTemplateProperty {
+@SuppressWarnings("serial")
+public class ProjectTemplateProperty implements Serializable {
 
 	public enum PropertyType {
 		STRING, URL, BOOLEAN;
