@@ -13,6 +13,7 @@ package com.tasktop.c2c.server.common.jpa;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLRecoverableException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +42,19 @@ public class DatasourceScriptRunner implements InitializingBean {
 		Connection c = null;
 
 		try {
-			c = dataSource.getConnection();
 
+			while (true) {
+				try {
+					c = dataSource.getConnection();
+					break;
+				} catch (SQLRecoverableException e) {
+					if (continueOnFailure) {
+						continue;
+					} else {
+						throw e;
+					}
+				}
+			}
 			for (String sqlStament : getStatements()) {
 				Statement s = c.createStatement();
 
