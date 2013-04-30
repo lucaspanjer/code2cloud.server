@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -51,6 +52,8 @@ import com.tasktop.c2c.server.profile.web.proxy.AuthenticationProviderNotApplica
 public class TrustedHostAuthenticationProvider extends AbstractAuthenticationServiceBean<AuthenticationServiceUser>
 		implements AuthenticationProvider {
 
+	private static final String LOCALHOST_ADDRESS = "127.0.0.1";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(TrustedHostAuthenticationProvider.class);
 
 	@Autowired
@@ -58,6 +61,9 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 
 	@Autowired
 	private ProfileService profileService;
+
+	@Value("${alm.auth.trustedHost.alwaysTrustLocalhost}")
+	private boolean alwaysTrustLocalhost = true;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -128,6 +134,9 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 	}
 
 	private boolean isTrustedForward(String hostAddr) {
+		if (hostAddr.equals(LOCALHOST_ADDRESS) && alwaysTrustLocalhost) {
+			return true;
+		}
 		List<ServiceHost> hosts = projectServiceService.findHostsForAddress(hostAddr);
 		for (ServiceHost host : hosts) {
 			if (host.getServiceHostConfiguration().getSupportedServices().contains(ServiceType.TRUSTED_PROXY)) {
