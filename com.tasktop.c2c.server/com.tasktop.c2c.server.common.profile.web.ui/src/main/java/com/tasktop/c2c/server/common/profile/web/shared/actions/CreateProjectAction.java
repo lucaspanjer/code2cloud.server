@@ -16,6 +16,7 @@ import net.customware.gwt.dispatch.shared.Action;
 
 import com.tasktop.c2c.server.profile.domain.project.Project;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplate;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateOptions;
 
 /**
  * @author cmorgan (Tasktop Technologies Inc.)
@@ -24,14 +25,17 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectTemplate;
 public class CreateProjectAction implements Action<CreateProjectResult> {
 	private Project project;
 	private ProjectTemplate projectTemplate;
+	private ProjectTemplateOptions projectTemplateOptions;
 
 	public CreateProjectAction(Project project) {
 		this.project = project;
 	}
 
-	public CreateProjectAction(Project project, ProjectTemplate projectTemplate) {
+	public CreateProjectAction(Project project, ProjectTemplate projectTemplate,
+			ProjectTemplateOptions projectTemplateOptions) {
 		this(project);
 		this.projectTemplate = projectTemplate;
+		this.projectTemplateOptions = projectTemplateOptions;
 	}
 
 	protected CreateProjectAction() {
@@ -43,6 +47,10 @@ public class CreateProjectAction implements Action<CreateProjectResult> {
 
 	public ProjectTemplate getProjectTemplate() {
 		return projectTemplate;
+	}
+
+	public ProjectTemplateOptions getProjectTemplateOptions() {
+		return projectTemplateOptions;
 	}
 
 }

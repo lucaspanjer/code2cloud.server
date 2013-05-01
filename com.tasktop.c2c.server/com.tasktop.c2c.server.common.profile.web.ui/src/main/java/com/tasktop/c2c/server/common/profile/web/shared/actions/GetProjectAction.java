@@ -41,14 +41,6 @@ public class GetProjectAction implements Action<GetProjectResult>, CachableReadA
 		return projectId;
 	}
 
-	/**
-	 * @param projectId
-	 *            the projectId to set
-	 */
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
-	}
-
 	@Override
 	public String getErrorMessage(DispatchException e) {
 		if (ExceptionsUtil.isEntityNotFound(e)) {

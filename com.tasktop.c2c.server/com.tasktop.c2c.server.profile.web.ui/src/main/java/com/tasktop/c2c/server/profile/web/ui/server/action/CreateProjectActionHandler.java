@@ -45,6 +45,9 @@ public class CreateProjectActionHandler extends AbstractProfileActionHandler<Cre
 			Project created = profileWebService.createProject(action.getProject());
 			if (action.getProjectTemplate() != null) {
 				ProjectTemplateOptions options = new ProjectTemplateOptions();
+				if (action.getProjectTemplateOptions() != null) {
+					options = action.getProjectTemplateOptions();
+				}
 				options.setTargetProjectIdentifier(created.getIdentifier());
 				options.setTemplate(action.getProjectTemplate());
 				projectTemplateService.applyTemplateToProject(options);

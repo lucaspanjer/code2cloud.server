@@ -58,7 +58,7 @@ public class NewProjectPresenter extends AbstractProfilePresenter implements Pre
 	@Override
 	public void createProject(Project project, ProjectTemplate template) {
 		getDispatchService().execute(
-				new CreateProjectAction(project, template),
+				new CreateProjectAction(project, template, null),
 				new AsyncCallbackSupport<CreateProjectResult>(new OperationMessage(profileMessages.creatingProject()),
 						null, view.getCreateButton()) {
 					@Override

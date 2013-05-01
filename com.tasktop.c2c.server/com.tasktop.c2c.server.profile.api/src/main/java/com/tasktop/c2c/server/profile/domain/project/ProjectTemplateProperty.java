@@ -21,11 +21,14 @@ public class ProjectTemplateProperty implements Serializable {
 		STRING, URL, BOOLEAN;
 	}
 
+	public static final String TRUE = "true";
+	public static final String FALSE = "false";
+
 	private String id;
 	private String name;
 	private PropertyType type;
-	private List<? extends Object> availableValues;
-	private Object value;
+	private List<String> availableValues;
+	private String value;
 	private boolean required;
 
 	public String getName() {
@@ -44,11 +47,11 @@ public class ProjectTemplateProperty implements Serializable {
 		this.type = type;
 	}
 
-	public Object getValue() {
+	public String getValue() {
 		return value;
 	}
 
-	public void setValue(Object value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 
@@ -60,11 +63,11 @@ public class ProjectTemplateProperty implements Serializable {
 		this.required = required;
 	}
 
-	public List<? extends Object> getAvailableValues() {
+	public List<String> getAvailableValues() {
 		return availableValues;
 	}
 
-	public void setAvailableValues(List<? extends Object> availableValues) {
+	public void setAvailableValues(List<String> availableValues) {
 		this.availableValues = availableValues;
 	}
 
