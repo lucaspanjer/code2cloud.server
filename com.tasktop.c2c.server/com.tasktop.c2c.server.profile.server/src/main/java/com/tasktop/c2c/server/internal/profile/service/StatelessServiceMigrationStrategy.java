@@ -43,6 +43,10 @@ public class StatelessServiceMigrationStrategy implements ProjectServiceMigratio
 
 	@Override
 	public void migrate(ProjectService service, ServiceHost newHost) {
+		if (!canMigrate(service)) {
+			throw new IllegalStateException();
+		}
+
 		ServiceHost oldHost = service.getServiceHost();
 		oldHost.getProjectServices().remove(service);
 

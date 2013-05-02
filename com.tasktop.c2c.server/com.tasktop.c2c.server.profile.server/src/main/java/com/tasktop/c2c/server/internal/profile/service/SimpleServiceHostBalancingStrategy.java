@@ -34,12 +34,11 @@ public class SimpleServiceHostBalancingStrategy implements ServiceHostBalancingS
 	public void balance(ServiceHost ontoHost, List<ServiceHost> otherHosts) {
 		int totalServices = ontoHost.getProjectServices().size();
 		int downHosts = 0;
-		int servicesOnDownHosts = 0;
+
 		for (ServiceHost otherHost : otherHosts) {
 			totalServices += otherHost.getProjectServices().size();
 			if (!otherHost.isAvailable()) {
 				downHosts++;
-				servicesOnDownHosts += otherHost.getProjectServices().size();
 			}
 		}
 
@@ -49,14 +48,17 @@ public class SimpleServiceHostBalancingStrategy implements ServiceHostBalancingS
 		for (ServiceHost otherHost : otherHosts) {
 			final int numServicesToTakeFromThisHost;
 			if (otherHost.isAvailable()) {
-				numServicesToTakeFromThisHost = Math.max(0, otherHost.getProjectServices().size()
+				numServicesToTakeFromThisHost = Math.max(0, countMigratableServices(otherHost)
 						- averageServicesPerAvailableHost);
 			} else {
-				numServicesToTakeFromThisHost = otherHost.getProjectServices().size();
+				numServicesToTakeFromThisHost = countMigratableServices(otherHost);
 			}
 
 			int migrated = 0;
 			for (ProjectService service : new ArrayList<ProjectService>(otherHost.getProjectServices())) {
+				if (!migrationStrategy.canMigrate(service)) {
+					continue;
+				}
 				if (migrated >= numServicesToTakeFromThisHost) {
 					break;
 				}
@@ -64,6 +66,16 @@ public class SimpleServiceHostBalancingStrategy implements ServiceHostBalancingS
 				migrated++;
 			}
 		}
+	}
+
+	protected int countMigratableServices(ServiceHost host) {
+		int sum = 0;
+		for (ProjectService service : host.getProjectServices()) {
+			if (migrationStrategy.canMigrate(service)) {
+				sum++;
+			}
+		}
+		return sum;
 	}
 
 	public void setMigrationStrategy(ProjectServiceMigrationStrategy migrationStrategy) {

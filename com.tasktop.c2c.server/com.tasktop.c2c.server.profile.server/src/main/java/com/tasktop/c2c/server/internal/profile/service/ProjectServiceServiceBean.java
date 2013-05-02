@@ -415,22 +415,21 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 		// Attempt to migrate services off the failed host
 		for (ProjectService service : new ArrayList<ProjectService>(host.getProjectServices())) {
+
+			if (!projectServiceManagementStrategy.canHandle(service)) {
+				continue;
+			}
+
 			try {
 				NodeProvisioningService nodeProvisioningService = nodeProvisioningServiceByType.get(service.getType());
 				if (nodeProvisioningService == null) {
 					continue;
 				}
 				ServiceHost newHost = convertToInternal(nodeProvisioningService.provisionNode());
-				tryMigrateService(service, newHost);
+				projectServiceMigrationStrategy.migrate(service, newHost);
 			} catch (NoNodeAvailableException e) {
 				// continue
 			}
-		}
-	}
-
-	private void tryMigrateService(ProjectService service, ServiceHost newHost) {
-		if (projectServiceMigrationStrategy.canMigrate(service)) {
-			projectServiceMigrationStrategy.migrate(service, newHost);
 		}
 	}
 
