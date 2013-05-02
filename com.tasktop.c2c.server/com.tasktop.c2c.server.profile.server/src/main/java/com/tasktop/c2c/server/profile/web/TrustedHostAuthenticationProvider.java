@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -30,7 +29,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 import com.tasktop.c2c.server.auth.service.AbstractAuthenticationServiceBean;
@@ -52,18 +50,16 @@ import com.tasktop.c2c.server.profile.web.proxy.AuthenticationProviderNotApplica
 public class TrustedHostAuthenticationProvider extends AbstractAuthenticationServiceBean<AuthenticationServiceUser>
 		implements AuthenticationProvider {
 
-	private static final String LOCALHOST_ADDRESS = "127.0.0.1";
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(TrustedHostAuthenticationProvider.class);
+
+	@Autowired
+	private ProfileService profileService;
 
 	@Autowired
 	private ProjectServiceService projectServiceService;
 
 	@Autowired
-	private ProfileService profileService;
-
-	@Value("${alm.auth.trustedHost.alwaysTrustLocalhost}")
-	private boolean alwaysTrustLocalhost = true;
+	private HttpForwardManager httpForwardManager;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -78,8 +74,7 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 		}
 
 		HttpServletRequest request = (HttpServletRequest) token.getCredentials();
-		WebAuthenticationDetails details = (WebAuthenticationDetails) token.getDetails();
-		String remoteAddr = computeTrustedOrigin(details.getRemoteAddress(), request);
+		String remoteAddr = computeTrustedOrigin(request);
 
 		if (remoteAddr == null) {
 			throw new AuthenticationCredentialsNotFoundException("Could not locate trusted host");
@@ -107,22 +102,12 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 
 	}
 
-	private static final String FORWARD_HEADER = "X-Forwarded-For";
-
-	private String computeTrustedOrigin(String remoteAddress, HttpServletRequest request) {
+	private String computeTrustedOrigin(HttpServletRequest request) {
 		// List of forwards, first is most recent.
-		List<String> forwards = new ArrayList<String>();
-		forwards.add(remoteAddress);
-		String forwardedFors = request.getHeader(FORWARD_HEADER);
-		if (forwardedFors != null) {
-			String[] forwardHosts = forwardedFors.split(",");
-			for (int i = forwardHosts.length - 1; i >= 0; i--) {
-				forwards.add(forwardHosts[i].trim());
-			}
-		}
+		List<String> forwards = httpForwardManager.computeForwardChain(request);
 
 		for (String host : forwards) {
-			if (isTrustedForward(host)) {
+			if (httpForwardManager.isTrustedForward(host)) {
 				continue;
 			} else {
 				return host;
@@ -131,19 +116,6 @@ public class TrustedHostAuthenticationProvider extends AbstractAuthenticationSer
 		// All trusted forwards. This could happen when nodes take on multiple roles. (EG apache/hub and service on same
 		// node)
 		return forwards.get(forwards.size() - 1);
-	}
-
-	private boolean isTrustedForward(String hostAddr) {
-		if (hostAddr.equals(LOCALHOST_ADDRESS) && alwaysTrustLocalhost) {
-			return true;
-		}
-		List<ServiceHost> hosts = projectServiceService.findHostsForAddress(hostAddr);
-		for (ServiceHost host : hosts) {
-			if (host.getServiceHostConfiguration().getSupportedServices().contains(ServiceType.TRUSTED_PROXY)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private List<String> convertToStringAuthorities(List<GrantedAuthority> authorities) {
