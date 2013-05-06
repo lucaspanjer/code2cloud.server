@@ -91,6 +91,11 @@ public class ProjectTenantAwareDataSource extends TenantAwareDataSource implemen
 
 	}
 
+	/** Remove the (transient) memory that a schema has been updated. */
+	public void forgetSchema(String schemaName) {
+		updatedDatabasenames.remove(schemaName);
+	}
+
 	/**
 	 * @param changelog
 	 *            the changelog to use for schema creation

@@ -79,8 +79,8 @@
 		<property name="configurators">
 			<list> 
 				<bean class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 
-					p:rawDatasource-ref="rawDataSource"  
-				p:databaseNamingStrategy-ref="databaseNamingStrategy"/>
+					p:rawDatasource-ref="rawDataSource" p:databaseNamingStrategy-ref="databaseNamingStrategy"
+					p:tenantAwareDataSource-ref="dataSource"/>
 				<bean id="taskPreferencesConfigurator" class="com.tasktop.c2c.server.internal.tasks.service.ProjectServicePreferencesConfigurator" />
 			</list>
 		</property>

@@ -19,6 +19,7 @@ import java.util.UUID;
 import javax.sql.DataSource;
 
 import com.tasktop.c2c.server.common.internal.tenancy.DatabaseNamingStrategy;
+import com.tasktop.c2c.server.common.internal.tenancy.ProjectTenantAwareDataSource;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Configurator;
 
 /**
@@ -37,6 +38,8 @@ public class ProjectServiceDatabaseConfigurator implements Configurator {
 
 	private boolean needsDatabaseCreation = true;
 
+	private ProjectTenantAwareDataSource tenantAwareDataSource;
+
 	private void initializeNewProject(ProjectServiceConfiguration config) {
 		String dbName = databaseNamingStrategy.getCurrentTenantDatabaseName();
 
@@ -49,6 +52,10 @@ public class ProjectServiceDatabaseConfigurator implements Configurator {
 				}
 				throw new RuntimeException(e);
 			}
+		}
+
+		if (tenantAwareDataSource != null) {
+			tenantAwareDataSource.forgetSchema(dbName);
 		}
 	}
 
@@ -115,6 +122,10 @@ public class ProjectServiceDatabaseConfigurator implements Configurator {
 
 	public void setNeedsDatabaseCreation(boolean needsDatabaseCreation) {
 		this.needsDatabaseCreation = needsDatabaseCreation;
+	}
+
+	public void setTenantAwareDataSource(ProjectTenantAwareDataSource tenantAwareDataSource) {
+		this.tenantAwareDataSource = tenantAwareDataSource;
 	}
 
 }

@@ -90,8 +90,8 @@
 	</bean>
 	
 	<bean id="wikiDatabaseConfigurator" class="com.tasktop.c2c.server.configuration.service.ProjectServiceDatabaseConfigurator" 
-				 	p:rawDatasource-ref="rawDataSource" 
-					p:databaseNamingStrategy-ref="databaseNamingStrategy"/>
+				 	p:rawDatasource-ref="rawDataSource" p:databaseNamingStrategy-ref="databaseNamingStrategy"
+				 	p:tenantAwareDataSource-ref="dataSource"/>
 	<bean id="wikiPreferencesConfigurator" class="com.tasktop.c2c.server.internal.wiki.server.ProjectServicePreferencesConfigurator" />
 	
 	<bean id="jobService" class="com.tasktop.c2c.server.common.service.job.ExecutorJobService" autowire="byType">
