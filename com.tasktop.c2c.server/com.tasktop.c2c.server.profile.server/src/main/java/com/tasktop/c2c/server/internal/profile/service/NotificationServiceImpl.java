@@ -23,9 +23,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.apache.velocity.app.VelocityEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ import com.tasktop.c2c.server.util.VelocityUtils;
 @Service
 public class NotificationServiceImpl extends AbstractJpaServiceBean implements NotificationService {
 
-	private static final Logger LOG = Logger.getLogger(NotificationServiceImpl.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger(NotificationServiceImpl.class);
 
 	@Autowired
 	private ProfileService profileService;
@@ -184,7 +185,7 @@ public class NotificationServiceImpl extends AbstractJpaServiceBean implements N
 					toEmail.add(profile);
 				}
 			} catch (EntityNotFoundException e) {
-				LOG.warning(String.format("Could not find username [%s] from task in profile.", watcher.getLoginName()));
+				LOG.warn(String.format("Could not find username [%s] from task in profile.", watcher.getLoginName()));
 			}
 		}
 
@@ -195,7 +196,7 @@ public class NotificationServiceImpl extends AbstractJpaServiceBean implements N
 					toEmail.add(profile);
 				}
 			} catch (EntityNotFoundException e) {
-				LOG.warning(String.format("Could not find username [%s] from task in profile.", task.getAssignee()
+				LOG.warn(String.format("Could not find username [%s] from task in profile.", task.getAssignee()
 						.getLoginName()));
 			}
 		}
@@ -208,7 +209,7 @@ public class NotificationServiceImpl extends AbstractJpaServiceBean implements N
 					toEmail.add(profile);
 				}
 			} catch (EntityNotFoundException e) {
-				LOG.warning(String.format("Could not find username [%s] from task in profile.", task.getComponent()
+				LOG.warn(String.format("Could not find username [%s] from task in profile.", task.getComponent()
 						.getInitialOwner().getLoginName()));
 			}
 		}
@@ -220,7 +221,7 @@ public class NotificationServiceImpl extends AbstractJpaServiceBean implements N
 					toEmail.add(profile);
 				}
 			} catch (EntityNotFoundException e) {
-				LOG.warning(String.format("Could not find username [%s] from task in profile.", user));
+				LOG.warn(String.format("Could not find username [%s] from task in profile.", user));
 			}
 		}
 
@@ -229,7 +230,7 @@ public class NotificationServiceImpl extends AbstractJpaServiceBean implements N
 			Profile profile = profileService.getProfileByUsername(changeAuthor.getLoginName());
 			toEmail.remove(profile);
 		} catch (EntityNotFoundException e) {
-			LOG.warning(String.format("Could not find username [%s] from task in profile.", changeAuthor.getLoginName()));
+			LOG.warn(String.format("Could not find username [%s] from task in profile.", changeAuthor.getLoginName()));
 		}
 
 		return toEmail;
