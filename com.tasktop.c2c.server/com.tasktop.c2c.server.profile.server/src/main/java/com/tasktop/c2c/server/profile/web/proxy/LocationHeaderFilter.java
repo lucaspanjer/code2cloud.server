@@ -11,6 +11,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.proxy;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,19 +60,27 @@ public class LocationHeaderFilter extends HeaderFilter {
 				return headerValue;
 			}
 
-			// headerValue = http://c2c.dev/hudson/job/foo
-			// desiredValue is http://c2c.dev/alm/s/project1/hudson/job/foo
+			// uri = /hudson/job/foo
+			// headerValue = http://c2c.dev/s2/qa_hudson/job/foo
+			// desiredValue is http://c2c.dev/alm/s2/project1/hudson/job/foo
 
-			String originalPath = request.getRequestURI(); // /alm/s/project1/hudson/job/foo
-			String proxiedpath = service.computeInternalProxyPath(uri); // /hudson/job/foo
+			String originalPath = request.getRequestURI(); // /alm/s2/project1/hudson/job/foo
 
 			String hostName = configuration.getProfileApplicationProtocol() + "://" + configuration.getWebHost(); // http://c2c.dev
 
-			if (headerValue.startsWith(hostName) && originalPath.endsWith(proxiedpath)) {
-				String redirectPath = headerValue.substring(hostName.length());
-				String prefixToAdd = originalPath.substring(0, originalPath.indexOf(proxiedpath));
+			if (headerValue.startsWith(hostName + service.getInternalUriPrefix())) {
+				String proxyRedirectPath = headerValue.substring(hostName.length()); // /s2/qa-dev/hudson/job/foo
+				String externalPrefix = originalPath.substring(0, originalPath.indexOf(uri)); // /alm/s2/project1
 
-				headerValue = hostName + prefixToAdd + redirectPath;
+				Matcher matcher = Pattern.compile(service.getUriPattern()).matcher(uri);
+				if (matcher.matches()) {
+					String otherBit = matcher.group(1);
+					String servicePart = uri.substring(0, uri.lastIndexOf(otherBit)); // hudson
+
+					String restOfPath = proxyRedirectPath.substring(service.getInternalUriPrefix().length()); // /job/foo
+
+					headerValue = hostName + externalPrefix + servicePart + restOfPath;
+				} // Else something is wrong...
 			}
 
 			return headerValue;

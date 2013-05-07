@@ -45,7 +45,7 @@ public class LocationHeaderFilterTest {
 		projectService.setAjpPort(123);
 		projectService.setInternalPort(8080);
 		projectService.setInternalUriPrefix("/hudson");
-		projectService.setUriPattern("/hudson(/.*)");
+		projectService.setUriPattern("/hudson(.*)");
 
 		request = new MockHttpServletRequest("POST", "/s/project1/hudson/job/foo");
 		request.setAttribute(ApplicationServiceProxyFilter.ATTR_APPLICATION_SERVICE, projectService);
@@ -68,6 +68,22 @@ public class LocationHeaderFilterTest {
 		request.setAttribute(ApplicationServiceProxyFilter.ATTR_APPLICATION_SERVICE_URI, uri);
 
 		String headerValue = "http://c2c.dev/hudson/job/foo";
+		String resultValue = locationHeaderFilter.processRequestHeader("Location", headerValue);
+		Assert.assertEquals("Should not touch request headers", headerValue, resultValue);
+
+		resultValue = locationHeaderFilter.processResponseHeader("Location", headerValue);
+		Assert.assertEquals("http://c2c.dev/s/project1/hudson/job/foo", resultValue);
+
+	}
+
+	@Test
+	public void testForHudsonPerOrg() {
+		projectService.setInternalUriPrefix("/s2/qa-dev/hudson");
+
+		String uri = "/hudson/job/foo";
+		request.setAttribute(ApplicationServiceProxyFilter.ATTR_APPLICATION_SERVICE_URI, uri);
+
+		String headerValue = "http://c2c.dev/s2/qa-dev/hudson/job/foo";
 		String resultValue = locationHeaderFilter.processRequestHeader("Location", headerValue);
 		Assert.assertEquals("Should not touch request headers", headerValue, resultValue);
 
