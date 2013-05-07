@@ -67,7 +67,7 @@ import com.tasktop.c2c.server.wiki.service.WikiService;
 @Title("Wiki Service")
 @Documentation("A wiki service for accessing, creating and modifying a project's wiki documentation."
 		+ "The Wiki service methods are available by appending the URI to the base URL\n"
-		+ "https://{hostname}/s/{projectIdentifier}/wiki + URI, for example: https://example.com/s/projectabc/wiki/page/Home")
+		+ "https://{hostname}/s/{projectIdentifier}/wiki + URI, for example to retrieve the page at path \"Home\" : https://example.com/s/projectabc/wiki/page/path/Home")
 @Controller
 @Qualifier("webservice")
 public class WikiServiceController extends AbstractBuildInfoRestService implements WikiService {
