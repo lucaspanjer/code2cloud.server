@@ -14,6 +14,8 @@ package com.tasktop.c2c.server.internal.profile.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.cloud.service.HudsonSlavePoolServiceInternal;
 import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
@@ -50,6 +52,19 @@ public class BuildSlaveProjectServiceManagementStrategy implements ProjectServic
 		hudsonSlavePoolServiceInternal.doReleaseSlave(projectService.getProjectServiceProfile().getProject()
 				.getIdentifier(), projectService.getServiceHost().getId());
 
+	}
+
+	@Override
+	public ProjectServiceStatus computeServiceStatus(ProjectService service) {
+		ProjectServiceStatus result = new ProjectServiceStatus();
+		result.setProjectIdentifier(service.getProjectServiceProfile().getProject().getIdentifier());
+		result.setServiceType(service.getType());
+		if (service.getServiceHost() != null && service.getServiceHost().isAvailable()) {
+			result.setServiceState(ServiceState.RUNNING);
+		} else {
+			result.setServiceState(ServiceState.UNAVAILABLE);
+		}
+		return result;
 	}
 
 }

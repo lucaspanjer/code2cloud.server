@@ -16,6 +16,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 
@@ -56,6 +57,11 @@ public class ProjectServiceManagementStrategyList implements ProjectServiceManag
 	@Override
 	public void deprovisionService(ProjectService service) {
 		get(service).deprovisionService(service);
+	}
+
+	@Override
+	public ProjectServiceStatus computeServiceStatus(ProjectService service) {
+		return get(service).computeServiceStatus(service);
 	}
 
 }

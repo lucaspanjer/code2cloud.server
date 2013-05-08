@@ -12,10 +12,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.tenancy.context.TenancyContextHolder;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus.ServiceState;
 import com.tasktop.c2c.server.cloud.domain.ServiceType;
 import com.tasktop.c2c.server.cloud.service.NodeProvisioningService;
 import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
+import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementService;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceClient;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceProvider;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
@@ -219,6 +222,33 @@ public class StandardProjectServiceManagementStrategy implements ProjectServiceM
 		} finally {
 			TenancyContextHolder.clearContext();
 		}
+	}
+
+	@Override
+	public ProjectServiceStatus computeServiceStatus(ProjectService service) {
+		try {
+			if (service.getServiceHost() == null || !service.getServiceHost().isAvailable()) {
+				return createFailureProjectServiceStatus(service);
+			} else {
+				tenancyManager.establishTenancyContext(service);
+				ProjectServiceManagementService serviceMangementService = projectServiceMangementServiceProvider
+						.getNewService(service.getServiceHost().getInternalNetworkAddress(), service.getType());
+
+				return serviceMangementService.retrieveServiceStatus(service.getProjectServiceProfile().getProject()
+						.getIdentifier());
+			}
+		} catch (Exception e) {
+			LOGGER.warn("Caught exception trying to contact service", e);
+			return createFailureProjectServiceStatus(service);
+		}
+	}
+
+	private ProjectServiceStatus createFailureProjectServiceStatus(ProjectService service) {
+		ProjectServiceStatus result = new ProjectServiceStatus();
+		result.setProjectIdentifier(service.getProjectServiceProfile().getProject().getIdentifier());
+		result.setServiceType(service.getType());
+		result.setServiceState(ServiceState.UNAVAILABLE);
+		return result;
 	}
 
 }

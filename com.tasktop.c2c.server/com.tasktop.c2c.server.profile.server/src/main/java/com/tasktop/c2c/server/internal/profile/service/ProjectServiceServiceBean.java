@@ -45,13 +45,10 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.common.service.domain.Role;
 import com.tasktop.c2c.server.common.service.job.JobService;
-import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementService;
-import com.tasktop.c2c.server.configuration.service.ProjectServiceMangementServiceProvider;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectServiceProfile;
 import com.tasktop.c2c.server.profile.domain.internal.ServiceHost;
-import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
 import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 
 @Service("projectServiceService")
@@ -64,19 +61,10 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	private static final long DOWN_SERVICE_RECHECK_DELAY = 10 * 1000l;
 
 	@Autowired
-	private ProfileServiceConfiguration configuration;
-
-	@Autowired(required = false)
-	private List<ProjectServiceProvisioner> projectServiceProvisionerList;
-
-	@Autowired
 	private JobService jobService;
 
 	@Resource
 	private Map<ServiceType, NodeProvisioningService> nodeProvisioningServiceByType;
-
-	@Autowired
-	private ProjectServiceMangementServiceProvider projectServiceMangementServiceProvider;
 
 	@Autowired
 	private ServiceHostCheckingStrategy serviceHostCheckingStrategy;
@@ -289,6 +277,7 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 
 	@Override
 	public List<ProjectService> findProjectServicesOlderThan(ServiceType type, Date date) {
+		@SuppressWarnings("unchecked")
 		List<ProjectService> projectServices = entityManager
 				.createQuery(
 						"SELECT projectService FROM "
@@ -310,26 +299,12 @@ public class ProjectServiceServiceBean extends AbstractJpaServiceBean implements
 	@Override
 	public List<ProjectServiceStatus> computeProjectServicesStatus(Project managedProject) {
 
-		// Need to establish the project tenancy context so that it gets propagated to internal services (used to
-		// compute database names and file locations).
-		tenancyManager.establishTenancyContextFromProjectIdentifier(managedProject.getIdentifier());
-
 		List<ProjectServiceStatus> result = new ArrayList<ProjectServiceStatus>();
 
-		// REVIEW what happens with builds slave here.
 		for (ProjectService service : managedProject.getProjectServiceProfile().getProjectServices()) {
-			try {
-				if (service.getServiceHost() == null || !service.getServiceHost().isAvailable()) {
-					result.add(createFailureProjectServiceStatus(service));
-				} else {
-					tenancyManager.establishTenancyContext(service);
-					ProjectServiceManagementService serviceMangementService = projectServiceMangementServiceProvider
-							.getNewService(service.getServiceHost().getInternalNetworkAddress(), service.getType());
-
-					result.add(serviceMangementService.retrieveServiceStatus(managedProject.getIdentifier()));
-				}
-			} catch (Exception e) {
-				LOGGER.warn("Caught exception trying to contact service", e);
+			if (projectServiceManagementStrategy.canHandle(service)) {
+				result.add(projectServiceManagementStrategy.computeServiceStatus(service));
+			} else {
 				result.add(createFailureProjectServiceStatus(service));
 			}
 		}

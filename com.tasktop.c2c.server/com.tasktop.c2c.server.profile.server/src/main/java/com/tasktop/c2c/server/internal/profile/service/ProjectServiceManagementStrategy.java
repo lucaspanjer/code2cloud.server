@@ -11,6 +11,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.internal.profile.service;
 
+import com.tasktop.c2c.server.cloud.domain.ProjectServiceStatus;
 import com.tasktop.c2c.server.common.service.NoNodeAvailableException;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 
@@ -44,4 +45,6 @@ public interface ProjectServiceManagementStrategy {
 	 * @param service
 	 */
 	void deprovisionService(ProjectService service);
+
+	ProjectServiceStatus computeServiceStatus(ProjectService service);
 }
