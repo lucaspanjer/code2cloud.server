@@ -77,6 +77,18 @@ public class LocationHeaderFilterTest {
 	}
 
 	@Test
+	public void testForHudsonWithDecodedUri() {
+		String uri = "/hudson/job/job name";
+		request.setRequestURI("/s/project1/hudson/job/job name");
+		request.setAttribute(ApplicationServiceProxyFilter.ATTR_APPLICATION_SERVICE_URI, uri);
+
+		String headerValue = "http://c2c.dev/hudson/job/job%20name";
+		String resultValue = locationHeaderFilter.processResponseHeader("Location", headerValue);
+		Assert.assertEquals("http://c2c.dev/s/project1/hudson/job/job%20name", resultValue);
+
+	}
+
+	@Test
 	public void testForHudsonPerOrg() {
 		projectService.setInternalUriPrefix("/s2/qa-dev/hudson");
 
@@ -84,10 +96,7 @@ public class LocationHeaderFilterTest {
 		request.setAttribute(ApplicationServiceProxyFilter.ATTR_APPLICATION_SERVICE_URI, uri);
 
 		String headerValue = "http://c2c.dev/s2/qa-dev/hudson/job/foo";
-		String resultValue = locationHeaderFilter.processRequestHeader("Location", headerValue);
-		Assert.assertEquals("Should not touch request headers", headerValue, resultValue);
-
-		resultValue = locationHeaderFilter.processResponseHeader("Location", headerValue);
+		String resultValue = locationHeaderFilter.processResponseHeader("Location", headerValue);
 		Assert.assertEquals("http://c2c.dev/s/project1/hudson/job/foo", resultValue);
 
 	}
@@ -101,10 +110,8 @@ public class LocationHeaderFilterTest {
 		request.setAttribute(ApplicationServiceProxyFilter.ATTR_APPLICATION_SERVICE_URI, uri);
 
 		String headerValue = "http://c2c.dev/hudson/job/foo";
-		String resultValue = locationHeaderFilter.processRequestHeader("Location", headerValue);
-		Assert.assertEquals("Should not touch request headers", headerValue, resultValue);
 
-		resultValue = locationHeaderFilter.processResponseHeader("Location", headerValue);
+		String resultValue = locationHeaderFilter.processResponseHeader("Location", headerValue);
 		Assert.assertEquals("http://c2c.dev/alm/s/project1/hudson/job/foo", resultValue);
 
 	}

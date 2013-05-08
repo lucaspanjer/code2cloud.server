@@ -11,6 +11,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.proxy;
 
+import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.util.UriUtils;
 
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
@@ -60,16 +62,21 @@ public class LocationHeaderFilter extends HeaderFilter {
 				return headerValue;
 			}
 
+			String originalPath = request.getRequestURI(); // /alm/s2/project1/hudson/job/foo
+			try {
+				uri = UriUtils.encodePath(uri, "utf8");
+				originalPath = UriUtils.encodePath(originalPath, "utf8");
+			} catch (UnsupportedEncodingException e) {
+				throw new RuntimeException(e);
+			}
+
 			// uri = /hudson/job/foo
 			// headerValue = http://c2c.dev/s2/qa_hudson/job/foo
 			// desiredValue is http://c2c.dev/alm/s2/project1/hudson/job/foo
 
-			String originalPath = request.getRequestURI(); // /alm/s2/project1/hudson/job/foo
-
 			String hostName = configuration.getProfileApplicationProtocol() + "://" + configuration.getWebHost(); // http://c2c.dev
 
-			if (headerValue.startsWith(hostName + service.getInternalUriPrefix())) {
-				String proxyRedirectPath = headerValue.substring(hostName.length()); // /s2/qa-dev/hudson/job/foo
+			if (headerValue.startsWith(hostName + service.getInternalUriPrefix()) && originalPath.contains(uri)) {
 				String externalPrefix = originalPath.substring(0, originalPath.indexOf(uri)); // /alm/s2/project1
 
 				Matcher matcher = Pattern.compile(service.getUriPattern()).matcher(uri);
@@ -77,7 +84,8 @@ public class LocationHeaderFilter extends HeaderFilter {
 					String otherBit = matcher.group(1);
 					String servicePart = uri.substring(0, uri.lastIndexOf(otherBit)); // hudson
 
-					String restOfPath = proxyRedirectPath.substring(service.getInternalUriPrefix().length()); // /job/foo
+					String restOfPath = headerValue.substring(hostName.length()
+							+ service.getInternalUriPrefix().length()); // /job/foo
 
 					headerValue = hostName + externalPrefix + servicePart + restOfPath;
 				} // Else something is wrong...
