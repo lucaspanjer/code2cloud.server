@@ -716,4 +716,23 @@
 			baseTableName="DEPLOYMENTACTIVITY" constraintName="FK_DEPLOYMENTACTIVITY_PROFILE"
 			referencedColumnNames="ID" referencedTableName="PROFILE"/>
 	</changeSet>
+	
+	<changeSet author="mnelson" id="enforceProfileLanguage-task5426">
+		<update tableName="PROFILE">
+			<column name="LANGUAGE" value="en"/>
+			<where>LANGUAGE IS NULL</where>
+		</update>
+		<!-- We could set "defaultNullValue" below, but doing so adds single quotes around the value. -->
+		<addNotNullConstraint 
+			columnDataType="VARCHAR(5)"
+			columnName="LANGUAGE"
+			tableName="PROFILE"
+		/>
+		<addDefaultValue
+			columnDataType="VARCHAR(5)"
+			columnName="LANGUAGE"
+			defaultValue="en"
+			tableName="PROFILE"
+		/>
+	</changeSet>
 </databaseChangeLog>

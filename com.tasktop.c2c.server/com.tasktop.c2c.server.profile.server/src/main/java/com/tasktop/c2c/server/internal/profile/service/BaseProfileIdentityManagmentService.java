@@ -283,7 +283,9 @@ public class BaseProfileIdentityManagmentService implements IdentityManagmentSer
 		if (profile.getPassword() != null && profile.getPassword().trim().length() > 0) {
 			resetPassword(currentProfile, profile.getPassword());
 		}
-		currentProfile.setLanguage(profile.getLanguage());
+		if (profile.getLanguage() != null) {
+			currentProfile.setLanguage(profile.getLanguage());
+		}
 
 		return currentProfile;
 	}
