@@ -20,7 +20,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
  * @author Clint Morgan <clint.morgan@tasktop.com> (Tasktop Technologies Inc.)
  * 
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class Event {
 	private String projectId;
 	private String userId;
