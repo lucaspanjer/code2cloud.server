@@ -500,4 +500,16 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 			}
 		}.doCall(url, repository, revision);
 	}
+
+	public static final String GET_MERGE_BASE_URL = "repository/{repo}/merge-base/{revA}/{revB}";
+
+	/** @Override in fact it does override, but ... */
+	public Commit getMergeBase(String repository, String revA, String revB) throws EntityNotFoundException {
+
+		return new GetCall<Commit>() {
+			public Commit getValue(ServiceCallResult result) {
+				return result.getCommit();
+			}
+		}.doCall(GET_MERGE_BASE_URL, repository, revA, revB);
+	}
 }

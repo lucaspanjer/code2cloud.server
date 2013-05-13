@@ -13,16 +13,20 @@ package com.tasktop.c2c.server.scm.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
+import org.eclipse.jgit.JGitText;
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.blame.BlameResult;
+import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -30,32 +34,29 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.patch.FileHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.revwalk.filter.SkipRevFilter;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
+import org.eclipse.jgit.util.io.NullOutputStream;
 
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.scm.domain.Blame;
 import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
-//import com.tasktop.c2c.server.scm.domain.DiffEntry.Content;
 import com.tasktop.c2c.server.scm.domain.DiffEntry;
 import com.tasktop.c2c.server.scm.domain.DiffEntry.Hunk;
 import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Trees;
-import java.io.OutputStream;
-import java.util.LinkedList;
-import java.util.Stack;
-import org.eclipse.jgit.diff.DiffFormatter;
-import org.eclipse.jgit.errors.CorruptObjectException;
-import org.eclipse.jgit.patch.FileHeader;
-import org.eclipse.jgit.util.io.NullOutputStream;
+
+//import com.tasktop.c2c.server.scm.domain.DiffEntry.Content;
 
 class GitBrowseUtil {
 
@@ -264,7 +265,41 @@ class GitBrowseUtil {
 
 	}
 
+	public static Commit getMergeBase(Repository r, String revA, String revB) throws IOException {
+
+		RevWalk walk = new RevWalk(r);
+
+		RevCommit a = walk.parseCommit(r.resolve(revA));
+		RevCommit b = walk.parseCommit(r.resolve(revB));
+
+		RevCommit base = getBaseCommit(walk, a, b);
+
+		return GitDomain.createCommit(base);
+	}
+
 	// Private methods ---------------------------------------------------------
+
+	// Taken/modified from JGit 3.0 Merger class
+	protected static RevCommit getBaseCommit(RevWalk walk, RevCommit a, RevCommit b)
+			throws IncorrectObjectTypeException, IOException {
+		walk.reset();
+		walk.setRevFilter(RevFilter.MERGE_BASE);
+		walk.markStart(a);
+		walk.markStart(b);
+		final RevCommit base = walk.next();
+		if (base == null)
+			return null;
+		final RevCommit base2 = walk.next();
+		if (base2 != null) {
+			// throw new NoMergeBaseException(MergeBaseFailureReason.MULTIPLE_MERGE_BASES_NOT_SUPPORTED,
+			// MessageFormat.format(JGitText.get().multipleMergeBasesFor, a.name(), b.name(), base.name(),
+			// base2.name()));
+			throw new IOException(MessageFormat.format(JGitText.get().multipleMergeBasesFor, a.name(), b.name(),
+					base.name(), base2.name()));
+
+		}
+		return base;
+	}
 
 	private static boolean moveToPath(TreeWalk treeWalk, String path) throws MissingObjectException, IOException {
 

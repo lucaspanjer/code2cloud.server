@@ -821,6 +821,22 @@ public class GitServiceBean implements GitService, InitializingBean {
 
 	@Secured({ Role.Observer, Role.User })
 	@Override
+	public Commit getMergeBase(String repoName, String revA, String revB) throws EntityNotFoundException {
+		try {
+			Repository r = findRepositoryByName(repoName);
+			Commit c = GitBrowseUtil.getMergeBase(r, revA, revB);
+			r.close();
+			return c;
+		} catch (IOException ex) {
+			throw new EntityNotFoundException(ex.getMessage());
+		} catch (URISyntaxException ex) {
+			throw new EntityNotFoundException(ex.getMessage());
+		}
+
+	}
+
+	@Secured({ Role.Observer, Role.User })
+	@Override
 	public Item getItem(String repoName, String revision, String path) throws EntityNotFoundException {
 		try {
 			Repository r = findRepositoryByName(repoName);

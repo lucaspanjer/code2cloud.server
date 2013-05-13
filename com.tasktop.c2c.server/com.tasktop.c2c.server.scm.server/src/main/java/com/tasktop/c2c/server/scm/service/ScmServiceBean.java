@@ -216,6 +216,11 @@ public class ScmServiceBean extends AbstactServiceBean implements ScmService {
 	}
 
 	@Override
+	public Commit getMergeBase(String repoName, String revA, String revB) throws EntityNotFoundException {
+		return gitService.getMergeBase(repoName, revA, revB);
+	}
+
+	@Override
 	public String getPublicSshKey() {
 		return gitService.getPublicSshKey();
 	}

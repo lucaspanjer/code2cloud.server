@@ -154,6 +154,8 @@ public interface GitService {
 	/** Resolve item on given patrh and at given change set */
 	Item getItem(String repository, String revision, String path) throws EntityNotFoundException;
 
+	Commit getMergeBase(String repository, String revA, String revB) throws EntityNotFoundException;
+
 	/**
 	 * @return
 	 */

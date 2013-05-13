@@ -274,6 +274,17 @@ public class ScmServiceController extends AbstractBuildInfoRestService implement
 		return scmService.getItem(repoName, revision, path);
 	}
 
+	@RequestMapping(value = ScmServiceClient.GET_MERGE_BASE_URL + "/**", method = RequestMethod.GET)
+	public Commit getMergeBaseRequest(@PathVariable("repo") String repoName, @PathVariable("revA") String revA,
+			@PathVariable("revB") String revB, HttpServletRequest request) throws EntityNotFoundException {
+		return getMergeBase(repoName, revA, revB);
+	}
+
+	@Override
+	public Commit getMergeBase(String repoName, String revA, String revB) throws EntityNotFoundException {
+		return scmService.getMergeBase(repoName, revA, revB);
+	}
+
 	/*
 	 * This is extremely ugly and fragile. Using some decent REST server/client framework such as Jersey would solve it
 	 * ... And it would also make the *ServiceCient.ServiceCallResult pattern go.

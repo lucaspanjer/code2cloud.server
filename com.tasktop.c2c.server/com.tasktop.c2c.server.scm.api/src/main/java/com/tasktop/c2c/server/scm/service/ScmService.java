@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.scm.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -192,6 +193,18 @@ public interface ScmService {
 	 * @throws EntityNotFoundException
 	 */
 	Item getItem(String repository, String revision, String path) throws EntityNotFoundException;
+
+	/**
+	 * Tries to find merge-base for two commits.
+	 * 
+	 * @param repository
+	 * @param revision
+	 * @param path
+	 * @return
+	 * @throws IOException
+	 *             in case of no or multiple mergebases found
+	 */
+	Commit getMergeBase(String repository, String revA, String revB) throws EntityNotFoundException;
 
 	String getPublicSshKey();
 }
