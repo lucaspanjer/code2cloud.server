@@ -120,7 +120,7 @@ public class InMemoryPromiseService implements PromiseService {
 		}
 		String message = messageSource.getMessage("no.such.promise", null,
 				AuthenticationServiceUser.getCurrentUserLocale());
-		throw new ValidationException(message, null);
+		throw new ValidationException(message);
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class InMemoryPromiseService implements PromiseService {
 		}
 		String message = messageSource.getMessage("no.such.promise", null,
 				AuthenticationServiceUser.getCurrentUserLocale());
-		throw new ValidationException(message, null);
+		throw new ValidationException(message);
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class InMemoryPromiseService implements PromiseService {
 		}
 		String message = messageSource.getMessage("no.such.promise", null,
 				AuthenticationServiceUser.getCurrentUserLocale());
-		throw new ValidationException(message, null);
+		throw new ValidationException(message);
 	}
 
 	@Override

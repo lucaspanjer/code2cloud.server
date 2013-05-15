@@ -93,7 +93,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 			findPageByPath(wikiPage.getPath());
 			Errors errors = createErrors(wikiPage);
 			errors.rejectValue("path", "nonUnique", new Object[] { wikiPage.getPath() }, "path in use");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		} catch (EntityNotFoundException e) {
 			// expected, this is good
 		}
@@ -371,7 +371,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 			if (pageByPath != null && !pageByPath.equals(page)) {
 				Errors errors = createErrors(wikiPage);
 				errors.rejectValue("path", "nonUnique", new Object[] { wikiPage.getPath() }, "path in use");
-				throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+				super.throwValidationException(errors);
 			}
 		} catch (EntityNotFoundException e) {
 			// expected, this is ok
@@ -617,7 +617,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 			findAttachmentByName(attachment.getPage().getId(), attachment.getName());
 			Errors errors = createErrors(attachment);
 			errors.rejectValue("name", "nonUnique", new Object[] { attachment.getName() }, "name in use");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		} catch (EntityNotFoundException e) {
 			// expected, this is good
 		}

@@ -77,7 +77,7 @@ public class PromiseServiceImpl extends AbstractJpaServiceBean implements Promis
 		} catch (NoResultException e) {
 			String message = super.messageSource.getMessage("no.such.promise", null,
 					AuthenticationServiceUser.getCurrentUserLocale());
-			throw new ValidationException(message, null);
+			throw new ValidationException(message);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class PromiseServiceImpl extends AbstractJpaServiceBean implements Promis
 		if (!isNextPromise(promiseToken)) {
 			String message = super.messageSource.getMessage("not.next.promise", null,
 					AuthenticationServiceUser.getCurrentUserLocale());
-			throw new ValidationException(message, null);
+			throw new ValidationException(message);
 		}
 		retrieve(promiseToken).setDateUsed(new Date());
 		// REVIEW Or we could delete it?

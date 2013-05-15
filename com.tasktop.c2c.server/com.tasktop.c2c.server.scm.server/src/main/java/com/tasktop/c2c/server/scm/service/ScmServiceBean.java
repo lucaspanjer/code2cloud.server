@@ -21,7 +21,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
-import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.common.service.AbstactServiceBean;
 import com.tasktop.c2c.server.common.service.BaseProfileConfiguration;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
@@ -68,11 +67,11 @@ public class ScmServiceBean extends AbstactServiceBean implements ScmService {
 			if (!repository.getName().endsWith(".git")) {
 				Errors errors = createErrors(repository);
 				errors.reject("scmrepo.internal.nameMustEndWithGit");
-				throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+				super.throwValidationException(errors);
 			} else if (repository.getName().equals(".git")) {
 				Errors errors = createErrors(repository);
 				errors.reject("scmrepo.internal.nameEmpty");
-				throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+				super.throwValidationException(errors);
 			}
 			repository.setUrl(internalUrlPrefix + repository.getName());
 		}
@@ -83,19 +82,19 @@ public class ScmServiceBean extends AbstactServiceBean implements ScmService {
 		if (findRepositoryByUrl(repository.getUrl()) != null) {
 			Errors errors = createErrors(repository);
 			errors.reject("scmrepo.urlExists");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 		if (ScmLocation.EXTERNAL.equals(repository.getScmLocation())
 				&& repository.getUrl().startsWith(internalUrlPrefix)) {
 			Errors errors = createErrors(repository);
 			errors.reject("scmrepo.external.url.isInternal");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 		if (ScmLocation.CODE2CLOUD.equals(repository.getScmLocation())
 				&& !repository.getUrl().startsWith(internalUrlPrefix)) {
 			Errors errors = createErrors(repository);
 			errors.reject("scmrepo.internal.url.isExternal");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 		if (!ScmType.GIT.equals(repository.getType())) {
 			throw new IllegalStateException("only git repos supported");

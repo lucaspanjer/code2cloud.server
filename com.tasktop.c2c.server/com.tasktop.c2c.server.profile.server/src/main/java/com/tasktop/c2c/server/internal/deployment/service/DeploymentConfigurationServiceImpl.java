@@ -32,7 +32,6 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.validation.Errors;
 
-import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
@@ -215,7 +214,7 @@ public class DeploymentConfigurationServiceImpl extends AbstractJpaServiceBean i
 		if (findDeploymentByName(internalDeploymentConfiguration.getName()) != null) {
 			Errors errors = createErrors(publicDeploymentConfiguration);
 			errors.rejectValue("name", "deployment.name.notUnique");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 	}
 

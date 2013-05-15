@@ -58,7 +58,6 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.ObjectError;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.auth.service.AuthenticationToken;
@@ -103,7 +102,6 @@ import com.tasktop.c2c.server.internal.tasks.domain.conversion.TaskDomain;
 import com.tasktop.c2c.server.internal.tasks.service.TaskCustomFieldService;
 import com.tasktop.c2c.server.internal.tasks.service.TaskServiceDependencies;
 import com.tasktop.c2c.server.internal.tasks.service.sql.SqlDialect;
-import com.tasktop.c2c.server.tasks.domain.AbstractDomainObject;
 import com.tasktop.c2c.server.tasks.domain.AbstractReferenceValue;
 import com.tasktop.c2c.server.tasks.domain.AttachmentHandle;
 import com.tasktop.c2c.server.tasks.domain.Comment;
@@ -1738,9 +1736,6 @@ public class TaskServiceTest {
 			} catch (ValidationException e) {
 				if (canCreate) {
 					fail("Should be able to create a task with status " + status);
-				} else {
-					ValidationAssert.assertHaveValidationError(e, "task.invalidTaskCreationStatus",
-							new Object[] { status.getValue() });
 				}
 			} catch (EntityNotFoundException e) {
 				throw new IllegalStateException(e);
@@ -1801,9 +1796,6 @@ public class TaskServiceTest {
 					if (transitionAllowed) {
 						fail("Should be able to transition a task with status from " + status + " to " + status2 + ": "
 								+ e.getMessage());
-					} else {
-						ValidationAssert.assertHaveValidationError(e, "task.invalidWorkflow",
-								new Object[] { status2.getValue(), status.getValue() });
 					}
 				}
 			}
@@ -3680,12 +3672,6 @@ public class TaskServiceTest {
 		taskService.updateComponent(origComponent);
 	}
 
-	// Simple key generation method, mimics logic in TaskServiceBean.combineValidationExceptions()
-	private String generateValidationKey(String fieldName, AbstractDomainObject domainObj) {
-		return String.format("field.required.%s[%s|%s]", fieldName, domainObj.getClass().getSimpleName(),
-				domainObj.getId());
-	}
-
 	@Test
 	public void testUpdateProductTree_ValidationErrors() throws Exception {
 		Product mockProduct = MockProductFactory.create(entityManager);
@@ -3698,17 +3684,11 @@ public class TaskServiceTest {
 		product.setDescription(RandomStringUtils.randomAlphanumeric(1024));
 		product.setIsActive(false);
 
-		// Create a list to keep track of all of our validation errors - we'll use then to ensure that all of our
-		// validation messages were present, and were correctly calculated.
-		List<String> validationList = new ArrayList<String>();
-
 		// Now, make some invalid data.
 		product.setName(null);
-		validationList.add(generateValidationKey("name", product));
 
 		for (com.tasktop.c2c.server.tasks.domain.Component curComponent : product.getComponents()) {
 			curComponent.setName(null);
-			validationList.add(generateValidationKey("name", curComponent));
 		}
 
 		try {
@@ -3716,23 +3696,8 @@ public class TaskServiceTest {
 			taskService.updateProductTree(product);
 		} catch (ValidationException ve) {
 
-			ve.getErrors().getAllErrors();
-
 			// We should have an error for every product, and 2 for every component
-			assertEquals(1 + product.getComponents().size(), ve.getErrors().getErrorCount());
-
-			for (ObjectError curErr : ve.getErrors().getAllErrors()) {
-				// Now, loop through our errors and make sure that the validation codes follow the correct format
-				if (!validationList.contains(curErr.getCode())) {
-					fail("The key " + curErr.getCode() + " was found, but was not expected from the validation system!");
-				}
-
-				validationList.remove(curErr.getCode());
-			}
-
-			if (validationList.size() > 0) {
-				fail("The following validation errors were not caught by the validator: " + validationList);
-			}
+			assertEquals(1 + product.getComponents().size(), ve.getMessages().size());
 		}
 	}
 
@@ -4292,7 +4257,7 @@ public class TaskServiceTest {
 			taskService.createQuery(query);
 			Assert.fail("Expect validation exception");
 		} catch (ValidationException e) {
-			ValidationAssert.assertHaveValidationError(e, "field.required.queryString");
+			ValidationAssert.assertHaveValidationError(e, "A query is required.");
 		}
 
 		query.setQueryString("DOES NOT PARSE");
@@ -4301,7 +4266,7 @@ public class TaskServiceTest {
 			taskService.createQuery(query);
 			Assert.fail("Expect validation exception");
 		} catch (ValidationException e) {
-			ValidationAssert.assertHaveValidationError(e, "invalid.queryString");
+			ValidationAssert.assertHaveValidationError(e, "Invalid query.");
 		}
 
 		query.setQueryString("status = 'NEW'");
@@ -4320,7 +4285,7 @@ public class TaskServiceTest {
 			taskService.updateQuery(query);
 			Assert.fail("Expect validation exception");
 		} catch (ValidationException e) {
-			ValidationAssert.assertHaveValidationError(e, "field.validQueryName");
+			ValidationAssert.assertHaveValidationError(e, "Query name must not contain special characters.");
 		}
 
 		query = new SavedTaskQuery();
@@ -4331,7 +4296,7 @@ public class TaskServiceTest {
 			taskService.createQuery(query);
 			Assert.fail("Expect validation exception");
 		} catch (ValidationException e) {
-			ValidationAssert.assertHaveValidationError(e, "query.nameUnique");
+			ValidationAssert.assertHaveValidationError(e, "Name is in use, choose another name.");
 		}
 	}
 

@@ -59,7 +59,7 @@ public class HudsonMaxConcurrentExecutorsQuotaEnforcer implements QuotaEnforcer<
 		if (currentSlaves.size() >= maxSlaves) {
 			String message = messageSource.getMessage("hudson.quota.reached", new Object[] { quota.getValue() },
 					AuthenticationServiceUser.getCurrentUserLocale());
-			throw new ValidationException(message, null);
+			throw new ValidationException(message);
 		}
 	}
 

@@ -24,7 +24,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.core.Conventions;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -44,8 +43,6 @@ public abstract class AbstractRestService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	protected MessageSource messageSource;
-	@Autowired
 	protected ObjectMapper jsonMapper;
 
 	/**
@@ -62,13 +59,8 @@ public abstract class AbstractRestService {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public void handleExceptionWrapperWithTextHtmlContent(TextHtmlContentExceptionWrapper ex,
 			HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
-		Error e;
+		Error e = new Error(ex.getCause());
 
-		if (ex.getCause() instanceof ValidationException) {
-			e = new Error((ValidationException) ex.getCause(), messageSource);
-		} else {
-			e = new Error(ex.getCause());
-		}
 		response.setContentType("text/html");
 		response.getWriter().write(jsonMapper.writeValueAsString(Collections.singletonMap("error", e)));
 	}
@@ -79,7 +71,7 @@ public abstract class AbstractRestService {
 		if (logger.isDebugEnabled()) {
 			logger.debug(ex.getClass().getName() + ": " + ex.getMessage(), ex);
 		}
-		return createModelAndView("validationError", new Error(ex, messageSource));
+		return createModelAndView("validationError", new Error(ex));
 	}
 
 	@ExceptionHandler(AuthenticationException.class)

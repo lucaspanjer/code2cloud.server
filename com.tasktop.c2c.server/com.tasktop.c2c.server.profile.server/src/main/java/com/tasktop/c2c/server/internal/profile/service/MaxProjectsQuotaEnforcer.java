@@ -76,7 +76,7 @@ public class MaxProjectsQuotaEnforcer implements QuotaEnforcer<Project> {
 		if (org.getProjects().size() >= maxProjects) {
 			String message = messageSource.getMessage("max.projects.reached", new Object[] { quota.getValue() },
 					AuthenticationServiceUser.getCurrentUserLocale());
-			throw new ValidationException(message, null);
+			throw new ValidationException(message);
 		}
 	}
 }

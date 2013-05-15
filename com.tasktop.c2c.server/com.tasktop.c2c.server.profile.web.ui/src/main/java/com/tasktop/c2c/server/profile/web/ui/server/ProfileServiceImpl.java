@@ -29,10 +29,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.Errors;
 
-import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileService;
 import com.tasktop.c2c.server.common.profile.web.shared.Credentials;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
@@ -483,9 +480,8 @@ public class ProfileServiceImpl extends AbstractAutowiredRemoteServiceServlet im
 					}
 				}
 			} catch (IOException e) {
-				Errors errors = new BeanPropertyBindingResult(invitationTokens, "invitations");
-				errors.reject("invalidFormat", "Cannot read CSV: " + e.getMessage());
-				throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+
+				throw new ValidationException("Cannot read CSV: " + e.getMessage());
 			}
 			return profileService.createInvitations(invitationTokens, sendEmail);
 		} catch (ValidationException e) {

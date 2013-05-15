@@ -11,7 +11,9 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Entity;
 
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
 
 import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
@@ -30,7 +33,6 @@ import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 public class AbstactServiceBean {
 
 	protected Validator validator;
-	@Autowired
 	protected MessageSource messageSource;
 
 	/**
@@ -59,8 +61,7 @@ public class AbstactServiceBean {
 			validator.validate(target, validationResult);
 		}
 		if (validationResult.hasErrors()) {
-			throw new ValidationException(validationResult, messageSource,
-					AuthenticationServiceUser.getCurrentUserLocale());
+			throwValidationException(validationResult);
 		}
 	}
 
@@ -89,6 +90,15 @@ public class AbstactServiceBean {
 		return new BeanPropertyBindingResult(target, beanName);
 	}
 
+	protected void throwValidationException(Errors errors) throws ValidationException {
+		List<String> messages = new ArrayList<String>(errors.getErrorCount());
+		for (ObjectError error : errors.getAllErrors()) {
+			messages.add(messageSource.getMessage(error, AuthenticationServiceUser.getCurrentUserLocale()));
+		}
+
+		throw new ValidationException(messages);
+	}
+
 	private String computeBeanName(Object target) {
 		Class<?> clazz = target.getClass();
 		// in case of subclassing
@@ -104,6 +114,11 @@ public class AbstactServiceBean {
 	@Autowired
 	public void setValidator(Validator validator) {
 		this.validator = validator;
+	}
+
+	@Autowired
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 
 }

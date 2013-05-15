@@ -278,7 +278,7 @@ public abstract class BaseProfileServiceTest {
 		try {
 			profileService.createProfile(arg);
 		} catch (ValidationException e) {
-			assertHaveValidationError(e, "profile.usernameUnique", profileExists.getUsername());
+			assertHaveValidationError(e, "Username is in use. Please try a different username.");
 			throw e;
 		}
 	}
@@ -291,7 +291,7 @@ public abstract class BaseProfileServiceTest {
 		try {
 			profileService.createProfile(arg);
 		} catch (ValidationException e) {
-			assertHaveValidationError(e, "profile.emailUnique", profileExists.getEmail());
+			assertHaveValidationError(e, "Email is already registered. Please login or use a different email address.");
 			throw e;
 		}
 	}
@@ -312,7 +312,8 @@ public abstract class BaseProfileServiceTest {
 			try {
 				profileService.createProfile(arg);
 			} catch (ValidationException e) {
-				assertHaveValidationError(e, "field.validUsername.username", username);
+				assertHaveValidationError(e,
+						"Username must not use special characters. Please try a different username.");
 				throw e;
 			}
 		}
@@ -450,7 +451,7 @@ public abstract class BaseProfileServiceTest {
 			profileService.createProject(profile.getId(), project);
 		} catch (ValidationException e) {
 			// expected
-			assertHaveValidationError(e, "project.nameUnique", project.getName());
+			assertHaveValidationError(e, "Project name is in use. Please try a different project name.");
 			throw e;
 		}
 	}
@@ -496,7 +497,7 @@ public abstract class BaseProfileServiceTest {
 			profileService.createProject(profile.getId(), project);
 		} catch (ValidationException e) {
 			// expected
-			assertHaveValidationError(e, "field.tooLong.project.description");
+			assertHaveValidationError(e, "Description is too long (Maximum of 255 characters)");
 			throw e;
 		}
 	}
@@ -562,7 +563,8 @@ public abstract class BaseProfileServiceTest {
 			profileService.createProject(profile.getId(), project);
 		} catch (ValidationException e) {
 			// expected
-			assertHaveValidationError(e, "project.maxNumReached");
+			assertHaveValidationError(e,
+					"Unable to create project - the maximum number of projects in the system has been reached");
 			throw e;
 		}
 	}
@@ -910,7 +912,9 @@ public abstract class BaseProfileServiceTest {
 		try {
 			profileService.updateProjectProfile(projectProfile);
 		} catch (ValidationException e) {
-			assertHaveValidationError(e, "project.ownerCannotRemoveSelf");
+			assertHaveValidationError(
+					e,
+					"You cannot remove yourself as an owner. To give up ownership of a project, have another project owner remove your role.");
 			throw e;
 		}
 	}
@@ -1602,13 +1606,13 @@ public abstract class BaseProfileServiceTest {
 		try {
 			profileService.createSshPublicKey(publicKeySpec);
 		} catch (ValidationException e) {
-			assertHaveValidationError(e, "field.required.keyData");
+			assertHaveValidationError(e, "Please provide an RSA key.");
 		}
 		publicKeySpec.setKeyData("XXXX");
 		try {
 			profileService.createSshPublicKey(publicKeySpec);
 		} catch (ValidationException e) {
-			assertHaveValidationError(e, "invalidKeyFormat");
+			assertHaveValidationError(e, "Unrecognized key format. Please provide an RSA key.");
 		}
 	}
 

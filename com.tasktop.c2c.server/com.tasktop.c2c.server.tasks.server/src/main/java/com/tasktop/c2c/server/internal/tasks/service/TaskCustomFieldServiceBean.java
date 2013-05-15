@@ -34,7 +34,6 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.tasktop.c2c.server.auth.service.AuthenticationServiceUser;
 import com.tasktop.c2c.server.common.service.AbstractJpaServiceBean;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.ValidationException;
@@ -278,7 +277,7 @@ public class TaskCustomFieldServiceBean extends AbstractJpaServiceBean implement
 			if (existingField.getName().equals(descriptor.getName())) {
 				Errors errors = super.createErrors(descriptor);
 				errors.reject("customfield.name.unique");
-				throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+				super.throwValidationException(errors);
 			}
 		}
 

@@ -456,7 +456,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 					&& getCurrentUserProfile().equals(managedApplicationProfile.getProfile())) {
 				Errors errors = createErrors(projectProfile);
 				errors.reject("project.ownerCannotRemoveSelf");
-				throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+				super.throwValidationException(errors);
 			}
 			projectProfile = managedApplicationProfile;
 		}
@@ -592,7 +592,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			// Construct and throw a new ValidationException
 			Errors errors = createErrors(project);
 			errors.reject("project.maxNumReached");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 
 		Organization associatedOrg = null;
@@ -1037,13 +1037,13 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (!profile.equals(token.getProfile())) {
 			Errors errors = createErrors(token);
 			errors.reject("email.verify.wrongProfile");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 
 		if (!token.getProfile().getEmail().equals(token.getEmail())) {
 			Errors errors = createErrors(emailToken);
 			errors.reject("email.verify.oldEmail");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 
 		profile.setEmailVerified(true);
@@ -1221,7 +1221,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			Errors errors = createErrors(project);
 			errors.reject("project.mustHaveMembers", null,
 					"Cannot remove member: an project must have at least one member");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 
 		int ownerCount = 0;
@@ -1240,7 +1240,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			// every project must have at least one owner
 			Errors errors = createErrors(project);
 			errors.reject("project.mustHaveOwner", null, "Cannot remove owner: an project must have at least one owner");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 
 		project.getProjectProfiles().remove(profileToRemove);
@@ -1634,7 +1634,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		if (sshPublicKey == null) {
 			Errors errors = createErrors(keySpec);
 			errors.reject("invalidKeyFormat");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 		sshPublicKey.setName(keySpec.getName());
 		return createSshPublicKey(sshPublicKey);

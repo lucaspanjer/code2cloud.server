@@ -35,7 +35,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.MapBindingResult;
 import org.springframework.validation.Validator;
 
@@ -77,7 +76,6 @@ import com.tasktop.c2c.server.internal.tasks.domain.conversion.ProfileConverter;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.SavedTaskQueryConverter;
 import com.tasktop.c2c.server.internal.tasks.domain.conversion.TaskDomain;
 import com.tasktop.c2c.server.internal.tasks.jpa.TaskQuery;
-import com.tasktop.c2c.server.tasks.domain.AbstractDomainObject;
 import com.tasktop.c2c.server.tasks.domain.AbstractReferenceValue;
 import com.tasktop.c2c.server.tasks.domain.Attachment;
 import com.tasktop.c2c.server.tasks.domain.AttachmentHandle;
@@ -862,7 +860,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 					errors.reject("task.taskStatusRequiresComment", new Object[] { newStatusValue },
 							"A comment is required to save a task with status " + newStatusValue);
 
-					throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+					super.throwValidationException(errors);
 				}
 			}
 		} catch (NoResultException e) {
@@ -874,7 +872,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 				errors.reject("task.invalidWorkflow", new Object[] { newStatusValue, originalStatusValue },
 						"Invalid workflow");
 			}
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 	}
 
@@ -959,7 +957,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			}
 		}
 		if (errors.hasErrors()) {
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 		taskCustomFieldService.updateTaskCustomFields(internalTask.getId(), fields);
 	}
@@ -1579,26 +1577,11 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 	}
 
 	private ValidationException combineValidationExceptions(Product product, List<ValidationException> validationErrors) {
-
-		Errors allErrors = new MapBindingResult(new HashMap<String, String>(), String.valueOf(product.getId()));
-
-		for (ValidationException curVe : validationErrors) {
-			BeanPropertyBindingResult beanError = (BeanPropertyBindingResult) curVe.getErrors();
-			// Grab the target object out, and cast as appropriate to get it.
-			AbstractDomainObject targetObj = (AbstractDomainObject) beanError.getTarget();
-
-			// Update our message string to contain our new code.
-
-			// allErrors.addAllErrors(beanError);
-
-			// Loop through each field, tack on our name, and add it to the final list.
-			for (FieldError curError : beanError.getFieldErrors()) {
-				allErrors.reject(String.format("%s.%s[%s|%s]", curError.getCode(), curError.getField(), targetObj
-						.getClass().getSimpleName(), targetObj.getId()), curVe.getMessage());
-			}
+		ArrayList<String> combined = new ArrayList<String>();
+		for (ValidationException ve : validationErrors) {
+			combined.addAll(ve.getMessages());
 		}
-
-		return new ValidationException(allErrors, AuthenticationServiceUser.getCurrentUserLocale());
+		return new ValidationException(combined);
 	}
 
 	@Override
@@ -1762,7 +1745,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			String defaultErrorMsg = "Cannot delete product because tasks still refer to it";
 			Errors allErrors = new MapBindingResult(new HashMap<String, String>(), String.valueOf(productId));
 			allErrors.reject("product.referencedByTasks", defaultErrorMsg);
-			throw new ValidationException(defaultErrorMsg, allErrors);
+			super.throwValidationException(allErrors);
 		}
 
 		// If we're ok to proceed, then go ahead and delete now.
@@ -1852,7 +1835,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			String defaultErrorMsg = "Cannot delete component because tasks still refer to it";
 			Errors allErrors = new MapBindingResult(new HashMap<String, String>(), String.valueOf(componentId));
 			allErrors.reject("component.referencedByTasks", defaultErrorMsg);
-			throw new ValidationException(defaultErrorMsg, allErrors);
+			super.throwValidationException(allErrors);
 		}
 
 		// If we're ok to proceed, then go ahead and delete now.
@@ -1878,8 +1861,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			delMilestone.setProduct(null);
 			Errors allErrors = new BeanPropertyBindingResult(delMilestone, String.valueOf(milestoneId));
 			allErrors.reject("milestone.referencedByTasks", defaultErrorMsg);
-			ValidationException ve = new ValidationException(defaultErrorMsg, allErrors);
-			throw ve;
+			super.throwValidationException(allErrors);
 		}
 
 		// Then, check if we're the default milestone for the product
@@ -1889,7 +1871,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			HashMap<String, String> binderMap = new HashMap<String, String>();
 			Errors allErrors = new MapBindingResult(binderMap, String.valueOf(milestoneId));
 			allErrors.reject("milestone.defaultForProduct", defaultErrorMsg);
-			throw new ValidationException(defaultErrorMsg, allErrors);
+			super.throwValidationException(allErrors);
 		}
 
 		// If we're ok to proceed, then go ahead and delete now.
@@ -1930,7 +1912,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		if (findKeyworddefByName(keyword) != null) {
 			Errors errors = createErrors(keyword);
 			errors.reject("keyword.nameExists");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 
 		Keyworddef keyworddef = createManaged(keyword);
@@ -1973,7 +1955,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		if (keyworddef.getKeywordses().size() > 0) {
 			Errors errors = createErrors(keyworddef);
 			errors.reject("keyword.mappedToTasks");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 		entityManager.remove(keyworddef);
 	}
@@ -2008,7 +1990,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		if (!q.getResultList().isEmpty()) {
 			Errors errors = createErrors(query);
 			errors.reject("query.nameUnique");
-			throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+			super.throwValidationException(errors);
 		}
 	}
 
@@ -2104,7 +2086,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			if (otherValue.getValue().equals(value.getValue()) && !otherValue.getId().equals(value.getId())) {
 				Errors errors = createErrors(value);
 				errors.reject("customField.value.nameUnique");
-				throw new ValidationException(errors, AuthenticationServiceUser.getCurrentUserLocale());
+				super.throwValidationException(errors);
 			}
 		}
 	}

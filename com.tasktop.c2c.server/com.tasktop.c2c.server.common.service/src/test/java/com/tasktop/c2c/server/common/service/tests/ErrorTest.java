@@ -17,11 +17,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 
-import java.util.Locale;
+import java.util.Arrays;
 
 import org.junit.Test;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.ObjectError;
 
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.EntityNotFoundException;
@@ -32,10 +30,7 @@ public class ErrorTest {
 
 	@Test
 	public void testValidationException() {
-		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(this, "foo");
-		errors.addError(new ObjectError("foo", "message1"));
-		errors.addError(new ObjectError("foo", "message2"));
-		ValidationException originalException = new ValidationException(errors, Locale.ENGLISH);
+		ValidationException originalException = new ValidationException(Arrays.asList("message1", "message2"));
 
 		Error error = new Error(originalException);
 

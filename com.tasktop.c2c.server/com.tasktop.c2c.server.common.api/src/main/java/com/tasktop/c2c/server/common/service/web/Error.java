@@ -16,20 +16,16 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.MessageSource;
-import org.springframework.context.NoSuchMessageException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 
 import com.tasktop.c2c.server.common.service.AuthenticationException;
 import com.tasktop.c2c.server.common.service.ConcurrentUpdateException;
@@ -67,7 +63,7 @@ public class Error {
 	private String errorCode;
 	private String message;
 	private String detail;
-	private ValidationErrors validationErrors;
+	private List<String> messages;
 
 	public Error() {
 
@@ -109,32 +105,11 @@ public class Error {
 		e.printStackTrace(printWriter);
 		printWriter.close();
 		detail = detailWriter.toString();
-
 	}
 
-	/**
-	 * Construct an error from a validation exception.
-	 */
-	public Error(ValidationException validationException, MessageSource messageSource) {
-		this(validationException);
-		validationErrors = new ValidationErrors();
-		message = "";
-		for (ObjectError error : validationException.getErrors().getAllErrors()) {
-			String fieldName = error instanceof FieldError ? ((FieldError) error).getField() : null;
-			String defaultMessage;
-			try {
-				defaultMessage = messageSource.getMessage(error, validationException.getLocale());
-			} catch (NoSuchMessageException e) {
-				defaultMessage = error.getDefaultMessage();
-				LoggerFactory.getLogger(Error.class).warn(e.getMessage(), e);
-			}
-			validationErrors.addError(error.getObjectName(), fieldName, error.getCode(), error.getArguments(),
-					defaultMessage);
-			if (message.length() > 0) {
-				message += ", ";
-			}
-			message += defaultMessage;
-		}
+	public Error(ValidationException e) {
+		this((Throwable) e);
+		this.messages = e.getMessages();
 	}
 
 	/**
@@ -188,14 +163,6 @@ public class Error {
 		this.detail = detail;
 	}
 
-	public ValidationErrors getValidationErrors() {
-		return validationErrors;
-	}
-
-	public void setValidationErrors(ValidationErrors validationErrors) {
-		this.validationErrors = validationErrors;
-	}
-
 	/**
 	 * Build the exception that this error represents.
 	 * 
@@ -206,8 +173,8 @@ public class Error {
 		Throwable e;
 		Class<? extends Throwable> exceptionClass = nameToExceptionType.get(errorCode);
 		if (exceptionClass != null) {
-			if (exceptionClass == ValidationException.class) {
-				e = new ValidationException(message, new ValidationErrorsBridge(validationErrors));
+			if (exceptionClass.equals(ValidationException.class)) {
+				e = new ValidationException(this.messages);
 			} else {
 				try {
 					e = exceptionClass.getConstructor(String.class).newInstance(message);
@@ -215,9 +182,19 @@ public class Error {
 					throw new IllegalStateException(message, t);
 				}
 			}
+
 		} else {
 			e = new ServerRuntimeException(message);
 		}
+
 		return e;
+	}
+
+	public List<String> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<String> messages) {
+		this.messages = messages;
 	}
 }

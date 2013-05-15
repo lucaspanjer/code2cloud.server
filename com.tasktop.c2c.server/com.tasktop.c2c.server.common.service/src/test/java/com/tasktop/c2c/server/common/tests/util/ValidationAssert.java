@@ -23,7 +23,6 @@ import org.springframework.validation.ObjectError;
 
 import com.tasktop.c2c.server.common.service.ValidationException;
 
-
 public class ValidationAssert {
 	public static void assertHaveValidationError(Errors errors, String code, Object... args) {
 		List<ObjectError> objectErrors = errors.getAllErrors();
@@ -69,8 +68,13 @@ public class ValidationAssert {
 		return "[" + message + "]";
 	}
 
-	public static void assertHaveValidationError(ValidationException e, String code, Object... args) {
-		assertHaveValidationError(e.getErrors(), code, args);
+	public static void assertHaveValidationError(ValidationException e, String expectedMessage) {
+		for (String message : e.getMessages()) {
+			if (message.equals(expectedMessage)) {
+				return;
+			}
+		}
+		fail(String.format("Expected message [%s], but was [%s]", expectedMessage, e.getMessages()));
 	}
 
 	public static void assertHaveNoValidationError(Errors errors, String code) {

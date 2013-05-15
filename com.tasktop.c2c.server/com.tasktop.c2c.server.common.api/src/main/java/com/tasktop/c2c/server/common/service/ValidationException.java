@@ -12,66 +12,38 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.common.service;
 
-import java.util.Locale;
-
-import org.springframework.context.MessageSource;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
+import java.util.Collections;
+import java.util.List;
 
 public class ValidationException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Errors errors;
+	private List<String> messages;
 
-	private final Locale locale;
-
-	public ValidationException(Errors errors, Locale locale) {
-		super(computeMessage(errors));
-		this.errors = errors;
-		this.locale = locale;
+	public ValidationException(List<String> messages) {
+		super(computeMessage(messages));
+		this.messages = messages;
 	}
 
-	public ValidationException(Errors errors, MessageSource messageSource, Locale locale) {
-		super(computeMessage(errors, messageSource, locale));
-		this.errors = errors;
-		this.locale = locale;
-	}
-
-	public ValidationException(String message, Errors errors) {
+	public ValidationException(String message) {
 		super(message);
-		this.errors = errors;
-		this.locale = null;
+		this.messages = Collections.singletonList(message);
 	}
 
-	public Errors getErrors() {
-		return errors;
-	}
-
-	public Locale getLocale() {
-		return locale;
-	}
-
-	private static String computeMessage(Errors errors) {
+	private static String computeMessage(List<String> messages) {
 		StringBuffer message = new StringBuffer();
-		for (ObjectError error : errors.getAllErrors()) {
+		for (String m : messages) {
 			if (message.length() > 0) {
 				message.append(", ");
 			}
-			message.append(error.getCode());
+			message.append(m);
 		}
 		return message.toString();
 	}
 
-	private static String computeMessage(Errors errors, MessageSource messageSource, Locale locale) {
-		StringBuffer message = new StringBuffer();
-		for (ObjectError error : errors.getAllErrors()) {
-			if (message.length() > 0) {
-				message.append(", ");
-			}
-			message.append(messageSource.getMessage(error, locale));
-		}
-		return message.toString();
+	public List<String> getMessages() {
+		return messages;
 	}
 
 }
