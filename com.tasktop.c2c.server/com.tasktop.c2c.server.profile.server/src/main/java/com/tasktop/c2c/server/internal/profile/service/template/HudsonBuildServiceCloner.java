@@ -23,6 +23,9 @@ import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.profile.domain.build.JobSummary;
 import com.tasktop.c2c.server.profile.domain.internal.Project;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateMetadata;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateMetadata.BuildJobConfigReplacement;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 import com.tasktop.c2c.server.profile.service.HudsonService;
 import com.tasktop.c2c.server.profile.service.ProfileServiceConfiguration;
 import com.tasktop.c2c.server.profile.service.provider.HudsonServiceProvider;
@@ -62,8 +65,9 @@ public class HudsonBuildServiceCloner extends BaseProjectServiceCloner {
 		List<String> jobConfigXmls = new ArrayList<String>();
 		for (JobSummary job : jobs) {
 			String configXml = templateHudsonService.getJobConfigXml(job.getName());
-			String rewrittenConfigXml = rewriteConfig(configXml, templateService.getProjectServiceProfile()
+			String rewrittenConfigXml = rewriteConfigUrls(configXml, templateService.getProjectServiceProfile()
 					.getProject(), targetService.getProjectServiceProfile().getProject());
+			rewrittenConfigXml = rewriteForTemplateMetadata(job.getName(), rewrittenConfigXml, context);
 			jobConfigXmls.add(rewrittenConfigXml);
 		}
 
@@ -77,7 +81,7 @@ public class HudsonBuildServiceCloner extends BaseProjectServiceCloner {
 
 	}
 
-	protected String rewriteConfig(String configXml, Project templateProject, Project targetProject) {
+	protected String rewriteConfigUrls(String configXml, Project templateProject, Project targetProject) {
 		String templateScmUrlPath = profileServiceConfiguration.getHostedScmUrlPath(templateProject.getIdentifier());
 		String targetScmUrlPath = profileServiceConfiguration.getHostedScmUrlPath(targetProject.getIdentifier());
 		configXml = configXml.replace(templateScmUrlPath, targetScmUrlPath);
@@ -92,6 +96,27 @@ public class HudsonBuildServiceCloner extends BaseProjectServiceCloner {
 				configXml = configXml.replace(templateHostName, targetHostName);
 			} finally {
 				TenancyUtil.setOrganizationTenancyContext(origninalOrgTenant);
+			}
+		}
+
+		return configXml;
+	}
+
+	protected String rewriteForTemplateMetadata(String jobName, String configXml, CloneContext context) {
+		ProjectTemplateMetadata metadata = context.getProjectTemplateMetadata();
+
+		if (metadata == null || metadata.getBuildJobReplacements() == null) {
+			return configXml;
+		}
+
+		for (BuildJobConfigReplacement replacement : metadata.getBuildJobReplacements()) {
+			if (replacement.getJobName().equals(jobName)) {
+				ProjectTemplateProperty property = context.getProperty(replacement.getProperty().getId());
+				if (property == null) {
+					// TODO ERROR?
+					continue;
+				}
+				configXml = configXml.replace(replacement.getPatternToReplace(), property.getValue());
 			}
 		}
 

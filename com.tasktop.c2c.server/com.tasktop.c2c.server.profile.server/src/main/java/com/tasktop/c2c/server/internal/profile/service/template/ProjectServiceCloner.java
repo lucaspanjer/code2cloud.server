@@ -15,6 +15,7 @@ import java.util.List;
 
 import com.tasktop.c2c.server.profile.domain.internal.Profile;
 import com.tasktop.c2c.server.profile.domain.internal.ProjectService;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateMetadata;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 
 /**
@@ -29,6 +30,7 @@ public interface ProjectServiceCloner {
 		private Profile user;
 		private ProjectService templateService;
 		private ProjectService targetService;
+		private ProjectTemplateMetadata projectTemplateMetadata;
 		private List<ProjectTemplateProperty> properties;
 
 		public Profile getUser() {
@@ -73,6 +75,14 @@ public interface ProjectServiceCloner {
 
 			}
 			return null;
+		}
+
+		public ProjectTemplateMetadata getProjectTemplateMetadata() {
+			return projectTemplateMetadata;
+		}
+
+		public void setProjectTemplateMetadata(ProjectTemplateMetadata projectTemplateMetadata) {
+			this.projectTemplateMetadata = projectTemplateMetadata;
 		}
 
 	}

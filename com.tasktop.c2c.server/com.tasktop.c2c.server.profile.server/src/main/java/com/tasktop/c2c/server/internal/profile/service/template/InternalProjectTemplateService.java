@@ -13,6 +13,7 @@ package com.tasktop.c2c.server.internal.profile.service.template;
 
 import java.util.List;
 
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateMetadata;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 
 /**
@@ -22,6 +23,6 @@ import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 public interface InternalProjectTemplateService {
 
 	void doCloneProjectService(Long sourceProjectServiceId, Long targetProjectServiceId, Long userId,
-			List<ProjectTemplateProperty> properties);
+			List<ProjectTemplateProperty> properties, ProjectTemplateMetadata metadata);
 
 }

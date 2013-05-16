@@ -55,4 +55,17 @@ public class Blob extends Item {
 		this.binary = binary;
 	}
 
+	public String getFullContent() {
+		if (lines == null) {
+			return null;
+		}
+		StringBuilder result = new StringBuilder();
+
+		for (String line : lines) {
+			result.append(line);
+			result.append("\n");
+		}
+		return result.toString();
+	}
+
 }

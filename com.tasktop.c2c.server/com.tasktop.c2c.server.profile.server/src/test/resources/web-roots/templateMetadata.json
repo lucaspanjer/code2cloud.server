@@ -1,0 +1,7 @@
+{ "fileReplacements" : [ { "patternToReplace" : "http://url.com", 
+                     "filePattern" : "config.properties",
+                     "property" : { "id" : "myProp", 
+                                    "name" :"Database URL"},
+                     }
+                        
+}

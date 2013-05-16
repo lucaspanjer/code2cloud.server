@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.tasktop.c2c.server.common.service.job.Job;
 import com.tasktop.c2c.server.internal.profile.service.template.ProjectServiceCloner.CloneContext;
+import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateMetadata;
 import com.tasktop.c2c.server.profile.domain.project.ProjectTemplateProperty;
 
 /**
@@ -29,6 +30,7 @@ public class ProjectServiceCloneJob extends Job {
 	private Long sourceProjectServiceId;
 	private Long targetProjectServiceId;
 	private List<ProjectTemplateProperty> properties;
+	private ProjectTemplateMetadata metadata;
 
 	/**
 	 * @param sourceProjectServiceId
@@ -39,12 +41,13 @@ public class ProjectServiceCloneJob extends Job {
 		this.targetProjectServiceId = context.getTargetService().getId();
 		this.userId = context.getUser().getId();
 		this.properties = context.getProperties();
+		this.metadata = context.getProjectTemplateMetadata();
 	}
 
 	@Override
 	public void execute(ApplicationContext applicationContext) {
 		applicationContext.getBean(InternalProjectTemplateService.class).doCloneProjectService(sourceProjectServiceId,
-				targetProjectServiceId, userId, properties);
+				targetProjectServiceId, userId, properties, metadata);
 	}
 
 }
