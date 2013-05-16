@@ -241,8 +241,6 @@ public class HudsonSlavePoolServiceImpl extends BasePoolService implements Hudso
 	public void doReleaseSlave(String projectId, Long serviceHostId) {
 		ServiceHost node;
 		try {
-			// DO the node-deallocation first so it functions as an auth check that the projected did own it, and thus
-			// it can be freed.
 			node = serviceHostService.retrieve(serviceHostId);
 			serviceHostService.deallocateHostFromProject(node, projectId);
 

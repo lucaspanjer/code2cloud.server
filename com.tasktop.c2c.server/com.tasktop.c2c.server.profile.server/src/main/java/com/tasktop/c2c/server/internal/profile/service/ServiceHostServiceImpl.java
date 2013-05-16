@@ -330,19 +330,23 @@ public class ServiceHostServiceImpl implements ServiceHostService {
 				LOGGER.warn("Allocated to : "
 						+ allocatedService.getProjectServiceProfile().getProject().getIdentifier());
 			}
-			throw new IllegalStateException();
 		}
-		ProjectService service = managedHost.getProjectServices().get(0);
-		if (!service.getProjectServiceProfile().getProject().getIdentifier().equals(projectIdentifier)) {
-			throw new IllegalStateException();
-		}
-		managedHost.getProjectServices().remove(service);
-		service.getProjectServiceProfile().getProjectServices().remove(service);
-		service.setProjectServiceProfile(null);
-		service.setServiceHost(null);
+		for (ProjectService service : new ArrayList<ProjectService>(managedHost.getProjectServices())) {
+			String actualProjectId = service.getProjectServiceProfile().getProject().getIdentifier();
+			if (!actualProjectId.equals(projectIdentifier)) {
+				LOGGER.warn(String
+						.format("Expected to dealocate for project [%s] on host [%s], but found project [%s]. Will de-aollocate anyway.",
+								projectIdentifier, managedHost.getInternalNetworkAddress(), actualProjectId));
+			}
+			managedHost.getProjectServices().remove(service);
+			service.getProjectServiceProfile().getProjectServices().remove(service);
+			service.setProjectServiceProfile(null);
+			service.setServiceHost(null);
 
-		entityManager.flush(); // Needed otherwise the entity gets put back
-		entityManager.remove(service);
+			entityManager.flush(); // Needed otherwise the entity gets put back
+			entityManager.remove(service);
+
+		}
 	}
 
 	@Override
