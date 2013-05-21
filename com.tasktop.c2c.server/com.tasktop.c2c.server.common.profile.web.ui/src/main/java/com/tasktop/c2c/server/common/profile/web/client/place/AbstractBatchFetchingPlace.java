@@ -28,6 +28,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tasktop.c2c.server.common.profile.web.client.AuthenticationHelper;
 import com.tasktop.c2c.server.common.profile.web.client.ProfileGinjector;
 import com.tasktop.c2c.server.common.profile.web.shared.UserInfo;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetAppConfigAction;
+import com.tasktop.c2c.server.common.profile.web.shared.actions.GetAppConfigResult;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetUserInfoAction;
 import com.tasktop.c2c.server.common.profile.web.shared.actions.GetUserInfoResult;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
@@ -109,6 +111,10 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 			setUserInfo(getResult(GetUserInfoResult.class).get());
 		}
 
+		if (requiresAppConfig()) {
+			setAppConfig(getResult(GetAppConfigResult.class));
+		}
+
 		if (isNotAuthorized()) {
 			onNotAuthorised();
 			return;
@@ -139,6 +145,12 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 		}
 
 		handleBatchResults();
+	}
+
+	protected void setAppConfig(GetAppConfigResult appConfigResult) {
+		if (appConfigResult != null) {
+			ProfileGinjector.get.instance().getAppState().setConfigurationProperties(appConfigResult.getProperties());
+		}
 	}
 
 	/**
@@ -208,10 +220,17 @@ public abstract class AbstractBatchFetchingPlace extends AbstractPlace {
 	private BatchAction createFetchAction() {
 		actions = new ArrayList<Action<?>>();
 		if (requiresUserInfo) {
-			actions.add(new GetUserInfoAction());
+			addAction(new GetUserInfoAction());
+		}
+		if (requiresAppConfig()) {
+			addAction(new GetAppConfigAction());
 		}
 		addActions();
 		return new BatchAction(OnException.CONTINUE, actions.toArray(new Action<?>[actions.size()]));
+	}
+
+	protected boolean requiresAppConfig() {
+		return ProfileGinjector.get.instance().getAppState().getConfigurationProperties() == null;
 	}
 
 	/** Override to add more actions. Don't forget to call super. */
