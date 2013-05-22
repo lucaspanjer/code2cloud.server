@@ -25,7 +25,7 @@
 
 	<bean class="com.tasktop.c2c.server.common.service.Log4JConfiguration" p:location="/opt/code2cloud/etc/log4j-hudson.xml" />
 	
-	<bean id="requestRootPathProvider" class="com.tasktop.c2c.server.hudson.configuration.service.TenantAwareRequestRootPathProvider" p:pattern="${alm.hudson.path}%s/hudson"/>
+	<bean id="requestRootPathProvider" class="com.tasktop.c2c.server.hudson.configuration.service.TenantAwareRequestRootPathProvider" p:pattern="${profile.prefix.path}${alm.hudson.path}%s/hudson"/>
 	<bean id="hudsonSetup" class="com.tasktop.c2c.server.hudson.configuration.service.HudsonSetup" p:requestRootPathProvider-ref="requestRootPathProvider"/>
 
 	<aop:config>
