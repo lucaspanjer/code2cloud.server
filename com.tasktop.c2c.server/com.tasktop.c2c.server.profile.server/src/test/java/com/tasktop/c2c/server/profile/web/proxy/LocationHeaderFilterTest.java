@@ -116,4 +116,20 @@ public class LocationHeaderFilterTest {
 
 	}
 
+	@Test
+	public void testForHudsonNonRootContextProtoChange() {
+		config.setBaseContextPath("/alm/");
+		config.setProfileApplicationProtocol("https");
+		request.setRequestURI("/alm/s/project1/hudson/job/foo");
+
+		String uri = "/hudson/job/foo";
+		request.setAttribute(ApplicationServiceProxyFilter.ATTR_APPLICATION_SERVICE_URI, uri);
+
+		String headerValue = "http://c2c.dev/hudson/job/foo";
+
+		String resultValue = locationHeaderFilter.processResponseHeader("Location", headerValue);
+		Assert.assertEquals("https://c2c.dev/alm/s/project1/hudson/job/foo", resultValue);
+
+	}
+
 }

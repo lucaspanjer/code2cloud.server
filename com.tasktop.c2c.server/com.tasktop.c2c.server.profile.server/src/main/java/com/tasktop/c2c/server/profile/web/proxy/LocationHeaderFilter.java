@@ -12,11 +12,15 @@
 package com.tasktop.c2c.server.profile.web.proxy;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -36,6 +40,8 @@ import com.tasktop.c2c.server.web.proxy.HeaderFilter;
  * 
  */
 public class LocationHeaderFilter extends HeaderFilter {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(LocationHeaderFilter.class);
 
 	@Autowired
 	private ProfileServiceConfiguration configuration;
@@ -67,16 +73,27 @@ public class LocationHeaderFilter extends HeaderFilter {
 				uri = UriUtils.encodePath(uri, "utf8");
 				originalPath = UriUtils.encodePath(originalPath, "utf8");
 			} catch (UnsupportedEncodingException e) {
-				throw new RuntimeException(e);
+				LOGGER.warn("unexpected error processing location header", e);
+				return headerValue;
+			}
+
+			String headerHostName;
+			String headerPath;
+			try {
+				URL headerUrl = new URL(headerValue);
+				headerHostName = headerUrl.getHost();
+				headerPath = headerUrl.getPath();
+			} catch (MalformedURLException e) {
+				LOGGER.warn("unexpected error processing location header", e);
+				return headerValue;
 			}
 
 			// uri = /hudson/job/foo
 			// headerValue = http://c2c.dev/s2/qa_hudson/job/foo
 			// desiredValue is http://c2c.dev/alm/s2/project1/hudson/job/foo
 
-			String hostName = configuration.getProfileApplicationProtocol() + "://" + configuration.getWebHost(); // http://c2c.dev
-
-			if (headerValue.startsWith(hostName + service.getInternalUriPrefix()) && originalPath.contains(uri)) {
+			if (headerHostName.equals(configuration.getBaseWebHost())
+					&& headerPath.startsWith(service.getInternalUriPrefix()) && originalPath.contains(uri)) {
 				String externalPrefix = originalPath.substring(0, originalPath.indexOf(uri)); // /alm/s2/project1
 
 				Matcher matcher = Pattern.compile(service.getUriPattern()).matcher(uri);
@@ -84,10 +101,10 @@ public class LocationHeaderFilter extends HeaderFilter {
 					String otherBit = matcher.group(1);
 					String servicePart = uri.substring(0, uri.lastIndexOf(otherBit)); // hudson
 
-					String restOfPath = headerValue.substring(hostName.length()
-							+ service.getInternalUriPrefix().length()); // /job/foo
+					String restOfPath = headerPath.substring(service.getInternalUriPrefix().length()); // /job/foo
 
-					headerValue = hostName + externalPrefix + servicePart + restOfPath;
+					headerValue = configuration.getProfileApplicationProtocol() + "://"
+							+ configuration.getBaseWebHost() + externalPrefix + servicePart + restOfPath;
 				} // Else something is wrong...
 			}
 
