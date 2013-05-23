@@ -71,7 +71,9 @@ public class LocationHeaderFilter extends HeaderFilter {
 			String originalPath = request.getRequestURI(); // /alm/s2/project1/hudson/job/foo
 			try {
 				uri = UriUtils.encodePath(uri, "utf8");
-				originalPath = UriUtils.encodePath(originalPath, "utf8");
+				if (!originalPath.contains("%")) { // Make sure we don't double encode
+					originalPath = UriUtils.encodePath(originalPath, "utf8");
+				}
 			} catch (UnsupportedEncodingException e) {
 				LOGGER.warn("unexpected error processing location header", e);
 				return headerValue;
