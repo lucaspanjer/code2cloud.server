@@ -37,6 +37,7 @@ import com.tasktop.c2c.server.common.service.web.AbstractBuildInfoRestService;
 import com.tasktop.c2c.server.scm.domain.Blame;
 import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.DiffEntry;
 import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
@@ -138,6 +139,15 @@ public class ScmServiceController extends AbstractBuildInfoRestService implement
 			@RequestParam(required = false, value = "context") Integer context) throws EntityNotFoundException {
 		return scmService.getCommit(repoName, commitId, context);
 	}
+
+	@Override
+	@RequestMapping(value = ScmServiceClient.GET_DIFF_ENTRIES_URL, method = RequestMethod.GET)
+	public List<DiffEntry> getDiffEntries(@PathVariable("repoName") String repoName, 
+		@PathVariable("baseCommitId") String baseCommitId, @PathVariable("commitId") String commitId, 
+		@RequestParam(required = false, value = "context") Integer context) throws EntityNotFoundException {
+		return scmService.getDiffEntries(repoName, baseCommitId, commitId, context);
+	}
+		
 
 	@RequestMapping(value = ScmServiceClient.GET_LOG_FOR_REPO_URL, method = RequestMethod.GET)
 	public List<Commit> getLog(@PathVariable("repo") String repoName,

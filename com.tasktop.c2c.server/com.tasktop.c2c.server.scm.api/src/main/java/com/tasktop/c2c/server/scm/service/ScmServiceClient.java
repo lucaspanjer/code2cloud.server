@@ -26,6 +26,7 @@ import com.tasktop.c2c.server.common.service.web.AbstractVersionedRestServiceCli
 import com.tasktop.c2c.server.scm.domain.Blame;
 import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.DiffEntry;
 import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
@@ -77,6 +78,7 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 		private Blob blob;
 		private Blame blame;
 		private Item item;
+		private List<DiffEntry> diffEntries;
 
 		public List<Commit> getCommitList() {
 			return commitList;
@@ -164,6 +166,14 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 
 		public void setItem(Item item) {
 			this.item = item;
+		}
+
+		private List<DiffEntry> getDiffEntryList() {
+			return diffEntries;
+		}
+
+		public void setDiffEntryList(List<DiffEntry> diffEntries) {
+			this.diffEntries = diffEntries;
 		}
 
 	}
@@ -327,6 +337,18 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 			convertEntityNotFoundException(e);
 		}
 		throw new IllegalStateException();
+	}
+
+	public static final String GET_DIFF_ENTRIES_URL = "diffentries/{repoName}/{baseCommitId}/{commitId}";
+
+	public List<DiffEntry> getDiffEntries(String repoName, String baseCommitId, String commitId, Integer numContextLines)
+			throws EntityNotFoundException {
+		return new GetCall<List<DiffEntry>>() {
+			@Override
+			public List<DiffEntry> getValue(ServiceCallResult result) {
+				return result.getDiffEntryList();
+			}
+		}.doCall(GET_DIFF_ENTRIES_URL, repoName, baseCommitId, commitId);
 	}
 
 	public static final String GET_LOG_FOR_REPO_URL = "repository/{repo}/repolog";

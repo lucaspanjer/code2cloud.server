@@ -38,7 +38,10 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
+import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
@@ -51,7 +54,6 @@ import org.eclipse.jgit.storage.file.FileRepository;
 import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
-import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.FileUtils;
 import org.eclipse.jgit.util.io.NullOutputStream;
 import org.springframework.beans.factory.InitializingBean;
@@ -75,6 +77,9 @@ import com.tasktop.c2c.server.scm.domain.ScmRepository;
 import com.tasktop.c2c.server.scm.domain.ScmSummary;
 import com.tasktop.c2c.server.scm.domain.ScmType;
 import com.tasktop.c2c.server.scm.domain.Trees;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 
 @Component
 public class GitServiceBean implements GitService, InitializingBean {
@@ -666,6 +671,28 @@ public class GitServiceBean implements GitService, InitializingBean {
 		}
 	}
 
+	@Override
+	public List<com.tasktop.c2c.server.scm.domain.DiffEntry> getDiffEntries(
+			final String repositoryName, final String baseCommitId, final String commitId, final Integer context) throws EntityNotFoundException {
+		try {
+			final Repository jgitRepo = findRepositoryByName(repositoryName);
+			final ObjectId commitObjectId = jgitRepo.resolve(commitId);
+			final ObjectId baseCommitObjectId = baseCommitId != null ? jgitRepo.resolve(baseCommitId) : null;
+
+			if (commitObjectId == null) {
+				throw new EntityNotFoundException();
+			}
+
+			final RevWalk walk = new RevWalk(jgitRepo);
+			final RevCommit baseCommit = baseCommitId != null ? walk.parseCommit(baseCommitObjectId) : null;
+			return getDiffEntries(jgitRepo, baseCommit, walk.parseCommit(commitObjectId), context);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+		
 	private Commit getCommitInternal(String repositoryName, Repository repo, String commitId, Integer context)
 			throws IOException, GitAPIException, EntityNotFoundException {
 
@@ -682,39 +709,7 @@ public class GitServiceBean implements GitService, InitializingBean {
 		result.setUrl(profileServiceConfiguration.getWebUrlForCommit(TenancyUtil.getCurrentTenantProjectIdentifer(),
 				result));
 		result.setRepository(repositoryName);
-
-		// FIXME how to handle merges? there can be real diffs there
-		if (theCommit.getParentCount() <= 1) {
-			// ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-			DiffFormatter diffFormatter = new DiffFormatter(NullOutputStream.INSTANCE); // new DiffFormatter(output);
-			diffFormatter.setRepository(repo);
-			diffFormatter.setPathFilter(TreeFilter.ALL);
-
-			RevTree tree = walk.parseTree(thisC);
-			CanonicalTreeParser thisTreeParser = new CanonicalTreeParser();
-			thisTreeParser.reset(repo.newObjectReader(), tree);
-
-			CanonicalTreeParser parentTreeParser = new CanonicalTreeParser();
-
-			if (theCommit.getParentCount() == 1) {
-				ObjectId parentC = theCommit.getParent(0);
-				RevTree parentTree = walk.parseTree(parentC);
-				parentTreeParser.reset(repo.newObjectReader(), parentTree);
-			}
-
-			diffFormatter.setDetectRenames(true);
-
-			List<DiffEntry> diffEntries = diffFormatter.scan(parentTreeParser, thisTreeParser);
-			List<com.tasktop.c2c.server.scm.domain.DiffEntry> rde = new ArrayList<com.tasktop.c2c.server.scm.domain.DiffEntry>();
-
-			for (DiffEntry de : diffEntries) {
-				rde.add(GitBrowseUtil.getDiffEntry(de, repo, context));
-			}
-
-			result.setChanges(rde);
-
-		}
+		result.setChanges(getDiffEntries(repo, null/*lookup parent*/, theCommit, context));
 
 		return result;
 	}
@@ -866,4 +861,51 @@ public class GitServiceBean implements GitService, InitializingBean {
 		}
 
 	}
+
+	private static List<com.tasktop.c2c.server.scm.domain.DiffEntry> getDiffEntries(Repository repository,
+			RevCommit baseCommit, RevCommit commit, Integer context) throws EntityNotFoundException,
+			MissingObjectException, IncorrectObjectTypeException, IOException {
+		return getDiffEntries(repository, baseCommit, commit, RawTextComparator.DEFAULT, context);
+	}
+	
+	private static List<com.tasktop.c2c.server.scm.domain.DiffEntry> getDiffEntries(final Repository repo,
+			final RevCommit baseCommit, final RevCommit commit, final RawTextComparator cmp, final Integer context) throws IOException {		
+		final DiffFormatter df = new DiffFormatter(NullOutputStream.INSTANCE);
+		df.setRepository(repo);
+		df.setDiffComparator(cmp);
+		df.setDetectRenames(true);
+		
+		RevTree baseTree = null;
+		if (baseCommit != null) {
+			baseTree = baseCommit.getTree();
+		} else {
+			RevCommit parentCommit = getParentCommit(repo, commit);
+			if (parentCommit != null) {
+				baseTree = parentCommit.getTree();
+			}
+		}
+		final List<com.tasktop.c2c.server.scm.domain.DiffEntry> retval = new ArrayList<com.tasktop.c2c.server.scm.domain.DiffEntry>();		
+		for (DiffEntry de : df.scan(getTreeIterator(repo, baseTree), getTreeIterator(repo, commit.getTree()))) {
+			retval.add(GitBrowseUtil.getDiffEntry(de, repo, context));
+		}
+		return retval;
+	}
+	
+	private static RevCommit getParentCommit(final Repository repo, final RevCommit commit) throws IOException {
+		RevCommit retval = null;
+		if (commit.getParentCount() > 0) {
+			final RevWalk rw = new RevWalk(repo);
+			retval = rw.parseCommit(commit.getParent(0).getId());
+			rw.dispose();
+		}
+		return retval;
+	}	
+
+	private static AbstractTreeIterator getTreeIterator(final Repository repo, final RevTree tree) throws IOException {
+		final CanonicalTreeParser treeParser = new CanonicalTreeParser();
+		if (tree != null) {
+			treeParser.reset(repo.newObjectReader(), tree);
+		}
+		return treeParser;
+	}	
 }

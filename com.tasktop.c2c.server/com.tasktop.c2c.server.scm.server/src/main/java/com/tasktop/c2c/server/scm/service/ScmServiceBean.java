@@ -31,6 +31,7 @@ import com.tasktop.c2c.server.common.service.web.TenancyUtil;
 import com.tasktop.c2c.server.scm.domain.Blame;
 import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.DiffEntry;
 import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmLocation;
@@ -166,7 +167,12 @@ public class ScmServiceBean extends AbstactServiceBean implements ScmService {
 	public Commit getCommit(String repoName, String commitId, Integer context) throws EntityNotFoundException {
 		return gitService.getCommitWithDiff(repoName, commitId, context);
 	}
-
+	
+	@Override
+	public List<DiffEntry> getDiffEntries(String repositoryName, String baseCommitId, String commitId, Integer numContextLines) throws EntityNotFoundException {
+		return gitService.getDiffEntries(repositoryName, baseCommitId, commitId, numContextLines);
+	}
+	
 	@Override
 	public List<Commit> getLog(String repoName, Region region) throws EntityNotFoundException {
 		return gitService.getLog(repoName, region);

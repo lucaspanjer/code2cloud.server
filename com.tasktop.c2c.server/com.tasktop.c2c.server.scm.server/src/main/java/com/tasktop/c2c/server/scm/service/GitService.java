@@ -20,6 +20,7 @@ import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.scm.domain.Blame;
 import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.DiffEntry;
 import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
@@ -82,6 +83,17 @@ public interface GitService {
 	 * @throws EntityNotFoundException
 	 */
 	Commit getCommitWithDiff(String repositoryName, String commitId, Integer context) throws EntityNotFoundException;
+
+	/**
+	 * @param repositoryName
+	 * @param baseCommitId can be null. Null is used in case if <code>List&lt;{@link DiffEntry}&gt;</code> is required
+	 * for commit (represented by commitId) and its parent
+	 * @param commitId
+	 * @param context
+	 * @return
+	 * @throws EntityNotFoundException 
+	 */
+	List<DiffEntry> getDiffEntries(String repositoryName, String baseCommitId, String commitId, Integer context) throws EntityNotFoundException;
 
 	/**
 	 * @param repoName

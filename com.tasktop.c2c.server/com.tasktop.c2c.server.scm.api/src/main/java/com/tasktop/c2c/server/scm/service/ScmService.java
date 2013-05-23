@@ -22,6 +22,7 @@ import com.tasktop.c2c.server.common.service.domain.Region;
 import com.tasktop.c2c.server.scm.domain.Blame;
 import com.tasktop.c2c.server.scm.domain.Blob;
 import com.tasktop.c2c.server.scm.domain.Commit;
+import com.tasktop.c2c.server.scm.domain.DiffEntry;
 import com.tasktop.c2c.server.scm.domain.Item;
 import com.tasktop.c2c.server.scm.domain.Profile;
 import com.tasktop.c2c.server.scm.domain.ScmRepository;
@@ -95,6 +96,19 @@ public interface ScmService {
 	 */
 	Commit getCommit(String repoName, String commitId, Integer numContextLines) throws EntityNotFoundException;
 
+	/**
+	 * Provides <code>List&lt;{@link DiffEntry}&gt;</code> for two arbitrary commits
+	 * 
+	 * @param repositoryName Name of the repository.
+	 * @param baseCommitId Id of the base commit. Can be null. Null is used in case if <code>List&lt;{@link DiffEntry}&gt;</code> is required
+	 * for commit (represented by commitId) and its parent
+	 * @param commitId Id of the commit.
+	 * @param context Generate diffs with <code>n</code> lines of context. Null for default.
+	 * @return <code>List&lt;{@link DiffEntry}&gt;</code>
+	 * @throws EntityNotFoundException 
+	 */
+	List<DiffEntry> getDiffEntries(String repositoryName, String baseCommitId, String commitId, Integer numContextLines) throws EntityNotFoundException;
+	
 	/**
 	 * XXX probably could be deleted and handled by getLog
 	 * 
