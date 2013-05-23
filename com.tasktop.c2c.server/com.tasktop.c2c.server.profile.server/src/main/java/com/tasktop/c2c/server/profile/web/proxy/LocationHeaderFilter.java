@@ -92,7 +92,7 @@ public class LocationHeaderFilter extends HeaderFilter {
 			// headerValue = http://c2c.dev/s2/qa_hudson/job/foo
 			// desiredValue is http://c2c.dev/alm/s2/project1/hudson/job/foo
 
-			if (headerHostName.equals(configuration.getBaseWebHost())
+			if (headerHostName.equals(configuration.getWebHost())
 					&& headerPath.startsWith(service.getInternalUriPrefix()) && originalPath.contains(uri)) {
 				String externalPrefix = originalPath.substring(0, originalPath.indexOf(uri)); // /alm/s2/project1
 
@@ -103,8 +103,8 @@ public class LocationHeaderFilter extends HeaderFilter {
 
 					String restOfPath = headerPath.substring(service.getInternalUriPrefix().length()); // /job/foo
 
-					headerValue = configuration.getProfileApplicationProtocol() + "://"
-							+ configuration.getBaseWebHost() + externalPrefix + servicePart + restOfPath;
+					headerValue = configuration.getProfileApplicationProtocol() + "://" + configuration.getWebHost()
+							+ externalPrefix + servicePart + restOfPath;
 				} // Else something is wrong...
 			}
 
