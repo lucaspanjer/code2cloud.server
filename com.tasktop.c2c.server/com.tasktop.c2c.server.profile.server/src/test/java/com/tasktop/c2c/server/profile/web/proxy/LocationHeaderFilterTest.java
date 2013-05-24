@@ -77,6 +77,17 @@ public class LocationHeaderFilterTest {
 	}
 
 	@Test
+	public void testWithHash() {
+		String uri = "/hudson/job/foo";
+		request.setAttribute(ApplicationServiceProxyFilter.ATTR_APPLICATION_SERVICE_URI, uri);
+
+		String headerValue = "http://c2c.dev/hudson/job/foo#afterHash";
+
+		String resultValue = locationHeaderFilter.processResponseHeader("Location", headerValue);
+		Assert.assertEquals("http://c2c.dev/s/project1/hudson/job/foo#afterHash", resultValue);
+	}
+
+	@Test
 	public void testForHudsonWithDecodedUri() {
 		String uri = "/hudson/job/job name";
 		request.setRequestURI("/s/project1/hudson/job/job name");

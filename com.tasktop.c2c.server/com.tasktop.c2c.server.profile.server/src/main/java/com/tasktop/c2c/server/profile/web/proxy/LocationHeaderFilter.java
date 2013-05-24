@@ -80,11 +80,14 @@ public class LocationHeaderFilter extends HeaderFilter {
 			}
 
 			String headerHostName;
-			String headerPath;
+			String headerRest;
 			try {
 				URL headerUrl = new URL(headerValue);
 				headerHostName = headerUrl.getHost();
-				headerPath = headerUrl.getPath();
+				headerRest = headerUrl.getPath();
+				if (headerUrl.getRef() != null) {
+					headerRest += "#" + headerUrl.getRef();
+				}
 			} catch (MalformedURLException e) {
 				LOGGER.warn("unexpected error processing location header", e);
 				return headerValue;
@@ -95,7 +98,7 @@ public class LocationHeaderFilter extends HeaderFilter {
 			// desiredValue is http://c2c.dev/alm/s2/project1/hudson/job/foo
 
 			if (headerHostName.equals(configuration.getWebHost())
-					&& headerPath.startsWith(service.getInternalUriPrefix()) && originalPath.contains(uri)) {
+					&& headerRest.startsWith(service.getInternalUriPrefix()) && originalPath.contains(uri)) {
 				String externalPrefix = originalPath.substring(0, originalPath.indexOf(uri)); // /alm/s2/project1
 
 				Matcher matcher = Pattern.compile(service.getUriPattern()).matcher(uri);
@@ -103,7 +106,7 @@ public class LocationHeaderFilter extends HeaderFilter {
 					String otherBit = matcher.group(1);
 					String servicePart = uri.substring(0, uri.lastIndexOf(otherBit)); // hudson
 
-					String restOfPath = headerPath.substring(service.getInternalUriPrefix().length()); // /job/foo
+					String restOfPath = headerRest.substring(service.getInternalUriPrefix().length()); // /job/foo
 
 					headerValue = configuration.getProfileApplicationProtocol() + "://" + configuration.getWebHost()
 							+ externalPrefix + servicePart + restOfPath;
