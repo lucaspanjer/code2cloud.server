@@ -73,7 +73,7 @@ public class HudsonJobRow extends Composite {
 			return new Image(buildResources.canceledBuild());
 		} else if (color.equals("disabled")) {
 			return new Image(buildResources.disabledBuild());
-		} else if (color.equals("blue_anime")) {
+		} else if (color.equals("blue_anime") || color.equals("green_anime")) {
 			return new Image(buildResources.stableBuilding());
 		} else if (color.equals("red_anime")) {
 			return new Image(buildResources.failedBuilding());
