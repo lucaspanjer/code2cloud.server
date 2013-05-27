@@ -16,6 +16,7 @@ import net.customware.gwt.dispatch.client.DispatchAsync;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.Ginjector;
+import com.tasktop.c2c.server.common.web.client.CommonMessages;
 import com.tasktop.c2c.server.common.web.client.notification.NotificationPanel;
 import com.tasktop.c2c.server.common.web.client.notification.Notifier;
 import com.tasktop.c2c.server.common.web.client.view.errors.ErrorHandler;
@@ -31,6 +32,8 @@ public interface CommonGinjector extends Ginjector {
 	ErrorHandler getErrorHandler();
 
 	DispatchAsync getDispatchService();
+
+	CommonMessages getCommonMessages();
 
 	public static class get {
 		private static CommonGinjector instance;

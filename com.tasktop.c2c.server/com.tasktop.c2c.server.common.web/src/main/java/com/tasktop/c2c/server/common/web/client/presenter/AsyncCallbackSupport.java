@@ -26,8 +26,8 @@ import com.tasktop.c2c.server.common.web.client.view.errors.ErrorHandler;
 
 public abstract class AsyncCallbackSupport<T> implements AsyncCallback<T> {
 
-	public static final Message LOADING_MESSSAGE = new Message(0, "Loading...", Message.MessageType.PROGRESS); // TODO
-																												// i18n
+	public static final Message LOADING_MESSSAGE = new Message(0, CommonGinjector.get.instance().getCommonMessages()
+			.loading(), Message.MessageType.PROGRESS);
 
 	public interface ErrorInterpreter {
 		List<String> getErrorMessages(Throwable exception);

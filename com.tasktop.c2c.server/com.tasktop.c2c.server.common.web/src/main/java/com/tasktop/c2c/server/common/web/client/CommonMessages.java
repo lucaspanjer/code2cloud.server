@@ -29,6 +29,9 @@ public interface CommonMessages extends Messages {
 	@DefaultMessage("File Not Found")
 	String errorFileNotFound();
 
-	@DefaultMessage("We're currently performing maintenance")
+	@DefaultMessage("We''re currently performing maintenance")
 	String errorPerformingMaintenance();
+
+	@DefaultMessage("Loading...")
+	String loading();
 }
