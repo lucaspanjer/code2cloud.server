@@ -20,7 +20,6 @@ import com.tasktop.c2c.server.common.web.client.view.CommonGinjector;
 import com.tasktop.c2c.server.profile.web.ui.client.App;
 import com.tasktop.c2c.server.profile.web.ui.client.AppConfiguration;
 import com.tasktop.c2c.server.profile.web.ui.client.AppShell;
-import com.tasktop.c2c.server.profile.web.ui.client.BuildServiceAsync;
 import com.tasktop.c2c.server.profile.web.ui.client.activity.HeaderActivityMapper;
 import com.tasktop.c2c.server.profile.web.ui.client.activity.MainActivityMapper;
 import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
@@ -40,8 +39,6 @@ public interface AppGinjector extends ProfileGinjector {
 	PlaceController getPlaceController();
 
 	App getApp();
-
-	BuildServiceAsync getBuildService();
 
 	MainActivityMapper getMainActivityMapper();
 

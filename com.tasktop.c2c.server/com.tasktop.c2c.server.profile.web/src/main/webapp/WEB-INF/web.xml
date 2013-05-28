@@ -115,11 +115,6 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>buildServiceServlet</servlet-name>
-		<servlet-class>com.tasktop.c2c.server.profile.web.ui.server.BuildServiceImpl</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-		<servlet>
 		<servlet-name>dispatchServiceServlet</servlet-name>
 		<servlet-class>com.tasktop.c2c.server.profile.web.ui.server.DispatchServiceImpl</servlet-class>
 		<load-on-startup>1</load-on-startup>
@@ -132,10 +127,6 @@
 	<servlet-mapping><!-- Profile GWT Service -->
 		<servlet-name>profileServiceServlet</servlet-name>
 		<url-pattern>/profile/profileService</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping><!-- Build summary GWT Service -->
-		<servlet-name>buildServiceServlet</servlet-name>
-		<url-pattern>/profile/buildService</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping><!-- General GWT Action Dispatch -->
 		<servlet-name>dispatchServiceServlet</servlet-name>

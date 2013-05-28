@@ -83,10 +83,6 @@ public class ProfileEntryPoint implements EntryPoint {
 		return injector.getProfileService();
 	}
 
-	public BuildServiceAsync getBuildService() {
-		return injector.getBuildService();
-	}
-
 	public AppState getAppState() {
 		return injector.getAppState();
 	}
