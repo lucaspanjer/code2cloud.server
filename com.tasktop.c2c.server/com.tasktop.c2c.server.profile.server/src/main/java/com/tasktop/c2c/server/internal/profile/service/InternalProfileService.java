@@ -29,9 +29,13 @@ import com.tasktop.c2c.server.profile.service.ProfileService;
 public interface InternalProfileService extends ProfileService {
 	void doDeleteProjectIfReady(String projectIdentifier);
 
+	void doDeleteOrganizationIfReady(String organizationIdentifier);
+
 	List<ProjectProfile> findAccessibleProjectsForProfile(Profile profile);
 
 	void doDeleteProject(String projectIdentifier) throws EntityNotFoundException;
+
+	void doDeleteOrganization(String organizationIdentifier) throws EntityNotFoundException;
 
 	/**
 	 * @param query

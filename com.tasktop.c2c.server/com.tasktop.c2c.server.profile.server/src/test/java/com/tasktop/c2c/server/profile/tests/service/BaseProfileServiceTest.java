@@ -58,7 +58,6 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.github.api.GitHub;
 import org.springframework.tenancy.context.TenancyContextHolder;
-import org.springframework.test.annotation.ExpectedException;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tasktop.c2c.server.auth.service.AuthUtils;
@@ -188,7 +187,7 @@ public abstract class BaseProfileServiceTest {
 
 	private void logonWithOrganization(Profile profile, String orgIdentifier) throws EntityNotFoundException,
 			ValidationException {
-		Organization org = setupOrganization();
+		setupOrganization();
 		Authentication authentication = new UsernamePasswordAuthenticationToken(profile.getUsername(),
 				profile.getPassword(), AuthUtils.toGrantedAuthorities(Collections.singletonList(AuthUtils
 						.toCompoundOrganizationRole(Role.User, orgIdentifier))));
@@ -219,7 +218,7 @@ public abstract class BaseProfileServiceTest {
 		projectProfile.setUser(true);
 		profile.getProjectProfiles().add(projectProfile);
 
-		Long profileId = profileService.authenticate(profile.getUsername(), originalPassword);
+		profileService.authenticate(profile.getUsername(), originalPassword);
 
 		assertEquals(profile.getUsername(), Security.getCurrentUser());
 
@@ -541,6 +540,7 @@ public abstract class BaseProfileServiceTest {
 		return entityManager.createQuery(query).getSingleResult().intValue();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test(expected = ValidationException.class)
 	public void testCreateProjectMaxProjectsReached() throws ValidationException, EntityNotFoundException {
 		Profile profile = createMockProfile(entityManager);
@@ -1351,8 +1351,7 @@ public abstract class BaseProfileServiceTest {
 		assertNotNull(signUpToken.getToken());
 	}
 
-	@Test
-	@ExpectedException(EntityNotFoundException.class)
+	@Test(expected = EntityNotFoundException.class)
 	public void markSignUpTokenUsed() throws EntityNotFoundException, ValidationException {
 		String fname = "first";
 		String lname = "last";
@@ -1732,7 +1731,48 @@ public abstract class BaseProfileServiceTest {
 		queryResult = profileService.findProjects(query);
 
 		assertEquals(1, (int) queryResult.getTotalResultSize());
+	}
 
+	@Test
+	public void testDeleteOrganization() throws ValidationException, EntityNotFoundException {
+		Profile profile = setupProfile();
+		Organization org = setupOrganization();
+
+		Project project = MockProjectFactory.create(null);
+		project.setOrganization(org);
+		project = profileService.createProject(profile.getId(), project);
+
+		int preDeleteJobCount = jobService.getScheduledJobs().size();
+		profileService.deleteOrganization(org.getIdentifier());
+		assertTrue("We should have more jobs after deleting the org",
+				jobService.getScheduledJobs().size() > preDeleteJobCount);
+	}
+
+	@Test
+	public void testDoDeleteOrganization() throws ValidationException, EntityNotFoundException {
+		Organization org = setupOrganization();
+
+		// Add a related entity
+		QuotaSetting qs = new QuotaSetting();
+		qs.setName("name");
+		qs.setValue("value");
+		qs.setOrganization(org);
+		entityManager.persist(qs);
+		assertEquals(org.getId(), qs.getOrganization().getId());
+
+		internalProfileService.doDeleteOrganization(org.getIdentifier());
+
+		// Organization should be gone
+		try {
+			profileService.getOrganizationByIdentfier(org.getIdentifier());
+			Assert.fail();
+		} catch (EntityNotFoundException e) {
+			// expected
+		}
+
+		// QuotaSetting should be gone
+		QuotaSetting foundQs = entityManager.find(QuotaSetting.class, qs.getId());
+		assertNull(foundQs);
 	}
 
 	@Test
@@ -1855,7 +1895,7 @@ public abstract class BaseProfileServiceTest {
 		internalProfileService.doDeleteProject(created.getIdentifier());
 		entityManager.flush();
 		try {
-			Project deleted = profileService.getProjectByIdentifier(created.getIdentifier());
+			profileService.getProjectByIdentifier(created.getIdentifier());
 			Assert.fail();
 		} catch (EntityNotFoundException e) {
 			// expected

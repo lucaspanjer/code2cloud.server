@@ -19,11 +19,10 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
-import com.tasktop.c2c.server.profile.domain.internal.ProjectPreferences;
 
 /**
  * An organization groups together related users and projects.
@@ -37,6 +36,7 @@ public class Organization extends BaseEntity {
 
 	private List<Project> projects = new ArrayList<Project>();
 	private List<OrganizationProfile> organizationProfiles = new ArrayList<OrganizationProfile>();
+	private List<QuotaSetting> quotaSettings = new ArrayList<QuotaSetting>();
 
 	private ProjectPreferences preferences;
 
@@ -108,7 +108,7 @@ public class Organization extends BaseEntity {
 	/**
 	 * the profiles that participate in this organization
 	 */
-	@OneToMany(cascade = { CascadeType.PERSIST }, mappedBy = "organization")
+	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "organization")
 	public List<OrganizationProfile> getOrganizationProfiles() {
 		return organizationProfiles;
 	}
@@ -125,5 +125,14 @@ public class Organization extends BaseEntity {
 
 	public void setProjectPreferences(ProjectPreferences preferences) {
 		this.preferences = preferences;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, mappedBy = "organization")
+	public List<QuotaSetting> getQuotaSettings() {
+		return quotaSettings;
+	}
+
+	public void setQuotaSettings(List<QuotaSetting> quotaSettings) {
+		this.quotaSettings = quotaSettings;
 	}
 }

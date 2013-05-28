@@ -1918,6 +1918,57 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 	}
 
 	@Override
+	public void deleteOrganization(String organizationIdentifier) throws EntityNotFoundException {
+		Organization org = getOrganizationByIdentfier(organizationIdentifier);
+
+		// send off our jobs to deprovision and delete projects
+		for (Project project : org.getProjects()) {
+			deleteProject(project.getIdentifier());
+		}
+
+		// send job to delete org after a delay
+		OrganizationDeletionJob job = new OrganizationDeletionJob(org.getIdentifier());
+		job.setDeliveryDelayInMilliseconds(30L * 1000);
+		jobService.schedule(job);
+	}
+
+	private boolean organizationIsReadyToDelete(String organizationIdentifier) {
+		Organization org;
+		try {
+			org = getOrganizationByIdentfier(organizationIdentifier);
+		} catch (EntityNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+		int undeletedProjects = org.getProjects().size();
+		boolean readyToDelete = (undeletedProjects == 0);
+		LOG.debug(String.format("We have [%s] undeleted project(s) for organization [%s], so it %s ready to delete",
+				undeletedProjects, organizationIdentifier, readyToDelete ? "is" : "is not"));
+		return readyToDelete;
+	}
+
+	public void doDeleteOrganizationIfReady(String organizationIdentifier) {
+		if (organizationIsReadyToDelete(organizationIdentifier)) {
+			try {
+				doDeleteOrganization(organizationIdentifier);
+			} catch (EntityNotFoundException e) {
+				LOG.debug(String.format("Organization [%s] not found. Likely already been deleted.",
+						organizationIdentifier));
+				return;
+			}
+		} else {
+			OrganizationDeletionJob job = new OrganizationDeletionJob(organizationIdentifier);
+			job.setDeliveryDelayInMilliseconds(30L * 1000);
+			jobService.schedule(job);
+		}
+	}
+
+	public void doDeleteOrganization(String organizationIdentifier) throws EntityNotFoundException {
+		Organization org = getOrganizationByIdentfier(organizationIdentifier);
+		entityManager.refresh(org);
+		entityManager.remove(org);
+	}
+
+	@Override
 	public QueryResult<Project> findProjects(ProjectsQuery query) {
 		return findProjects(query, null);
 	}
@@ -1974,7 +2025,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 			}
 		}
 
-		LOG.debug(String.format("We have [%s] service for project [%s], and %s ready to delete", project
+		LOG.debug(String.format("We have [%s] service(s) for project [%s], so it %s ready to delete", project
 				.getProjectServiceProfile().getProjectServices().size(), projectIdentifier, readyToDelete ? "are"
 				: "are not"));
 		if (readyToDelete) {

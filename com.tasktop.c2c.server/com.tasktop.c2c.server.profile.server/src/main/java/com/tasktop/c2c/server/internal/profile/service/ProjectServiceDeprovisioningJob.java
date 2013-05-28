@@ -7,6 +7,7 @@ import com.tasktop.c2c.server.common.service.EntityNotFoundException;
 import com.tasktop.c2c.server.common.service.job.Job;
 import com.tasktop.c2c.server.common.service.job.JobService;
 
+@SuppressWarnings("serial")
 public class ProjectServiceDeprovisioningJob extends Job {
 
 	private String projectId;

@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import com.tasktop.c2c.server.auth.service.AuthUtils;
 import com.tasktop.c2c.server.common.service.job.Job;
 
+@SuppressWarnings("serial")
 public class ProjectDeletionJob extends Job {
 
 	private String projectId;

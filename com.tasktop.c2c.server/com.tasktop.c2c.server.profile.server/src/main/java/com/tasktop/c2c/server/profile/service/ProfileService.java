@@ -124,9 +124,11 @@ public interface ProfileService {
 	 *            the id of the profile to be replicated
 	 * @param projectId
 	 *            the id of the project to replicate the profile into
-	 * @param scope TODO
+	 * @param scope
+	 *            TODO
 	 */
-	public void replicateProjectProfile(Long profileId, Long projectId, ReplicationScope scope) throws EntityNotFoundException;
+	public void replicateProjectProfile(Long profileId, Long projectId, ReplicationScope scope)
+			throws EntityNotFoundException;
 
 	public Boolean isProjectCreateAvailable();
 
@@ -204,6 +206,8 @@ public interface ProfileService {
 	Organization createOrganization(Organization org) throws ValidationException;
 
 	Organization getOrganizationByIdentfier(String orgIdentifier) throws EntityNotFoundException;
+
+	void deleteOrganization(String orgIdentifier) throws EntityNotFoundException;
 
 	public QueryResult<Project> findProjects(ProjectsQuery query);
 
