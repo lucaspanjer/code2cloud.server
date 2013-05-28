@@ -343,12 +343,17 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 
 	public List<DiffEntry> getDiffEntries(String repoName, String baseCommitId, String commitId, Integer numContextLines)
 			throws EntityNotFoundException {
-		return new GetCall<List<DiffEntry>>() {
-			@Override
-			public List<DiffEntry> getValue(ServiceCallResult result) {
-				return result.getDiffEntryList();
-			}
-		}.doCall(GET_DIFF_ENTRIES_URL, repoName, baseCommitId, commitId);
+		try {
+			return new GetCall<List<DiffEntry>>() {
+				@Override
+				public List<DiffEntry> getValue(ServiceCallResult result) {
+					return result.getDiffEntryList();
+				}
+			}.doCall(GET_DIFF_ENTRIES_URL, repoName, baseCommitId, commitId);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+		}
+		throw new IllegalStateException();
 	}
 
 	public static final String GET_LOG_FOR_REPO_URL = "repository/{repo}/repolog";
@@ -379,11 +384,17 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 					PAGESIZE_URL_PARAM, region.getSize());
 		}
 
-		return new GetCall<List<Commit>>() {
-			public List<Commit> getValue(ServiceCallResult result) {
-				return result.getCommitList();
-			}
-		}.doCall(url, repoName, revision);
+		try {
+			return new GetCall<List<Commit>>() {
+				public List<Commit> getValue(ServiceCallResult result) {
+					return result.getCommitList();
+				}
+			}.doCall(url, repoName, revision);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+		}
+		throw new IllegalStateException();
+
 	}
 
 	public static final String BRANCH_PARAM = "branch";
@@ -468,11 +479,17 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 
 		url = String.format("%s/%s?%s=%b&%s=%d", url, path, "history", history, "recursion", recursion);
 
-		return new GetCall<Trees>() {
-			public Trees getValue(ServiceCallResult result) {
-				return result.getTrees();
-			}
-		}.doCall(url, repo, revision);
+		try {
+			return new GetCall<Trees>() {
+				public Trees getValue(ServiceCallResult result) {
+					return result.getTrees();
+				}
+			}.doCall(url, repo, revision);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+		}
+		throw new IllegalStateException();
+
 	}
 
 	public static final String GET_BLOB_URL = "repository/{repo}/blob/{revision}";
@@ -484,11 +501,17 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 
 		url = String.format("%s/%s", url, path);
 
-		return new GetCall<Blob>() {
-			public Blob getValue(ServiceCallResult result) {
-				return result.getBlob();
-			}
-		}.doCall(url, repository, revision);
+		try {
+			return new GetCall<Blob>() {
+				public Blob getValue(ServiceCallResult result) {
+					return result.getBlob();
+				}
+			}.doCall(url, repository, revision);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+		}
+		throw new IllegalStateException();
+
 	}
 
 	public static final String GET_BLAME_URL = "repository/{repo}/blame/{revision}";
@@ -500,11 +523,17 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 
 		url = String.format("%s/%s", url, path);
 
-		return new GetCall<Blame>() {
-			public Blame getValue(ServiceCallResult result) {
-				return result.getBlame();
-			}
-		}.doCall(url, repository, revision);
+		try {
+			return new GetCall<Blame>() {
+				public Blame getValue(ServiceCallResult result) {
+					return result.getBlame();
+				}
+			}.doCall(url, repository, revision);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+		}
+		throw new IllegalStateException();
+
 	}
 
 	public static final String GET_ITEM_URL = "repository/{repo}/item/{revision}";
@@ -516,11 +545,17 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 
 		url = String.format("%s/%s", url, path);
 
-		return new GetCall<Item>() {
-			public Item getValue(ServiceCallResult result) {
-				return result.getItem();
-			}
-		}.doCall(url, repository, revision);
+		try {
+			return new GetCall<Item>() {
+				public Item getValue(ServiceCallResult result) {
+					return result.getItem();
+				}
+			}.doCall(url, repository, revision);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+		}
+		throw new IllegalStateException();
+
 	}
 
 	public static final String GET_MERGE_BASE_URL = "repository/{repo}/merge-base/{revA}/{revB}";
@@ -528,10 +563,16 @@ public class ScmServiceClient extends AbstractVersionedRestServiceClient impleme
 	/** @Override in fact it does override, but ... */
 	public Commit getMergeBase(String repository, String revA, String revB) throws EntityNotFoundException {
 
-		return new GetCall<Commit>() {
-			public Commit getValue(ServiceCallResult result) {
-				return result.getCommit();
-			}
-		}.doCall(GET_MERGE_BASE_URL, repository, revA, revB);
+		try {
+			return new GetCall<Commit>() {
+				public Commit getValue(ServiceCallResult result) {
+					return result.getCommit();
+				}
+			}.doCall(GET_MERGE_BASE_URL, repository, revA, revB);
+		} catch (WrappedCheckedException e) {
+			convertEntityNotFoundException(e);
+		}
+		throw new IllegalStateException();
+
 	}
 }
