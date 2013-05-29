@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.tasktop.c2c.server.profile.web.ui.client.presenter.components;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.tasktop.c2c.server.common.profile.web.client.ValidationUtils;
 import com.tasktop.c2c.server.common.profile.web.client.place.SignInPlace;
 import com.tasktop.c2c.server.common.web.client.notification.Message;
@@ -25,7 +23,8 @@ import com.tasktop.c2c.server.profile.web.ui.client.presenter.AbstractProfilePre
 import com.tasktop.c2c.server.profile.web.ui.client.resources.ProfileMessages;
 import com.tasktop.c2c.server.profile.web.ui.client.view.components.PasswordResetRequestView;
 
-public class PasswordResetRequestPresenter extends AbstractProfilePresenter {
+public class PasswordResetRequestPresenter extends AbstractProfilePresenter implements
+		PasswordResetRequestView.Presenter {
 
 	private final PasswordResetRequestView passwordResetRequestView;
 	private ProfileMessages profileMessages = AppGinjector.get.instance().getProfileMessages();
@@ -33,20 +32,16 @@ public class PasswordResetRequestPresenter extends AbstractProfilePresenter {
 	public PasswordResetRequestPresenter(PasswordResetRequestView view, RequestPasswordResetPlace place) {
 		super(view);
 		passwordResetRequestView = view;
+
 	}
 
 	@Override
 	protected void bind() {
-		passwordResetRequestView.submitButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				doRequestPasswordReset();
-			}
-		});
+		passwordResetRequestView.setPresenter(this);
 	}
 
-	private void doRequestPasswordReset() {
-		final String email = passwordResetRequestView.email.getText();
+	@Override
+	public void requestPasswordReset(final String email) {
 
 		if (email == null || email.isEmpty()) {
 			AppGinjector.get.instance().getNotifier()
@@ -77,7 +72,6 @@ public class PasswordResetRequestPresenter extends AbstractProfilePresenter {
 	}
 
 	private void onSuccessfulRequest(String email) {
-		passwordResetRequestView.email.setText("");
 		SignInPlace.createPlace()
 				.displayOnArrival(Message.createSuccessMessage(profileMessages.passwordResetInstructionsSent())).go();
 	}
