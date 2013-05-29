@@ -12,6 +12,7 @@
 package com.tasktop.c2c.server.hudson.configuration.service;
 
 import hudson.Functions;
+import hudson.RequestRootPathProvider;
 
 import org.springframework.beans.factory.InitializingBean;
 
@@ -21,7 +22,7 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class HudsonSetup implements InitializingBean {
 
-	private TenantAwareRequestRootPathProvider requestRootPathProvider;
+	private RequestRootPathProvider requestRootPathProvider;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -29,7 +30,7 @@ public class HudsonSetup implements InitializingBean {
 
 	}
 
-	public void setRequestRootPathProvider(TenantAwareRequestRootPathProvider requestRootPathProvider) {
+	public void setRequestRootPathProvider(RequestRootPathProvider requestRootPathProvider) {
 		this.requestRootPathProvider = requestRootPathProvider;
 	}
 
