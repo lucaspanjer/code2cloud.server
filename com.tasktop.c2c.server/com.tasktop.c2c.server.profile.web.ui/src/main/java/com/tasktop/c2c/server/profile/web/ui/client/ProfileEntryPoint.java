@@ -38,10 +38,11 @@ public class ProfileEntryPoint implements EntryPoint {
 	public ProfileEntryPoint() {
 		instance = this;
 
+		initializeInjector();
+
 		// FIXME this could be in a better place
 		AsyncCallbackSupport.setErrorInterpreter(new ExceptionMessageProvider());
 
-		initializeInjector();
 		registerPageMappings(); // REVIEW, push to BOOT??
 
 		// TODO Move elsewhere
