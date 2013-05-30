@@ -38,8 +38,8 @@ import com.tasktop.c2c.server.profile.service.ProjectServiceService;
 public class ApplicationServiceProxyFilter extends GenericFilterBean {
 
 	private static final String PREFIX = ApplicationServiceProxyFilter.class.getSimpleName();
-	static final String ATTR_APPLICATION_SERVICE = PREFIX + "#ApplicationService";
-	static final String ATTR_APPLICATION_SERVICE_URI = PREFIX + "#URI";
+	public static final String ATTR_APPLICATION_SERVICE = PREFIX + "#ApplicationService";
+	public static final String ATTR_APPLICATION_SERVICE_URI = PREFIX + "#URI";
 
 	private Pattern pathPattern = Pattern.compile("/([^/]+)(/.+)");
 
