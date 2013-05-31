@@ -1964,6 +1964,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 
 	public void doDeleteOrganization(String organizationIdentifier) throws EntityNotFoundException {
 		Organization org = getOrganizationByIdentfier(organizationIdentifier);
+		securityPolicy.delete(org);
 		entityManager.refresh(org);
 		entityManager.remove(org);
 	}
