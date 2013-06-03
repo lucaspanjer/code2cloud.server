@@ -110,6 +110,8 @@ public class InternalTaskServiceBean extends AbstractJpaServiceBean implements I
 		try {
 			Profile profile = (Profile) query.getSingleResult();
 			profile.setRealname(taskUserProfile.getRealname());
+			profile.setGravatarHash(taskUserProfile.getGravatarHash());
+
 			if (!entityManager.contains(profile)) {
 				entityManager.persist(profile);
 				entityManager.flush(); // Make id available
