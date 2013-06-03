@@ -31,11 +31,13 @@ import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.MutableObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.patch.FileHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.revwalk.filter.SkipRevFilter;
@@ -73,13 +75,14 @@ class GitBrowseUtil {
 			throw new EntityNotFoundException("Revision: " + revision + " not found.");
 		}
 
-		TreeWalk treeWalk = new TreeWalk(r);
-		treeWalk.addTree(new RevWalk(r).parseTree(revId));
+		MutableObjectId revTree = new MutableObjectId();
+		TreeWalk treeWalk = getTreeOnPath(revTree, r, revId, path);
 
-		if (!moveToPath(treeWalk, path)) {
+		if (treeWalk == null) {
 			throw new EntityNotFoundException("Revision: " + revision + ", path: " + path + " not found.");
 		}
-		Trees trees = new Trees(treeWalk.getObjectId(0).getName());
+
+		Trees trees = new Trees(revTree.name());
 
 		Git git = history ? new Git(r) : null;
 
@@ -301,27 +304,39 @@ class GitBrowseUtil {
 		return base;
 	}
 
-	private static boolean moveToPath(TreeWalk treeWalk, String path) throws MissingObjectException, IOException {
+	private static TreeWalk getTreeOnPath(MutableObjectId id, Repository repo, ObjectId rev, String path)
+			throws MissingObjectException, IOException {
+
+		RevTree tree = new RevWalk(repo).parseTree(rev);
+
+		TreeWalk tw = new TreeWalk(repo);
+		tw.reset(tree);
+		tw.setRecursive(false);
 
 		if (path == null || path.isEmpty() || "/".equals(path)) {
-			return true;
+			id.fromObjectId(tree.getId());
+			return tw;
 		}
 
-		if (path.startsWith("/")) {
-			path = path.substring(1);
-		}
+		PathFilter f = PathFilter.create(path);
+		tw.setFilter(f);
 
-		treeWalk.setFilter(PathFilter.create(path));
+		while (tw.next()) {
+			if (f.isDone(tw)) {
+				id.fromObjectId(tw.getObjectId(0));
+				if (tw.isSubtree()) {
+					tw.enterSubtree();
+					return tw;
+				} else {
+					throw new MissingObjectException(tw.getObjectId(0), Constants.OBJ_TREE);
+				}
 
-		while (treeWalk.next()) {
-			if (path.equals(treeWalk.getPathString())) {
-				treeWalk.enterSubtree();
-				return true;
+			} else if (tw.isSubtree()) {
+				tw.enterSubtree();
 			}
-			treeWalk.enterSubtree();
 		}
+		return null;
 
-		return false;
 	}
 
 	public static String resolve(Repository r, ObjectId revision, String path) throws MissingObjectException,
