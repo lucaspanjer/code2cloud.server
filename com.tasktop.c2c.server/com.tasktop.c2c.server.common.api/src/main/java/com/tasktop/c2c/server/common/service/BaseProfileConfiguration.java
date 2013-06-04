@@ -29,6 +29,7 @@ public class BaseProfileConfiguration {
 	private String serviceProxyPath;
 	private String baseContextPath;
 	private boolean prefixHostnameWithOrgId = false;
+	private boolean prefixPathWithOrgId = false;
 
 	public String getProfileApplicationProtocol() {
 		return profileApplicationProtocol;
@@ -67,8 +68,13 @@ public class BaseProfileConfiguration {
 	}
 
 	public String getProfileBaseUrl() {
-		String baseUrl = profileApplicationProtocol + "://";
-		baseUrl += getWebHost() + baseContextPath;
+		String baseUrl = getProfileApplicationProtocol() + "://";
+		baseUrl += getWebHost() + getBaseContextPath();
+
+		if (prefixPathWithOrgId && TenancyUtil.getCurrentTenantOrganizationIdentifer() != null) {
+			baseUrl += "/" + TenancyUtil.getCurrentTenantOrganizationIdentifer();
+		}
+
 		return baseUrl;
 	}
 
@@ -113,5 +119,13 @@ public class BaseProfileConfiguration {
 			path = "/" + path;
 		}
 		return path;
+	}
+
+	public boolean isPrefixPathWithOrgId() {
+		return prefixPathWithOrgId;
+	}
+
+	public void setPrefixPathWithOrgId(boolean prefixPathWithOrgId) {
+		this.prefixPathWithOrgId = prefixPathWithOrgId;
 	}
 }
