@@ -94,9 +94,10 @@ public class HudsonServiceConfiguratorTest {
 				FileUtils.deleteDirectory(webappsTargetDir);
 			}
 			String expectedDestFile = webappsTarget + "s#test#hudson.war";
+			HudsonWarNamingStrategy warNamingStrategy = new HudsonWarNamingStrategy();
+			warNamingStrategy.setPathPattern(webappsTarget + "s#%s#hudson.war");
+			configurator.setHudsonWarNamingStrategy(warNamingStrategy);
 			configurator.setTargetHudsonHomeBaseDir(expectedHomeDir);
-			configurator.setTargetWebappsDir(webappsTarget);
-			configurator.setHudsonPath("/s/");
 			ProjectServiceConfiguration config = new ProjectServiceConfiguration();
 			config.setProjectIdentifier("test123");
 
@@ -184,8 +185,9 @@ public class HudsonServiceConfiguratorTest {
 			// Configure this configurator with appropriate folders for testing.
 			String webappsTarget = FileUtils.getTempDirectoryPath() + "/webapps/";
 			String expectedDestFile = webappsTarget + "s#test123#hudson.war";
-			configurator.setTargetWebappsDir(webappsTarget);
-			configurator.setHudsonPath("/s/");
+			HudsonWarNamingStrategy warNamingStrategy = new HudsonWarNamingStrategy();
+			warNamingStrategy.setPathPattern(webappsTarget + "s#%s#hudson.war");
+			configurator.setHudsonWarNamingStrategy(warNamingStrategy);
 			configurator.setTargetHudsonHomeBaseDir("/some/silly/random/homeDir");
 
 			ProjectServiceConfiguration config = new ProjectServiceConfiguration();

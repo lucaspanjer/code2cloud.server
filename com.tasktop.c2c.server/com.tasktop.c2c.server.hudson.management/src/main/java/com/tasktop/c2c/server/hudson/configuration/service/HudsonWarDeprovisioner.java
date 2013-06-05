@@ -14,13 +14,10 @@ package com.tasktop.c2c.server.hudson.configuration.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 import com.tasktop.c2c.server.configuration.service.ProjectServiceConfiguration;
 import com.tasktop.c2c.server.configuration.service.ProjectServiceManagementServiceBean.Deprovisioner;
@@ -33,33 +30,15 @@ public class HudsonWarDeprovisioner implements Deprovisioner {
 
 	private static final Logger LOG = LoggerFactory.getLogger(HudsonWarDeprovisioner.class.getName());
 
-	private String hudsonWebappsDir;
-	private String hudsonPath;
-	private boolean perOrg = false;
+	private HudsonWarNamingStrategy hudsonWarNamingStrategy;
 
 	@Override
 	public void deprovision(ProjectServiceConfiguration configuration) {
-		try {
-			String deployedUrl = configuration.getProperties().get(ProjectServiceConfiguration.PROFILE_BASE_URL)
-					+ hudsonPath
-					+ (perOrg ? configuration.getOrganizationIdentifier() : configuration.getProjectIdentifier())
-					+ "/hudson/";
-			deployedUrl.replace("//", "/");
-			URL deployedHudsonUrl = new URL(deployedUrl);
-			String webappName = deployedHudsonUrl.getPath();
-			if (webappName.startsWith("/")) {
-				webappName = webappName.substring(1);
-			}
-			if (webappName.endsWith("/")) {
-				webappName = webappName.substring(0, webappName.length() - 1);
-			}
-			webappName = webappName.replace("/", "#");
-
-			tryDelete(new File(hudsonWebappsDir, webappName));
-			tryDelete(new File(hudsonWebappsDir, webappName + ".war"));
-
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
+		String webappPath = hudsonWarNamingStrategy.getWarFilePath(configuration);
+		tryDelete(new File(webappPath));
+		if (webappPath.endsWith(".war")) {
+			String webappDir = webappPath.substring(0, webappPath.length() - ".war".length());
+			tryDelete(new File(webappDir));
 		}
 
 	}
@@ -88,17 +67,8 @@ public class HudsonWarDeprovisioner implements Deprovisioner {
 		}
 	}
 
-	public void setHudsonWebappsDir(String hudsonWebappsDir) {
-		this.hudsonWebappsDir = hudsonWebappsDir;
-	}
-
-	@Required
-	public void setHudsonPath(String hudsonPath) {
-		this.hudsonPath = hudsonPath;
-	}
-
-	public void setPerOrg(boolean perOrg) {
-		this.perOrg = perOrg;
+	public void setHudsonWarNamingStrategy(HudsonWarNamingStrategy hudsonWarNamingStrategy) {
+		this.hudsonWarNamingStrategy = hudsonWarNamingStrategy;
 	}
 
 }

@@ -15,8 +15,6 @@ package com.tasktop.c2c.server.hudson.configuration.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -54,9 +52,8 @@ public class HudsonServiceConfigurator implements Configurator {
 	private String tempDir = FileUtils.getTempDirectoryPath();
 	private String warTemplateFile;
 	private String targetHudsonHomeBaseDir;
-	private String targetWebappsDir;
-	private String hudsonPath;
 	private boolean perOrg = false;
+	private HudsonWarNamingStrategy hudsonWarNamingStrategy;
 
 	@Override
 	public void configure(ProjectServiceConfiguration configuration) {
@@ -71,30 +68,7 @@ public class HudsonServiceConfigurator implements Configurator {
 			throw new IllegalStateException(message);
 		}
 
-		String pathProperty = perOrg ? configuration.getOrganizationIdentifier() : configuration.getProjectIdentifier();
-
-		String deployedUrl = configuration.getProperties().get(ProjectServiceConfiguration.PROFILE_BASE_URL)
-				+ hudsonPath + pathProperty + "/hudson/";
-		deployedUrl.replace("//", "/");
-		URL deployedHudsonUrl;
-		try {
-			deployedHudsonUrl = new URL(deployedUrl);
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
-		}
-		String webappName = deployedHudsonUrl.getPath();
-		if (webappName.startsWith("/")) {
-			webappName = webappName.substring(1);
-		}
-		if (webappName.endsWith("/")) {
-			webappName = webappName.substring(0, webappName.length() - 1);
-		}
-		webappName = webappName.replace("/", "#");
-		webappName = webappName + ".war";
-
-		// Calculate our final filename.
-
-		String deployLocation = targetWebappsDir + webappName;
+		String deployLocation = hudsonWarNamingStrategy.getWarFilePath(configuration);
 
 		File hudsonDeployFile = new File(deployLocation);
 
@@ -190,17 +164,11 @@ public class HudsonServiceConfigurator implements Configurator {
 		this.warTemplateFile = warTemplateFile;
 	}
 
-	@Required
-	public void setTargetWebappsDir(String targetWebappsDir) {
-		this.targetWebappsDir = targetWebappsDir;
-	}
-
-	@Required
-	public void setHudsonPath(String hudsonPath) {
-		this.hudsonPath = hudsonPath;
-	}
-
 	public void setPerOrg(boolean perOrg) {
 		this.perOrg = perOrg;
+	}
+
+	public void setHudsonWarNamingStrategy(HudsonWarNamingStrategy hudsonWarNamingStrategy) {
+		this.hudsonWarNamingStrategy = hudsonWarNamingStrategy;
 	}
 }
