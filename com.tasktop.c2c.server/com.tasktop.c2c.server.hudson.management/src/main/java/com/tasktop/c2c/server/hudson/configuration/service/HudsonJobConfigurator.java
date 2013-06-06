@@ -65,10 +65,21 @@ public class HudsonJobConfigurator implements Configurator {
 			String name = jobDir.getName();
 			String configXml = FileUtils.readFileToString(new File(jobDir, "config.xml"));
 			configXml = rewriteConfigForProject(configXml, configuration);
+			String newId = configuration.getProjectIdentifier() + "_" + name;
+			configXml = addIdProperty(configXml, newId);
 			result.put(name, configXml);
 		}
 
 		return result;
+	}
+
+	/**
+	 * @param configXml
+	 * @param newId
+	 * @return
+	 */
+	private String addIdProperty(String configXml, String newId) {
+		return configXml.replaceFirst("<project>", "<project>\n  <id>" + newId + "</id>\n");
 	}
 
 	/**

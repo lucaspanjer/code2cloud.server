@@ -65,10 +65,13 @@ public class HudsonBuildServiceCloner extends BaseProjectServiceCloner {
 		List<String> jobConfigXmls = new ArrayList<String>();
 		for (JobSummary job : jobs) {
 			String configXml = templateHudsonService.getJobConfigXml(job.getName());
-			String rewrittenConfigXml = rewriteConfigUrls(configXml, templateService.getProjectServiceProfile()
-					.getProject(), targetService.getProjectServiceProfile().getProject());
-			rewrittenConfigXml = rewriteForTemplateMetadata(job.getName(), rewrittenConfigXml, context);
-			jobConfigXmls.add(rewrittenConfigXml);
+			String newId = targetService.getProjectServiceProfile().getProject().getIdentifier() + "_" + job.getName();
+			newId = newId.toLowerCase();
+			configXml = replaceIdElement(configXml, newId);
+			configXml = rewriteConfigUrls(configXml, templateService.getProjectServiceProfile().getProject(),
+					targetService.getProjectServiceProfile().getProject());
+			configXml = rewriteForTemplateMetadata(job.getName(), configXml, context);
+			jobConfigXmls.add(configXml);
 		}
 
 		AuthUtils.assumeSystemIdentity(targetService.getProjectServiceProfile().getProject().getIdentifier());
@@ -79,6 +82,11 @@ public class HudsonBuildServiceCloner extends BaseProjectServiceCloner {
 			targetHudsonService.createNewJob(jobs.get(i).getName(), jobConfigXmls.get(i));
 		}
 
+	}
+
+	// / This is needed to work around hudson issue https://q.tasktop.com/alm/#projects/c2c/task/5618
+	static String replaceIdElement(String configXml, String newId) {
+		return configXml.replaceFirst("<id>(.*)</id>", "<id>" + newId + "</id>");
 	}
 
 	protected String rewriteConfigUrls(String configXml, Project templateProject, Project targetProject) {
