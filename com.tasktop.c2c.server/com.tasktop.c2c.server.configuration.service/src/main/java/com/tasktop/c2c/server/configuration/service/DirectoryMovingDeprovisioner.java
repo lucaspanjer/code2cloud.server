@@ -35,9 +35,11 @@ public class DirectoryMovingDeprovisioner implements Deprovisioner {
 	@Override
 	public void deprovision(ProjectServiceConfiguration configuration) {
 
-		String uniqueIdentifier = configuration.getProperties().get(ProjectServiceConfiguration.UNIQUE_IDENTIFER);
+		final String uniqueIdentifier;
 		if (perOrg) {
-			uniqueIdentifier = configuration.getOrganizationIdentifier() + "-" + uniqueIdentifier;
+			uniqueIdentifier = configuration.getOrganizationIdentifier() + "_ORG_" + System.currentTimeMillis();
+		} else {
+			uniqueIdentifier = configuration.getProperties().get(ProjectServiceConfiguration.UNIQUE_IDENTIFER);
 		}
 		File toBaseDirFile = new File(toBaseDir, uniqueIdentifier);
 		File fromDir = new File(fromBaseDir + "/"
