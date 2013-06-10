@@ -105,7 +105,7 @@ public class NewTaskPresenter extends AbstractEditTaskPresenter<NewTaskDisplay> 
 			}
 		}
 
-		if (task.getAssignee() == null) {
+		if (task.getAssignee() == null && task.getComponent() != null) {
 			task.setAssignee(task.getComponent().getInitialOwner());
 		}
 		populateUi(task);
