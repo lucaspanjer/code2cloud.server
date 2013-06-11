@@ -51,6 +51,11 @@ import com.tasktop.c2c.server.tasks.domain.WorkLog;
  */
 public class TaskDomain {
 
+	/**
+	 * 
+	 */
+	private static final long MIN_DATE_RESOLUTION = 1000l;
+
 	public com.tasktop.c2c.server.tasks.domain.TaskSeverity createDomain(TaskSeverity source) {
 		if (source == null) {
 			return null;
@@ -161,23 +166,33 @@ public class TaskDomain {
 		return new Task();
 	}
 
-	public void makeDescriptionTheEarliestComment(com.tasktop.c2c.server.internal.tasks.domain.Task internalTask) {
+	/**
+	 * The list of comments is ordered by the creation date. The description is the first (earliest) comment. This
+	 * method ensures that the list order is reflected in the timestamps. Additionally, the difference between each
+	 * element's timestamp must be >- MIN_DATE_RESOLUTION.
+	 * 
+	 * @param internalTask
+	 */
+	public void ensureCommentsDateOrder(com.tasktop.c2c.server.internal.tasks.domain.Task internalTask) {
 		Date now = new Date();
-		Comment descriptionComment = internalTask.getComments().get(0);
+		Date lastCommentDate = null;
 
-		Date commentMinDate = descriptionComment.getCreationTs() == null ? now : descriptionComment.getCreationTs();
-		for (Comment c : internalTask.getComments().subList(1, internalTask.getComments().size())) {
+		for (int i = internalTask.getComments().size() - 1; i >= 0; i--) {
 
-			if (c.getCreationTs() != null && c.getCreationTs().before(commentMinDate)) {
-				commentMinDate = c.getCreationTs();
+			Comment c = internalTask.getComments().get(i);
+
+			if (c.getCreationTs() == null) {
+				c.setCreationTs(now);
 			}
+
+			// Ensure this comment is at least 1s earlier than the last one
+			if (lastCommentDate != null
+					&& c.getCreationTs().getTime() > lastCommentDate.getTime() - MIN_DATE_RESOLUTION) {
+				c.setCreationTs(new Date(lastCommentDate.getTime() - MIN_DATE_RESOLUTION));
+			}
+
+			lastCommentDate = c.getCreationTs();
 		}
-
-		// Need to add a 1 second difference, since that's the granularity of the MySQL DATETIME data type - 1ms is not
-		// sufficient.
-		Date descriptionDate = new Date(commentMinDate.getTime() - 1000l);
-		descriptionComment.setCreationTs(descriptionDate);
-
 	}
 
 	/**
@@ -482,7 +497,7 @@ public class TaskDomain {
 		managedTarget.setKeywords(source.getKeywords());
 		managedTarget.setKeywordses(source.getKeywordses());
 		fillComments(managedTarget.getComments(), source.getComments());
-		makeDescriptionTheEarliestComment(managedTarget);
+		ensureCommentsDateOrder(managedTarget);
 
 		updateDependencies(managedTarget, managedTarget.getDependenciesesForBlocked(),
 				source.getDependenciesesForBlocked());

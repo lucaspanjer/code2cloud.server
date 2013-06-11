@@ -2127,30 +2127,23 @@ public class TaskServiceTest {
 		com.tasktop.c2c.server.tasks.domain.Task toCreate = getMockTask();
 		String c1Text = "c1Text";
 		String c2Text = "c2Text";
+		String c3Text = "c3Text";
 
-		Comment myComment = new Comment();
-		myComment.setCommentText(c1Text);
-		myComment.setAuthor(toCreate.getReporter());
-		myComment.setCreationDate(new Date());
+		Comment c1 = new Comment();
+		c1.setCommentText(c1Text);
 
-		Comment mySecondComment = new Comment();
-		mySecondComment.setCommentText(c2Text);
-		mySecondComment.setAuthor(toCreate.getReporter());
-		mySecondComment.setCreationDate(new Date());
+		Comment c2 = new Comment();
+		c2.setCommentText(c2Text);
 
-		toCreate.setComments(Arrays.asList(myComment, mySecondComment));
+		Comment c3 = new Comment();
+		c3.setCommentText(c3Text);
+
+		toCreate.setComments(Arrays.asList(c1, c2, c3));
 		com.tasktop.c2c.server.tasks.domain.Task created = taskService.createTask(toCreate);
-		assertEquals(2, created.getComments().size());
-		boolean foundComment1 = false;
-		boolean foundComment2 = false;
-		for (Comment c : created.getComments()) {
-			if (c1Text.equals(c.getCommentText()))
-				foundComment1 = true;
-			else if (c2Text.equals(c.getCommentText()))
-				foundComment2 = true;
-		}
-		assertTrue(foundComment1);
-		assertTrue(foundComment2);
+		assertEquals(3, created.getComments().size());
+		Assert.assertEquals(c1Text, created.getComments().get(0).getCommentText());
+		Assert.assertEquals(c2Text, created.getComments().get(1).getCommentText());
+		Assert.assertEquals(c3Text, created.getComments().get(2).getCommentText());
 	}
 
 	private int getNumCommentsInDB() {

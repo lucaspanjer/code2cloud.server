@@ -579,7 +579,7 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 
 		internalTask.setDeltaTs(new Date());
 		internalTask.setCreationTs(internalTask.getDeltaTs());
-		taskDomain.makeDescriptionTheEarliestComment(internalTask);
+		taskDomain.ensureCommentsDateOrder(internalTask);
 		fillManagedObjects(internalTask);
 		entityManager.persist(internalTask);
 		entityManager.flush(); // This is needed to set the bugId.
