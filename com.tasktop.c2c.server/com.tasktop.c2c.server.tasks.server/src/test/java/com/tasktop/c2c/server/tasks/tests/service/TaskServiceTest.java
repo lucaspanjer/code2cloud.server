@@ -4681,7 +4681,7 @@ public class TaskServiceTest {
 		TestSecurity.login(currentUser, Role.Admin);
 
 		// create a Profile that we'll be impersonating
-		Profile impersonatedGuy = getCreatedMockProfile();
+		Profile impersonatedGuy = MockProfileFactory.create(null);
 
 		// create a Task and impersonate our guy
 		com.tasktop.c2c.server.tasks.domain.Task mock = getMockTask();
@@ -4721,14 +4721,14 @@ public class TaskServiceTest {
 		assertNotNull(comments);
 		assertEquals(1, comments.size());
 		assertEquals(origComment.getCommentText(), comments.get(0).getCommentText());
-		assertEquals(impersonatedGuy.getId(), comments.get(0).getAuthor().getId());
+		assertEquals(impersonatedGuy.getLoginName(), comments.get(0).getAuthor().getLoginName());
 
 		// Work Logs
 		List<WorkLog> workLogs = task.getWorkLogs();
 		assertNotNull(workLogs);
 		assertEquals(1, workLogs.size());
 		assertEquals(origWorkLog.getComment(), workLogs.get(0).getComment());
-		assertEquals(impersonatedGuy.getId(), workLogs.get(0).getProfile().getId());
+		assertEquals(impersonatedGuy.getLoginName(), workLogs.get(0).getProfile().getLoginName());
 
 		// Save an Attachment
 		TaskHandle taskHandle = new TaskHandle();
@@ -4752,14 +4752,14 @@ public class TaskServiceTest {
 		assertNotNull(attachments);
 		assertEquals(1, attachments.size());
 		for (com.tasktop.c2c.server.tasks.domain.Attachment attachment : attachments) {
-			assertEquals(impersonatedGuy.getId(), attachment.getSubmitter().getId());
+			assertEquals(impersonatedGuy.getLoginName(), attachment.getSubmitter().getLoginName());
 		}
 
 		// Verify the Comment author is the same as before
 		comments = task.getComments();
 		assertEquals(2, comments.size());
 		for (Comment comment : comments) {
-			assertEquals(impersonatedGuy.getId(), comment.getAuthor().getId());
+			assertEquals(impersonatedGuy.getLoginName(), comment.getAuthor().getLoginName());
 		}
 	}
 

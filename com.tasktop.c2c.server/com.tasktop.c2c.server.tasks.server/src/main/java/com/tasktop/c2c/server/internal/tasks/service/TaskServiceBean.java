@@ -2211,6 +2211,9 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 			// but non-Admin users cannot
 			if (Security.hasRole(Role.Admin)) {
 				retVal = existingProfile;
+				Profile profile = internalTaskService.provisionAccount(existingProfile);
+				retVal.setId(profile.getId());
+
 			} else if (!existingProfile.getLoginName().equals(loggedInUser.getLoginName())) {
 				throw new InsufficientPermissionsException(String.format(
 						"The %s cannot be set to a Profile other than the logged in Profile.", property));
