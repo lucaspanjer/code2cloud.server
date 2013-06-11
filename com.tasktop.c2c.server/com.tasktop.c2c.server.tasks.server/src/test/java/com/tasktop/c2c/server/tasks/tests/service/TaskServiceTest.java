@@ -4690,6 +4690,8 @@ public class TaskServiceTest {
 		// set Reporter
 		mock.setReporter(tuImpersonatedGuy);
 
+		mock.setAssignee(tuImpersonatedGuy);
+
 		// add a Comment
 		Comment origComment = new Comment();
 		origComment.setCommentText("Yo");
@@ -4715,6 +4717,9 @@ public class TaskServiceTest {
 		TaskUserProfile reporter = task.getReporter();
 		assertNotNull(reporter);
 		assertEquals(impersonatedGuy.getRealname(), reporter.getRealname());
+
+		// Assignee
+		assertEquals(impersonatedGuy.getLoginName(), task.getAssignee().getLoginName());
 
 		// Comments
 		List<Comment> comments = task.getComments();
@@ -4761,6 +4766,26 @@ public class TaskServiceTest {
 		for (Comment comment : comments) {
 			assertEquals(impersonatedGuy.getLoginName(), comment.getAuthor().getLoginName());
 		}
+	}
+
+	@Test
+	public void testCreateTaskAsAdminCreateAssignee() throws Exception {
+		// log in again, with the Admin role
+		TestSecurity.login(currentUser, Role.Admin);
+
+		// create a Profile that we'll be impersonating
+		Profile impersonatedGuy = MockProfileFactory.create(null);
+
+		// create a Task and impersonate our guy
+		com.tasktop.c2c.server.tasks.domain.Task mock = getMockTask();
+		TaskUserProfile tuImpersonatedGuy = ProfileConverter.copy(impersonatedGuy);
+
+		mock.setAssignee(tuImpersonatedGuy);
+
+		com.tasktop.c2c.server.tasks.domain.Task task = taskService.createTask(mock);
+
+		// Assignee
+		assertEquals(impersonatedGuy.getLoginName(), task.getAssignee().getLoginName());
 	}
 
 	@Test(expected = InsufficientPermissionsException.class)

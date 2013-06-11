@@ -727,7 +727,17 @@ public class TaskServiceBean extends AbstractJpaServiceBean implements TaskServi
 		if (profile.getLoginName().isEmpty()) {
 			return null; // Special case for DS
 		}
-		Profile internalProfile = internalTaskService.findProfile(profile.getLoginName());
+
+		Profile internalProfile;
+		try {
+			internalProfile = internalTaskService.findProfile(profile.getLoginName());
+		} catch (EntityNotFoundException e) {
+			if (Security.hasRole(Role.Admin)) {
+				internalProfile = internalTaskService.provisionAccount(profile);
+			} else {
+				throw e;
+			}
+		}
 		return ProfileConverter.copy(internalProfile);
 	}
 
