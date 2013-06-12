@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import liquibase.exception.LiquibaseException;
-import liquibase.integration.spring.SpringLiquibase;
 
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.ResourceLoader;
@@ -73,10 +72,11 @@ public class ProjectTenantAwareDataSource extends TenantAwareDataSource implemen
 		}
 
 		try {
-			SpringLiquibase schemaInstaller = new SpringLiquibase();
+			LiquibaseRunner schemaInstaller = new LiquibaseRunner();
 			schemaInstaller.setResourceLoader(resourceLoader);
 			schemaInstaller.setDataSource(this);
 			schemaInstaller.setChangeLog(changelog);
+
 			if (dbType.toUpperCase().startsWith("HSQL") || dbType.toUpperCase().startsWith("ORACLE")) {
 				// HSQLDB will create the DB in upper case even if we specify lower case in the escaped create schema
 				// statement

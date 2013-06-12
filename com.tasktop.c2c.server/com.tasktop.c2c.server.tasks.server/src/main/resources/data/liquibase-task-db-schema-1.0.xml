@@ -808,9 +808,13 @@
     	<modifySql dbms="oracle">
     		<replace replace="MEDIUMINT" with="NUMBER(7)"/>
     	</modifySql>
-    	 <modifySql dbms="hsqldb, oracle">
+    	<modifySql dbms="hsqldb">
          	<replace replace="MEDIUMTEXT" with="VARCHAR(4000)"/>
     	</modifySql>
+    	 <modifySql dbms="oracle">
+         	<replace replace="MEDIUMTEXT" with="CLOB"/>
+    	</modifySql>
+
 	</changeSet>
 	<changeSet author="taskdb" id="createMilestonesTable">
 		<createTable tableName="milestones">
