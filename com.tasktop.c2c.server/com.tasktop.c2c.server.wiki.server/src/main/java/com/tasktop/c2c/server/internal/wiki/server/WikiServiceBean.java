@@ -130,7 +130,7 @@ public class WikiServiceBean extends AbstractJpaServiceBean implements WikiServi
 		if (providedPerson == null || providedPerson.getIdentity() == null) {
 			retVal = loggedInPerson;
 		} else if (Security.hasRole(Role.Admin)) {
-			retVal = providedPerson;
+			retVal = createOrUpdatePerson(providedPerson);
 		} else if (!providedPerson.getIdentity().equals(loggedInPerson.getIdentity())) {
 			throw new InsufficientPermissionsException(String.format(
 					"The %s cannot be set to a person other than the logged in person.", property));
