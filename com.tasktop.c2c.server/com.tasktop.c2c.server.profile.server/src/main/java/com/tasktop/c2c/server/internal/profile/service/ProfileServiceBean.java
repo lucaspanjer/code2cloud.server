@@ -306,7 +306,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("profile", profile);
 		model.put("AppName", configuration.getAppName());
-		model.put("AppBaseUrl", configuration.getProfileBaseUrl());
+		model.put("AppBaseUrl", configuration.getTenantUrl());
 
 		String subject = super.messageSource.getMessage("email.subject.welcome",
 				new Object[] { configuration.getAppName() }, AuthenticationServiceUser.getCurrentUserLocale());
@@ -827,7 +827,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("passwordResetURL", passwordResetURL);
 		model.put("AppName", configuration.getAppName());
-		model.put("AppBaseUrl", configuration.getProfileBaseUrl());
+		model.put("AppBaseUrl", configuration.getTenantUrl());
 		model.put("username", profile.getUsername());
 
 		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, passwordResetTemplate, model,
@@ -1009,7 +1009,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		model.put("token", token);
 		model.put("profile", profile);
 		model.put("AppName", configuration.getAppName());
-		model.put("AppBaseUrl", configuration.getProfileBaseUrl());
+		model.put("AppBaseUrl", configuration.getTenantUrl());
 		model.put("URL", configuration.getEmailVerificationURL(token.getToken()));
 		String subject = super.messageSource.getMessage("email.subject.verification",
 				new Object[] { configuration.getAppName() }, AuthenticationServiceUser.getCurrentUserLocale());
@@ -1522,7 +1522,7 @@ public class ProfileServiceBean extends AbstractJpaServiceBean implements Profil
 		model.put("lastName", token.getLastname());
 		model.put("URL", configuration.getSignUpInvitationURL(token.getToken()));
 		model.put("AppName", configuration.getAppName());
-		model.put("AppBaseUrl", configuration.getProfileBaseUrl());
+		model.put("AppBaseUrl", configuration.getTenantUrl());
 		model.put("UpdateSite", configuration.getUpdateSiteUrl());
 		String bodyText = VelocityUtils.getLocalizedTemplateText(velocityEngine, signUpInvitationTemplate, model,
 				AuthenticationServiceUser.getCurrentUserLanguage());

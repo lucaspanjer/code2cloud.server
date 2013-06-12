@@ -78,6 +78,11 @@ public class BaseProfileConfiguration {
 		return baseUrl;
 	}
 
+	public String getTenantUrl() {
+		String tenantUrl = getProfileBaseUrl();
+		return tenantUrl.endsWith("/") ? tenantUrl : tenantUrl + "/";
+	}
+
 	private String getOrganizationHostPrefix() {
 		String orgHostPrefix = "";
 		if (prefixHostnameWithOrgId && TenancyUtil.getCurrentTenantOrganizationIdentifer() != null) {
