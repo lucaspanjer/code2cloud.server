@@ -100,14 +100,5 @@
 			</list>
 		</property>
 	</bean>
-	
-	<bean id="aopLogger" class="com.tasktop.c2c.server.common.service.ServiceLoggingAdvice"/>
-	
-	<aop:config>
-		<aop:aspect ref="aopLogger">
-			<aop:pointcut id="serviceCall" expression="execution(public * com.tasktop.c2c.server.internal.tasks.service.TaskServiceBean.*(..))"/>
-			<aop:around pointcut-ref="serviceCall" method="doLogging"/>
-		</aop:aspect>
-	</aop:config>
-		
+
 </beans>
