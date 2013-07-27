@@ -1,4 +1,3 @@
-code2cloud.server
+Code2Cloud Server
 =================
 
-Code2Cloud Server
